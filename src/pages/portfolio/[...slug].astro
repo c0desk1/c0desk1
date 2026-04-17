@@ -60,13 +60,16 @@ const formattedUpdateDate = updatedDate ? formatDate(updatedDate) : undefined;
 const seoTitle = seo?.title || `${title} | ${siteConfig.name}`;
 const seoDescription = seo?.description || description;
 const seoImage = (() => {
-  if (seo?.ogImage && typeof seo.ogImage === 'string') return seo.ogImage;
+  if (seo?.ogImage) return seo.ogImage;
   if (image && typeof image === 'string') return image;
   return siteConfig.ogImage;
 })();
 
-// Handle image
-const displayImage = typeof image === 'string' ? image : image?.src;
+// Handle image - untuk MD, image adalah string
+const displayImage = typeof image === 'string' ? image : null;
+
+// Handle gallery - untuk MD, gallery adalah array of string
+const displayGallery = Array.isArray(gallery) ? gallery : [];
 
 // Get related projects
 const allProjects = await getCollection('portfolio', ({ data }) => !data.draft);
@@ -189,7 +192,7 @@ const relatedProjects = getRelatedProjects(project, allProjects, 2);
           </div>
           
           {/* Gallery */}
-          {gallery && gallery.length > 0 && (
+          {displayGallery.length > 0 && (
             <section class="mt-12 pt-8 border-t border-zinc-100 dark:border-zinc-900">
               <div class="flex items-center gap-3 mb-6">
                 <div class="h-px w-8 bg-linear-to-r from-zinc-300 to-transparent dark:from-zinc-700"></div>
@@ -199,18 +202,15 @@ const relatedProjects = getRelatedProjects(project, allProjects, 2);
                 <div class="h-px flex-1 bg-linear-to-l from-zinc-100 to-transparent dark:from-zinc-900"></div>
               </div>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {gallery.map((img, idx) => {
-                  const imgSrc = typeof img === 'string' ? img : img?.src;
-                  return imgSrc ? (
-                    <img 
-                      key={idx}
-                      src={imgSrc}
-                      alt={`${title} screenshot ${idx + 1}`}
-                      class="rounded-lg border border-zinc-200 dark:border-zinc-800 w-full h-auto"
-                      loading="lazy"
-                    />
-                  ) : null;
-                })}
+                {displayGallery.map((img, idx) => (
+                  <img 
+                    key={idx}
+                    src={img}
+                    alt={`${title} screenshot ${idx + 1}`}
+                    class="rounded-lg border border-zinc-200 dark:border-zinc-800 w-full h-auto"
+                    loading="lazy"
+                  />
+                ))}
               </div>
             </section>
           )}
