@@ -1,6 +1,6 @@
 ---
 // src/components/blog/PostCardCompact.astro
-// @ts-nocheck
+
 import type { CollectionEntry } from 'astro:content';
 import { formatDate, getReadingTime } from '@/lib/utils';
 
@@ -16,7 +16,7 @@ const { title, description, pubDate, tags, image, imageAlt, featured, pinned } =
 
 const formattedDate = formatDate(pubDate);
 const readingTime = getReadingTime(undefined, undefined, body);
-const displayImage = typeof image === 'string' ? image : image?.src;
+const displayImage = typeof image === 'string' ? image : null;
 ---
 
 <a 

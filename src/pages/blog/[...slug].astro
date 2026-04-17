@@ -1,6 +1,6 @@
 ---
 // src/pages/blog/[...slug].astro
-// @ts-nocheck
+
 import { getCollection, render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { siteConfig } from '@/config/site';
@@ -77,7 +77,7 @@ const seoImage = (() => {
 const tocHeadings = filterHeadingsForTOC(headings);
 
 // Handle image
-const displayImage = typeof image === 'string' ? image : image?.src;
+const displayImage = typeof image === 'string' ? image : null;
 
 // Last updated
 const lastUpdated = updatedDate 

@@ -6,11 +6,15 @@ import { formatDate } from '@/lib/utils';
 
 interface Props {
   slug: string;
-  lastUpdated: Date;
+  lastUpdated: Date | string;
 }
 
 const { slug, lastUpdated } = Astro.props;
-const formattedDate = formatDate(lastUpdated);
+
+const lastUpdatedDate = typeof lastUpdated === 'string' 
+  ? new Date(lastUpdated) 
+  : lastUpdated;
+const formattedDate = formatDate(lastUpdatedDate);
 ---
 
 <section class="mt-12 pt-6">
@@ -20,7 +24,7 @@ const formattedDate = formatDate(lastUpdated);
       <span>found a typo?</span>
       <span class="text-zinc-300 dark:text-zinc-700">/</span>
       <a 
-        href={`${siteConfig.links.github}/edit/main/src/content/blog/${slug}.mdx`}
+        href={`${siteConfig.links.github}/edit/main/src/content/blog/${slug}.md`}
         target="_blank"
         rel="noopener noreferrer"
         class="hover:text-zinc-900 dark:hover:text-white transition-colors underline-offset-4 hover:underline"

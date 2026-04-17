@@ -9,13 +9,11 @@ import PostCard from '@/components/blog/PostCard.astro';
 import ProjectCard from '@/components/portfolio/ProjectCard.astro';
 import { sortByDate, filterByDraft } from '@/lib/utils';
 
-// Ambil 3 blog posts terbaru
 const allPosts = await getCollection('blog');
-const blogPosts = sortByDate(filterByDraft(allPosts)).slice(0, 3);
+const blogPosts = sortByDate(filterByDraft(allPosts)).slice(0, 6);
 
-// Ambil 3 portfolio projects terbaru
 const allProjects = await getCollection('portfolio');
-const portfolioProjects = sortByDate(filterByDraft(allProjects), 'date').slice(0, 3);
+const portfolioProjects = sortByDate(filterByDraft(allProjects), 'date').slice(0, 2);
 ---
 
 <BaseLayout>

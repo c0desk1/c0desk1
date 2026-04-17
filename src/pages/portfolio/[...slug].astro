@@ -1,6 +1,6 @@
 ---
 // src/pages/portfolio/[...slug].astro
-// @ts-nocheck
+
 import { getCollection, render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
@@ -204,7 +204,6 @@ const relatedProjects = getRelatedProjects(project, allProjects, 2);
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {displayGallery.map((img, idx) => (
                   <img 
-                    key={idx}
                     src={img}
                     alt={`${title} screenshot ${idx + 1}`}
                     class="rounded-lg border border-zinc-200 dark:border-zinc-800 w-full h-auto"

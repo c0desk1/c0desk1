@@ -1,6 +1,6 @@
 ---
 // src/components/portfolio/ProjectCard.astro
-// @ts-nocheck
+
 import type { CollectionEntry } from 'astro:content';
 import { formatDate } from '@/lib/utils';
 
@@ -27,7 +27,7 @@ const {
 } = data;
 
 const formattedDate = formatDate(date);
-const displayImage = typeof image === 'string' ? image : image?.src;
+const displayImage = typeof image === 'string' ? image : null;
 
 // Variant classes
 const variantClasses = {
