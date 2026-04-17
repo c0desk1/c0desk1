@@ -201,7 +201,7 @@ content:
     label: Portfolio Projects
     type: collection
     path: src/content/portfolio
-    filename: "{fields.slug}.md"
+    filename: "{fields.slug}.mdx"
     
     view:
       fields: [title, date, featured, draft]
