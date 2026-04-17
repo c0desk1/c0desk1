@@ -1,0 +1,429 @@
+# .pages.yml
+
+# Media configuration untuk upload gambar
+media:
+  - name: blog-images
+    label: Blog Images
+    input: public/images/blog
+    output: /images/blog
+    categories: [image]
+    
+  - name: portfolio-images
+    label: Portfolio Images
+    input: public/images/portfolio
+    output: /images/portfolio
+    categories: [image]
+    
+  - name: gallery-images
+    label: Gallery Images
+    input: public/images/gallery
+    output: /images/gallery
+    categories: [image]
+
+# Site configuration (optional)
+site:
+  title: "C0desk1 Portfolio"
+  description: "Digital garden dan portofolio profesional"
+
+# Content collections
+content:
+  # ==================== BLOG COLLECTION ====================
+  - name: blog
+    label: Blog Posts
+    type: collection
+    path: src/content/blog
+    filename: "{fields.slug}.md"
+    exclude:
+      - "**/_*/**"
+      - "**/_*"
+    
+    view:
+      fields: [title, pubDate, draft, featured]
+      sort: ["pubDate desc"]
+    
+    fields:
+      - name: slug
+        label: Slug
+        type: string
+        required: true
+        pattern:
+          regex: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          message: "Use lowercase letters, numbers, and hyphens only"
+        description: "URL-friendly identifier (e.g., my-first-post)"
+      
+      - name: title
+        label: Title
+        type: string
+        required: true
+        options:
+          maxlength: 100
+        description: "SEO: Max 100 characters"
+      
+      - name: description
+        label: Description
+        type: text
+        required: true
+        options:
+          maxlength: 160
+          rows: 3
+        description: "SEO: Max 160 characters"
+      
+      - name: pubDate
+        label: Publish Date
+        type: date
+        required: true
+        options:
+          time: false
+          format: "yyyy-MM-dd"
+      
+      - name: updatedDate
+        label: Updated Date
+        type: date
+        required: false
+        options:
+          time: false
+          format: "yyyy-MM-dd"
+      
+      - name: tags
+        label: Tags
+        type: select
+        multiple: true
+        creatable: true
+        default: []
+        options:
+          max: 5
+        description: "Max 5 tags"
+      
+      - name: categories
+        label: Categories
+        type: select
+        multiple: true
+        creatable: true
+        default: []
+        options:
+          max: 3
+      
+      - name: image
+        label: Cover Image
+        type: image
+        options:
+          media: blog-images
+        description: "Main image for the blog post"
+      
+      - name: imageAlt
+        label: Image Alt Text
+        type: string
+        description: "Accessibility: Describe the image"
+      
+      - name: draft
+        label: Draft
+        type: boolean
+        default: false
+        description: "Hide from production"
+      
+      - name: featured
+        label: Featured Post
+        type: boolean
+        default: false
+        description: "Show on homepage"
+      
+      - name: pinned
+        label: Pinned Post
+        type: boolean
+        default: false
+        description: "Pin to top of blog list"
+      
+      - name: readingTime
+        label: Reading Time (minutes)
+        type: number
+        required: false
+        description: "Leave empty for auto-calculation"
+      
+      - name: wordCount
+        label: Word Count
+        type: number
+        required: false
+      
+      - name: author
+        label: Author
+        type: object
+        fields:
+          - name: name
+            label: Name
+            type: string
+            default: "C0desk1"
+          - name: avatar
+            label: Avatar URL
+            type: string
+            pattern:
+              regex: "^https?://"
+              message: "Must be a valid URL"
+          - name: title
+            label: Title
+            type: string
+            description: "e.g., Frontend Developer"
+      
+      - name: seo
+        label: SEO Settings
+        type: object
+        description: "Override default SEO settings"
+        fields:
+          - name: title
+            label: SEO Title
+            type: string
+            options:
+              maxlength: 100
+          - name: description
+            label: SEO Description
+            type: text
+            options:
+              maxlength: 160
+          - name: ogImage
+            label: OG Image URL
+            type: string
+            pattern:
+              regex: "^https?://"
+              message: "Must be a valid URL"
+          - name: canonical
+            label: Canonical URL
+            type: string
+            pattern:
+              regex: "^https?://"
+              message: "Must be a valid URL"
+          - name: noIndex
+            label: No Index
+            type: boolean
+            default: false
+            description: "Prevent search engines from indexing"
+
+  # ==================== PORTFOLIO COLLECTION ====================
+  - name: portfolio
+    label: Portfolio Projects
+    type: collection
+    path: src/content/portfolio
+    filename: "{fields.slug}.md"
+    
+    view:
+      fields: [title, date, featured, draft]
+      sort: ["date desc"]
+    
+    fields:
+      - name: slug
+        label: Slug
+        type: string
+        required: true
+        pattern:
+          regex: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          message: "Use lowercase letters, numbers, and hyphens only"
+      
+      - name: title
+        label: Project Title
+        type: string
+        required: true
+        options:
+          maxlength: 80
+      
+      - name: description
+        label: Description
+        type: text
+        required: true
+        options:
+          maxlength: 200
+          rows: 3
+      
+      - name: date
+        label: Project Date
+        type: date
+        required: true
+        options:
+          format: "yyyy-MM-dd"
+      
+      - name: updatedDate
+        label: Updated Date
+        type: date
+        required: false
+        options:
+          format: "yyyy-MM-dd"
+      
+      - name: techStack
+        label: Tech Stack
+        type: select
+        multiple: true
+        creatable: true
+        required: true
+        options:
+          min: 1
+          max: 10
+      
+      - name: demoUrl
+        label: Demo URL
+        type: string
+        required: false
+        pattern:
+          regex: "^https?://"
+          message: "Must be a valid URL starting with http:// or https://"
+      
+      - name: repoUrl
+        label: Repository URL
+        type: string
+        required: false
+        pattern:
+          regex: "^https?://"
+          message: "Must be a valid URL"
+      
+      - name: image
+        label: Cover Image
+        type: image
+        options:
+          media: portfolio-images
+      
+      - name: imageAlt
+        label: Image Alt Text
+        type: string
+      
+      - name: gallery
+        label: Gallery Images
+        type: list
+        required: false
+        fields:
+          - name: image
+            label: Gallery Image
+            type: image
+            options:
+              media: gallery-images
+        description: "Additional project screenshots"
+      
+      - name: draft
+        label: Draft
+        type: boolean
+        default: false
+      
+      - name: featured
+        label: Featured Project
+        type: boolean
+        default: false
+      
+      - name: archived
+        label: Archived
+        type: boolean
+        default: false
+      
+      - name: client
+        label: Client Name
+        type: string
+        required: false
+      
+      - name: role
+        label: Your Role
+        type: string
+        required: false
+        description: "e.g., Lead Developer, Designer"
+      
+      - name: duration
+        label: Project Duration
+        type: string
+        required: false
+        placeholder: "e.g., 3 months"
+      
+      - name: metrics
+        label: Performance Metrics
+        type: object
+        description: "Lighthouse scores (0-100)"
+        fields:
+          - name: performance
+            label: Performance Score
+            type: number
+            options:
+              min: 0
+              max: 100
+          - name: accessibility
+            label: Accessibility Score
+            type: number
+            options:
+              min: 0
+              max: 100
+          - name: seo
+            label: SEO Score
+            type: number
+            options:
+              min: 0
+              max: 100
+      
+      - name: challenge
+        label: The Challenge
+        type: text
+        required: false
+        options:
+          rows: 4
+      
+      - name: solution
+        label: The Solution
+        type: text
+        required: false
+        options:
+          rows: 4
+      
+      - name: result
+        label: The Result
+        type: text
+        required: false
+        options:
+          rows: 4
+
+  # ==================== SETTINGS COLLECTION ====================
+  - name: settings
+    label: Site Settings
+    type: file
+    path: src/content/settings/site.json
+    format: json
+    
+    fields:
+      - name: siteName
+        label: Site Name
+        type: string
+        required: true
+      
+      - name: siteDescription
+        label: Site Description
+        type: text
+        required: true
+      
+      - name: socialLinks
+        label: Social Links
+        type: object
+        fields:
+          - name: github
+            label: GitHub URL
+            type: string
+            pattern:
+              regex: "^https?://(github\\.com|www\\.github\\.com)"
+              message: "Must be a valid GitHub URL"
+          - name: twitter
+            label: Twitter URL
+            type: string
+            pattern:
+              regex: "^https?://(twitter\\.com|x\\.com|www\\.twitter\\.com)"
+              message: "Must be a valid Twitter/X URL"
+          - name: linkedin
+            label: LinkedIn URL
+            type: string
+            pattern:
+              regex: "^https?://(linkedin\\.com|www\\.linkedin\\.com)"
+              message: "Must be a valid LinkedIn URL"
+      
+      - name: seo
+        label: Default SEO Settings
+        type: object
+        fields:
+          - name: title
+            label: Default SEO Title
+            type: string
+          - name: description
+            label: Default SEO Description
+            type: text
+          - name: ogImage
+            label: Default OG Image URL
+            type: string
+          - name: canonical
+            label: Default Canonical URL
+            type: string
