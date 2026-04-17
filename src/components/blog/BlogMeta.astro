@@ -1,0 +1,55 @@
+---
+// src/components/blog/BlogMeta.astro
+// @ts-nocheck
+import { formatDate } from '@/lib/utils';
+
+interface Props {
+  pubDate: Date;
+  updatedDate?: Date;
+  readingTime: string;
+  featured?: boolean;
+  pinned?: boolean;
+}
+
+const { pubDate, updatedDate, readingTime, featured = false, pinned = false } = Astro.props;
+
+const formattedDate = formatDate(pubDate);
+const formattedUpdateDate = updatedDate ? formatDate(updatedDate) : undefined;
+---
+
+<div class="flex flex-wrap items-center gap-2 md:gap-3 font-mono text-xs md:text-sm text-zinc-500 dark:text-zinc-400">
+  <div class="flex items-center gap-2">
+    <div class="h-1.5 w-1.5 rounded-full bg-emerald-500"></div>
+    <span>published</span>
+  </div>
+  <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+  
+  {updatedDate && (
+    <>
+      <span class="text-zinc-300 dark:text-zinc-700">/</span>
+      <span>updated</span>
+      <time datetime={updatedDate.toISOString()}>{formattedUpdateDate}</time>
+    </>
+  )}
+  
+  <span class="text-zinc-300 dark:text-zinc-700">/</span>
+  <div class="flex items-center gap-0.5">
+    <span>[</span>
+    <span>{readingTime}</span>
+    <span>]</span>
+  </div>
+
+  {featured && (
+    <>
+      <span class="text-zinc-300 dark:text-zinc-700">/</span>
+      <span class="text-amber-600 dark:text-amber-500">[featured]</span>
+    </>
+  )}
+
+  {pinned && (
+    <>
+      <span class="text-zinc-300 dark:text-zinc-700">/</span>
+      <span class="text-blue-600 dark:text-blue-500">[pinned]</span>
+    </>
+  )}
+</div>

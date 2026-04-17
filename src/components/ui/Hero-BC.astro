@@ -1,0 +1,42 @@
+---
+// src/components/ui/Hero.astro - Extra Compact
+import { siteConfig } from "@/config/site";
+---
+
+<section class="py-10 md:py-14">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+      
+      {/* Left side - text content */}
+      <div class="space-y-2">
+        <div class="flex items-center gap-2 font-mono text-[10px] tracking-wider text-zinc-400 dark:text-zinc-500">
+          <span>$</span>
+          <span>whoami</span>
+          <span>→</span>
+          <span class="text-emerald-600 dark:text-emerald-400">{siteConfig.author}</span>
+        </div>
+        
+        <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-zinc-900 dark:text-white">
+          frontend.<span class="text-zinc-400 dark:text-zinc-600">engineer</span>
+        </h1>
+        
+        <p class="max-w-md text-xs font-mono text-zinc-500 dark:text-zinc-400">
+          Systematic, performant, accessible.
+        </p>
+      </div>
+      
+      {/* Right side - tactical CTA */}
+      <div class="flex items-center gap-3 font-mono text-xs">
+        <a href="/blog" class="px-3 py-1.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:opacity-90 transition-all">
+          blog
+        </a>
+        <a href={siteConfig.links.github} class="px-3 py-1.5 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all">
+          github
+        </a>
+      </div>
+      
+    </div>
+    
+  </div>
+</section>

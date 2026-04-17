@@ -1,0 +1,48 @@
+---
+// src/components/blog/BlogHeader.astro
+
+import BlogMeta from './BlogMeta.astro';
+import BlogAuthor from './BlogAuthor.astro';
+import BlogTags from './BlogTags.astro';
+
+interface Props {
+  title: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  readingTime: string;
+  tags?: string[];
+  author?: {
+    name: string;
+    avatar?: string;
+    title?: string;
+  };
+  featured?: boolean;
+  pinned?: boolean;
+}
+
+const { title, pubDate, updatedDate, readingTime, tags = [], author, featured, pinned } = Astro.props;
+---
+
+<header class="space-y-5 md:space-y-6">
+  
+  <BlogMeta 
+    pubDate={pubDate}
+    updatedDate={updatedDate}
+    readingTime={readingTime}
+    featured={featured}
+    pinned={pinned}
+  />
+  
+  <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-zinc-900 dark:text-white leading-[1.1]">
+    {title}
+  </h1>
+  
+  <BlogAuthor author={author} />
+  
+  <BlogTags tags={tags} />
+  
+  <div class="pt-4">
+    <div class="h-px w-12 bg-linear-to-r from-zinc-300 to-transparent dark:from-zinc-700"></div>
+  </div>
+  
+</header>

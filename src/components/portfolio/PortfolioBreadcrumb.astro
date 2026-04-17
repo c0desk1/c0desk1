@@ -1,0 +1,22 @@
+---
+// src/components/portfolio/PortfolioBreadcrumb.astro
+// @ts-nocheck
+interface Props {
+  slug?: string;
+}
+
+const { slug } = Astro.props;
+---
+
+<nav class="flex items-center gap-2 font-mono text-[11px] md:text-xs tracking-wide text-zinc-400 dark:text-zinc-500 mb-6 md:mb-8">
+  <span class="text-emerald-600 dark:text-emerald-500 font-bold">$</span>
+  <a href="/" class="hover:text-zinc-900 dark:hover:text-white transition-colors">home</a>
+  <span class="text-zinc-300 dark:text-zinc-700">/</span>
+  <a href="/portfolio" class="hover:text-zinc-900 dark:hover:text-white transition-colors">portfolio</a>
+  {slug && (
+    <>
+      <span class="text-zinc-300 dark:text-zinc-700">/</span>
+      <span class="text-zinc-600 dark:text-zinc-400 truncate">{slug}</span>
+    </>
+  )}
+</nav>

@@ -1,0 +1,28 @@
+---
+// src/components/blog/BlogBreadcrumb.astro
+import { getBreadcrumbFromPath } from '@/lib/utils';
+
+interface Props {
+  slug?: string;
+  currentPath?: string;
+}
+
+const { slug, currentPath = Astro.url.pathname } = Astro.props;
+const breadcrumbs = getBreadcrumbFromPath(currentPath);
+---
+
+<nav class="flex items-center gap-2 font-mono text-[11px] md:text-xs tracking-wide text-zinc-400 dark:text-zinc-500 mb-6 md:mb-8">
+  <span class="text-emerald-600 dark:text-emerald-500 font-bold">$</span>
+  {breadcrumbs.map((item, index) => (
+    <>
+      {index > 0 && <span class="text-zinc-300 dark:text-zinc-700">/</span>}
+      {index === breadcrumbs.length - 1 && slug ? (
+        <span class="text-zinc-600 dark:text-zinc-400 truncate">{slug}</span>
+      ) : (
+        <a href={item.href} class="hover:text-zinc-900 dark:hover:text-white transition-colors">
+          {item.name}
+        </a>
+      )}
+    </>
+  ))}
+</nav>

@@ -1,0 +1,119 @@
+/* src/styles/global.css */
+@import "tailwindcss";
+
+/* Plugin typography untuk Tailwind v4 */
+@plugin "@tailwindcss/typography";
+
+/* Custom fonts */
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Theme variables */
+@theme {
+  --font-main: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  /* Custom colors jika perlu */
+  --color-zinc-50: #fafafa;
+  --color-zinc-100: #f4f4f5;
+  --color-zinc-200: #e4e4e7;
+  --color-zinc-300: #d4d4d8;
+  --color-zinc-400: #a1a1aa;
+  --color-zinc-500: #71717a;
+  --color-zinc-600: #52525b;
+  --color-zinc-700: #3f3f46;
+  --color-zinc-800: #27272a;
+  --color-zinc-900: #18181b;
+  --color-zinc-950: #09090b;
+}
+
+/* Base styles */
+@layer base {
+  html {
+    font-family: var(--font-main);
+    letter-spacing: -0.01em;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    width: 100%;
+  }
+  
+  body {
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  button:focus-visible,
+  a:focus-visible {
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  
+  img {
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: attr(width) / attr(height);
+  }
+}
+
+/* Custom prose styles untuk industrial tactical vibe */
+@layer components {
+  .prose {
+    @apply prose prose-zinc dark:prose-invert max-w-none;
+    --tw-prose-body: #3f3f46;
+    --tw-prose-headings: #18181b;
+    --tw-prose-lead: #52525b;
+    --tw-prose-links: #18181b;
+    --tw-prose-bold: #18181b;
+    --tw-prose-counters: #71717a;
+    --tw-prose-bullets: #a1a1aa;
+    --tw-prose-hr: #e4e4e7;
+    --tw-prose-quotes: #3f3f46;
+    --tw-prose-quote-borders: #d4d4d8;
+    --tw-prose-captions: #71717a;
+    --tw-prose-code: #18181b;
+    --tw-prose-pre-code: #e4e4e7;
+    --tw-prose-pre-bg: #18181b;
+    --tw-prose-th-borders: #d4d4d8;
+    --tw-prose-td-borders: #e4e4e7;
+  }
+  
+  .dark .prose {
+    --tw-prose-body: #d4d4d8;
+    --tw-prose-headings: #ffffff;
+    --tw-prose-lead: #a1a1aa;
+    --tw-prose-links: #ffffff;
+    --tw-prose-bold: #ffffff;
+    --tw-prose-counters: #a1a1aa;
+    --tw-prose-bullets: #52525b;
+    --tw-prose-hr: #27272a;
+    --tw-prose-quotes: #d4d4d8;
+    --tw-prose-quote-borders: #3f3f46;
+    --tw-prose-captions: #a1a1aa;
+    --tw-prose-code: #d4d4d8;
+    --tw-prose-pre-code: #d4d4d8;
+    --tw-prose-pre-bg: #18181b;
+    --tw-prose-th-borders: #3f3f46;
+    --tw-prose-td-borders: #27272a;
+  }
+}
+
+/* Utility classes */
+@layer utilities {
+  .tracking-tighter {
+    letter-spacing: -0.02em;
+  }
+  
+  .tracking-tight {
+    letter-spacing: -0.01em;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  scrollbar-width: thin;
+}

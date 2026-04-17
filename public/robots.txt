@@ -1,0 +1,12 @@
+# https://www.robotstxt.org/robotstxt.html
+
+# Izinkan semua bot untuk merayapi seluruh situs
+User-agent: *
+Allow: /
+
+# Cegah bot merayapi folder draft jika ada (opsional)
+Disallow: /api/
+Disallow: /private/
+
+# Beritahu lokasi Sitemap (Ganti URL dengan domain asli kamu nanti)
+Sitemap: https://c0desk1.com/sitemap-index.xml

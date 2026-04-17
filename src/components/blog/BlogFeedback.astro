@@ -1,0 +1,37 @@
+---
+// src/components/blog/BlogFeedback.astro
+
+import { siteConfig } from '@/config/site';
+import { formatDate } from '@/lib/utils';
+
+interface Props {
+  slug: string;
+  lastUpdated: Date;
+}
+
+const { slug, lastUpdated } = Astro.props;
+const formattedDate = formatDate(lastUpdated);
+---
+
+<section class="mt-12 pt-6">
+  <div class="flex flex-wrap items-center justify-between gap-4 p-4 md:p-5 bg-zinc-50 dark:bg-zinc-900/50 rounded-lg border border-zinc-100 dark:border-zinc-800">
+    <div class="flex items-center gap-3 font-mono text-xs md:text-sm text-zinc-500 dark:text-zinc-400">
+      <span class="text-emerald-600 dark:text-emerald-500 font-bold">$</span>
+      <span>found a typo?</span>
+      <span class="text-zinc-300 dark:text-zinc-700">/</span>
+      <a 
+        href={`${siteConfig.links.github}/edit/main/src/content/blog/${slug}.mdx`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hover:text-zinc-900 dark:hover:text-white transition-colors underline-offset-4 hover:underline"
+      >
+        edit on github
+      </a>
+    </div>
+    <div class="flex items-center gap-2 font-mono text-xs md:text-sm text-zinc-400 dark:text-zinc-500">
+      <span>[</span>
+      <span>last updated: {formattedDate}</span>
+      <span>]</span>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,216 @@
+---
+// src/components/portfolio/ProjectCard.astro
+// @ts-nocheck
+import type { CollectionEntry } from 'astro:content';
+import { formatDate } from '@/lib/utils';
+
+interface Props {
+  project: CollectionEntry<'portfolio'>;
+  variant?: 'default' | 'compact' | 'featured';
+  showTechStack?: boolean;
+}
+
+const { project, variant = 'default', showTechStack = true } = Astro.props;
+const { data, id } = project;
+const { 
+  title, 
+  description, 
+  techStack, 
+  demoUrl, 
+  repoUrl, 
+  image, 
+  imageAlt,
+  date,
+  featured,
+  client,
+  role
+} = data;
+
+const formattedDate = formatDate(date);
+const displayImage = typeof image === 'string' ? image : image?.src;
+
+// Variant classes
+const variantClasses = {
+  default: 'p-5 md:p-6',
+  compact: 'p-4',
+  featured: 'p-6 md:p-8'
+};
+
+const imageSizes = {
+  default: 'h-48 md:h-56',
+  compact: 'h-32',
+  featured: 'h-56 md:h-64'
+};
+
+const titleSizes = {
+  default: 'text-xl md:text-2xl',
+  compact: 'text-base',
+  featured: 'text-2xl md:text-3xl'
+};
+---
+
+<article class="group relative">
+  <div 
+    class="block h-full border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden transition-all duration-300 hover:border-zinc-300 dark:hover:border-zinc-700 hover:shadow-lg hover:shadow-zinc-200/20 dark:hover:shadow-zinc-900/20 hover:-translate-y-1 rounded-lg"
+    class:list={[
+      variantClasses[variant],
+      variant === 'featured' ? 'md:grid md:grid-cols-2 md:gap-6 md:p-0 md:overflow-visible' : ''
+    ]}
+  >
+    
+    {/* Image Section */}
+    {displayImage && variant !== 'featured' && (
+      <div class={`relative overflow-hidden bg-zinc-100 dark:bg-zinc-900 -m-6 mb-4 rounded-t-lg ${imageSizes[variant]}`}>
+        <img 
+          src={displayImage}
+          alt={imageAlt || title}
+          class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          loading="lazy"
+        />
+        
+        {/* Industrial corner marks */}
+        <div class="absolute top-3 left-3 w-4 h-4 border-l border-t border-white/30 rounded-tl"></div>
+        <div class="absolute bottom-3 right-3 w-4 h-4 border-r border-b border-white/30 rounded-br"></div>
+        
+        {/* Featured badge */}
+        {featured && (
+          <div class="absolute top-3 right-3">
+            <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-amber-500/90 text-white backdrop-blur-sm rounded">
+              [featured]
+            </span>
+          </div>
+        )}
+      </div>
+    )}
+
+    {/* Featured Layout - Image side by side */}
+    {variant === 'featured' && displayImage && (
+      <>
+        <div class="relative overflow-hidden bg-zinc-100 dark:bg-zinc-900 h-full min-h-48 md:min-h-full">
+          <img 
+            src={displayImage}
+            alt={imageAlt || title}
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+          />
+          <div class="absolute top-3 left-3 w-4 h-4 border-l border-t border-white/30 rounded-tl"></div>
+          <div class="absolute bottom-3 right-3 w-4 h-4 border-r border-b border-white/30 rounded-br"></div>
+        </div>
+        <div class="p-6 md:p-8">
+          {/* Content will go here */}
+        </div>
+      </>
+    )}
+
+    {/* Content Section */}
+    <div class={variant === 'featured' && displayImage ? 'p-6 md:p-8' : ''}>
+      
+      {/* Meta info - industrial tactical */}
+      <div class="flex flex-wrap items-center gap-2 font-mono text-[10px] md:text-[11px] tracking-wide text-zinc-500 dark:text-zinc-400 mb-3">
+        <span class="text-emerald-600 dark:text-emerald-500 font-bold">$</span>
+        <time datetime={date.toISOString()}>{formattedDate}</time>
+        <span class="text-zinc-300 dark:text-zinc-700">/</span>
+        <div class="flex items-center gap-0.5">
+          <span>[</span>
+          <span>project</span>
+          <span>]</span>
+        </div>
+        
+        {featured && variant !== 'featured' && (
+          <>
+            <span class="text-zinc-300 dark:text-zinc-700">/</span>
+            <span class="text-amber-600 dark:text-amber-500">[★]</span>
+          </>
+        )}
+      </div>
+      
+      {/* Title */}
+      <h3 class={`font-bold tracking-tight text-zinc-900 dark:text-white transition-colors group-hover:text-zinc-600 dark:group-hover:text-zinc-300 mb-2 ${titleSizes[variant]}`}>
+        {title}
+      </h3>
+      
+      {/* Client/Role - optional */}
+      {(client || role) && variant !== 'compact' && (
+        <div class="flex flex-wrap items-center gap-2 mb-2 font-mono text-[10px] text-zinc-400 dark:text-zinc-500">
+          {client && (
+            <>
+              <span>client:</span>
+              <span class="text-zinc-600 dark:text-zinc-400">{client}</span>
+            </>
+          )}
+          {client && role && <span>/</span>}
+          {role && (
+            <>
+              <span>role:</span>
+              <span class="text-zinc-600 dark:text-zinc-400">{role}</span>
+            </>
+          )}
+        </div>
+      )}
+      
+      {/* Description */}
+      <p class="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed line-clamp-2 mb-3">
+        {description}
+      </p>
+      
+      {/* Tech Stack */}
+      {showTechStack && techStack && techStack.length > 0 && variant !== 'compact' && (
+        <div class="flex flex-wrap gap-1.5 mb-4">
+          {techStack.slice(0, 4).map(tech => (
+            <span class="px-1.5 py-0.5 text-[9px] md:text-[10px] font-mono border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 rounded">
+              {tech}
+            </span>
+          ))}
+          {techStack.length > 4 && (
+            <span class="px-1.5 py-0.5 text-[9px] md:text-[10px] font-mono text-zinc-400 dark:text-zinc-600">
+              +{techStack.length - 4}
+            </span>
+          )}
+        </div>
+      )}
+      
+      {/* Links - industrial tactical (tanpa onClick) */}
+      <div class="flex items-center gap-4 pt-2">
+        {demoUrl && (
+          <a 
+            href={demoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group/link inline-flex items-center gap-1 text-[10px] md:text-[11px] font-mono text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors"
+          >
+            <span>[live</span>
+            <span class="group-hover/link:translate-x-0.5 transition-transform duration-200">→</span>
+            <span>]</span>
+          </a>
+        )}
+        
+        {repoUrl && (
+          <a 
+            href={repoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group/link inline-flex items-center gap-1 text-[10px] md:text-[11px] font-mono text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors"
+          >
+            <span>[code</span>
+            <span class="group-hover/link:translate-x-0.5 transition-transform duration-200">→</span>
+            <span>]</span>
+          </a>
+        )}
+        
+        {/* View project arrow (if no links) */}
+        {!demoUrl && !repoUrl && (
+          <div class="flex items-center gap-0.5 text-[10px] md:text-[11px] font-mono text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-all duration-200 group-hover:translate-x-0.5">
+            <span>[view</span>
+            <span>→</span>
+            <span>]</span>
+          </div>
+        )}
+      </div>
+      
+      {/* Industrial separator line on hover */}
+      <div class="mt-4 h-px w-0 bg-linear-to-r from-zinc-300 to-transparent dark:from-zinc-700 group-hover:w-full transition-all duration-500"></div>
+      
+    </div>
+    
+  </div>
+</article>

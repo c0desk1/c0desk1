@@ -1,0 +1,31 @@
+---
+// src/components/blog/BlogFeaturedImage.astro
+// @ts-nocheck
+interface Props {
+  image: string;
+  alt?: string;
+}
+
+const { image, alt } = Astro.props;
+---
+
+<div class="border-b border-zinc-100 dark:border-zinc-900 bg-zinc-50/50 dark:bg-zinc-900/30">
+  <Container size="md" class="py-8 md:py-10">
+    <div class="relative rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+      <img 
+        src={image} 
+        alt={alt || 'Featured image'}
+        class="w-full h-auto object-cover"
+        loading="eager"
+      />
+      {/* Industrial corner marks */}
+      <div class="absolute top-3 left-3 w-4 h-4 border-l border-t border-white/30 rounded-tl"></div>
+      <div class="absolute bottom-3 right-3 w-4 h-4 border-r border-b border-white/30 rounded-br"></div>
+    </div>
+    {alt && (
+      <p class="text-xs text-center text-zinc-500 dark:text-zinc-400 mt-3 font-mono">
+        {alt}
+      </p>
+    )}
+  </Container>
+</div>

@@ -1,0 +1,135 @@
+---
+// src/components/portfolio/PortfolioHeader.astro
+import { formatDate } from '@/lib/utils';
+
+interface Props {
+  title: string;
+  date: Date;
+  updatedDate?: Date;
+  featured?: boolean;
+  client?: string;
+  role?: string;
+  duration?: string;
+  techStack?: string[];
+  demoUrl?: string;
+  repoUrl?: string;
+}
+
+const { title, date, updatedDate, featured, client, role, duration, techStack, demoUrl, repoUrl } = Astro.props;
+
+const formattedDate = formatDate(date);
+const formattedUpdateDate = updatedDate ? formatDate(updatedDate) : undefined;
+---
+
+<header class="space-y-5 md:space-y-6">
+  
+  {/* Meta info */}
+  <div class="flex flex-wrap items-center gap-2 md:gap-3 font-mono text-xs md:text-sm text-zinc-500 dark:text-zinc-400">
+    <div class="flex items-center gap-2">
+      <div class="h-1.5 w-1.5 rounded-full bg-emerald-500"></div>
+      <span>project</span>
+    </div>
+    <time datetime={date.toISOString()}>{formattedDate}</time>
+    
+    {updatedDate && (
+      <>
+        <span class="text-zinc-300 dark:text-zinc-700">/</span>
+        <span>updated</span>
+        <time datetime={updatedDate.toISOString()}>{formattedUpdateDate}</time>
+      </>
+    )}
+    
+    <span class="text-zinc-300 dark:text-zinc-700">/</span>
+    <div class="flex items-center gap-0.5">
+      <span>[</span>
+      <span>case study</span>
+      <span>]</span>
+    </div>
+
+    {featured && (
+      <>
+        <span class="text-zinc-300 dark:text-zinc-700">/</span>
+        <span class="text-amber-600 dark:text-amber-500">[featured]</span>
+      </>
+    )}
+  </div>
+  
+  {/* Title */}
+  <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-zinc-900 dark:text-white leading-[1.1]">
+    {title}
+  </h1>
+  
+  {/* Client & Role */}
+  {(client || role) && (
+    <div class="flex flex-wrap items-center gap-4 pt-2 font-mono text-sm text-zinc-500 dark:text-zinc-400">
+      {client && (
+        <div class="flex items-center gap-2">
+          <span class="text-zinc-400 dark:text-zinc-600">client</span>
+          <span class="text-zinc-900 dark:text-white">{client}</span>
+        </div>
+      )}
+      {client && role && <span class="text-zinc-300 dark:text-zinc-700">/</span>}
+      {role && (
+        <div class="flex items-center gap-2">
+          <span class="text-zinc-400 dark:text-zinc-600">role</span>
+          <span class="text-zinc-900 dark:text-white">{role}</span>
+        </div>
+      )}
+      {duration && (
+        <>
+          <span class="text-zinc-300 dark:text-zinc-700">/</span>
+          <div class="flex items-center gap-0.5">
+            <span>[</span>
+            <span>{duration}</span>
+            <span>]</span>
+          </div>
+        </>
+      )}
+    </div>
+  )}
+  
+  {/* Tech Stack */}
+  {techStack && techStack.length > 0 && (
+    <div class="flex flex-wrap gap-2 pt-2">
+      {techStack.map(tech => (
+        <span class="px-2 py-0.5 text-[11px] md:text-xs font-mono border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors rounded">
+          {tech}
+        </span>
+      ))}
+    </div>
+  )}
+  
+  {/* Links */}
+  <div class="flex flex-wrap items-center gap-4 pt-4">
+    {demoUrl && (
+      <a 
+        href={demoUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-mono rounded hover:opacity-90 transition-opacity"
+      >
+        <span>[live</span>
+        <span>→</span>
+        <span>]</span>
+      </a>
+    )}
+    {repoUrl && (
+      <a 
+        href={repoUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 px-4 py-2 border border-zinc-200 dark:border-zinc-800 text-sm font-mono rounded hover:border-zinc-300 dark:hover:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all"
+      >
+        <span>[code</span>
+        <span>→</span>
+        <span>]</span>
+      </a>
+    )}
+  </div>
+  
+  {/* Industrial separator */}
+  <div class="pt-4">
+    <div class="h-px w-12 bg-linear-to-r from-zinc-300 to-transparent dark:from-zinc-700"></div>
+  </div>
+  
+</header>
