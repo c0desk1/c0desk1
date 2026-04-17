@@ -9,7 +9,7 @@ import mdx from '@astrojs/mdx';
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://dev-c0desk1.pages.dev",
+  site: "https://bimaakbar.my.id",
   vite: {
     plugins: [tailwindcss()]
   },

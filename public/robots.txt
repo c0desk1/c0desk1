@@ -8,5 +8,4 @@ Allow: /
 Disallow: /api/
 Disallow: /private/
 
-# Beritahu lokasi Sitemap (Ganti URL dengan domain asli kamu nanti)
-Sitemap: https://c0desk1.com/sitemap-index.xml
+Sitemap: https://bimaakbar.my.id/sitemap-index.xml

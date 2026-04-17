@@ -4,7 +4,7 @@ export const siteConfig = {
   name: "C0desk1",
   author: "C0desk1",
   description: "Digital garden dan portofolio profesional yang berfokus pada pengembangan web modern, sistem minimalis, dan efisiensi kode.",
-  url: "https://c0desk1.com",
+  url: "https://bimaakbar.my.id",
   ogImage: "/og-image.png",
   keywords: [
     "Web Developer",

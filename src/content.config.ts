@@ -1,3 +1,4 @@
+// src/content.config.ts
 import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
@@ -30,7 +31,7 @@ const blogCollection = defineCollection({
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
     
-    image: image().optional(),
+    image: z.string().optional(),
     imageAlt: z.string().optional(),
     
     tags: z.array(z.string().max(30, "Tag maksimal 30 karakter"))
@@ -70,12 +71,13 @@ const portfolioCollection = defineCollection({
       .min(1, "Minimal 1 tech stack")
       .max(10, "Maksimal 10 tech stack"),
     
-    demoUrl: z.string().url({ message: "Demo URL harus valid" }).optional(),
+    demoUrl: z.string().url({ message: "Demo URL harus valid" }),
     repoUrl: z.string().url({ message: "Repo URL harus valid" }).optional(),
     
-    image: image().optional(),
+    image: z.string().optional(),
     imageAlt: z.string().optional(),
-    gallery: z.array(image()).optional(),
+
+    gallery: z.array(z.string()).optional(),
     
     date: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
