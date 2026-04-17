@@ -71,12 +71,12 @@ const portfolioCollection = defineCollection({
       .min(1, "Minimal 1 tech stack")
       .max(10, "Maksimal 10 tech stack"),
     
-    demoUrl: z.string().url({ message: "Demo URL harus valid" }),
+    demoUrl: z.string().url({ message: "Demo URL harus valid" }).optional(),
     repoUrl: z.string().url({ message: "Repo URL harus valid" }).optional(),
     
     image: z.string().optional(),
     imageAlt: z.string().optional(),
-
+    
     gallery: z.array(z.string()).optional(),
     
     date: z.coerce.date(),
@@ -99,6 +99,12 @@ const portfolioCollection = defineCollection({
     challenge: z.string().optional(),
     solution: z.string().optional(),
     result: z.string().optional(),
+    
+    seo: z.object({
+      title: z.string().optional(),
+      description: z.string().optional(),
+      ogImage: z.string().optional(),
+    }).optional(),
   }),
 });
 
