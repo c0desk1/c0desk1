@@ -98,4 +98,20 @@ if (type === "article" && title) {
 <!-- JSON-LD Schema -->
 <script type="application/ld+json" set:html={JSON.stringify(schema)} />
 
+<!-- Organization schema -->
+{type === 'website' && (
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": siteConfig.name,
+    "url": siteConfig.url,
+    "logo": `${siteConfig.url}/favicon.svg`,
+    "sameAs": [
+      siteConfig.links.github,
+      siteConfig.links.twitter,
+      siteConfig.links.linkedin
+    ].filter(Boolean)
+  })} />
+)}
+
 <link rel="preload" href="/fonts/Geist.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
