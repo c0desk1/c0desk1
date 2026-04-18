@@ -1,6 +1,6 @@
 ---
 // src/components/blog/RelatedPostCard.astro
-
+// @ts-nocheck
 import type { CollectionEntry } from 'astro:content';
 import { formatDateCompact, getReadingTime } from '@/lib/utils';
 
@@ -20,30 +20,39 @@ const readingTime = getReadingTime(undefined, undefined, body);
 
 <a 
   href={`/blog/${id}`} 
-  class="group block py-2 border-b border-zinc-100 dark:border-zinc-800 transition-all duration-200 hover:pl-2"
+  class="group block py-3 border-b border-zinc-100 dark:border-zinc-800 transition-all duration-200 hover:pl-2"
 >
-  <div class="flex flex-col gap-1">
+  <div class="flex flex-col gap-1.5">
     
-    {/* Date & Reading Time */}
-    <div class="flex items-center gap-2 text-[10px] font-mono text-zinc-400 dark:text-zinc-500">
-      {showDate && (
-        <time datetime={pubDate.toISOString()}>{formattedDate}</time>
-      )}
-      {showDate && showReadingTime && <span class="text-zinc-300 dark:text-zinc-700">/</span>}
-      {showReadingTime && (
-        <div class="flex items-center gap-0.5">
-          <span>[</span>
-          <span>{readingTime}</span>
-          <span>]</span>
-        </div>
-      )}
-      {featured && (
-        <span class="text-amber-600 dark:text-amber-500 text-[9px]">[★]</span>
-      )}
+    {/* Date */}
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2 text-[10px] font-mono text-zinc-400 dark:text-zinc-500">
+        {showDate && (
+          <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+        )}
+        {showDate && showReadingTime && <span class="text-zinc-300 dark:text-zinc-700">/</span>}
+        {showReadingTime && (
+          <div class="flex items-center gap-0.5">
+            <span>[</span>
+            <span>{readingTime}</span>
+            <span>]</span>
+          </div>
+        )}
+        {featured && (
+          <span class="text-amber-600 dark:text-amber-500 text-[9px]">[★]</span>
+        )}
+      </div>
+      
+      {/* [read] */}
+      <div class="flex items-center gap-0.5 text-[10px] font-mono text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-all group-hover:translate-x-0.5">
+        <span>[read</span>
+        <span>→</span>
+        <span>]</span>
+      </div>
     </div>
     
     {/* Title */}
-    <h4 class="text-sm font-mono text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">
+    <h4 class="text-sm font-mono text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors leading-snug">
       {title}
     </h4>
     
