@@ -1,5 +1,6 @@
 ---
 // src/pages/blog/[...slug].astro
+
 import { getCollection, render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { siteConfig } from '@/config/site';
@@ -11,6 +12,7 @@ import BackToTop from '@/components/ui/BackToTop.astro';
 
 import BlogHeader from '@/components/blog/BlogHeader.astro';
 import BlogFeaturedImage from '@/components/blog/BlogFeaturedImage.astro';
+import BlogContent from '@/components/blog/BlogContent.astro';
 import BlogTOC from '@/components/blog/BlogTOC.astro';
 import BlogRelatedPosts from '@/components/blog/BlogRelatedPosts.astro';
 import BlogFeedback from '@/components/blog/BlogFeedback.astro';
@@ -19,11 +21,9 @@ import {
   getReadingTime, 
   filterHeadingsForTOC, 
   getRelatedPosts,
-  formatDate
+  formatDateCompact
 } from '@/lib/utils';
-import BlogContent from '@/components/blog/BlogContent.astro';
 
-// Generate static paths
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
   return posts.map((post: CollectionEntry<'blog'>) => ({
@@ -51,21 +51,18 @@ const {
   seo
 } = post.data;
 
-// Render konten
+
 const { Content, headings, remarkPluginFrontmatter } = await render(post);
 
-// Ambil semua posts untuk related posts
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
 const relatedPosts = getRelatedPosts(post, allPosts, 3);
 
-// Hitung reading time
 const readingTime = getReadingTime(
   customReadingTime,
   remarkPluginFrontmatter?.minutesRead,
   post.body
 );
 
-// SEO
 const seoTitle = seo?.title || title;
 const seoDescription = seo?.description || description;
 const seoImage = (() => {
@@ -74,14 +71,9 @@ const seoImage = (() => {
   return siteConfig.ogImage;
 })();
 
-// Filter headings untuk TOC
 const tocHeadings = filterHeadingsForTOC(headings);
-
-// Handle image
 const displayImage = typeof image === 'string' ? image : null;
-
-// Format last updated
-const lastUpdated = formatDate(updatedDate || pubDate);
+const lastUpdated = formatDateCompact(updatedDate || pubDate);
 ---
 
 <BaseLayout 
@@ -96,7 +88,7 @@ const lastUpdated = formatDate(updatedDate || pubDate);
 >
   <article>
     
-    {/* Hero Section */}
+    {/* Hero */}
     <div class="border-b border-zinc-100 dark:border-zinc-900">
       <Container size="md" class="py-8 md:py-10">
         
