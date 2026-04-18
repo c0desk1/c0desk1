@@ -1,6 +1,6 @@
 ---
 // src/components/blog/PostCardCompact.astro
-// @ts-nocheck
+
 import type { CollectionEntry } from 'astro:content';
 import { formatDateCompact, getReadingTime } from '@/lib/utils';
 
@@ -19,7 +19,7 @@ const readingTime = getReadingTime(undefined, undefined, body);
 
 <a 
   href={`/blog/${id}`} 
-  class="group block py-4 border-b border-zinc-100 dark:border-zinc-800 transition-all duration-200 hover:border-zinc-300 dark:hover:border-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 dark:focus:ring-zinc-600"
+  class="group block py-4 border-b border-zinc-100 dark:border-zinc-800 transition-all duration-200 hover:border-zinc-300 dark:hover:border-zinc-700"
   aria-label={`Read article: ${title}`}
 >
   {/* Date di atas dengan $ hijau */}
@@ -56,7 +56,7 @@ const readingTime = getReadingTime(undefined, undefined, body);
       {showTags && tags && tags.length > 0 && (
         <>
           {tags.slice(0, 2).map(tag => (
-            <span key={tag} class="hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors">
+            <span class="hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors">
               #{tag}
             </span>
           ))}
