@@ -1,5 +1,6 @@
 ---
 // src/components/blog/BlogHeader.astro
+
 import BlogMeta from './BlogMeta.astro';
 import BlogAuthor from './BlogAuthor.astro';
 import BlogTags from './BlogTags.astro';
@@ -15,11 +16,10 @@ interface Props {
     avatar?: string;
     title?: string;
   };
-  featured?: boolean;
-  pinned?: boolean;
+  featured?: boolean;
 }
 
-const { title, pubDate, updatedDate, readingTime, tags = [], author, featured, pinned } = Astro.props;
+const { title, pubDate, updatedDate, readingTime, tags = [], author, featured } = Astro.props;
 ---
 
 <header class="space-y-4">
@@ -33,7 +33,6 @@ const { title, pubDate, updatedDate, readingTime, tags = [], author, featured, p
     updatedDate={updatedDate}
     readingTime={readingTime}
     featured={featured}
-    pinned={pinned}
   />
   
   <BlogAuthor author={author} />
