@@ -2,7 +2,7 @@
 // src/components/blog/BlogFeedback.astro
 
 import { siteConfig } from '@/config/site';
-import { formatDate } from '@/lib/utils';
+import { formatDateCompact } from '@/lib/utils';  // ← ganti ke compact
 
 interface Props {
   slug: string;
@@ -14,12 +14,12 @@ const { slug, lastUpdated } = Astro.props;
 const lastUpdatedDate = typeof lastUpdated === 'string' 
   ? new Date(lastUpdated) 
   : lastUpdated;
-const formattedDate = formatDate(lastUpdatedDate);
+const formattedDate = formatDateCompact(lastUpdatedDate);  // ← compact
 ---
 
 <section class="mt-10 pt-5 border-t border-zinc-100 dark:border-zinc-800">
   <div class="flex flex-wrap items-center justify-between gap-3 p-3 md:p-4 border border-zinc-200 dark:border-zinc-800">
-    <div class="flex items-center gap-2 font-mono text-[11px] text-zinc-500 dark:text-zinc-400">
+    <div class="flex items-center gap-2 font-mono text-[12px] text-zinc-500 dark:text-zinc-400">
       <span class="text-emerald-600 dark:text-emerald-500 font-bold">$</span>
       <span>found a typo?</span>
       <span class="text-zinc-300 dark:text-zinc-700">/</span>
@@ -27,12 +27,13 @@ const formattedDate = formatDate(lastUpdatedDate);
         href={`${siteConfig.links.github}/edit/main/src/content/blog/${slug}.md`}
         target="_blank"
         rel="noopener noreferrer"
-        class="hover:text-zinc-900 dark:hover:text-white transition-colors hover:underline underline-offset-2"
+        class="hover:text-zinc-900 dark:hover:text-white transition-colors hover:underline underline-offset-2 focus:outline-none focus:ring-2 focus:ring-zinc-400 dark:focus:ring-zinc-600 rounded-sm"
+        aria-label="Edit this post on GitHub"
       >
         edit on github
       </a>
     </div>
-    <div class="flex items-center gap-1 font-mono text-[11px] text-zinc-400 dark:text-zinc-500">
+    <div class="flex items-center gap-1 font-mono text-[12px] text-zinc-400 dark:text-zinc-500">
       <span>[</span>
       <span>updated: {formattedDate}</span>
       <span>]</span>
