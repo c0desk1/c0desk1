@@ -2,7 +2,7 @@
 // src/components/blog/BlogFeedback.astro
 
 import { siteConfig } from '@/config/site';
-import { formatDateCompact } from '@/lib/utils';  // ← ganti ke compact
+import { formatDateCompact } from '@/lib/utils';
 
 interface Props {
   slug: string;
@@ -14,7 +14,7 @@ const { slug, lastUpdated } = Astro.props;
 const lastUpdatedDate = typeof lastUpdated === 'string' 
   ? new Date(lastUpdated) 
   : lastUpdated;
-const formattedDate = formatDateCompact(lastUpdatedDate);  // ← compact
+const formattedDate = formatDateCompact(lastUpdatedDate);
 ---
 
 <section class="mt-10 pt-5 border-t border-zinc-100 dark:border-zinc-800">
