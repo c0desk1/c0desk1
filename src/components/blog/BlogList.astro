@@ -1,10 +1,12 @@
 ---
 // src/components/blog/BlogList.astro
+
+import type { CollectionEntry } from 'astro:content';
 import PostCard from './PostCard.astro';
 
 interface Props {
-  featuredPost: any;
-  regularPosts: any[];
+  featuredPost?: CollectionEntry<'blog'>;
+  regularPosts: CollectionEntry<'blog'>[];
   totalCount: number;
 }
 const { featuredPost, regularPosts, totalCount } = Astro.props;
@@ -14,7 +16,7 @@ const { featuredPost, regularPosts, totalCount } = Astro.props;
   {featuredPost && (
     <div class="mb-10 pb-8">
       <div class="flex items-center gap-2 mb-4">
-        <span class="text-[12px] font-mono text-amber-600 dark:text-amber-500 font-bold">[FEATURED]</span>
+        <span class="text-[11px] font-mono text-amber-600 dark:text-amber-500 font-bold">[featured]</span>
         <div class="h-px flex-1 bg-linear-to-r from-amber-500/50 to-transparent"></div>
       </div>
       <div class="bg-amber-50/30 dark:bg-amber-950/10 border-l-2 border-amber-500 p-5 -mx-5">
