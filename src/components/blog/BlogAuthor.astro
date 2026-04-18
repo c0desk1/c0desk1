@@ -1,5 +1,6 @@
 ---
 // src/components/blog/BlogAuthor.astro
+
 interface Author {
   name: string;
   avatar?: string;
@@ -14,11 +15,11 @@ const { author } = Astro.props;
 ---
 
 {author && (
-  <div class="flex items-center gap-3 pt-1">
+  <div class="flex items-center gap-3 pt-1" aria-label={`Author: ${author.name}`}>
     {author.avatar && (
       <img 
         src={author.avatar} 
-        alt={author.name}
+        alt={`Avatar of ${author.name}`}
         class="w-8 h-8 rounded-full border border-zinc-200 dark:border-zinc-800"
         loading="lazy"
       />
