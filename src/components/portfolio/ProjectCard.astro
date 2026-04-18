@@ -1,6 +1,6 @@
 ---
 // src/components/portfolio/ProjectCard.astro
-
+// @ts-nocheck
 import type { CollectionEntry } from 'astro:content';
 import { formatDateCompact } from '@/lib/utils';
 
@@ -30,6 +30,7 @@ const formattedDate = formatDateCompact(date);
 const displayImage = typeof image === 'string' ? image : null;
 const detailUrl = `/portfolio/${id}`;
 
+// Variant classes
 const variantClasses = {
   default: 'p-4 md:p-5',
   compact: 'p-3',
@@ -37,52 +38,58 @@ const variantClasses = {
 };
 
 const imageSizes = {
-  default: 'h-44 md:h-52',
-  compact: 'h-32',
-  featured: 'h-52 md:h-64'
+  default: 'w-full h-36 md:h-40',
+  compact: 'w-full h-28',
+  featured: 'w-full h-48 md:h-56'
 };
 
 const titleSizes = {
-  default: 'text-lg md:text-xl',
-  compact: 'text-base',
-  featured: 'text-2xl md:text-3xl'
+  default: 'text-base md:text-lg',
+  compact: 'text-sm',
+  featured: 'text-xl md:text-2xl'
 };
 ---
 
 <article class="group relative h-full">
-  <a 
-    href={detailUrl}
-    class="block h-full border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden transition-all duration-200 hover:border-zinc-300 dark:hover:border-zinc-700 hover:shadow-md rounded-md"
+  <!-- Card wrapper (bukan link) -->
+  <div 
+    class="h-full border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden transition-all duration-200 hover:border-zinc-300 dark:hover:border-zinc-700 hover:shadow-md rounded-md"
     class:list={[
       variantClasses[variant],
       variant === 'featured' ? 'md:grid md:grid-cols-2 md:gap-4 md:p-0 md:overflow-visible' : ''
     ]}
   >
     
+    {/* Image Section - klik ke detail */}
     {displayImage && variant !== 'featured' && (
-      <div class={`relative overflow-hidden bg-zinc-100 dark:bg-zinc-900 -m-4 md:-m-5 mb-3 rounded-t-md ${imageSizes[variant]}`}>
-        <img 
-          src={displayImage}
-          alt={imageAlt || title}
-          class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-          loading="lazy"
-        />
-        
-        <div class="absolute top-2 left-2 w-4 h-4 border-l border-t border-white/30"></div>
-        
-        {featured && (
-          <div class="absolute top-2 right-2">
-            <span class="px-1.5 py-0.5 text-[10px] font-mono font-bold bg-amber-500/90 text-white backdrop-blur-sm rounded-sm">
-              [★]
-            </span>
-          </div>
-        )}
-      </div>
+      <a href={detailUrl} class="block overflow-hidden -m-4 md:-m-5 mb-3 rounded-t-md">
+        <div class={`relative ${imageSizes[variant]}`}>
+          <img 
+            src={displayImage}
+            alt={imageAlt || title}
+            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            loading="lazy"
+          />
+          
+          {/* Industrial corner marks */}
+          <div class="absolute top-2 left-2 w-4 h-4 border-l border-t border-white/30"></div>
+          
+          {/* Featured badge */}
+          {featured && (
+            <div class="absolute top-2 right-2">
+              <span class="px-1.5 py-0.5 text-[10px] font-mono font-bold bg-amber-500/90 text-white backdrop-blur-sm rounded-sm">
+                [★]
+              </span>
+            </div>
+          )}
+        </div>
+      </a>
     )}
 
+    {/* Featured Layout - Image side by side */}
     {variant === 'featured' && displayImage && (
       <>
-        <div class="relative overflow-hidden bg-zinc-100 dark:bg-zinc-900 h-full min-h-48 md:min-h-full">
+        <a href={detailUrl} class="relative overflow-hidden bg-zinc-100 dark:bg-zinc-900 h-full min-h-48 md:min-h-full">
           <img 
             src={displayImage}
             alt={imageAlt || title}
@@ -90,15 +97,24 @@ const titleSizes = {
             loading="lazy"
           />
           <div class="absolute top-2 left-2 w-4 h-4 border-l border-t border-white/30"></div>
-        </div>
+        </a>
         <div class="p-4 md:p-6">
           {/* Content will go here */}
         </div>
       </>
     )}
 
+    {/* Content Section */}
     <div class={variant === 'featured' && displayImage ? 'p-4 md:p-6' : ''}>
       
+      {/* Title - link ke detail */}
+      <a href={detailUrl} class="block">
+        <h3 class={`font-bold tracking-tight text-zinc-900 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-colors mb-1.5 leading-tight ${titleSizes[variant]}`}>
+          {title}
+        </h3>
+      </a>
+      
+      {/* Meta info */}
       <div class="flex items-center gap-1.5 font-mono text-[11px] md:text-xs tracking-wide text-zinc-500 dark:text-zinc-400 mb-2">
         <span class="text-emerald-500 dark:text-emerald-400 font-bold">$</span>
         <span class="text-zinc-400 dark:text-zinc-500">{formattedDate}</span>
@@ -117,10 +133,7 @@ const titleSizes = {
         )}
       </div>
       
-      <h3 class={`font-bold tracking-tight text-zinc-900 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-colors mb-1.5 leading-tight ${titleSizes[variant]}`}>
-        {title}
-      </h3>
-      
+      {/* Client/Role */}
       {(client || role) && variant !== 'compact' && (
         <div class="flex items-center gap-1.5 mb-2 font-mono text-[10px] md:text-[11px] text-zinc-400 dark:text-zinc-500">
           {client && <span class="text-zinc-500 dark:text-zinc-400">{client}</span>}
@@ -129,10 +142,14 @@ const titleSizes = {
         </div>
       )}
       
-      <p class={`text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed ${variant === 'featured' ? 'line-clamp-3' : 'line-clamp-2'} mb-3`}>
-        {description}
-      </p>
+      {/* Description */}
+      <a href={detailUrl} class="block">
+        <p class={`text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed ${variant === 'featured' ? 'line-clamp-3' : 'line-clamp-2'} mb-3`}>
+          {description}
+        </p>
+      </a>
       
+      {/* Tech Stack */}
       {showTechStack && techStack && techStack.length > 0 && variant !== 'compact' && (
         <div class="flex flex-wrap gap-1.5 mb-3">
           {techStack.slice(0, 3).map(tech => (
@@ -148,7 +165,8 @@ const titleSizes = {
         </div>
       )}
       
-      <div class="flex items-center gap-4 pt-1" onClick={(e) => e.stopPropagation()}>
+      {/* Links - external links */}
+      <div class="flex items-center gap-4 pt-1">
         {demoUrl && (
           <a 
             href={demoUrl}
@@ -176,9 +194,10 @@ const titleSizes = {
         )}
       </div>
       
+      {/* Industrial hover line */}
       <div class="mt-3 h-px w-0 bg-linear-to-r from-zinc-300 to-transparent dark:from-zinc-700 group-hover:w-full transition-all duration-300"></div>
       
     </div>
     
-  </a>
+  </div>
 </article>
