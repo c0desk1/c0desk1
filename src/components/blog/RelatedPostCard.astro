@@ -1,5 +1,6 @@
 ---
-// src/components/blog/PostCardMinimal.astro
+// src/components/blog/RelatedPostCard.astro
+
 import type { CollectionEntry } from 'astro:content';
 import { formatDateCompact, getReadingTime } from '@/lib/utils';
 
@@ -19,34 +20,32 @@ const readingTime = getReadingTime(undefined, undefined, body);
 
 <a 
   href={`/blog/${id}`} 
-  class="group flex items-center justify-between py-2 border-b border-zinc-100 dark:border-zinc-800 hover:pl-2 transition-all duration-200"
+  class="group block py-2 border-b border-zinc-100 dark:border-zinc-800 transition-all duration-200 hover:pl-2"
 >
-  <div class="flex items-center gap-3 flex-1 min-w-0">
-    {/* Tactical dot */}
-    <div class="w-1 h-1 rounded-full bg-zinc-300 dark:bg-zinc-700 group-hover:bg-emerald-500 transition-colors"></div>
+  <div class="flex flex-col gap-1">
     
-    {/* Date */}
-    {showDate && (
-      <span class="hidden sm:inline text-[11px] font-mono text-zinc-400 dark:text-zinc-500 shrink-0">
-        {formattedDate}
-      </span>
-    )}
+    {/* Date & Reading Time */}
+    <div class="flex items-center gap-2 text-[10px] font-mono text-zinc-400 dark:text-zinc-500">
+      {showDate && (
+        <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+      )}
+      {showDate && showReadingTime && <span class="text-zinc-300 dark:text-zinc-700">/</span>}
+      {showReadingTime && (
+        <div class="flex items-center gap-0.5">
+          <span>[</span>
+          <span>{readingTime}</span>
+          <span>]</span>
+        </div>
+      )}
+      {featured && (
+        <span class="text-amber-600 dark:text-amber-500 text-[9px]">[★]</span>
+      )}
+    </div>
     
     {/* Title */}
-    <h3 class="font-mono text-sm text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors truncate">
+    <h4 class="text-sm font-mono text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">
       {title}
-    </h3>
+    </h4>
     
-    {/* Featured indicator */}
-    {featured && (
-      <span class="text-[10px] font-mono text-amber-600 dark:text-amber-500 shrink-0">[★]</span>
-    )}
   </div>
-  
-  {/* Reading time */}
-  {showReadingTime && (
-    <div class="text-[11px] font-mono text-zinc-400 dark:text-zinc-500 shrink-0 ml-2">
-      {readingTime}
-    </div>
-  )}
 </a>
