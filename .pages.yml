@@ -86,9 +86,8 @@ content:
       
       - name: tags
         label: Tags
-        type: select
-        multiple: true
-        creatable: true
+        type: string
+        list: true
         default: []
         options:
           max: 5
