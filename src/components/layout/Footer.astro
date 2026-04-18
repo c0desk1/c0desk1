@@ -1,12 +1,13 @@
 ---
 // src/components/layout/Footer.astro
-// @ts-nocheck
+
+import Container from "../ui/Container.astro";
 import Icon from "../ui/Icon.astro";
 import { siteConfig } from "@/config/site";
 ---
 
 <footer class="border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10">
+  <Container size="md" class="mx-auto py-8">
     
     {/* Main Footer Grid - More Compact */}
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
@@ -69,7 +70,7 @@ import { siteConfig } from "@/config/site";
         </div>
         <ul class="space-y-1.5">
           {siteConfig.navItems.map((item) => (
-            <li key={item.href}>
+            <li>
               <a 
                 href={item.href} 
                 class="text-[13px] font-mono text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
@@ -159,5 +160,5 @@ import { siteConfig } from "@/config/site";
       </div>
     </div>
     
-  </div>
+  </Container>
 </footer>

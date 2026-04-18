@@ -1,14 +1,20 @@
 ---
 // src/components/layout/DesktopNav.astro
-// @ts-nocheck
 import NavLink from "../ui/NavLink.astro";
 import { siteConfig } from "@/config/site";
+
+const currentPath = Astro.url.pathname;
 ---
 
-<nav class="hidden md:flex items-center gap-1">
-  {siteConfig.navItems.map((item) => (
-    <NavLink href={item.href}>
-      {item.label}
-    </NavLink>
-  ))}
+<nav class="hidden md:flex items-center gap-1" aria-label="Main navigation">
+  {siteConfig.navItems.map((item) => {
+    const isActive = currentPath === item.href || 
+      (item.href !== '/' && currentPath.startsWith(item.href));
+    
+    return (
+      <NavLink href={item.href} current={isActive}>
+        {item.label}
+      </NavLink>
+    );
+  })}
 </nav>
