@@ -1,6 +1,6 @@
 ---
 // src/components/portfolio/ProjectCard.astro
-// @ts-nocheck
+
 import type { CollectionEntry } from 'astro:content';
 import { formatDateCompact } from '@/lib/utils';
 
@@ -28,29 +28,30 @@ const {
 
 const formattedDate = formatDateCompact(date);
 const displayImage = typeof image === 'string' ? image : null;
+const detailUrl = `/portfolio/${id}`;
 
-// Variant classes
 const variantClasses = {
-  default: 'p-4',
+  default: 'p-4 md:p-5',
   compact: 'p-3',
   featured: 'p-5 md:p-6'
 };
 
 const imageSizes = {
-  default: 'h-40 md:h-44',
-  compact: 'h-28',
-  featured: 'h-48 md:h-56'
+  default: 'h-44 md:h-52',
+  compact: 'h-32',
+  featured: 'h-52 md:h-64'
 };
 
 const titleSizes = {
-  default: 'text-base md:text-lg',
-  compact: 'text-sm',
-  featured: 'text-xl md:text-2xl'
+  default: 'text-lg md:text-xl',
+  compact: 'text-base',
+  featured: 'text-2xl md:text-3xl'
 };
 ---
 
-<article class="group relative">
-  <div 
+<article class="group relative h-full">
+  <a 
+    href={detailUrl}
     class="block h-full border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden transition-all duration-200 hover:border-zinc-300 dark:hover:border-zinc-700 hover:shadow-md rounded-md"
     class:list={[
       variantClasses[variant],
@@ -58,9 +59,8 @@ const titleSizes = {
     ]}
   >
     
-    {/* Image Section */}
     {displayImage && variant !== 'featured' && (
-      <div class={`relative overflow-hidden bg-zinc-100 dark:bg-zinc-900 -m-4 mb-3 rounded-t-md ${imageSizes[variant]}`}>
+      <div class={`relative overflow-hidden bg-zinc-100 dark:bg-zinc-900 -m-4 md:-m-5 mb-3 rounded-t-md ${imageSizes[variant]}`}>
         <img 
           src={displayImage}
           alt={imageAlt || title}
@@ -68,13 +68,11 @@ const titleSizes = {
           loading="lazy"
         />
         
-        {/* Industrial corner marks */}
-        <div class="absolute top-2 left-2 w-3 h-3 border-l border-t border-white/20"></div>
+        <div class="absolute top-2 left-2 w-4 h-4 border-l border-t border-white/30"></div>
         
-        {/* Featured badge */}
         {featured && (
           <div class="absolute top-2 right-2">
-            <span class="px-1.5 py-0.5 text-[9px] font-mono font-bold bg-amber-500/90 text-white backdrop-blur-sm rounded-sm">
+            <span class="px-1.5 py-0.5 text-[10px] font-mono font-bold bg-amber-500/90 text-white backdrop-blur-sm rounded-sm">
               [★]
             </span>
           </div>
@@ -82,28 +80,26 @@ const titleSizes = {
       </div>
     )}
 
-    {/* Featured Layout */}
     {variant === 'featured' && displayImage && (
       <>
-        <div class="relative overflow-hidden bg-zinc-100 dark:bg-zinc-900 h-full min-h-40 md:min-h-full">
+        <div class="relative overflow-hidden bg-zinc-100 dark:bg-zinc-900 h-full min-h-48 md:min-h-full">
           <img 
             src={displayImage}
             alt={imageAlt || title}
             class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             loading="lazy"
           />
-          <div class="absolute top-2 left-2 w-3 h-3 border-l border-t border-white/20"></div>
+          <div class="absolute top-2 left-2 w-4 h-4 border-l border-t border-white/30"></div>
         </div>
-        <div class="p-4 md:p-5">
+        <div class="p-4 md:p-6">
+          {/* Content will go here */}
         </div>
       </>
     )}
 
-    {/* Content Section */}
-    <div class={variant === 'featured' && displayImage ? 'p-4 md:p-5' : ''}>
+    <div class={variant === 'featured' && displayImage ? 'p-4 md:p-6' : ''}>
       
-      {/* Meta info - compact industrial */}
-      <div class="flex items-center gap-1.5 font-mono text-[9px] md:text-[10px] tracking-wide text-zinc-500 dark:text-zinc-400 mb-1.5">
+      <div class="flex items-center gap-1.5 font-mono text-[11px] md:text-xs tracking-wide text-zinc-500 dark:text-zinc-400 mb-2">
         <span class="text-emerald-500 dark:text-emerald-400 font-bold">$</span>
         <span class="text-zinc-400 dark:text-zinc-500">{formattedDate}</span>
         <span class="text-zinc-300 dark:text-zinc-700">/</span>
@@ -121,49 +117,44 @@ const titleSizes = {
         )}
       </div>
       
-      {/* Title */}
-      <h3 class={`font-bold tracking-tight text-zinc-900 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-colors mb-1 leading-tight ${titleSizes[variant]}`}>
+      <h3 class={`font-bold tracking-tight text-zinc-900 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-colors mb-1.5 leading-tight ${titleSizes[variant]}`}>
         {title}
       </h3>
       
-      {/* Client/Role */}
       {(client || role) && variant !== 'compact' && (
-        <div class="flex items-center gap-1.5 mb-1.5 font-mono text-[9px] text-zinc-400 dark:text-zinc-500">
+        <div class="flex items-center gap-1.5 mb-2 font-mono text-[10px] md:text-[11px] text-zinc-400 dark:text-zinc-500">
           {client && <span class="text-zinc-500 dark:text-zinc-400">{client}</span>}
           {client && role && <span>/</span>}
           {role && <span>{role}</span>}
         </div>
       )}
       
-      {/* Description */}
-      <p class={`text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed ${variant === 'featured' ? 'line-clamp-2' : 'line-clamp-1'} mb-2`}>
+      <p class={`text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed ${variant === 'featured' ? 'line-clamp-3' : 'line-clamp-2'} mb-3`}>
         {description}
       </p>
       
-      {/* Tech Stack */}
       {showTechStack && techStack && techStack.length > 0 && variant !== 'compact' && (
-        <div class="flex flex-wrap gap-1 mb-2.5">
+        <div class="flex flex-wrap gap-1.5 mb-3">
           {techStack.slice(0, 3).map(tech => (
-            <span class="px-1 py-0.5 text-[8px] font-mono border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 rounded-sm">
+            <span class="px-1.5 py-0.5 text-[10px] md:text-[11px] font-mono border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 rounded-sm">
               {tech}
             </span>
           ))}
           {techStack.length > 3 && (
-            <span class="px-1 py-0.5 text-[8px] font-mono text-zinc-400 dark:text-zinc-600">
+            <span class="px-1.5 py-0.5 text-[10px] md:text-[11px] font-mono text-zinc-400 dark:text-zinc-500">
               +{techStack.length - 3}
             </span>
           )}
         </div>
       )}
       
-      {/* Links */}
-      <div class="flex items-center gap-3 pt-1">
+      <div class="flex items-center gap-4 pt-1" onClick={(e) => e.stopPropagation()}>
         {demoUrl && (
           <a 
             href={demoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            class="group/link inline-flex items-center gap-0.5 text-[9px] font-mono text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors"
+            class="group/link inline-flex items-center gap-1 text-[11px] md:text-xs font-mono text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors"
           >
             <span>[live</span>
             <span class="group-hover/link:translate-x-0.5 transition-transform duration-150">→</span>
@@ -176,27 +167,18 @@ const titleSizes = {
             href={repoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            class="group/link inline-flex items-center gap-0.5 text-[9px] font-mono text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors"
+            class="group/link inline-flex items-center gap-1 text-[11px] md:text-xs font-mono text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors"
           >
             <span>[code</span>
             <span class="group-hover/link:translate-x-0.5 transition-transform duration-150">→</span>
             <span>]</span>
           </a>
         )}
-        
-        {!demoUrl && !repoUrl && (
-          <div class="inline-flex items-center gap-0.5 text-[9px] font-mono text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-all duration-150 group-hover:translate-x-0.5">
-            <span>[details</span>
-            <span>→</span>
-            <span>]</span>
-          </div>
-        )}
       </div>
       
-      {/* Industrial hover line */}
-      <div class="mt-2.5 h-px w-0 bg-linear-to-r from-zinc-300 to-transparent dark:from-zinc-700 group-hover:w-8 transition-all duration-300"></div>
+      <div class="mt-3 h-px w-0 bg-linear-to-r from-zinc-300 to-transparent dark:from-zinc-700 group-hover:w-full transition-all duration-300"></div>
       
     </div>
     
-  </div>
+  </a>
 </article>
