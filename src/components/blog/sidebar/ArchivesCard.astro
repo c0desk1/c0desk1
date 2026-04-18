@@ -22,10 +22,11 @@ const { counts } = Astro.props;
         .map(([year, count]) => (
           <a 
             href={`/blog/archive/${year}`}
-            class="flex items-center justify-between py-1.5 text-[12px] font-mono text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+            class="flex items-center justify-between py-1.5 text-[12px] font-mono text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-400 dark:focus:ring-zinc-600 rounded-sm px-1 -mx-1"
+            aria-label={`View posts from ${year} (${count} posts)`}
           >
             <span>{year}</span>
-            <span class="text-zinc-400 dark:text-zinc-500">[{count}]</span>
+            <span class="text-zinc-400 dark:text-zinc-500" aria-hidden="true">[{count}]</span>
           </a>
         ))}
     </div>
