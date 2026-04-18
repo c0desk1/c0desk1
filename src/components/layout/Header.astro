@@ -1,15 +1,13 @@
 ---
 // src/components/layout/Header.astro
-// @ts-nocheck
-import Logo from "../ui/Logo.astro";
+import Logo from "@/components/ui/Logo.astro";
 import DesktopNav from "./DesktopNav.astro";
 import MobileNav from "./MobileNav.astro";
-import SearchButton from "../ui/SearchButton.astro";
-import ThemeToggle from "../ui/ThemeToggle.astro";
-import { siteConfig } from "@/config/site";
+import SearchButton from "@/components/ui/SearchButton.astro";
+import ThemeToggle from "@/components/ui/ThemeToggle.astro";
 ---
 
-<header class="sticky top-0 z-50 w-full border-b border-zinc-200/80 dark:border-zinc-800/80 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-xl supports-backdrop-filter:bg-white/60 dark:supports-backdrop-filter:bg-zinc-950/60 transition-transform duration-300">
+<header class="sticky top-0 z-50 w-full border-b border-zinc-200/80 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md">
   <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex h-14 sm:h-16 items-center justify-between gap-4">
       
@@ -29,31 +27,3 @@ import { siteConfig } from "@/config/site";
     </div>
   </div>
 </header>
-
-<script>
-  (function() {
-    let lastScroll = 0;
-    const header = document.querySelector('header');
-    
-    if (!header) return;
-    
-    window.addEventListener('scroll', () => {
-      const currentScroll = window.pageYOffset;
-      
-      if (currentScroll <= 0) {
-        header.classList.remove('-translate-y-full');
-        return;
-      }
-      
-      if (currentScroll > lastScroll && currentScroll > 80) {
-        // Scrolling down
-        header.classList.add('-translate-y-full');
-      } else {
-        // Scrolling up
-        header.classList.remove('-translate-y-full');
-      }
-      
-      lastScroll = currentScroll;
-    });
-  })();
-</script>
