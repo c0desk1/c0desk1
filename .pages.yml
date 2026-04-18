@@ -93,22 +93,15 @@ content:
         type: select
         options:
           multiple: true
-          values:
-            - name: tutorial
-            - label: Tutorial
-            - name: ai
-            - label: AI
-            - name: tech
-            - label: Tech
-            - name: game
-            - label: Game
-            
+          type: string
+          values: [AI, Tutorial, Tech, Game, Anime, Movie]
           max: 3
       
       - name: image
         label: Cover Image
         type: image
         options:
+          rename: true
           media: blog-images
         description: "Main image for the blog post"
       
@@ -116,6 +109,13 @@ content:
         label: Image Alt Text
         type: string
         description: "Accessibility: Describe the image"
+
+      - name: imageCaption
+        label: Caption
+        type: reference
+        options:
+          collection: blog
+          rename: true
       
       - name: draft
         label: Draft
@@ -124,13 +124,13 @@ content:
         description: "Hide from production"
       
       - name: featured
-        label: Featured Post
+        label: Featured
         type: boolean
         default: false
         description: "Show on homepage"
       
       - name: readingTime
-        label: Reading Time (minutes)
+        label: Reading Time
         type: number
         required: false
         description: "Leave empty for auto-calculation"
@@ -148,6 +148,7 @@ content:
             label: Name
             type: string
             default: "C0desk1"
+            
           - name: avatar
             label: Avatar URL
             type: string
@@ -244,10 +245,10 @@ content:
       - name: techStack
         label: Tech Stack
         type: select
-        multiple: true
-        creatable: true
         required: true
         options:
+          multiple: true
+          creatable: true
           min: 1
           max: 10
       
@@ -279,13 +280,14 @@ content:
       
       - name: gallery
         label: Gallery Images
-        type: list
+        type: image
         required: false
         fields:
           - name: image
             label: Gallery Image
             type: image
             options:
+              multiple: true
               media: gallery-images
         description: "Additional project screenshots"
       
@@ -319,7 +321,7 @@ content:
         label: Project Duration
         type: string
         required: false
-        placeholder: "e.g., 3 months"
+        description: "e.g., 3 months"
       
       - name: metrics
         label: Performance Metrics
@@ -380,28 +382,28 @@ content:
         required: true
       
       - name: siteDescription
-        label: Site Description
+        label: Description
         type: text
         required: true
       
       - name: socialLinks
-        label: Social Links
+        label: Social
         type: object
         fields:
           - name: github
-            label: GitHub URL
+            label: GitHub
             type: string
             pattern:
               regex: "^https?://(github\\.com|www\\.github\\.com)"
               message: "Must be a valid GitHub URL"
           - name: twitter
-            label: Twitter URL
+            label: Twitter
             type: string
             pattern:
               regex: "^https?://(twitter\\.com|x\\.com|www\\.twitter\\.com)"
               message: "Must be a valid Twitter/X URL"
           - name: linkedin
-            label: LinkedIn URL
+            label: LinkedIn
             type: string
             pattern:
               regex: "^https?://(linkedin\\.com|www\\.linkedin\\.com)"
