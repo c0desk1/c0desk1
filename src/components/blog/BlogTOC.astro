@@ -1,6 +1,8 @@
 ---
 // src/components/blog/BlogTOC.astro
-// @ts-nocheck
+
+import { filterHeadingsForTOC } from '@/lib/utils';
+
 interface Heading {
   depth: number;
   slug: string;
@@ -12,26 +14,26 @@ interface Props {
 }
 
 const { headings } = Astro.props;
+const tocHeadings = filterHeadingsForTOC(headings); // filter depth <= 3
 ---
 
-{headings.length > 0 && (
+{tocHeadings.length > 0 && (
   <aside class="hidden lg:block">
     <div class="sticky top-24">
       <div class="space-y-3">
-        <div class="flex items-center gap-2">
-          <div class="h-2 w-2 rounded-full bg-zinc-400 dark:bg-zinc-500"></div>
+        <div class="flex items-center gap-1.5">
+          <div class="h-1.5 w-1.5 rounded-full bg-zinc-400 dark:bg-zinc-500"></div>
           <h3 class="text-[12px] font-mono font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
             On this page
           </h3>
         </div>
         
         <nav class="space-y-1.5 border-l border-zinc-200 dark:border-zinc-800 pl-3">
-          {headings.map(h => (
-            <a 
-              key={h.slug}
+          {tocHeadings.map(h => (
+            <a
               href={`#${h.slug}`} 
               class:list={[
-                "block text-[13px] font-mono text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors",
+                "block text-[12px] font-mono text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors",
                 { "pl-3": h.depth === 3 }
               ]}
             >
