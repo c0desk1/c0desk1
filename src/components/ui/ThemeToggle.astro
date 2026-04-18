@@ -1,28 +1,49 @@
 ---
 // src/components/ui/ThemeToggle.astro
-// @ts-nocheck
+
 import Icon from "@/components/ui/Icon.astro";
 ---
 
 <button 
   id="theme-toggle" 
   aria-label="Toggle theme" 
-  class="relative p-2 rounded-md text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-all duration-200"
+  class="p-2 rounded-md text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-all duration-200"
 >
-  <div class="relative w-5 h-5">
-    <div id="theme-sun" class="absolute inset-0 transition-all duration-300 scale-100 dark:scale-0 opacity-100 dark:opacity-0">
-      <Icon name="sun" class="w-5 h-5" />
-    </div>
-    <div id="theme-moon" class="absolute inset-0 transition-all duration-300 scale-0 dark:scale-100 opacity-0 dark:opacity-100">
-      <Icon name="moon" class="w-5 h-5" />
-    </div>
-  </div>
+  <!-- Sun -->
+  <svg id="theme-sun" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <Icon name="sun" class="w-5 h-5" />
+  </svg>
+  <!-- Moon -->
+  <svg id="theme-moon" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <Icon name="moon" class="w-5 h-5" />
+  </svg>
 </button>
 
 <script>
   (function() {
     const toggle = document.getElementById('theme-toggle');
     if (!toggle) return;
+    
+    const updateIcons = () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      const sunIcon = document.getElementById('theme-sun');
+      const moonIcon = document.getElementById('theme-moon');
+      
+      if (!sunIcon || !moonIcon) return;
+      
+      if (isDark) {
+        sunIcon.classList.add('block');
+        sunIcon.classList.remove('hidden');
+        moonIcon.classList.add('hidden');
+        moonIcon.classList.remove('block');
+      } else {
+        sunIcon.classList.add('hidden');
+        sunIcon.classList.remove('block');
+        moonIcon.classList.add('block');
+        moonIcon.classList.remove('hidden');
+      }
+    };
+    updateIcons();
     
     toggle.addEventListener('click', () => {
       const isDark = document.documentElement.classList.contains('dark');
@@ -33,6 +54,20 @@ import Icon from "@/components/ui/Icon.astro";
       } else {
         document.documentElement.classList.add('dark');
         localStorage.setItem('theme', 'dark');
+      }
+      
+      updateIcons();
+    });
+    
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'theme') {
+        const isDark = e.newValue === 'dark';
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+        updateIcons();
       }
     });
   })();
