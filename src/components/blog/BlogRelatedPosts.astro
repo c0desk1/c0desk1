@@ -1,0 +1,33 @@
+---
+// src/components/blog/BlogRelatedPosts.astro
+import type { CollectionEntry } from 'astro:content';
+import RelatedPostCard from './RelatedPostCard.astro';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+}
+
+const { posts } = Astro.props;
+---
+
+{posts.length > 0 && (
+  <section class="mt-12 pt-6 border-t border-zinc-100 dark:border-zinc-900">
+    <div class="flex items-center gap-2 mb-4">
+      <div class="h-px w-6 bg-linear-to-r from-zinc-300 to-transparent dark:from-zinc-700"></div>
+      <h3 class="text-sm font-bold tracking-wider text-zinc-500 dark:text-zinc-400">
+        Further reading
+      </h3>
+      <div class="h-px flex-1 bg-linear-to-l from-zinc-100 to-transparent dark:from-zinc-800"></div>
+    </div>
+    
+    <div class="space-y-0">
+      {posts.map(post => (
+        <RelatedPostCard 
+          post={post}
+          showDate={true}
+          showReadingTime={true}
+        />
+      ))}
+    </div>
+  </section>
+)}

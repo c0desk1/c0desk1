@@ -1,0 +1,30 @@
+---
+title: "Website Portfolio Versi Lama"
+description: "Versi awal website portfolio sebelum redesign modern."
+
+techStack:
+  - HTML
+  - CSS
+  - JavaScript
+
+demoUrl: "https://example.com/demo/old-portfolio"
+
+date: 2023-06-10
+
+draft: false
+featured: false
+archived: true
+
+role: "Frontend Developer"
+duration: "1 bulan"
+---
+
+## Tentang Project
+
+Ini adalah versi awal portfolio pribadi.
+
+### Pelajaran
+
+- Struktur kode penting  
+- Konsistensi desain  
+- Optimasi performa

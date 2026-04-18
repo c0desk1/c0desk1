@@ -1,0 +1,117 @@
+---
+// src/components/layout/BaseHead.astro
+import { siteConfig } from "@/config/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  canonicalURL?: URL;
+  type?: "website" | "article";
+  noIndex?: boolean;
+  publishedTime?: Date;
+  modifiedTime?: Date;
+  tags?: string[];
+}
+
+const { 
+  title, 
+  description = siteConfig.description, 
+  image = siteConfig.ogImage,
+  canonicalURL = new URL(Astro.url.pathname, Astro.site ?? siteConfig.url),
+  type = "website",
+  noIndex = false,
+  publishedTime,
+  modifiedTime,
+  tags = []
+} = Astro.props;
+
+const formattedTitle = title ? `${title} | ${siteConfig.name}` : siteConfig.name;
+const fullImageURL = image?.startsWith('http') ? image : new URL(image || siteConfig.ogImage, Astro.url).toString();
+
+const schema: Record<string, any> = {
+  "@context": "https://schema.org",
+  "@type": type === "article" ? "BlogPosting" : "WebSite",
+  "name": formattedTitle,
+  "description": description,
+  "url": canonicalURL.toString(),
+  "author": {
+    "@type": "Person",
+    "name": siteConfig.author
+  }
+};
+
+if (type === "article" && title) {
+  schema.headline = title;
+  if (publishedTime) schema.datePublished = publishedTime.toISOString();
+  if (modifiedTime) schema.dateModified = modifiedTime.toISOString();
+  if (tags.length > 0) schema.keywords = tags.join(", ");
+}
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="mask-icon" href="/favicon.svg" color="#18181b" />
+<meta name="generator" content={Astro.generator} />
+
+<!-- Theme Color -->
+<meta name="theme-color" content="#18181b" media="(prefers-color-scheme: dark)" />
+<meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
+
+<!-- Canonical & Robots -->
+<link rel="canonical" href={canonicalURL} />
+{noIndex ? (
+  <meta name="robots" content="noindex, nofollow" />
+) : (
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+)}
+
+<!-- Basic Meta -->
+<title>{formattedTitle}</title>
+<meta name="title" content={formattedTitle} />
+<meta name="description" content={description} />
+<meta name="author" content={siteConfig.author} />
+<meta name="keywords" content={siteConfig.keywords.join(", ")} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={formattedTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={fullImageURL} />
+<meta property="og:image:alt" content={description} />
+<meta property="og:site_name" content={siteConfig.name} />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={canonicalURL} />
+<meta name="twitter:title" content={formattedTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={fullImageURL} />
+<meta name="twitter:image:alt" content={description} />
+
+<!-- RSS & Sitemap -->
+<link rel="sitemap" href="/sitemap-index.xml" />
+<link rel="alternate" type="application/rss+xml" title={`${siteConfig.name} - Blog`} href={`${Astro.site}rss.xml`} />
+
+<!-- JSON-LD Schema -->
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+<!-- Organization schema -->
+{type === 'website' && (
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": siteConfig.name,
+    "url": siteConfig.url,
+    "logo": `${siteConfig.url}/favicon.svg`,
+    "sameAs": [
+      siteConfig.links.github,
+      siteConfig.links.twitter,
+      siteConfig.links.linkedin
+    ].filter(Boolean)
+  })} />
+)}
+
+<link rel="preload" href="/fonts/Geist.woff2" as="font" type="font/woff2" crossorigin="anonymous" />

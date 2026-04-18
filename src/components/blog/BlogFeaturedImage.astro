@@ -1,0 +1,42 @@
+---
+// src/components/blog/BlogFeaturedImage.astro
+
+import Container from '@/components/ui/Container.astro';
+
+interface Props {
+  image: string;
+  alt?: string;
+  caption?: string;
+}
+
+const { image, alt, caption } = Astro.props;
+const finalCaption = caption || alt;
+---
+
+<div class="border-b border-zinc-100 dark:border-zinc-900">
+  <Container size="md" class="py-4 md:py-6">
+    <figure class="relative overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800" aria-label={alt || 'Featured image'}>
+      <div class="relative overflow-hidden aspect-16/9">
+        <div class="absolute inset-0 bg-zinc-100 dark:bg-zinc-800 animate-pulse" aria-hidden="true"></div>
+        <img 
+          src={image} 
+          alt={alt || ''}
+          class="relative z-10 w-full h-auto object-coveropacity-0 transition-opacity duration-300" 
+          loading="lazy" 
+          decoding="async" 
+          sizes="(min-width: 768px) 768px, 100vw" 
+          onload="this.style.opacity='1'" />
+        <div class="absolute top-2 left-2 w-4 h-4 border-l border-t border-white/30"aria-hidden="true"></div>
+        <div class="absolute bottom-2 right-2 w-4 h-4 border-r border-b border-white/30" aria-hidden="true"></div>
+      </div>
+      {finalCaption && (
+        <figcaption class="px-2 py-1.5 border-t border-zinc-200 dark:border-zinc-800 text-xs text-zinc-500 dark:text-zinc-400">
+          <span class="text-zinc-400 dark:text-zinc-600 mr-1.5 font-mono">
+            //
+          </span>
+          {finalCaption}
+        </figcaption>
+      )}
+    </figure>
+  </Container>
+</div>

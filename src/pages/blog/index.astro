@@ -1,0 +1,47 @@
+---
+// src/pages/blog/index.astro
+
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/ui/Container.astro';
+import BlogHero from '@/components/blog/BlogHero.astro';
+import BlogList from '@/components/blog/BlogList.astro';
+import BlogSidebar from '@/components/blog/BlogSidebar.astro';
+import { sortByDate, getAllTags, getArchiveCounts } from '@/lib/utils';
+
+const allPosts = await getCollection('blog');
+const publishedPosts = allPosts.filter((p: CollectionEntry<'blog'>) => !p.data.draft);
+const posts = sortByDate(publishedPosts);
+
+const featuredPost = posts.find((p: CollectionEntry<'blog'>) => p.data.featured === true);
+const regularPosts = posts.filter((p: CollectionEntry<'blog'>) => !p.data.featured);
+
+const recentPosts = regularPosts.slice(0, 5);
+const allTags = getAllTags(posts);
+const popularTags = allTags.slice(0, 8);
+const archiveCounts = getArchiveCounts(posts);
+---
+
+<BaseLayout 
+  title="Blog"
+  description="Articles about web development, design systems, and industrial tactical design."
+  type="website"
+>
+  <BlogHero />
+  
+  <Container size="md" class="py-10 md:py-14">
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-12">
+      <BlogList 
+        featuredPost={featuredPost}
+        regularPosts={regularPosts}
+        totalCount={posts.length}
+      />
+      <BlogSidebar 
+        popularTags={popularTags}
+        recentPosts={recentPosts}
+        archiveCounts={archiveCounts}
+      />
+    </div>
+  </Container>
+</BaseLayout>
