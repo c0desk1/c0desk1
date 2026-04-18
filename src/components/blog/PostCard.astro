@@ -49,7 +49,7 @@ const readingTime = getReadingTime(undefined, undefined, body);
   
   {/* Tags & Arrow */}
   <div class="flex items-center justify-between">
-    <div class="flex flex-wrap items-center gap-2 text-[12px] font-mono text-zinc-400 dark:text-zinc-500">
+    <div class="flex flex-wrap items-center gap-2 text-[11px] font-mono text-zinc-400 dark:text-zinc-500">
       {showTags && tags && tags.length > 0 && (
         <>
           {tags.slice(0, 2).map(tag => (
@@ -65,7 +65,7 @@ const readingTime = getReadingTime(undefined, undefined, body);
     </div>
     
     <div class="flex items-center gap-1 text-zinc-400 dark:text-zinc-600 group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-all duration-200 group-hover:translate-x-0.5">
-      <span class="text-[12px] font-mono">[baca]</span>
+      <span class="text-[11px] font-mono">[baca]</span>
       <span class="text-xs" aria-hidden="true">→</span>
     </div>
   </div>
