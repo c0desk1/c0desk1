@@ -14,12 +14,6 @@ media:
     output: /images/portfolio
     categories: [image]
     
-  - name: gallery-images
-    label: Gallery Images
-    input: public/images/gallery
-    output: /images/gallery
-    categories: [image]
-    
 
 # Content collections
 content:
@@ -86,38 +80,21 @@ content:
         list: true
         options:
           max: 5
-        description: "Max 5 tags"
-      
-      - name: categories
-        label: Categories
-        type: select
-        options:
-          multiple: true
-          type: string
-          values: [AI, Tutorial, Tech, Game, Anime, Movie]
-          max: 3
       
       - name: image
-        label: Cover Image
+        label: Cover
         type: image
         options:
           rename: true
           media: blog-images
-        description: "Main image for the blog post"
       
       - name: imageAlt
         label: Image Alt Text
         type: string
-        description: "Accessibility: Describe the image"
 
       - name: imageCaption
         label: Caption
-        type: reference
-        options:
-          collection: blog
-          value: {imageAlt}
-          label: {imageAlt}
-          rename: true
+        type: string
 
       - name: body
         label: Content
@@ -130,24 +107,11 @@ content:
         label: Draft
         type: boolean
         default: false
-        description: "Hide from production"
       
       - name: featured
         label: Featured
         type: boolean
         default: false
-        description: "Show on homepage"
-      
-      - name: readingTime
-        label: Reading Time
-        type: number
-        required: false
-        description: "Leave empty for auto-calculation"
-      
-      - name: wordCount
-        label: Word Count
-        type: number
-        required: false
       
       - name: author
         label: Author
@@ -159,7 +123,7 @@ content:
             default: "C0desk1"
             
           - name: avatar
-            label: Avatar URL
+            label: Avatar
             type: string
             pattern:
               regex: "^https?://"
@@ -310,11 +274,6 @@ content:
         type: boolean
         default: false
       
-      - name: archived
-        label: Archived
-        type: boolean
-        default: false
-      
       - name: client
         label: Client Name
         type: string
@@ -324,18 +283,15 @@ content:
         label: Your Role
         type: string
         required: false
-        description: "e.g., Lead Developer, Designer"
       
       - name: duration
         label: Project Duration
         type: string
         required: false
-        description: "e.g., 3 months"
       
       - name: metrics
         label: Performance Metrics
         type: object
-        description: "Lighthouse scores (0-100)"
         fields:
           - name: performance
             label: Performance Score
