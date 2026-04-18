@@ -1,72 +1,29 @@
 ---
 // src/pages/index.astro
-// @ts-nocheck
+
 import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Container from '@/components/ui/Container.astro';
 import Hero from '@/components/ui/Hero.astro';
-import PostCard from '@/components/blog/PostCard.astro';
+import PostCard from '@/components/blog/PostCard.astro';      // Compact dengan gambar
 import ProjectCard from '@/components/portfolio/ProjectCard.astro';
 import { sortByDate, filterByDraft } from '@/lib/utils';
 
-// Ambil data
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
-const blogPosts = sortByDate(allPosts).slice(0, 4);
+const blogPosts = sortByDate(allPosts).slice(0, 4);  // 4 posts
 
 const allProjects = await getCollection('portfolio', ({ data }) => !data.draft);
-const portfolioProjects = sortByDate(allProjects, 'date').slice(0, 2);
+const portfolioProjects = sortByDate(allProjects, 'date').slice(0, 2);  // 2 projects
 ---
 
 <BaseLayout>
   
-  {/* Hero Section */}
   <Hero />
 
-  {/* Featured Work Section */}
   <section class="border-b border-zinc-100 dark:border-zinc-900">
-    <Container size="md" class="py-12 md:py-16">
+    <Container size="md" class="py-10 md:py-12">
       
-      <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center gap-2">
-          <div class="h-1.5 w-1.5 rounded-full bg-emerald-500"></div>
-          <span class="text-xs font-mono text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
-            Selected work
-          </span>
-        </div>
-        <a 
-          href="/portfolio" 
-          class="group flex items-center gap-1 text-xs font-mono text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors"
-        >
-          <span>[view all</span>
-          <span class="group-hover:translate-x-0.5 transition-transform">→</span>
-          <span>]</span>
-        </a>
-      </div>
-      
-      {portfolioProjects.length > 0 ? (
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {portfolioProjects.map(project => (
-            <ProjectCard 
-              project={project}
-              variant="default"
-              showTechStack={true}
-            />
-          ))}
-        </div>
-      ) : (
-        <div class="text-center py-10 border border-zinc-200 dark:border-zinc-800 rounded-lg">
-          <p class="text-zinc-500 dark:text-zinc-400 font-mono text-sm">$ No projects yet.</p>
-        </div>
-      )}
-      
-    </Container>
-  </section>
-
-  {/* Latest Blog Posts Section */}
-  <section class="border-b border-zinc-100 dark:border-zinc-900">
-    <Container size="md" class="py-12 md:py-16">
-      
-      <div class="flex items-center justify-between mb-6">
+      <div class="flex items-center justify-between mb-5">
         <div class="flex items-center gap-2">
           <div class="h-1.5 w-1.5 rounded-full bg-emerald-500"></div>
           <span class="text-xs font-mono text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
@@ -84,7 +41,7 @@ const portfolioProjects = sortByDate(allProjects, 'date').slice(0, 2);
       </div>
       
       {blogPosts.length > 0 ? (
-        <div class="space-y-0">
+        <div class="space-y-0 divide-y divide-zinc-100 dark:divide-zinc-900">
           {blogPosts.map(post => (
             <PostCard 
               post={post}
@@ -94,7 +51,7 @@ const portfolioProjects = sortByDate(allProjects, 'date').slice(0, 2);
           ))}
         </div>
       ) : (
-        <div class="text-center py-10 border border-zinc-200 dark:border-zinc-800 rounded-lg">
+        <div class="text-center py-8 border border-zinc-200 dark:border-zinc-800 rounded-lg">
           <p class="text-zinc-500 dark:text-zinc-400 font-mono text-sm">$ No blog posts yet.</p>
         </div>
       )}
@@ -102,45 +59,82 @@ const portfolioProjects = sortByDate(allProjects, 'date').slice(0, 2);
     </Container>
   </section>
 
-  {/* CTA Section */}
-  <section class="py-12 md:py-16">
+  <section class="border-b border-zinc-100 dark:border-zinc-900">
+    <Container size="md" class="py-10 md:py-12">
+      
+      <div class="flex items-center justify-between mb-5">
+        <div class="flex items-center gap-2">
+          <div class="h-1.5 w-1.5 rounded-full bg-zinc-400 dark:bg-zinc-500"></div>
+          <span class="text-xs font-mono text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+            Featured work
+          </span>
+        </div>
+        <a 
+          href="/portfolio" 
+          class="group flex items-center gap-1 text-xs font-mono text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors"
+        >
+          <span>[view all</span>
+          <span class="group-hover:translate-x-0.5 transition-transform">→</span>
+          <span>]</span>
+        </a>
+      </div>
+      
+      {portfolioProjects.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {portfolioProjects.map(project => (
+            <ProjectCard 
+              project={project}
+              variant="compact"
+              showTechStack={false}
+            />
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-8 border border-zinc-200 dark:border-zinc-800 rounded-lg">
+          <p class="text-zinc-500 dark:text-zinc-400 font-mono text-sm">$ No projects yet.</p>
+        </div>
+      )}
+      
+    </Container>
+  </section>
+
+  <section class="py-10 md:py-12">
     <Container size="md">
-      <div class="relative p-6 md:p-10 border border-zinc-200 dark:border-zinc-800 rounded-lg bg-linear-to-br from-white to-zinc-50 dark:from-zinc-950 dark:to-zinc-900 overflow-hidden">
+      <div class="relative p-6 md:p-8 border border-zinc-200 dark:border-zinc-800 rounded-lg bg-linear-to-br from-white to-zinc-50 dark:from-zinc-950 dark:to-zinc-900 overflow-hidden">
         
-        {/* Industrial corner marks */}
         <div class="absolute top-3 left-3 w-5 h-5 border-l border-t border-zinc-300 dark:border-zinc-700"></div>
         <div class="absolute bottom-3 right-3 w-5 h-5 border-r border-b border-zinc-300 dark:border-zinc-700"></div>
         
-        <div class="text-center max-w-2xl mx-auto space-y-5">
+        <div class="text-center max-w-2xl mx-auto space-y-4">
           <div class="flex justify-center gap-2">
             <div class="h-1.5 w-1.5 rounded-full bg-emerald-500"></div>
             <div class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
             <div class="h-1.5 w-1.5 rounded-full bg-emerald-500"></div>
           </div>
           
-          <h2 class="text-2xl md:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
+          <h2 class="text-xl md:text-2xl font-bold tracking-tight text-zinc-900 dark:text-white">
             Let's build something
             <span class="text-zinc-400 dark:text-zinc-600"> great together.</span>
           </h2>
           
-          <p class="text-zinc-600 dark:text-zinc-400 font-mono text-sm">
+          <p class="text-zinc-600 dark:text-zinc-400 font-mono text-xs md:text-sm">
             $ I'm currently available for freelance work and collaborations.
           </p>
           
-          <div class="flex flex-col sm:flex-row gap-3 justify-center pt-3">
+          <div class="flex flex-col sm:flex-row gap-3 justify-center pt-2">
             <a 
-              href="/portfolio"
-              class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-mono rounded-md hover:opacity-90 transition-opacity"
+              href="/blog"
+              class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-xs font-mono rounded-md hover:opacity-90 transition-opacity"
             >
-              <span>[view work</span>
+              <span>[read blog</span>
               <span>→</span>
               <span>]</span>
             </a>
             <a 
-              href="/contact"
-              class="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-zinc-200 dark:border-zinc-800 text-sm font-mono rounded-md hover:border-zinc-300 dark:hover:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all"
+              href="/portfolio"
+              class="inline-flex items-center justify-center gap-2 px-4 py-2 border border-zinc-200 dark:border-zinc-800 text-xs font-mono rounded-md hover:border-zinc-300 dark:hover:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all"
             >
-              <span>[contact</span>
+              <span>[view work</span>
               <span>→</span>
               <span>]</span>
             </a>
