@@ -1,10 +1,11 @@
 ---
 // src/components/blog/sidebar/RecentPostsCard.astro
 
+import type { CollectionEntry } from 'astro:content';
 import { formatDateCompact, getReadingTime } from '@/lib/utils';
 
 interface Props {
-  posts: any[];
+  posts: CollectionEntry<'blog'>[];
 }
 
 const { posts } = Astro.props;
@@ -25,12 +26,14 @@ const { posts } = Astro.props;
         
         return (
           <a 
+            key={post.id}
             href={`/blog/${post.id}`}
             class="group block py-2 border-b border-zinc-100 dark:border-zinc-800 last:border-0 hover:pl-2 transition-all duration-200"
+            aria-label={`Read article: ${post.data.title}`}
           >
             <div class="flex items-start justify-between gap-3">
               <div class="flex-1 min-w-0">
-                <h4 class="text-sm font-medium text-zinc-800 dark:text-zinc-200 group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-colors line-clamp-1">
+                <h4 class="text-sm font-mono font-medium text-zinc-800 dark:text-zinc-200 group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-colors line-clamp-1">
                   {post.data.title}
                 </h4>
                 <div class="flex items-center gap-2 mt-1 text-[12px] font-mono text-zinc-400 dark:text-zinc-500">
