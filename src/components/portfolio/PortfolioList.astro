@@ -12,21 +12,14 @@ const { projects, totalCount } = Astro.props;
 ---
 
 <div class="min-w-0">
-  
-  {/* Projects Header */}
   <div class="flex items-center justify-between mb-4">
     <div class="flex items-center gap-2">
-      <span class="text-[11px] font-mono text-zinc-400 dark:text-zinc-500">$</span>
-      <span class="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+      <span class="text-sm text-zinc-400 dark:text-zinc-500">$</span>
+      <span class="text-sm text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
         All projects ({totalCount})
       </span>
     </div>
-    <div class="text-[11px] font-mono text-zinc-400 dark:text-zinc-500">
-      [grid view]
-    </div>
   </div>
-  
-  {/* Projects Grid */}
   {projects.length > 0 ? (
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
       {projects.map(project => (
@@ -37,8 +30,7 @@ const { projects, totalCount } = Astro.props;
     </div>
   ) : (
     <div class="py-12 text-center border border-zinc-200 dark:border-zinc-800">
-      <p class="text-zinc-500 dark:text-zinc-400 font-mono text-sm">$ No projects found.</p>
+      <p class="text-zinc-500 dark:text-zinc-400 text-sm">$ No projects found.</p>
     </div>
   )}
-  
 </div>
