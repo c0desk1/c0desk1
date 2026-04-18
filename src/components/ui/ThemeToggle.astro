@@ -1,6 +1,7 @@
 ---
 // src/components/ui/ThemeToggle.astro
-import Icon from "./Icon.astro";
+// @ts-nocheck
+import Icon from "@/components/ui/Icon.astro";
 ---
 
 <button 
@@ -9,10 +10,10 @@ import Icon from "./Icon.astro";
   class="relative p-2 rounded-md text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-all duration-200"
 >
   <div class="relative w-5 h-5">
-    <div id="theme-toggle-light" class="absolute inset-0 transition-all duration-300 scale-100 dark:scale-0 opacity-100 dark:opacity-0">
+    <div id="theme-sun" class="absolute inset-0 transition-all duration-300 scale-100 dark:scale-0 opacity-100 dark:opacity-0">
       <Icon name="sun" class="w-5 h-5" />
     </div>
-    <div id="theme-toggle-dark" class="absolute inset-0 transition-all duration-300 scale-0 dark:scale-100 opacity-0 dark:opacity-100">
+    <div id="theme-moon" class="absolute inset-0 transition-all duration-300 scale-0 dark:scale-100 opacity-0 dark:opacity-100">
       <Icon name="moon" class="w-5 h-5" />
     </div>
   </div>
@@ -23,27 +24,16 @@ import Icon from "./Icon.astro";
     const toggle = document.getElementById('theme-toggle');
     if (!toggle) return;
     
-    const lightIcon = document.getElementById('theme-toggle-light');
-    const darkIcon = document.getElementById('theme-toggle-dark');
-    
-    const setTheme = (isDark: boolean) => {
+    toggle.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      
       if (isDark) {
-        document.documentElement.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-      } else {
         document.documentElement.classList.remove('dark');
         localStorage.setItem('theme', 'light');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
       }
-    };
-    
-    const isDark = localStorage.getItem('theme') === 'dark' || 
-      (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    
-    setTheme(isDark);
-    
-    toggle.addEventListener('click', () => {
-      const isCurrentlyDark = document.documentElement.classList.contains('dark');
-      setTheme(!isCurrentlyDark);
     });
   })();
 </script>
