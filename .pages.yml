@@ -127,12 +127,6 @@ content:
         default: false
         description: "Show on homepage"
       
-      - name: pinned
-        label: Pinned Post
-        type: boolean
-        default: false
-        description: "Pin to top of blog list"
-      
       - name: readingTime
         label: Reading Time (minutes)
         type: number
