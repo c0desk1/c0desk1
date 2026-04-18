@@ -1,0 +1,21 @@
+---
+// src/components/ui/NavLink.astro
+// @ts-nocheck
+import { siteConfig } from "@/config/site";
+
+const { href, current = false } = Astro.props;
+---
+
+<a 
+  href={href}
+  class="relative px-3 py-2 text-sm font-medium transition-all duration-200
+    ${current 
+      ? 'text-zinc-900 dark:text-white' 
+      : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white'
+    }"
+>
+  <slot />
+  {current && (
+    <span class="absolute bottom-0 left-3 right-3 h-0.5 bg-zinc-900 dark:bg-white rounded-full"></span>
+  )}
+</a>
