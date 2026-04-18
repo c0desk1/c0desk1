@@ -115,7 +115,16 @@ content:
         type: reference
         options:
           collection: blog
+          value: {imageAlt}
+          label: {imageAlt}
           rename: true
+
+      - name: body
+        label: Content
+        type: rich-text
+        options:
+          rename: true
+          switcher: true
       
       - name: draft
         label: Draft
