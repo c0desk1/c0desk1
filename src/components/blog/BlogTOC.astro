@@ -14,7 +14,7 @@ interface Props {
 }
 
 const { headings } = Astro.props;
-const tocHeadings = filterHeadingsForTOC(headings); // filter depth <= 3
+const tocHeadings = filterHeadingsForTOC(headings);
 ---
 
 {tocHeadings.length > 0 && (
