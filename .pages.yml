@@ -1,6 +1,6 @@
 # .pages.yml
 
-# Media configuration untuk upload gambar
+# Media configuration
 media:
   - name: blog-images
     label: Blog Images
@@ -19,15 +19,11 @@ media:
     input: public/images/gallery
     output: /images/gallery
     categories: [image]
-
-# Site configuration (optional)
-site:
-  title: "C0desk1 Portfolio"
-  description: "Digital garden dan portofolio profesional"
+    
 
 # Content collections
 content:
-  # ==================== BLOG COLLECTION ====================
+  # == BLOG ==
   - name: blog
     label: Blog Posts
     type: collection
@@ -88,7 +84,6 @@ content:
         label: Tags
         type: string
         list: true
-        default: []
         options:
           max: 5
         description: "Max 5 tags"
@@ -96,10 +91,18 @@ content:
       - name: categories
         label: Categories
         type: select
-        multiple: true
-        creatable: true
-        default: []
         options:
+          multiple: true
+          values:
+            - name: tutorial
+            - label: Tutorial
+            - name: ai
+            - label: AI
+            - name: tech
+            - label: Tech
+            - name: game
+            - label: Game
+            
           max: 3
       
       - name: image
