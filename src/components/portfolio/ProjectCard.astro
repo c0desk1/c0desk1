@@ -1,11 +1,12 @@
 ---
 // src/components/portfolio/ProjectCard.astro
+
 import type { CollectionEntry } from 'astro:content';
 import { formatDateCompact } from '@/lib/utils';
 
 interface Props {
   project: CollectionEntry<'portfolio'>;
-  variant?: 'default' | 'compact' | 'featured';
+  variant?: 'default' | 'compact';
   showTechStack?: boolean;
 }
 
@@ -29,171 +30,138 @@ const formattedDate = formatDateCompact(date);
 const displayImage = typeof image === 'string' ? image : null;
 const detailUrl = `/portfolio/${id}`;
 
-const variantClasses = {
-  default: 'p-4 md:p-5',
-  compact: 'p-3',
-  featured: 'p-5 md:p-6'
-};
-
-const imageSizes = {
-  default: 'w-full h-36 md:h-40',
-  compact: 'w-full h-28',
-  featured: 'w-full h-48 md:h-56'
-};
-
-const titleSizes = {
-  default: 'text-base md:text-lg',
-  compact: 'text-sm',
-  featured: 'text-xl md:text-2xl'
-};
+const isCompact = variant === 'compact';
 ---
 
 <article class="group relative h-full">
-  <div 
-    class="h-full border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden transition-all duration-200 hover:border-zinc-300 dark:hover:border-zinc-700 hover:shadow-md rounded-md"
-    class:list={[
-      variantClasses[variant],
-      variant === 'featured' ? 'md:grid md:grid-cols-2 md:gap-4 md:p-0 md:overflow-visible' : ''
-    ]}
-  >
-    
-    {displayImage && variant !== 'featured' && (
-      <a href={detailUrl} class="block overflow-hidden -m-4 md:-m-5 mb-3 rounded-t-md">
-        <div class={`relative ${imageSizes[variant]}`}>
+  <div class="block border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 transition-all duration-200 hover:border-zinc-300 dark:hover:border-zinc-700">
+    <div class="flex gap-4 p-4 md:p-5">
+      
+      {/* Image - Left side */}
+      {displayImage && (
+        <a 
+          href={detailUrl}
+          class="shrink-0 w-20 h-20 md:w-24 md:h-24 overflow-hidden bg-zinc-100 dark:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 dark:focus:ring-zinc-600"
+          aria-label={`View project: ${title}`}
+        >
           <img 
             src={displayImage}
             alt={imageAlt || title}
             class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             loading="lazy"
           />
-          
-          {/* Industrial corner marks */}
-          <div class="absolute top-2 left-2 w-4 h-4 border-l border-t border-white/30"></div>
-          
-          {/* Featured badge */}
-          {featured && (
-            <div class="absolute top-2 right-2">
-              <span class="px-1.5 py-0.5 text-[10px] font-mono font-bold bg-amber-500/90 text-white backdrop-blur-sm rounded-sm">
-                [★]
-              </span>
-            </div>
-          )}
-        </div>
-      </a>
-    )}
-
-    {/* Featured Layout - Image side by side */}
-    {variant === 'featured' && displayImage && (
-      <>
-        <a href={detailUrl} class="relative overflow-hidden bg-zinc-100 dark:bg-zinc-900 h-full min-h-48 md:min-h-full">
-          <img 
-            src={displayImage}
-            alt={imageAlt || title}
-            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            loading="lazy"
-          />
-          <div class="absolute top-2 left-2 w-4 h-4 border-l border-t border-white/30"></div>
         </a>
-        <div class="p-4 md:p-6">
-          {/* Content will go here */}
-        </div>
-      </>
-    )}
-
-    {/* Content Section */}
-    <div class={variant === 'featured' && displayImage ? 'p-4 md:p-6' : ''}>
-      
-      {/* Title - link ke detail */}
-      <a href={detailUrl} class="block">
-        <h3 class={`font-bold tracking-tight text-zinc-900 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-colors mb-1.5 leading-tight ${titleSizes[variant]}`}>
-          {title}
-        </h3>
-      </a>
-      
-      {/* Meta info */}
-      <div class="flex items-center gap-1.5 font-mono text-[11px] md:text-xs tracking-wide text-zinc-500 dark:text-zinc-400 mb-2">
-        <span class="text-emerald-500 dark:text-emerald-400 font-bold">$</span>
-        <span class="text-zinc-400 dark:text-zinc-500">{formattedDate}</span>
-        <span class="text-zinc-300 dark:text-zinc-700">/</span>
-        <div class="flex items-center gap-0.5">
-          <span>[</span>
-          <span>work</span>
-          <span>]</span>
-        </div>
-        
-        {featured && variant !== 'featured' && (
-          <>
-            <span class="text-zinc-300 dark:text-zinc-700">/</span>
-            <span class="text-amber-500">[★]</span>
-          </>
-        )}
-      </div>
-      
-      {/* Client/Role */}
-      {(client || role) && variant !== 'compact' && (
-        <div class="flex items-center gap-1.5 mb-2 font-mono text-[10px] md:text-[11px] text-zinc-400 dark:text-zinc-500">
-          {client && <span class="text-zinc-500 dark:text-zinc-400">{client}</span>}
-          {client && role && <span>/</span>}
-          {role && <span>{role}</span>}
-        </div>
       )}
       
-      {/* Description */}
-      <a href={detailUrl} class="block">
-        <p class={`text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed ${variant === 'featured' ? 'line-clamp-3' : 'line-clamp-2'} mb-3`}>
-          {description}
-        </p>
-      </a>
-      
-      {/* Tech Stack */}
-      {showTechStack && techStack && techStack.length > 0 && variant !== 'compact' && (
-        <div class="flex flex-wrap gap-1.5 mb-3">
-          {techStack.slice(0, 3).map(tech => (
-            <span class="px-1.5 py-0.5 text-[10px] md:text-[11px] font-mono border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 rounded-sm">
-              {tech}
-            </span>
-          ))}
-          {techStack.length > 3 && (
-            <span class="px-1.5 py-0.5 text-[10px] md:text-[11px] font-mono text-zinc-400 dark:text-zinc-500">
-              +{techStack.length - 3}
-            </span>
+      {/* Content - Right side */}
+      <div class="flex-1 min-w-0">
+        
+        {/* Meta info */}
+        <div class="flex items-center gap-1.5 font-mono text-[11px] md:text-xs tracking-wide text-zinc-500 dark:text-zinc-400 mb-1.5">
+          <span class="text-emerald-500 dark:text-emerald-400 font-bold" aria-hidden="true">$</span>
+          <time datetime={date.toISOString()}>{formattedDate}</time>
+          <span class="text-zinc-300 dark:text-zinc-700" aria-hidden="true">/</span>
+          <div class="flex items-center gap-0.5">
+            <span aria-hidden="true">[</span>
+            <span>work</span>
+            <span aria-hidden="true">]</span>
+          </div>
+          {featured && (
+            <>
+              <span class="text-zinc-300 dark:text-zinc-700" aria-hidden="true">/</span>
+              <span class="text-amber-500" aria-label="Featured project">[★]</span>
+            </>
           )}
         </div>
-      )}
-      
-      {/* Links - external links */}
-      <div class="flex items-center gap-4 pt-1">
-        {demoUrl && (
-          <a 
-            href={demoUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="group/link inline-flex items-center gap-1 text-[11px] md:text-xs font-mono text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors"
-          >
-            <span>[live</span>
-            <span class="group-hover/link:translate-x-0.5 transition-transform duration-150">→</span>
-            <span>]</span>
-          </a>
+        
+        {/* Title */}
+        <a href={detailUrl} class="block focus:outline-none focus:ring-2 focus:ring-zinc-400 dark:focus:ring-zinc-600 rounded-sm">
+          <h3 class="font-semibold text-zinc-900 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-colors text-base md:text-lg leading-tight mb-1">
+            {title}
+          </h3>
+        </a>
+        
+        {/* Client & Role */}
+        {(client || role) && !isCompact && (
+          <div class="flex items-center gap-1.5 mb-2 font-mono text-[10px] md:text-[11px] text-zinc-400 dark:text-zinc-500">
+            {client && <span class="text-zinc-500 dark:text-zinc-400">{client}</span>}
+            {client && role && <span aria-hidden="true">/</span>}
+            {role && <span>{role}</span>}
+          </div>
         )}
         
-        {repoUrl && (
-          <a 
-            href={repoUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="group/link inline-flex items-center gap-1 text-[11px] md:text-xs font-mono text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors"
-          >
-            <span>[code</span>
-            <span class="group-hover/link:translate-x-0.5 transition-transform duration-150">→</span>
-            <span>]</span>
-          </a>
+        {/* Description */}
+        <a href={detailUrl} class="block">
+          <p class="text-xs md:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed line-clamp-2 mb-2">
+            {description}
+          </p>
+        </a>
+        
+        {/* Tech Stack */}
+        {showTechStack && techStack && techStack.length > 0 && !isCompact && (
+          <div class="flex flex-wrap gap-1.5 mb-3">
+            {techStack.slice(0, 3).map(tech => (
+              <span 
+                class="px-1.5 py-0.5 text-[10px] md:text-[11px] font-mono border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400"
+              >
+                {tech}
+              </span>
+            ))}
+            {techStack.length > 3 && (
+              <span class="px-1.5 py-0.5 text-[10px] md:text-[11px] font-mono text-zinc-400 dark:text-zinc-500">
+                +{techStack.length - 3}
+              </span>
+            )}
+          </div>
         )}
+        
+        {/* Links - External */}
+        <div class="flex items-center gap-4 pt-1">
+          {demoUrl && (
+            <a 
+              href={demoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group/link inline-flex items-center gap-1 text-[11px] md:text-xs font-mono text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-400 dark:focus:ring-zinc-600"
+              aria-label="Live demo"
+            >
+              <span aria-hidden="true">[</span>
+              <span>live</span>
+              <span class="group-hover/link:translate-x-0.5 transition-transform duration-150" aria-hidden="true">→</span>
+              <span aria-hidden="true">]</span>
+            </a>
+          )}
+          
+          {repoUrl && (
+            <a 
+              href={repoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group/link inline-flex items-center gap-1 text-[11px] md:text-xs font-mono text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-400 dark:focus:ring-zinc-600"
+              aria-label="Source code"
+            >
+              <span aria-hidden="true">[</span>
+              <span>code</span>
+              <span class="group-hover/link:translate-x-0.5 transition-transform duration-150" aria-hidden="true">→</span>
+              <span aria-hidden="true">]</span>
+            </a>
+          )}
+        </div>
+        
+        {/* Industrial hover line */}
+        <div class="mt-3 h-px w-0 bg-linear-to-r from-zinc-300 to-transparent dark:from-zinc-700 group-hover:w-full transition-all duration-300"></div>
+        
       </div>
       
-      {/* Industrial hover line */}
-      <div class="mt-3 h-px w-0 bg-linear-to-r from-zinc-300 to-transparent dark:from-zinc-700 group-hover:w-full transition-all duration-300"></div>
+      {/* Arrow indicator */}
+      <a 
+        href={detailUrl}
+        class="hidden sm:flex shrink-0 items-center text-zinc-400 dark:text-zinc-600 group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-all duration-200 group-hover:translate-x-0.5 focus:outline-none focus:ring-2 focus:ring-zinc-400 dark:focus:ring-zinc-600"
+        aria-label={`View project: ${title}`}
+      >
+        <span class="text-sm" aria-hidden="true">→</span>
+      </a>
       
     </div>
-    
   </div>
 </article>

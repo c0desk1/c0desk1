@@ -10,20 +10,13 @@ import ThemeToggle from "@/components/ui/ThemeToggle.astro";
 <header class="sticky top-0 z-50 w-full border-b border-zinc-200/80 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md">
   <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex h-14 sm:h-16 items-center justify-between gap-4">
-      
-      {/* Left Section - Logo */}
       <Logo />
-      
-      {/* Center Section - Desktop Navigation */}
       <DesktopNav />
-      
-      {/* Right Section - Actions */}
       <div class="flex items-center gap-1">
         <SearchButton />
         <ThemeToggle />
         <MobileNav />
       </div>
-      
     </div>
   </div>
 </header>

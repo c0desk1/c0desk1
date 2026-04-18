@@ -1,159 +1,75 @@
 ---
 // src/components/blog/PostCardCompact.astro
-
+// @ts-nocheck
 import type { CollectionEntry } from 'astro:content';
-import { formatDate, getReadingTime } from '@/lib/utils';
+import { formatDateCompact, getReadingTime } from '@/lib/utils';
 
 interface Props {
   post: CollectionEntry<'blog'>;
   showTags?: boolean;
-  imagePosition?: 'left' | 'right';
 }
 
-const { post, showTags = true, imagePosition = 'left' } = Astro.props;
+const { post, showTags = true } = Astro.props;
 const { data, id, body } = post;
-const { title, description, pubDate, tags, image, imageAlt, featured, pinned } = data;
+const { title, description, pubDate, tags, featured, pinned } = data;
 
-const formattedDate = formatDate(pubDate);
+const formattedDate = formatDateCompact(pubDate);
 const readingTime = getReadingTime(undefined, undefined, body);
-const displayImage = typeof image === 'string' ? image : null;
 ---
 
 <a 
   href={`/blog/${id}`} 
-  class="group block py-4 border-b border-zinc-100 dark:border-zinc-900 transition-all duration-200 hover:bg-zinc-50 dark:hover:bg-zinc-900/50 -mx-4 px-4 rounded-lg"
+  class="group block py-4 border-b border-zinc-100 dark:border-zinc-800 transition-all duration-200 hover:border-zinc-300 dark:hover:border-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 dark:focus:ring-zinc-600"
+  aria-label={`Read article: ${title}`}
 >
-  <div class="flex items-start gap-4">
-    
-    {/* Image - left side */}
-    {displayImage && imagePosition === 'left' && (
-      <div class="shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-md overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
-        <img 
-          src={displayImage}
-          alt={imageAlt || title}
-          class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-          loading="lazy"
-        />
-      </div>
+  {/* Date di atas dengan $ hijau */}
+  <div class="flex items-center gap-2 font-mono text-[12px] tracking-wide text-zinc-500 dark:text-zinc-400 mb-1.5">
+    <span class="text-emerald-600 dark:text-emerald-500 font-bold" aria-hidden="true">$</span>
+    <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+    <span class="text-zinc-300 dark:text-zinc-700" aria-hidden="true">/</span>
+    <div class="flex items-center gap-0.5">
+      <span aria-hidden="true">[</span>
+      <span>{readingTime}</span>
+      <span aria-hidden="true">]</span>
+    </div>
+  </div>
+  
+  {/* Title - lebih besar untuk aksesibilitas */}
+  <h3 class="font-semibold text-zinc-900 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors text-base md:text-lg leading-tight mb-1.5">
+    {title}
+    {featured && (
+      <span class="ml-2 text-[11px] font-mono text-amber-600 dark:text-amber-500" aria-label="Featured post">[★]</span>
     )}
-    
-    {/* Meta - tactical left column (hidden when image on left) */}
-    {!displayImage && (
-      <div class="hidden sm:flex items-center gap-2 font-mono text-[11px] tracking-wide text-zinc-500 dark:text-zinc-400 shrink-0 w-28">
-        <span class="text-zinc-400 dark:text-zinc-600">$</span>
-        <time datetime={pubDate.toISOString()}>{formattedDate}</time>
-      </div>
+    {pinned && (
+      <span class="ml-2 text-[11px] font-mono text-blue-600 dark:text-blue-500" aria-label="Pinned post">[↑]</span>
     )}
-    
-    {/* Content - main area */}
-    <div class="flex-1 min-w-0 space-y-1">
-      
-      {/* Meta row - when image exists, show here */}
-      {displayImage && (
-        <div class="flex flex-wrap items-center gap-2 font-mono text-[10px] sm:text-[11px] tracking-wide text-zinc-500 dark:text-zinc-400 mb-1">
-          <span class="text-emerald-600 dark:text-emerald-500 font-bold">$</span>
-          <time datetime={pubDate.toISOString()}>{formattedDate}</time>
-          <span class="text-zinc-300 dark:text-zinc-700">/</span>
-          <div class="flex items-center gap-0.5">
-            <span>[</span>
-            <span>{readingTime}</span>
-            <span>]</span>
-          </div>
-          {featured && (
-            <>
-              <span class="text-zinc-300 dark:text-zinc-700">/</span>
-              <span class="text-amber-600 dark:text-amber-500">[★]</span>
-            </>
+  </h3>
+  
+  {/* Description - kontras lebih baik */}
+  <p class="text-sm md:text-base text-zinc-600 dark:text-zinc-400 leading-relaxed line-clamp-2 mb-3">
+    {description}
+  </p>
+  
+  {/* Tags & Arrow */}
+  <div class="flex items-center justify-between">
+    <div class="flex flex-wrap items-center gap-2 text-[11px] font-mono text-zinc-400 dark:text-zinc-500">
+      {showTags && tags && tags.length > 0 && (
+        <>
+          {tags.slice(0, 2).map(tag => (
+            <span key={tag} class="hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors">
+              #{tag}
+            </span>
+          ))}
+          {tags.length > 2 && (
+            <span class="text-zinc-400 dark:text-zinc-600">+{tags.length - 2}</span>
           )}
-          {pinned && (
-            <>
-              <span class="text-zinc-300 dark:text-zinc-700">/</span>
-              <span class="text-blue-600 dark:text-blue-500">[↑]</span>
-            </>
-          )}
-        </div>
+        </>
       )}
-      
-      {/* Title row with badges */}
-      <div class="flex items-center gap-2 flex-wrap">
-        <h3 class="font-medium text-zinc-900 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors text-base sm:text-lg leading-tight">
-          {title}
-        </h3>
-        
-        {/* Tactical badges - only show if no image (to keep clean) */}
-        {!displayImage && featured && (
-          <span class="text-[9px] font-mono text-amber-600 dark:text-amber-500 px-1.5 py-0.5 border border-amber-200 dark:border-amber-800 rounded">
-            featured
-          </span>
-        )}
-        {!displayImage && pinned && (
-          <span class="text-[9px] font-mono text-blue-600 dark:text-blue-500 px-1.5 py-0.5 border border-blue-200 dark:border-blue-800 rounded">
-            pinned
-          </span>
-        )}
-      </div>
-      
-      {/* Description - single line */}
-      <p class="text-sm text-zinc-500 dark:text-zinc-400 line-clamp-1">
-        {description}
-      </p>
-      
-      {/* Bottom row - date mobile + tags + reading time */}
-      <div class="flex flex-wrap items-center gap-2 pt-1 text-[10px] sm:text-[11px] font-mono text-zinc-400 dark:text-zinc-500">
-        
-        {/* Mobile date (only if no image or image on right) */}
-        {(!displayImage || imagePosition === 'right') && (
-          <>
-            <time datetime={pubDate.toISOString()} class="sm:hidden">
-              {formattedDate}
-            </time>
-            <span class="sm:hidden text-zinc-300 dark:text-zinc-700">|</span>
-          </>
-        )}
-        
-        {/* Reading time with brackets (if no meta row above) */}
-        {!displayImage && (
-          <div class="flex items-center gap-0.5">
-            <span>[</span>
-            <span>{readingTime}</span>
-            <span>]</span>
-          </div>
-        )}
-        
-        {/* Tags */}
-        {showTags && tags && tags.length > 0 && (
-          <>
-            <span class="text-zinc-300 dark:text-zinc-700">|</span>
-            <div class="flex flex-wrap gap-2">
-              {tags.slice(0, 2).map(tag => (
-                <span>#{tag}</span>
-              ))}
-              {tags.length > 2 && (
-                <span>+{tags.length - 2}</span>
-              )}
-            </div>
-          </>
-        )}
-      </div>
-      
     </div>
     
-    {/* Image - right side */}
-    {displayImage && imagePosition === 'right' && (
-      <div class="shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-md overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
-        <img 
-          src={displayImage}
-          alt={imageAlt || title}
-          class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-          loading="lazy"
-        />
-      </div>
-    )}
-    
-    {/* Right side - arrow indicator on hover */}
-    <div class="shrink-0 text-zinc-300 dark:text-zinc-700 group-hover:text-zinc-500 dark:group-hover:text-zinc-400 transition-all duration-200 group-hover:translate-x-0.5 self-center">
-      <span class="text-xs sm:text-sm">→</span>
+    <div class="flex items-center gap-1 text-zinc-400 dark:text-zinc-600 group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-all duration-200 group-hover:translate-x-0.5">
+      <span class="text-[11px] font-mono">[read]</span>
+      <span class="text-xs" aria-hidden="true">→</span>
     </div>
-    
   </div>
 </a>

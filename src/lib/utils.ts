@@ -263,21 +263,21 @@ export function filterByYear<T extends { data: { pubDate?: Date | string | numbe
   });
 }
 
-export function groupByYear<T extends { data: { pubDate?: Date | string | number; date?: Date | string | number } }>(
+export function groupByYear<T extends { data: { pubDate?: Date; date?: Date } }>(
   items: T[],
   dateField: 'pubDate' | 'date' = 'pubDate'
 ): Record<number, T[]> {
   return items.reduce((acc, item) => {
     const date = item.data[dateField];
     if (date) {
-      const d = ensureDate(date);
-      const year = d.getFullYear();
+      const year = date.getFullYear();
       if (!acc[year]) acc[year] = [];
       acc[year].push(item);
     }
     return acc;
   }, {} as Record<number, T[]>);
 }
+
 export function filterByDraft<T extends { data: { draft?: boolean } }>(
   items: T[],
   showDrafts: boolean = false
@@ -288,6 +288,20 @@ export function filterByDraft<T extends { data: { draft?: boolean } }>(
 
 export function filterByFeatured<T extends { data: { featured?: boolean } }>(items: T[]): T[] {
   return items.filter(item => item.data.featured);
+}
+
+export function getArchiveCounts<T extends { data: { pubDate?: Date; date?: Date } }>(
+  items: T[],
+  dateField: 'pubDate' | 'date' = 'pubDate'
+): Record<number, number> {
+  const grouped = groupByYear(items, dateField);
+  const counts: Record<number, number> = {};
+  
+  for (const [year, posts] of Object.entries(grouped)) {
+    counts[Number(year)] = posts.length;
+  }
+  
+  return counts;
 }
 
 // ==================== SEARCH UTILITIES ====================

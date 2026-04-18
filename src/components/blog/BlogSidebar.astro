@@ -1,0 +1,24 @@
+---
+// src/components/blog/BlogSidebar.astro
+import AboutCard from './sidebar/AboutCard.astro';
+import TagsCard from './sidebar/TagsCard.astro';
+import RecentPostsCard from './sidebar/RecentPostsCard.astro';
+import ArchivesCard from './sidebar/ArchivesCard.astro';
+import NewsletterCard from './sidebar/NewsletterCard.astro';
+
+interface Props {
+  popularTags: string[];
+  recentPosts: any[];
+  archiveCounts: Record<number, number>;
+}
+
+const { popularTags, recentPosts, archiveCounts } = Astro.props;
+---
+
+<aside class="space-y-8">
+  <AboutCard />
+  <TagsCard tags={popularTags} />
+  <RecentPostsCard posts={recentPosts} />
+  <ArchivesCard counts={archiveCounts} />
+  <NewsletterCard />
+</aside>

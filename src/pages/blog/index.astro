@@ -1,26 +1,24 @@
 ---
 // src/pages/blog/index.astro
-
 import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Container from '@/components/ui/Container.astro';
-import PostCard from '@/components/blog/PostCard.astro';
-import RelatedPostCard from '@/components/blog/RelatedPostCard.astro';
-import { sortByDate, getAllTags, groupByYear, filterByFeatured, filterByDraft } from '@/lib/utils';
+import BlogHero from '@/components/blog/BlogHero.astro';
+import BlogList from '@/components/blog/BlogList.astro';
+import BlogSidebar from '@/components/blog/BlogSidebar.astro';
+import { sortByDate, getAllTags, getArchiveCounts } from '@/lib/utils';
 
 const allPosts = await getCollection('blog');
-const posts = sortByDate(filterByDraft(allPosts));
+const publishedPosts = allPosts.filter(p => !p.data.draft);
+const posts = sortByDate(publishedPosts);
 
-const featuredPosts = filterByFeatured(posts);
-const featuredPost = featuredPosts[0];
+const featuredPost = posts.find(p => p.data.featured === true);
 const regularPosts = posts.filter(p => !p.data.featured);
 
 const recentPosts = regularPosts.slice(0, 5);
-
 const allTags = getAllTags(posts);
 const popularTags = allTags.slice(0, 8);
-
-const archives = groupByYear(posts);
+const archiveCounts = getArchiveCounts(posts);
 ---
 
 <BaseLayout 
@@ -28,222 +26,20 @@ const archives = groupByYear(posts);
   description="Articles about web development, design systems, and industrial tactical design."
   type="website"
 >
+  <BlogHero />
   
-  {/* Hero Section */}
-  <div class="border-b border-zinc-100 dark:border-zinc-900 bg-white dark:bg-zinc-950">
-    <Container size="md" class="py-12 md:py-16 lg:py-20">
-      
-      {/* Breadcrumb */}
-      <nav class="flex items-center gap-2 font-mono text-[11px] md:text-xs tracking-wide text-zinc-400 dark:text-zinc-500 mb-6">
-        <span class="text-emerald-600 dark:text-emerald-500 font-bold">$</span>
-        <a href="/" class="hover:text-zinc-900 dark:hover:text-white transition-colors">home</a>
-        <span class="text-zinc-300 dark:text-zinc-700">/</span>
-        <span class="text-zinc-600 dark:text-zinc-400">blog</span>
-      </nav>
-      
-      <div class="space-y-4">
-        <div class="flex items-center gap-2">
-          <div class="h-1.5 w-1.5 rounded-full bg-emerald-500"></div>
-          <span class="text-xs font-mono text-zinc-500 dark:text-zinc-400">ARTICLES / WRITINGS</span>
-        </div>
-        
-        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-zinc-900 dark:text-white leading-[1.1]">
-          Thoughts &<br />
-          <span class="text-zinc-400 dark:text-zinc-600">insights.</span>
-        </h1>
-        
-        <p class="text-base md:text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl leading-relaxed">
-          Exploring web development, design systems, and industrial tactical design.
-        </p>
-        
-        <div class="pt-4">
-          <div class="h-px w-12 bg-linear-to-r from-zinc-300 to-transparent dark:from-zinc-700"></div>
-        </div>
-      </div>
-      
-    </Container>
-  </div>
-  
-  {/* Main Content */}
-  <Container size="md" class="py-12 md:py-16">
-    <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12 md:gap-16">
-      
-      {/* Left Column - Posts */}
-      <div class="min-w-0">
-        
-        {/* Featured Post */}
-        {featuredPost && (
-          <div class="mb-10 pb-8 border-b border-zinc-100 dark:border-zinc-900">
-            <div class="flex items-center gap-2 mb-4">
-              <span class="text-[10px] font-mono text-amber-600 dark:text-amber-500">[featured]</span>
-              <div class="h-px w-8 bg-zinc-200 dark:bg-zinc-800"></div>
-            </div>
-            <PostCard 
-              post={featuredPost}
-              showTags={true}
-              imagePosition="left"
-            />
-          </div>
-        )}
-        
-        {/* Posts List Header */}
-        <div class="flex items-center justify-between mb-6">
-          <div class="flex items-center gap-2">
-            <span class="text-[10px] font-mono text-zinc-400 dark:text-zinc-500">$</span>
-            <span class="text-xs font-mono text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
-              All posts ({posts.length})
-            </span>
-          </div>
-          
-          {/* View selector (optional) */}
-          <div class="flex items-center gap-1 text-[10px] font-mono text-zinc-400 dark:text-zinc-500">
-            <span>[</span>
-            <span>list view</span>
-            <span>]</span>
-          </div>
-        </div>
-        
-        {/* Regular Posts List */}
-        <div class="space-y-0">
-          {regularPosts.length > 0 ? (
-            regularPosts.map(post => (
-              <PostCard 
-                post={post}
-                showTags={true}
-                imagePosition="left"
-              />
-            ))
-          ) : (
-            <div class="py-12 text-center">
-              <p class="text-zinc-500 dark:text-zinc-400 font-mono">No posts found.</p>
-            </div>
-          )}
-        </div>
-        
-      </div>
-      
-      {/* Right Column - Sidebar */}
-      <aside class="space-y-8">
-        
-        {/* About Card */}
-        <div class="p-5 border border-zinc-200 dark:border-zinc-800 rounded-lg bg-white dark:bg-zinc-950">
-          <div class="flex items-center gap-2 mb-3">
-            <div class="h-1.5 w-1.5 rounded-full bg-emerald-500"></div>
-            <h3 class="text-xs font-mono font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-              About
-            </h3>
-          </div>
-          <p class="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-3">
-            Exploring the intersection of clean code, industrial design, and digital experiences.
-          </p>
-          <div class="flex items-center gap-2 text-[10px] font-mono text-zinc-400">
-            <span>$</span>
-            <span>active since 2024</span>
-          </div>
-        </div>
-        
-        {/* Popular Tags */}
-        {popularTags.length > 0 && (
-          <div>
-            <div class="flex items-center gap-2 mb-4">
-              <div class="h-1.5 w-1.5 rounded-full bg-zinc-400 dark:bg-zinc-500"></div>
-              <h3 class="text-xs font-mono font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                Tags
-              </h3>
-            </div>
-            <div class="flex flex-wrap gap-2">
-              {popularTags.map(tag => (
-                <a 
-                  href={`/blog/tags/${encodeURIComponent(tag)}`}
-                  class="px-2 py-1 text-[11px] font-mono border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 rounded hover:border-zinc-400 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all"
-                >
-                  #{tag}
-                </a>
-              ))}
-            </div>
-          </div>
-        )}
-        
-        {/* Recent Posts */}
-        {recentPosts.length > 0 && (
-          <div>
-            <div class="flex items-center gap-2 mb-4">
-              <div class="h-1.5 w-1.5 rounded-full bg-zinc-400 dark:bg-zinc-500"></div>
-              <h3 class="text-xs font-mono font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                Recent
-              </h3>
-            </div>
-            <div class="space-y-0">
-              {recentPosts.map(post => (
-                <RelatedPostCard 
-                  post={post}
-                  showDate={false}
-                  showReadingTime={true}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-        
-        {/* Archives */}
-        {Object.keys(archives).length > 0 && (
-          <div>
-            <div class="flex items-center gap-2 mb-4">
-              <div class="h-1.5 w-1.5 rounded-full bg-zinc-400 dark:bg-zinc-500"></div>
-              <h3 class="text-xs font-mono font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                Archives
-              </h3>
-            </div>
-            <div class="space-y-1">
-              {Object.entries(archives)
-                .sort((a, b) => Number(b[0]) - Number(a[0]))
-                .map(([year, count]) => (
-                  <a 
-                    href={`/blog/archive/${year}`}
-                    class="flex items-center justify-between py-1.5 text-sm font-mono text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
-                  >
-                    <span>$ {year}</span>
-                    <span class="text-[10px] text-zinc-400 dark:text-zinc-500">[{count}]</span>
-                  </a>
-                ))}
-            </div>
-          </div>
-        )}
-        
-        {/* Newsletter */}
-        <div class="pt-4">
-          <div class="p-5 border border-zinc-200 dark:border-zinc-800 rounded-lg bg-linear-to-br from-white to-zinc-50 dark:from-zinc-950 dark:to-zinc-900">
-            <div class="flex items-center gap-2 mb-3">
-              <span class="text-emerald-600 dark:text-emerald-500 font-mono font-bold">$</span>
-              <h3 class="text-xs font-mono font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                Newsletter
-              </h3>
-            </div>
-            <p class="text-sm text-zinc-600 dark:text-zinc-400 mb-4">
-              Get notified when I publish new articles.
-            </p>
-            <form class="space-y-3">
-              <input 
-                type="email" 
-                placeholder="your@email.com"
-                class="w-full px-3 py-2 text-sm font-mono border border-zinc-200 dark:border-zinc-800 rounded bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:border-zinc-400 dark:focus:border-zinc-600 transition-colors"
-              />
-              <button 
-                type="submit"
-                class="w-full px-3 py-2 text-xs font-mono font-medium border border-zinc-200 dark:border-zinc-800 rounded hover:border-zinc-400 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all"
-              >
-                [subscribe]
-              </button>
-            </form>
-            <p class="text-[9px] font-mono text-zinc-400 dark:text-zinc-500 mt-3">
-              No spam. Unsubscribe anytime.
-            </p>
-          </div>
-        </div>
-        
-      </aside>
-      
+  <Container size="lg" class="py-10 md:py-14">
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-12">
+      <BlogList 
+        featuredPost={featuredPost}
+        regularPosts={regularPosts}
+        totalCount={posts.length}
+      />
+      <BlogSidebar 
+        popularTags={popularTags}
+        recentPosts={recentPosts}
+        archiveCounts={archiveCounts}
+      />
     </div>
   </Container>
-  
 </BaseLayout>

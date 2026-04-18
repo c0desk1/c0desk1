@@ -3,6 +3,9 @@ title: "Strategi Optimasi Performa Website Modern"
 description: "Pelajari teknik optimasi performa website seperti lazy loading, caching, dan code splitting untuk meningkatkan pengalaman pengguna."
 pubDate: 2026-04-05
 
+image: "https://images.unsplash.com/photo-1518770660439-4636190af475"
+imageAlt: "Ilustrasi server edge computing modern"
+
 tags:
   - web-performance
   - frontend

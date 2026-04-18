@@ -1,0 +1,51 @@
+---
+// src/components/blog/sidebar/RecentPostsCard.astro
+
+import { formatDateCompact, getReadingTime } from '@/lib/utils';
+
+interface Props {
+  posts: any[];
+}
+
+const { posts } = Astro.props;
+---
+
+{posts.length > 0 && (
+  <div>
+    <div class="flex items-center gap-2 mb-3">
+      <div class="h-1.5 w-1.5 rounded-full bg-zinc-400 dark:bg-zinc-500"></div>
+      <h3 class="text-[12px] font-mono font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+        Recent
+      </h3>
+    </div>
+    <div class="space-y-2">
+      {posts.map(post => {
+        const formattedDate = formatDateCompact(post.data.pubDate);
+        const readingTime = getReadingTime(undefined, undefined, post.body);
+        
+        return (
+          <a 
+            href={`/blog/${post.id}`}
+            class="group block py-2 border-b border-zinc-100 dark:border-zinc-800 last:border-0 hover:pl-2 transition-all duration-200"
+          >
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex-1 min-w-0">
+                <h4 class="text-sm font-medium text-zinc-800 dark:text-zinc-200 group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-colors line-clamp-1">
+                  {post.data.title}
+                </h4>
+                <div class="flex items-center gap-2 mt-1 text-[12px] font-mono text-zinc-400 dark:text-zinc-500">
+                  <time datetime={post.data.pubDate.toISOString()}>{formattedDate}</time>
+                  <span class="text-zinc-300 dark:text-zinc-700">/</span>
+                  <span>[{readingTime}]</span>
+                </div>
+              </div>
+              <div class="shrink-0 text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-all group-hover:translate-x-0.5">
+                <span class="text-[12px]">→</span>
+              </div>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+)}

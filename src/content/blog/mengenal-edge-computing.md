@@ -18,7 +18,7 @@ categories:
   - Infrastruktur
 
 draft: false
-featured: true
+featured: false
 
 readingTime: 6
 wordCount: 820
