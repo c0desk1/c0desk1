@@ -1,8 +1,7 @@
 ---
 // src/components/blog/PostCardMinimal.astro
-
 import type { CollectionEntry } from 'astro:content';
-import { formatDate, getReadingTime } from '@/lib/utils';
+import { formatDateCompact, getReadingTime } from '@/lib/utils';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -14,21 +13,21 @@ const { post, showDate = true, showReadingTime = true } = Astro.props;
 const { data, id, body } = post;
 const { title, pubDate, featured } = data;
 
-const formattedDate = formatDate(pubDate);
+const formattedDate = formatDateCompact(pubDate);
 const readingTime = getReadingTime(undefined, undefined, body);
 ---
 
 <a 
   href={`/blog/${id}`} 
-  class="group flex items-center justify-between py-2 border-b border-zinc-100 dark:border-zinc-900 hover:pl-2 transition-all duration-200"
+  class="group flex items-center justify-between py-2 border-b border-zinc-100 dark:border-zinc-800 hover:pl-2 transition-all duration-200"
 >
   <div class="flex items-center gap-3 flex-1 min-w-0">
     {/* Tactical dot */}
     <div class="w-1 h-1 rounded-full bg-zinc-300 dark:bg-zinc-700 group-hover:bg-emerald-500 transition-colors"></div>
     
-    {/* Date (optional) */}
+    {/* Date */}
     {showDate && (
-      <span class="hidden sm:inline text-[10px] font-mono text-zinc-400 dark:text-zinc-500 shrink-0">
+      <span class="hidden sm:inline text-[11px] font-mono text-zinc-400 dark:text-zinc-500 shrink-0">
         {formattedDate}
       </span>
     )}
@@ -46,7 +45,7 @@ const readingTime = getReadingTime(undefined, undefined, body);
   
   {/* Reading time */}
   {showReadingTime && (
-    <div class="text-[11px] font-mono text-zinc-400 dark:text-zinc-600 shrink-0 ml-2">
+    <div class="text-[11px] font-mono text-zinc-400 dark:text-zinc-500 shrink-0 ml-2">
       {readingTime}
     </div>
   )}
