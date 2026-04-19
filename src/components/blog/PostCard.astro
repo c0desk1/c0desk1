@@ -1,0 +1,50 @@
+---
+// src/components/blog/PostCard.astro
+
+import type { CollectionEntry } from 'astro:content';
+import { formatDateCompact } from '@/lib/utils';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  showTags?: boolean;
+}
+
+const { post, showTags = true } = Astro.props;
+const { data, id } = post;
+const { title, description, pubDate, tags, featured } = data;
+
+const formattedDate = formatDateCompact(pubDate);
+---
+
+<a href={`/blog/${id}`} class="block py-4 text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100 transition-colors duration-200" aria-label={`Read article: ${title}`}>
+  <div class="flex items-center justify-between mb-1.5 text-[13px]">
+    <div class="flex items-center gap-2">
+      <span class="font-semibold font-mono text-emerald-600 dark:text-emerald-500" aria-hidden="true">
+        ▼
+      </span>
+      <time datetime={pubDate.toISOString()}>
+        {formattedDate}
+      </time>
+    </div>
+    {showTags && tags && tags.length > 0 && (
+      <div class="flex flex-wrap items-center gap-2">
+        {tags.slice(0, 2).map(tag => (
+          <span class="text-inherit opacity-80">
+            #{tag}
+          </span>
+        ))}
+      </div>
+    )}
+  </div>
+  <h3 class="font-semibold text-zinc-950 dark:text-zinc-100 text-base md:text-lg leading-tight mb-1.5">
+    {title}
+    {featured && (
+      <span class="ml-2 text-amber-600 dark:text-amber-500 text-sm" aria-label="Postingan unggulan">
+        ▼
+      </span>
+    )}
+  </h3>
+  <p class="text-sm md:text-base text-inherit opacity-80 leading-relaxed line-clamp-2 mb-3">
+    {description}
+  </p>
+</a>

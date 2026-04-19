@@ -1,0 +1,57 @@
+---
+// src/pages/portfolio/index.astro
+
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/ui/Container.astro';
+import PortfolioHero from '@/components/portfolio/PortfolioHero.astro';
+import PortfolioFeatured from '@/components/portfolio/PortfolioFeatured.astro';
+import PortfolioList from '@/components/portfolio/PortfolioList.astro';
+import PortfolioSidebar from '@/components/portfolio/PortfolioSidebar.astro';
+
+import {
+  sortByDate,
+  getAllTechStacks,
+  filterByFeatured,
+  filterByDraft
+} from '@/lib/utils';
+
+const allProjects = await getCollection('portfolio');
+
+// pipeline lebih jelas
+const projects = sortByDate(filterByDraft(allProjects), 'date');
+
+const featuredProjects = filterByFeatured(projects);
+const featuredProject = featuredProjects?.[0];
+
+const regularProjects = projects.filter(p => !p.data.featured);
+
+const recentProjects = regularProjects.slice(0, 3);
+const allTechStacks = getAllTechStacks(projects);
+const popularTech = allTechStacks.slice(0, 8);
+---
+
+<BaseLayout
+  title="Portfolio"
+  description="A collection of my work including web applications, design systems, and digital experiences."
+  type="website"
+>
+  <PortfolioHero />
+  <Container size="lg" class="py-10 md:py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-12">
+      <div class="min-w-0">
+        {featuredProject && (
+          <PortfolioFeatured project={featuredProject} />
+        )}
+        <PortfolioList
+          projects={regularProjects}
+          totalCount={projects.length}
+        />
+      </div>
+      <PortfolioSidebar
+        popularTech={popularTech}
+        recentProjects={recentProjects}
+      />
+    </div>
+  </Container>
+</BaseLayout>

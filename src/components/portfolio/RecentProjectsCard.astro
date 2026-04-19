@@ -1,0 +1,50 @@
+---
+// src/components/portfolio/RecentProjectsCard.astro
+import { formatDateCompact } from '@/lib/utils';
+
+interface Props {
+  projects: any[];
+}
+
+const { projects } = Astro.props;
+---
+
+{projects.length > 0 && (
+  <div>
+    <div class="flex items-center gap-2 mb-3">
+      <div class="h-1.5 w-1.5 rounded-full bg-emerald-500"></div>
+      <h3 class="text-sm font-semibold tracking-wider text-zinc-500 dark:text-zinc-400">
+        Pekerjaan terbaru
+      </h3>
+    </div>
+    <div class="space-y-0 divide-y divide-zinc-100 dark:divide-zinc-800">
+      {projects.map(project => {
+        const formattedDate = formatDateCompact(project.data.date);
+        return (
+          <a
+            href={`/portfolio/${project.id}`}
+            class="group flex items-start justify-between gap-4 py-2 transition-colors"
+          >
+            <div class="min-w-0">
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-mono text-emerald-600 dark:text-emerald-500 font-bold">
+                  $
+                </span>
+                <h4 class="text-sm text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors line-clamp-1">
+                  {project.data.title}
+                </h4>
+              </div>
+              <time class="mt-1 block text-xs font-mono text-zinc-400 dark:text-zinc-500"
+                datetime={project.data.date.toISOString()}>
+                {formattedDate}
+              </time>
+            </div>
+            <span class="text-xs text-zinc-400 dark:text-zinc-500 group-hover:text-emerald-500 transition-colors">
+              →
+            </span>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+)}

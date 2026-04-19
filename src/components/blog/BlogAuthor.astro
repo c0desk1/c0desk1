@@ -1,0 +1,38 @@
+---
+// src/components/blog/BlogAuthor.astro
+
+import { siteConfig } from '@/config/site';
+
+interface Props {
+  name?: string;
+  avatar?: string;
+  title?: string;
+}
+
+const { name, avatar, title } = Astro.props;
+
+const authorName = name || siteConfig.author;
+const authorAvatar = avatar || siteConfig.authorAvatar;
+const authorTitle = title || siteConfig.authorTitle;
+---
+
+<div class="flex items-center gap-3 text-sm" aria-label={`Author: ${authorName}`}>
+  {authorAvatar && (
+    <img
+      src={authorAvatar}
+      alt={`Avatar of ${authorName}`}
+      class="w-8 h-8 rounded-full object-cover opacity-90"
+      loading="lazy"
+    />
+  )}
+  <div class="leading-tight">
+    <div class="font-medium text-zinc-900 dark:text-zinc-100">
+      {authorName}
+    </div>
+    {authorTitle && (
+      <div class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+        {authorTitle}
+      </div>
+    )}
+  </div>
+</div>

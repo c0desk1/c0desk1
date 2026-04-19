@@ -1,0 +1,176 @@
+---
+// src/pages/portfolio/[...slug].astro
+import "@/styles/prose.css";
+
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import { siteConfig } from '@/config/site';
+import { formatDateCompact } from '@/lib/utils';
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/ui/Container.astro';
+import Breadcrumb from '@/components/ui/Breadcrumb.astro';
+import BackToTop from '@/components/ui/BackToTop.astro';
+
+import PortfolioHeader from '@/components/portfolio/PortfolioHeader.astro';
+import PortfolioMetrics from '@/components/portfolio/PortfolioMetrics.astro';
+import PortfolioGallery from '@/components/portfolio/PortfolioGallery.astro';
+import PortfolioFeedback from '@/components/portfolio/PortfolioFeedback.astro';
+import PortfolioRelated from '@/components/portfolio/PortfolioRelated.astro';
+import PortfolioFeaturedImage from "@/components/portfolio/PortfolioFeaturedImage.astro";
+
+export async function getStaticPaths() {
+  const projects = await getCollection('portfolio', ({ data }) => !data.draft);
+
+  return projects.map((project: CollectionEntry<'portfolio'>) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: CollectionEntry<'portfolio'>;
+}
+
+const { project } = Astro.props;
+
+const {
+  title,
+  description,
+  date,
+  updatedDate,
+  techStack,
+  demoUrl,
+  repoUrl,
+  image,
+  imageAlt,
+  imageCaption,
+  gallery,
+  featured,
+  client,
+  role,
+  duration,
+  challenge,
+  solution,
+  result,
+  metrics,
+  seo
+} = project.data;
+
+const { Content } = await render(project);
+
+const seoTitle = seo?.title || `${title} | ${siteConfig.name}`;
+const seoDescription = seo?.description || description;
+const seoImage =
+  seo?.ogImage ||
+  (typeof image === 'string' ? image : siteConfig.ogImage);
+
+const displayImage = typeof image === 'string' ? image : null;
+const displayGallery = Array.isArray(gallery) ? gallery : [];
+
+const allProjects = await getCollection('portfolio', ({ data }) => !data.draft);
+
+const relatedProjects = allProjects
+  .filter(p => p.id !== project.id)
+  .filter(p =>
+    p.data.techStack?.some(tech =>
+      techStack?.includes(tech)
+    )
+  )
+  .slice(0, 2);
+---
+
+<BaseLayout
+  title={seoTitle}
+  description={seoDescription}
+  image={seoImage}
+  type="article"
+  publishedTime={date}
+  modifiedTime={updatedDate}
+  tags={techStack}
+  container={false}
+>
+  <article>
+    <div class="border-b border-zinc-100 dark:border-zinc-900">
+      <Container size="md" class="py-8 md:py-10">
+        <Breadcrumb items={[
+          { name: 'Home', href: '/' },
+          { name: 'Portfolio', href: '/portfolio' },
+          { name: title, href: '#' }
+        ]} />
+        <PortfolioHeader
+          title={title}
+          date={date}
+          updatedDate={updatedDate}
+          featured={featured}
+          client={client}
+          role={role}
+          duration={duration}
+          techStack={techStack}
+          demoUrl={demoUrl}
+          repoUrl={repoUrl}
+        />
+      </Container>
+    </div>
+    {displayImage && (
+      <PortfolioFeaturedImage
+        src={displayImage}
+        alt={imageAlt || title}
+        caption={imageCaption || imageAlt || title}
+      />
+    )}
+    <PortfolioMetrics metrics={metrics} />
+    <Container size="md" class="py-10 md:py-12">
+      <div class="mx-auto">
+        {(challenge || solution || result) && (
+          <div class="space-y-6 mb-8 pb-6 border-b border-zinc-100 dark:border-zinc-800">
+            {challenge && (
+              <div>
+                <h2 class="text-lg font-semibold text-zinc-900 dark:text-white mb-2">
+                  Tantangan
+                </h2>
+                <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                  {challenge}
+                </p>
+              </div>
+            )}
+            {solution && (
+              <div>
+                <h2 class="text-lg font-semibold text-zinc-900 dark:text-white mb-2">
+                  Solusi
+                </h2>
+                <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                  {solution}
+                </p>
+              </div>
+            )}
+            {result && (
+              <div>
+                <h2 class="text-lg font-semibold text-zinc-900 dark:text-white mb-2">
+                  Hasil
+                </h2>
+                <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                  {result}
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+        <div class="prose-custom">
+          <Content />
+        </div>
+        <PortfolioGallery
+          images={displayGallery}
+          title={title}
+        />
+        <PortfolioRelated
+          projects={relatedProjects}
+        />
+        <PortfolioFeedback
+          lastUpdated={formatDateCompact(updatedDate || date)}
+        />
+        <BackToTop showBorder={true} align="right" />
+      </div>
+    </Container>
+  </article>
+</BaseLayout>
