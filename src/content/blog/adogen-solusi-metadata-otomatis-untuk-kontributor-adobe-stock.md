@@ -3,8 +3,8 @@ title: "Adogen: Solusi Metadata Otomatis untuk Kontributor Adobe Stock"
 description: Lelah input keyword manual? Adogen hadir membantu kontributor
   Indonesia menghasilkan judul dan keyword akurat dalam hitungan detik
   menggunakan AI.
-pubDate: 2026-04-19
-updatedDate: 2026-04-19
+pubDate: 2026-04-19T14:58
+updatedDate: 2026-04-19T14:58
 tags:
   - Products
   - AI
@@ -12,17 +12,17 @@ tags:
   - Astro
 imageAlt: Dashboard Adogen Metadata Generator
 imageCaption: Tampilan antarmuka Adogen yang minimalis dan efisien.
-draft: false
+draft: true
 featured: true
 author:
   name: Bima Akbar
-  avatar: https://avatars.githubusercontent.com/u/9919?v=4
+  avatar: public/images/author/author.jpg
   title: Founder of Adogen
 seo:
   title: Adogen - Generator Metadata Adobe Stock Berbasis AI
   description: Optimalkan workflow Adobe Stock Anda dengan Adogen. Generate judul
     dan keyword otomatis, gratis, dan cepat.
-  noIndex: false
+  ogImage: /images/blog/og/og-adogen.webp
 ---
 Lelah menghabiskan waktu berjam-jam hanya untuk memikirkan 50 keyword yang tepat untuk satu foto? Sebagai kontributor, kita tahu bahwa **Metadata adalah kunci**, tapi prosesnya seringkali membosankan. Itulah alasan saya membangun **Adogen**.
 
