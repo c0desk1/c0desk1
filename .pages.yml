@@ -2,10 +2,22 @@
 
 # Media configuration
 media:
+  - name: blog-authors
+    label: Blog Authors
+    input: public/images/author
+    output: /images/author
+    categories: [image]
+
   - name: blog-images
     label: Blog Images
     input: public/images/blog
     output: /images/blog
+    categories: [image]
+
+  - name: blog-og-images
+    label: Blog OG Images
+    input: public/images/blog/og
+    output: /images/blog/og
     categories: [image]
     
   - name: portfolio-images
@@ -108,7 +120,10 @@ content:
             
           - name: avatar
             label: Avatar
-            type: string
+            type: image
+            options:
+              media: blog-author
+              rename: true
             
           - name: title
             label: Title
@@ -132,7 +147,10 @@ content:
               maxlength: 160
           - name: ogImage
             label: OG Image
-            type: string
+            type: image
+            options:
+              media: blog-og-images
+              rename: true
             
 
   # ==================== PORTFOLIO COLLECTION ====================
