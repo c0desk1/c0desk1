@@ -5,37 +5,37 @@ media:
   - name: blog-author
     label: Authors
     input: public/images/author
-    output: https://bimaakbar.my.id/images/author
+    output: /images/author
     categories: [image]
 
   - name: blog-images
     label: Blog Images
     input: public/images/blog
-    output: https://bimaakbar.my.id/images/blog
+    output: /images/blog
     categories: [image]
 
   - name: blog-og
     label: Blog OG
     input: public/images/blog/og
-    output: https://bimaakbar.my.od/images/blog/og
+    output: /images/blog/og
     categories: [image]
     
   - name: portfolio-images
     label: Portfolio Images
     input: public/images/portfolio
-    output: https://bimaakbar.my.id/images/portfolio
+    output: /images/portfolio
     categories: [image]
 
   - name: portfolio-gallery
     label: Portfolio Gallery
     input: public/images/portfolio/gallery
-    output: https://bimaakbar.my.id/images/portfolio/gallery
+    output: /images/portfolio/gallery
     categories: [image]
 
   - name: portfolio-og
     label: Portfolio OG
     input: public/images/portfolio/og
-    output: https://bimaakbar.my.id/images/portfolio/og
+    output: /images/portfolio/og
     categories: [image]
     
 
