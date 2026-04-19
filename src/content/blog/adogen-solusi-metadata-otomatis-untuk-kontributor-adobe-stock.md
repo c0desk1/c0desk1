@@ -10,14 +10,14 @@ tags:
   - AI
   - AdobeStock
   - Astro
-image: /images/blog/hero-adogen.webp
+image: "/images/blog/hero-adogen.webp"
 imageAlt: Dashboard Adogen Metadata Generator
 imageCaption: Tampilan antarmuka Adogen yang minimalis dan efisien.
 draft: false
 featured: true
 author:
   name: Bima Akbar
-  avatar: /images/author/author.jpg
+  avatar: "/images/author/author.jpg"
   title: Founder of Adogen
 seo:
   title: Adogen - Generator Metadata Adobe Stock Berbasis AI
