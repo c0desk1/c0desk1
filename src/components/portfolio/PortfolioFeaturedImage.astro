@@ -2,12 +2,14 @@
 import Container from '../ui/Container.astro';
 
 interface Props {
-  src: string;
+  src: any; 
   alt?: string;
   caption?: string;
 }
 
 const { src, alt, caption } = Astro.props;
+const finalSrc = typeof src === 'object' ? src.src : src;
+
 const finalCaption = caption || alt;
 ---
 
@@ -16,7 +18,7 @@ const finalCaption = caption || alt;
     <figure class="overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900">
       <div class="relative aspect-16/9 overflow-hidden">
         <img 
-          src={src}
+          src={finalSrc}
           alt={alt || 'Project image'}
           class="absolute inset-0 w-full h-full object-cover"
           loading="eager"
