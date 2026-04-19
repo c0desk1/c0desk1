@@ -10,20 +10,20 @@ tags:
   - Astro
   - Adobe Stock
   - AI Engineering
-image: /images/blog/hero-adogen.webp
+image: public/images/blog/adogen-preview.webp
 imageAlt: Banner Adogen Metadata Generator
 imageCaption: Adogen - Menghubungkan kreativitas manusia dengan efisiensi mesin.
 draft: false
 featured: true
 author:
   name: Bima Akbar
-  avatar: https://bimaakbar.my.id/images/author/author.jpg
+  avatar: public/images/author/author.jpg
   title: Founder of Adogen
 seo:
   title: Adogen - Generator Metadata AI Tercepat untuk Kontributor Indonesia
   description: Stop buang waktu input keyword manual. Gunakan Adogen untuk
     optimasi SEO Adobe Stock secara otomatis dan gratis.
-  ogImage: https://bimaakbar.my.id/images/blog/og/og-adogen.webp
+  ogImage: public/images/blog/og/og-adogen.webp
 ---
 Menjadi kontributor mikrostock di era sekarang bukan lagi sekadar soal estetika foto. Ini adalah soal **SEO (Search Engine Optimization)**. Lu bisa punya foto sejernih kristal, tapi tanpa judul dan 50 keyword yang tepat, foto lu hanya akan terkubur di gudang digital tanpa pernah dibeli siapapun.
 
