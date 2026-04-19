@@ -10,13 +10,14 @@ tags:
   - AI
   - AdobeStock
   - Astro
+image: /images/blog/hero-adogen.webp
 imageAlt: Dashboard Adogen Metadata Generator
 imageCaption: Tampilan antarmuka Adogen yang minimalis dan efisien.
 draft: true
 featured: true
 author:
   name: Bima Akbar
-  avatar: public/images/author/author.jpg
+  avatar: /images/author/author.jpg
   title: Founder of Adogen
 seo:
   title: Adogen - Generator Metadata Adobe Stock Berbasis AI
@@ -24,40 +25,52 @@ seo:
     dan keyword otomatis, gratis, dan cepat.
   ogImage: /images/blog/og/og-adogen.webp
 ---
-Lelah menghabiskan waktu berjam-jam hanya untuk memikirkan 50 keyword yang tepat untuk satu foto? Sebagai kontributor, kita tahu bahwa **Metadata adalah kunci**, tapi prosesnya seringkali membosankan. Itulah alasan saya membangun **Adogen**.
+Menjadi kontributor mikrostock di era sekarang bukan lagi sekadar soal estetika foto. Ini adalah soal **SEO (Search Engine Optimization)**. Anda bisa punya foto sejernih kristal, tapi tanpa judul dan 50 keyword yang tepat, foto Anda hanya akan terkubur di gudang digital tanpa pernah dibeli siapapun.
 
-## Apa itu Adogen?
+Masalahnya satu: **Input metadata secara manual itu membosankan dan memakan waktu.**
 
-**Adogen** adalah alat bantu (tool) berbasis web yang dirancang khusus untuk membantu kontributor stok foto (khususnya Adobe Stock) menghasilkan metadata berupa judul dan kata kunci (keywords) secara otomatis. 
+Itulah alasan saya membangun **Adogen**. Sebuah proyek idealis yang lahir dari keresahan pribadi, dirancang untuk menjadi asisten pribadi bagi setiap kontributor di Indonesia.
 
-Ditenagai oleh teknologi AI terbaru (Llama 3.2 Vision & Pixtral), Adogen mampu "melihat" gambar yang Anda unggah dan merangkai kata-kata yang paling relevan untuk meningkatkan visibilitas penjualan Anda.
+## 1. Masalah: Botol Leher (Bottleneck) Kontributor
 
-## Mengapa Menggunakan Adogen?
+Bayangkan Anda baru saja pulang dari sesi foto *gym* atau *industrial* dan memiliki 100 foto yang sudah matang di-*edit*. Untuk setiap foto, Anda harus memikirkan:
 
-1. **Kecepatan "Burag" :V**: Proses analisa gambar hingga hasil jadi hanya memakan waktu beberapa detik.
-2. **Optimasi SEO**: Keywords yang dihasilkan disesuaikan dengan standar industri stok foto.
-3. **Privasi Aman**: API Key menggunakan milik Anda sendiri, memberikan kendali penuh dan keamanan data.
-4. **Gratis & Tanpa Batas**: Selama Anda memiliki quota API (Groq/Mistral), Anda bisa memproses gambar sebanyak yang Anda mau.
+- Judul yang deskriptif tapi tidak *spamming*.
+- 50 kata kunci yang relevan (Keywords).
+- Kategori yang sesuai standar Adobe Stock (ada 21 kategori spesifik).
 
-## Teknologi di Balik Layar
+Jika satu foto memakan waktu 3-5 menit, Anda butuh **8 jam hanya untuk urusan teks!** Di sinilah Adogen masuk untuk memangkas waktu tersebut menjadi kurang dari **10 detik per foto**.
 
-Adogen dibangun dengan standar web modern untuk memastikan performa maksimal:
+## 2. Keunggulan Teknologi: Mengapa Adogen Berbeda?
 
-- **Framework**: Astro (v6.1) untuk kecepatan loading luar biasa.
-- **Styling**: Tailwind CSS (v4) dengan desain minimalis ala Vercel.
-- **Backend**: Cloudflare Workers untuk pemrosesan API yang *scalable*.
-- **AI Engine**: Mendukung Groq dan Mistral AI untuk hasil analisa visual yang akurat.
+Saya membangun Adogen tidak hanya sebagai *wrapper* AI biasa. Ada beberapa keputusan teknis yang saya ambil untuk memastikan performa "Burag" :V khas developer:
 
-## Cara Menggunakan
+- **Astro 6 & Tailwind 4**: Menggunakan teknologi terbaru untuk memastikan *First Contentful Paint* (FCP) di bawah 1 detik. Ringan, minimalis, dan sangat cepat.
+- **Vision AI Integration**: Adogen menggunakan model **Llama 3.2 Vision** dan **Pixtral**. AI ini tidak menebak berdasarkan nama file, tapi benar-benar "melihat" objek, warna, suasana, dan konsep di dalam gambar Anda.
+- **Client-Side Processing**: Gambar Anda di-*resize* di browser sebelum dikirim ke API. Ini menghemat kuota data Anda dan mempercepat proses unggah.
+- **CSV Batch Export**: Begitu selesai, Anda tidak perlu *copy-paste* satu per satu. Klik satu tombol, dan file CSV siap di-impor ke dashboard Adobe Stock.
 
-Sangat simpel. Anda hanya perlu:
+## 3. Filosofi "Gratis Tapi Premium"
 
-1. Buka [Adogen](https://dev-adogen.bimasaktiakbarr.workers.dev/).
-2. Masukkan API Key Groq atau Mistral Anda di menu konfigurasi.
-3. Upload gambar (bisa banyak sekaligus).
-4. Klik **Generate** dan tunggu keajaibannya.
-5. Unduh hasilnya dalam format **CSV** yang siap di-upload ke Adobe Stock.
+Banyak alat serupa di luar sana yang mematok harga langganan bulanan yang mahal. Adogen mengambil pendekatan berbeda: **Bawa API Key Anda Sendiri.**
+
+Dengan menggunakan API Key dari **Groq** atau **Mistral** (yang memiliki tier gratis yang sangat murah/loyal), Anda memiliki kontrol penuh atas biaya dan privasi Anda. Tidak ada data gambar yang saya simpan secara permanen—semuanya diproses secara *real-time*.
+
+
+
+## 4. Cara Memulai Workflow Masa Depan
+
+1. **Siapkan API Key**: Ambil API Key gratis Anda di console.groq.com.
+2. **Konfigurasi**: Masukkan key di panel **System Configuration** Adogen.
+3. **Upload & Analisa**: Taruh semua foto Anda, dan saksikan AI bekerja merakit metadata untuk Anda.
+4. **Export**: Unduh CSV, upload ke Adobe Stock, dan fokuslah kembali untuk memotret!
+
+## Kesimpulan: Fokus ke Kreativitas, Biarkan AI Mengurus Data
+
+Teknologi AI bukan hadir untuk menggantikan fotografer, tapi untuk membebaskan fotografer dari tugas administratif yang menjemukan. Dengan Adogen, saya berharap kontributor Indonesia bisa lebih produktif dan kompetitif di kancah internasional.
+
+Metadata otomatis, cuan makin manis! 🚀💰
 
 ---
 
-*Metadata otomatis, cuan makin manis!* Selamat mencoba dan semoga portfolio Adobe Stock Anda semakin laris manis!
+*Tertarik mencoba? Langsung meluncur ke [adogen.my.id](https://adogen.my.id). Ingin berdiskusi soal teknis atau kerjasama? Hubungi saya melalui link portfolio di bawah.*
