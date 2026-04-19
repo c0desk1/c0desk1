@@ -22,12 +22,10 @@ content:
     label: Blog Posts
     type: collection
     path: src/content/blog
-    filename: "{fields.slug}.md"
-    
+    filename: "{primary}.md"
     view:
       fields: [title, pubDate, draft, featured]
       sort: ["pubDate desc"]
-    
     fields:
       - name: title
         label: Title
