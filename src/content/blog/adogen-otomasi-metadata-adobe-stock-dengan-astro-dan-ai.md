@@ -17,7 +17,7 @@ draft: false
 featured: true
 author:
   name: Bima Akbar
-  avatar: https://bimaakbar.my.id/images/author/author.jpg
+  avatar: /images/author/author.jpg
   title: Founder of Adogen
 seo:
   title: Adogen - Generator Metadata AI Tercepat untuk Kontributor Indonesia
