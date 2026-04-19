@@ -2,14 +2,14 @@
 // src/components/portfolio/PortfolioGallery.astro
 
 interface Props {
-  images: string[];
+  images: any[]; 
   title: string;
 }
 
 const { images, title } = Astro.props;
 ---
 
-{images.length > 0 && (
+{images && images.length > 0 && (
   <div class="mt-10 pt-6 border-t border-zinc-100 dark:border-zinc-900">
     <div class="flex items-center gap-2 mb-4">
       <div class="h-px w-6 bg-linear-to-r from-zinc-300 to-transparent dark:from-zinc-700"></div>
@@ -18,20 +18,23 @@ const { images, title } = Astro.props;
       </h2>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {images.map((img, idx) => (
-        <figure class="overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900">
-          <div class="relative aspect-16/9 overflow-hidden">
-            <img
-              src={img}
-              alt={`${title} screenshot ${idx + 1}`}
-              class="absolute inset-0 w-full h-full object-cover"
-              loading="lazy"
-              decoding="async"
-              sizes="(min-width: 768px) 384px, 100vw"
-            />
-          </div>
-        </figure>
-      ))}
+      {images.map((img, idx) => {
+        const imageSrc = typeof img === 'object' ? img.src : img;
+        return (
+          <figure class="overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900">
+            <div class="relative aspect-16/9 overflow-hidden">
+              <img
+                src={imageSrc}
+                alt={`${title} screenshot ${idx + 1}`}
+                class="absolute inset-0 w-full h-full object-cover"
+                loading="lazy"
+                decoding="async"
+                sizes="(min-width: 768px) 384px, 100vw"
+              />
+            </div>
+          </figure>
+        );
+      })}
     </div>
   </div>
 )}
