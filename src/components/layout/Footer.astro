@@ -58,8 +58,8 @@ import { siteConfig } from "@/config/site";
       <div>
         <div class="flex items-center gap-1.5 mb-3">
           <div class="h-1 w-1 rounded-full bg-emerald-500"></div>
-          <h2 class="text-xs font-bold tracking-wider text-zinc-500 dark:text-zinc-400">
-            Explore
+          <h2 class="text-xs text-zinc-500 dark:text-zinc-400">
+            Mengeksplorasi
           </h2>
         </div>
         <ul class="space-y-1.5">
@@ -75,13 +75,11 @@ import { siteConfig } from "@/config/site";
           ))}
         </ul>
       </div>
-      
-      {/* Contact Section - Industrial Style */}
       <div>
         <div class="flex items-center gap-1.5 mb-3">
           <div class="h-1 w-1 rounded-full bg-emerald-500"></div>
-          <h2 class="text-xs font-bold tracking-wider text-zinc-500 dark:text-zinc-400">
-            Contact
+          <h2 class="text-xs text-zinc-500 dark:text-zinc-400">
+            Kontak
           </h2>
         </div>
         <ul class="space-y-1.5">
@@ -107,52 +105,45 @@ import { siteConfig } from "@/config/site";
           </li>
         </ul>
       </div>
-      
-      {/* CTA / Newsletter Section */}
       <div>
         <div class="flex items-center gap-1.5 mb-3">
-          <span class="text-emerald-600 dark:text-emerald-500 font-mono font-bold text-[11px]">$</span>
-          <h2 class="text-xs font-bold tracking-wider text-zinc-500 dark:text-zinc-400">
-            Stay updated
+          <span class="text-emerald-600 dark:text-emerald-500 font-mono font-semibold text-xs">$</span>
+          <h2 class="text-xs font-bold text-zinc-500 dark:text-zinc-400">
+            Tetaplah terupdate
           </h2>
         </div>
-        <p class="text-xs text-zinc-600 dark:text-zinc-400 mb-3">
-          Get notified about new projects and articles.
+        <p class="text-sm text-zinc-600 dark:text-zinc-400 mb-3">
+          Dapatkan notifikasi tentang proyek dan artikel baru.
         </p>
         <form class="flex gap-2">
           <input 
             type="email" 
-            placeholder="your@email.com"
+            placeholder="namakamu@email.com"
             class="flex-1 px-2 py-1.5 text-xs border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:border-zinc-400 dark:focus:border-zinc-600 transition-colors"
-            aria-label="Email address"
+            aria-label="Alamat Email"
           />
           <button 
             type="submit"
             class="px-2 py-1.5 text-xs font-medium border border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all"
           >
-            Sub
+            Ber
           </button>
         </form>
       </div>
       
-    </div>
-    
-    {/* Industrial Separator */}
+    </div>   
     <div class="my-6">
       <div class="h-px w-full bg-linear-to-r from-transparent via-zinc-200 dark:via-zinc-800 to-transparent"></div>
     </div>
-    
-    {/* Copyright - Industrial Style */}
     <div class="flex flex-col sm:flex-row justify-between items-center gap-2 text-sm text-zinc-500 dark:text-zinc-500">
       <div class="flex items-center gap-2">
         <span class="text-emerald-600 dark:text-emerald-500 font-bold">$</span>
         <span>© {new Date().getFullYear()} {siteConfig.name}</span>
       </div>
       <div class="flex items-center gap-3">
-        <span>[Built with Astro]</span>
+        <span>Dibangun dengan Astro</span>
         <span>▼</span>
       </div>
     </div>
-    
   </Container>
 </footer>
