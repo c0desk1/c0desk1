@@ -1,6 +1,5 @@
 # .pages.yml
 
-# Media configuration
 media:
   - name: blog-author
     label: Authors
@@ -38,10 +37,7 @@ media:
     output: /images/portfolio/og
     categories: [image]
     
-
-# Content collections
 content:
-  # == BLOG ==
   - name: blog
     label: Blog Posts
     type: collection
@@ -52,24 +48,22 @@ content:
       sort: ["pubDate desc"]
     fields:
       - name: title
-        label: Title
+        label: Judul
         type: string
         required: true
         options:
           maxlength: 100
-        description: "SEO: Max 100 characters"
       
       - name: description
-        label: Description
+        label: Deskripsi
         type: text
         required: true
         options:
           maxlength: 160
           rows: 3
-        description: "Max 160 characters"
       
       - name: pubDate
-        label: Publish Date
+        label: Tanggal
         type: date
         required: true
         options:
@@ -77,7 +71,7 @@ content:
           format: yyyy-MM-dd'T'HH:mm
       
       - name: updatedDate
-        label: Updated Date
+        label: Tanggal diperbarui
         type: date
         required: false
         options:
@@ -99,15 +93,15 @@ content:
           rename: true
       
       - name: imageAlt
-        label: Alt Text
+        label: Cover Alt
         type: string
 
       - name: imageCaption
-        label: Caption
+        label: Cover Caption
         type: string
 
       - name: body
-        label: Content
+        label: Konten
         type: rich-text
         options:
           media: blog-images
@@ -119,7 +113,7 @@ content:
         default: false
       
       - name: featured
-        label: Featured
+        label: Unggulan
         type: boolean
         default: false
       
@@ -128,7 +122,7 @@ content:
         type: object
         fields:
           - name: name
-            label: Name
+            label: Nama
             type: string
             default: "C0desk1"
             
@@ -140,9 +134,8 @@ content:
               rename: true
             
           - name: title
-            label: Title
+            label: Deskripsi
             type: string
-            description: "e.g., Frontend Developer"
       
       - name: seo
         label: SEO
@@ -150,17 +143,17 @@ content:
         description: "Override default SEO settings"
         fields:
           - name: title
-            label: SEO Title
+            label: Judul
             type: string
             options:
               maxlength: 100
           - name: description
-            label: SEO Description
+            label: Deskripsi
             type: text
             options:
               maxlength: 160
           - name: ogImage
-            label: OG Image
+            label: Gambar OG
             type: image
             options:
               media: blog-og
@@ -180,14 +173,14 @@ content:
     
     fields:      
       - name: title
-        label: Project Title
+        label: Judul
         type: string
         required: true
         options:
           maxlength: 80
       
       - name: description
-        label: Description
+        label: Deskripsi
         type: text
         required: true
         options:
@@ -195,26 +188,26 @@ content:
           rows: 3
       
       - name: date
-        label: Project Date
+        label: Tanggal
         type: date
         required: true
         options:
-          format: "yyyy-MM-dd"
+          time: true
+          format: yyyy-MM-dd'T'HH:mm
       
       - name: updatedDate
-        label: Updated Date
+        label: Tanggal diperbarui
         type: date
         required: false
         options:
-          format: "yyyy-MM-dd"
+          time: true
+          format: yyyy-MM-dd'T'HH:mm
       
       - name: techStack
         label: Tech Stack
-        type: select
-        required: true
+        type: list
+        list: true
         options:
-          multiple: true
-          creatable: true
           min: 1
           max: 10
       
@@ -222,30 +215,28 @@ content:
         label: Demo URL
         type: string
         required: false
-        pattern:
-          regex: "^https?://"
-          message: "Must be a valid URL starting with http:// or https://"
       
       - name: repoUrl
         label: Repository URL
         type: string
         required: false
-        pattern:
-          regex: "^https?://"
-          message: "Must be a valid URL"
       
       - name: image
-        label: Cover Image
+        label: Cover
         type: image
         options:
           media: portfolio-images
       
       - name: imageAlt
-        label: Image Alt Text
+        label: Cover Alt
+        type: string
+        
+      - name: imageCaption
+        label: Cover Caption
         type: string
       
       - name: gallery
-        label: Gallery Images
+        label: Gambar Gallery
         type: image
         required: false
         fields:
@@ -255,7 +246,6 @@ content:
             options:
               multiple: true
               media: portfolio-gallery
-        description: "Additional project screenshots"
       
       - name: draft
         label: Draft
@@ -263,50 +253,50 @@ content:
         default: false
       
       - name: featured
-        label: Featured Project
+        label: Unggulan
         type: boolean
         default: false
       
       - name: client
-        label: Client Name
+        label: Client
         type: string
         required: false
       
       - name: role
-        label: Your Role
+        label: Aturan
         type: string
         required: false
       
       - name: duration
-        label: Project Duration
+        label: Durasi
         type: string
         required: false
       
       - name: metrics
-        label: Performance Metrics
+        label: Performance
         type: object
         fields:
           - name: performance
-            label: Performance Score
+            label: Performa
             type: number
             options:
               min: 0
               max: 100
           - name: accessibility
-            label: Accessibility Score
+            label: Aksebilitas
             type: number
             options:
               min: 0
               max: 100
           - name: seo
-            label: SEO Score
+            label: SEO
             type: number
             options:
               min: 0
               max: 100
       
       - name: challenge
-        label: The Challenge
+        label: Tantangan
         type: text
         required: false
         options:
@@ -320,7 +310,7 @@ content:
           rows: 4
       
       - name: result
-        label: The Result
+        label: Hasil
         type: text
         required: false
         options:
