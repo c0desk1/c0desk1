@@ -10,7 +10,7 @@ tags:
   - Astro
   - Adobe Stock
   - AI Engineering
-image: public/images/blog/adogen-preview.webp
+image: ./images/blog/hero-adogen.webp
 imageAlt: Banner Adogen Metadata Generator
 imageCaption: Adogen - Menghubungkan kreativitas manusia dengan efisiensi mesin.
 draft: false
