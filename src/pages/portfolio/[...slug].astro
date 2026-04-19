@@ -111,17 +111,13 @@ const relatedProjects = allProjects
         />
       </Container>
     </div>
-
     {displayImage && (
       <PortfolioFeaturedImage
-        image={displayImage}
-        alt={imageAlt || title}
+        src={displayImage}  alt={imageAlt || title}
         caption={imageCaption || imageAlt || title}
       />
     )}
-
     <PortfolioMetrics metrics={metrics} />
-
     <Container size="md" class="py-10 md:py-12">
       <div class="mx-auto">
         {(challenge || solution || result) && (
@@ -161,16 +157,13 @@ const relatedProjects = allProjects
         <div class="prose-custom">
           <Content />
         </div>
-
         <PortfolioGallery
           images={displayGallery}
           title={title}
         />
-
         <PortfolioRelated
           projects={relatedProjects}
         />
-
         <PortfolioFeedback
           lastUpdated={formatDateCompact(updatedDate || date)}
         />
