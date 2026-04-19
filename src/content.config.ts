@@ -1,6 +1,6 @@
 import { defineCollection } from "astro:content";
 import { z } from "astro/zod";
-import { glob } from "astro:loaders";
+import { glob } from "astro/loaders";
 
 const createSeoSchema = (image: any) => z.object({
   title: z.string().max(100).optional(),
