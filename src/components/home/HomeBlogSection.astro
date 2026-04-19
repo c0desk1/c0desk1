@@ -1,5 +1,6 @@
 ---
 // src/components/home/HomeBlogSection.astro
+
 import PostCard from '@/components/blog/PostCard.astro';
 import Container from '../ui/Container.astro';
 
@@ -16,7 +17,7 @@ const { posts } = Astro.props;
     <div class="flex items-center justify-between mb-5">
       <div class="flex items-center gap-2">
         <div class="h-1.5 w-1.5 rounded-full bg-emerald-500" aria-hidden="true"></div>
-        <h2 class="text-sm text-zinc-500 dark:text-zinc-400 tracking-wider">
+        <h2 class="text-sm text-zinc-500 dark:text-zinc-400">
           Latest insights
         </h2>
       </div>
