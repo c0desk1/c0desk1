@@ -1,5 +1,6 @@
 ---
 // src/components/portfolio/ProjectCard.astro
+
 import type { CollectionEntry } from 'astro:content';
 import { formatDateCompact } from '@/lib/utils';
 
@@ -16,16 +17,16 @@ const formattedDate = formatDateCompact(date);
 
 <a 
   href={`/portfolio/${id}`} 
-  class="group block py-4 border-b border-zinc-100 dark:border-zinc-900 transition-all duration-200 hover:border-zinc-300 dark:hover:border-zinc-700"
+  class="group block py-4 transition-colors duration-200 hover:border-zinc-300 dark:hover:border-zinc-700"
   aria-label={`View project: ${title}`}
 >
-  <div class="flex items-center gap-2 font-mono text-sm tracking-wide text-zinc-500 dark:text-zinc-400 mb-1.5">
-    <span class="text-emerald-600 dark:text-emerald-500 font-bold" aria-hidden="true">$</span>
+  <div class="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400 mb-1.5">
+    <span class="font-mono font-semibold text-emerald-600 dark:text-emerald-500" aria-hidden="true">$</span>
     <time class="font-mono" datetime={date.toISOString()}>{formattedDate}</time>
     {featured && (
       <>
         <span class="text-zinc-300 dark:text-zinc-700" aria-hidden="true">/</span>
-        <span class="text-amber-600 dark:text-amber-500" aria-label="Featured project">[★]</span>
+        <span class="text-amber-600 dark:text-amber-500" aria-label="Featured project">★</span>
       </>
     )}
   </div>
