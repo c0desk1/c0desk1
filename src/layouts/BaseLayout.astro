@@ -3,7 +3,6 @@
 import "@/styles/global.css";
 import BaseHead from "@/components/layout/BaseHead.astro";
 
-
 import Header from "@/components/layout/Header.astro";
 import Footer from "@/components/layout/Footer.astro";
 import Container from "@/components/ui/Container.astro";
@@ -12,8 +11,8 @@ import HomeCTA from "@/components/home/HomeCTA.astro";
 interface Props {
   title?: string;
   description?: string;
-  image?: string;
-  canonicalURL?: URL;
+  image?: any; 
+  canonicalURL?: URL | string;
   type?: "website" | "article";
   noIndex?: boolean;
   publishedTime?: Date;
@@ -56,13 +55,15 @@ const {
         
         if (theme === 'dark') {
           document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
         }
       })();
     </script>
     <BaseHead 
       title={title}
       description={description}
-      image={typeof image === 'string' ? image : undefined}
+      image={image} 
       canonicalURL={canonicalURL}
       type={type}
       noIndex={noIndex}
@@ -72,8 +73,7 @@ const {
     />
   </head>
   <body class="bg-zinc-50 dark:bg-zinc-950 text-zinc-950 dark:text-zinc-50 antialiased font-medium">
-    {header && <Header />}
-    
+    {header && <Header />}    
     <main>
       {container ? (
         <Container size={containerSize}>
@@ -83,8 +83,7 @@ const {
         <slot />
       )}
       <HomeCTA />
-    </main>
-    
+    </main>    
     {footer && <Footer />}
   </body>
 </html>
