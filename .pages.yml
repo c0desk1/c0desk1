@@ -5,37 +5,37 @@ media:
   - name: blog-author
     label: Authors
     input: public/images/author
-    output: /images/author
+    output: public/images/author
     categories: [image]
 
   - name: blog-images
     label: Blog Images
     input: public/images/blog
-    output: /images/blog
+    output: public/images/blog
     categories: [image]
 
   - name: blog-og
     label: Blog OG
     input: public/images/blog/og
-    output: /images/blog/og
+    output: public/images/blog/og
     categories: [image]
     
   - name: portfolio-images
     label: Portfolio Images
     input: public/images/portfolio
-    output: /images/portfolio
+    output: public//images/portfolio
     categories: [image]
 
   - name: portfolio-gallery
     label: Portfolio Gallery
     input: public/images/portfolio/gallery
-    output: /images/portfolio/gallery
+    output: public/images/portfolio/gallery
     categories: [image]
 
   - name: portfolio-og
     label: Portfolio OG
     input: public/images/portfolio/og
-    output: /images/portfolio/og
+    output: public/images/portfolio/og
     categories: [image]
     
 
@@ -325,61 +325,3 @@ content:
         required: false
         options:
           rows: 4
-
-  # ==================== SETTINGS COLLECTION ====================
-  - name: settings
-    label: Site Settings
-    type: file
-    path: src/content/settings/site.json
-    format: json
-    
-    fields:
-      - name: siteName
-        label: Site Name
-        type: string
-        required: true
-      
-      - name: siteDescription
-        label: Description
-        type: text
-        required: true
-      
-      - name: socialLinks
-        label: Social
-        type: object
-        fields:
-          - name: github
-            label: GitHub
-            type: string
-            pattern:
-              regex: "^https?://(github\\.com|www\\.github\\.com)"
-              message: "Must be a valid GitHub URL"
-          - name: twitter
-            label: Twitter
-            type: string
-            pattern:
-              regex: "^https?://(twitter\\.com|x\\.com|www\\.twitter\\.com)"
-              message: "Must be a valid Twitter/X URL"
-          - name: linkedin
-            label: LinkedIn
-            type: string
-            pattern:
-              regex: "^https?://(linkedin\\.com|www\\.linkedin\\.com)"
-              message: "Must be a valid LinkedIn URL"
-      
-      - name: seo
-        label: Default SEO Settings
-        type: object
-        fields:
-          - name: title
-            label: Default SEO Title
-            type: string
-          - name: description
-            label: Default SEO Description
-            type: text
-          - name: ogImage
-            label: Default OG Image URL
-            type: string
-          - name: canonical
-            label: Default Canonical URL
-            type: string
