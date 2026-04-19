@@ -1,5 +1,6 @@
 ---
 // src/components/home/HomePortfolioSection.astro
+
 import Container from '../ui/Container.astro';
 import ProjectCard from '@/components/portfolio/ProjectCard.astro';
 
@@ -16,7 +17,7 @@ const { projects } = Astro.props;
     <div class="flex items-center justify-between mb-5">
       <div class="flex items-center gap-2">
         <div class="h-1.5 w-1.5 rounded-full bg-zinc-400 dark:bg-zinc-500" aria-hidden="true"></div>
-        <h2 class="text-sm text-zinc-500 dark:text-zinc-400 tracking-wider">
+        <h2 class="text-sm text-zinc-500 dark:text-zinc-400">
           Featured work
         </h2>
       </div>
@@ -31,7 +32,7 @@ const { projects } = Astro.props;
     </div>
     
     {projects.length > 0 ? (
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 space-y-0 divide-y divide-zinc-100 dark:divide-zinc-900"">
         {projects.map(project => (
           <ProjectCard project={project} />
         ))}
