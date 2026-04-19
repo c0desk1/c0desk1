@@ -1,11 +1,15 @@
-# https://www.robotstxt.org/robotstxt.html
+# robots.txt
+User-agent: FeedFetcher-Google
+Allow: /rss.xml
 
-# Izinkan semua bot untuk merayapi seluruh situs
 User-agent: *
 Allow: /
+Allow: /favicon.ico
+Allow: /favicon.svg
+Allow: /apple-touch-icon.png
 
-# Cegah bot merayapi folder draft jika ada (opsional)
 Disallow: /api/
-Disallow: /private/
+Disallow: /404/
 
 Sitemap: https://bimaakbar.my.id/sitemap-index.xml
+Sitemap: https://bimaakbar.my.id/rss.xml
