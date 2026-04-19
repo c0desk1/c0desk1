@@ -17,7 +17,7 @@ media:
   - name: blog-og
     label: Blog OG
     input: public/images/blog/og
-    output: https://bimaakbar.my.id/images/blog/og
+    output: /images/blog/og
     categories: [image]
     
   - name: portfolio-images
@@ -35,7 +35,7 @@ media:
   - name: portfolio-og
     label: Portfolio OG
     input: public/images/portfolio/og
-    output: https://bimaakbar.my.id/images/portfolio/og
+    output: /images/portfolio/og
     categories: [image]
     
 
