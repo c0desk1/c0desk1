@@ -1,0 +1,49 @@
+---
+// src/components/home/HomePortfolioSection.astro
+
+import Container from '../ui/Container.astro';
+import ProjectCard from '@/components/portfolio/ProjectCard.astro';
+
+interface Props {
+  projects: any[];
+}
+
+const { projects } = Astro.props;
+---
+
+<section class="border-b border-zinc-100 dark:border-zinc-900">
+  <Container size="md" class="py-10 md:py-12">
+    
+    <div class="flex items-center justify-between mb-5">
+      <div class="flex items-center gap-2">
+        <div class="h-1.5 w-1.5 rounded-full bg-zinc-400 dark:bg-zinc-500" aria-hidden="true"></div>
+        <h2 class="text-sm text-zinc-500 dark:text-zinc-400">
+          Featured work
+        </h2>
+      </div>
+      <a 
+        href="/portfolio" 
+        class="group flex items-center gap-1 text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-400 dark:focus:ring-zinc-600 rounded-sm px-2 py-1 -mr-2"
+        aria-label="View all portfolio projects"
+      >
+        <span>View all</span>
+        <span class="group-hover:translate-x-0.5 transition-transform" aria-hidden="true">→</span>
+      </a>
+    </div>
+    
+    {projects.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 space-y-0 divide-y divide-zinc-100 dark:divide-zinc-900"">
+        {projects.map(project => (
+          <ProjectCard project={project} />
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-8 border border-zinc-200 dark:border-zinc-800">
+        <p class="text-zinc-500 dark:text-zinc-400 text-sm">
+          <span class="text-emerald-600 dark:text-emerald-500" aria-hidden="true">$</span> No projects yet.
+        </p>
+      </div>
+    )}
+    
+  </Container>
+</section>

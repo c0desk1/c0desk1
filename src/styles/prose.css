@@ -1,0 +1,372 @@
+/* src/styles/prose.css */
+@reference "@/styles/global.css";
+
+/* ==================== BASE ==================== */
+
+.prose-custom {
+  max-width: none;
+}
+
+/* ==================== HEADINGS ==================== */
+
+.prose-custom h1 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  .prose-custom h1 {
+    font-size: 2.25rem;
+  }
+}
+
+.prose-custom h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .prose-custom h2 {
+    font-size: 1.875rem;
+  }
+}
+
+.prose-custom h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .prose-custom h3 {
+    font-size: 1.5rem;
+  }
+}
+
+.prose-custom h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* ==================== PARAGRAPH ==================== */
+
+.prose-custom p {
+  color: #3f3f46;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.dark .prose-custom p {
+  color: #d4d4d8;
+}
+
+/* ==================== LINKS ==================== */
+
+.prose-custom a {
+  color: #18181b;
+  text-decoration: none;
+  border-bottom: 1px solid #a1a1aa;
+  transition: all 0.2s;
+}
+
+.dark .prose-custom a {
+  color: #ffffff;
+  border-bottom-color: #52525b;
+}
+
+.prose-custom a:hover {
+  border-bottom-color: #18181b;
+}
+
+.dark .prose-custom a:hover {
+  border-bottom-color: #ffffff;
+}
+
+/* ==================== STRONG & EM ==================== */
+
+.prose-custom strong {
+  color: #18181b;
+  font-weight: 600;
+}
+
+.dark .prose-custom strong {
+  color: #ffffff;
+}
+
+.prose-custom em {
+  color: #52525b;
+}
+
+.dark .prose-custom em {
+  color: #a1a1aa;
+}
+
+/* ==================== INLINE CODE ==================== */
+
+.prose-custom code:not(pre code) {
+  font-size: 0.875rem;
+  background-color: #f4f4f5;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-family: monospace;
+  color: #27272a;
+}
+
+.dark .prose-custom code:not(pre code) {
+  background-color: #27272a;
+  color: #d4d4d8;
+}
+
+/* ==================== CODE BLOCK ==================== */
+
+.prose-custom pre {
+  background-color: #09090b;
+  border: 1px solid #27272a;
+  border-radius: 0.25rem;
+  padding: 1rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.dark .prose-custom pre {
+  background-color: #18181b;
+  border-color: #3f3f46;
+}
+
+.prose-custom pre code {
+  background-color: transparent;
+  padding: 0;
+  color: #e4e4e7;
+}
+
+.dark .prose-custom pre code {
+  color: #d4d4d8;
+}
+
+/* ==================== IMAGES ==================== */
+
+.prose-custom img {
+  border-radius: 0.25rem;
+  border: 1px solid #e4e4e7;
+  margin: 1.5rem 0;
+  max-width: 100%;
+  height: auto;
+}
+
+.dark .prose-custom img {
+  border-color: #3f3f46;
+}
+
+/* ==================== BLOCKQUOTE ==================== */
+
+.prose-custom blockquote {
+  border-left: 2px solid #a1a1aa;
+  padding-left: 1rem;
+  margin: 1rem 0;
+  font-style: italic;
+  color: #52525b;
+}
+
+.dark .prose-custom blockquote {
+  border-left-color: #52525b;
+  color: #a1a1aa;
+}
+
+/* ==================== LISTS ==================== */
+
+.prose-custom ul {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+  list-style: none;
+}
+
+.prose-custom ul > li {
+  position: relative;
+  padding-left: 1rem;
+  color: #3f3f46;
+  margin-bottom: 0.375rem;
+}
+
+.dark .prose-custom ul > li {
+  color: #d4d4d8;
+}
+
+.prose-custom ul > li::before {
+  content: "—";
+  position: absolute;
+  left: -0.25rem;
+  color: #10b981;
+  font-family: monospace;
+}
+
+.dark .prose-custom ul > li::before {
+  color: #34d399;
+}
+
+/* nested ul */
+.prose-custom ul ul > li::before {
+  content: "•";
+  color: #71717a;
+}
+
+/* ordered list */
+.prose-custom ol {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+  list-style: none;
+  counter-reset: item;
+}
+
+.prose-custom ol > li {
+  position: relative;
+  padding-left: 1.25rem;
+  color: #3f3f46;
+  margin-bottom: 0.375rem;
+  counter-increment: item;
+}
+
+.dark .prose-custom ol > li {
+  color: #d4d4d8;
+}
+
+.prose-custom ol > li::before {
+  content: counter(item) ".";
+  position: absolute;
+  left: 0;
+  color: #10b981;
+  font-family: monospace;
+}
+
+/* ==================== LIST INTERACTION (FIXED) ==================== */
+
+.prose-custom li:hover {
+  color: inherit;
+}
+
+/* ==================== TABLE ==================== */
+
+.prose-custom table {
+  width: 100%;
+  margin: 1rem 0;
+  border-collapse: collapse;
+}
+
+.prose-custom th {
+  border: 1px solid #e4e4e7;
+  padding: 0.5rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #18181b;
+}
+
+.dark .prose-custom th {
+  border-color: #3f3f46;
+  color: #ffffff;
+}
+
+.prose-custom td {
+  border: 1px solid #e4e4e7;
+  padding: 0.5rem 1rem;
+  color: #3f3f46;
+}
+
+.dark .prose-custom td {
+  border-color: #3f3f46;
+  color: #d4d4d8;
+}
+
+/* ==================== HR ==================== */
+
+.prose-custom hr {
+  border-top: 1px solid #e4e4e7;
+  margin: 2rem 0;
+}
+
+.dark .prose-custom hr {
+  border-top-color: #3f3f46;
+}
+
+/* ==================== FIGURE ==================== */
+
+.prose-custom figure {
+  margin: 1.5rem 0;
+}
+
+.prose-custom figcaption {
+  text-align: center;
+  font-size: 0.75rem;
+  color: #71717a;
+  margin-top: 0.5rem;
+  font-family: monospace;
+}
+
+.dark .prose-custom figcaption {
+  color: #a1a1aa;
+}
+
+/* ==================== KBD ==================== */
+
+.prose-custom kbd {
+  background-color: #f4f4f5;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-family: monospace;
+  border: 1px solid #e4e4e7;
+}
+
+.dark .prose-custom kbd {
+  background-color: #27272a;
+  border-color: #3f3f46;
+  color: #d4d4d8;
+}
+
+/* ==================== MISC ==================== */
+
+.prose-custom video {
+  margin: 1.5rem 0;
+}
+
+.prose-custom dl {
+  margin: 1rem 0;
+}
+
+.prose-custom dt {
+  font-weight: 600;
+  color: #18181b;
+}
+
+.dark .prose-custom dt {
+  color: #ffffff;
+}
+
+.prose-custom dd {
+  margin-left: 1rem;
+  color: #52525b;
+  margin-bottom: 0.5rem;
+}
+
+.dark .prose-custom dd {
+  color: #a1a1aa;
+}
+
+.prose-custom address {
+  font-style: normal;
+  color: #52525b;
+  font-family: monospace;
+  font-size: 0.875rem;
+}
+
+.dark .prose-custom address {
+  color: #a1a1aa;
+}

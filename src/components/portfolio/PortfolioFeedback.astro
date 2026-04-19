@@ -1,0 +1,33 @@
+---
+// src/components/portfolio/PortfolioFeedback.astro
+import { siteConfig } from '@/config/site';
+
+interface Props {
+  lastUpdated: string;
+}
+
+const { lastUpdated } = Astro.props;
+---
+
+<div class="mt-10 pt-6 border-t border-zinc-100 dark:border-zinc-900">
+  <div class="flex flex-wrap items-center justify-between gap-3 p-3 border border-zinc-200 dark:border-zinc-800">
+    <div class="flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
+      <span class="text-emerald-600 dark:text-emerald-500 font-bold">$</span>
+      <span>Found an issue?</span>
+      <span class="text-zinc-300 dark:text-zinc-700">/</span>
+      <a 
+        href={`${siteConfig.links.github}/issues/new`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hover:text-zinc-900 dark:hover:text-white transition-colors"
+      >
+        Report on github
+      </a>
+    </div>
+    <div class="flex items-center gap-1 text-sm text-zinc-400 dark:text-zinc-500">
+      <span>[</span>
+      <span>Updated: {lastUpdated}</span>
+      <span>]</span>
+    </div>
+  </div>
+</div>

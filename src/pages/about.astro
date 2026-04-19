@@ -1,0 +1,215 @@
+---
+// src/pages/about.astro
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/ui/Container.astro';
+import Breadcrumb from '@/components/ui/Breadcrumb.astro';
+import { siteConfig } from '@/config/site';
+---
+
+<BaseLayout 
+  title="About"
+  description="Learn more about me, my journey, and my approach to building digital experiences."
+  type="website"
+>
+  <div class="border-b border-zinc-100 dark:border-zinc-900">
+    <Container size="md" class="py-8 md:py-10">
+      <Breadcrumb items={[
+        { name: 'Home', href: '/' },
+        { name: 'About', href: '/about' }
+      ]} />
+      
+      <div class="space-y-3 mt-4">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-zinc-900 dark:text-white">
+          About
+          <span class="text-zinc-400 dark:text-zinc-600"> me.</span>
+        </h1>
+        <p class="text-sm text-zinc-600 dark:text-zinc-400 max-w-2xl">
+          Developer, designer, and creator of industrial tactical digital experiences.
+        </p>
+        <div class="pt-3">
+          <div class="h-px w-8 bg-linear-to-r from-zinc-300 to-transparent dark:from-zinc-700"></div>
+        </div>
+      </div>
+    </Container>
+  </div>
+  <Container size="md" class="py-10 md:py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-12">
+      <div class="min-w-0 space-y-8">
+        <section>
+          <h2 class="text-xl font-bold tracking-tight text-zinc-900 dark:text-white mb-3">
+            $ whoami
+          </h2>
+          <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">
+            I'm {siteConfig.author}, a frontend engineer and design engineer based in Indonesia. 
+            I specialize in building fast, accessible, and visually striking web applications 
+            with a focus on industrial tactical aesthetics.
+          </p>
+          <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            My approach combines clean code, thoughtful design, and performance optimization 
+            to create digital experiences that are both functional and memorable.
+          </p>
+        </section>
+        
+        {/* Journey */}
+        <section>
+          <h2 class="text-xl font-bold tracking-tight text-zinc-900 dark:text-white mb-3">
+            $ journey
+          </h2>
+          <div class="space-y-4">
+            <div class="border-l-2 border-emerald-500 pl-4">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs font-mono text-emerald-600 dark:text-emerald-500">2024 — Present</span>
+                <span class="text-zinc-300 dark:text-zinc-700">/</span>
+                <span class="text-sm font-medium text-zinc-900 dark:text-white">Frontend Engineer</span>
+              </div>
+              <p class="text-sm text-zinc-600 dark:text-zinc-400">Building industrial tactical interfaces with Astro, Tailwind CSS, and modern web technologies.</p>
+            </div>
+            
+            <div class="border-l-2 border-zinc-200 dark:border-zinc-800 pl-4">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs font-mono text-zinc-500 dark:text-zinc-400">2022 — 2024</span>
+                <span class="text-zinc-300 dark:text-zinc-700">/</span>
+                <span class="text-sm font-medium text-zinc-900 dark:text-white">UI/UX Designer</span>
+              </div>
+              <p class="text-sm text-zinc-600 dark:text-zinc-400">Designed and developed user-centered applications for various clients across industries.</p>
+            </div>
+            
+            <div class="border-l-2 border-zinc-200 dark:border-zinc-800 pl-4">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs font-mono text-zinc-500 dark:text-zinc-400">2020 — 2022</span>
+                <span class="text-zinc-300 dark:text-zinc-700">/</span>
+                <span class="text-sm font-medium text-zinc-900 dark:text-white">Freelance Developer</span>
+              </div>
+              <p class="text-sm text-zinc-600 dark:text-zinc-400">Started my journey building websites for local businesses and startups.</p>
+            </div>
+          </div>
+        </section>
+        
+        {/* Philosophy */}
+        <section>
+          <h2 class="text-xl font-bold tracking-tight text-zinc-900 dark:text-white mb-3">
+            $ philosophy
+          </h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="p-4 border border-zinc-200 dark:border-zinc-800">
+              <div class="flex items-center gap-1.5 mb-2">
+                <span class="text-emerald-600 dark:text-emerald-500 font-mono text-sm">[1]</span>
+                <h3 class="text-sm font-medium text-zinc-900 dark:text-white">Performance</h3>
+              </div>
+              <p class="text-xs text-zinc-500 dark:text-zinc-400">Fast load times and smooth interactions are non-negotiable.</p>
+            </div>
+            <div class="p-4 border border-zinc-200 dark:border-zinc-800">
+              <div class="flex items-center gap-1.5 mb-2">
+                <span class="text-emerald-600 dark:text-emerald-500 font-mono text-sm">[2]</span>
+                <h3 class="text-sm font-medium text-zinc-900 dark:text-white">Accessibility</h3>
+              </div>
+              <p class="text-xs text-zinc-500 dark:text-zinc-400">Building for everyone, regardless of ability or device.</p>
+            </div>
+            <div class="p-4 border border-zinc-200 dark:border-zinc-800">
+              <div class="flex items-center gap-1.5 mb-2">
+                <span class="text-emerald-600 dark:text-emerald-500 font-mono text-sm">[3]</span>
+                <h3 class="text-sm font-medium text-zinc-900 dark:text-white">Simplicity</h3>
+              </div>
+              <p class="text-xs text-zinc-500 dark:text-zinc-400">Clean code and intuitive design that just works.</p>
+            </div>
+          </div>
+        </section>
+        
+        {/* Tech Stack */}
+        <section>
+          <h2 class="text-xl font-bold tracking-tight text-zinc-900 dark:text-white mb-3">
+            $ tools
+          </h2>
+          <div class="flex flex-wrap gap-2">
+            {["Astro", "Tailwind CSS", "TypeScript", "React", "Vue", "Figma", "Git", "Vercel"].map(tech => (
+              <span 
+                class="px-2 py-1 text-xs bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 font-medium"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+        </section>
+        
+      </div>
+      
+      {/* Right Column - Sidebar */}
+      <aside class="space-y-8">
+        
+        {/* Contact Card */}
+        <div class="border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-5">
+          <div class="flex items-center gap-2 mb-3">
+            <div class="h-1.5 w-1.5 rounded-full bg-emerald-500"></div>
+            <h3 class="text-sm font-bold tracking-wider text-zinc-500 dark:text-zinc-400">
+              Contact
+            </h3>
+          </div>
+          <div class="space-y-2">
+            <a 
+              href={`mailto:${siteConfig.links.mail}`}
+              class="flex items-center gap-2 text-sm font-mono text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+            >
+              <span class="text-emerald-600 dark:text-emerald-500">$</span>
+              {siteConfig.links.mail}
+            </a>
+            <a 
+              href={siteConfig.links.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center gap-2 text-sm font-mono text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+            >
+              <span class="text-emerald-600 dark:text-emerald-500">$</span>
+              github
+            </a>
+            <a 
+              href={siteConfig.links.twitter}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center gap-2 text-sm font-mono text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+            >
+              <span class="text-emerald-600 dark:text-emerald-500">$</span>
+              twitter
+            </a>
+          </div>
+        </div>
+        
+        {/* Availability Card */}
+        <div class="border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-5">
+          <div class="flex items-center gap-2 mb-3">
+            <div class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+            <h3 class="text-xs font-bold tracking-wider text-zinc-500 dark:text-zinc-400">
+              Availability
+            </h3>
+          </div>
+          <p class="text-sm text-zinc-600 dark:text-zinc-400 mb-2">
+            Currently open for freelance work and collaborations.
+          </p>
+          <div class="flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-500">
+            <span>●</span>
+            <span>Available for hire</span>
+          </div>
+        </div>
+        
+        {/* Location Card */}
+        <div class="border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-5">
+          <div class="flex items-center gap-2 mb-3">
+            <div class="h-1.5 w-1.5 rounded-full bg-zinc-400 dark:bg-zinc-500"></div>
+            <h3 class="text-xs font-bold tracking-wider text-zinc-500 dark:text-zinc-400">
+              Location
+            </h3>
+          </div>
+          <p class="text-sm text-zinc-600 dark:text-zinc-400">
+            Indonesia / Remote
+          </p>
+          <p class="text-xs text-zinc-400 dark:text-zinc-500 mt-2">
+            UTC+7 · WIB
+          </p>
+        </div>
+        
+      </aside>
+      
+    </div>
+  </Container>
+  
+</BaseLayout>

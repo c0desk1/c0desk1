@@ -1,0 +1,29 @@
+---
+// src/components/ui/Breadcrumb.astro
+
+interface Props {
+  items: Array<{ name: string; href: string }>;
+}
+
+const { items = [] } = Astro.props;
+---
+
+<nav class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs tracking-wide pb-2 text-zinc-400 dark:text-zinc-500">
+  <span class="text-emerald-600 dark:text-emerald-500 font-bold shrink-0">▼</span>
+  <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+    {items.map((item, index) => (
+      <div class="flex items-center gap-x-2">
+        {index > 0 && <span class="text-zinc-300 dark:text-zinc-700 shrink-0">/</span>}
+        {index === items.length - 1 ? (
+          <span class="text-zinc-600 dark:text-zinc-400 wrap-break-words">
+            {item.name}
+          </span>
+        ) : (
+          <a href={item.href} class="hover:text-zinc-900 dark:hover:text-white transition-colors shrink-0">
+            {item.name}
+          </a>
+        )}
+      </div>
+    ))}
+  </div>
+</nav>

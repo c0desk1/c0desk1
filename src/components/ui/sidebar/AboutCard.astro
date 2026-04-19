@@ -1,0 +1,47 @@
+---
+// src/components/ui/sidebar/AboutCard.astro
+
+import { siteConfig } from '@/config/site';
+
+interface Props {
+  description?: string;
+  status?: string;
+}
+
+const { 
+  description = siteConfig.description,
+  status = "Tidak tersedia untuk bekerja"
+} = Astro.props;
+---
+
+<div class="border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-6 transition-colors hover:border-zinc-300 dark:hover:border-zinc-700">
+  <div class="flex items-center justify-between mb-4">
+    <div class="flex items-center gap-2">
+      <span class="font-semibold font-mono text-emerald-600 dark:text-emerald-500" aria-hidden="true">
+        ▼
+      </span>
+      <h2 class="text-xs text-zinc-500 dark:text-zinc-400">
+        Tentang
+      </h2>
+    </div>
+    <span class="text-xs font-medium text-zinc-400 dark:text-zinc-500">
+      {siteConfig.name}
+    </span>
+  </div>
+  <p class="text-[15px] leading-relaxed text-zinc-700 dark:text-zinc-300 mb-5">
+    {description}
+  </p>
+  <div class="flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
+    <div class="flex items-center gap-2">
+      <span class="font-mono font-semibold text-emerald-600 dark:text-emerald-500">
+        $
+      </span>
+      <span class="font-medium">
+        {status}
+      </span>
+    </div>
+    <a href={`mailto:${siteConfig.links.mail}`} class="text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors">
+      Kontak
+    </a>
+  </div>
+</div>

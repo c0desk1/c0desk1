@@ -1,0 +1,65 @@
+/* src/styles/global.css */
+@import "tailwindcss";
+
+/* Plugin typography untuk Tailwind v4 */
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Custom fonts */
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Theme variables */
+@theme {
+  --font-main: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dark {
+  background-color: #09090b;
+  color: #fafafa;
+}
+
+/* Base styles */
+@layer base {
+  html {
+    font-family: var(--font-main);
+    letter-spacing: -0.01em;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  body {
+    line-height: 1.7;
+  }
+
+  button:focus-visible,
+  a:focus-visible {
+    outline-offset: 2px;
+  }
+  
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* Utility classes */
+@layer utilities {
+  .tracking-tighter {
+    letter-spacing: -0.02em;
+  }
+  
+  .tracking-tight {
+    letter-spacing: -0.01em;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}

@@ -1,0 +1,22 @@
+---
+// src/components/ui/Logo.astro
+// @ts-nocheck
+import Icon from "./Icon.astro";
+import { siteConfig } from "@/config/site";
+---
+
+<a 
+  href="/" 
+  class="group flex items-center gap-2.5 transition-all duration-200 hover:opacity-80"
+  aria-label="Home"
+>
+  <div class="relative">
+    <Icon name="logo" class="w-5 h-5 text-zinc-900 dark:text-white" />
+    <div class="absolute inset-0 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      <Icon name="logo" class="w-5 h-5 text-zinc-400 dark:text-zinc-600" />
+    </div>
+  </div>
+  <span class="text-xl font-semibold font-mono tracking-tight text-zinc-900 dark:text-white">
+    {siteConfig.name}
+  </span>
+</a>

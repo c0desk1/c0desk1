@@ -1,0 +1,31 @@
+---
+// src/components/portfolio/PortfolioHero.astro
+import Container from '@/components/ui/Container.astro';
+import Breadcrumb from '@/components/ui/Breadcrumb.astro';
+---
+
+<div class="border-b border-zinc-100 dark:border-zinc-900">
+  <Container size="lg" class="py-8 md:py-10">
+    
+    <Breadcrumb items={[
+      { name: 'Home', href: '/' },
+      { name: 'Portfolio', href: '/portfolio' }
+    ]} />
+    
+    <div class="space-y-3 mt-4">
+      <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-zinc-900 dark:text-white">
+        Crafting digital
+        <span class="text-zinc-400 dark:text-zinc-600"> experiences.</span>
+      </h1>
+      
+      <p class="text-sm text-zinc-600 dark:text-zinc-400 max-w-2xl">
+        A showcase of my work including web applications, design systems, and industrial tactical interfaces.
+      </p>
+      
+      <div class="pt-3">
+        <div class="h-px w-8 bg-linear-to-r from-zinc-300 to-transparent dark:from-zinc-700"></div>
+      </div>
+    </div>
+    
+  </Container>
+</div>

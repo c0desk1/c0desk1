@@ -1,0 +1,38 @@
+---
+// src/components/blog/BlogAuthor.astro
+
+interface Author {
+  name: string;
+  avatar?: string;
+  title?: string;
+}
+
+interface Props {
+  author?: Author;
+}
+
+const { author } = Astro.props;
+---
+
+{author && (
+  <div class="flex items-center gap-3 text-sm" aria-label={`Author: ${author.name}`}>
+    {author.avatar && (
+      <img
+        src={author.avatar}
+        alt={`Avatar of ${author.name}`}
+        class="w-8 h-8 rounded-full object-cover opacity-90"
+        loading="lazy"
+      />
+    )}
+    <div class="leading-tight">
+      <div class="font-medium text-zinc-900 dark:text-zinc-100">
+        {author.name}
+      </div>
+      {author.title && (
+        <div class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+          {author.title}
+        </div>
+      )}
+    </div>
+  </div>
+)}
