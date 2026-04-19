@@ -32,15 +32,6 @@ content:
       sort: ["pubDate desc"]
     
     fields:
-      - name: slug
-        label: Slug
-        type: string
-        required: true
-        pattern:
-          regex: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
-          message: "Use lowercase letters, numbers, and hyphens only"
-        description: "URL-friendly identifier (e.g., my-first-post)"
-      
       - name: title
         label: Title
         type: string
@@ -134,7 +125,7 @@ content:
             description: "e.g., Frontend Developer"
       
       - name: seo
-        label: SEO Settings
+        label: SEO
         type: object
         description: "Override default SEO settings"
         fields:
