@@ -98,6 +98,7 @@ content:
         label: Content
         type: rich-text
         options:
+          media: blog-images
           switcher: true
       
       - name: draft
