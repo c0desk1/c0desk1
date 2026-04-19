@@ -2,7 +2,7 @@
 
 # Media configuration
 media:
-  - name: blog-authors
+  - name: blog-author
     label: Blog Authors
     input: public/images/author
     output: /images/author
