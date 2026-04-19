@@ -5,8 +5,8 @@ import { siteConfig } from "@/config/site";
 interface Props {
   title?: string;
   description?: string;
-  image?: string;
-  canonicalURL?: URL;
+  image?: any; // Menggunakan any karena bisa berupa ImageMetadata (objek) atau string
+  canonicalURL?: URL | string;
   type?: "website" | "article";
   noIndex?: boolean;
   publishedTime?: Date;
@@ -17,8 +17,7 @@ interface Props {
 const { 
   title, 
   description = siteConfig.description, 
-  image = siteConfig.ogImage,
-  canonicalURL = new URL(Astro.url.pathname, Astro.site ?? siteConfig.url),
+  image,
   type = "website",
   noIndex = false,
   publishedTime,
@@ -26,15 +25,32 @@ const {
   tags = []
 } = Astro.props;
 
+const canonical = Astro.props.canonicalURL 
+  ? new URL(Astro.props.canonicalURL, Astro.site ?? siteConfig.url)
+  : new URL(Astro.url.pathname, Astro.site ?? siteConfig.url);
+
 const formattedTitle = title ? `${title} | ${siteConfig.name}` : siteConfig.name;
-const fullImageURL = image?.startsWith('http') ? image : new URL(image || siteConfig.ogImage, Astro.url).toString();
+
+let fullImageURL: string;
+
+if (!image) {
+  fullImageURL = new URL(siteConfig.ogImage, siteConfig.url).toString();
+} else if (typeof image === 'string') {
+  fullImageURL = image.startsWith('http') 
+    ? image 
+    : new URL(image, siteConfig.url).toString();
+} else if (typeof image === 'object' && image.src) {
+  fullImageURL = new URL(image.src, siteConfig.url).toString();
+} else {
+  fullImageURL = new URL(siteConfig.ogImage, siteConfig.url).toString();
+}
 
 const schema: Record<string, any> = {
   "@context": "https://schema.org",
   "@type": type === "article" ? "BlogPosting" : "WebSite",
   "name": formattedTitle,
   "description": description,
-  "url": canonicalURL.toString(),
+  "url": canonical.toString(),
   "author": {
     "@type": "Person",
     "name": siteConfig.author
@@ -46,6 +62,7 @@ if (type === "article" && title) {
   if (publishedTime) schema.datePublished = publishedTime.toISOString();
   if (modifiedTime) schema.dateModified = modifiedTime.toISOString();
   if (tags.length > 0) schema.keywords = tags.join(", ");
+  schema.image = fullImageURL;
 }
 ---
 
@@ -55,50 +72,42 @@ if (type === "article" && title) {
 <link rel="mask-icon" href="/favicon.svg" color="#18181b" />
 <meta name="generator" content={Astro.generator} />
 
-<!-- Theme Color -->
 <meta name="theme-color" content="#18181b" media="(prefers-color-scheme: dark)" />
 <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
 
-<!-- Canonical & Robots -->
-<link rel="canonical" href={canonicalURL} />
+<link rel="canonical" href={canonical} />
 {noIndex ? (
   <meta name="robots" content="noindex, nofollow" />
 ) : (
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 )}
 
-<!-- Basic Meta -->
 <title>{formattedTitle}</title>
 <meta name="title" content={formattedTitle} />
 <meta name="description" content={description} />
 <meta name="author" content={siteConfig.author} />
 <meta name="keywords" content={siteConfig.keywords.join(", ")} />
 
-<!-- Open Graph / Facebook -->
 <meta property="og:type" content={type} />
-<meta property="og:url" content={canonicalURL} />
+<meta property="og:url" content={canonical} />
 <meta property="og:title" content={formattedTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={fullImageURL} />
 <meta property="og:image:alt" content={description} />
 <meta property="og:site_name" content={siteConfig.name} />
 
-<!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:url" content={canonicalURL} />
+<meta name="twitter:url" content={canonical} />
 <meta name="twitter:title" content={formattedTitle} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={fullImageURL} />
 <meta name="twitter:image:alt" content={description} />
 
-<!-- RSS & Sitemap -->
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link rel="alternate" type="application/rss+xml" title={`${siteConfig.name} - Blog`} href={`${Astro.site}rss.xml`} />
 
-<!-- JSON-LD Schema -->
 <script type="application/ld+json" set:html={JSON.stringify(schema)} />
 
-<!-- Organization schema -->
 {type === 'website' && (
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
@@ -107,8 +116,8 @@ if (type === "article" && title) {
     "url": siteConfig.url,
     "logo": `${siteConfig.url}/favicon.svg`,
     "sameAs": [
-      siteConfig.links.github,
-      siteConfig.links.twitter,
+      siteConfig.links?.github,
+      siteConfig.links?.twitter,
     ].filter(Boolean)
   })} />
 )}
@@ -116,5 +125,4 @@ if (type === "article" && title) {
 <link rel="preload" href="/fonts/Geist.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
 
 <meta name="google-site-verification" content="kho65u9v63Iyq-j3KpnIKChy0yh_vVLZhzCrBDpnVVs" />
-
 <meta name="yandex-verification" content="0750847de0e7aa96" />
