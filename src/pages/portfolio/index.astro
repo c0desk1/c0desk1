@@ -18,24 +18,24 @@ import {
 
 const allProjects = await getCollection('portfolio');
 
-// pipeline lebih jelas
 const projects = sortByDate(filterByDraft(allProjects), 'date');
 
 const featuredProjects = filterByFeatured(projects);
 const featuredProject = featuredProjects?.[0];
 
-const regularProjects = projects.filter(p => !p.data.featured);
+const regularProjects = projects.filter(p => p.id !== featuredProject?.id);
 
 const recentProjects = regularProjects.slice(0, 3);
 const allTechStacks = getAllTechStacks(projects);
 const popularTech = allTechStacks.slice(0, 8);
+
+const seoData = {
+  title: "Portfolio & Projects",
+  description: "A collection of my work including web applications, design systems, and digital experiences.",
+};
 ---
 
-<BaseLayout
-  title="Portfolio"
-  description="A collection of my work including web applications, design systems, and digital experiences."
-  type="website"
->
+<BaseLayout {...seoData} type="website">
   <PortfolioHero />
   <Container size="lg" class="py-10 md:py-12">
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-12">
@@ -43,15 +43,21 @@ const popularTech = allTechStacks.slice(0, 8);
         {featuredProject && (
           <PortfolioFeatured project={featuredProject} />
         )}
-        <PortfolioList
-          projects={regularProjects}
-          totalCount={projects.length}
-        />
+        <div class="mt-12">
+           <PortfolioList
+            projects={regularProjects}
+            totalCount={projects.length}
+          />
+        </div>
       </div>
-      <PortfolioSidebar
-        popularTech={popularTech}
-        recentProjects={recentProjects}
-      />
+      <aside>
+        <div class="lg:sticky lg:top-24 h-fit">
+          <PortfolioSidebar
+            popularTech={popularTech}
+            recentProjects={recentProjects}
+          />
+        </div>
+      </aside>
     </div>
   </Container>
 </BaseLayout>
