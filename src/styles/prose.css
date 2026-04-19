@@ -9,46 +9,31 @@
 
 /* ==================== HEADINGS ==================== */
 
-.prose-custom h1 {
-  font-size: 1.875rem;
+.prose-custom h1,
+.prose-custom h2,
+.prose-custom h3,
+.prose-custom h4 {
   font-weight: 700;
   letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.prose-custom h1 {
+  font-size: 1.875rem;
   margin-top: 2rem;
   margin-bottom: 1rem;
 }
 
-@media (min-width: 768px) {
-  .prose-custom h1 {
-    font-size: 2.25rem;
-  }
-}
-
 .prose-custom h2 {
   font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
   margin-top: 1.5rem;
   margin-bottom: 0.75rem;
 }
 
-@media (min-width: 768px) {
-  .prose-custom h2 {
-    font-size: 1.875rem;
-  }
-}
-
 .prose-custom h3 {
   font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
   margin-top: 1.25rem;
   margin-bottom: 0.5rem;
-}
-
-@media (min-width: 768px) {
-  .prose-custom h3 {
-    font-size: 1.5rem;
-  }
 }
 
 .prose-custom h4 {
@@ -56,6 +41,12 @@
   font-weight: 600;
   margin-top: 1rem;
   margin-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .prose-custom h1 { font-size: 2.25rem; }
+  .prose-custom h2 { font-size: 1.875rem; }
+  .prose-custom h3 { font-size: 1.5rem; }
 }
 
 /* ==================== PARAGRAPH ==================== */
@@ -76,7 +67,7 @@
   color: #18181b;
   text-decoration: none;
   border-bottom: 1px solid #a1a1aa;
-  transition: all 0.2s;
+  transition: border-color 0.2s;
 }
 
 .dark .prose-custom a {
@@ -156,7 +147,6 @@
 /* ==================== IMAGES ==================== */
 
 .prose-custom img {
-  border-radius: 0.25rem;
   border: 1px solid #e4e4e7;
   margin: 1.5rem 0;
   max-width: 100%;
@@ -184,27 +174,35 @@
 
 /* ==================== LISTS ==================== */
 
-.prose-custom ul {
+.prose-custom ul,
+.prose-custom ol {
   margin: 1rem 0;
   padding-left: 1.5rem;
   list-style: none;
 }
 
-.prose-custom ul > li {
+.prose-custom ul > li,
+.prose-custom ol > li {
   position: relative;
-  padding-left: 1rem;
   color: #3f3f46;
   margin-bottom: 0.375rem;
 }
 
-.dark .prose-custom ul > li {
+.dark .prose-custom ul > li,
+.dark .prose-custom ol > li {
   color: #d4d4d8;
+}
+
+/* Unordered List */
+.prose-custom ul > li {
+  padding-left: 1rem;
 }
 
 .prose-custom ul > li::before {
   content: "—";
   position: absolute;
   left: -0.25rem;
+  top: 0.125rem;
   color: #10b981;
   font-family: monospace;
 }
@@ -213,43 +211,74 @@
   color: #34d399;
 }
 
-/* nested ul */
+/* Nested Unordered List */
+.prose-custom ul ul {
+  margin: 0.25rem 0;
+}
+
+.prose-custom ul ul > li {
+  padding-left: 1.25rem;
+}
+
 .prose-custom ul ul > li::before {
   content: "•";
   color: #71717a;
+  left: 0;
 }
 
-/* ordered list */
+/* Deep Nested */
+.prose-custom ul ul ul > li::before {
+  content: "◦";
+}
+
+/* Ordered List */
 .prose-custom ol {
-  margin: 1rem 0;
-  padding-left: 1.5rem;
-  list-style: none;
   counter-reset: item;
 }
 
 .prose-custom ol > li {
-  position: relative;
   padding-left: 1.25rem;
-  color: #3f3f46;
-  margin-bottom: 0.375rem;
   counter-increment: item;
-}
-
-.dark .prose-custom ol > li {
-  color: #d4d4d8;
 }
 
 .prose-custom ol > li::before {
   content: counter(item) ".";
   position: absolute;
   left: 0;
+  top: 0.125rem;
   color: #10b981;
   font-family: monospace;
 }
 
-/* ==================== LIST INTERACTION (FIXED) ==================== */
+/* Nested Ordered List */
+.prose-custom ol ol {
+  counter-reset: subitem;
+  margin: 0.25rem 0;
+}
 
+.prose-custom ol ol > li {
+  padding-left: 1.5rem;
+  counter-increment: subitem;
+}
+
+.prose-custom ol ol > li::before {
+  content: counter(item) "." counter(subitem) ".";
+  color: #71717a;
+  font-size: 0.875rem;
+}
+
+/* Mixed Nested (ul dalam ol, ol dalam ul) */
+.prose-custom ol ul > li::before,
+.prose-custom ul ol > li::before {
+  color: #71717a;
+}
+
+/* List Item Hover - no color change */
 .prose-custom li:hover {
+  color: inherit;
+}
+
+.prose-custom li:hover::before {
   color: inherit;
 }
 
@@ -261,33 +290,39 @@
   border-collapse: collapse;
 }
 
-.prose-custom th {
+.prose-custom th,
+.prose-custom td {
   border: 1px solid #e4e4e7;
   padding: 0.5rem 1rem;
+}
+
+.prose-custom th {
   text-align: left;
   font-weight: 600;
   color: #18181b;
 }
 
-.dark .prose-custom th {
-  border-color: #3f3f46;
-  color: #ffffff;
-}
-
 .prose-custom td {
-  border: 1px solid #e4e4e7;
-  padding: 0.5rem 1rem;
   color: #3f3f46;
 }
 
+.dark .prose-custom th,
 .dark .prose-custom td {
   border-color: #3f3f46;
+}
+
+.dark .prose-custom th {
+  color: #ffffff;
+}
+
+.dark .prose-custom td {
   color: #d4d4d8;
 }
 
 /* ==================== HR ==================== */
 
 .prose-custom hr {
+  border: none;
   border-top: 1px solid #e4e4e7;
   margin: 2rem 0;
 }
@@ -346,14 +381,14 @@
   color: #18181b;
 }
 
-.dark .prose-custom dt {
-  color: #ffffff;
-}
-
 .prose-custom dd {
   margin-left: 1rem;
   color: #52525b;
   margin-bottom: 0.5rem;
+}
+
+.dark .prose-custom dt {
+  color: #ffffff;
 }
 
 .dark .prose-custom dd {
@@ -369,4 +404,79 @@
 
 .dark .prose-custom address {
   color: #a1a1aa;
+}
+
+/* ==================== ADDITIONAL PROSE ELEMENTS ==================== */
+
+/* Superscript & Subscript */
+.prose-custom sup,
+.prose-custom sub {
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+.prose-custom sup {
+  vertical-align: super;
+}
+
+.prose-custom sub {
+  vertical-align: sub;
+}
+
+/* Small Text */
+.prose-custom small {
+  font-size: 0.875rem;
+  color: #71717a;
+}
+
+.dark .prose-custom small {
+  color: #a1a1aa;
+}
+
+/* Mark / Highlight */
+.prose-custom mark {
+  background-color: #fef3c7;
+  color: #18181b;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+}
+
+.dark .prose-custom mark {
+  background-color: #78350f;
+  color: #fef3c7;
+}
+
+/* Abbreviation */
+.prose-custom abbr[title] {
+  text-decoration: underline dotted;
+  cursor: help;
+}
+
+/* Details / Summary */
+.prose-custom details {
+  margin: 1rem 0;
+  padding: 0.5rem;
+  border: 1px solid #e4e4e7;
+  border-radius: 0.25rem;
+}
+
+.dark .prose-custom details {
+  border-color: #3f3f46;
+}
+
+.prose-custom summary {
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.prose-custom summary:hover {
+  color: #10b981;
+}
+
+/* Keyboard shortcut */
+.prose-custom kbd kbd {
+  background-color: transparent;
+  padding: 0;
+  border: none;
 }
