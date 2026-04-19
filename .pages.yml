@@ -23,9 +23,6 @@ content:
     type: collection
     path: src/content/blog
     filename: "{fields.slug}.md"
-    exclude:
-      - "**/_*/**"
-      - "**/_*"
     
     view:
       fields: [title, pubDate, draft, featured]
@@ -77,10 +74,9 @@ content:
         type: image
         options:
           rename: true
-          media: blog-images
       
       - name: imageAlt
-        label: Image Alt Text
+        label: Alt Text
         type: string
 
       - name: imageCaption
@@ -116,9 +112,7 @@ content:
           - name: avatar
             label: Avatar
             type: string
-            pattern:
-              regex: "^https?://"
-              message: "Must be a valid URL"
+            
           - name: title
             label: Title
             type: string
@@ -140,17 +134,13 @@ content:
             options:
               maxlength: 160
           - name: ogImage
-            label: OG Image URL
+            label: OG Image
             type: string
-            pattern:
-              regex: "^https?://"
-              message: "Must be a valid URL"
+            
           - name: canonical
             label: Canonical URL
             type: string
-            pattern:
-              regex: "^https?://"
-              message: "Must be a valid URL"
+            
           - name: noIndex
             label: No Index
             type: boolean
