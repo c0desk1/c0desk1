@@ -1,8 +1,8 @@
 // src/config/site.ts
 
 export const siteConfig = {
-  name: "C0desk1",
-  author: "C0desk1",
+  name: "c0desk1",
+  author: "Bima Akbar",
   description: "Digital garden dan portofolio profesional yang berfokus pada pengembangan web modern, sistem minimalis, dan efisiensi kode.",
   url: "https://bimaakbar.my.id",
   ogImage: "/og-image.png",
@@ -15,18 +15,19 @@ export const siteConfig = {
     "Portfolio",
     "C0desk1"
   ],
+  
   links: {
     github: "https://github.com/c0desk1",
     twitter: "https://twitter.com/c0desk1",
     mail: "hello@c0desk1.com"
   },
-  // Tambahkan navigation items
+  
   navItems: [
     { href: "/blog", label: "Blog" },
     { href: "/portfolio", label: "Portfolio" },
-    { href: "/about", label: "About" }
+    { href: "/about", label: "Tentang" }
   ],
-  // Social media untuk footer
+  
   social: {
     github: "https://github.com/c0desk1",
     twitter: "https://twitter.com/c0desk1",
