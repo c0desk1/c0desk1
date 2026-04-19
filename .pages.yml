@@ -134,15 +134,6 @@ content:
             label: OG Image
             type: string
             
-          - name: canonical
-            label: Canonical URL
-            type: string
-            
-          - name: noIndex
-            label: No Index
-            type: boolean
-            default: false
-            description: "Prevent search engines from indexing"
 
   # ==================== PORTFOLIO COLLECTION ====================
   - name: portfolio
