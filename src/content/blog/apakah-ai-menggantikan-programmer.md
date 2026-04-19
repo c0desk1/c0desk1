@@ -10,7 +10,7 @@ tags:
   - ai
   - programming
   - teknologi
-  - masa-depan
+  - masadepan
 
 draft: false
 featured: true
