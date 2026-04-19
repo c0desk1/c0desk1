@@ -85,7 +85,6 @@ content:
         label: Content
         type: rich-text
         options:
-          rename: true
           switcher: true
       
       - name: draft
