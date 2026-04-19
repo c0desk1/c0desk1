@@ -35,7 +35,7 @@ const readingTime = getReadingTime(undefined, undefined, body);
   <h3 class="font-semibold text-zinc-900 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors text-base md:text-lg leading-tight mb-1.5">
     {title}
     {featured && (
-      <span class="ml-2 text-xs text-amber-600 dark:text-amber-500" aria-label="Featured post">★</span>
+      <span class="ml-2 text-xs text-amber-600 dark:text-amber-500" aria-label="Featured post">✓</span>
     )}
   </h3>
   <p class="text-sm md:text-base text-zinc-600 dark:text-zinc-400 leading-relaxed line-clamp-2 mb-3">
@@ -51,12 +51,12 @@ const readingTime = getReadingTime(undefined, undefined, body);
             </span>
           ))}
           {tags.length > 2 && (
-            <span class="text-zinc-400 dark:text-zinc-600 font-mono">+{tags.length - 2}</span>
+            <span class="text-zinc-500 dark:text-zinc-600 font-mono">+{tags.length - 2}</span>
           )}
         </>
       )}
     </div>
-    <div class="flex items-center gap-1 text-zinc-400 dark:text-zinc-600 group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-all duration-200 group-hover:translate-x-0.5">
+    <div class="flex items-center gap-1 text-zinc-500 dark:text-zinc-600 group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-all duration-200 group-hover:translate-x-0.5">
       <span class="text-sm">Read</span>
       <span class="text-xs" aria-hidden="true">→</span>
     </div>
