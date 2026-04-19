@@ -47,7 +47,7 @@ content:
         options:
           maxlength: 160
           rows: 3
-        description: "SEO: Max 160 characters"
+        description: "Max 160 characters"
       
       - name: pubDate
         label: Publish Date
