@@ -3,7 +3,7 @@ import { defineCollection } from "astro:content";
 import { z } from "astro/zod";
 import { glob } from "astro/loaders";
 
-// SEO Schema - tanpa image() karena pakai string path
+
 const createSeoSchema = () => z.object({
   title: z.string().max(100).optional(),
   description: z.string().min(10).max(160).optional(),
@@ -12,14 +12,12 @@ const createSeoSchema = () => z.object({
   noIndex: z.boolean().default(false),
 });
 
-// Author Schema - tanpa image() karena pakai string path
 const createAuthorSchema = () => z.object({
   name: z.string().default("C0desk1"),
   avatar: z.string().optional(),
   title: z.string().optional(),
 });
 
-// Blog Collection
 const blogCollection = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/blog" }),
   schema: z.object({
@@ -38,7 +36,6 @@ const blogCollection = defineCollection({
   }),
 });
 
-// Portfolio Collection
 const portfolioCollection = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/portfolio" }),
   schema: z.object({
