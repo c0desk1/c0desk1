@@ -17,13 +17,13 @@ draft: false
 featured: true
 author:
   name: Bima Akbar
-  avatar: "/images/author/author.jpg"
+  avatar: "https://bimaakbar.my.id/images/author/author.jpg"
   title: Founder of Adogen
 seo:
   title: Adogen - Generator Metadata Adobe Stock Berbasis AI
   description: Optimalkan workflow Adobe Stock Anda dengan Adogen. Generate judul
     dan keyword otomatis, gratis, dan cepat.
-  ogImage: /images/blog/og/og-adogen.webp
+  ogImage: "https://bimaakbar.my.id/images/blog/og/og-adogen.webp"
 ---
 Menjadi kontributor mikrostock di era sekarang bukan lagi sekadar soal estetika foto. Ini adalah soal **SEO (Search Engine Optimization)**. Anda bisa punya foto sejernih kristal, tapi tanpa judul dan 50 keyword yang tepat, foto Anda hanya akan terkubur di gudang digital tanpa pernah dibeli siapapun.
 
