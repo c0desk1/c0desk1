@@ -1,22 +1,23 @@
 ---
 // src/components/ui/sidebar/AboutCard.astro
+
 interface Props {
   description?: string;
   status?: string;
 }
 
 const { 
-  description = "Building industrial tactical interfaces with a focus on performance, accessibility, and clean architecture.",
-  status = "available for work"
+  description = "Membangun antarmuka taktis industri dengan fokus pada kinerja, aksesibilitas, dan arsitektur yang bersih.",
+  status = "Tidak tersedia untuk bekerja"
 } = Astro.props;
 ---
 
 <div class="border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-5">
   <div class="flex items-center gap-2 mb-3">
     <div class="h-1.5 w-1.5 rounded-full bg-emerald-500"></div>
-    <h3 class="text-sm font-bold tracking-wider text-zinc-500 dark:text-zinc-400">
-      About
-    </h3>
+    <h2 class="text-sm text-zinc-500 dark:text-zinc-400">
+      Tentang
+    </h2>
   </div>
   <p class="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-3">
     {description}
