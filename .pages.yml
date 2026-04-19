@@ -3,7 +3,7 @@
 # Media configuration
 media:
   - name: blog-author
-    label: Blog Authors
+    label: Authors
     input: public/images/author
     output: /images/author
     categories: [image]
@@ -14,8 +14,8 @@ media:
     output: /images/blog
     categories: [image]
 
-  - name: blog-og-images
-    label: Blog OG Images
+  - name: blog-og
+    label: Blog OG
     input: public/images/blog/og
     output: /images/blog/og
     categories: [image]
@@ -24,6 +24,18 @@ media:
     label: Portfolio Images
     input: public/images/portfolio
     output: /images/portfolio
+    categories: [image]
+
+  - name: portfolio-gallery
+    label: Portfolio Gallery
+    input: public/images/portfolio/gallery
+    output: /images/portfolio/gallery
+    categories: [image]
+
+  - name: portfolio-og
+    label: Portfolio OG
+    input: public/images/portfolio/og
+    output: /images/portfolio/og
     categories: [image]
     
 
@@ -151,7 +163,7 @@ content:
             label: OG Image
             type: image
             options:
-              media: blog-og-images
+              media: blog-og
               rename: true
             
 
@@ -160,21 +172,13 @@ content:
     label: Portfolio Projects
     type: collection
     path: src/content/portfolio
-    filename: "{fields.slug}.mdx"
+    filename: "{primary}.mdx"
     
     view:
       fields: [title, date, featured, draft]
       sort: ["date desc"]
     
-    fields:
-      - name: slug
-        label: Slug
-        type: string
-        required: true
-        pattern:
-          regex: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
-          message: "Use lowercase letters, numbers, and hyphens only"
-      
+    fields:      
       - name: title
         label: Project Title
         type: string
@@ -250,7 +254,7 @@ content:
             type: image
             options:
               multiple: true
-              media: gallery-images
+              media: portfolio-gallery
         description: "Additional project screenshots"
       
       - name: draft
