@@ -1,26 +1,22 @@
 ---
 title: "Apakah AI Akan Menggantikan Programmer di Masa Depan?"
+
 description: "AI semakin canggih, tetapi apakah benar programmer akan tergantikan? Simak analisis realistis tentang masa depan profesi developer."
+
 pubDate: 2026-04-10
 
 image: "https://images.unsplash.com/photo-1677442135136-760c813a743d"
 imageAlt: "Ilustrasi AI dan programmer bekerja bersama"
+imageCaption: "Ilustrasi AI dan programmer bekerja bersama"
 
 tags:
   - ai
   - programming
   - teknologi
   - masa-depan
-
-categories:
-  - Teknologi
-  - Karier
-
+
 draft: false
-featured: true
-
-readingTime: 8
-wordCount: 1100
+featured: true
 
 author:
   name: "C0desk1"
@@ -29,9 +25,7 @@ author:
 
 seo:
   description: "AI tidak menggantikan programmer, tetapi mengubah cara kerja mereka."
-  canonical: "https://example.com/blog/apakah-ai-menggantikan-programmer"
-
-pinned: true
+  canonical: "https://example.com/blog/apakah-ai-menggantikan-programmer"
 ---
 
 ## Pendahuluan
