@@ -15,19 +15,19 @@ const publishedPosts = allPosts.filter((p: CollectionEntry<'blog'>) => !p.data.d
 const posts = sortByDate(publishedPosts);
 
 const featuredPost = posts.find((p: CollectionEntry<'blog'>) => p.data.featured === true);
-const regularPosts = posts.filter((p: CollectionEntry<'blog'>) => !p.data.featured);
+const regularPosts = posts.filter((p: CollectionEntry<'blog'>) => p.data.featured !== true);
 
-const recentPosts = regularPosts.slice(0, 5);
 const allTags = getAllTags(posts);
 const popularTags = allTags.slice(0, 8);
 const archiveCounts = getArchiveCounts(posts);
+
+const seoData = {
+  title: "Blog & Insights",
+  description: "Articles about web development, design systems, and industrial tactical design.",
+};
 ---
 
-<BaseLayout 
-  title="Blog"
-  description="Articles about web development, design systems, and industrial tactical design."
-  type="website"
->
+<BaseLayout {...seoData} type="website">
   <BlogHero />
   <Container size="md" class="py-12 md:py-16">
     <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_260px] gap-10 lg:gap-12">
@@ -37,7 +37,7 @@ const archiveCounts = getArchiveCounts(posts);
           regularPosts={regularPosts}
         />
       </div>
-      <aside class="lg:sticky lg:top-16 h-fit">
+      <aside class="lg:sticky lg:top-24 h-fit"> { /* Top offset ditambah sedikit agar tidak mentok header */ }
         <BlogSidebar 
           popularTags={popularTags}
           archiveCounts={archiveCounts}
