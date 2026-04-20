@@ -85,5 +85,24 @@ const {
       <HomeCTA />
     </main>    
     {footer && <Footer />}
+    {/* Yandex Ads - Hanya tampil di production */}
+    {import.meta.env.PROD && (
+      <div class="yandex-ads my-8">
+        <script
+          is:inline
+          src="https://yandex.ru/ads/system/context.js"
+          async
+        ></script>
+        <script is:inline>
+          window.yaContextCb = window.yaContextCb || [];
+          window.yaContextCb.push(() => {
+            Ya.Context.AdvManager.render({
+              blockId: "R-A-19135204-1",
+              type: "topAd",
+            });
+          });
+        </script>
+      </div>
+    )}
   </body>
 </html>
