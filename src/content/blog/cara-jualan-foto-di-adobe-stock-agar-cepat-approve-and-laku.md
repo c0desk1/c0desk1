@@ -12,10 +12,11 @@ tags:
   - TipsCuan
   - AIArt
   - PassiveIncome
+image: /images/blog/cover-cuan-dengan-ai-di-adobe-stock.webp
 imageAlt: Ilustrasi meja kerja minimalis dengan layar menampilkan dashboard
   kontributor stok foto, gaya industrial modern.
 imageCaption: Ubah prompt AI jadi aset digital yang menghasilkan.
-draft: true
+draft: false
 featured: false
 author:
   name: Bima Akbar
@@ -26,6 +27,7 @@ seo:
   description: "Mau dapet Dollar dari AI? Simak panduan jualan foto di Adobe
     Stock: tips niche industrial, prompt komersial, dan cara biar lolos review.
     Cek di sini!"
+  ogImage: /images/blog/og/og-cuan-dengan-ai-di-adobe-stock.webp
 ---
 Pernah nggak lu kepikiran, gambar-gambar estetik yang lu hasilin lewat AI bisa jadi aset digital yang ngasih *passive income* dalam Dollar? Kalau selama ini lu cuma mainan AI buat seneng-seneng doang, lu melewatkan peluang gede di **Adobe Stock** dan **Wirestock**.
 
