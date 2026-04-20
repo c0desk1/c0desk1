@@ -1,0 +1,39 @@
+name: Optimize Images
+
+on:
+  workflow_dispatch:
+    inputs:
+      payload:
+        description: 'Pages CMS payload'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6.0.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6.4.0
+        with:
+          node-version: 20
+
+      - name: Install image optimization tools
+        run: npm install -g sharp-cli
+
+      - name: Optimize images
+        run: |
+          npx sharp-cli -i public/images -o public/images --quality 80 --format webp
+
+      - name: Commit optimized images
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/images/
+          git diff --quiet && git diff --staged --quiet || git commit -m "chore: optimize images [skip ci]"
+          git push
