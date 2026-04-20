@@ -202,7 +202,7 @@
   content: "—";
   position: absolute;
   left: -0.25rem;
-  top: 0.125rem;
+  top: 0.150rem;
   color: #10b981;
   font-family: monospace;
 }
@@ -245,9 +245,8 @@
   content: counter(item) ".";
   position: absolute;
   left: 0;
-  top: 0.125rem;
   color: #10b981;
-  font-family: monospace;
+  /*font-family: monospace; */
 }
 
 /* Nested Ordered List */
@@ -274,13 +273,13 @@
 }
 
 /* List Item Hover - no color change */
-.prose-custom li:hover {
+/*.prose-custom li:hover {
   color: inherit;
-}
+}*/
 
-.prose-custom li:hover::before {
+/*.prose-custom li:hover::before {
   color: inherit;
-}
+}*/
 
 /* ==================== TABLE ==================== */
 
@@ -323,7 +322,7 @@
 
 .prose-custom hr {
   border: none;
-  border-top: 1px solid #e4e4e7;
+  border-top: 1px dashed #e4e4e7;
   margin: 2rem 0;
 }
 
