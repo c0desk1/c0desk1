@@ -4,24 +4,31 @@ title: Capek Beresin File Manual? Sini Gue Bisikin Cara Automasi Windows Pake
 description: Capek ngerapiin file manual? Sini gue ajarin bikin script
   PowerShell buat auto-rename & delete file di Windows. Anti-error & praktis,
   biar PC lu kerja!
-pubDate: 2026-04-20T14:44
-updatedDate: 2026-04-20T14:44
+pubDate: 2026-04-20T15:09
+updatedDate: 2026-04-20T15:09
 tags:
   - PowerShellIndonesia
   - AutomasiWindows
   - TipsProduktivitas
   - Scripting
   - TutorialWindows
-draft: true
+image: /images/blog/powershell-preview.webp
+imageAlt: Sebuah terminal PowerShell modern mengambang di dalam lingkungan
+  pabrik industri yang terbuat dari beton dan baja, menunjukkan automasi file
+  digital dengan efek cahaya neon biru.
+imageCaption: Di mana presisi industri bertemu dengan automasi digital Windows.
+draft: false
 featured: false
 author:
-  name: c0desk1
+  name: Bima Akbar
+  avatar: /images/author/author.jpg
   title: Author
 seo:
   title: "Cara Automasi Windows: Script PowerShell buat Auto Rename & Delete File"
   description: Bosen ngerapiin file manual? Sini gue ajarin bikin script
     PowerShell buat auto-rename & delete di Windows. Anti-error & praktis, biar
     PC lu kerja!
+  ogImage: /images/blog/og/og-powershell-tips-auto-rename-delete-file.webp
 ---
 Lu pernah nggak sih ngerasa kayak robot pas lagi ngerapiin folder? Misal, lu abis download ratusan aset desain atau foto, terus namanya berantakan semua kayak IMG_999_final_banget_v2.jpg. Atau yang lebih parah, folder "Downloads" lu udah penuh sampah file dari zaman Majapahit yang bikin SSD lu jerit-jerit?
 
