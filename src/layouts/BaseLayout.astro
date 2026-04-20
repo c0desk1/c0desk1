@@ -82,27 +82,26 @@ const {
       ) : (
         <slot />
       )}
+
+      <!-- Yandex Ads  -->
+      {import.meta.env.PROD && (
+        <Container size={containerSize}>
+          <div class="yandex-ads my-8">
+            <script is:inline>window.yaContextCb = window.yaContextCb || [];</script>
+            <script async src="https://yandex.ru/ads/system/context.js"></script>
+            <script is:inline>
+              window.yaContextCb.push(() => {
+                Ya.Context.AdvManager.render({
+                  blockId: "R-A-19135204-1",
+                  type: "topAd",
+                });
+              });
+            </script>
+          </div>
+        </Container>
+      )}
       <HomeCTA />
     </main>    
     {footer && <Footer />}
-    {/* Yandex Ads - Hanya tampil di production */}
-    {import.meta.env.PROD && (
-      <div class="yandex-ads my-8">
-        <script
-          is:inline
-          src="https://yandex.ru/ads/system/context.js"
-          async
-        ></script>
-        <script is:inline>
-          window.yaContextCb = window.yaContextCb || [];
-          window.yaContextCb.push(() => {
-            Ya.Context.AdvManager.render({
-              blockId: "R-A-19135204-1",
-              type: "topAd",
-            });
-          });
-        </script>
-      </div>
-    )}
   </body>
 </html>
