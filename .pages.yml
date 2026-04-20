@@ -44,7 +44,7 @@ content:
     path: src/content/blog
     filename: "{primary}.md"
     view:
-      fields: [title, pubDate, draft, featured]
+      fields: [image, title, pubDate, draft, featured]
       sort: ["pubDate desc"]
     fields:
       - name: title
