@@ -100,21 +100,21 @@ export function calculateReadingTime(
   content: string,
   wordsPerMinute: number = 200
 ): string {
-  if (!content?.trim()) return '1 men baca';
+  if (!content?.trim()) return '1 menit baca';
 
   const words = content.trim().split(/\s+/).length;
   const minutes = Math.max(1, Math.ceil(words / wordsPerMinute));
 
   return minutes === 1
-    ? '1 men baca'
-    : `${minutes} men baca`;
+    ? '1 menit baca'
+    : `${minutes} menit baca`;
 }
 
 export function getReadingTime(
   content?: string,
   locale: 'id' | 'en' = 'id'
 ): string {
-  const suffix = locale === 'id' ? 'men baca' : 'min read';
+  const suffix = locale === 'id' ? 'menit baca' : 'min read';
 
   if (!content?.trim()) {
     return `1 ${suffix}`;
@@ -209,14 +209,21 @@ export function generateHeadingId(text: string): string {
 export function getRelatedPosts<T extends { data: { tags?: string[] } }>(
   currentPost: T,
   allPosts: T[],
-  limit: number = 2
+  limit: number = 3
 ): T[] {
   const currentTags = currentPost.data.tags || [];
   
-  return allPosts
+  let related = allPosts
     .filter(p => p !== currentPost)
-    .filter(p => hasCommonTags(currentTags, p.data.tags || []))
-    .slice(0, limit);
+    .filter(p => hasCommonTags(currentTags, p.data.tags || []));
+  
+  if (related.length === 0) {
+    related = allPosts
+      .filter(p => p !== currentPost)
+      .slice(0, limit);
+  }
+  
+  return related.slice(0, limit);
 }
 
 export function getRelatedProjects<T extends { data: { techStack?: string[] } }>(
