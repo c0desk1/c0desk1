@@ -2,18 +2,18 @@
 // src/components/blog/PostCard.astro
 
 import type { CollectionEntry } from 'astro:content';
-import { formatDateCompact } from '@/lib/utils';
+import { formatDateCompact, getReadingTime } from '@/lib/utils';
 
 interface Props {
   post: CollectionEntry<'blog'>;
-  showTags?: boolean;
 }
 
 const { post, showTags = true } = Astro.props;
-const { data, id } = post;
+const { data, id, body } = post;
 const { title, description, pubDate, tags, featured } = data;
 
 const formattedDate = formatDateCompact(pubDate);
+const readingTime = getReadingTime(body, 'id');
 ---
 
 <a href={`/blog/${id}`} class="block py-4 text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100 transition-colors duration-200" aria-label={`Read article: ${title}`}>
@@ -26,15 +26,9 @@ const formattedDate = formatDateCompact(pubDate);
         {formattedDate}
       </time>
     </div>
-    {showTags && tags && tags.length > 0 && (
-      <div class="flex flex-wrap items-center gap-2">
-        {tags.slice(0, 2).map(tag => (
-          <span class="text-inherit opacity-80">
-            #{tag}
-          </span>
-        ))}
-      </div>
-    )}
+    <span class="text-inherit opacity-80">
+		{readingTime}
+	</span>
   </div>
   <h3 class="font-semibold text-zinc-950 dark:text-zinc-100 text-base md:text-lg leading-tight mb-1.5">
     {title}
