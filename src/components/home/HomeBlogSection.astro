@@ -16,18 +16,18 @@ const { posts } = Astro.props;
     <div class="flex items-end justify-between mb-6">
       <div class="space-y-1">
         <div class="flex items-center gap-2">
-          <div class="h-1 w-1 rounded-full bg-emerald-500"></div>
+          <div class="h-1.5 w-1.5 rounded-full bg-emerald-500"></div>
           <h2 class="text-sm text-zinc-500 dark:text-zinc-400">
-            Wawasan terbaru
+            Postingan terbaru
           </h2>
         </div>
-        <div class="h-px w-10 bg-linear-to-r from-zinc-300 to-transparent dark:from-zinc-700"></div>
       </div>
-      <a 
+      <a
         href="/blog"
-        class="text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors"
+        class="group flex items-center gap-1 text-center text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors"
       >
-        Lihat semua →
+        <span>Lihat semua</span>
+        <span class="group-hover:translate-x-0.5 transition-transform">→</span>
       </a>
     </div>
     {posts.length > 0 ? (
