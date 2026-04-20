@@ -193,20 +193,6 @@ content:
             options:
               media: blog-og
               rename: true
-
-    actions:
-      - name: preview-post
-        label: Preview Post
-        scope: entry
-        workflow: preview-post.yml
-        fields:
-          - name: environment
-            label: Preview Environment
-            type: select
-            default: staging
-            options:
-              - label: Staging
-                value: staging
             
 
   - name: portfolio
