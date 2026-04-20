@@ -1,6 +1,22 @@
 # .pages.yml
 
 media:
+  - name: images
+    label: Image
+    input: public/images
+    output: /images
+    rename: safe
+    categories: [image]
+    extensions: [png, jpg, webp]
+    actions:
+      - name: optimize-images
+        label: Optimize All Images
+        workflow: optimize-images.yml
+        confirm:
+          title: "Optimize Images?"
+          message: "Ini akan memproses semua gambar di folder images."
+          button: "Ya, Optimize"
+          
   - name: blog-author
     label: Authors
     input: public/images/author
