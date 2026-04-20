@@ -345,7 +345,7 @@ content:
 actions:
   - name: deploy
     label: 🚀 Deploy to Cloudflare
-    workflow: deploy.yml
+    workflow: manual-deploy.yml
     ref: current
     cancelable: true
     confirm:
