@@ -149,6 +149,7 @@ if (type === "website") {
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={fullImageURL} />
 <meta name="twitter:image:alt" content={description} />
+<meta name="twitter:site" content={siteConfig.links?.twitter} />
 
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link rel="alternate" type="application/rss+xml" title={`${siteConfig.name} - Blog`} href={new URL('/rss.xml', Astro.site ?? siteConfig.url)} />
