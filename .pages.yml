@@ -46,6 +46,16 @@ content:
     view:
       fields: [image, title, pubDate, draft, featured]
       sort: ["pubDate desc"]
+      
+    actions:
+      - name: rebuild-blog
+        label: 🔄 Rebuild Blog Index
+        scope: collection          # muncul di halaman daftar koleksi
+        workflow: rebuild-blog.yml
+        confirm:
+          title: "Rebuild Blog?"
+          message: "Ini akan memicu rebuild index blog."
+          button: "Ya, Rebuild"
     fields:
       - name: title
         label: Judul
