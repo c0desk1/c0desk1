@@ -91,7 +91,6 @@ content:
         options:
           media: blog-images
           rename: true
-          editable: true
       
       - name: imageAlt
         label: Cover Alt
