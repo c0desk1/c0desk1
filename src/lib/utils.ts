@@ -206,8 +206,6 @@ export function generateHeadingId(text: string): string {
 
 // ==================== RELATED CONTENT UTILITIES ====================
 
-// src/lib/utils.ts
-
 export function getRelatedPosts<T extends { id: string; data: { tags?: string[] } }>(
   currentPost: T,
   allPosts: T[],
