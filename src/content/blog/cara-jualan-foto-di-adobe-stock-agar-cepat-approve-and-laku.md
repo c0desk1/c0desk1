@@ -8,7 +8,6 @@ updatedDate: 2026-04-20T18:13
 tags:
   - AdobeStock
   - Wirestock
-  - IndustrialMinimalist
   - TipsCuan
   - AIArt
   - PassiveIncome
