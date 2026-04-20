@@ -100,21 +100,21 @@ export function calculateReadingTime(
   content: string,
   wordsPerMinute: number = 200
 ): string {
-  if (!content?.trim()) return '1 min baca';
+  if (!content?.trim()) return '1 men baca';
 
   const words = content.trim().split(/\s+/).length;
   const minutes = Math.max(1, Math.ceil(words / wordsPerMinute));
 
   return minutes === 1
-    ? '1 min baca'
-    : `${minutes} min baca`;
+    ? '1 men baca'
+    : `${minutes} men baca`;
 }
 
 export function getReadingTime(
   content?: string,
   locale: 'id' | 'en' = 'id'
 ): string {
-  const suffix = locale === 'id' ? 'min baca' : 'min read';
+  const suffix = locale === 'id' ? 'men baca' : 'min read';
 
   if (!content?.trim()) {
     return `1 ${suffix}`;
