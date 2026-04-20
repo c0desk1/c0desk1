@@ -206,21 +206,26 @@ export function generateHeadingId(text: string): string {
 
 // ==================== RELATED CONTENT UTILITIES ====================
 
-export function getRelatedPosts<T extends { data: { tags?: string[] } }>(
+// src/lib/utils.ts
+
+export function getRelatedPosts<T extends { id: string; data: { tags?: string[] } }>(
   currentPost: T,
   allPosts: T[],
   limit: number = 3
 ): T[] {
   const currentTags = currentPost.data.tags || [];
+  const currentId = currentPost.id;
   
-  let related = allPosts
-    .filter(p => p !== currentPost)
-    .filter(p => hasCommonTags(currentTags, p.data.tags || []));
+  let related = allPosts.filter(p => p.id !== currentId);
   
-  if (related.length === 0) {
-    related = allPosts
-      .filter(p => p !== currentPost)
-      .slice(0, limit);
+  if (currentTags.length > 0) {
+    const taggedPosts = related.filter(p => 
+      p.data.tags?.some(tag => currentTags.includes(tag))
+    );
+    
+    if (taggedPosts.length > 0) {
+      return taggedPosts.slice(0, limit);
+    }
   }
   
   return related.slice(0, limit);
