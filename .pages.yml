@@ -341,25 +341,3 @@ content:
         required: false
         options:
           rows: 4
-
-actions:
-  - name: deploy
-    label: 🚀 Deploy to Cloudflare
-    workflow: manual-deploy.yml
-    ref: current
-    cancelable: true
-    confirm:
-      title: "Deploy Website?"
-      message: "Apakah Anda yakin ingin melakukan deploy ulang?"
-      button: "Ya, Deploy!"
-    fields:
-      - name: environment
-        label: Environment
-        type: select
-        required: true
-        default: production
-        options:
-          - label: Production
-            value: production
-          - label: Preview
-            value: preview
