@@ -91,6 +91,7 @@ content:
         options:
           media: blog-images
           rename: true
+          editable: true
       
       - name: imageAlt
         label: Cover Alt
@@ -140,7 +141,6 @@ content:
       - name: seo
         label: SEO
         type: object
-        description: "Override default SEO settings"
         fields:
           - name: title
             label: Judul
@@ -204,7 +204,7 @@ content:
       
       - name: techStack
         label: Tech Stack
-        type: list
+        type: string
         list: true
         options:
           min: 1
