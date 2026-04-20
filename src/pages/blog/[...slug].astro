@@ -57,13 +57,13 @@ const { Content, headings } = await render(post);
 
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
 const relatedPosts = getRelatedPosts(post, allPosts, 3);
-const readingTime = getReadingTime(post.body);
 
 const seoTitle = seo?.title || title;
 const seoDescription = seo?.description || description;
-const seoImage = seo?.ogImage || image;
+const seoImage = seo?.ogImage || image || siteConfig.ogImage;
 const tocHeadings = filterHeadingsForTOC(headings);
 const displayImage = image; 
+const readingTime = getReadingTime(post.body, 'id');
 const lastUpdated = formatDateCompact(updatedDate || pubDate);
 ---
 

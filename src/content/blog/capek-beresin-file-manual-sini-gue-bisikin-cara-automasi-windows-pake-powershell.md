@@ -1,9 +1,9 @@
 ---
-title: Capek Beresin File Manual? Sini Gue Bisikin Cara Automasi Windows Pake
-  PowerShell!
-description: Capek ngerapiin file manual? Sini gue ajarin bikin script
+title: "Capek Beresin File Manual? Sini Gue Bisikin Cara Automasi Windows Pake
+  PowerShell!"
+description: "Capek ngerapiin file manual? Sini gue ajarin bikin script
   PowerShell buat auto-rename & delete file di Windows. Anti-error & praktis,
-  biar PC lu kerja!
+  biar PC lu kerja!"
 pubDate: 2026-04-20T15:09
 updatedDate: 2026-04-20T15:09
 tags:

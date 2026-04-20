@@ -1,9 +1,10 @@
 ---
 // src/components/portfolio/RecentProjectsCard.astro
 import { formatDateCompact } from '@/lib/utils';
+import type { CollectionEntry } from 'astro:content';
 
 interface Props {
-  projects: any[];
+  projects: CollectionEntry<'portfolio'>[];
 }
 
 const { projects } = Astro.props;

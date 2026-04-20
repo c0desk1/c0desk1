@@ -10,7 +10,7 @@ interface Props {
 
 const { post } = Astro.props;
 const { data, id, body } = post;
-const { title, description, pubDate, tags, featured } = data;
+const { title, description, pubDate, featured } = data;
 
 const formattedDate = formatDateCompact(pubDate);
 const readingTime = getReadingTime(body, 'id');

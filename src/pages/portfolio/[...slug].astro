@@ -5,7 +5,7 @@ import "@/styles/prose.css";
 import { getCollection, render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { siteConfig } from '@/config/site';
-import { formatDateCompact } from '@/lib/utils';
+import { formatDateCompact, getRelatedProjects } from '@/lib/utils';
 
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Container from '@/components/ui/Container.astro';
@@ -69,14 +69,7 @@ const displayGallery = Array.isArray(gallery) ? gallery : [];
 
 const allProjects = await getCollection('portfolio', ({ data }) => !data.draft);
 
-const relatedProjects = allProjects
-  .filter(p => p.id !== project.id)
-  .filter(p =>
-    p.data.techStack?.some(tech =>
-      techStack?.includes(tech)
-    )
-  )
-  .slice(0, 2);
+const relatedProjects = getRelatedProjects(project, allProjects, 2);
 ---
 
 <BaseLayout

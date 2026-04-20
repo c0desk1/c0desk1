@@ -29,7 +29,9 @@ const canonical = Astro.props.canonicalURL
   ? new URL(Astro.props.canonicalURL, Astro.site ?? siteConfig.url)
   : new URL(Astro.url.pathname, Astro.site ?? siteConfig.url);
 
-const formattedTitle = title ? `${title} | ${siteConfig.name}` : siteConfig.name;
+const formattedTitle = title && title !== siteConfig.name 
+  ? `${title} | ${siteConfig.name}` 
+  : siteConfig.name;
 
 let fullImageURL: string;
 
@@ -125,8 +127,6 @@ if (type === "article" && title) {
 <link rel="preload" href="/fonts/Geist.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
 
 <meta name="google-site-verification" content="kho65u9v63Iyq-j3KpnIKChy0yh_vVLZhzCrBDpnVVs" />
-<meta name="google-adsense-account" content="ca-pub-4943136052113535">
-
 <meta name="yandex-verification" content="0750847de0e7aa96" />
 
 <script type="text/partytown" src="https://www.googletagmanager.com/gtag/js?id=GT-MRM425N7"></script>

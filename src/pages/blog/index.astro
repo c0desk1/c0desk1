@@ -15,7 +15,7 @@ const publishedPosts = allPosts.filter((p: CollectionEntry<'blog'>) => !p.data.d
 const posts = sortByDate(publishedPosts);
 
 const featuredPost = posts.find((p: CollectionEntry<'blog'>) => p.data.featured === true);
-const regularPosts = posts.filter((p: CollectionEntry<'blog'>) => p.data.featured !== true);
+const regularPosts = posts.filter((p) => !p.data.featured);
 
 const allTags = getAllTags(posts);
 const popularTags = allTags.slice(0, 8);

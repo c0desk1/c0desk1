@@ -23,7 +23,7 @@ const projects = sortByDate(filterByDraft(allProjects), 'date');
 const featuredProjects = filterByFeatured(projects);
 const featuredProject = featuredProjects?.[0];
 
-const regularProjects = projects.filter(p => p.id !== featuredProject?.id);
+const regularProjects = projects.filter(p => !p.data.featured);
 
 const recentProjects = regularProjects.slice(0, 3);
 const allTechStacks = getAllTechStacks(projects);
