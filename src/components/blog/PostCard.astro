@@ -8,7 +8,7 @@ interface Props {
   post: CollectionEntry<'blog'>;
 }
 
-const { post, showTags = true } = Astro.props;
+const { post } = Astro.props;
 const { data, id, body } = post;
 const { title, description, pubDate, tags, featured } = data;
 
