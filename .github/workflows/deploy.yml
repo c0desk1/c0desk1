@@ -4,14 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       payload:
-      environment:
-        description: 'Environment to deploy'
-        required: true
-        default: 'production'
-        type: choice
-        options:
-          - production
-          - preview
+        description: 'Pages CMS payload'
+        required: false
+        type: string
 
 permissions:
   actions: write
@@ -24,7 +19,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6.0.2
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v6.4.0
         with:
@@ -44,4 +39,3 @@ jobs:
           projectName: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}
           directory: ./dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.event.inputs.environment == 'production' && 'main' || 'preview' }}
