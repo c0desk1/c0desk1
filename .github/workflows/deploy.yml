@@ -3,6 +3,7 @@ name: Deploy to Cloudflare Pages
 on:
   workflow_dispatch:
     inputs:
+      payload:
       environment:
         description: 'Environment to deploy'
         required: true
