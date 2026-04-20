@@ -7,7 +7,7 @@ export const siteConfig = {
   authorTitle: "Author",
   description: "Digital garden dan portofolio profesional yang berfokus pada pengembangan web modern, sistem minimalis, dan efisiensi kode.",
   url: "https://bimaakbar.my.id",
-  ogImage: "/og-image.png",
+  ogImage: "/images/c0desk1-og.webp",
   keywords: [
     "Web Developer",
     "Astro v6",
