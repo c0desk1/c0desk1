@@ -124,7 +124,7 @@ content:
           - name: name
             label: Nama
             type: string
-            default: "C0desk1"
+            default: "c0desk1"
             
           - name: avatar
             label: Avatar
