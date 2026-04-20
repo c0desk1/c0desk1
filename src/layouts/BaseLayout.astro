@@ -97,6 +97,23 @@ const {
                 });
               });
             </script>
+			<script is:inline>
+				window.yaContextCb.push(() => {
+    				Ya.Context.AdvManager.render({
+        				"blockId": "R-A-19135204-2",
+        				"type": "floorAd",
+        				"platform": "desktop"
+    				})
+				})
+			</script>
+			<script is:inline>
+				window.yaContextCb.push(() => {
+    				Ya.Context.AdvManager.render({
+        				"blockId": "R-A-19135204-3",
+        				"renderTo": "yandex_rtb_R-A-19135204-3"
+    				})
+				})
+			</script>
           </div>
         </Container>
       )}
