@@ -1,0 +1,97 @@
+---
+title: Capek Beresin File Manual? Sini Gue Bisikin Cara Automasi Windows Pake
+  PowerShell!
+description: Capek ngerapiin file manual? Sini gue ajarin bikin script
+  PowerShell buat auto-rename & delete file di Windows. Anti-error & praktis,
+  biar PC lu kerja!
+pubDate: 2026-04-20T14:44
+updatedDate: 2026-04-20T14:44
+tags:
+  - PowerShellIndonesia
+  - AutomasiWindows
+  - TipsProduktivitas
+  - Scripting
+  - TutorialWindows
+draft: true
+featured: false
+author:
+  name: c0desk1
+  title: Author
+seo:
+  title: "Cara Automasi Windows: Script PowerShell buat Auto Rename & Delete File"
+  description: Bosen ngerapiin file manual? Sini gue ajarin bikin script
+    PowerShell buat auto-rename & delete di Windows. Anti-error & praktis, biar
+    PC lu kerja!
+---
+Lu pernah nggak sih ngerasa kayak robot pas lagi ngerapiin folder? Misal, lu abis download ratusan aset desain atau foto, terus namanya berantakan semua kayak IMG_999_final_banget_v2.jpg. Atau yang lebih parah, folder "Downloads" lu udah penuh sampah file dari zaman Majapahit yang bikin SSD lu jerit-jerit?
+
+Kalo lu masih *rename* atau *delete* satu-satu pake klik kanan... asli, lu buang-buang waktu berharga lu.
+
+Di artikel ini, gue mau kasih tau cara bikin script PowerShell sederhana biar Windows lu kerja sendiri. Lu tinggal duduk manis sambil ngopi, biar script gue yang beresin sisanya.
+
+## PowerShell: Bukan Cuma Layar Biru Biasa
+
+Banyak yang nanya, *"Kenapa nggak pake CMD aja, Bang?"*. Gini ya, PowerShell itu jauh lebih "pinter" dibanding CMD. Dia bisa baca objek. Jadi kalau lu mau nyari file yang ukurannya di atas 1GB atau file yang nggak pernah dibuka selama setahun, PowerShell bisa nemuin itu dengan gampang banget.
+
+### 1. Jurus Auto-Rename: Biar Folder Lu Estetik
+
+Katakanlah lu punya folder isi foto-foto dari kamera yang namanya DSC001, DSC002, dsb. Terus lu pengen ubah jadi Projek_Keren_001.
+
+Sikat Pake Kode Ini:
+
+```
+# Ganti path-nya ke folder tujuan lu ya!
+$folderPath = "C:\Users\Gue\Documents\Project_Aset"
+
+# Ambil semua file, terus ganti namanya
+Get-ChildItem -Path $folderPath | ForEach-Object {
+    $namaBaru = $_.Name -replace "DSC", "Projek_Keren"
+    Rename-Item -Path $_.FullName -NewName $namaBaru
+}
+```
+
+Kenapa Gini?:
+
+1. Get-ChildItem: Ini cara lu bilang ke PowerShell, *"Eh, tolong liatin isi folder ini dong."*
+2. -replace: Ini perintah paling sakti buat nuker kata-kata sampah jadi kata-kata yang lu mau.
+
+### 2. Jurus Auto-Delete: Buang Mantan... Eh, File Sampah!
+
+Gue yakin folder Temp atau Downloads lu itu sarang hantu. Nah, kita bisa bikin script yang otomatis hapus file yang udah lebih dari 30 hari nggak lu sentuh.
+
+Copy-Paste Kode Ini:
+
+```
+# Target folder sampah lu
+$pathSampah = "D:\Downloads\Trash"
+$batasHari = 30
+
+# Cari yang udah jamuran, terus sikat!
+Get-ChildItem -Path $pathSampah -Recurse | Where-Object {
+    $_.LastWriteTime -lt (Get-Date).AddDays(-$batasHari)
+} | Remove-Item -Force
+```
+
+Tips Biar Nggak Menyesal:
+
+> Pro Tip: Kalau lu takut salah hapus, tambahin -WhatIf di akhir baris Remove-Item. Nanti PowerShell cuma bakal pamer, "Nih file yang BAKAL gue hapus," tanpa beneran ngehapus. Jadi lu bisa cek dulu.
+
+## Cara Biar Run Otomatis (Gak Perlu Klik-Klik Lagi)
+
+Script di atas nggak bakal guna kalau lu harus buka-tulis tiap hari. Lu harus pake Task Scheduler bawaan Windows:
+
+1. Cari Task Scheduler di Start Menu.
+2. Pilih Create Basic Task, kasih nama "Bersih-Bersih Folder".
+3. Di bagian Action, pilih Start a Program.
+4. Di bagian Program/script isi: powershell.exe.
+5. Di bagian Add arguments, masukin: -ExecutionPolicy Bypass -File "C:\Path\Ke\Script\Lu.ps1".
+
+Selesai! Sekarang tiap pagi pas lu nyalain PC, script itu bakal jalan sendiri di *background*.
+
+## Kesimpulan: Jangan Jadi Budak File!
+
+Hari gini masih manual? Sayang banget skill lu. Dengan automasi kecil kayak gini, lu udah selangkah lebih maju buat jadi power user yang efisien.
+
+Gue pengen tau nih, folder mana di PC lu yang paling berantakan sekarang? Atau lu punya ide automasi lain tapi bingung cara bikin script-nya?
+
+Tulis di kolom komentar ya, entar gue bantu racikin kodenya!
