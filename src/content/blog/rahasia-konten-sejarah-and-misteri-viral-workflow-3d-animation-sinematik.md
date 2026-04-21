@@ -11,10 +11,11 @@ tags:
   - Blender
   - MisteriSejarah
   - Edutainment
+image: /images/blog/rahasia-visual-konten-edutainment.webp
 imageAlt: Render 3D objek kuno dengan pencahayaan dramatis gaya industrial di
   dalam software animasi.
 imageCaption: Menghidupkan masa lalu dengan teknologi masa depan.
-draft: true
+draft: false
 featured: false
 author:
   name: Bima Akbar
@@ -25,6 +26,7 @@ seo:
   description: Mau bikin konten edutainment yang viral? Bongkar rahasia riset
     misteri & workflow 3D animation biar video sejarah lu makin sinematik. Cek
     di sini!
+  ogImage: /images/blog/og/og-rahasia-visual-konten-edutainment.webp
 ---
 Lu pernah nggak nonton video sejarah atau misteri di TikTok/YouTube yang visualnya keren banget sampe lu betah nonton sampe abis? Padahal cuma bahas kejadian ribuan tahun lalu. Kuncinya bukan cuma di ceritanya, tapi di gimana cara lu "menghidupkan" sejarah itu lewat visual.
 
