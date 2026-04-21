@@ -124,12 +124,12 @@ const lastUpdated = formatDateCompact(updatedDate || pubDate);
         <aside>
           <div class="lg:sticky lg:top-24 h-fit">
             <BlogTOC headings={tocHeadings} />
-<ReadingProgress />
           </div>
         </aside>
       </div>
     </Container>
   </article>
+  <ReadingProgress />
 </BaseLayout>
 <script is:inline>
   window.yaContextCb.push(() => {
