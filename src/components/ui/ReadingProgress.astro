@@ -3,39 +3,54 @@
 // @ts-nocheck
 ---
 
-<div id="reading-progress" class="fixed top-0 left-0 z-[9999] w-full h-[2px] bg-zinc-900 dark:bg-white origin-left scale-x-0 transition-transform duration-150 shadow-lg shadow-zinc-900/20 dark:shadow-white/20"></div>
+<div id="reading-progress-container" class="fixed top-0 left-0 z-[9999] w-full h-1 bg-zinc-200 dark:bg-zinc-800">
+  <div id="reading-progress-bar" class="h-full bg-emerald-500 origin-left scale-x-0 transition-transform duration-150"></div>
+</div>
+
+<div id="reading-percentage" class="fixed top-2 right-4 z-[9999] font-mono text-[10px] text-emerald-600 dark:text-emerald-400 bg-white/80 dark:bg-zinc-950/80 px-2 py-0.5 rounded-full backdrop-blur-sm opacity-0 transition-opacity duration-200 pointer-events-none">
+  0%
+</div>
 
 <script>
   (function() {
-    const progressBar = document.getElementById('reading-progress');
-    if (!progressBar) return;
-
-    let ticking = false;
+    const progressBar = document.getElementById('reading-progress-bar');
+    const percentageEl = document.getElementById('reading-percentage');
+    
+    if (!progressBar) {
+      console.error('ReadingProgress: Element not found!');
+      return;
+    }
+    
+    let timeout;
     
     const updateProgress = () => {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const scrollPercent = scrollTop / docHeight;
+      const percent = Math.round(scrollPercent * 100);
+      
       progressBar.style.transform = `scaleX(${scrollPercent})`;
-      ticking = false;
-    };
-
-    const requestTick = () => {
-      if (!ticking) {
-        requestAnimationFrame(updateProgress);
-        ticking = true;
+      
+      if (percentageEl) {
+        percentageEl.textContent = `${percent}%`;
+        percentageEl.style.opacity = '1';
+        
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          percentageEl.style.opacity = '0';
+        }, 1500);
       }
     };
-
-    window.addEventListener('scroll', requestTick);
+    
+    window.addEventListener('scroll', updateProgress);
     window.addEventListener('resize', updateProgress);
     updateProgress();
   })();
 </script>
 
 <style is:global>
-  #reading-progress {
+  #reading-progress-bar {
     transform-origin: 0 50%;
-    transition: transform 0.15s ease-out;
+    will-change: transform;
   }
 </style>
