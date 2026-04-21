@@ -8,8 +8,6 @@ import { siteConfig } from '@/config/site';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Container from '@/components/ui/Container.astro';
 import Breadcrumb from '@/components/ui/Breadcrumb.astro';
-import BackToTop from '@/components/ui/BackToTop.astro';
-
 import BlogHeader from '@/components/blog/BlogHeader.astro';
 import BlogFeaturedImage from '@/components/blog/BlogFeaturedImage.astro';
 import BlogContent from '@/components/blog/BlogContent.astro';
@@ -110,7 +108,6 @@ const lastUpdated = formatDate(updatedDate || pubDate);
           <BlogContent>
             <Content />
           </BlogContent>
-          <BackToTop showBorder={true} align="right" />
           <BlogRelatedPosts posts={relatedPosts} />
           <div id="yandex_rtb_R-A-19135204-3" class="pt-6"></div>
           
