@@ -21,6 +21,17 @@ const { projects, totalCount } = Astro.props;
         Proyek ({totalCount})
       </span>
     </div>
+    <div class="flex items-center gap-2 font-mono text-xs">
+        <a 
+          href="/rss.xml" 
+          class="p-2 text-zinc-500 hover:text-zinc-900 rounded-lg dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-all duration-200"
+          aria-label="Langganan RSS Feed"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z" />
+          </svg>
+        </a>
+      </div>
   </div>
 
   <!-- Grid -->

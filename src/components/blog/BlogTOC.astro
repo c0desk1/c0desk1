@@ -1,6 +1,5 @@
 ---
 // src/components/blog/BlogTOC.astro
-
 import { filterHeadingsForTOC } from '@/lib/utils';
 
 interface Heading {
@@ -18,26 +17,23 @@ const tocHeadings = filterHeadingsForTOC(headings);
 ---
 
 {tocHeadings.length > 0 && (
-  <aside class="hidden lg:block">
+  <aside class="block">
     <div class="sticky top-24">
-      <div class="mb-4 flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
-        <span class="font-mono text-zinc-400 dark:text-zinc-600">
-          //
-        </span>
-        <span>
+      <div class="mb-3">
+        <span class="text-xs md:text-sm font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
           Di halaman ini
         </span>
       </div>
-      <nav class="space-y-1 border-l border-zinc-200 dark:border-zinc-800 pl-3">
+      <nav class="space-y-2">
         {tocHeadings.map(h => (
           <a
             href={`#${h.slug}`}
-            class:list={[
-              "block text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors leading-relaxed",
-              { "pl-4 text-xs opacity-90": h.depth === 3 }
-            ]}
+            class="group block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
           >
-            {h.text}
+            <span class="relative inline-block">
+              {h.text}
+              <span class="absolute -bottom-0.5 left-0 w-0 h-px bg-zinc-400 dark:bg-zinc-500 group-hover:w-full transition-all duration-200"></span>
+            </span>
           </a>
         ))}
       </nav>

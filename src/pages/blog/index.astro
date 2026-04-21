@@ -7,19 +7,13 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Container from '@/components/ui/Container.astro';
 import BlogHero from '@/components/blog/BlogHero.astro';
 import BlogList from '@/components/blog/BlogList.astro';
-import BlogSidebar from '@/components/blog/BlogSidebar.astro';
-import { sortByDate, getAllTags, getArchiveCounts } from '@/lib/utils';
+import { sortByDate } from '@/lib/utils';
 
 const allPosts = await getCollection('blog');
 const publishedPosts = allPosts.filter((p: CollectionEntry<'blog'>) => !p.data.draft);
 const posts = sortByDate(publishedPosts);
 
-const featuredPost = posts.find((p: CollectionEntry<'blog'>) => p.data.featured === true);
-const regularPosts = posts.filter((p) => !p.data.featured);
-
-const allTags = getAllTags(posts);
-const popularTags = allTags.slice(0, 8);
-const archiveCounts = getArchiveCounts(posts);
+const regularPosts = posts;
 
 const seoData = {
   title: "Blog & Insights",
@@ -30,19 +24,8 @@ const seoData = {
 <BaseLayout {...seoData} type="website">
   <BlogHero />
   <Container size="md" class="py-12 md:py-16">
-    <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_260px] gap-10 lg:gap-12">
-      <div class="min-w-0">
-        <BlogList 
-          featuredPost={featuredPost}
-          regularPosts={regularPosts}
-        />
-      </div>
-      <aside class="lg:sticky lg:top-24 h-fit">
-        <BlogSidebar 
-          popularTags={popularTags}
-          archiveCounts={archiveCounts}
-        />
-      </aside>
-    </div>
+    <BlogList
+      regularPosts={regularPosts}
+    />
   </Container>
 </BaseLayout>

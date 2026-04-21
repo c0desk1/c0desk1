@@ -7,7 +7,7 @@ function ensureDate(date: Date | string | number): Date {
   return new Date(date);
 }
 
-export function formatDate(date: Date | string | number, locale: string = 'en-US'): string {
+export function formatDate(date: Date | string | number, locale: string = 'id-ID'): string {
   const d = ensureDate(date);
   return d.toLocaleDateString(locale, {
     year: 'numeric',
@@ -16,10 +16,9 @@ export function formatDate(date: Date | string | number, locale: string = 'en-US
   });
 }
 
-export function formatDateCompact(date: Date | string | number, locale: string = 'en-US'): string {
+export function formatDateCompact(date: Date | string | number, locale: string = 'id-ID'): string {
   const d = ensureDate(date);
   return d.toLocaleDateString(locale, {
-    year: 'numeric',
     month: 'short',
     day: 'numeric',
   });

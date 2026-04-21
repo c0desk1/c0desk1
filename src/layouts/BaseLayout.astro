@@ -7,7 +7,6 @@ import Header from "@/components/layout/Header.astro";
 import Footer from "@/components/layout/Footer.astro";
 import Container from "@/components/ui/Container.astro";
 import HomeCTA from "@/components/home/HomeCTA.astro";
-import ReadingProgress from '@/components/ui/ReadingProgress.astro';
 
 interface Props {
   title?: string;
@@ -73,12 +72,12 @@ const {
       tags={tags}
     />
   </head>
-  <body class="bg-zinc-50 dark:bg-zinc-950 text-zinc-950 dark:text-zinc-50 antialiased font-medium">
-    <ReadingProgress />
-    {header && <Header />}    
+  <body class="bg-white dark:bg-black text-zinc-950 dark:text-zinc-50 antialiased font-medium bg-vercel-dots">
+    {header && <Header />}
+    
     <main>
       {container ? (
-        <Container size={containerSize}>
+        <Container size={containerSize} class="">
           <slot />
         </Container>
       ) : (
@@ -88,7 +87,7 @@ const {
       <!-- Yandex Ads  -->
       {import.meta.env.PROD && (
   		<Container size={containerSize}>
-			<div class="yandex-ads my-8">
+			  <div class="yandex-ads my-8">
       		<script is:inline>window.yaContextCb = window.yaContextCb || [];</script>
       		<script async src="https://yandex.ru/ads/system/context.js"></script>
       		<script is:inline>
@@ -116,7 +115,7 @@ const {
     </main>    
     {footer && <Footer />}
     <noscript>
-		<div><img src="https://mc.yandex.ru/watch/108674014" style="position:absolute; left:-9999px;" alt="" /></div>
-	</noscript>
+      <div><img src="https://mc.yandex.ru/watch/108674014" style="position:absolute; left:-9999px;" alt="" /></div>
+    </noscript>
   </body>
 </html>

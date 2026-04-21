@@ -16,6 +16,7 @@ import BlogContent from '@/components/blog/BlogContent.astro';
 import BlogTOC from '@/components/blog/BlogTOC.astro';
 import BlogRelatedPosts from '@/components/blog/BlogRelatedPosts.astro';
 import BlogFeedback from '@/components/blog/BlogFeedback.astro';
+import ReadingProgress from '@/components/ui/ReadingProgress.astro';
 
 import {
   filterHeadingsForTOC,
@@ -77,27 +78,24 @@ const lastUpdated = formatDateCompact(updatedDate || pubDate);
   tags={tags}
   container={false}
 >
+  <ReadingProgress /> 
   <article>
-    <div class="border-b border-zinc-100 dark:border-zinc-900">
-      <Container size="md" class="py-8 md:py-10">
-        <Breadcrumb items={[
-          { name: 'Home', href: '/' },
-          { name: 'Blog', href: '/blog' },
-        ]} />
-        <BlogHeader
-          title={title}
-          pubDate={pubDate}
-          updatedDate={updatedDate}
-          readingTime={readingTime}
-          tags={tags}
-          authorName={author?.name} 
-          authorAvatar={author?.avatar} 
-          authorTitle={author?.title}
-          featured={featured}
-        />
-      </Container>
-    </div>
-    
+    <Container size="sm" class="py-6 md:py-8">
+      <Breadcrumb items={[
+        { name: 'Home', href: '/' },
+        { name: 'Blog', href: '/blog/' },
+      ]} />
+      <BlogHeader
+        title={title}
+        pubDate={pubDate}
+        updatedDate={updatedDate}
+        readingTime={readingTime}
+        authorName={author?.name} 
+        authorAvatar={author?.avatar} 
+        authorTitle={author?.title}
+        featured={featured}
+      />
+    </Container>
     {displayImage && (
       <BlogFeaturedImage
         image={displayImage}
@@ -105,26 +103,22 @@ const lastUpdated = formatDateCompact(updatedDate || pubDate);
         caption={imageCaption || imageAlt}
       />
     )}
-
-    <Container size="md" class="py-10 md:py-12">
-      <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-8 md:gap-12">
+    <Container size="sm" class="py-10 md:py-12">
+      <div class="grid grid-cols-1 gap-8 md:gap-12">
+        <BlogTOC headings={tocHeadings} />
         <div class="min-w-0">
           <BlogContent>
             <Content />
           </BlogContent>
-          <BlogRelatedPosts posts={relatedPosts} />
           <BlogFeedback
             slug={post.id}
             lastUpdated={lastUpdated}
           />
-          <div id="yandex_rtb_R-A-19135204-3" class="pt-4"></div>
           <BackToTop showBorder={true} align="right" />
+          <BlogRelatedPosts posts={relatedPosts} />
+          <div id="yandex_rtb_R-A-19135204-3" class="pt-6"></div>
+          
         </div>
-        <aside>
-          <div class="lg:sticky lg:top-24 h-fit">
-            <BlogTOC headings={tocHeadings} />
-          </div>
-        </aside>
       </div>
     </Container>
   </article>

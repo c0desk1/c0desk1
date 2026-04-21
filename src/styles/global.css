@@ -18,7 +18,7 @@
 }
 
 .dark {
-  background-color: #09090b;
+  background-color: #000000;
   color: #fafafa;
 }
 
@@ -58,4 +58,52 @@
 
 * {
   box-sizing: border-box;
+}
+
+.bg-vercel-radial {
+  background-image: radial-gradient(circle at 25% 0%, rgba(0,0,0,0.02) 0%, transparent 50%);
+}
+
+.dark .bg-vercel-radial {
+  background-image: radial-gradient(circle at 25% 0%, rgba(255,255,255,0.03) 0%, transparent 50%);
+}
+
+.bg-vercel-grid {
+  background-image: 
+    linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.dark .bg-vercel-grid {
+  background-image: 
+    linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+}
+
+.bg-vercel-dots {
+  background-image: radial-gradient(rgba(0,0,0,0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.dark .bg-vercel-dots {
+  background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+}
+
+.section-border-top {
+  position: relative;
+}
+
+.section-border-top::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
+}
+
+.dark .section-border-top::before {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
 }

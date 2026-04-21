@@ -13,9 +13,9 @@
 .prose-custom h2,
 .prose-custom h3,
 .prose-custom h4 {
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.02em;
-  line-height: 1.25;
+  line-height: 1.3;
 }
 
 .prose-custom h1 {
@@ -38,7 +38,7 @@
 
 .prose-custom h4 {
   font-size: 1.125rem;
-  font-weight: 600;
+  font-weight: 500;
   margin-top: 1rem;
   margin-bottom: 0.5rem;
 }
@@ -64,23 +64,27 @@
 /* ==================== LINKS ==================== */
 
 .prose-custom a {
-  color: #18181b;
-  text-decoration: none;
-  border-bottom: 1px solid #a1a1aa;
-  transition: border-color 0.2s;
+  color: #10b981;
+  
+  transition: text-decoration-color 0.2s;
 }
 
 .dark .prose-custom a {
-  color: #ffffff;
-  border-bottom-color: #52525b;
+  color: #10b981;
 }
 
 .prose-custom a:hover {
-  border-bottom-color: #18181b;
+  text-decoration-color: #18181b;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
 }
 
 .dark .prose-custom a:hover {
-  border-bottom-color: #ffffff;
+  text-decoration-color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
 }
 
 /* ==================== STRONG & EM ==================== */
@@ -123,7 +127,7 @@
 .prose-custom pre {
   background-color: #09090b;
   border: 1px solid #27272a;
-  border-radius: 0.25rem;
+  border-radius: 0.5rem;
   padding: 1rem;
   overflow-x: auto;
   margin: 1rem 0;
@@ -147,28 +151,28 @@
 /* ==================== IMAGES ==================== */
 
 .prose-custom img {
-  border: 1px solid #e4e4e7;
+  border-radius: 0.5rem;
   margin: 1.5rem 0;
   max-width: 100%;
   height: auto;
+  border: 1px solid #e4e4e7
 }
 
 .dark .prose-custom img {
-  border-color: #27272a;
+  border: 1.5px solid #18181b
 }
 
 /* ==================== BLOCKQUOTE ==================== */
 
 .prose-custom blockquote {
-  border-left: 2px solid #a1a1aa;
+  border-left: 2px solid #e4e4e7;
   padding-left: 1rem;
   margin: 1rem 0;
-  font-style: italic;
   color: #52525b;
 }
 
 .dark .prose-custom blockquote {
-  border-left-color: #52525b;
+  border-left-color: #3f3f46;
   color: #a1a1aa;
 }
 
@@ -178,108 +182,42 @@
 .prose-custom ol {
   margin: 1rem 0;
   padding-left: 1.5rem;
-  list-style: none;
 }
 
-.prose-custom ul > li,
-.prose-custom ol > li {
-  position: relative;
+.prose-custom ul {
+  list-style-type: disc;
+}
+
+.prose-custom ul ul {
+  list-style-type: circle;
+  margin: 0.25rem 0;
+}
+
+.prose-custom ul ul ul {
+  list-style-type: square;
+}
+
+.prose-custom ol {
+  list-style-type: decimal;
+}
+
+.prose-custom ol ol {
+  list-style-type: lower-alpha;
+  margin: 0.25rem 0;
+}
+
+.prose-custom ol ol ol {
+  list-style-type: lower-roman;
+}
+
+.prose-custom li {
   color: #3f3f46;
-  margin-bottom: 0.375rem;
+  margin-bottom: 0.25rem;
 }
 
-.dark .prose-custom ul > li,
-.dark .prose-custom ol > li {
+.dark .prose-custom li {
   color: #d4d4d8;
 }
-
-/* Unordered List */
-.prose-custom ul > li {
-  padding-left: 1rem;
-}
-
-.prose-custom ul > li::before {
-  content: "—";
-  position: absolute;
-  left: -0.25rem;
-  top: 0.150rem;
-  color: #10b981;
-  font-family: monospace;
-}
-
-.dark .prose-custom ul > li::before {
-  color: #34d399;
-}
-
-/* Nested Unordered List */
-.prose-custom ul ul {
-  margin: 0.25rem 0;
-}
-
-.prose-custom ul ul > li {
-  padding-left: 1.25rem;
-}
-
-.prose-custom ul ul > li::before {
-  content: "•";
-  color: #71717a;
-  left: 0;
-}
-
-/* Deep Nested */
-.prose-custom ul ul ul > li::before {
-  content: "◦";
-}
-
-/* Ordered List */
-.prose-custom ol {
-  counter-reset: item;
-}
-
-.prose-custom ol > li {
-  padding-left: 1.25rem;
-  counter-increment: item;
-}
-
-.prose-custom ol > li::before {
-  content: counter(item) ".";
-  position: absolute;
-  left: 0;
-  color: #10b981;
-  /*font-family: monospace; */
-}
-
-/* Nested Ordered List */
-.prose-custom ol ol {
-  counter-reset: subitem;
-  margin: 0.25rem 0;
-}
-
-.prose-custom ol ol > li {
-  padding-left: 1.5rem;
-  counter-increment: subitem;
-}
-
-.prose-custom ol ol > li::before {
-  content: counter(item) "." counter(subitem) ".";
-  color: #71717a;
-  font-size: 0.875rem;
-}
-
-/* Mixed Nested (ul dalam ol, ol dalam ul) */
-.prose-custom ol ul > li::before,
-.prose-custom ul ol > li::before {
-  color: #71717a;
-}
-
-/* List Item Hover - no color change */
-/*.prose-custom li:hover {
-  color: inherit;
-}*/
-
-/*.prose-custom li:hover::before {
-  color: inherit;
-}*/
 
 /* ==================== TABLE ==================== */
 
@@ -287,6 +225,7 @@
   width: 100%;
   margin: 1rem 0;
   border-collapse: collapse;
+  font-size: 0.875rem;
 }
 
 .prose-custom th,
@@ -322,12 +261,12 @@
 
 .prose-custom hr {
   border: none;
-  border-top: 1px dashed #e4e4e7;
+  border-top: 1px solid #e4e4e7;
   margin: 2rem 0;
 }
 
 .dark .prose-custom hr {
-  border-top-color: #3f3f46;
+  border-top-color: #18181b;
 }
 
 /* ==================== FIGURE ==================== */
@@ -341,7 +280,6 @@
   font-size: 0.75rem;
   color: #71717a;
   margin-top: 0.5rem;
-  font-family: monospace;
 }
 
 .dark .prose-custom figcaption {
@@ -397,7 +335,6 @@
 .prose-custom address {
   font-style: normal;
   color: #52525b;
-  font-family: monospace;
   font-size: 0.875rem;
 }
 
@@ -405,9 +342,8 @@
   color: #a1a1aa;
 }
 
-/* ==================== ADDITIONAL PROSE ELEMENTS ==================== */
+/* ==================== ADDITIONAL ==================== */
 
-/* Superscript & Subscript */
 .prose-custom sup,
 .prose-custom sub {
   font-size: 0.75rem;
@@ -422,7 +358,6 @@
   vertical-align: sub;
 }
 
-/* Small Text */
 .prose-custom small {
   font-size: 0.875rem;
   color: #71717a;
@@ -432,7 +367,6 @@
   color: #a1a1aa;
 }
 
-/* Mark / Highlight */
 .prose-custom mark {
   background-color: #fef3c7;
   color: #18181b;
@@ -445,18 +379,16 @@
   color: #fef3c7;
 }
 
-/* Abbreviation */
 .prose-custom abbr[title] {
   text-decoration: underline dotted;
   cursor: help;
 }
 
-/* Details / Summary */
 .prose-custom details {
   margin: 1rem 0;
   padding: 0.5rem;
   border: 1px solid #e4e4e7;
-  border-radius: 0.25rem;
+  border-radius: 0.5rem;
 }
 
 .dark .prose-custom details {
@@ -471,11 +403,4 @@
 
 .prose-custom summary:hover {
   color: #10b981;
-}
-
-/* Keyboard shortcut */
-.prose-custom kbd kbd {
-  background-color: transparent;
-  padding: 0;
-  border: none;
 }

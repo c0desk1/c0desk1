@@ -1,7 +1,7 @@
 ---
 // src/components/blog/BlogMeta.astro
 
-import { formatDateCompact } from '@/lib/utils';
+import { formatDate } from '@/lib/utils';
 
 interface Props {
   pubDate: Date;
@@ -11,31 +11,27 @@ interface Props {
 
 const { pubDate, readingTime, featured = false } = Astro.props;
 
-const formattedDate = formatDateCompact(pubDate);
+const formattedDate = formatDate(pubDate);
 ---
 
-<div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-zinc-500 dark:text-zinc-400">
-  <span class="font-mono font-semibold text-emerald-600 dark:text-emerald-500 shrink-0">
-    $
-  </span>
-  <time 
-    class="font-mono text-zinc-600 dark:text-zinc-400"
-    datetime={pubDate.toISOString()}
-  >
-    {formattedDate}
-  </time>
-  <span class="flex items-center gap-1 text-zinc-400 dark:text-zinc-500">
-    <span class="opacity-40">•</span>
-    <span class="font-mono">
+<div class="flex flex-wrap justify-between items-center text-xs md:text-sm text-zinc-500 dark:text-zinc-400">
+  <section class="flex items-center gap-2">
+    {featured && (
+      <span class="items-center gap-1 text-amber-600 dark:text-amber-500">
+        ▼
+      </span>
+    )}
+    <span>
       {readingTime}
     </span>
   </span>
-  {featured && (
-    <span class="flex items-center gap-1 text-amber-600 dark:text-amber-500">
-      <span class="opacity-40 text-zinc-400">•</span>
-      <span class="font-mono">
-        ▼
-      </span>
-    </span>
-  )}
+  </section>
+  <section class="flex items-center gap-1">
+    <time 
+      class="text-zinc-600 dark:text-zinc-400"
+      datetime={pubDate.toISOString()}
+    >
+      {formattedDate}
+    </time>
+  </section>
 </div>

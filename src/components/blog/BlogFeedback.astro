@@ -12,29 +12,25 @@ const lastUpdatedDate = typeof lastUpdated === 'string' ? new Date(lastUpdated) 
 const formattedDate = formatDateCompact(lastUpdatedDate);
 ---
 
-<section class="mt-12 pt-6 border-t border-zinc-200 dark:border-zinc-800">
-  <div class="flex flex-wrap items-center justify-between gap-3 text-sm text-zinc-500 dark:text-zinc-400">
-    <!-- Left -->
+<section class="pt-6 border-t border-zinc-200 dark:border-zinc-900">
+  <div class="flex flex-wrap items-center justify-between gap-2 text-xs md:text-sm text-zinc-500 dark:text-zinc-400">
     <div class="flex items-center gap-2">
-      <span class="font-mono font-semibold text-emerald-600 dark:text-emerald-500">▼</span>
       <span class="opacity-90">Kesalahan ketik?</span>
       <span class="opacity-40">/</span>
       <a 
         href={`${siteConfig.links.github}/edit/main/src/content/blog/${slug}.md`}
         target="_blank"
         rel="noopener noreferrer"
-        class="font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white underline-offset-2 hover:underline transition-colors focus:outline-none"
+        class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white underline-offset-2 hover:underline transition-colors focus:outline-none"
         aria-label="Edit this post on GitHub"
       >
         Edit di GitHub
       </a>
     </div>
-    <div class="flex items-center gap-1 text-xs text-zinc-400 dark:text-zinc-500">
-      <span>[</span>
-      <span class="font-mono">
+    <div class="flex items-center gap-1 text-xs md:text-sm text-zinc-400 dark:text-zinc-500">
+      <span>
         Diperbarui: {formattedDate}
       </span>
-      <span>]</span>
     </div>
   </div>
 </section>
