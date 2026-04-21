@@ -8,6 +8,7 @@ import PortfolioHero from '@/components/portfolio/PortfolioHero.astro';
 import PortfolioFeatured from '@/components/portfolio/PortfolioFeatured.astro';
 import PortfolioList from '@/components/portfolio/PortfolioList.astro';
 import PortfolioSidebar from '@/components/portfolio/PortfolioSidebar.astro';
+import Breadcrumb from '@/components/ui/Breadcrumb.astro';
 
 import {
   sortByDate,
@@ -36,8 +37,12 @@ const seoData = {
 ---
 
 <BaseLayout {...seoData} type="website">
+  <Breadcrumb items={[
+      { name: 'Home', href: '/' },
+      { name: 'Portfolio', href: '/portfolio' }
+    ]} />
   <PortfolioHero />
-  <Container size="lg" class="py-10 md:py-12">
+  <Container size="md" class="py-10 md:py-12">
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-12">
       <div class="min-w-0">
         {featuredProject && (
