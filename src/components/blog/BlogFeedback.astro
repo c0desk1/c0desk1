@@ -2,35 +2,26 @@
 // src/components/blog/BlogFeedback.astro
 
 import { siteConfig } from '@/config/site';
-import { formatDateCompact } from '@/lib/utils';
 
-interface Props { slug: string; lastUpdated: Date | string; }
+interface Props { slug: string; }
 
-const { slug, lastUpdated } = Astro.props;
-
-const lastUpdatedDate = typeof lastUpdated === 'string' ? new Date(lastUpdated) : lastUpdated;
-const formattedDate = formatDateCompact(lastUpdatedDate);
+const { slug } = Astro.props;
 ---
 
 <section class="pt-6 border-t border-zinc-200 dark:border-zinc-900">
   <div class="flex flex-wrap items-center justify-between gap-2 text-xs md:text-sm text-zinc-500 dark:text-zinc-400">
     <div class="flex items-center gap-2">
-      <span class="opacity-90">Kesalahan ketik?</span>
-      <span class="opacity-40">/</span>
+      <span>Kesalahan ketik?</span>
+      <span>/</span>
       <a 
         href={`${siteConfig.links.github}/edit/main/src/content/blog/${slug}.md`}
         target="_blank"
         rel="noopener noreferrer"
-        class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white underline-offset-2 hover:underline transition-colors focus:outline-none"
+        class="text-zinc-800 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white underline-offset-2 hover:underline focus:outline-none"
         aria-label="Edit this post on GitHub"
       >
         Edit di GitHub
       </a>
-    </div>
-    <div class="flex items-center gap-1 text-xs md:text-sm text-zinc-400 dark:text-zinc-500">
-      <span>
-        Diperbarui: {formattedDate}
-      </span>
     </div>
   </div>
 </section>
