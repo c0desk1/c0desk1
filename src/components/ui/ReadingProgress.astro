@@ -3,7 +3,7 @@
 // @ts-nocheck
 ---
 
-<div id="reading-progress" class="fixed top-0 left-0 z-100 w-full h-2 bg-zinc-900 dark:bg-white origin-left scale-x-0 transition-transform duration-150"></div>
+<div id="reading-progress" class="fixed top-0 left-0 z-[9999] w-full h-[2px] bg-zinc-900 dark:bg-white origin-left scale-x-0 transition-transform duration-150 shadow-lg shadow-zinc-900/20 dark:shadow-white/20"></div>
 
 <script>
   (function() {
@@ -37,6 +37,5 @@
   #reading-progress {
     transform-origin: 0 50%;
     transition: transform 0.15s ease-out;
-    will-change: transform;
   }
 </style>
