@@ -16,7 +16,6 @@ import BlogContent from '@/components/blog/BlogContent.astro';
 import BlogTOC from '@/components/blog/BlogTOC.astro';
 import BlogRelatedPosts from '@/components/blog/BlogRelatedPosts.astro';
 import BlogFeedback from '@/components/blog/BlogFeedback.astro';
-import ReadingProgress from '@/components/ui/ReadingProgress.astro';
 
 import {
   filterHeadingsForTOC,
@@ -78,7 +77,6 @@ const lastUpdated = formatDateCompact(updatedDate || pubDate);
   tags={tags}
   container={false}
 >
-  <ReadingProgress />
   <article>
     <div class="border-b border-zinc-100 dark:border-zinc-900">
       <Container size="md" class="py-8 md:py-10">
