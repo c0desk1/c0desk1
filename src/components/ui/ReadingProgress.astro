@@ -1,0 +1,42 @@
+---
+// src/components/ui/ReadingProgress.astro
+// @ts-nocheck
+---
+
+<div id="reading-progress" class="fixed top-0 left-0 z-50 w-full h-2 bg-zinc-900 dark:bg-white origin-left scale-x-0 transition-transform duration-150"></div>
+
+<script>
+  (function() {
+    const progressBar = document.getElementById('reading-progress');
+    if (!progressBar) return;
+
+    let ticking = false;
+    
+    const updateProgress = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = scrollTop / docHeight;
+      progressBar.style.transform = `scaleX(${scrollPercent})`;
+      ticking = false;
+    };
+
+    const requestTick = () => {
+      if (!ticking) {
+        requestAnimationFrame(updateProgress);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', requestTick);
+    window.addEventListener('resize', updateProgress);
+    updateProgress();
+  })();
+</script>
+
+<style is:global>
+  #reading-progress {
+    transform-origin: 0 50%;
+    transition: transform 0.15s ease-out;
+    will-change: transform;
+  }
+</style>
