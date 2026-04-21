@@ -78,6 +78,7 @@ const lastUpdated = formatDateCompact(updatedDate || pubDate);
   tags={tags}
   container={false}
 >
+  <ReadingProgress />
   <article>
     <div class="border-b border-zinc-100 dark:border-zinc-900">
       <Container size="md" class="py-8 md:py-10">
@@ -128,7 +129,6 @@ const lastUpdated = formatDateCompact(updatedDate || pubDate);
         </aside>
       </div>
     </Container>
-    <ReadingProgress />
   </article>
 </BaseLayout>
 <script is:inline>
