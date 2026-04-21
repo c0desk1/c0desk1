@@ -7,6 +7,7 @@ import Header from "@/components/layout/Header.astro";
 import Footer from "@/components/layout/Footer.astro";
 import Container from "@/components/ui/Container.astro";
 import HomeCTA from "@/components/home/HomeCTA.astro";
+import ReadingProgress from '@/components/ui/ReadingProgress.astro';
 
 interface Props {
   title?: string;
@@ -73,6 +74,7 @@ const {
     />
   </head>
   <body class="bg-zinc-50 dark:bg-zinc-950 text-zinc-950 dark:text-zinc-50 antialiased font-medium">
+    <ReadingProgress />
     {header && <Header />}    
     <main>
       {container ? (
