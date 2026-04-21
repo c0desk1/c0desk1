@@ -2,8 +2,21 @@
 // src/components/blog/BlogContent.astro
 
 import '@/styles/prose.css';
+import { formatDate } from '@/lib/utils';
+
+interface Props { lastUpdated: Date | string; }
+
+const { lastUpdated } = Astro.props;
+
+const lastUpdatedDate = typeof lastUpdated === 'string' ? new Date(lastUpdated) : lastUpdated;
+const formattedDate = formatDate(lastUpdatedDate);
 ---
 
 <div class="prose-custom">
   <slot />
 </div>
+<div class="flex items-center gap-1 text-xs md:text-sm text-zinc-400 dark:text-zinc-500">
+      <span>
+        Diperbarui: {formattedDate}
+      </span>
+    </div>
