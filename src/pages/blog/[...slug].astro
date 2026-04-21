@@ -21,6 +21,7 @@ import {
   filterHeadingsForTOC,
   getRelatedPosts,
   formatDateCompact,
+  formatDate,
   getReadingTime
 } from '@/lib/utils';
 
@@ -64,7 +65,7 @@ const seoImage = seo?.ogImage || image || siteConfig.ogImage;
 const tocHeadings = filterHeadingsForTOC(headings);
 const displayImage = image; 
 const readingTime = getReadingTime(post.body, 'id');
-const lastUpdated = formatDateCompact(updatedDate || pubDate);
+const lastUpdated = formatDate(updatedDate || pubDate);
 ---
 
 <BaseLayout
