@@ -1,38 +1,48 @@
 ---
 // src/components/ui/ReadingProgress.astro
-// @ts-nocheck
 ---
 
-<div id="reading-progress-container" class="fixed top-0 left-0 z-[9999] w-full h-1 bg-zinc-200 dark:bg-zinc-800">
-  <div id="reading-progress-bar" class="h-full bg-linear-to-r from-emerald-500 to-emerald-400 origin-left scale-x-0 transition-transform duration-150 shadow-lg shadow-emerald-500/50"></div>
+<div class="reading-progress-container sticky top-[64px] z-40 w-full h-1 bg-(--border)/30 pointer-events-none">
+    <div 
+        id="reading-bar" 
+        class="h-full bg-blue-600 w-0 transition-all duration-75 ease-linear shadow-[0_0_8px_rgba(37,99,235,0.5)]"
+    ></div>
 </div>
 
-<script is:inline>
-  (function() {
-    const progressBar = document.getElementById('reading-progress-bar');
-    if (!progressBar) {
-      console.error('ReadingProgress: Element not found!');
-      return;
+<script>
+    function initReadingProgress() {
+        const bar = document.getElementById('reading-bar');
+        const article = document.querySelector('article');
+
+        if (!bar || !article) return;
+
+        const updateProgress = () => {
+            const rect = article.getBoundingClientRect();
+            const articleHeight = article.offsetHeight;
+            
+            const progress = Math.max(0, Math.min(100, ((-rect.top) / (articleHeight - window.innerHeight)) * 100));
+            
+            bar.style.width = `${progress}%`;
+
+            if (progress >= 100 || rect.top > 0) {
+                bar.style.opacity = '0';
+            } else {
+                bar.style.opacity = '1';
+            }
+        };
+
+        window.addEventListener('scroll', updateProgress, { passive: true });
+        updateProgress();
     }
-    
-    console.log('ReadingProgress: Initialized');
-    
-    const updateProgress = () => {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPercent = scrollTop / docHeight;
-      progressBar.style.transform = `scaleX(${scrollPercent})`;
-    };
-    
-    window.addEventListener('scroll', updateProgress);
-    window.addEventListener('resize', updateProgress);
-    updateProgress();
-  })();
+    initReadingProgress();
+    document.addEventListener('astro:page-load', initReadingProgress);
 </script>
 
-<style is:global>
-  #reading-progress-bar {
-    transform-origin: 0 50%;
-    will-change: transform;
-  }
+<style>
+    .reading-progress-container {
+        margin-top: -1px; 
+    }
+    #reading-bar {
+        transition: width 0.1s ease-out, opacity 0.3s ease-in-out;
+    }
 </style>
