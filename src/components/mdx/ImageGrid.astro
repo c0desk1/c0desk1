@@ -6,19 +6,21 @@ interface Props {
 }
 
 const { images, columns = 2 } = Astro.props;
-
 const isSingle = images.length === 1;
 ---
 
 <div class={`not-prose my-12 overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-200 dark:bg-zinc-800 ${!isSingle ? 'grid grid-cols-1 gap-px' : ''} ${!isSingle && columns === 2 ? 'md:grid-cols-2' : ''} ${!isSingle && columns === 3 ? 'md:grid-cols-3' : ''}`}>
   {images.map((img) => (
-    <figure class="group relative bg-white dark:bg-zinc-950 flex flex-col h-full m-0">
-      <div class="aspect-video overflow-hidden">
+    <figure class="group relative bg-white dark:bg-zinc-950 flex flex-col h-full m-0 overflow-hidden">
+      <div class="relative aspect-video overflow-hidden bg-zinc-100 dark:bg-zinc-900">
+        <div class="absolute inset-0 animate-pulse bg-zinc-200 dark:bg-zinc-800" aria-hidden="true"></div>
         <img
           src={img.src}
           alt={img.alt}
-          class="h-full w-full object-cover transition-opacity duration-300 group-hover:opacity-90"
+          class="relative z-10 h-full w-full object-cover opacity-0 transition-all duration-500 group-hover:scale-105"
           loading="lazy"
+          decoding="async"
+          onload="this.style.opacity='1'"
         />
       </div>
       {img.caption && (
