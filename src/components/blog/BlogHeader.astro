@@ -15,25 +15,46 @@ interface Props {
   featured?: boolean;
 }
 
-const { title, pubDate, readingTime, authorName,
+const {
+  title,
+  pubDate,
+  readingTime,
+  authorName,
   authorAvatar,
-  authorTitle, featured } = Astro.props;
+  authorTitle,
+  featured
+} = Astro.props;
 ---
 
-<header class="w-full items-center text-center mx-auto py-6 space-y-8">
-  <h1 class="text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 leading-[1.1]">
+<header class="w-full max-w-3xl mx-auto text-center py-4 md:py-6">
+  <h1
+    class="
+      text-2xl
+      sm:text-3xl
+      md:text-4xl
+      lg:text-5xl
+      font-semibold
+      tracking-tight
+      text-zinc-900
+      dark:text-zinc-100
+      leading-[1.15]
+      mb-4
+    "
+  >
     {title}
   </h1>
-  <BlogAuthor 
-    name={authorName}
-    avatar={authorAvatar}
-    title={authorTitle}
+  {authorName && (
+    <div class="mb-3">
+      <BlogAuthor 
+        name={authorName}
+        avatar={authorAvatar}
+        title={authorTitle}
+      />
+    </div>
+  )}
+  <BlogMeta 
+    pubDate={pubDate}
+    readingTime={readingTime}
+    featured={featured}
   />
-  <div class="pt-1">
-    <BlogMeta 
-      pubDate={pubDate}
-      readingTime={readingTime}
-      featured={featured}
-    />
-  </div>
 </header>

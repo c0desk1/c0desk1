@@ -90,20 +90,30 @@
   background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
 }
 
-.section-border-top {
+.section-divider {
   position: relative;
 }
 
-.section-border-top::before {
-  content: '';
+.section-divider::before {
+  content: "";
   position: absolute;
+  inset-inline: 0;
   top: 0;
-  left: 0;
-  right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(24,24,27,0.08),
+    transparent
+  );
 }
 
-.dark .section-border-top::before {
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+.dark .section-divider::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.08),
+    transparent
+  );
 }

@@ -206,7 +206,7 @@
   border: 1.5px solid #18181b
 }
 
-{/*.prose-custom img + em {
+/*.prose-custom img + em {
   display: block;
   text-align: center;
   font-size: 0.75rem;
@@ -214,11 +214,11 @@
   font-style: normal;
   margin-top: -1rem;
   margin-bottom: 1.5rem;
-}*/}
+}*/
 
-{/*.dark .prose-custom img + em {
+/*.dark .prose-custom img + em {
   color: #a1a1aa;
-}*/}
+}*/
 
 /* ==================== BLOCKQUOTE ==================== */
 
@@ -385,14 +385,15 @@
   margin: 2rem 0;
 }
 
-.prose-custom figure > p, .prose-custom figure p > img {
+.prose-custom figure > p,
+.prose-custom figure p > img {
   margin: 0;
 }
 
 .prose-custom figure img {
   width: 100%;
   height: auto;
-  border-radius: 0.5rem;
+
   border: 1px solid #e4e4e7;
 }
 

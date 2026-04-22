@@ -79,7 +79,6 @@ const lastUpdated = formatDate(updatedDate || pubDate);
   container={false}
 >
 <article>
-  <!-- HEADER AREA -->
   <Container size="sm" class="pt-6 md:pt-8 pb-2">
     <Breadcrumb
       items={[
@@ -99,16 +98,16 @@ const lastUpdated = formatDate(updatedDate || pubDate);
     />
 
   </Container>
-
-  <!-- FEATURED IMAGE -->
-  {image && (
-    <BlogFeaturedImage
-      image={image}
-      alt={imageAlt || title}
-      caption={imageCaption || imageAlt}
-    />
-  )}
-
+  <Container size="sm">
+    <!-- FEATURED IMAGE -->
+    {image && (
+      <BlogFeaturedImage
+        image={image}
+        alt={imageAlt || title}
+        caption={imageCaption || imageAlt}
+      />
+    )}
+  </Container>
 
   <!-- MAIN CONTENT -->
   <Container size="sm" class="pt-6 md:pt-8 pb-12">
@@ -132,9 +131,9 @@ const lastUpdated = formatDate(updatedDate || pubDate);
       </BlogContent>
 
       <!-- RELATED POSTS -->
-      <div class="mt-12 md:mt-16">
+      <section class="section-divider mt-12 md:mt-16">
         <BlogRelatedPosts posts={relatedPosts} />
-      </div>
+      </section>
 
       <!-- ADS -->
       <div

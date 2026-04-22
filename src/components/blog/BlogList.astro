@@ -10,8 +10,8 @@ interface Props {
 const { regularPosts } = Astro.props;
 ---
 
-<div class="min-w-0">
-  <div class="flex items-center justify-between mb-4">
+<section class="section-divider">
+  <div class="flex items-center justify-between my-6">
     <div class="flex items-center gap-2 text-lg md:text-xl">
       <h2 class="text-zinc-900 dark:text-zinc-100 font-semibold">Semua postingan</h2>
     </div>
@@ -38,4 +38,4 @@ const { regularPosts } = Astro.props;
       <p class="text-zinc-500 dark:text-zinc-400 text-md">▼ Tidak ada postingan yang ditemukan.</p>
     </div>
   )}
-</div>
+</section>
