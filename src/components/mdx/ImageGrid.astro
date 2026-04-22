@@ -1,19 +1,37 @@
 ---
 // src/components/mdx/ImageGrid.astro
 interface Props {
-  images: { src: string; alt: string }[];
+  images: { src: string; alt: string; caption?: string }[];
+  columns?: 2 | 3;
 }
 
-const { images } = Astro.props;
+const { images, columns = 2 } = Astro.props;
+
+const gridConfig = {
+  2: "md:grid-cols-2",
+  3: "md:grid-cols-2 lg:grid-cols-3"
+};
 ---
 
-<div class="not-prose my-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-  {images.map(img => (
-    <img
-      src={img.src}
-      alt={img.alt}
-      class="rounded-lg border border-zinc-200 dark:border-zinc-800"
-      loading="lazy"
-    />
+<div class={`not-prose my-12 grid grid-cols-1 gap-6 ${gridConfig[columns]}`}>
+  {images.map((img) => (
+    <div class="group relative flex flex-col rounded-lg border border-zinc-200 bg-zinc-50/50 p-1 dark:border-zinc-800 dark:bg-zinc-900/50">
+      <div class="relative aspect-video overflow-hidden rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
+        <img
+          src={img.src}
+          alt={img.alt}
+          class="h-full w-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:opacity-90"
+          loading="lazy"
+        />
+      </div>
+      {img.caption && (
+        <div class="flex items-center justify-between px-2 py-2.5">
+          <span class="font-mono text-[10px] font-medium tracking-tighter text-zinc-400 uppercase">
+            {img.caption}
+          </span>
+          <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></span>
+        </div>
+      )}
+    </div>
   ))}
 </div>
