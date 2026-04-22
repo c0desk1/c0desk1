@@ -94,16 +94,16 @@ const lastUpdated = formatDate(updatedDate || pubDate);
         featured={featured}
       />
     </Container>
-    {displayImage && (
-      <BlogFeaturedImage
-        image={displayImage}
-        alt={imageAlt || title}
-        caption={imageCaption || imageAlt}
-      />
-    )}
     <Container size="sm" class="py-10 md:py-12">
       <div class="grid grid-cols-1 gap-8 md:gap-12">
         <BlogTOC headings={tocHeadings} />
+		{displayImage && (
+      	<BlogFeaturedImage
+        	image={displayImage}
+        	alt={imageAlt || title}
+        	caption={imageCaption || imageAlt}
+      	/>
+    	)}
         <div class="min-w-0">
           <BlogContent>
             <Content
