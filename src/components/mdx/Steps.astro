@@ -2,28 +2,45 @@
 // src/components/mdx/Steps.astro
 ---
 
-<div class="steps-container not-prose my-8 ml-4 border-l border-zinc-200 pl-8 dark:border-zinc-800">
+<div class="steps-container not-prose my-12 ml-4 border-l border-zinc-200 pl-9 dark:border-zinc-800">
   <slot />
 </div>
 
 <style is:global>
+  /* 1. Reset Counter */
+  .steps-container {
+    counter-reset: step;
+    position: relative;
+  }
+
+  /* 2. Styling Judul H3 */
   .steps-container h3 {
     counter-increment: step;
     position: relative;
-    font-size: 1rem; /* text-base */
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: var(--tw-prose-headings);
+    font-size: 0.875rem !important; /* Ukuran font khas Vercel Docs */
+    font-weight: 600 !important;
+    margin-top: 2.5rem !important;
+    margin-bottom: 0.5rem !important;
+    line-height: 1.5rem !important;
+    color: #18181b !important;
   }
 
-  .steps-container {
-    counter-reset: step;
+  .dark .steps-container h3 {
+    color: #fafafa !important;
   }
+
+  /* Elemen pertama jangan ada margin-top */
+  .steps-container h3:first-of-type {
+    margin-top: 0 !important;
+  }
+
+  /* 3. Bulatan Angka - Presisi Pixel Perfect */
   .steps-container h3::before {
     content: counter(step);
     position: absolute;
-    left: -2.85rem;
-    top: -0.1rem;
+    /* Geser ke kiri tepat di tengah garis (pl-9 = 2.25rem) */
+    left: calc(-2.25rem - 0.875rem - 1px); 
+    top: -0.125rem;
     width: 1.75rem;
     height: 1.75rem;
     background-color: #ffffff;
@@ -33,12 +50,46 @@
     align-items: center;
     justify-content: center;
     font-size: 0.75rem;
-    font-weight: 700;
-    color: #18181b;
+    font-weight: 600;
+    color: #71717a;
+    z-index: 20;
   }
+
   .dark .steps-container h3::before {
     background-color: #09090b;
     border-color: #27272a;
-    color: #fafafa;
+    color: #a1a1aa;
+  }
+
+  /* 4. TRIK: Menghapus Sisa Garis di Step Terakhir */
+  /* Kita gunakan pseudo-element pada container untuk menutupi garis sisa */
+  .steps-container::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    /* Posisi di atas border-left container */
+    left: -1px;
+    width: 2px;
+    /* Tinggi dinamis untuk menutupi sisa garis setelah H3 terakhir */
+    height: calc(100% - (var(--last-h3-pos, 0) + 1.6rem)); 
+    background-color: #ffffff; 
+    z-index: 10;
+  }
+  
+  .dark .steps-container::after {
+    background-color: #09090b; /* Sesuaikan dengan background site lu */
+  }
+
+  /* 5. Styling Deskripsi (Paragraf di bawah H3) */
+  .steps-container h3 + p {
+    font-size: 0.875rem;
+    line-height: 1.625rem;
+    color: #71717a;
+    margin-top: 0 !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .dark .steps-container h3 + p {
+    color: #a1a1aa;
   }
 </style>
