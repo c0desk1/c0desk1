@@ -1,0 +1,40 @@
+---
+// src/components/mdx/CodeGroup.astro
+interface Props {
+  titles: string[];
+}
+
+const { titles } = Astro.props;
+---
+
+<div class="not-prose my-6 overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-800">
+  <div class="flex overflow-x-auto border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50">
+    {titles.map((title, index) => (
+      <button
+        data-code-tab={index}
+        class="px-4 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors data-[active=true]:border-b-2 data-[active=true]:border-zinc-900 dark:data-[active=true]:border-white data-[active=true]:text-zinc-900 dark:data-[active=true]:text-white"
+      >
+        {title}
+      </button>
+    ))}
+  </div>
+  <div class="code-group-content">
+    <slot />
+  </div>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('[data-code-tab]');
+  const contents = document.querySelector('.code-group-content')?.children;
+  
+  if (tabs.length && contents) {
+    const activate = (index) => {
+      tabs.forEach((tab, i) => {
+        tab.setAttribute('data-active', i === index);
+        if (contents[i]) contents[i].style.display = i === index ? 'block' : 'none';
+      });
+    };
+    tabs.forEach((tab, i) => tab.addEventListener('click', () => activate(i)));
+    activate(0);
+  }
+</script>
