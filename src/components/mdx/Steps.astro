@@ -2,38 +2,29 @@
 // src/components/mdx/Steps.astro
 ---
 
-<div class="steps-container not-prose mb-12 ml-4 border-l border-zinc-200 pl-8 dark:border-zinc-800">
+<div class="steps-container not-prose my-10 ml-4 border-l border-zinc-200 pl-8 dark:border-zinc-800">
   <slot />
 </div>
 
 <style is:global>
   .steps-container {
     counter-reset: step;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
   }
 
-  .steps-container > h3,
-  .steps-container > p:has(strong:first-child) {
+  .steps-container > * {
     counter-increment: step;
     position: relative;
-    font-size: 0.875rem;
-    font-weight: 600;
-    line-height: 1.25rem;
-    margin-top: 2rem;
-    margin-bottom: 0.5rem;
-    color: #18181b;
+    margin: 0 !important;
   }
 
-  .dark .steps-container > h3,
-  .dark .steps-container > p:has(strong:first-child) {
-    color: #fafafa;
-  }
-
-  .steps-container > h3::before,
-  .steps-container > p:has(strong:first-child)::before {
+  .steps-container > *::before {
     content: counter(step);
     position: absolute;
     left: calc(-2rem - 1.35rem); 
-    top: -0.15rem;
+    top: 0.25rem;
     width: 1.6rem;
     height: 1.6rem;
     background-color: #ffffff;
@@ -45,27 +36,38 @@
     font-size: 0.7rem;
     font-weight: 600;
     color: #71717a;
+    z-index: 10;
   }
 
-  .dark .steps-container > h3::before,
-  .dark .steps-container > p:has(strong:first-child)::before {
+  .dark .steps-container > *::before {
     background-color: #09090b;
     border-color: #27272a;
     color: #a1a1aa;
   }
-  
-  .steps-container > p {
+
+  .steps-container > * strong:first-child {
+    display: block;
     font-size: 0.875rem;
-    line-height: 1.5rem;
-    color: #71717a;
-    margin-top: 0.25rem;
-    margin-bottom: 1rem;
+    font-weight: 600;
+    color: #18181b;
+    margin-bottom: 0.25rem;
   }
 
-  .dark .steps-container > p {
+  .dark .steps-container > * strong:first-child {
+    color: #fafafa;
+  }
+
+  .steps-container > * {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: #71717a;
+  }
+
+  .dark .steps-container > * {
     color: #a1a1aa;
   }
-  .steps-container > *:first-child {
-    margin-top: 0;
+
+  .steps-container {
+    position: relative;
   }
 </style>
