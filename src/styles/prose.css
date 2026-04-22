@@ -7,7 +7,6 @@
   max-width: none;
 }
 
-/* TAMBAHAN: Reset margin first/last child biar rapih ala Vercel */
 .prose-custom > :first-child {
   margin-top: 0!important;
 }
@@ -26,7 +25,6 @@
   line-height: 1.3;
 }
 
-/* TAMBAHAN: Scroll margin buat sticky header + posisi relative buat anchor # */
 .prose-custom h2,
 .prose-custom h3 {
   position: relative;
@@ -64,7 +62,6 @@
  .prose-custom h3 { font-size: 1.5rem; }
 }
 
-/* TAMBAHAN: Anchor # muncul pas hover di h2/h3 ala Vercel docs */
 .prose-custom h2:hover::before,
 .prose-custom h3:hover::before {
   content: '#';
@@ -87,7 +84,7 @@
   margin-bottom: 1.25rem;
 }
 
-.dark.prose-custom p {
+.dark .prose-custom p {
   color: #d4d4d8;
 }
 
@@ -97,14 +94,13 @@
   color: #10b981;
 }
 
-.dark.prose-custom a {
+.dark .prose-custom a {
   color: #10b981;
 }
 
 .prose-custom a:hover {
   text-decoration-color: #18181b;
   text-decoration: underline;
-  /* TAMBAHAN: Vercel pake 2px biar lebih rapet */
   text-underline-offset: 2px;
   text-decoration-thickness: 1px;
 }
@@ -123,7 +119,7 @@
   font-weight: 600;
 }
 
-.dark.prose-custom strong {
+.dark .prose-custom strong {
   color: #ffffff;
 }
 
@@ -131,7 +127,7 @@
   color: #52525b;
 }
 
-.dark.prose-custom em {
+.dark .prose-custom em {
   color: #a1a1aa;
 }
 
@@ -162,7 +158,7 @@
   margin: 1rem 0;
 }
 
-.dark.prose-custom pre {
+.dark .prose-custom pre {
   background-color: #18181b;
   border-color: #3f3f46;
 }
@@ -171,12 +167,11 @@
   background-color: transparent;
   padding: 0;
   color: #e4e4e7;
-  /* TAMBAHAN: Samain font-size code block Vercel 13px */
   font-size: 0.8125rem;
   line-height: 1.7;
 }
 
-.dark.prose-custom pre code {
+.dark .prose-custom pre code {
   color: #d4d4d8;
 }
 
@@ -190,11 +185,10 @@
   border: 1px solid #e4e4e7
 }
 
-.dark.prose-custom img {
+.dark .prose-custom img {
   border: 1.5px solid #18181b
 }
 
-/* TAMBAHAN: Image caption dari <em> setelah img */
 .prose-custom img + em {
   display: block;
   text-align: center;
@@ -205,7 +199,7 @@
   margin-bottom: 1.5rem;
 }
 
-.dark.prose-custom img + em {
+.dark .prose-custom img + em {
   color: #a1a1aa;
 }
 
@@ -215,17 +209,15 @@
   border-left: 2px solid #e4e4e7;
   padding-left: 1rem;
   margin: 1rem 0;
-  /* TAMBAHAN: Warna lebih soft + italic ala Vercel */
   color: #71717a;
   font-style: italic;
 }
 
-.dark.prose-custom blockquote {
+.dark .prose-custom blockquote {
   border-left-color: #3f3f46;
   color: #a1a1aa;
 }
 
-/* TAMBAHAN: Biar <p> di dalam blockquote ikut italic & warna inherit */
 .prose-custom blockquote p {
   color: inherit;
 }
@@ -269,22 +261,20 @@
   margin-bottom: 0.5rem;
 }
 
-.dark.prose-custom li {
+.dark .prose-custom li {
   color: #d4d4d8;
 }
 
-/* TAMBAHAN: Warna bullet/number abu biar ga terlalu nonjol ala Vercel */
 .prose-custom ul > li::marker,
 .prose-custom ol > li::marker {
   color: #a1a1aa;
 }
 
-.dark.prose-custom ul > li::marker,
-.dark.prose-custom ol > li::marker {
+.dark .prose-custom ul > li::marker,
+.dark .prose-custom ol > li::marker {
   color: #52525b;
 }
 
-/* TAMBAHAN: Task list checkbox ala GitHub */
 .prose-custom.contains-task-list {
   list-style: none;
   padding-left: 0;
@@ -307,13 +297,12 @@
   cursor: default;
 }
 
-.dark.prose-custom.task-list-item input[type="checkbox"] {
+.dark .prose-custom.task-list-item input[type="checkbox"] {
   border-color: #52525b;
 }
 
 /* ==================== TABLE ==================== */
 
-/* TAMBAHAN: Table wrapper biar responsive */
 .prose-custom.table-wrapper {
   overflow-x: auto;
   margin: 1.5rem 0;
@@ -347,17 +336,17 @@
   color: #3f3f46;
 }
 
-.dark.prose-custom th,
-.dark.prose-custom td {
+.dark .prose-custom th,
+.dark .prose-custom td {
   border-color: #3f3f46;
 }
 
-.dark.prose-custom th {
+.dark .prose-custom th {
   color: #ffffff;
   background-color: #18181b;
 }
 
-.dark.prose-custom td {
+.dark .prose-custom td {
   color: #d4d4d8;
 }
 
@@ -369,7 +358,7 @@
   margin: 2rem 0;
 }
 
-.dark.prose-custom hr {
+.dark .prose-custom hr {
   border-top-color: #18181b;
 }
 
@@ -386,7 +375,7 @@
   margin-top: 0.5rem;
 }
 
-.dark.prose-custom figcaption {
+.dark .prose-custom figcaption {
   color: #a1a1aa;
 }
 
@@ -401,13 +390,12 @@
   border: 1px solid #e4e4e7;
 }
 
-.dark.prose-custom kbd {
+.dark .prose-custom kbd {
   background-color: #27272a;
   border-color: #3f3f46;
   color: #d4d4d8;
 }
 
-/* TAMBAHAN: Stack KBD biar rapet */
 .prose-custom kbd + kbd {
   margin-left: 0.25rem;
 }
@@ -434,11 +422,11 @@
   margin-bottom: 0.5rem;
 }
 
-.dark.prose-custom dt {
+.dark .prose-custom dt {
   color: #ffffff;
 }
 
-.dark.prose-custom dd {
+.dark .prose-custom dd {
   color: #a1a1aa;
 }
 
@@ -448,7 +436,7 @@
   font-size: 0.875rem;
 }
 
-.dark.prose-custom address {
+.dark .prose-custom address {
   color: #a1a1aa;
 }
 
@@ -473,7 +461,7 @@
   color: #71717a;
 }
 
-.dark.prose-custom small {
+.dark .prose-custom small {
   color: #a1a1aa;
 }
 
@@ -484,7 +472,7 @@
   border-radius: 0.25rem;
 }
 
-.dark.prose-custom mark {
+.dark .prose-custom mark {
   background-color: #78350f;
   color: #fef3c7;
 }
@@ -501,7 +489,7 @@
   border-radius: 0.5rem;
 }
 
-.dark.prose-custom details {
+.dark .prose-custom details {
   border-color: #3f3f46;
 }
 
@@ -517,7 +505,6 @@
 }
 
 /* ==================== FOOTNOTES ==================== */
-/* TAMBAHAN: Footnotes ala GitHub */
 
 .prose-custom.footnotes {
   margin-top: 3rem;
@@ -526,7 +513,7 @@
   font-size: 0.875rem;
 }
 
-.dark.prose-custom.footnotes {
+.dark .prose-custom.footnotes {
   border-top-color: #27272a;
 }
 
@@ -538,7 +525,7 @@
   color: #71717a;
 }
 
-.dark.prose-custom.footnotes li {
+.dark .prose-custom.footnotes li {
   color: #a1a1aa;
 }
 
@@ -561,7 +548,6 @@
 }
 
 /* ==================== CALLOUTS ==================== */
-/* TAMBAHAN: Callouts/Admonitions ala GitHub/Vercel */
 
 .prose-custom.callout {
   margin: 1.5rem 0;
@@ -589,49 +575,45 @@
   gap: 0.5rem;
 }
 
-/* Note - Blue */
 .prose-custom.callout-note {
   background-color: #eff6ff;
   border-color: #3b82f6;
   color: #1e40af;
 }
-.dark.prose-custom.callout-note {
+.dark .prose-custom.callout-note {
   background-color: #1e3a8a20;
   border-color: #3b82f6;
   color: #93c5fd;
 }
 
-/* Warning - Yellow */
 .prose-custom.callout-warning {
   background-color: #fefce8;
   border-color: #eab308;
   color: #854d0e;
 }
-.dark.prose-custom.callout-warning {
+.dark .prose-custom.callout-warning {
   background-color: #713f1220;
   border-color: #eab308;
   color: #fde047;
 }
 
-/* Danger - Red */
 .prose-custom.callout-danger {
   background-color: #fef2f2;
   border-color: #ef4444;
   color: #991b1b;
 }
-.dark.prose-custom.callout-danger {
+.dark .prose-custom.callout-danger {
   background-color: #7f1d1d20;
   border-color: #ef4444;
   color: #fca5a5;
 }
 
-/* Tip - Green */
 .prose-custom.callout-tip {
   background-color: #f0fdf4;
   border-color: #10b981;
   color: #14532d;
 }
-.dark.prose-custom.callout-tip {
+.dark .prose-custom.callout-tip {
   background-color: #14532d20;
   border-color: #10b981;
   color: #86efac;
