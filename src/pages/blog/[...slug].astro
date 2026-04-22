@@ -14,6 +14,7 @@ import BlogContent from '@/components/blog/BlogContent.astro';
 import BlogTOC from '@/components/blog/BlogTOC.astro';
 import BlogRelatedPosts from '@/components/blog/BlogRelatedPosts.astro';
 import Image from "@/components/mdx/Image.astro";
+import HR from "@/components/mdx/HR.astro";
 
 import {
   filterHeadingsForTOC,
@@ -107,7 +108,8 @@ const lastUpdated = formatDate(updatedDate || pubDate);
           <BlogContent>
             <Content
               components={{
-                img: Image
+                img: Image,
+                hr: HR
               }}
             />
           </BlogContent>
