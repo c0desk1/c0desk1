@@ -395,22 +395,24 @@
 /* ==================== KBD ==================== */
 
 .prose-custom kbd {
-  background-color: #f4f4f5;
-  padding: 0.125rem 0.375rem;
-  border-radius: 0.25rem;
-  font-size: 0.75rem;
-  font-family: monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.75em;
+  font-weight: 600;
+  background-color: #fafafa;
+  color: #18181b;
+  padding: 0.15rem 0.4rem;
+  border-radius: 5px;
   border: 1px solid #e4e4e7;
+  border-bottom: 2.5px solid #d4d4d8; /* Efek ketebalan tombol */
+  margin: 0 0.2rem;
+  vertical-align: middle;
 }
 
 .dark .prose-custom kbd {
-  background-color: #27272a;
+  background-color: #18181b;
+  color: #f4f4f5;
   border-color: #3f3f46;
-  color: #d4d4d8;
-}
-
-.prose-custom kbd + kbd {
-  margin-left: 0.25rem;
+  border-bottom-color: #27272a;
 }
 
 /* ==================== MISC ==================== */
