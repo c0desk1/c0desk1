@@ -1,0 +1,27 @@
+---
+interface Props {
+  src: string;
+  alt?: string;
+  title?: string;
+}
+
+const { src, alt = "", title } = Astro.props;
+
+const caption = title || alt;
+---
+
+<figure class="my-8">
+  <img
+    src={src}
+    alt={alt}
+    loading="lazy"
+    decoding="async"
+    class="rounded-lg"
+  />
+
+  {caption && (
+    <figcaption class="mt-2 text-center text-sm text-muted-foreground">
+      {caption}
+    </figcaption>
+  )}
+</figure>
