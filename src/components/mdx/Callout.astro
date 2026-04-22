@@ -1,0 +1,80 @@
+---
+// src/components/mdx/Callout.astro
+interface Props {
+  type?: 'note' | 'warning' | 'danger' | 'tip' | 'info';
+  title?: string;
+}
+
+const { type = 'note', title } = Astro.props;
+
+const config = {
+  note: {
+    defaultTitle: 'Note',
+    classes: 'border-blue-200 bg-blue-50 text-blue-900 dark:border-blue-900/50 dark:bg-blue-950/30 dark:text-blue-200',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>`
+  },
+  info: {
+    defaultTitle: 'Info',
+    classes: 'border-blue-200 bg-blue-50 text-blue-900 dark:border-blue-900/50 dark:bg-blue-950/30 dark:text-blue-200',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>`
+  },
+  warning: {
+    defaultTitle: 'Warning',
+    classes: 'border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-200',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`
+  },
+  danger: {
+    defaultTitle: 'Danger',
+    classes: 'border-red-200 bg-red-50 text-red-900 dark:border-red-900/50 dark:bg-red-950/30 dark:text-red-200',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>`
+  },
+  tip: {
+    defaultTitle: 'Tip',
+    classes: 'border-emerald-200 bg-emerald-50 text-emerald-900 dark:border-emerald-900/50 dark:bg-emerald-950/30 dark:text-emerald-200',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1.7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>`
+  }
+};
+
+const { defaultTitle, classes, icon } = config[type];
+---
+
+<div class:list={['my-6 rounded-lg border p-4 text-sm', classes]}>
+  <div class="mb-2 flex items-center gap-2 font-semibold">
+    <span class="h-4 w-4 flex-shrink-0" set:html={icon} />
+    <span>{title || defaultTitle}</span>
+  </div>
+  <div class="callout-content prose-p:my-2 prose-p:leading-6 prose-ul:my-2 prose-ul:pl-5 prose-li:my-0.5 prose-code:rounded prose-code:px-1 prose-code:py-0.5">
+    <slot />
+  </div>
+</div>
+
+<style>
+.callout-content :global(p:first-child) {
+    margin-top: 0;
+  }
+.callout-content :global(p:last-child) {
+    margin-bottom: 0;
+  }
+.callout-content :global(ul:first-child) {
+    margin-top: 0;
+  }
+.callout-content :global(ul:last-child) {
+    margin-bottom: 0;
+  }
+.callout-content :global(code:not(pre code)) {
+    background-color: rgb(0 0 0 / 0.05);
+    color: inherit;
+    font-size: 0.8125rem;
+  }
+  :global(.dark).callout-content :global(code:not(pre code)) {
+    background-color: rgb(255 255 255 / 0.1);
+  }
+.callout-content :global(a) {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+.callout-content :global(strong) {
+    color: inherit;
+  }
+</style>
