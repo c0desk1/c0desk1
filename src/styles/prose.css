@@ -76,6 +76,13 @@
   color: #52525b;
 }
 
+.steps-container h3:hover::before {
+  content: none !important;
+}
+.steps-container h3::before {
+  content: counter(step) !important;
+}
+
 /* ==================== PARAGRAPH ==================== */
 
 .prose-custom p {
