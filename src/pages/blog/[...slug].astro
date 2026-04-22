@@ -13,6 +13,7 @@ import BlogFeaturedImage from '@/components/blog/BlogFeaturedImage.astro';
 import BlogContent from '@/components/blog/BlogContent.astro';
 import BlogTOC from '@/components/blog/BlogTOC.astro';
 import BlogRelatedPosts from '@/components/blog/BlogRelatedPosts.astro';
+import Image from "@/components/mdx/Image.astro";
 
 import {
   filterHeadingsForTOC,
@@ -104,7 +105,11 @@ const lastUpdated = formatDate(updatedDate || pubDate);
         <BlogTOC headings={tocHeadings} />
         <div class="min-w-0">
           <BlogContent>
-            <Content />
+            <Content
+              components={{
+                img: Image
+              }}
+            />
           </BlogContent>
           <BlogRelatedPosts posts={relatedPosts} />
           <div id="yandex_rtb_R-A-19135204-3" class="pt-6"></div>
