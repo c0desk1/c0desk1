@@ -50,7 +50,9 @@ Sebelum kita masuk ke teknis, kita perlu paham posisi Vheer di pasar. Jika kita 
 
 Untuk mendapatkan hasil yang aman untuk dipasarkan (seperti di Adobe Stock), lu nggak bisa cuma asal ketik prompt. Lu harus mainin "jeroan" engine-nya via API atau Advanced Settings.
 
+<Callout type="warning">
 **Peringatan**: Mengatur `Motion Bucket` di atas 180 akan menyebabkan distorsi pada anatomi manusia. Untuk niche gym/fitness, gunakan angka aman di **85 - 110**.
+</Callout>
 
 ### Variabel Penting yang Harus Lu Tahu:
 
@@ -62,22 +64,18 @@ Untuk mendapatkan hasil yang aman untuk dipasarkan (seperti di Adobe Stock), lu 
 
 Berikut adalah workflow yang gue gunain buat bikin konten edutainment sejarah dan 3D render:
 
-
-
+<Steps>
 ### Konstruksi Prompt Spesifik
-
-Jangan gunakan prompt generic. Vheer sangat sensitif terhadap lighting. 
-
+Jangan gunakan prompt generic. Vheer sangat sensitif terhadap lighting.
 - **Bad:** `Man running in the gym.`
 - **Good:** `Cinematic close-up of a man running on a treadmill, industrial gym aesthetic, moody lighting, sweat details, 8k, stable motion.`
 
 ### Pre-Visualization
-
-Gunakan resolusi rendah (360p) terlebih dahulu untuk mengecek *angle* kamera. Tekan Alt + P untuk fitur *Quick Preview* di dashboard.
+Gunakan resolusi rendah (360p) terlebih dahulu untuk mengecek *angle* kamera. Tekan <KBD>Alt</KBD> + <KBD>P</KBD> untuk fitur *Quick Preview* di dashboard.
 
 ### Final Render & Upscaling
-
-Gunakan fitur *Refiner* bawaan Vheer untuk membersihkan noise pada area gelap. Cukup tekan Shift + R untuk memicu mode refinement.
+Gunakan fitur *Refiner* bawaan Vheer untuk membersihkan noise pada area gelap. Cukup tekan <KBD>Shift</KBD> + <KBD>R</KBD> untuk memicu mode refinement.
+</Steps>
 
 ## Integrasi API untuk Automasi CMS
 
@@ -87,6 +85,7 @@ Lu bisa menghubungkan Vheer langsung ke CMS portfolio lu agar render terjadi di 
 
 ```python
 import vheer
+
 # Inisialisasi client
 client = vheer.Client(api_key="YOUR_VHEER_KEY")
 video = client.generate(
@@ -96,6 +95,9 @@ video = client.generate(
     consistency_level="ultra"
 )
 video.download("./output-asset.mp4")
+```
+
+```js
 const vheer = require('@vheer/sdk');
 
 async function renderVideo() {
@@ -108,8 +110,7 @@ async function renderVideo() {
   console.log(`Job ID: ${job.id} is processing...`);
 }
 ```
-
-
+</CodeGroup>
 
 ## Troubleshooting: Masalah Umum & Solusi
 
@@ -119,8 +120,6 @@ async function renderVideo() {
 - API Timeout: Pastikan lu pake Webhook buat nerima hasil render, jangan ditungguin secara synchronous.
 
 ## Gallery
-
-![](/images/blog/1000187795.webp)
 
 ![Hasil render 4K Vheer AI menunjukkan pria sedang angkat beban di gym industrial dengan pencahayaan sinematik dan detail keringat yang realistis.](/images/blog/hasil-render-vheer-ai.webp)
 
