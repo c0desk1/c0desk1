@@ -74,4 +74,4 @@ Google Adsense dan Yandex suka konten yang transparan. Jadi:
 
 ## Konsistensi Adalah Segalanya
 
-Jualan stok foto itu bukan lari sprint, tapi maraton. Lu nggak bisa cuma *upload* 10 foto terus ngarep dapet ribuan Dollar besok pagi. Kuncinya adalah bangun portofolio yang rapi, berkualitas, dan punya gaya unik (kayak gaya industrial-minimalis yang gue sebut tadi).
+Jualan stok foto itu bukan lari sprint, tapi maraton. Lu nggak bisa cuma *upload* 10 foto terus ngarep dapet ribuan Dollar besok pagi. Kuncinya adalah bangun portofolio yang rapi, berkualitas, dan punya gaya unik.
