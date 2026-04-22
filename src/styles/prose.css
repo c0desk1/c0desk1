@@ -191,18 +191,22 @@
 /* ==================== IMAGES ==================== */
 
 .prose-custom img {
-  border-radius: 0.5rem;
-  margin: 0;
   max-width: 100%;
   height: auto;
-  border: 1px solid #e4e4e7
+  display: block;
 }
 
-.dark .prose-custom img {
+.prose-custom p > img {
+  margin: 1.5rem auto;
+  border-radius: 0.5rem;
+  border: 1px solid #e4e4e7;
+}
+
+.dark .prose-custom p > img {
   border: 1.5px solid #18181b
 }
 
-.prose-custom img + em {
+{/*.prose-custom img + em {
   display: block;
   text-align: center;
   font-size: 0.75rem;
@@ -210,7 +214,7 @@
   font-style: normal;
   margin-top: -1rem;
   margin-bottom: 1.5rem;
-}
+}*/}
 
 .dark .prose-custom img + em {
   color: #a1a1aa;
@@ -378,14 +382,29 @@
 /* ==================== FIGURE ==================== */
 
 .prose-custom figure {
-  margin: 1.5rem 0;
+  margin: 2rem 0;
+}
+
+.prose-custom figure img {
+  width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  border: 1px solid #e4e4e7;
+}
+
+.dark .prose-custom figure img {
+  border-color: #18181b;
 }
 
 .prose-custom figcaption {
   text-align: center;
   font-size: 0.75rem;
+  line-height: 1.5;
   color: #71717a;
   margin-top: 0.5rem;
+  max-width: 65ch;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .dark .prose-custom figcaption {
