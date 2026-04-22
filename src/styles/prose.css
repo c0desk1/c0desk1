@@ -216,9 +216,9 @@
   margin-bottom: 1.5rem;
 }*/}
 
-.dark .prose-custom img + em {
+{/*.dark .prose-custom img + em {
   color: #a1a1aa;
-}
+}*/}
 
 /* ==================== BLOCKQUOTE ==================== */
 
@@ -405,7 +405,6 @@
   font-size: 0.75rem;
   line-height: 1.5;
   color: #71717a;
-  margin-top: 0.5rem;
   max-width: 65ch;
   margin-left: auto;
   margin-right: auto;
