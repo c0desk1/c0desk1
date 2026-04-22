@@ -1,0 +1,29 @@
+---
+// src/components/ui/BackToTop.astro
+
+interface Props {
+  showBorder?: boolean;
+  align?: 'left' | 'center' | 'right';
+}
+
+const { showBorder = true, align = 'left' } = Astro.props;
+
+const alignClasses = {
+  left: 'text-left',
+  center: 'text-center',
+  right: 'text-right'
+};
+---
+
+<div class:list={[
+  showBorder ? 'pt-8' : '',
+  alignClasses[align]
+]}>
+  <a 
+    href="#top" 
+    class="inline-flex items-center gap-1.5 text-sm text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors group"
+  >
+    <span class="group-hover:-translate-y-0.5 transition-transform duration-200">↑</span>
+    <span>Kembali ke atas</span>
+  </a>
+</div>

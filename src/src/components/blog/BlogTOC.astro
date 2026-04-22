@@ -1,0 +1,44 @@
+---
+// src/components/blog/BlogTOC.astro
+
+import { filterHeadingsForTOC } from '@/lib/utils';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+const tocHeadings = filterHeadingsForTOC(headings);
+---
+
+{tocHeadings.length > 0 && (
+  <nav class="not-prose my-6 md:my-8 rounded-lg border border-zinc-200 dark:border-zinc-900 p-4 md:p-5">
+    <h2 class="mb-3 text-[11px] font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+      Daftar Isi
+    </h2>
+    <ul class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-1.5">
+      {tocHeadings.map(h => (
+        <li class:list={[
+          "text-sm",
+          h.depth === 3 ? "ml-3" : ""
+        ]}>
+          <a
+            href={`#${h.slug}`}
+            class="group flex items-start gap-2 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+          >
+            <span class="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-zinc-400 dark:bg-zinc-600"></span>
+            <span class="leading-snug">
+              {h.text}
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}

@@ -1,0 +1,31 @@
+---
+// src/pages/blog/index.astro
+
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/ui/Container.astro';
+import BlogHero from '@/components/blog/BlogHero.astro';
+import BlogList from '@/components/blog/BlogList.astro';
+import { sortByDate } from '@/lib/utils';
+
+const allPosts = await getCollection('blog');
+const publishedPosts = allPosts.filter((p: CollectionEntry<'blog'>) => !p.data.draft);
+const posts = sortByDate(publishedPosts);
+
+const regularPosts = posts;
+
+const seoData = {
+  title: "Blog & Insights",
+  description: "Catatan dari balik layar tentang sistem, kreativitas, dan fragmen digital yang gue pelajari.",
+};
+---
+
+<BaseLayout {...seoData} type="website">
+  <BlogHero />
+  <Container size="md" class="py-12 md:py-16">
+    <BlogList
+      regularPosts={regularPosts}
+    />
+  </Container>
+</BaseLayout>

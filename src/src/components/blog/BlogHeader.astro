@@ -1,0 +1,60 @@
+---
+// src/components/blog/BlogHeader.astro
+
+import BlogMeta from './BlogMeta.astro';
+import BlogAuthor from './BlogAuthor.astro';
+
+interface Props {
+  title: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  readingTime: string;
+  authorName?: string;
+  authorAvatar?: string;
+  authorTitle?: string;
+  featured?: boolean;
+}
+
+const {
+  title,
+  pubDate,
+  readingTime,
+  authorName,
+  authorAvatar,
+  authorTitle,
+  featured
+} = Astro.props;
+---
+
+<header class="w-full max-w-3xl mx-auto text-center py-4 md:py-6">
+  <h1
+    class="
+      text-2xl
+      sm:text-3xl
+      md:text-4xl
+      lg:text-5xl
+      font-semibold
+      tracking-tight
+      text-zinc-900
+      dark:text-zinc-100
+      leading-[1.15]
+      mb-4
+    "
+  >
+    {title}
+  </h1>
+  {authorName && (
+    <div class="mb-3">
+      <BlogAuthor 
+        name={authorName}
+        avatar={authorAvatar}
+        title={authorTitle}
+      />
+    </div>
+  )}
+  <BlogMeta 
+    pubDate={pubDate}
+    readingTime={readingTime}
+    featured={featured}
+  />
+</header>

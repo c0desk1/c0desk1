@@ -1,0 +1,26 @@
+---
+// src/components/portfolio/PortfolioFeatured.astro
+
+import ProjectCard from './ProjectCard.astro';
+
+interface Props {
+  project: any;
+}
+
+const { project } = Astro.props;
+---
+
+{project && (
+  <div class="mb-10 pb-8">
+
+    <div class="flex items-center gap-2 text-lg mb-4">
+      <h2 class="text-amber-600 dark:text-amber-500 font-semibold">
+        Unggulan
+      </h2>
+      <div class="h-px flex-1 bg-linear-to-r from-amber-500/50 to-transparent"></div>
+    </div>
+
+    <ProjectCard project={project} />
+
+  </div>
+)}
