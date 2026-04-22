@@ -31,18 +31,18 @@ import CodeGroup from "@/components/mdx/CodeGroup.astro";
 
 ## Key Features & Technical Decisions
 
-### 1. Performa "Burag" dengan Astro & Tailwind
+### Performa "Burag" dengan Astro & Tailwind
 Memilih **Astro** adalah keputusan krusial karena hampir semua interaksi bersifat statis kecuali pada bagian antrean gambar. Dengan meminimalkan pengiriman JavaScript ke browser, aplikasi ini mencapai skor **Lighthouse 100/100** dengan mudah.
 
-### 2. Keamanan Data dengan Model "Bring Your Own Key"
+### Keamanan Data dengan Model "Bring Your Own Key"
 Alih-alih membebankan biaya langganan kepada user, saya menerapkan sistem *BYOK (Bring Your Own Key)*. User memasukkan API Key Groq/Mistral mereka sendiri yang disimpan secara aman di `localStorage` browser. Ini memastikan:
 * Biaya operasional server hampir nol ($0).
 * Privasi gambar user terjaga karena tidak disimpan di server saya.
 
-### 3. Arsitektur Antrean (Queue Management)
+### Arsitektur Antrean (Queue Management)
 Untuk menangani *Rate Limit* dari provider AI gratisan, saya membangun sistem antrean dengan **Safe Delay Logic**. Sistem ini memastikan request dikirim satu per satu dengan jeda waktu tertentu untuk menghindari error `429 Too Many Requests`.
 
-### 4. Robust CSV Sanitization
+### Robust CSV Sanitization
 Data dari AI seringkali mengandung karakter ilegal atau format yang berantakan. Saya membangun utilitas khusus menggunakan **TypeScript** untuk membersihkan baris baru (`\n`), menghapus simbol terlarang (`©`, `™`), dan memastikan limitasi 50 keyword terpenuhi sebelum file CSV diunduh.
 
 <CodeGroup titles={["Typescript"]}>
@@ -57,13 +57,3 @@ const clean = (str: string) => {
 };
 ```
 </CodeGroup>
----
-
-### Kenapa Ini Bagus untuk Portfolio Kamu?
-
-1.  **Metrik Terukur:** Kamu mencantumkan durasi pengerjaan dan skor performa. Ini sangat disukai klien.
-2.  **Highlight Problem/Solution:** Kamu tidak hanya bilang "saya buat aplikasi", tapi "saya menyelesaikan masalah waktu kontributor".
-3.  **Technical Deep Dive:** Bagian *Key Features* menjelaskan bahwa kamu mengerti soal *Rate Limiting*, *Bandwidth Optimization*, dan *Data Sanitization*.
-4.  **Modern Stack:** Penggunaan **Cloudflare Workers** dan **Astro 6** menunjukkan kamu selalu *up-to-date* dengan teknologi terbaru.
-
-Dengan draf ini, project **Adogen** akan terlihat seperti produk profesional yang matang di mata siapa pun yang melihat portfolio kamu! 🔥🚀
