@@ -2,7 +2,7 @@
 // src/components/mdx/Steps.astro
 ---
 
-<div class="steps-container not-prose my-8 ml-4 border-l border-zinc-200 pl-8 dark:border-zinc-800">
+<div class="steps-container not-prose mb-12 ml-4 border-l border-zinc-200 pl-8 dark:border-zinc-800">
   <slot />
 </div>
 
@@ -10,43 +10,62 @@
   .steps-container {
     counter-reset: step;
   }
-  .steps-container > p,
+
   .steps-container > h3,
-  .steps-container > div {
+  .steps-container > p:has(strong:first-child) {
     counter-increment: step;
     position: relative;
-    margin-bottom: 1.5rem !important; 
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+    color: #18181b;
   }
-  .steps-container > p::before,
+
+  .dark .steps-container > h3,
+  .dark .steps-container > p:has(strong:first-child) {
+    color: #fafafa;
+  }
+
   .steps-container > h3::before,
-  .steps-container > div::before {
+  .steps-container > p:has(strong:first-child)::before {
     content: counter(step);
     position: absolute;
-    left: -2.85rem; 
-    top: 0.1rem;
-    width: 1.75rem;
-    height: 1.75rem;
+    left: calc(-2rem - 1.35rem); 
+    top: -0.15rem;
+    width: 1.6rem;
+    height: 1.6rem;
     background-color: #ffffff;
     border: 1px solid #e4e4e7;
     border-radius: 9999px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #18181b;
-    z-index: 10;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #71717a;
   }
 
-  .dark .steps-container > p::before,
   .dark .steps-container > h3::before,
-  .dark .steps-container > div::before {
-    background-color: #09090b; /* zinc-950 */
+  .dark .steps-container > p:has(strong:first-child)::before {
+    background-color: #09090b;
     border-color: #27272a;
-    color: #fafafa;
+    color: #a1a1aa;
+  }
+  
+  .steps-container > p {
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    color: #71717a;
+    margin-top: 0.25rem;
+    margin-bottom: 1rem;
   }
 
-  .steps-container > *:last-child {
-    margin-bottom: 0 !important;
+  .dark .steps-container > p {
+    color: #a1a1aa;
+  }
+  .steps-container > *:first-child {
+    margin-top: 0;
   }
 </style>
