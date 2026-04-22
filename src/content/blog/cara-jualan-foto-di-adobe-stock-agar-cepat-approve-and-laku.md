@@ -28,6 +28,8 @@ seo:
     Cek di sini!"
   ogImage: /images/blog/og/og-cuan-dengan-ai-di-adobe-stock.webp
 ---
+import Callout from '@/components/mdx/Callout.astro';
+
 Pernah nggak lu kepikiran, gambar-gambar estetik yang lu hasilin lewat AI bisa jadi aset digital yang ngasih *passive income* dalam Dollar? Kalau selama ini lu cuma mainan AI buat seneng-seneng doang, lu melewatkan peluang gede di **Adobe Stock** dan **Wirestock**.
 
 Tapi hati-hati, nggak semua gambar AI bisa masuk. Banyak yang asal *upload* terus langsung kena *reject* massal. Di artikel ini, gue bakal bongkar strategi jitu biar foto AI lu punya nilai komersial tinggi dan lolos sensor ketat Adobe.
@@ -36,7 +38,7 @@ Tapi hati-hati, nggak semua gambar AI bisa masuk. Banyak yang asal *upload* teru
 
 Dibanding platform lain, Adobe Stock itu "ramah" sama AI, asal lu jujur dan kualitasnya oke. Kelebihannya? Integrasi langsung sama aplikasi Adobe Creative Cloud. Artinya, jutaan desainer di seluruh dunia bisa nemuin karya lu langsung dari Photoshop atau Illustrator mereka.
 
-## 1. Niche Adalah Kunci: Jangan Asal Bikin!
+## Niche Adalah Kunci: Jangan Asal Bikin!
 
 Banyak orang bikin gambar pemandangan atau karakter anime. Masalahnya, pasar itu udah banjir banget. Kalau lu mau laku, lu harus masuk ke **Industrial Niche** atau **Commercial Assets**.
 
@@ -46,7 +48,7 @@ Ide Niche yang Dicari Desainer Global:
 2. **Isolated Background**: Objek (misal: alat fitness atau alat pertukangan) dengan latar putih bersih. Ini gampang banget buat desainer pake di projek mereka.
 3. **Industrial Tech**: Mesin pabrik modern, kabel rapi (cable management), atau detail material metal.
 
-## 2. Rahasia Prompt: Fokus pada Kualitas, Bukan Kuantitas
+## Rahasia Prompt: Fokus pada Kualitas, Bukan Kuantitas
 
 Jangan cuma nulis prompt pendek. Gunakan parameter yang detail buat mastiin resolusinya tajam.
 
@@ -54,26 +56,22 @@ Contoh Prompt Gaya **Industrial-Minimalis**:
 
 > "High-quality photography of a minimalist industrial dumbbell, matte black finish, isolated on a clean white background, studio lighting, sharp focus, 8k resolution, professional commercial stock photo."
 
-**Tips Pro**: Pastikan gambar lu nggak punya teks aneh atau distorsi di bagian tangan/jari kalau lu bikin objek manusia, karena itu alasan nomor satu penolakan (Rejection).
+<Callout type="tip">Pastikan gambar lu nggak punya teks aneh atau distorsi di bagian tangan/jari kalau lu bikin objek manusia, karena itu alasan nomor satu penolakan (Rejection).</Callout>
 
-## 3. Metadata yang "Searchable" (SEO Powerfull)
+## Metadata yang "Searchable" (SEO Powerfull)
 
 Biar orang nemuin gambar lu, judul dan tags itu krusial.
 
 - **Judul**: Jangan pake bahasa puitis. Pake bahasa deskriptif. (Contoh: *"Minimalist Black Dumbbell on White Background"*).
 - **Tags**: Masukin minimal 15-20 kata kunci yang relevan. Mulai dari yang paling spesifik ke yang umum.
 
-## 4. Etika & Aturan Main (Biar Aman dari Banned)
+## Etika & Aturan Main (Biar Aman dari Banned)
 
 Google Adsense dan Yandex suka konten yang transparan. Jadi:
 
 1. Wajib centang "**Generative AI Tools**" saat *upload*. Jangan bohong kalau itu hasil AI.
 2. Property Release: Kalau ada muka orang atau properti intelektual, lu wajib punya izin. Makanya, gue saranin main di *isolated object* aja biar lebih aman dan minim drama.
 
-## Kesimpulan: Konsistensi Adalah Segalanya
+## Konsistensi Adalah Segalanya
 
 Jualan stok foto itu bukan lari sprint, tapi maraton. Lu nggak bisa cuma *upload* 10 foto terus ngarep dapet ribuan Dollar besok pagi. Kuncinya adalah bangun portofolio yang rapi, berkualitas, dan punya gaya unik (kayak gaya industrial-minimalis yang gue sebut tadi).
-
----
-
-Gimana, siap buat konversi hobi AI lu jadi Dollar? Kalau lu punya pertanyaan soal settingan Wirestock atau cara kurasi gambar, tanya aja di kolom komentar ya!
