@@ -30,6 +30,8 @@ seo:
     PC lu kerja!
   ogImage: /images/blog/og/og-powershell-tips-auto-rename-delete-file.webp
 ---
+import Callout from "@/components/mdx/Callout.astro";
+
 Lu pernah nggak sih ngerasa kayak robot pas lagi ngerapiin folder? Misal, lu abis download ratusan aset desain atau foto, terus namanya berantakan semua kayak IMG_999_final_banget_v2.jpg. Atau yang lebih parah, folder "Downloads" lu udah penuh sampah file dari zaman Majapahit yang bikin SSD lu jerit-jerit?
 
 Kalo lu masih *rename* atau *delete* satu-satu pake klik kanan... asli, lu buang-buang waktu berharga lu.
@@ -79,9 +81,7 @@ Get-ChildItem -Path $pathSampah -Recurse | Where-Object {
 } | Remove-Item -Force
 ```
 
-Tips Biar Nggak Menyesal:
-
-> Pro Tip: Kalau lu takut salah hapus, tambahin -WhatIf di akhir baris Remove-Item. Nanti PowerShell cuma bakal pamer, "Nih file yang BAKAL gue hapus," tanpa beneran ngehapus. Jadi lu bisa cek dulu.
+<Callout type="tip">Kalau lu takut salah hapus, tambahin -WhatIf di akhir baris Remove-Item. Nanti PowerShell cuma bakal pamer, "Nih file yang BAKAL gue hapus," tanpa beneran ngehapus. Jadi lu bisa cek dulu.</Callout>
 
 ## Cara Biar Run Otomatis (Gak Perlu Klik-Klik Lagi)
 
