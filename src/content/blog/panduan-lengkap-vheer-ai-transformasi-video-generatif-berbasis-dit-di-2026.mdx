@@ -9,7 +9,12 @@ tags:
   - Vheer AI
   - Content Strategy
   - Tech Tutorial
-draft: true
+image: /images/blog/hero-vheer-ai.webp
+imageAlt: Visualisasi 3D node pemrosesan AI video dengan aliran data berwarna
+  hijau emerald dan latar belakang minimalis.
+imageCaption: Representasi visual dari pemrosesan AI Video masa depan yang
+  mengandalkan efisiensi komputasi tinggi dan konsistensi data.
+draft: false
 featured: false
 author:
   name: Bima Akbar
@@ -19,6 +24,7 @@ seo:
   title: "Panduan Lengkap Vheer AI: Transformasi Video Generatif Berbasis DiT di 2026"
   description: Analisis mendalam arsitektur Vheer AI, perbandingannya dengan
     Sora/Runway, strategi render 4K, dan optimasi workflow untuk monetisasi.
+  ogImage: /images/blog/og/og-vheer-ai.webp
 ---
 import Callout from "@/components/mdx/Callout.astro";
 import CodeGroup from "@/components/mdx/CodeGroup.astro";
@@ -73,7 +79,6 @@ Gunakan resolusi rendah (360p) terlebih dahulu untuk mengecek *angle* kamera. Te
 
 Gunakan fitur *Refiner* bawaan Vheer untuk membersihkan noise pada area gelap. Cukup tekan Shift + R untuk memicu mode refinement.
 
-
 ## Integrasi API untuk Automasi CMS
 
 Lu bisa menghubungkan Vheer langsung ke CMS portfolio lu agar render terjadi di *background*.
@@ -112,4 +117,10 @@ async function renderVideo() {
 - Video Berkedip (Flickering): Naikkan nilai Temporal Refinement di settings.
 - Objek Hilang di Tengah Durasi: Ini karena context window penuh. Pecah video lu jadi 2 segmen masing-masing 5 detik, lalu stitch di editor.
 - API Timeout: Pastikan lu pake Webhook buat nerima hasil render, jangan ditungguin secara synchronous.
+
+## Gallery
+
+![](/images/blog/1000187795.webp)
+
+![Hasil render 4K Vheer AI menunjukkan pria sedang angkat beban di gym industrial dengan pencahayaan sinematik dan detail keringat yang realistis.](/images/blog/hasil-render-vheer-ai.webp)
 
