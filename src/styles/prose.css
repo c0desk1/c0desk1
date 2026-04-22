@@ -64,23 +64,26 @@
 
 .prose-custom h2:hover::before,
 .prose-custom h3:hover::before {
-  content: '#';
-  position: absolute;
-  left: -1.25rem;
-  color: #a1a1aa;
-  font-weight: 400;
+  content: none; 
 }
 
-.dark.prose-custom h2:hover::before,
-.dark.prose-custom h3:hover::before {
+.prose-custom h2:hover::after,
+.prose-custom h3:hover::after {
+  content: '#';
+  margin-left: 0.5rem;
+  color: #a1a1aa;
+  font-weight: 400;
+  font-size: 1.1rem;
+  vertical-align: middle;
+}
+
+.dark.prose-custom h2:hover::after,
+.dark.prose-custom h3:hover::after {
   color: #52525b;
 }
 
-.steps-container h3:hover::before {
+.steps-container h3:hover::after {
   content: none !important;
-}
-.steps-container h3::before {
-  content: counter(step) !important;
 }
 
 /* ==================== PARAGRAPH ==================== */
