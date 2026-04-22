@@ -2,50 +2,28 @@
 // src/components/mdx/Steps.astro
 ---
 
-<div class="steps-container not-prose my-12 ml-4">
+<div class="steps-container not-prose my-8 ml-4 border-l border-zinc-200 pl-8 dark:border-zinc-800">
   <slot />
 </div>
 
 <style is:global>
-  .steps-container {
-    counter-reset: step;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .steps-container > h3,
-  .steps-container > p:has(strong:first-child) {
+  .steps-container h3 {
     counter-increment: step;
     position: relative;
-    padding-left: 2.25rem;
-    margin-bottom: 0.5rem !important;
-    margin-top: 2rem !important;
-    font-size: 0.9375rem;
+    font-size: 1rem; /* text-base */
     font-weight: 600;
-    color: #18181b;
+    margin-bottom: 0.5rem;
+    color: var(--tw-prose-headings);
   }
 
-  .dark .steps-container > h3,
-  .dark .steps-container > p:has(strong:first-child) {
-    color: #fafafa;
+  .steps-container {
+    counter-reset: step;
   }
-
-  .steps-container > h3 + p,
-  .steps-container > p:has(strong:first-child) + p {
-    padding-left: 2.25rem;
-    margin-top: -0.25rem !important;
-    margin-bottom: 0 !important;
-    font-size: 0.9375rem;
-    color: #71717a;
-    counter-increment: none; 
-  }
-
-  .steps-container > h3::before,
-  .steps-container > p:has(strong:first-child)::before {
+  .steps-container h3::before {
     content: counter(step);
     position: absolute;
-    left: 0;
-    top: 0;
+    left: -2.85rem;
+    top: -0.1rem;
     width: 1.75rem;
     height: 1.75rem;
     background-color: #ffffff;
@@ -55,41 +33,12 @@
     align-items: center;
     justify-content: center;
     font-size: 0.75rem;
-    font-weight: 600;
-    color: #71717a;
-    z-index: 10;
+    font-weight: 700;
+    color: #18181b;
   }
-
-  .dark .steps-container > h3::before,
-  .dark .steps-container > p:has(strong:first-child)::before {
+  .dark .steps-container h3::before {
     background-color: #09090b;
     border-color: #27272a;
-    color: #a1a1aa;
-  }
-
-  .steps-container > h3::after,
-  .steps-container > p:has(strong:first-child)::after {
-    content: "";
-    position: absolute;
-    left: 0.875rem;
-    top: 1.75rem;
-    bottom: -2.5rem;
-    width: 1px;
-    background-color: #e4e4e7;
-    z-index: 1;
-  }
-
-  .dark .steps-container > h3::after,
-  .dark .steps-container > p:has(strong:first-child)::after {
-    background-color: #27272a;
-  }
-
-  .steps-container > h3:last-of-type::after,
-  .steps-container > p:has(strong:first-child):last-of-type::after {
-    display: none;
-  }
-
-  .steps-container > *:first-child {
-    margin-top: 0 !important;
+    color: #fafafa;
   }
 </style>
