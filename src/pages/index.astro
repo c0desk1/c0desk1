@@ -10,7 +10,7 @@ import HomeBlogSection from '@/components/home/HomeBlogSection.astro';
 import HomePortfolioSection from '@/components/home/HomePortfolioSection.astro';
 
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
-const blogPosts = sortByDate(allPosts).slice(0, 4);
+const blogPosts = sortByDate(allPosts).slice(0, 9);
 
 const allProjects = await getCollection('portfolio', ({ data }) => !data.draft);
 const portfolioProjects = sortByDate(allProjects, 'date').slice(0, 2);
@@ -25,5 +25,5 @@ const seoData = {
 <BaseLayout {...seoData}>
   <Hero />
   <HomeBlogSection posts={blogPosts} />
-  <HomePortfolioSection projects={portfolioProjects} />
+  <!---<HomePortfolioSection projects={portfolioProjects} />--->
 </BaseLayout>
