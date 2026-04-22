@@ -1,13 +1,12 @@
 ---
-// src/components/mdx/CodeGroup.astro
 interface Props {
-  titles: string[];
+  titles?: string[]; // Made optional with '?' to prevent crashes
 }
 
-const { titles } = Astro.props;
+const { titles = ["Code"] } = Astro.props; // Default to ["Code"] if empty
 ---
 
-<div class="not-prose my-6 overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-800">
+<div class="not-prose my-6 overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-950">
   <div class="flex overflow-x-auto border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50">
     {titles.map((title, index) => (
       <button
@@ -18,23 +17,33 @@ const { titles } = Astro.props;
       </button>
     ))}
   </div>
-  <div class="code-group-content">
+  <div class="code-group-content [&_pre]:!my-0 [&_pre]:!rounded-none">
     <slot />
   </div>
 </div>
 
 <script>
-  const tabs = document.querySelectorAll('[data-code-tab]');
-  const contents = document.querySelector('.code-group-content')?.children;
-  
-  if (tabs.length && contents) {
-    const activate = (index) => {
-      tabs.forEach((tab, i) => {
-        tab.setAttribute('data-active', i === index);
-        if (contents[i]) contents[i].style.display = i === index ? 'block' : 'none';
-      });
-    };
-    tabs.forEach((tab, i) => tab.addEventListener('click', () => activate(i)));
-    activate(0);
-  }
+  // Added a check to ensure code runs only when tabs exist
+  const initTabs = () => {
+    const tabs = document.querySelectorAll('[data-code-tab]');
+    const contents = document.querySelector('.code-group-content')?.children;
+    
+    if (tabs.length && contents) {
+      const activate = (index: number) => {
+        tabs.forEach((tab, i) => {
+          tab.setAttribute('data-active', (i === index).toString());
+          if (contents[i]) {
+            (contents[i] as HTMLElement).style.display = i === index ? 'block' : 'none';
+          }
+        });
+      };
+      tabs.forEach((tab, i) => tab.addEventListener('click', () => activate(i)));
+      activate(0);
+    }
+  };
+
+  // Run on initial load
+  initTabs();
+  // Run on view transitions if you use them
+  document.addEventListener('astro:after-swap', initTabs);
 </script>
