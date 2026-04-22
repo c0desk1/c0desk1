@@ -385,6 +385,10 @@
   margin: 2rem 0;
 }
 
+.prose-custom figure > p, .prose-custom figure p > img {
+  margin: 0;
+}
+
 .prose-custom figure img {
   width: 100%;
   height: auto;
