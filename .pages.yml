@@ -60,7 +60,7 @@ content:
     label: Blog Posts
     type: collection
     path: src/content/blog
-    filename: "{primary}.md"
+    filename: "{primary}.mdx"
     view:
       fields: [image, title, pubDate, draft, featured]
       sort: ["pubDate desc"]
