@@ -13,13 +13,13 @@ import BlogFeaturedImage from '@/components/blog/BlogFeaturedImage.astro';
 import BlogContent from '@/components/blog/BlogContent.astro';
 import BlogTOC from '@/components/blog/BlogTOC.astro';
 import BlogRelatedPosts from '@/components/blog/BlogRelatedPosts.astro';
+
 import Image from "@/components/mdx/Image.astro";
 import HR from "@/components/mdx/HR.astro";
 
 import {
   filterHeadingsForTOC,
   getRelatedPosts,
-  formatDateCompact,
   formatDate,
   getReadingTime
 } from '@/lib/utils';
@@ -61,8 +61,9 @@ const relatedPosts = getRelatedPosts(post, allPosts, 3);
 const seoTitle = seo?.title || title;
 const seoDescription = seo?.description || description;
 const seoImage = seo?.ogImage || image || siteConfig.ogImage;
+
 const tocHeadings = filterHeadingsForTOC(headings);
-const displayImage = image; 
+
 const readingTime = getReadingTime(post.body, 'id');
 const lastUpdated = formatDate(updatedDate || pubDate);
 ---
@@ -77,55 +78,78 @@ const lastUpdated = formatDate(updatedDate || pubDate);
   tags={tags}
   container={false}
 >
-  <article>
-    <Container size="sm" class="py-6 md:py-8">
-      <Breadcrumb items={[
+<article>
+  <!-- HEADER AREA -->
+  <Container size="sm" class="pt-6 md:pt-8 pb-2">
+    <Breadcrumb
+      items={[
         { name: 'Home', href: '/' },
         { name: 'Blog', href: '/blog/' },
-      ]} />
-      <BlogHeader
-        title={title}
-        pubDate={pubDate}
-        updatedDate={updatedDate}
-        readingTime={readingTime}
-        authorName={author?.name} 
-        authorAvatar={author?.avatar} 
-        authorTitle={author?.title}
-        featured={featured}
-      />
-    </Container>
-    <Container size="sm">
-      <div class="grid grid-cols-1 gap-8 md:gap-12">
+      ]}
+    />
+    <BlogHeader
+      title={title}
+      pubDate={pubDate}
+      updatedDate={updatedDate}
+      readingTime={readingTime}
+      authorName={author?.name}
+      authorAvatar={author?.avatar}
+      authorTitle={author?.title}
+      featured={featured}
+    />
+
+  </Container>
+
+  <!-- FEATURED IMAGE -->
+  {image && (
+    <BlogFeaturedImage
+      image={image}
+      alt={imageAlt || title}
+      caption={imageCaption || imageAlt}
+    />
+  )}
+
+
+  <!-- MAIN CONTENT -->
+  <Container size="sm" class="pt-6 md:pt-8 pb-12">
+
+    <!-- TOC -->
+    {tocHeadings.length > 0 && (
+      <div class="mb-8 md:mb-10">
         <BlogTOC headings={tocHeadings} />
-		{displayImage && (
-      	<BlogFeaturedImage
-        	image={displayImage}
-        	alt={imageAlt || title}
-        	caption={imageCaption || imageAlt}
-      	/>
-    	)}
-        <div class="min-w-0">
-          <BlogContent>
-            <Content
-              components={{
-                img: Image,
-                hr: HR
-              }}
-            />
-          </BlogContent>
-          <BlogRelatedPosts posts={relatedPosts} />
-          <div id="yandex_rtb_R-A-19135204-3" class="pt-6"></div>
-          
-        </div>
       </div>
-    </Container>
-  </article>
+    )}
+
+    <!-- ARTICLE BODY -->
+    <div class="min-w-0">
+      <BlogContent>
+        <Content
+          components={{
+            img: Image,
+            hr: HR
+          }}
+        />
+      </BlogContent>
+
+      <!-- RELATED POSTS -->
+      <div class="mt-12 md:mt-16">
+        <BlogRelatedPosts posts={relatedPosts} />
+      </div>
+
+      <!-- ADS -->
+      <div
+        id="yandex_rtb_R-A-19135204-3"
+        class="pt-8"
+      ></div>
+    </div>
+  </Container>
+</article>
 </BaseLayout>
 <script is:inline>
-  window.yaContextCb.push(() => {
-    Ya.Context.AdvManager.render({
-      blockId: "R-A-19135204-3",
-      renderTo: "yandex_rtb_R-A-19135204-3"
-    });
+window.yaContextCb.push(() => {
+  Ya.Context.AdvManager.render({
+    blockId: "R-A-19135204-3",
+    renderTo: "yandex_rtb_R-A-19135204-3"
   });
+});
 </script>
