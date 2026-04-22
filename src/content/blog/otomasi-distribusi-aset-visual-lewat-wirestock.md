@@ -10,7 +10,12 @@ tags:
   - Stock Photo
   - AI Tips
   - Passive Income
-draft: true
+image: /images/blog/otomasi-distribusi-wirestock.webp
+imageAlt: Visualisasi 3D minimalis yang menampilkan pusat distribusi digital
+  atau central hub yang terhubung ke berbagai titik, gaya industrial modern
+  dengan aksen warna biru neon.
+imageCaption: Mengoptimalkan distribusi aset digital melalui sistem satu pintu.
+draft: false
 featured: false
 author:
   name: Bima Akbar
@@ -20,6 +25,7 @@ seo:
   title: Otomasi Distribusi Aset Visual Lewat Wirestock
   description: Membedah workflow distribusi stok foto menggunakan Wirestock. Cara
     efisien jualan foto AI ke berbagai platform global dalam satu pintu.
+  ogImage: /images/blog/og/og-otomasi-distribusi-wirestock.webp
 ---
 Menghasilkan gambar AI yang estetik itu baru separuh jalan. Tantangan sebenernya adalah distribusi. Mengunggah aset satu per satu ke Adobe Stock, Shutterstock, hingga Pond5 lengkap dengan deskripsi dan puluhan *tags* adalah pekerjaan repetitif yang membosankan.
 
@@ -36,8 +42,8 @@ Konsep utama Wirestock adalah menjadi *aggregator*. Lu cukup *upload* sekali, da
 
 Meskipun prosesnya otomatis, kualitas input tetap jadi tanggung jawab lu. Wirestock punya standar kurasi yang lumayan ketat:
 
-- Upscaling: Pastikan gambar AI lu sudah melewati proses *upscale* minimal ke resolusi 4K. Gambar pecah bakal langsung ditolak (Rejection).
-- AI Labeling: Selalu jujur kalau gambar lu adalah hasil *Generative AI*. Transparansi adalah kunci agar akun lu aman untuk jangka panjang.
+- **Upscaling**: Pastikan gambar AI lu sudah melewati proses *upscale* minimal ke resolusi 4K. Gambar pecah bakal langsung ditolak (Rejection).
+- **AI Labeling**: Selalu jujur kalau gambar lu adalah hasil *Generative AI*. Transparansi adalah kunci agar akun lu aman untuk jangka panjang.
 
 ## Skema Monetisasi dan Potongan
 
