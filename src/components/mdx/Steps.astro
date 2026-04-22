@@ -2,7 +2,7 @@
 // src/components/mdx/Steps.astro
 ---
 
-<div class="not-prose my-6 space-y-4">
+<div class="steps-container not-prose my-8 ml-4 border-l border-zinc-200 pl-8 dark:border-zinc-800">
   <slot />
 </div>
 
@@ -10,32 +10,41 @@
   .steps-container {
     counter-reset: step;
   }
-  .step-item {
+  .steps-container > h3,
+  .steps-container > p:has(strong:first-child),
+  .steps-container > strong {
     counter-increment: step;
     position: relative;
-    padding-left: 2.5rem;
+    display: block;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
   }
-  .step-item::before {
+  .steps-container > h3::before,
+  .steps-container > p:has(strong:first-child)::before,
+  .steps-container > strong::before {
     content: counter(step);
     position: absolute;
-    left: 0;
-    top: 0;
+    left: -2.85rem; 
+    top: -0.1rem;
     width: 1.75rem;
     height: 1.75rem;
-    background-color: #f4f4f5;
+    background-color: #ffffff;
+    border: 1px solid #e4e4e7;
     border-radius: 9999px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.875rem;
-    font-weight: 600;
+    font-size: 0.75rem;
+    font-weight: 700;
     color: #18181b;
+    z-index: 10;
   }
-  .dark .step-item::before {
-    background-color: #27272a;
+
+  .dark .steps-container > h3::before,
+  .dark .steps-container > p:has(strong:first-child)::before,
+  .dark .steps-container > strong::before {
+    background-color: #09090b; /* zinc-950 */
+    border-color: #27272a;
     color: #fafafa;
-  }
-  .step-item:not(:last-child) {
-    padding-bottom: 1rem;
   }
 </style>
