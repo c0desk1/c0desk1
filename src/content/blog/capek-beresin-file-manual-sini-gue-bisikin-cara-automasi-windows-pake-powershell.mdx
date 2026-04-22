@@ -34,9 +34,11 @@ import Callout from "@/components/mdx/Callout.astro";
 import CodeGroup from "@/components/mdx/CodeGroup.astro";
 import Steps from "@/components/mdx/Steps.astro";
 
-Lu pernah nggak sih ngerasa kayak robot pas lagi ngerapiin folder? Misal, lu abis download ratusan aset desain atau foto, terus namanya berantakan semua kayak IMG_999_final_banget_v2.jpg. Atau yang lebih parah, folder "Downloads" lu udah penuh sampah file dari zaman Majapahit yang bikin SSD lu jerit-jerit?
+Lu pernah nggak sih ngerasa kayak robot pas lagi ngerapiin folder? Misal, lu abis download ratusan aset desain atau foto, terus namanya berantakan semua kayak `IMG_999_final_banget_v2.jpg`. Atau yang lebih parah, folder "Downloads" lu udah penuh sampah file dari zaman Majapahit yang bikin SSD lu jerit-jerit?
 
 Kalo lu masih *rename* atau *delete* satu-satu pake klik kanan... asli, lu buang-buang waktu berharga lu.
+
+---
 
 Di artikel ini, gue mau kasih tau cara bikin script PowerShell sederhana biar Windows lu kerja sendiri. Lu tinggal duduk manis sambil ngopi, biar script gue yang beresin sisanya.
 
@@ -44,9 +46,9 @@ Di artikel ini, gue mau kasih tau cara bikin script PowerShell sederhana biar Wi
 
 Banyak yang nanya, *"Kenapa nggak pake CMD aja, Bang?"*. Gini ya, PowerShell itu jauh lebih "pinter" dibanding CMD. Dia bisa baca objek. Jadi kalau lu mau nyari file yang ukurannya di atas 1GB atau file yang nggak pernah dibuka selama setahun, PowerShell bisa nemuin itu dengan gampang banget.
 
-### 1. Jurus Auto-Rename: Biar Folder Lu Estetik
+### Jurus Auto-Rename: Biar Folder Lu Estetik
 
-Katakanlah lu punya folder isi foto-foto dari kamera yang namanya DSC001, DSC002, dsb. Terus lu pengen ubah jadi Projek_Keren_001.
+Katakanlah lu punya folder isi foto-foto dari kamera yang namanya `DSC001`, `DSC002`, dsb. Terus lu pengen ubah jadi `Projek_Keren_001`.
 
 Sikat Pake Kode Ini:
 
@@ -68,7 +70,7 @@ Kenapa Gini?:
 1. `Get-ChildItem`: Ini cara lu bilang ke PowerShell, *"Eh, tolong liatin isi folder ini dong."*
 2. `-replace`: Ini perintah paling sakti buat nuker kata-kata sampah jadi kata-kata yang lu mau.
 
-### 2. Jurus Auto-Delete: Buang Mantan... Eh, File Sampah!
+### Jurus Auto-Delete: Buang Mantan... Eh, File Sampah!
 
 Gue yakin folder Temp atau Downloads lu itu sarang hantu. Nah, kita bisa bikin script yang otomatis hapus file yang udah lebih dari 30 hari nggak lu sentuh.
 
@@ -88,7 +90,9 @@ Get-ChildItem -Path $pathSampah -Recurse | Where-Object {
 ```
 </CodeGroup>
 
-<Callout type="tip">Kalau lu takut salah hapus, tambahin `-WhatIf` di akhir baris `Remove-Item`. Nanti PowerShell cuma bakal pamer, "Nih file yang BAKAL gue hapus," tanpa beneran ngehapus. Jadi lu bisa cek dulu.</Callout>
+<Callout type="tip">
+Kalau lu takut salah hapus, tambahin `-WhatIf` di akhir baris `Remove-Item`. Nanti PowerShell cuma bakal pamer, "Nih file yang BAKAL gue hapus," tanpa beneran ngehapus. Jadi lu bisa cek dulu.
+</Callout>
 
 ## Cara Biar Run Otomatis (Gak Perlu Klik-Klik Lagi)
 
@@ -114,6 +118,6 @@ Di bagian Add arguments, masukin:
 
 Selesai! Sekarang tiap pagi pas lu nyalain PC, script itu bakal jalan sendiri di *background*.
 
-## Kesimpulan: Jangan Jadi Budak File!
+## Kesimpulan
 
 Hari gini masih manual? Sayang banget skill lu. Dengan automasi kecil kayak gini, lu udah selangkah lebih maju buat jadi power user yang efisien.
