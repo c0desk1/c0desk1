@@ -141,50 +141,34 @@
   color: #a1a1aa;
 }
 
-/* ==================== INLINE CODE ==================== */
-
-.prose-custom code:not(pre code) {
-  font-size: 0.875rem;
-  background-color: #f4f4f5;
-  padding: 0.125rem 0.375rem;
-  border-radius: 0.25rem;
-  font-family: monospace;
-  color: #27272a;
-}
-
-.dark.prose-custom code:not(pre code) {
-  background-color: #27272a;
-  color: #d4d4d8;
-}
-
 /* ==================== CODE BLOCK ==================== */
 
 .prose-custom pre {
-  background-color: #09090b;
+  background-color: #09090b !important; 
   border: 1px solid #27272a;
   border-radius: 0.5rem;
-  padding: 1rem;
+  padding: 1.25rem;
   overflow-x: auto;
-  margin: 1rem 0;
+  margin: 1.5rem 0;
 }
 
 .dark .prose-custom pre {
-  background-color: #18181b;
-  border-color: #3f3f46;
+  background-color: #0c0c0e !important; 
+  border-color: #1d1d20;
 }
 
 .prose-custom pre code {
-  background-color: transparent;
+  background-color: transparent !important;
   padding: 0;
   color: #e4e4e7;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   line-height: 1.7;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 .dark .prose-custom pre code {
   color: #d4d4d8;
 }
-
 /* ==================== IMAGES ==================== */
 
 .prose-custom img {
