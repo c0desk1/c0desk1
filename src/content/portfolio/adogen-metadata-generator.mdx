@@ -27,6 +27,8 @@ seo:
   ogImage: "https://bimaakbar.my.id/images/blog/og/og-adogen.webp"
 ---
 
+import CodeGroup from "@/components/mdx/CodeGroup.astro";
+
 ## Key Features & Technical Decisions
 
 ### 1. Performa "Burag" dengan Astro & Tailwind
@@ -43,6 +45,7 @@ Untuk menangani *Rate Limit* dari provider AI gratisan, saya membangun sistem an
 ### 4. Robust CSV Sanitization
 Data dari AI seringkali mengandung karakter ilegal atau format yang berantakan. Saya membangun utilitas khusus menggunakan **TypeScript** untuk membersihkan baris baru (`\n`), menghapus simbol terlarang (`©`, `™`), dan memastikan limitasi 50 keyword terpenuhi sebelum file CSV diunduh.
 
+<CodeGroup titles={["Typescript"]}>
 ```typescript
 // Contoh logika sanitasi yang saya gunakan
 const clean = (str: string) => {
@@ -53,6 +56,7 @@ const clean = (str: string) => {
     .trim();
 };
 ```
+</CodeGroup>
 ---
 
 ### Kenapa Ini Bagus untuk Portfolio Kamu?
