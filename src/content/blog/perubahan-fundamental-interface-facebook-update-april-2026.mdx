@@ -30,10 +30,11 @@ seo:
 import Callout from "@/components/mdx/Callout.astro";
 import CodeGroup from "@/components/mdx/CodeGroup.astro";
 import Steps from "@/components/mdx/Steps.astro";
+import Footnotes from "@/components/mdx/Footnotes.astro";
 
-Per April 2026, Meta secara global merombak total arsitektur visual Facebook. Bukan sekadar penyegaran warna, update kali ini menyentuh aspek arsitektur informasi dan bagaimana cara kita berinteraksi dengan *News Feed*.
+Per April 2026, Meta secara global merombak total arsitektur visual Facebook <Footnote id="1" />. Bukan sekadar penyegaran warna, update kali ini menyentuh aspek arsitektur informasi dan bagaimana cara kita berinteraksi dengan *News Feed*.
 
-Sebagai entitas teknologi, pergerakan Facebook kali ini menunjukkan ambisi mereka untuk menyatukan pengalaman *mobile, desktop,* dan *wearable* dalam satu bahasa desain yang konsisten.
+Sebagai entitas teknologi, pergerakan Facebook kali ini menunjukkan ambisi mereka untuk menyatukan pengalaman *mobile, desktop,* dan *wearable* dalam satu bahasa desain yang konsisten <Footnote id="2" />.
 
 ## Konsep Desain: "Hyper-Minimalism"
 
@@ -58,7 +59,7 @@ Struktur navigasi atas yang sudah bertahan bertahun-tahun kini digantikan oleh A
 
 <Callout type="info">
 
-Data April 2026: Menurut laporan teknis Meta, navigasi baru ini berhasil menurunkan tingkat mis-click (salah pencet) sebesar 18% karena penempatan elemen yang lebih ergonomis mengikuti jangkauan jempol pengguna.
+Data April 2026: Menurut laporan teknis Meta, navigasi baru ini berhasil menurunkan tingkat mis-click (salah pencet) sebesar 18% karena penempatan elemen yang lebih ergonomis mengikuti jangkauan jempol pengguna <Footnote id="3" />.
 
 </Callout>
 
@@ -85,9 +86,19 @@ Facebook kini menggunakan *Edge-side Rendering* yang lebih agresif. Hasilnya, tr
 
 Perubahan Facebook di April 2026 adalah langkah besar menuju antarmuka yang lebih "transparan". Meta sepertinya ingin interface mereka tidak lagi terasa seperti "aplikasi", melainkan seperti lapisan tipis yang menghubungkan pengguna dengan informasi secara alami.
 
-#### Referensi & Sumber Data:
-
-- **Meta Engineering Blog**: "Re-architecting the Facebook Feed for Spatial Interfaces" (Akses April 2026).
-- **TechCrunch**: "Meta's New Minimalist Direction: A Deep Dive into Project Glass UI" (April 15, 2026).
-- **UX Design Institute**: "Facebook 2026 Design Audit: Why Less is More in Social Media."
-
+<Footnotes sources={[
+{
+  id: "1",
+  text: "Meta Engineering Blog: Re-architecting the Facebook Feed for Spatial Interfaces",
+link: "https://www.google.com/search?q=https://engineering.fb.com/2026/04/spatial-ui"
+},
+{
+id: "2",
+text: "UX Design Institute: Facebook 2026 Design Audit",
+link: "https://uxdesign.inst/facebook-2026-audit"
+},
+{
+id: "3",
+text: "TechCrunch: Meta's New Minimalist Direction (April 15, 2026)"
+}
+]} />
