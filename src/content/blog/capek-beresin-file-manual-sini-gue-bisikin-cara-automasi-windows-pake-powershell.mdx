@@ -74,7 +74,7 @@ Gue yakin folder Temp atau Downloads lu itu sarang hantu. Nah, kita bisa bikin s
 
 Copy-Paste Kode Ini:
 
-<CodeGroup titles={["Powersheel"]}>
+<CodeGroup titles={["Powershell"]}>
 
 ```
 # Target folder sampah lu
@@ -95,18 +95,12 @@ Get-ChildItem -Path $pathSampah -Recurse | Where-Object {
 Script di atas nggak bakal guna kalau lu harus buka-tulis tiap hari. Lu harus pake Task Scheduler bawaan Windows:
 <Steps>
 
-Cari Task Scheduler di Start Menu.
-
-Pilih Create Basic Task, kasih nama "Bersih-Bersih Folder".
-
-Di bagian Action, pilih Start a Program.
-
-Di bagian Program/script isi: powershell.exe.
-
-Di bagian Add arguments, masukin:
-```
--ExecutionPolicy Bypass -File "C:\Path\Ke\Script\Lu.ps1".
-```
+1. Cari Task Scheduler di Start Menu.
+2.Pilih Create Basic Task, kasih nama "Bersih-Bersih Folder".
+3. Di bagian Action, pilih Start a Program.
+4. Di bagian Program/script isi: powershell.exe.
+5. Di bagian Add arguments, masukin:
+`-ExecutionPolicy Bypass -File "C:\Path\Ke\Script\Lu.ps1".`
 </Steps>
 
 Selesai! Sekarang tiap pagi pas lu nyalain PC, script itu bakal jalan sendiri di *background*.
