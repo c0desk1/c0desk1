@@ -17,26 +17,32 @@ const tocHeadings = filterHeadingsForTOC(headings);
 ---
 
 {tocHeadings.length > 0 && (
-  <aside class="block">
-    <div class="sticky top-24">
-      <div class="mb-3">
-        <span class="text-xs md:text-sm font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-          Di halaman ini
-        </span>
-      </div>
-      <nav class="space-y-2">
-        {tocHeadings.map(h => (
+  <nav class="not-prose my-10 rounded-xl border border-zinc-200 bg-zinc-50/50 p-6 dark:border-zinc-800 dark:bg-zinc-900/50">
+    <div class="mb-4">
+      <h2 class="text-[12px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
+        Daftar Isi
+      </h2>
+    </div>
+    
+    <ul class="grid grid-cols-1 gap-x-8 gap-y-2 md:grid-cols-2">
+      {tocHeadings.map(h => (
+        <li class:list={[
+          "flex items-start transition-all duration-200",
+          h.depth === 3 ? "ml-4" : "" 
+        ]}>
           <a
             href={`#${h.slug}`}
-            class="group block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+            class="group flex items-center gap-2 text-[14px] text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
           >
-            <span class="relative inline-block">
+            <span class="h-1 w-1 shrink-0 rounded-full bg-zinc-300 transition-colors group-hover:bg-emerald-500 dark:bg-zinc-700"></span>
+            
+            <span class="relative overflow-hidden">
               {h.text}
-              <span class="absolute -bottom-0.5 left-0 w-0 h-px bg-zinc-400 dark:bg-zinc-500 group-hover:w-full transition-all duration-200"></span>
+              <span class="absolute bottom-0 left-0 h-px w-0 bg-zinc-900 transition-all duration-300 group-hover:w-full dark:bg-zinc-100"></span>
             </span>
           </a>
-        ))}
-      </nav>
-    </div>
-  </aside>
+        </li>
+      ))}
+    </ul>
+  </nav>
 )}
