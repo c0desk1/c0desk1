@@ -10,29 +10,19 @@ const { src, alt = "", title } = Astro.props;
 const caption = title || alt;
 ---
 
-<figure class="overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 my-8">
+<figure class="my-8 overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900">
 
-  <div class="relative overflow-hidden">
-    <div
-      class="absolute inset-0 animate-pulse bg-zinc-200 dark:bg-zinc-800"
-      aria-hidden="true"
-    ></div>
-
-    <img
-      src={src}
-      alt={alt}
-      loading="lazy"
-      decoding="async"
-      class="relative z-10 w-full h-auto object-cover opacity-0 transition-opacity duration-500"
-      onload="this.style.opacity='1'"
-    />
-  </div>
+  <img
+    src={src}
+    alt={alt}
+    loading="lazy"
+    decoding="async"
+    class="w-full h-auto object-cover"
+  />
 
   {caption && (
-    <figcaption class="px-2 py-1.5 border-t border-zinc-200 dark:border-zinc-800 text-xs md:text-sm text-center text-zinc-500 dark:text-zinc-400 flex items-center justify-center gap-2">
-      <span>
-        {caption}
-      </span>
+    <figcaption class="px-2 py-1.5 border-t border-zinc-200 dark:border-zinc-800 text-xs md:text-sm text-center text-zinc-500 dark:text-zinc-400">
+      {caption}
     </figcaption>
   )}
 
