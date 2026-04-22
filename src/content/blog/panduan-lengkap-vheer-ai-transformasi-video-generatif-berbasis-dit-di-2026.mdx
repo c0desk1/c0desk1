@@ -30,6 +30,7 @@ import Callout from "@/components/mdx/Callout.astro";
 import CodeGroup from "@/components/mdx/CodeGroup.astro";
 import Steps from "@/components/mdx/Steps.astro";
 import KBD from "@/components/mdx/KBD.astro";
+import ImageGrid from "@/components/mdx/ImageGrid.astro";
 
 Lompatan teknologi AI Video di tahun 2026 tidak lagi hanya soal "bisa membuat video", tapi soal **konsistensi temporal**. Di sinilah **Vheer AI** muncul sebagai pemain kunci. Dengan arsitektur *Diffusion-Transformer* (DiT), Vheer mampu memecahkan masalah klasik AI video: gerakan yang patah dan perubahan objek yang tidak logis.
 
@@ -119,7 +120,16 @@ async function renderVideo() {
 - Objek Hilang di Tengah Durasi: Ini karena context window penuh. Pecah video lu jadi 2 segmen masing-masing 5 detik, lalu stitch di editor.
 - API Timeout: Pastikan lu pake Webhook buat nerima hasil render, jangan ditungguin secara synchronous.
 
-## Gallery
+## Hasil render dari Vheer AI
 
-![Hasil render 4K Vheer AI menunjukkan pria sedang angkat beban di gym industrial dengan pencahayaan sinematik dan detail keringat yang realistis.](/images/blog/hasil-render-vheer-ai.webp)
 
+<ImageGrid 
+  columns={1}
+  images={[
+    { 
+      src: "/images/blog/hasil-render-vheer-ai.webp", 
+      alt: "Vheer AI Test", 
+      caption: "Hasil render 4K Vheer AI menunjukkan pria sedang angkat beban di gym industrial dengan pencahayaan sinematik dan detail keringat yang realistis." 
+    }
+  ]} 
+/>
