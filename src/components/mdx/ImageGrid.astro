@@ -1,0 +1,19 @@
+---
+// src/components/mdx/ImageGrid.astro
+interface Props {
+  images: { src: string; alt: string }[];
+}
+
+const { images } = Astro.props;
+---
+
+<div class="not-prose my-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+  {images.map(img => (
+    <img
+      src={img.src}
+      alt={img.alt}
+      class="rounded-lg border border-zinc-200 dark:border-zinc-800"
+      loading="lazy"
+    />
+  ))}
+</div>
