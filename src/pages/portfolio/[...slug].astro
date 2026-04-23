@@ -161,17 +161,8 @@ const relatedProjects = getRelatedProjects(project, allProjects, 2);
         <PortfolioFeedback
           lastUpdated={formatDateCompact(updatedDate || date)}
         />
-        <div id="yandex_rtb_R-A-19135204-3" class="pt-4"></div>
-        <BackToTop showBorder={true} align="right" />
+        <BackToTop showBorder={true} align="center" />
       </div>
     </Container>
   </article>
 </BaseLayout>
-<script is:inline>
-  window.yaContextCb.push(() => {
-    Ya.Context.AdvManager.render({
-      blockId: "R-A-19135204-3",
-      renderTo: "yandex_rtb_R-A-19135204-3"
-    });
-  });
-</script>
