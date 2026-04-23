@@ -68,20 +68,19 @@
   background-image: radial-gradient(circle at 25% 0%, rgba(255,255,255,0.03) 0%, transparent 50%);
 }
 
-/* GRID BACKGROUND MODERN */
-
-.bg-grid {
+.grid-bg {
   position: relative;
 }
 
-.bg-grid::before {
+.grid-bg::before {
   content: "";
   position: absolute;
   inset: 0;
   background-image:
     linear-gradient(to right, rgba(0,0,0,0.04) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(0,0,0,0.04) 1px, transparent 1px);
-  background-size: calc(100% / 3) 56px;
+  background-size:
+    calc(100% / 3) 56px;
   mask-image: linear-gradient(
     to bottom,
     transparent,
@@ -89,10 +88,11 @@
     black calc(100% - 40px),
     transparent
   );
+
   pointer-events: none;
 }
 
-.dark .bg-grid::before {
+.dark .grid-bg::before {
   background-image:
     linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
