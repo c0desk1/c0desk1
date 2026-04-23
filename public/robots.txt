@@ -4,13 +4,6 @@ Allow: /rss.xml
 
 User-agent: *
 Allow: /
-Allow: /favicon.ico
-Allow: /favicon.svg
-Allow: /apple-touch-icon.png
-
-# Yandex
-User-agent: Yandex
-Allow: /
 
 # Disallow
 Disallow: /api/
