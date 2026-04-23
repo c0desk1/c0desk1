@@ -24,7 +24,7 @@ const { sources } = Astro.props;
         <span class="shrink-0 font-mono text-[10px] text-zinc-400 mt-1">[{s.id}]</span>
         <div class="leading-relaxed">
           {s.link ? (
-            <a href={s.link} target="_blank" rel="noopener" class="hover:text-emerald-500 transition-colors underline underline-offset-4 decoration-zinc-300 dark:decoration-zinc-700">
+            <a href={s.link} target="_blank" rel="noopener" class="hover:text-emerald-500">
               {s.text}
             </a>
           ) : (
