@@ -74,16 +74,15 @@ const {
   </head>
 
   <body class="bg-white dark:bg-black text-zinc-950 dark:text-zinc-50 antialiased font-medium ">
+  
     <div aria-hidden="true" class="pointer-events-none fixed inset-0 z-0">
       <div class="absolute inset-y-0 left-1/2 w-px bg-black/5 dark:bg-white/5"></div>
       <div class="absolute top-0 bottom-0 left-[15%] w-px bg-black/5 dark:bg-white/5"></div>
       <div class="absolute top-0 bottom-0 left-[85%] w-px bg-black/5 dark:bg-white/5"></div>
-
-      <div class="absolute top-20 left-1/2 w-px h-px rounded-full -translate-x-1/2 bg-zinc-400/40 dark:bg-zinc-600/40"></div>
-      <div class="absolute bottom-20 left-1/2 w-px h-px rounded-full -translate-x-1/2 bg-zinc-400/40 dark:bg-zinc-600/40"></div>
     </div>
 
     {header && <Header />}
+    
     <main>
       {container ? (
         <Container size={containerSize}>
@@ -120,7 +119,9 @@ const {
     		</div>
   		</Container>
 		)}
+		
       <HomeCTA />
+      
     </main>    
     {footer && <Footer />}
     <noscript>
