@@ -9,9 +9,11 @@ import partytown from '@astrojs/partytown';
 
 import mdx from '@astrojs/mdx';
 
+import { siteConfig } from '@/config/site';
+
 // https://astro.build/config
 export default defineConfig({
-  site: "https://c0desk1.my.id",
+  site: siteConfig.url,
   vite: {
     plugins: [tailwindcss()]
   },
