@@ -2,6 +2,8 @@
 // src/components/layout/BaseHead.astro
 import { siteConfig } from "@/config/site";
 
+import Analytics from "@/components/layout/Analytics.astro";
+
 interface Props {
   title?: string;
   description?: string;
@@ -178,3 +180,5 @@ if (type === "website") {
 <link rel="dns-prefetch" href="https://mc.yandex.ru">
 
 <meta name="yandex-verification" content="1878480c0d7b5510" />
+
+<Analytics />
