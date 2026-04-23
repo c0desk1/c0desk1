@@ -71,6 +71,8 @@ const {
       modifiedTime={modifiedTime}
       tags={tags}
     />
+	<script is:inline>window.yaContextCb=window.yaContextCb||[]</script>
+	<script src="https://yandex.ru/ads/system/context.js" async></script>
   </head>
 
   <body class="bg-white dark:bg-black text-zinc-950 dark:text-zinc-50 antialiased font-medium ">
@@ -95,7 +97,14 @@ const {
       <!-- Yandex Ads  -->
       {import.meta.env.PROD && (
   		<Container size={containerSize}>
-	
+        <script is:inline>
+          window.yaContextCb.push(() => {
+              Ya.Context.AdvManager.render({
+                  "blockId": "R-A-19153443-1",
+                  "type": "topAd"
+              })
+          })
+        </script>
   		</Container>
 		)}
 		
