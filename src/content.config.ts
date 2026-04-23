@@ -3,6 +3,8 @@ import { defineCollection } from "astro:content";
 import { z } from "astro/zod";
 import { glob } from "astro/loaders";
 
+import { categories } from "@/config/blog";
+
 
 const createSeoSchema = () => z.object({
   title: z.string().max(100).optional(),
@@ -28,6 +30,9 @@ const blogCollection = defineCollection({
     image: z.string().optional(),
     imageAlt: z.string().optional(),
     imageCaption: z.string().optional(),
+    category: z
+      .enum(categories)
+      .default("general"),
     tags: z.array(z.string().max(30)).max(5).default([]),
     draft: z.boolean().default(false),
     featured: z.boolean().default(false),
