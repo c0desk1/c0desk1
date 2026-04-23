@@ -95,28 +95,7 @@ const {
       <!-- Yandex Ads  -->
       {import.meta.env.PROD && (
   		<Container size={containerSize}>
-			  <div class="yandex-ads my-8">
-      		<script is:inline>window.yaContextCb = window.yaContextCb || [];</script>
-      		<script async src="https://yandex.ru/ads/system/context.js"></script>
-      		<script is:inline>
-        		window.yaContextCb.push(() => {
-          		Ya.Context.AdvManager.render({
-            		blockId: "R-A-19135204-1",
-            		type: "topAd",
-          		});
-        		});
-      		</script>
-      
-      		<script is:inline>
-        		window.yaContextCb.push(() => {
-          		Ya.Context.AdvManager.render({
-            		blockId: "R-A-19135204-2",
-            		type: "floorAd",
-            		platform: "desktop"
-          		});
-        		});
-      		</script>
-    		</div>
+	
   		</Container>
 		)}
 		
@@ -124,8 +103,5 @@ const {
       
     </main>    
     {footer && <Footer />}
-    <noscript>
-      <div><img src="https://mc.yandex.ru/watch/108674014" style="position:absolute; left:-9999px;" alt="" /></div>
-    </noscript>
   </body>
 </html>
