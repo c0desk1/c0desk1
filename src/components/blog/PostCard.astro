@@ -1,83 +1,158 @@
 ---
-// src/components/blog/PostCard.astro
+// src/pages/blog/[...slug].astro
 
+import { getCollection, render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { siteConfig } from '@/config/site';
 import { categoryLabels } from '@/config/blog';
-import { formatDateCompact, getReadingTime } from '@/lib/utils';
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/ui/Container.astro';
+import Breadcrumb from '@/components/ui/Breadcrumb.astro';
+import BlogHeader from '@/components/blog/BlogHeader.astro';
+import BlogFeaturedImage from '@/components/blog/BlogFeaturedImage.astro';
+import BlogContent from '@/components/blog/BlogContent.astro';
+import BlogTOC from '@/components/blog/BlogTOC.astro';
+import BlogRelatedPosts from '@/components/blog/BlogRelatedPosts.astro';
+
+import Image from "@/components/mdx/Image.astro";
+import HR from "@/components/mdx/HR.astro";
+
+import {
+  filterHeadingsForTOC,
+  getRelatedPosts,
+  formatDate,
+  getReadingTime
+} from '@/lib/utils';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+
+  return posts.map((post: CollectionEntry<'blog'>) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
 
 interface Props {
   post: CollectionEntry<'blog'>;
 }
 
 const { post } = Astro.props;
-const { data, id, body } = post;
 
 const {
   title,
   description,
   pubDate,
+  tags,
+  updatedDate,
   category,
+  image,
+  imageAlt,
+  imageCaption,
   featured,
-  author
-} = data;
+  author,
+  seo
+} = post.data;
 
-const formattedDate = formatDateCompact(pubDate);
-const readingTime = getReadingTime(body, 'id');
+const { Content, headings } = await render(post);
 
-const authorName = author?.name || siteConfig.author;
-const authorAvatar = author?.avatar || siteConfig.authorAvatar;
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const relatedPosts = getRelatedPosts(post, allPosts, 3);
+
+const seoTitle = seo?.title || title;
+const seoDescription = seo?.description || description;
+const seoImage = seo?.ogImage || image || siteConfig.ogImage;
+
+const tocHeadings = filterHeadingsForTOC(headings);
+
+const readingTime = getReadingTime(post.body);
+const lastUpdated = formatDate(updatedDate || pubDate);
 ---
 
-<a
-  href={`/blog/${id}`}
-  class="group block"
-  aria-label={`Read article: ${title}`}
+<BaseLayout
+  title={seoTitle}
+  description={seoDescription}
+  image={seoImage}
+  type="article"
+  publishedTime={pubDate}
+  modifiedTime={updatedDate}
+  tags={tags}
+  container={false}
 >
-  <div class="flex flex-col gap-3 my-4">
-    <div class="flex items-center justify-between text-xs md:text-sm text-zinc-500 dark:text-zinc-400">
-      <div class="flex items-center gap-2">
-        {featured && (
-          <span class="text-amber-600 dark:text-amber-500 px-1.5 py-0.5 bg-amber-50 dark:bg-amber-950/30 rounded">
-            Unggulan
-          </span>
-        )}
-        <time datetime={pubDate.toISOString()}>
-          {formattedDate}
-        </time>
+<article>
+  <Container size="sm" class="pt-6 md:pt-8 pb-2">
+    <Breadcrumb
+      items={[
+        { name: 'Home', href: '/' },
+        { name: 'Blog', href: '/blog/' },
+        { name: categoryLabels[category], href: `/category/${category}/` },
+      ]}
+    />
+    <BlogHeader
+      title={title}
+      pubDate={pubDate}
+      updatedDate={updatedDate}
+      readingTime={readingTime}
+      authorName={author?.name}
+      authorAvatar={author?.avatar}
+      authorTitle={author?.title}
+      featured={featured}
+    />
+
+  </Container>
+  <Container size="sm">
+    <!-- FEATURED IMAGE -->
+    {image && (
+      <BlogFeaturedImage
+        image={image}
+        alt={imageAlt || title}
+        caption={imageCaption || imageAlt}
+      />
+    )}
+  </Container>
+
+  <!-- MAIN CONTENT -->
+  <Container size="sm" class="pt-6 md:pt-8 pb-12">
+
+    <!-- TOC -->
+    {tocHeadings.length > 0 && (
+      <div class="mb-8 md:mb-10">
+        <BlogTOC headings={tocHeadings} />
       </div>
-      <span>
-        {readingTime}
-      </span>
-    </div>
-    <h3 class="text-base font-semibold mb-2 text-zinc-900 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-300 line-clamp-3">
-      {title}
-    </h3>
-    <p class="text-sm text-zinc-600 dark:text-zinc-400 line-clamp-3">
-      {description}
-    </p>
-    <div class="flex justify-between items-center">
-      <div class="flex items-center gap-2 pt-1">
-        {authorAvatar && (
-          <img
-            src={authorAvatar}
-            alt={authorName}
-            class="w-4 h-4 rounded-full object-cover"
-            loading="lazy"
-          />
-        )}
-        <span class="text-xs md:text-sm text-zinc-500 dark:text-zinc-400">
-          {authorName}
-        </span>
-      </div>
+    )}
+
+    <!-- ARTICLE BODY -->
+    <div class="min-w-0">
+      <BlogContent>
+        <Content
+          components={{
+            img: Image,
+            hr: HR
+          }}
+        />
+      </BlogContent>
+
+      <!-- RELATED POSTS -->
+      <section class="section-divider mt-12 md:mt-16">
+        <BlogRelatedPosts posts={relatedPosts} />
+      </section>
+
+      <!-- ADS -->
       <div
-        class="text-xs md:text-sm
-        text-zinc-500 dark:text-zinc-400
-        group-hover:text-zinc-900 dark:group-hover:text-white
-        transition-colors"
-      >
-        {categoryLabels[category]}
-      </div>
+        id="yandex_rtb_R-A-19135204-3"
+        class="pt-8"
+      ></div>
     </div>
-  </div>
-</a>
+  </Container>
+</article>
+</BaseLayout>
+
+<script is:inline>
+window.yaContextCb.push(() => {
+  Ya.Context.AdvManager.render({
+    blockId: "R-A-19135204-3",
+    renderTo: "yandex_rtb_R-A-19135204-3"
+  });
+});
+</script>
