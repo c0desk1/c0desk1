@@ -14,6 +14,7 @@ import BlogFeaturedImage from '@/components/blog/BlogFeaturedImage.astro';
 import BlogContent from '@/components/blog/BlogContent.astro';
 import BlogTOC from '@/components/blog/BlogTOC.astro';
 import BlogRelatedPosts from '@/components/blog/BlogRelatedPosts.astro';
+import BackToTop from "@/components/ui/BackToTop.astro";
 
 import Image from "@/components/mdx/Image.astro";
 import HR from "@/components/mdx/HR.astro";
@@ -144,6 +145,8 @@ const lastUpdated = formatDate(updatedDate || pubDate);
         class="pt-8"
       ></div>
     </div>
+    <!-- Back to top -->
+    <BackToTop align="center" />
   </Container>
 </article>
 </BaseLayout>
