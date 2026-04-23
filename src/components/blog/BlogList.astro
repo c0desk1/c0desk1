@@ -30,7 +30,7 @@ const { regularPosts } = Astro.props;
   {regularPosts.length > 0 ? (
     <div class="grid grid-cols-1 md:grid-cols-3">
       {regularPosts.map(post => (
-		<div class="py-6 border-b border-zinc-100 dark:border-zinc-900 md:border-r md:[&:nth-child(3n)]:border-r-0 md:[&:nth-last-child(-n+3)]:border-b-0">
+		<div class="py-6 px-0 md:px-4 border-b border-zinc-100 dark:border-zinc-900 md:border-r md:[&:nth-child(3n)]:border-r-0 md:[&:nth-last-child(-n+3)]:border-b-0">
         	<PostCard post={post} />
 		</div>
       ))}
