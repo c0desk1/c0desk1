@@ -5,7 +5,7 @@ export const siteConfig = {
   author: "Bima Akbar",
   authorAvatar: "/images/author/author.jpg",
   authorTitle: "Author",
-  description: "Digital garden dan portofolio profesional yang berfokus pada pengembangan web modern, sistem minimalis, dan efisiensi kode.",
+  description: "Eksplorasi workflow digital, AI tools, musik, anime, dan game dari perspektif kreator modern yang membangun di era otomatisasi.",
   url: "https://bimaakbar.my.id",
   ogImage: "/images/c0desk1-og.webp",
   keywords: [
