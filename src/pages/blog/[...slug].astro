@@ -4,6 +4,7 @@
 import { getCollection, render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { siteConfig } from '@/config/site';
+import { categoryLabels } from '@/config/blog';
 
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Container from '@/components/ui/Container.astro';
@@ -45,6 +46,7 @@ const {
   pubDate,
   tags,
   updatedDate,
+  category,
   image,
   imageAlt,
   imageCaption,
@@ -64,7 +66,7 @@ const seoImage = seo?.ogImage || image || siteConfig.ogImage;
 
 const tocHeadings = filterHeadingsForTOC(headings);
 
-const readingTime = getReadingTime(post.body, 'id');
+const readingTime = getReadingTime(post.body);
 const lastUpdated = formatDate(updatedDate || pubDate);
 ---
 
@@ -84,6 +86,7 @@ const lastUpdated = formatDate(updatedDate || pubDate);
       items={[
         { name: 'Home', href: '/' },
         { name: 'Blog', href: '/blog/' },
+        { name: categoryLabels[category], href: `/category/${category}/` },
       ]}
     />
     <BlogHeader
@@ -144,6 +147,7 @@ const lastUpdated = formatDate(updatedDate || pubDate);
   </Container>
 </article>
 </BaseLayout>
+
 <script is:inline>
 window.yaContextCb.push(() => {
   Ya.Context.AdvManager.render({
