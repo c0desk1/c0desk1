@@ -8,8 +8,14 @@ Allow: /favicon.ico
 Allow: /favicon.svg
 Allow: /apple-touch-icon.png
 
+# Yandex
+User-agent: Yandex
+Allow: /
+
+# Disallow
 Disallow: /api/
 Disallow: /404/
 
+# Sitemap location
 Sitemap: https://c0desk1.my.id/sitemap-index.xml
 Sitemap: https://c0desk1.my.id/rss.xml
