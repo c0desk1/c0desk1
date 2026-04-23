@@ -9,11 +9,9 @@ import partytown from '@astrojs/partytown';
 
 import mdx from '@astrojs/mdx';
 
-import { siteConfig } from '@/config/site';
-
 // https://astro.build/config
 export default defineConfig({
-  site: siteConfig.url,
+  site: "https://c0desk1.my.id/",
   vite: {
     plugins: [tailwindcss()]
   },
@@ -22,7 +20,7 @@ export default defineConfig({
     mdx(), 
     partytown({
       config: {
-        forward: ['dataLayer', 'gtag', 'ym'],
+        forward: ['dataLayer.push', 'gtag', 'ym'],
       },
     }),
   ]
