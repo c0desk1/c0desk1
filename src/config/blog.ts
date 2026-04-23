@@ -11,7 +11,8 @@ export const categories = [
   "tutorials",
   "security",
   "networking",
-  "electronics"
+  "electronics",
+  "workflow"
 ] as const;
 
 export const categoryLabels: Record<
@@ -31,4 +32,5 @@ export const categoryLabels: Record<
   "security": "Security",
   "networking": "Networking",
   "electronics": "Electronics",
+  "workflow": "Workflow",
 };
