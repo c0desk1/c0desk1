@@ -1,0 +1,85 @@
+---
+// src/components/mdx/Steps.astro
+---
+
+<div class="steps-container not-prose my-12 ml-4 border-l border-black/20 dark:border-white/5 pl-9">
+  <slot />
+</div>
+
+<style is:global>
+  .steps-container {
+    counter-reset: step;
+    position: relative;
+  }
+  .steps-container h3 {
+    counter-increment: step;
+    position: relative;
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+    margin-top: 2rem !important;
+    margin-bottom: 0.5rem !important;
+    line-height: 1.75rem !important;
+    color: #18181b !important;
+    scroll-margin-top: 100px;
+  }
+  .dark .steps-container h3 {
+    color: #fafafa !important;
+  }
+  .steps-container h3:first-of-type {
+    margin-top: 0 !important;
+  }
+  .steps-container h3::before {
+    content: counter(step);
+    position: absolute;
+    left: calc(-2.25rem - 0.875rem - 1px); 
+    top: 0;
+    
+    width: 1.75rem;
+    height: 1.75rem;
+    background-color: #ffffff;
+    border: 1px solid #e4e4e7;
+    border-radius: 9999px;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #71717a;
+    transition: all 0.2s ease;
+    z-index: 20;
+    cursor: pointer;
+  }
+
+  .dark .steps-container h3::before {
+    background-color: #09090b;
+    border-color: #27272a;
+    color: #a1a1aa;
+  }
+  .steps-container h3:hover::before {
+    content: "#";
+    color: #10b981;
+    border-color: #10b981;
+    background-color: #f0fdf4;
+    font-size: 0.875rem;
+  }
+
+  .dark .steps-container h3:hover::before {
+    background-color: #000000;
+    border-color: #10b981;
+    color: #34d399;
+  }
+
+  .steps-container h3 + p {
+    font-size: 0.875rem;
+    line-height: 1.625rem;
+    color: #71717a;
+    margin-top: 0 !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .dark .steps-container h3 + p {
+    color: #a1a1aa;
+  }
+</style>

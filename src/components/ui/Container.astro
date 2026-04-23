@@ -1,0 +1,25 @@
+---
+// src/components/ui/Container.astro
+// @ts-nocheck
+interface Props {
+  as?: 'div' | 'section' | 'article' | 'main';
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+  class?: string;
+}
+
+const { as: Component = 'div', size = 'md', class: className = '' } = Astro.props;
+
+const sizeClasses: Record<string, string> = {
+  sm: 'max-w-3xl',
+  md: 'max-w-5xl',
+  lg: 'max-w-6xl',
+  xl: 'max-w-7xl',
+  full: 'max-w-none'
+};
+
+const sizeClass = sizeClasses[size] || sizeClasses.md;
+---
+
+<Component class={`mx-auto px-2 ${sizeClass} ${className}`}>
+  <slot />
+</Component>

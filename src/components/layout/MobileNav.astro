@@ -1,0 +1,100 @@
+---
+// src/components/layout/MobileNav.astro
+// @ts-nocheck
+import { siteConfig } from "@/config/site";
+---
+
+<div class="md:hidden relative">
+  <button 
+    id="mobile-menu-button" 
+    aria-label="Menu" 
+    class="p-2 rounded-md text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-all duration-200"
+  >
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path 
+        stroke-linecap="round" 
+        stroke-linejoin="round" 
+        stroke-width="1.5" 
+        d="M4 8h16M4 16h16"
+      />
+    </svg>
+  </button>
+  
+  <div 
+    id="mobile-dropdown" 
+    class="absolute right-0 top-full mt-4 w-48 bg-white dark:bg-black border border-black/20 dark:border-white/5 rounded-lg shadow-lg opacity-0 invisible transition-all duration-200 z-50"
+  >
+    <nav class="flex flex-col p-2">
+      {siteConfig.navItems.map(item => (
+        <a 
+          href={item.href}
+          class="px-3 py-2 text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md transition-colors"
+        >
+          {item.label}
+        </a>
+      ))}
+      <div class="h-px bg-black/20 dark:bg-white/5 my-1"></div>
+      <a 
+        href={siteConfig.links.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="px-3 py-2 text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md transition-colors"
+      >
+        GitHub
+      </a>
+    </nav>
+  </div>
+</div>
+
+<script>
+  // @ts-nocheck
+  (function() {
+    const menuButton = document.getElementById('mobile-menu-button');
+    const dropdown = document.getElementById('mobile-dropdown');
+    
+    if (!menuButton || !dropdown) return;
+    
+    let isOpen = false;
+    
+    const toggleMenu = (e) => {
+      e.stopPropagation();
+      isOpen = !isOpen;
+      
+      if (isOpen) {
+        dropdown.classList.remove('opacity-0', 'invisible');
+        dropdown.classList.add('opacity-100', 'visible');
+      } else {
+        dropdown.classList.remove('opacity-100', 'visible');
+        dropdown.classList.add('opacity-0', 'invisible');
+      }
+    };
+    
+    const closeMenu = () => {
+      isOpen = false;
+      dropdown.classList.remove('opacity-100', 'visible');
+      dropdown.classList.add('opacity-0', 'invisible');
+    };
+    
+    menuButton.addEventListener('click', toggleMenu);
+    
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+      const target = e.target;
+      if (isOpen && target !== menuButton && !dropdown.contains(target)) {
+        closeMenu();
+      }
+    });
+    
+    // Close when pressing Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isOpen) {
+        closeMenu();
+      }
+    });
+    
+    // Close when clicking a link
+    dropdown.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', closeMenu);
+    });
+  })();
+</script>

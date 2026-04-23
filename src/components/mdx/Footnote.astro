@@ -1,0 +1,17 @@
+---
+// src/components/mdx/Footnote.astro
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+---
+
+<sup id={`fnref-${id}`} class="scroll-mt-32 px-0.5">
+  <a 
+    href={`#fn-${id}`} 
+    class="text-[10px] font-bold text-emerald-500 no-underline transition-opacity hover:opacity-70"
+  >
+    [{id}]
+  </a>
+</sup>

@@ -1,0 +1,117 @@
+---
+// src/components/blog/BlogList.astro
+import type { CollectionEntry } from 'astro:content';
+import PostCard from './PostCard.astro';
+import FeaturedPostCard from './FeaturedPostCard.astro';
+import { formatDateCompact, getReadingTime } from '@/lib/utils';
+
+interface Props {
+  allPosts: CollectionEntry<'blog'>[];
+  featuredPosts?: CollectionEntry<'blog'>[];
+}
+
+const { allPosts, featuredPosts = [] } = Astro.props;
+const postsPerPage = 6;
+const initialPosts = allPosts.slice(0, postsPerPage);
+
+const postsData = allPosts.map(post => ({
+  id: post.id,
+  title: post.data.title,
+  description: post.data.description,
+  pubDate: post.data.pubDate.toISOString(),
+  formattedDate: formatDateCompact(post.data.pubDate),
+  readingTime: getReadingTime(post.body, 'en'),
+  author: post.data.author?.name,
+  authorAvatar: post.data.author?.avatar,
+  category: post.data.category
+}));
+---
+
+<div class="border border-black/20 dark:border-white/5 items-start mx-auto relative overflow-hidden">
+  {featuredPosts.length > 0 && (
+    <div class="mb-16">
+      <div class="grid grid-cols-1 md:grid-cols-3 border-b border-black/20 dark:border-white/5 divide-y md:divide-x md:divide-y-0 divide-black/20 dark:divide-white/5 overflow-hidden">
+        {featuredPosts.map(post => (
+          <FeaturedPostCard post={post} />
+        ))}
+      </div>
+    </div>
+  )}
+  <div class="mb-8 flex items-center justify-between p-4 md:p-8">
+    <h2 class="text-3xl md:text-4xl font-semibold">Terbaru.</h2>
+    <div class="flex items-center gap-4">
+      <a href="/rss.xml"
+        class="p-2 text-zinc-500 hover:text-zinc-900 rounded-full dark:text-zinc-400 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-all duration-200"
+        aria-label="Langganan RSS Feed"
+        >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z" />
+        </svg>
+      </a>
+    </div>
+  </div>
+  <div id="posts-container" class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 divide-black/20 dark:divide-white/5 overflow-hidden">
+    {initialPosts.map(post => (
+      <PostCard post={post} />
+    ))}
+  </div>
+  {allPosts.length > postsPerPage && (
+    <div class="mt-16 flex justify-center">
+      <button
+        id="load-more-btn"
+        class="px-10 py-4 border border-zinc-900 hover:border-white transition-all duration-300 text-sm tracking-[0.3em] bg-transparent text-zinc-400 hover:text-white"
+      >
+        Load More Batch
+      </button>
+    </div>
+  )}
+</div>
+
+
+<script id="posts-data" type="application/json">
+  {JSON.stringify(postsData)}
+</script>
+
+<script is:inline>
+  (function() {
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    const container = document.getElementById('posts-container');
+    const postsDataElement = document.getElementById('posts-data');
+    if (!loadMoreBtn || !postsDataElement || !container) return;
+
+    const allPosts = JSON.parse(postsDataElement.textContent || '[]');
+    let currentIndex = 6;
+    const postsPerPage = 6;
+
+    function renderPostCard(post) {
+      return `
+        <div class="vercel-item group">
+          <a href="/blog/${post.id}" class="flex flex-col h-full p-8 md:p-10 transition-colors duration-200 hover:bg-[#111]">
+            <div class="flex items-center justify-between mb-8">
+              <span class="text-[13px] font-medium text-zinc-500 capitalize">${post.category || 'General'}</span>
+              <span class="text-[13px] text-zinc-500">${post.formattedDate}</span>
+            </div>
+            <h3 class="text-xl md:text-2xl font-bold tracking-tighter text-white mb-4 leading-tight group-hover:text-zinc-300 transition-colors">
+              ${post.title}
+            </h3>
+            <p class="text-[15px] text-zinc-500 leading-relaxed line-clamp-3 mb-10">
+              ${post.description}
+            </p>
+            <div class="mt-auto flex items-center gap-3">
+              <img src="${post.authorAvatar || '/default-avatar.png'}" class="w-6 h-6 rounded-full grayscale border border-zinc-800" />
+              <span class="text-[13px] font-medium text-zinc-500">${post.author || 'Admin'}</span>
+            </div>
+          </a>
+        </div>
+      `;
+    }
+
+    loadMoreBtn.addEventListener('click', () => {
+      const nextEnd = Math.min(currentIndex + postsPerPage, allPosts.length);
+      const postsToAdd = allPosts.slice(currentIndex, nextEnd);
+      container.insertAdjacentHTML('beforeend', postsToAdd.map(renderPostCard).join(''));
+      currentIndex = nextEnd;
+      if (currentIndex >= allPosts.length) loadMoreBtn.style.display = 'none';
+    });
+  })();
+</script>

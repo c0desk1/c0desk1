@@ -1,0 +1,16 @@
+---
+// src/components/mdx/Tweet.astro
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+---
+
+<div class="not-prose my-6 flex justify-center">
+  <blockquote class="twitter-tweet" data-dnt="true" data-theme="dark">
+    <a href={`https://twitter.com/x/status/${id}`}>Loading tweet...</a>
+  </blockquote>
+</div>
+
+<script src="https://platform.twitter.com/widgets.js" async></script>
