@@ -6,7 +6,7 @@ export const siteConfig = {
   authorAvatar: "/images/author/author.jpg",
   authorTitle: "Author",
   description: "Eksplorasi workflow digital, AI tools, musik, anime, dan game dari perspektif kreator modern yang membangun di era otomatisasi.",
-  url: "https://bimaakbar.my.id",
+  url: "https://c0desk1.my.id",
   ogImage: "/images/c0desk1-og.webp",
   keywords: [
     "Web Developer",
