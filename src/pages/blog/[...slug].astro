@@ -16,6 +16,9 @@ import BlogContent from "@/components/blog/BlogContent.astro";
 import BlogRelatedPosts from "@/components/blog/BlogRelatedPosts.astro";
 import BackToTop from "@/components/ui/BackToTop.astro";
 
+import Image from "@/components/mdx/Image.astro";
+import HR from "@/components/mdx/HR.astro";
+
 import {
 filterHeadingsForTOC,
 getReadingTime
@@ -23,7 +26,8 @@ getReadingTime
 
 import {
   getSmartRelatedPosts,
-  injectInternalLinks
+  injectInternalLinks,
+  remarkInternalLinks
 } from "@/lib/botEngine";
 
 
@@ -65,11 +69,12 @@ const allPosts = await getCollection(
 
 // ================= INTERNAL LINK INJECTION =================
 
-const injectedBody =
-  injectInternalLinks(
-    post.body,
-    allPosts
-  );
+const { Content, headings } =
+  await render(post, {
+    remarkPlugins: [
+      remarkInternalLinks(allPosts)
+    ]
+  });
 
 
 // ================= RELATED =================
@@ -226,10 +231,12 @@ const schema = {
   >
     <div class="px-4 md:px-8">
       <BlogContent>
-        <div
-          class="prose-custom"
-          set:html={injectedBody}
-        />
+        <Content
+  components={{
+    img: Image,
+    hr: HR
+  }}
+/>
       </BlogContent>
     </div>
   </Container>
