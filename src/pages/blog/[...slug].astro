@@ -1,202 +1,110 @@
 ---
-// src/pages/blog/[...slug].astro
-
-import { getCollection, render } from "astro:content";
-import type { CollectionEntry } from "astro:content";
-
-import { siteConfig } from "@/config/site";
-import { categoryLabels } from "@/config/blog";
-
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/ui/Container.astro";
-import Breadcrumb from "@/components/ui/Breadcrumb.astro";
-import BlogHeader from "@/components/blog/BlogHeader.astro";
-import BlogFeaturedImage from "@/components/blog/BlogFeaturedImage.astro";
-import BlogContent from "@/components/blog/BlogContent.astro";
-import BlogTOC from "@/components/blog/BlogTOC.astro";
-import BlogRelatedPosts from "@/components/blog/BlogRelatedPosts.astro";
-import BackToTop from "@/components/ui/BackToTop.astro";
-
-import Image from "@/components/mdx/Image.astro";
-import HR from "@/components/mdx/HR.astro";
-import InternalLink from "@/components/mdx/InternalLink.astro";
-
-import {
-  filterHeadingsForTOC,
-  getReadingTime
-} from "@/lib/utils";
-
-import {
-  getSmartRelatedPosts
-} from "@/lib/botEngine";
-
-// ================= STATIC PATHS =================
+import { getCollection } from "astro:content";
+import { siteConfig } from "@/config/site";
+import { categoryLabels } from "@/config/blog";
+import { formatDateCompact } from "@/lib/utils";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog", ({ data }) => !data.draft);
-
-  return posts.map((post: CollectionEntry<"blog">) => ({
-    params: { slug: post.id },
-    props: { post }
-  }));
-}
-
-// ================= PROPS =================
-
-interface Props {
-  post: CollectionEntry<"blog">;
-}
-
-const { post } = Astro.props;
-
-// ================= LOAD POSTS =================
-
-const allPosts = await getCollection("blog", ({ data }) => !data.draft);
-
-// ================= RENDER =================
-
-const { Content, headings } = await render(post);
-
-// ================= RELATED =================
-
-const relatedPosts = getSmartRelatedPosts(post, allPosts, 3);
-
-// ================= DATA =================
-
-const {
-  title,
-  description,
-  pubDate,
-  updatedDate,
-  tags,
-  category,
-  image,
-  imageAlt,
-  imageCaption,
-  featured,
-  author,
-  seo
-} = post.data;
-
-// ================= SEO =================
-
-const seoTitle = seo?.title || title;
-const seoDescription = seo?.description || description;
-const seoImage = seo?.ogImage || image || siteConfig.ogImage;
-
-// FIX: structured author fallback consistency
-const schemaAuthorName = author?.name || siteConfig.author;
-
-// ================= TOC =================
-
-const tocHeadings = filterHeadingsForTOC(headings);
-
-// ================= READING TIME =================
-
-const readingTime = getReadingTime(post.body);
-
-// ================= BREADCRUMB =================
-
-const breadcrumbItems = [
-  { name: "Blog", href: "/blog/" },
-  {
-    name: categoryLabels[category],
-    href: `/category/${category.toLowerCase()}/`
-  }
-];
-
-// ================= SCHEMA =================
-
-const schema = {
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  headline: seoTitle,
-  description: seoDescription,
-  image: seoImage,
-  datePublished: pubDate,
-  dateModified: updatedDate || pubDate,
-  author: {
-    "@type": "Person",
-    name: schemaAuthorName
-  },
-  publisher: {
-    "@type": "Organization",
-    name: siteConfig.name,
-    logo: {
-      "@type": "ImageObject",
-      url: `${siteConfig.url}/favicon.svg`
+  return [
+    {
+      params: { slug: siteConfig.author.slug }
     }
-  },
-  mainEntityOfPage: {
-    "@type": "WebPage",
-    "@id": Astro.url.href
-  },
-  keywords: tags?.join(", ") || ""
+  ];
+}
+
+const { slug } = Astro.params;
+
+const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+const authorPosts = posts.filter((post) => {
+  const authorSlug =
+    post.data.author?.slug ||
+    siteConfig.author.slug;
+
+  return authorSlug === slug;
+});
+
+const author = siteConfig.author;
+
+const seo = {
+  title: `Artikel oleh ${author.name}`,
+  description: author.bio,
+  url: `${siteConfig.url}/author/${author.slug}`
 };
 ---
 
-<BaseLayout
-  title={seoTitle}
-  description={seoDescription}
-  image={seoImage}
-  type="article"
-  publishedTime={pubDate}
-  modifiedTime={updatedDate}
-  tags={tags}
-  container={false}
->
-<script type="application/ld+json" set:html={JSON.stringify(schema)} />
+<!-- AUTHOR SCHEMA -->
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": `${seo.url}#person`,
+  "name": author.name,
+  "url": seo.url,
+  "image": `${siteConfig.url}${author.avatar}`,
+  "jobTitle": author.title,
+  "description": author.bio,
+  "sameAs": [
+    siteConfig.social.github,
+    siteConfig.social.twitter,
+    siteConfig.social.linkedin
+  ],
+  "worksFor": {
+    "@type": "Organization",
+    "name": siteConfig.name
+  }
+})} />
 
-<article>
+<BaseLayout title={seo.title} description={seo.description}>
+  <Container size="md" class="py-12">
 
-  <Container size="md" class="pt-8 md:pt-16 pb-8">
-    <Breadcrumb items={breadcrumbItems} />
-
-    <BlogHeader
-      title={title}
-      pubDate={pubDate}
-      updatedDate={updatedDate}
-      readingTime={readingTime}
-      authorName={author?.name}
-      authorAvatar={author?.avatar}
-      authorTitle={author?.title}
-      featured={featured}
-    />
-
-    {image && (
-      <BlogFeaturedImage
-        image={image}
-        alt={imageAlt || title}
-        caption={imageCaption || imageAlt}
+    <!-- HEADER -->
+    <div class="flex items-center gap-4">
+      <img
+        src={author.avatar}
+        alt={author.name}
+        class="w-14 h-14 rounded-full object-cover"
       />
-    )}
-  </Container>
 
-  <Container size="sm" class="pt-4 md:pt-8 pb-12">
+      <div>
+        <h1 class="text-2xl font-semibold">
+          {author.name}
+        </h1>
 
-    {tocHeadings.length > 0 && (
-      <div class="mb-8 md:mb-10 px-4 md:px-8">
-        <BlogTOC headings={tocHeadings} />
+        <p class="text-sm text-zinc-500">
+          {author.title}
+        </p>
+
+        <p class="mt-2 text-sm text-zinc-500 max-w-xl">
+          {author.bio}
+        </p>
       </div>
-    )}
-
-    <div class="px-4 md:px-8">
-      <BlogContent>
-        <InternalLink allPosts={allPosts}>
-          <Content components={{ img: Image, hr: HR }} />
-        </InternalLink>
-      </BlogContent>
     </div>
 
+    <!-- STATS -->
+    <div class="mt-8 text-sm text-zinc-500">
+      {authorPosts.length} Artikel
+    </div>
+
+    <!-- POSTS -->
+    <div class="mt-10 grid gap-6">
+      {authorPosts.map((post) => (
+        <a href={`/blog/${post.id}`} class="block">
+          <div class="text-xs md:text-sm text-zinc-500 items-center justify-between">
+            {formatDateCompact(post.data.pubDate)}
+			{categoryLabels[post.data.category]}
+          </div>
+
+          <div class="text-lg md:text-xl font-semibold line-clamp-3">
+            {post.data.title}
+          </div>
+
+          <p class="text-sm text-zinc-500 line-clamp-3">
+            {post.data.description}
+          </p>
+        </a>
+      ))}
+    </div>
   </Container>
-
-  <BackToTop align="center" />
-
-  <section class="section-divider mt-4 md:mt-8 px-4 md:px-8">
-    <Container size="md">
-      <BlogRelatedPosts posts={relatedPosts} />
-    </Container>
-  </section>
-
-</article>
 </BaseLayout>
