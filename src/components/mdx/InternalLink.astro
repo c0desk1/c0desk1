@@ -1,0 +1,31 @@
+---
+// src/components/blog/InternalLink.astro
+interface Props {
+  allPosts: any[];
+}
+
+const { allPosts } = Astro.props;
+const slotContent = await Astro.slots.render('default');
+
+let finalContent = slotContent;
+
+for (const post of allPosts) {
+  const words = post.data.title
+    .toLowerCase()
+    .replace(/[^\w\s]/g, "")
+    .split(/\s+/)
+    .filter((w: string) => w.length >= 5);
+
+  for (const word of words) {
+    const regex = new RegExp(`\\b(${word})\\b`, "gi");
+    if (regex.test(finalContent)) {
+       finalContent = finalContent.replace(
+         regex, 
+         `<a href="/blog/${post.id}/" class="text-primary underline">〄 $1</a>`
+       );
+       break; 
+    }
+  }
+}
+---
+<span set:html={finalContent} />
