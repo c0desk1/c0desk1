@@ -123,14 +123,11 @@ const schema = {
 
   {/* STRUCTURED DATA */}
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
-
   <article>
 
     {/* HEADER BLOCK */}
     <Container size="md" class="pt-8 md:pt-16 pb-8">
-
       <Breadcrumb items={breadcrumbItems} />
-
       <BlogHeader
         title={title}
         pubDate={pubDate}
@@ -141,7 +138,6 @@ const schema = {
         authorTitle={author?.title}
         featured={featured}
       />
-
       {image && (
         <BlogFeaturedImage
           image={image}
@@ -149,7 +145,6 @@ const schema = {
           caption={imageCaption || imageAlt}
         />
       )}
-
     </Container>
 
     {/* CONTENT BLOCK */}
@@ -173,7 +168,6 @@ const schema = {
           />
         </BlogContent>
       </div>
-
     </Container>
 
     {/* UTILITIES */}
@@ -185,7 +179,5 @@ const schema = {
         <BlogRelatedPosts posts={relatedPosts} />
       </Container>
     </section>
-
   </article>
-
 </BaseLayout>
