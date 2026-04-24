@@ -15,13 +15,11 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 
+const author = siteConfig.author;
+
 const posts = await getCollection("blog", ({ data }) => !data.draft);
 
-const authorPosts = posts.filter((post) =>
-  post.data.author?.name === author.name
-);
-
-const author = siteConfig.author;
+const authorPosts = posts;
 
 const seo = {
   title: `Artikel oleh ${author.name}`,
@@ -51,7 +49,7 @@ const seo = {
 })} />
 
 <BaseLayout title={seo.title} description={seo.description}>
-  <Container size="md" class="py-12">
+  <Container size="md" class="py-16">
     <div class="flex items-center gap-4">
       <img
         src={author.avatar}
@@ -84,7 +82,7 @@ const seo = {
           href={`/blog/${post.id}`}
           class="block group"
         >
-          <div class="text-xs text-zinc-500 mb-1">            {formatDateCompact(post.data.pubDate)} · {post.data.category}
+          <div class="text-xs text-zinc-500 mb-1">           {formatDateCompact(post.data.pubDate)} · {post.data.category}
           </div>
           <div class="text-lg font-medium text-zinc-900 dark:text-white group-hover:underline">
             {post.data.title}
