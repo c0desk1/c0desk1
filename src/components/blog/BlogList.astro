@@ -28,25 +28,39 @@ const postsData = posts.map((post) => ({
 }));
 ---
 
-<div class="border border-black/20 dark:border-white/5 overflow-hidden">
+<div class="overflow-hidden">
 
   {variant === "featured" && (
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {posts.map((post) => (
-        <FeaturedPostCard post={post} />
+    <!-- Vercel style for featured posts -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-black/10 dark:bg-white/10 rounded-xl overflow-hidden">
+      {posts.map((post, index) => (
+        <div class={index === 0 ? "bg-white dark:bg-black" : "bg-white dark:bg-black"}>
+          <FeaturedPostCard post={post} />
+        </div>
       ))}
     </div>
   )}
 
   {variant === "default" && (
     <>
-      <div class="mb-8 flex items-center justify-between">
-        <h2 class="text-3xl md:text-4xl font-semibold">Terbaru.</h2>
+      <div class="mb-10 flex items-center justify-between">
+        <h2 class="text-2xl md:text-3xl font-medium tracking-tight text-zinc-900 dark:text-zinc-100">
+          Latest articles
+        </h2>
+        <a 
+          href="/blog" 
+          class="text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300 transition-colors"
+        >
+          View all →
+        </a>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Vercel style grid with subtle gaps -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
         {posts.map((post) => (
-          <PostCard post={post} />
+          <div class="group relative rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-200 hover:shadow-sm">
+            <PostCard post={post} />
+          </div>
         ))}
       </div>
     </>
