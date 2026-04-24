@@ -30,25 +30,16 @@ import {
   getSmartRelatedPosts
 } from "@/lib/botEngine";
 
-
 // ================= STATIC PATHS =================
 
 export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
 
-  const posts = await getCollection(
-    "blog",
-    ({ data }) => !data.draft
-  );
-
-  return posts.map(
-    (post: CollectionEntry<"blog">) => ({
-      params: { slug: post.id },
-      props: { post }
-    })
-  );
-
+  return posts.map((post: CollectionEntry<"blog">) => ({
+    params: { slug: post.id },
+    props: { post }
+  }));
 }
-
 
 // ================= PROPS =================
 
@@ -58,29 +49,17 @@ interface Props {
 
 const { post } = Astro.props;
 
+// ================= LOAD POSTS =================
 
-// ================= LOAD ALL POSTS =================
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 
-const allPosts = await getCollection(
-  "blog",
-  ({ data }) => !data.draft
-);
-
-
-// ================= RENDER MDX + INTERNAL LINKS =================
+// ================= RENDER =================
 
 const { Content, headings } = await render(post);
 
-
 // ================= RELATED =================
 
-const relatedPosts =
-  getSmartRelatedPosts(
-    post,
-    allPosts,
-    3
-  );
-
+const relatedPosts = getSmartRelatedPosts(post, allPosts, 3);
 
 // ================= DATA =================
 
@@ -99,32 +78,22 @@ const {
   seo
 } = post.data;
 
-
 // ================= SEO =================
 
-const seoTitle =
-  seo?.title || title;
+const seoTitle = seo?.title || title;
+const seoDescription = seo?.description || description;
+const seoImage = seo?.ogImage || image || siteConfig.ogImage;
 
-const seoDescription =
-  seo?.description || description;
-
-const seoImage =
-  seo?.ogImage ||
-  image ||
-  siteConfig.ogImage;
-
+// FIX: structured author fallback consistency
+const schemaAuthorName = author?.name || siteConfig.author;
 
 // ================= TOC =================
 
-const tocHeadings =
-  filterHeadingsForTOC(headings);
-
+const tocHeadings = filterHeadingsForTOC(headings);
 
 // ================= READING TIME =================
 
-const readingTime =
-  getReadingTime(post.body);
-
+const readingTime = getReadingTime(post.body);
 
 // ================= BREADCRUMB =================
 
@@ -132,10 +101,9 @@ const breadcrumbItems = [
   { name: "Blog", href: "/blog/" },
   {
     name: categoryLabels[category],
-    href: `/category/${category}/`
+    href: `/category/${category.toLowerCase()}/`
   }
 ];
-
 
 // ================= SCHEMA =================
 
@@ -149,25 +117,21 @@ const schema = {
   dateModified: updatedDate || pubDate,
   author: {
     "@type": "Person",
-    name:
-      author?.name ||
-      siteConfig.author
+    name: schemaAuthorName
   },
   publisher: {
     "@type": "Organization",
     name: siteConfig.name,
     logo: {
       "@type": "ImageObject",
-      url:
-        `${siteConfig.url}/favicon.svg`
+      url: `${siteConfig.url}/favicon.svg`
     }
   },
   mainEntityOfPage: {
     "@type": "WebPage",
     "@id": Astro.url.href
   },
-  keywords:
-    tags?.join(", ") || ""
+  keywords: tags?.join(", ") || ""
 };
 ---
 
@@ -181,20 +145,13 @@ const schema = {
   tags={tags}
   container={false}
 >
-<script
-  type="application/ld+json"
-  set:html={JSON.stringify(schema)}
-/>
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
 <article>
 
-  {/* HEADER */}
-  <Container
-    size="md"
-    class="pt-8 md:pt-16 pb-8"
-  >
-    <Breadcrumb
-      items={breadcrumbItems}
-    />
+  <Container size="md" class="pt-8 md:pt-16 pb-8">
+    <Breadcrumb items={breadcrumbItems} />
+
     <BlogHeader
       title={title}
       pubDate={pubDate}
@@ -205,45 +162,41 @@ const schema = {
       authorTitle={author?.title}
       featured={featured}
     />
+
     {image && (
       <BlogFeaturedImage
         image={image}
         alt={imageAlt || title}
-        caption={
-          imageCaption || imageAlt
-        }
+        caption={imageCaption || imageAlt}
       />
     )}
   </Container>
 
-  {/* CONTENT */}
-  <Container
-    size="sm"
-    class="pt-4 md:pt-8 pb-12"
-  >
+  <Container size="sm" class="pt-4 md:pt-8 pb-12">
+
     {tocHeadings.length > 0 && (
       <div class="mb-8 md:mb-10 px-4 md:px-8">
-        <BlogTOC
-          headings={tocHeadings}
-        />
+        <BlogTOC headings={tocHeadings} />
       </div>
     )}
+
     <div class="px-4 md:px-8">
       <BlogContent>
-        <InternalLink allPosts={allPosts}>          <Content components={{ img: Image, hr: HR }} />
+        <InternalLink allPosts={allPosts}>
+          <Content components={{ img: Image, hr: HR }} />
         </InternalLink>
       </BlogContent>
     </div>
+
   </Container>
+
   <BackToTop align="center" />
 
-  {/* RELATED */}
   <section class="section-divider mt-4 md:mt-8 px-4 md:px-8">
     <Container size="md">
-      <BlogRelatedPosts
-        posts={relatedPosts}
-      />
+      <BlogRelatedPosts posts={relatedPosts} />
     </Container>
   </section>
+
 </article>
 </BaseLayout>
