@@ -1,11 +1,75 @@
 import type { CollectionEntry } from "astro:content";
 
+
+import { visit } from "unist-util-visit";
+
 /* ================================
    TYPES
 ================================ */
 
 type BlogPost = CollectionEntry<"blog">;
 type Portfolio = CollectionEntry<"portfolio">;
+
+export function remarkInternalLinks(allPosts) {
+
+  const keywordMap = {};
+
+  for (const post of allPosts) {
+
+    const slug =
+      `/blog/${post.id}/`;
+
+    const words =
+      post.data.title
+        .toLowerCase()
+        .split(" ")
+        .filter(w => w.length >= 5)
+        .slice(0, 3);
+
+    for (const word of words) {
+
+      if (!keywordMap[word]) {
+
+        keywordMap[word] = slug;
+
+      }
+
+    }
+
+  }
+
+  return function transformer(tree) {
+
+    visit(tree, "text", (node) => {
+
+      let value = node.value;
+
+      for (const keyword in keywordMap) {
+
+        const url =
+          keywordMap[keyword];
+
+        const regex =
+          new RegExp(
+            `\\b(${keyword})\\b`,
+            "gi"
+          );
+
+        value =
+          value.replace(
+            regex,
+            `[${keyword}](${url})`
+          );
+
+      }
+
+      node.value = value;
+
+    });
+
+  };
+
+}
 
 /* ================================
    BLOG SCORING ENGINE
