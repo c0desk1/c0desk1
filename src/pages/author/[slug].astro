@@ -15,19 +15,25 @@ const { slug } = Astro.params;
 const posts = await getCollection("blog", ({ data }) => !data.draft);
 
 const authorPosts = posts
-  .filter((post) => (post.data.author?.slug || siteConfig.author.slug) === slug)
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+  .filter(
+    (post) =>
+      (post.data.author?.slug || siteConfig.author.slug) === slug
+  )
+  .sort(
+    (a, b) =>
+      b.data.pubDate.getTime() - a.data.pubDate.getTime()
+  );
 
 const author = siteConfig.author;
 
 const seo = {
-  title: `${author.name} — Writing`,
+  title: `${author.name}`,
   description: author.bio,
   url: `${siteConfig.url}/author/${author.slug}`
 };
 ---
 
-<!-- PERSON ENTITY SEO -->
+<!-- JSON-LD (SEO kuat untuk author entity) -->
 <script type="application/ld+json" set:html={JSON.stringify({
   "@context": "https://schema.org",
   "@type": "Person",
@@ -49,71 +55,72 @@ const seo = {
 })} />
 
 <BaseLayout title={seo.title} description={seo.description}>
-  <Container size="md" class="py-20 md:py-28">
+  <Container size="md" class="py-20">
 
-    <!-- AUTHOR HEADER (VERCEL STYLE) -->
-    <header class="flex flex-col md:flex-row items-start md:items-center gap-6 pb-12 border-b border-zinc-100 dark:border-zinc-800">
+    <!-- ================= HEADER (Vercel-like minimal) ================= -->
+    <header class="mb-16">
+      <div class="flex items-center gap-5">
 
-      <img
-        src={author.avatar}
-        alt={author.name}
-        class="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover ring-1 ring-zinc-200 dark:ring-zinc-800"
-      />
+        <img
+          src={author.avatar}
+          alt={author.name}
+          class="w-14 h-14 rounded-full object-cover"
+        />
 
-      <div class="space-y-2">
-        <h1 class="text-3xl md:text-4xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-          {author.name}
-        </h1>
+        <div class="space-y-1">
+          <h1 class="text-2xl md:text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white">
+            {author.name}
+          </h1>
 
-        <p class="text-sm text-zinc-500 dark:text-zinc-400">
-          {author.title}
-        </p>
+          <p class="text-sm text-zinc-500 dark:text-zinc-400">
+            {author.title}
+          </p>
+        </div>
+      </div>
 
-        <p class="text-sm leading-relaxed text-zinc-500 dark:text-zinc-400 max-w-2xl">
-          {author.bio}
-        </p>
+      <p class="mt-5 max-w-2xl text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
+        {author.bio}
+      </p>
+
+      <div class="mt-6 text-xs text-zinc-400">
+        {authorPosts.length} posts
       </div>
     </header>
 
-    <!-- SECTION HEADER -->
-    <div class="mt-14 mb-6 flex items-center justify-between">
-      <h2 class="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-400">
-        Writing
-      </h2>
+    <!-- ================= POSTS LIST (Vercel style: no card) ================= -->
+    <section class="border-t border-zinc-200 dark:border-zinc-800">
 
-      <span class="text-xs text-zinc-500">
-        {authorPosts.length} posts
-      </span>
-    </div>
+      <div class="space-y-0">
+        {authorPosts.map((post) => (
+          <a
+            href={`/blog/${post.id}`}
+            class="group block py-6 border-b border-zinc-100 dark:border-zinc-800"
+          >
 
-    <!-- POSTS LIST -->
-    <div class="divide-y divide-zinc-100 dark:divide-zinc-800">
+            <!-- meta row -->
+            <div class="flex items-center justify-between text-xs text-zinc-400">
+              <span>
+                {categoryLabels[post.data.category] ?? post.data.category}
+              </span>
 
-      {authorPosts.map((post) => (
-        <a
-          href={`/blog/${post.id}`}
-          class="group block py-6 transition-colors hover:bg-zinc-50/50 dark:hover:bg-zinc-900/30 px-3 -mx-3 rounded-lg"
-        >
+              <time datetime={post.data.pubDate.toISOString()}>
+                {formatDateCompact(post.data.pubDate)}
+              </time>
+            </div>
 
-          <!-- META -->
-          <div class="flex items-center justify-between text-xs text-zinc-400 mb-2">
+            <!-- title -->
+            <h2 class="mt-2 text-base md:text-lg font-medium text-zinc-900 dark:text-zinc-100 group-hover:text-black dark:group-hover:text-white transition-colors">
+              {post.data.title}
+            </h2>
 
-            <span class="px-2 py-0.5 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
-              {categoryLabels[post.data.category] ?? post.data.category}
-            </span>
+            <!-- description -->
+            <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400 line-clamp-2">
+              {post.data.description}
+            </p>
 
-            <time datetime={post.data.pubDate.toISOString()}>
-  {formatDateCompact(post.data.pubDate)}
-            </time>
-          </div>
-          <h3 class="text-base md:text-lg font-medium text-zinc-900 dark:text-zinc-100 group-hover:text-black dark:group-hover:text-white transition-colors leading-snug">
-            {post.data.title}
-          </h3>
-          <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400 line-clamp-2 max-w-3xl">
-            {post.data.description}
-          </p>
-        </a>
-      ))}
-    </div>
+          </a>
+        ))}
+      </div>
+    </section>
   </Container>
 </BaseLayout>
