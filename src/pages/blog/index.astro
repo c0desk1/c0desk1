@@ -19,6 +19,10 @@ const publishedPosts = allPosts.filter(
 
 const posts = sortByDate(publishedPosts);
 
+const featuredPosts = posts
+  .filter((p) => p.data.featured)
+  .slice(0, 3);
+
 const regularPosts = posts.filter((p) => !p.data.featured);
 
 // ================= SEO =================
