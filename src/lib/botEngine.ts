@@ -1,10 +1,10 @@
 import type { CollectionEntry } from "astro:content";
-
 import { contentGraph } from "./contentGraph";
 
 /* ================================
    TYPES
 ================================ */
+
 type BlogPost = CollectionEntry<"blog">;
 type Portfolio = CollectionEntry<"portfolio">;
 
@@ -17,18 +17,19 @@ type GraphNode = {
 /* ================================
    BLOG SCORING ENGINE
 ================================ */
+
 export function scoreBlogRelation(
   source: BlogPost,
   target: BlogPost
 ): number {
   let score = 0;
 
-  // 1. CATEGORY MATCH
+  // CATEGORY MATCH
   if (source.data.category === target.data.category) {
     score += 6;
   }
 
-  // 2. TAG OVERLAP (STRONG SIGNAL)
+  // TAG OVERLAP
   const sourceTags = source.data.tags || [];
   const targetTags = target.data.tags || [];
 
@@ -38,29 +39,34 @@ export function scoreBlogRelation(
 
   score += overlap * 4;
 
-  // 3. FEATURED BOOST
+  // FEATURED BOOST
   if (target.data.featured) {
     score += 2;
   }
 
-  // 4. RECENCY BOOST
+  // RECENCY BOOST
   const sourceDate = new Date(source.data.pubDate).getTime();
   const targetDate = new Date(target.data.pubDate).getTime();
 
   const diffDays =
-    Math.abs(sourceDate - targetDate) / (1000 * 60 * 60 * 24);
+    Math.abs(sourceDate - targetDate) /
+    (1000 * 60 * 60 * 24);
 
   if (diffDays <= 30) score += 2;
   if (diffDays <= 7) score += 3;
 
-  // 5. DESCRIPTION KEYWORD SOFT MATCH
+  // KEYWORD SOFT MATCH
   const sourceText =
-    (source.data.title + " " + source.data.description).toLowerCase();
+    (source.data.title + " " +
+      source.data.description).toLowerCase();
 
   const targetText =
-    (target.data.title + " " + target.data.description).toLowerCase();
+    (target.data.title + " " +
+      target.data.description).toLowerCase();
 
-  const keywords = sourceText.split(" ").slice(0, 8);
+  const keywords = sourceText
+    .split(" ")
+    .slice(0, 8);
 
   const keywordHits = keywords.filter((k) =>
     k.length > 4 && targetText.includes(k)
@@ -74,6 +80,7 @@ export function scoreBlogRelation(
 /* ================================
    RELATED BLOG POSTS
 ================================ */
+
 export function getSmartRelatedPosts(
   source: BlogPost,
   allPosts: BlogPost[],
@@ -93,13 +100,14 @@ export function getSmartRelatedPosts(
 /* ================================
    PORTFOLIO SCORING ENGINE
 ================================ */
+
 export function scorePortfolioRelation(
   source: Portfolio,
   target: Portfolio
 ): number {
   let score = 0;
 
-  // 1. TECH STACK OVERLAP
+  // TECH STACK OVERLAP
   const sourceTech = source.data.techStack || [];
   const targetTech = target.data.techStack || [];
 
@@ -109,24 +117,32 @@ export function scorePortfolioRelation(
 
   score += overlap * 5;
 
-  // 2. FEATURED BOOST
+  // FEATURED BOOST
   if (target.data.featured) score += 2;
 
-  // 3. CLIENT / ROLE SIMILARITY
-  if (source.data.client && source.data.client === target.data.client) {
+  // CLIENT MATCH
+  if (
+    source.data.client &&
+    source.data.client === target.data.client
+  ) {
     score += 3;
   }
 
-  if (source.data.role && source.data.role === target.data.role) {
+  // ROLE MATCH
+  if (
+    source.data.role &&
+    source.data.role === target.data.role
+  ) {
     score += 2;
   }
 
-  // 4. RECENCY
+  // RECENCY
   const sourceDate = new Date(source.data.date).getTime();
   const targetDate = new Date(target.data.date).getTime();
 
   const diffDays =
-    Math.abs(sourceDate - targetDate) / (1000 * 60 * 60 * 24);
+    Math.abs(sourceDate - targetDate) /
+    (1000 * 60 * 60 * 24);
 
   if (diffDays <= 60) score += 2;
 
@@ -136,6 +152,7 @@ export function scorePortfolioRelation(
 /* ================================
    RELATED PORTFOLIO
 ================================ */
+
 export function getSmartRelatedProjects(
   source: Portfolio,
   allProjects: Portfolio[],
@@ -145,14 +162,23 @@ export function getSmartRelatedProjects(
     .filter((p) => p.id !== source.id)
     .map((target) => ({
       project: target,
-      score: scorePortfolioRelation(source, target)
+      score: scorePortfolioRelation(
+        source,
+        target
+      )
     }))
     .sort((a, b) => b.score - a.score)
     .slice(0, limit)
     .map((item) => item.project);
 }
 
-export function findRelevantLinks(content: string) {
+/* ================================
+   FIND RELEVANT LINKS (GRAPH)
+================================ */
+
+export function findRelevantLinks(
+  content: string
+) {
   const lowerContent = content.toLowerCase();
 
   const matches: {
@@ -161,9 +187,13 @@ export function findRelevantLinks(content: string) {
     score: number;
   }[] = [];
 
-  for (const node of contentGraph as any) {
+  for (const node of contentGraph as GraphNode[]) {
     for (const keyword of node.keywords) {
-      if (lowerContent.includes(keyword.toLowerCase())) {
+      if (
+        lowerContent.includes(
+          keyword.toLowerCase()
+        )
+      ) {
         matches.push({
           keyword,
           url: node.urls[0],
@@ -173,26 +203,150 @@ export function findRelevantLinks(content: string) {
     }
   }
 
-  return matches.sort((a, b) => b.score - a.score);
+  return matches.sort(
+    (a, b) => b.score - a.score
+  );
 }
 
-export function injectInternalLinks(content: string): string {
-  const matches = findRelevantLinks(content);
+/* ================================
+   INTERNAL LINK INJECTION
+   (PRODUCTION SAFE VERSION)
+================================ */
 
-  let result = content;
-  const used = new Set<string>();
+export function injectInternalLinks(
+  content: string
+): string {
 
-  for (const match of matches) {
-    if (used.has(match.keyword)) continue;
+  /* CONFIG */
 
-    const regex = new RegExp(`\\b(${match.keyword})\\b`, "i");
+  const MAX_TOTAL_LINKS = 8;
+  const MAX_PER_KEYWORD = 2;
 
-    result = result.replace(regex, (text) => {
-      used.add(match.keyword);
+  const keywordMap: Record<string, string> = {
+    "astro seo": "/blog/astro-seo-guide/",
+    "internal linking":
+      "/blog/internal-linking-guide/",
+    "astro": "/blog/astro-guide/",
+    "markdown": "/blog/markdown-guide/"
+  };
 
-      return `<a href="${match.url}" class="text-emerald-500 hover:underline">${text}</a>`;
-    });
+  /* STATE */
+
+  let totalLinks = 0;
+  let lastIndex = -1000;
+
+  const keywordUsage: Record<
+    string,
+    number
+  > = {};
+
+  const sortedKeywords = Object
+    .keys(keywordMap)
+    .sort((a, b) => b.length - a.length);
+
+  /* =============================
+     PROTECT CODE BLOCKS
+  ============================= */
+
+  const codeBlocks: string[] = [];
+
+  content = content.replace(
+    /```[\s\S]*?```/g,
+    (match) => {
+      codeBlocks.push(match);
+      return `__CODE_BLOCK_${codeBlocks.length - 1}__`;
+    }
+  );
+
+  /* =============================
+     PROTECT EXISTING LINKS
+  ============================= */
+
+  const links: string[] = [];
+
+  content = content.replace(
+    /\[.*?\]\(.*?\)/g,
+    (match) => {
+      links.push(match);
+      return `__LINK_${links.length - 1}__`;
+    }
+  );
+
+  /* =============================
+     PROTECT HEADINGS
+  ============================= */
+
+  const headings: string[] = [];
+
+  content = content.replace(
+    /^#{1,6} .*/gm,
+    (match) => {
+      headings.push(match);
+      return `__HEADING_${headings.length - 1}__`;
+    }
+  );
+
+  /* =============================
+     LINK INJECTION
+  ============================= */
+
+  for (const keyword of sortedKeywords) {
+
+    keywordUsage[keyword] = 0;
+
+    const url = keywordMap[keyword];
+
+    const regex = new RegExp(
+      `\\b(${keyword})\\b`,
+      "gi"
+    );
+
+    content = content.replace(
+      regex,
+      (match, offset) => {
+
+        if (totalLinks >= MAX_TOTAL_LINKS)
+          return match;
+
+        if (
+          keywordUsage[keyword] >=
+          MAX_PER_KEYWORD
+        )
+          return match;
+
+        // spacing control
+        if (offset - lastIndex < 120)
+          return match;
+
+        keywordUsage[keyword]++;
+
+        totalLinks++;
+
+        lastIndex = offset;
+
+        return `[${match}](${url})`;
+      }
+    );
   }
 
-  return result;
+  /* =============================
+     RESTORE PROTECTED BLOCKS
+  ============================= */
+
+  content = content.replace(
+    /__HEADING_(\d+)__/g,
+    (_, i) => headings[Number(i)]
+  );
+
+  content = content.replace(
+    /__LINK_(\d+)__/g,
+    (_, i) => links[Number(i)]
+  );
+
+  content = content.replace(
+    /__CODE_BLOCK_(\d+)__/g,
+    (_, i) => codeBlocks[Number(i)]
+  );
+
+  return content;
 }
