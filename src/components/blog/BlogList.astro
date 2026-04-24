@@ -13,7 +13,6 @@ interface Props {
 
 const { posts, variant = "default" } = Astro.props;
 
-// SAFE mapping (tanpa post.body error)
 const postsData = posts.map((post) => ({
   id: post.id,
   title: post.data.title,
@@ -21,7 +20,6 @@ const postsData = posts.map((post) => ({
   pubDate: post.data.pubDate.toISOString(),
   formattedDate: formatDateCompact(post.data.pubDate),
 
-  // FIX: fallback kalau body tidak tersedia
   readingTime: getReadingTime(post.body || post.data.description || ""),
 
   author: post.data.author?.name,
@@ -42,7 +40,7 @@ const postsData = posts.map((post) => ({
 
   {variant === "default" && (
     <>
-      <div class="mb-8 flex items-center justify-between p-4 md:p-8">
+      <div class="mb-8 flex items-center justify-between">
         <h2 class="text-3xl md:text-4xl font-semibold">Terbaru.</h2>
       </div>
 
