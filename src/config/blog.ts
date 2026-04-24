@@ -24,7 +24,7 @@ export const categoryLabels: Record<
   "ai": "Artificial Intelligence",
   "anime": "Anime",
   "automation": "Automation",
-  "Game": "Game",
+  "game": "Game",
   "infrastructure": "Infrastructure",
   "news": "News",
   "tools": "Tools",
