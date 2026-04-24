@@ -7,7 +7,6 @@ interface Props {
 const { allPosts } = Astro.props;
 const html = await Astro.slots.render('default');
 
-// 1. Siapkan Keyword Map
 const keywordMap: Record<string, string> = {};
 allPosts.forEach(post => {
   const words = post.data.title
@@ -23,40 +22,22 @@ allPosts.forEach(post => {
 
 const sortedKeywords = Object.keys(keywordMap).sort((a, b) => b.length - a.length);
 
-// 2. LOGIKA ANTI-BOCOR: Split HTML berdasarkan Tag
-// Regex ini memecah string menjadi array: [teks, <tag>, teks, <tag>, ...]
 const parts = html.split(/(<[^>]+>)/g);
-
 const processedParts = parts.map((part) => {
-  // Jika ini adalah tag HTML, biarkan apa adanya (JANGAN DISENTUH)
-  if (part.startsWith('<')) {
-    return part;
-  }
+  if (part.startsWith('<')) return part;
 
-  // Jika ini adalah teks biasa, lakukan injeksi link
   let text = part;
-  
-  // Kita cek apakah teks ini berada di area terlarang secara manual
-  // Namun dengan Split, kita sudah otomatis melindungi isi atribut tag (seperti src, href, class)
-  
   for (const keyword of sortedKeywords) {
     const url = keywordMap[keyword];
     const regex = new RegExp(`\\b(${keyword})\\b`, "gi");
     
-    // Vercel Style Injection
     text = text.replace(regex, `<a href="${url}" class="internal-link">〄 $1</a>`);
   }
-  
   return text;
 });
 
-let processedHtml = processedParts.join('');
+let processedHtml = processedHtml = processedParts.join('');
 
-/**
- * PROTEKSI EXTRA: 
- * Karena kita menggunakan MDX, heading dan codeblock biasanya dibungkus tag <h1>...</h1> atau <pre>...
- * Kita gunakan Regex terakhir untuk membersihkan link yang "terlanjur" masuk ke tag terlarang tersebut.
- */
 processedHtml = processedHtml.replace(/<(h[1-6]|pre|code|button)[^>]*>([\s\S]*?)<\/\1>/gi, (match) => {
   return match.replace(/<a href="\/blog\/[^"]*" class="internal-link">〄 (.*?)<\/a>/gi, '$1');
 });
@@ -66,21 +47,34 @@ processedHtml = processedHtml.replace(/<(h[1-6]|pre|code|button)[^>]*>([\s\S]*?)
 
 <style is:global>
   .internal-link {
-    @apply inline-flex items-center gap-1 no-underline transition-all duration-200;
-    color: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.125rem 0.375rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
     font-weight: 500;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
     text-decoration: none !important;
+    transition: all 0.2s ease;
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #171717;
+    border: 1px solid rgba(0, 0, 0, 0.1);
   }
 
   :global(.dark) .internal-link {
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #ededed;
+    border: 1px solid rgba(255, 255, 255, 0.15);
   }
 
   .internal-link:hover {
-    @apply text-black dark:text-white;
-    border-bottom-color: currentColor;
-    background-color: rgba(0,0,0,0.04);
-    border-radius: 2px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 0, 0, 0.3);
+    transform: translateY(-1px);
+  }
+
+  :global(.dark) .internal-link:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
   }
 </style>
