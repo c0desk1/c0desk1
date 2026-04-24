@@ -11,42 +11,63 @@ import BlogList from "@/components/blog/BlogList.astro";
 import { sortByDate } from "@/lib/utils";
 
 // ================= DATA =================
+
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 
 const posts = sortByDate(allPosts);
 
-const featuredPosts = posts.filter((p) => p.data.featured === true);
-
+const featuredPosts = posts.filter((p) => p.data.featured);
 const regularPosts = posts.filter((p) => !p.data.featured);
 
 // ================= SEO =================
+
 const seoData = {
   title: "Blog & Insights",
   description:
     "Catatan dari balik layar tentang sistem, kreativitas, dan eksplorasi dunia digital modern.",
   type: "website" as const,
-  canonicalURL: "/blog/",
+  canonicalURL: "https://c0desk1.my.id/blog/"
+};
+
+// ================= SCHEMA =================
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: seoData.title,
+  description: seoData.description,
+  url: seoData.canonicalURL,
+  mainEntity: {
+    "@type": "ItemList",
+    numberOfItems: posts.length
+  }
 };
 ---
 
 <BaseLayout {...seoData}>
 
+  <!-- STRUCTURED DATA -->
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+  <!-- HERO (ASSUME H1 INSIDE) -->
   <section aria-label="Blog introduction">
     <BlogHero />
   </section>
 
-  {/* FEATURED */}
+  <!-- FEATURED -->
   {featuredPosts.length > 0 && (
     <section aria-label="Featured articles">
       <Container size="lg" class="mb-12">
+        <h2 class="sr-only">Featured Posts</h2>
         <BlogList posts={featuredPosts} variant="featured" />
       </Container>
     </section>
   )}
 
-  {/* REGULAR */}
+  <!-- REGULAR -->
   <section aria-label="All articles">
     <Container size="lg" class="mb-16">
+      <h2 class="sr-only">All Posts</h2>
       <BlogList posts={regularPosts} variant="default" />
     </Container>
   </section>
