@@ -1,7 +1,7 @@
 ---
 // src/pages/blog/[...slug].astro
 
-import { getCollection, render } from "astro:content";
+import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 
 import { siteConfig } from "@/config/site";
@@ -13,17 +13,10 @@ import Breadcrumb from "@/components/ui/Breadcrumb.astro";
 import BlogHeader from "@/components/blog/BlogHeader.astro";
 import BlogFeaturedImage from "@/components/blog/BlogFeaturedImage.astro";
 import BlogContent from "@/components/blog/BlogContent.astro";
-import BlogTOC from "@/components/blog/BlogTOC.astro";
 import BlogRelatedPosts from "@/components/blog/BlogRelatedPosts.astro";
 import BackToTop from "@/components/ui/BackToTop.astro";
 
-import Image from "@/components/mdx/Image.astro";
-import HR from "@/components/mdx/HR.astro";
-
-import {
-  filterHeadingsForTOC,
-  getReadingTime
-} from "@/lib/utils";
+import { getReadingTime } from "@/lib/utils";
 
 import {
   getSmartRelatedPosts,
@@ -76,16 +69,7 @@ const injectedBody =
   );
 
 
-// ================= RENDER CONTENT =================
-
-const { Content, headings } =
-  await render({
-    ...post,
-    body: injectedBody
-  });
-
-
-// ================= RELATED CONTENT =================
+// ================= RELATED =================
 
 const relatedPosts =
   getSmartRelatedPosts(
@@ -127,10 +111,7 @@ const seoImage =
   siteConfig.ogImage;
 
 
-// ================= CONTENT METRICS =================
-
-const tocHeadings =
-  filterHeadingsForTOC(headings);
+// ================= READING TIME =================
 
 const readingTime =
   getReadingTime(injectedBody);
@@ -193,110 +174,72 @@ const schema = {
   container={false}
 >
 
-  {/* STRUCTURED DATA */}
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(schema)}
+/>
 
-  <script
-    type="application/ld+json"
-    set:html={JSON.stringify(schema)}
-  />
+<article>
 
+  {/* HEADER */}
 
-  <article>
+  <Container
+    size="md"
+    class="pt-8 md:pt-16 pb-8"
+  >
 
-    {/* HEADER */}
+    <Breadcrumb
+      items={breadcrumbItems}
+    />
 
-    <Container
-      size="md"
-      class="pt-8 md:pt-16 pb-8"
-    >
+    <BlogHeader
+      title={title}
+      pubDate={pubDate}
+      updatedDate={updatedDate}
+      readingTime={readingTime}
+      authorName={author?.name}
+      authorAvatar={author?.avatar}
+      authorTitle={author?.title}
+      featured={featured}
+    />
 
-      <Breadcrumb
-        items={breadcrumbItems}
+    {image && (
+
+      <BlogFeaturedImage
+        image={image}
+        alt={imageAlt || title}
+        caption={
+          imageCaption || imageAlt
+        }
       />
+    )}
+  </Container>
 
-      <BlogHeader
-        title={title}
-        pubDate={pubDate}
-        updatedDate={updatedDate}
-        readingTime={readingTime}
-        authorName={author?.name}
-        authorAvatar={author?.avatar}
-        authorTitle={author?.title}
-        featured={featured}
+
+  {/* CONTENT TEST MODE */}
+  <Container
+    size="sm"
+    class="pt-4 md:pt-8 pb-12"
+  >
+    <div class="px-4 md:px-8">
+      <BlogContent>
+        <div
+          
+          set:html={injectedBody}
+        />
+      </BlogContent>
+    </div>
+  </Container>
+  <BackToTop align="center" />
+
+
+  {/* RELATED */}
+  <section class="section-divider mt-4 md:mt-8 px-4 md:px-8">
+    <Container size="md">
+      <BlogRelatedPosts
+        posts={relatedPosts}
       />
-
-      {image && (
-
-        <BlogFeaturedImage
-          image={image}
-          alt={imageAlt || title}
-          caption={
-            imageCaption || imageAlt
-          }
-        />
-
-      )}
-
     </Container>
-
-
-    {/* CONTENT */}
-
-    <Container
-      size="sm"
-      class="pt-4 md:pt-8 pb-12"
-    >
-
-      {tocHeadings.length > 0 && (
-
-        <div class="mb-8 md:mb-10 px-4 md:px-8">
-
-          <BlogTOC
-            headings={tocHeadings}
-          />
-
-        </div>
-
-      )}
-
-
-      <div class="px-4 md:px-8">
-
-        <BlogContent>
-
-          <Content
-            components={{
-              img: Image,
-              hr: HR
-            }}
-          />
-
-        </BlogContent>
-
-      </div>
-
-    </Container>
-
-
-    {/* UTILITIES */}
-
-    <BackToTop align="center" />
-
-
-    {/* RELATED */}
-
-    <section class="section-divider mt-4 md:mt-8 px-4 md:px-8">
-
-      <Container size="md">
-
-        <BlogRelatedPosts
-          posts={relatedPosts}
-        />
-
-      </Container>
-
-    </section>
-
-  </article>
-
+  </section>
+</article>
 </BaseLayout>
