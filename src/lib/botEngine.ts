@@ -171,7 +171,6 @@ export function getSmartRelatedProjects(
 
 /* ================================
    AUTO INTERNAL LINK ENGINE
-   (FULL AUTO SLUG VERSION)
 ================================ */
 
 export function injectInternalLinks(
@@ -186,7 +185,7 @@ export function injectInternalLinks(
   let lastIndex = -1000;
 
   /* =============================
-     BUILD KEYWORD MAP (AUTO)
+     BUILD KEYWORD MAP
   ============================= */
 
   const keywordMap: Record<string, string> = {};
@@ -300,7 +299,7 @@ export function injectInternalLinks(
 
         lastIndex = offset;
 
-        return `[${match}](${url})`;
+        return `[♠ ${match}](${url})`;
 
       }
     );
