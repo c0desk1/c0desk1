@@ -199,8 +199,10 @@ export function filterHeadingsForTOC(headings: Heading[], maxDepth: number = 3):
 export function generateHeadingId(text: string): string {
   return text
     .toLowerCase()
-    .replace(/[^\w\s]/g, '')
-    .replace(/\s+/g, '-');
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
 }
 
 // ==================== RELATED CONTENT UTILITIES ====================
