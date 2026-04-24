@@ -6,6 +6,17 @@ interface Props {
 }
 
 const { items = [] } = Astro.props;
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": items.map((item, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "name": item.name,
+    "item": new URL(item.href, Astro.site).toString()
+  }))
+};
 ---
 
 <nav
@@ -28,6 +39,7 @@ const { items = [] } = Astro.props;
             /
           </span>
         )}
+
         {index === items.length - 1 ? (
           <span
             class="text-zinc-600 dark:text-zinc-400
@@ -36,12 +48,11 @@ const { items = [] } = Astro.props;
           >
             {item.name}
           </span>
-
         ) : (
           <a
             href={item.href}
             class="transition-colors
-            hover:text-zinc-900
+            hover:text-emerald-500
             dark:hover:text-white"
           >
             {item.name}
@@ -51,3 +62,10 @@ const { items = [] } = Astro.props;
     ))}
   </ol>
 </nav>
+
+{items.length > 0 && (
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(breadcrumbSchema)}
+  />
+)}
