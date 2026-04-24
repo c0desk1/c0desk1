@@ -28,7 +28,8 @@ const { posts } = Astro.props;
       </a>
     </div>
     {posts.length > 0 ? (
-      <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 divide-black/20 dark:divide-white/5">
+      <!-- Perubahan ada di sini: dari divide-y md:divide-y-0 ... menjadi gap-6 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 		    {posts.map(post => (
       		<PostCard post={post} />
   		  ))}
