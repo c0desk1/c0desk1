@@ -1,39 +1,44 @@
 ---
 // src/pages/portfolio/[...slug].astro
+
 import "@/styles/prose.css";
 
-import { getCollection, render } from 'astro:content';
-import type { CollectionEntry } from 'astro:content';
-import { siteConfig } from '@/config/site';
-import { formatDateCompact, getRelatedProjects } from '@/lib/utils';
+import { getCollection, render } from "astro:content";
+import type { CollectionEntry } from "astro:content";
 
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import Container from '@/components/ui/Container.astro';
-import Breadcrumb from '@/components/ui/Breadcrumb.astro';
-import BackToTop from '@/components/ui/BackToTop.astro';
+import { siteConfig } from "@/config/site";
+import { formatDateCompact, getRelatedProjects } from "@/lib/utils";
 
-import PortfolioHeader from '@/components/portfolio/PortfolioHeader.astro';
-import PortfolioMetrics from '@/components/portfolio/PortfolioMetrics.astro';
-import PortfolioGallery from '@/components/portfolio/PortfolioGallery.astro';
-import PortfolioFeedback from '@/components/portfolio/PortfolioFeedback.astro';
-import PortfolioRelated from '@/components/portfolio/PortfolioRelated.astro';
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Breadcrumb from "@/components/ui/Breadcrumb.astro";
+import BackToTop from "@/components/ui/BackToTop.astro";
+
+import PortfolioHeader from "@/components/portfolio/PortfolioHeader.astro";
+import PortfolioMetrics from "@/components/portfolio/PortfolioMetrics.astro";
+import PortfolioGallery from "@/components/portfolio/PortfolioGallery.astro";
+import PortfolioFeedback from "@/components/portfolio/PortfolioFeedback.astro";
+import PortfolioRelated from "@/components/portfolio/PortfolioRelated.astro";
 import PortfolioFeaturedImage from "@/components/portfolio/PortfolioFeaturedImage.astro";
 
+// ================= STATIC PATHS =================
 export async function getStaticPaths() {
-  const projects = await getCollection('portfolio', ({ data }) => !data.draft);
+  const projects = await getCollection("portfolio", ({ data }) => !data.draft);
 
-  return projects.map((project: CollectionEntry<'portfolio'>) => ({
+  return projects.map((project: CollectionEntry<"portfolio">) => ({
     params: { slug: project.id },
-    props: { project },
+    props: { project }
   }));
 }
 
+// ================= PROPS =================
 interface Props {
-  project: CollectionEntry<'portfolio'>;
+  project: CollectionEntry<"portfolio">;
 }
 
 const { project } = Astro.props;
 
+// ================= DATA =================
 const {
   title,
   description,
@@ -59,17 +64,23 @@ const {
 
 const { Content } = await render(project);
 
+// ================= SEO =================
+const seoTitle =
+  seo?.title || `${title} | ${siteConfig.name}`;
 
-const seoTitle = seo?.title || `${title} | ${siteConfig.name}`;
-const seoDescription = seo?.description || description;
-const seoImage = seo?.ogImage || image;
+const seoDescription =
+  seo?.description || description;
 
-const displayImage = image; 
-const displayGallery = Array.isArray(gallery) ? gallery : [];
+const seoImage =
+  seo?.ogImage || image || siteConfig.ogImage;
 
-const allProjects = await getCollection('portfolio', ({ data }) => !data.draft);
+// ================= RELATED =================
+const allProjects = await getCollection("portfolio", ({ data }) => !data.draft);
 
 const relatedProjects = getRelatedProjects(project, allProjects, 2);
+
+// ================= NORMALIZED DATA =================
+const displayGallery = Array.isArray(gallery) ? gallery : [];
 ---
 
 <BaseLayout
@@ -82,14 +93,19 @@ const relatedProjects = getRelatedProjects(project, allProjects, 2);
   tags={techStack}
   container={false}
 >
+
   <article>
-    <div class="border-b border-zinc-100 dark:border-zinc-900">
+    {/* HEADER SECTION */}
+    <header class="border-b border-zinc-100 dark:border-zinc-900">
       <Container size="md" class="py-8 md:py-10">
-        <Breadcrumb items={[
-          { name: 'Home', href: '/' },
-          { name: 'Portfolio', href: '/portfolio' },
-          { name: title, href: '#' }
-        ]} />
+
+        <Breadcrumb
+          items={[
+            { name: "Portfolio", href: "/portfolio/" },
+            { name: title, href: "#" }
+          ]}
+        />
+
         <PortfolioHeader
           title={title}
           date={date}
@@ -103,18 +119,30 @@ const relatedProjects = getRelatedProjects(project, allProjects, 2);
           repoUrl={repoUrl}
         />
       </Container>
-    </div>
-    {displayImage && (
+    </header>
+
+    {/* FEATURED IMAGE */}
+    {image && (
       <PortfolioFeaturedImage
-        src={displayImage}  alt={imageAlt || title}
+        src={image}
+        alt={imageAlt || title}
         caption={imageCaption || imageAlt || title}
       />
     )}
+
+    {/* METRICS */}
     <PortfolioMetrics metrics={metrics} />
+
+    {/* CONTENT BODY */}
     <Container size="md" class="py-10 md:py-12">
       <div class="mx-auto">
+
+        {/* CASE STUDY BLOCK */}
         {(challenge || solution || result) && (
-          <div class="space-y-6 mb-8 pb-6 border-b border-zinc-100 dark:border-zinc-800">
+          <section
+            aria-label="Case study"
+            class="space-y-6 mb-8 pb-6 border-b border-zinc-100 dark:border-zinc-800"
+          >
             {challenge && (
               <div>
                 <h2 class="text-lg font-semibold text-zinc-900 dark:text-white mb-2">
@@ -145,22 +173,31 @@ const relatedProjects = getRelatedProjects(project, allProjects, 2);
                 </p>
               </div>
             )}
-          </div>
+          </section>
         )}
+
+        {/* MAIN CONTENT */}
         <div class="prose-custom">
           <Content />
         </div>
+
+        {/* GALLERY */}
         <PortfolioGallery
           images={displayGallery}
           title={title}
         />
+
+        {/* RELATED PROJECTS */}
         <PortfolioRelated
           projects={relatedProjects}
         />
-        
+
+        {/* FEEDBACK */}
         <PortfolioFeedback
           lastUpdated={formatDateCompact(updatedDate || date)}
         />
+
+        {/* UTILITIES */}
         <BackToTop showBorder={true} align="center" />
       </div>
     </Container>
