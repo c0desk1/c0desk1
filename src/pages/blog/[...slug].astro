@@ -22,10 +22,11 @@ import HR from "@/components/mdx/HR.astro";
 
 import {
   filterHeadingsForTOC,
-  getRelatedPosts,
   formatDate,
   getReadingTime
 } from "@/lib/utils";
+
+import { getSmartRelatedPosts } from "@/lib/botEngine";
 
 // ================= STATIC PATHS =================
 export async function getStaticPaths() {
@@ -64,7 +65,8 @@ const { Content, headings } = await render(post);
 
 // ================= RELATED CONTENT =================
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
-const relatedPosts = getRelatedPosts(post, allPosts, 3);
+
+const relatedPosts = getSmartRelatedPosts(post, allPosts, 3);
 
 // ================= SEO FALLBACK SYSTEM =================
 const seoTitle = seo?.title || title;
