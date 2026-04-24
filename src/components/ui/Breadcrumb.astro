@@ -7,53 +7,39 @@ interface Props {
 
 const { items = [] } = Astro.props;
 
+const siteURL = Astro.site ?? "https://c0desk1.my.id";
+const breadcrumbId = `${Astro.url.pathname}#breadcrumb`;
+
 const breadcrumbSchema = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
-  "itemListElement": items.map((item, index) => ({
+  "@id": breadcrumbId,
+  itemListElement: items.map((item, index) => ({
     "@type": "ListItem",
-    "position": index + 1,
-    "name": item.name,
-    "item": new URL(item.href, Astro.site).toString()
+    position: index + 1,
+    name: item.name,
+    item: new URL(item.href, siteURL).toString()
   }))
 };
 ---
 
-<nav
-  aria-label="Breadcrumb"
-  class="flex justify-center pb-8"
->
-  <ol
-    class="flex flex-wrap items-center
-    gap-x-2 gap-y-1
-    text-xs md:text-sm
-    text-zinc-400 dark:text-zinc-500"
-  >
+<nav aria-label="Breadcrumb" class="flex justify-center pb-8">
+  <ol class="flex flex-wrap items-center gap-x-2 text-xs md:text-sm text-zinc-400 dark:text-zinc-500">
     {items.map((item, index) => (
       <li class="flex items-center gap-x-2">
         {index > 0 && (
-          <span
-            class="text-zinc-300 dark:text-zinc-700 select-none"
-            aria-hidden="true"
-          >
+          <span aria-hidden="true" class="text-zinc-300 dark:text-zinc-700">
             /
           </span>
         )}
-
         {index === items.length - 1 ? (
-          <span
-            class="text-zinc-600 dark:text-zinc-400
-            wrap-break-words"
-            aria-current="page"
-          >
+          <span aria-current="page" class="text-zinc-600 dark:text-zinc-400">
             {item.name}
           </span>
         ) : (
           <a
             href={item.href}
-            class="transition-colors
-            hover:text-emerald-500
-            dark:hover:text-white"
+            class="hover:text-emerald-500 dark:hover:text-white transition"
           >
             {item.name}
           </a>
@@ -62,10 +48,6 @@ const breadcrumbSchema = {
     ))}
   </ol>
 </nav>
-
 {items.length > 0 && (
-  <script
-    type="application/ld+json"
-    set:html={JSON.stringify(breadcrumbSchema)}
-  />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
 )}
