@@ -7,16 +7,9 @@
 </div>
 
 <style is:global>
-  /* =========================
-     BASE
-  ========================= */
   .steps-container {
     position: relative;
   }
-
-  /* =========================
-     H3 (STEP TITLE)
-  ========================= */
   .steps-container h3 {
     counter-increment: step;
     position: relative;
@@ -39,9 +32,6 @@
     margin-top: 0 !important;
   }
 
-  /* =========================
-     NUMBER BADGE
-  ========================= */
   .steps-container h3::before {
     content: counter(step);
     position: absolute;
@@ -51,14 +41,11 @@
     width: 1.75rem;
     height: 1.75rem;
     border-radius: 9999px;
-
     background: #fff;
     border: 1px solid #e4e4e7;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     font-size: 0.75rem;
     font-weight: 600;
     color: #71717a;
@@ -70,9 +57,6 @@
     color: #a1a1aa;
   }
 
-  /* =========================
-     UNIFIED TEXT SIZE (INI KUNCI)
-  ========================= */
   .steps-container p,
   .steps-container li {
     font-size: 0.875rem;
@@ -85,9 +69,6 @@
     color: #e4e4e7;
   }
 
-  /* =========================
-     LIST RESET (BIAR TIDAK BEDA SIZE)
-  ========================= */
   .steps-container ul,
   .steps-container ol {
     margin: 0.25rem 0 1.5rem 0;
@@ -98,17 +79,14 @@
   .steps-container ol > li {
     list-style: none;
     position: relative;
-    padding-left: 2rem;
+    padding-left: 1.25rem;
     margin-bottom: 0.5rem;
   }
 
-  /* =========================
-     BULLET STYLE
-  ========================= */
   .steps-container ul > li::before {
     content: "";
     position: absolute;
-    left: 0;
+    left: 0.5rem;
     top: 0.65rem;
 
     width: 0.4rem;
@@ -121,9 +99,6 @@
     background: #a1a1aa;
   }
 
-  /* =========================
-     NUMBERED LIST STYLE
-  ========================= */
   .steps-container ol {
     counter-reset: list-item;
   }
@@ -133,7 +108,7 @@
     content: counter(list-item);
 
     position: absolute;
-    left: 0;
+    left: 0.5rem;
     top: 0;
 
     width: 1.2rem;
@@ -155,9 +130,6 @@
     color: #a1a1aa;
   }
 
-  /* =========================
-     SPACING BETWEEN STEPS
-  ========================= */
   .steps-container h3:not(:first-of-type) {
     margin-top: 2.5rem !important;
   }
