@@ -65,7 +65,7 @@ Get-ChildItem -Path $folderPath | ForEach-Object {
     Rename-Item -Path $_.FullName -NewName $namaBaru
 }
 ```
-
+</CodeGroup>
 
 
 Kenapa Gini?:
@@ -91,8 +91,7 @@ Get-ChildItem -Path $pathSampah -Recurse | Where-Object {
     $_.LastWriteTime -lt (Get-Date).AddDays(-$batasHari)
 } | Remove-Item -Force
 ```
-
-
+</CodeGroup>
 
 Kalau lu takut salah hapus, tambahin `-WhatIf` di akhir baris `Remove-Item`. Nanti PowerShell cuma bakal pamer, "Nih file yang BAKAL gue hapus," tanpa beneran ngehapus. Jadi lu bisa cek dulu.
 
