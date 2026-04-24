@@ -15,66 +15,97 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 
-// ambil semua blog
 const posts = await getCollection("blog", ({ data }) => !data.draft);
 
-// filter by author slug (sementara pakai simple match)
 const authorPosts = posts.filter((post) => {
-  const authorSlug =
-    post.data.author?.slug ||
-    siteConfig.author.slug;
-
-  return authorSlug === slug;
+  return post.data.author?.slug === slug;
 });
 
 const author = siteConfig.author;
 
-// SEO data
+// SEO
 const seo = {
   title: `Artikel oleh ${author.name}`,
-  description: `Kumpulan artikel dari ${author.name}`,
+  description: author.bio || `Kumpulan artikel dari ${author.name}`,
+  url: `${siteConfig.url}/author/${author.slug}`
 };
 ---
+
+<!-- ================= AUTHOR SCHEMA ================= -->
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": `${seo.url}#person`,
+  "name": author.name,
+  "url": seo.url,
+  "image": `${siteConfig.url}${author.avatar}`,
+  "jobTitle": author.title,
+  "description": author.bio,
+  "sameAs": [
+    siteConfig.social.github,
+    siteConfig.social.twitter,
+    siteConfig.social.linkedin
+  ],
+  "worksFor": {
+    "@type": "Organization",
+    "name": siteConfig.name
+  }
+})} />
 
 <BaseLayout title={seo.title} description={seo.description}>
   <Container size="md" class="py-12">
 
-    <!-- AUTHOR HEADER -->
-    <div class="flex items-center gap-4 mb-10">
+    <!-- ================= AUTHOR HEADER ================= -->
+    <div class="flex items-center gap-4">
       <img
         src={author.avatar}
-        class="w-14 h-14 rounded-full"
         alt={author.name}
+        class="w-14 h-14 rounded-full object-cover"
       />
 
       <div>
         <h1 class="text-2xl font-semibold text-zinc-900 dark:text-white">
           {author.name}
         </h1>
-        <p class="text-zinc-500">
+
+        <p class="text-zinc-500 text-sm">
           {author.title}
+        </p>
+
+        <!-- BIO -->
+        <p class="mt-2 text-sm text-zinc-500 leading-relaxed max-w-xl">
+          {author.bio}
         </p>
       </div>
     </div>
 
-    <!-- POSTS -->
-    <div class="grid gap-6">
-      {authorPosts.map((post) => (
-        <a href={`/blog/${post.id}`} class="block">
-          <div class="text-sm text-zinc-500">
-            {formatDateCompact(post.data.pubDate)}
-          </div>
+    <!-- ================= AUTHOR STATS ================= -->
+    <div class="flex gap-6 mt-8 text-sm text-zinc-500">
+      <div>
+        <span class="font-medium text-zinc-900 dark:text-white">
+          {authorPosts.length}
+        </span>
+        {" "}Artikel
+      </div>
+    </div>
 
-          <div class="text-lg font-medium text-zinc-900 dark:text-white">
+    <!-- ================= POSTS ================= -->
+    <div class="mt-10 grid gap-6">
+      {authorPosts.map((post) => (
+        <a
+          href={`/blog/${post.id}`}
+          class="block group"
+        >
+          <div class="text-xs text-zinc-500 mb-1">            {formatDateCompact(post.data.pubDate)} · {post.data.category}
+          </div>
+          <div class="text-lg font-medium text-zinc-900 dark:text-white group-hover:underline">
             {post.data.title}
           </div>
-
-          <p class="text-sm text-zinc-500 line-clamp-2">
+          <p class="text-sm text-zinc-500 line-clamp-2 mt-1">
             {post.data.description}
           </p>
         </a>
       ))}
     </div>
-
   </Container>
 </BaseLayout>
