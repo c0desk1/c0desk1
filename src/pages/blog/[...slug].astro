@@ -69,12 +69,12 @@ const allPosts = await getCollection(
 
 // ================= RENDER MDX + INTERNAL LINKS =================
 
-const modifiedPost = {
-  ...post,
-  body: injectInternalLinks(post.body, allPosts)
-};
+const modifiedBody = injectInternalLinks(post.body, allPosts);
 
-const { Content, headings } = await render(modifiedPost);
+const { Content, headings } = await render({
+  ...post,
+  body: modifiedBody
+});
 
 // ================= RELATED =================
 
