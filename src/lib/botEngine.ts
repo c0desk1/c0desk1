@@ -218,3 +218,32 @@ export function remarkInternalLinks(allPosts: any[]) {
     });
   };
 }
+
+export function getPostTopicGraph(
+  post: CollectionEntry<"blog">,
+  allPosts: CollectionEntry<"blog">[]
+) {
+  const tags = post.data.tags ?? [];
+  const category = post.data.category;
+
+  const related = allPosts
+    .filter((p) => p.id !== post.id)
+    .map((p) => {
+      const sharedTags =
+        (p.data.tags ?? []).filter((t) => tags.includes(t)).length;
+
+      const sameCategory =
+        p.data.category === category ? 2 : 0;
+
+      const score = sharedTags + sameCategory;
+
+      return {
+        post: p,
+        score
+      };
+    })
+    .filter((r) => r.score > 0)
+    .sort((a, b) => b.score - a.score);
+
+  return related.slice(0, 5).map((r) => r.post);
+}
