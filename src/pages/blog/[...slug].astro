@@ -22,30 +22,81 @@ import HR from "@/components/mdx/HR.astro";
 
 import {
   filterHeadingsForTOC,
-  formatDate,
   getReadingTime
 } from "@/lib/utils";
 
-import { getSmartRelatedPosts, injectInternalLinks } from "@/lib/botEngine";
+import {
+  getSmartRelatedPosts,
+  injectInternalLinks
+} from "@/lib/botEngine";
+
 
 // ================= STATIC PATHS =================
-export async function getStaticPaths() {
-  const posts = await getCollection("blog", ({ data }) => !data.draft);
 
-  return posts.map((post: CollectionEntry<"blog">) => ({
-    params: { slug: post.id },
-    props: { post }
-  }));
+export async function getStaticPaths() {
+
+  const posts = await getCollection(
+    "blog",
+    ({ data }) => !data.draft
+  );
+
+  return posts.map(
+    (post: CollectionEntry<"blog">) => ({
+      params: { slug: post.id },
+      props: { post }
+    })
+  );
+
 }
 
+
 // ================= PROPS =================
+
 interface Props {
   post: CollectionEntry<"blog">;
 }
 
 const { post } = Astro.props;
 
+
+// ================= LOAD ALL POSTS =================
+
+const allPosts = await getCollection(
+  "blog",
+  ({ data }) => !data.draft
+);
+
+
+// ================= INTERNAL LINK INJECTION =================
+
+const injectedBody =
+  injectInternalLinks(
+    post.body,
+    allPosts
+  );
+
+
+// ================= RENDER CONTENT =================
+
+const { Content, headings } =
+  await render({
+    ...post,
+    body: injectedBody
+  });
+
+
+// ================= RELATED CONTENT =================
+
+const relatedPosts =
+  getSmartRelatedPosts(
+    post,
+    allPosts,
+    3
+  );
+
+
 // ================= DATA =================
+
 const {
   title,
   description,
@@ -61,35 +112,43 @@ const {
   seo
 } = post.data;
 
-const injectedBody = injectInternalLinks(post.body);
 
-const { Content, headings } = await render({
-  ...post,
-  body: injectedBody
-});
+// ================= SEO =================
 
-// ================= RELATED CONTENT =================
-const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const seoTitle =
+  seo?.title || title;
 
-const relatedPosts = getSmartRelatedPosts(post, allPosts, 3);
+const seoDescription =
+  seo?.description || description;
 
-// ================= SEO FALLBACK SYSTEM =================
-const seoTitle = seo?.title || title;
-const seoDescription = seo?.description || description;
-const seoImage = seo?.ogImage || image || siteConfig.ogImage;
+const seoImage =
+  seo?.ogImage ||
+  image ||
+  siteConfig.ogImage;
+
 
 // ================= CONTENT METRICS =================
-const tocHeadings = filterHeadingsForTOC(headings);
 
-const readingTime = getReadingTime(injectedBody);
+const tocHeadings =
+  filterHeadingsForTOC(headings);
+
+const readingTime =
+  getReadingTime(injectedBody);
+
 
 // ================= BREADCRUMB =================
+
 const breadcrumbItems = [
   { name: "Blog", href: "/blog/" },
-  { name: categoryLabels[category], href: `/category/${category}/` }
+  {
+    name: categoryLabels[category],
+    href: `/category/${category}/`
+  }
 ];
 
-// ================= SCHEMA (SEO POWER LAYER) =================
+
+// ================= SCHEMA =================
+
 const schema = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
@@ -100,23 +159,28 @@ const schema = {
   dateModified: updatedDate || pubDate,
   author: {
     "@type": "Person",
-    name: author?.name || siteConfig.author
+    name:
+      author?.name ||
+      siteConfig.author
   },
   publisher: {
     "@type": "Organization",
     name: siteConfig.name,
     logo: {
       "@type": "ImageObject",
-      url: `${siteConfig.url}/favicon.svg`
+      url:
+        `${siteConfig.url}/favicon.svg`
     }
   },
   mainEntityOfPage: {
     "@type": "WebPage",
     "@id": Astro.url.href
   },
-  keywords: tags?.join(", ") || ""
+  keywords:
+    tags?.join(", ") || ""
 };
 ---
+
 
 <BaseLayout
   title={seoTitle}
@@ -130,12 +194,26 @@ const schema = {
 >
 
   {/* STRUCTURED DATA */}
-  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(schema)}
+  />
+
+
   <article>
 
-    {/* HEADER BLOCK */}
-    <Container size="md" class="pt-8 md:pt-16 pb-8">
-      <Breadcrumb items={breadcrumbItems} />
+    {/* HEADER */}
+
+    <Container
+      size="md"
+      class="pt-8 md:pt-16 pb-8"
+    >
+
+      <Breadcrumb
+        items={breadcrumbItems}
+      />
+
       <BlogHeader
         title={title}
         pubDate={pubDate}
@@ -146,46 +224,79 @@ const schema = {
         authorTitle={author?.title}
         featured={featured}
       />
+
       {image && (
+
         <BlogFeaturedImage
           image={image}
           alt={imageAlt || title}
-          caption={imageCaption || imageAlt}
+          caption={
+            imageCaption || imageAlt
+          }
         />
+
       )}
+
     </Container>
 
-    {/* CONTENT BLOCK */}
-    <Container size="sm" class="pt-4 md:pt-8 pb-12">
 
-      {/* TABLE OF CONTENTS */}
+    {/* CONTENT */}
+
+    <Container
+      size="sm"
+      class="pt-4 md:pt-8 pb-12"
+    >
+
       {tocHeadings.length > 0 && (
+
         <div class="mb-8 md:mb-10 px-4 md:px-8">
-          <BlogTOC headings={tocHeadings} />
+
+          <BlogTOC
+            headings={tocHeadings}
+          />
+
         </div>
+
       )}
 
-      {/* ARTICLE CONTENT */}
+
       <div class="px-4 md:px-8">
+
         <BlogContent>
-<Content
-  components={{
-    img: Image,
-    hr: HR
-  }}
-/>
-</BlogContent>
+
+          <Content
+            components={{
+              img: Image,
+              hr: HR
+            }}
+          />
+
+        </BlogContent>
+
       </div>
+
     </Container>
+
 
     {/* UTILITIES */}
+
     <BackToTop align="center" />
 
-    {/* RELATED CONTENT */}
+
+    {/* RELATED */}
+
     <section class="section-divider mt-4 md:mt-8 px-4 md:px-8">
+
       <Container size="md">
-        <BlogRelatedPosts posts={relatedPosts} />
+
+        <BlogRelatedPosts
+          posts={relatedPosts}
+        />
+
       </Container>
+
     </section>
+
   </article>
+
 </BaseLayout>
