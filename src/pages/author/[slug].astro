@@ -3,6 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/ui/Container.astro";
 import { getCollection } from "astro:content";
 import { siteConfig } from "@/config/site";
+import { categoryLabels } from "@/config/blog";
 import { formatDateCompact } from "@/lib/utils";
 
 export async function getStaticPaths() {
@@ -17,7 +18,6 @@ const { slug } = Astro.params;
 
 const posts = await getCollection("blog", ({ data }) => !data.draft);
 
-// FIX: fallback + safe access
 const authorPosts = posts.filter((post) => {
   const authorSlug =
     post.data.author?.slug ||
@@ -57,7 +57,7 @@ const seo = {
 })} />
 
 <BaseLayout title={seo.title} description={seo.description}>
-  <Container size="md" class="py-12">
+  <Container size="md" class="px-4 md:px-8 py-16">
 
     <!-- HEADER -->
     <div class="flex items-center gap-4">
@@ -91,15 +91,16 @@ const seo = {
     <div class="mt-10 grid gap-6">
       {authorPosts.map((post) => (
         <a href={`/blog/${post.id}`} class="block">
-          <div class="text-xs text-zinc-500">
-            {formatDateCompact(post.data.pubDate)} · {post.data.category}
+          <div class="text-xs md:text-sm text-zinc-500 items-center justify-between">
+            {formatDateCompact(post.data.pubDate)}
+			{categoryLabels(post.data.category)}
           </div>
 
-          <div class="text-lg font-medium">
+          <div class="text-lg md:text-xl font-semibold line-clamp-3">
             {post.data.title}
           </div>
 
-          <p class="text-sm text-zinc-500 line-clamp-2">
+          <p class="text-sm text-zinc-500 line-clamp-3">
             {post.data.description}
           </p>
         </a>
