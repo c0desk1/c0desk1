@@ -22,8 +22,9 @@ export async function GET(context: any) {
       const authorName =
         post.data.author?.name || siteConfig.author.name;
 
-      const tags = post.data.tags ?? [];
       const category = post.data.category;
+
+      const tags = post.data.tags ?? [];
 
       return {
         title: post.data.title,
@@ -32,6 +33,7 @@ export async function GET(context: any) {
 
         description: post.data.description,
 
+        // SEO signal ringan & valid RSS
         categories: [
           category,
           ...tags
@@ -39,15 +41,7 @@ export async function GET(context: any) {
 
         author: authorName,
 
-        guid: url,
-
-        customData: `
-          <author>${authorName}</author>
-          <category>${category ?? ""}</category>
-          <tags>${tags.join(",")}</tags>
-          <topic>${category ?? ""}</topic>
-          <canonical>${url}</canonical>
-        `
+        guid: url
       };
     }),
 
