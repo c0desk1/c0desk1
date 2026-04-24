@@ -27,7 +27,8 @@ import {
 
 import {
   getSmartRelatedPosts,
-  remarkInternalLinks
+  remarkInternalLinks,
+  injectInternalLinks
 } from "@/lib/botEngine";
 
 
@@ -69,13 +70,12 @@ const allPosts = await getCollection(
 
 // ================= RENDER MDX + INTERNAL LINKS =================
 
-const { Content, headings } =
-  await render(post, {
-    remarkPlugins: [
-      remarkInternalLinks(allPosts)
-    ]
-  });
+const modifiedPost = {
+  ...post,
+  body: injectInternalLinks(post.body, allPosts)
+};
 
+const { Content, headings } = await render(modifiedPost);
 
 // ================= RELATED =================
 
