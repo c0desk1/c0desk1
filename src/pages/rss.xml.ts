@@ -19,24 +19,32 @@ export async function GET(context: any) {
     items: sorted.map((post) => {
       const url = new URL(`blog/${post.id}/`, site).toString();
 
+      const author = post.data.author?.name || siteConfig.author.name;
+
       return {
         title: post.data.title,
         link: url,
         pubDate: post.data.pubDate,
+        description: post.data.description,
 
-        description: post.data.tags?.length
-          ? `${post.data.description} — Tags: ${post.data.tags.join(", ")}`
-          : post.data.description,
-        categories: post.data.category ? [post.data.category] : [],
-
-        guid: url
+        categories: [
+          post.data.category,
+          ...(post.data.tags ?? [])
+        ].filter(Boolean),
+        author,
+        guid: url,
+        customData: `
+          <author>${author}</author>
+          <category>${post.data.category ?? ""}</category>
+        `
       };
     }),
 
     customData: `
       <language>id-ID</language>
       <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
-      <generator>c0desk1 Feeds</generator>
+      <generator>${siteConfig.name} RSS Feed</generator>
+      <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
     `
   });
 }
