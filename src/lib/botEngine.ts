@@ -1,5 +1,4 @@
 import type { CollectionEntry } from "astro:content";
-import { contentGraph } from "./contentGraph";
 
 /* ================================
    TYPES
@@ -7,12 +6,6 @@ import { contentGraph } from "./contentGraph";
 
 type BlogPost = CollectionEntry<"blog">;
 type Portfolio = CollectionEntry<"portfolio">;
-
-type GraphNode = {
-  topic: string;
-  keywords: string[];
-  urls: string[];
-};
 
 /* ================================
    BLOG SCORING ENGINE
@@ -22,6 +15,7 @@ export function scoreBlogRelation(
   source: BlogPost,
   target: BlogPost
 ): number {
+
   let score = 0;
 
   // CATEGORY MATCH
@@ -86,6 +80,7 @@ export function getSmartRelatedPosts(
   allPosts: BlogPost[],
   limit = 3
 ): BlogPost[] {
+
   return allPosts
     .filter((post) => post.id !== source.id)
     .map((target) => ({
@@ -105,6 +100,7 @@ export function scorePortfolioRelation(
   source: Portfolio,
   target: Portfolio
 ): number {
+
   let score = 0;
 
   // TECH STACK OVERLAP
@@ -158,6 +154,7 @@ export function getSmartRelatedProjects(
   allProjects: Portfolio[],
   limit = 2
 ): Portfolio[] {
+
   return allProjects
     .filter((p) => p.id !== source.id)
     .map((target) => ({
@@ -173,76 +170,56 @@ export function getSmartRelatedProjects(
 }
 
 /* ================================
-   FIND RELEVANT LINKS (GRAPH)
-================================ */
-
-export function findRelevantLinks(
-  content: string
-) {
-  const lowerContent = content.toLowerCase();
-
-  const matches: {
-    keyword: string;
-    url: string;
-    score: number;
-  }[] = [];
-
-  for (const node of contentGraph as GraphNode[]) {
-    for (const keyword of node.keywords) {
-      if (
-        lowerContent.includes(
-          keyword.toLowerCase()
-        )
-      ) {
-        matches.push({
-          keyword,
-          url: node.urls[0],
-          score: keyword.length
-        });
-      }
-    }
-  }
-
-  return matches.sort(
-    (a, b) => b.score - a.score
-  );
-}
-
-/* ================================
-   INTERNAL LINK INJECTION
-   (PRODUCTION SAFE VERSION)
+   AUTO INTERNAL LINK ENGINE
+   (FULL AUTO SLUG VERSION)
 ================================ */
 
 export function injectInternalLinks(
-  content: string
+  content: string,
+  allPosts: BlogPost[]
 ): string {
-
-  /* CONFIG */
 
   const MAX_TOTAL_LINKS = 8;
   const MAX_PER_KEYWORD = 2;
 
-  const keywordMap: Record<string, string> = {
-    "astro seo": "/blog/astro-seo-guide/",
-    "internal linking":
-      "/blog/internal-linking-guide/",
-    "astro": "/blog/astro-guide/",
-    "markdown": "/blog/markdown-guide/"
-  };
-
-  /* STATE */
-
   let totalLinks = 0;
   let lastIndex = -1000;
+
+  /* =============================
+     BUILD KEYWORD MAP (AUTO)
+  ============================= */
+
+  const keywordMap: Record<string, string> = {};
+
+  for (const post of allPosts) {
+
+    const slug = `/blog/${post.id}/`;
+
+    const title = post.data.title.toLowerCase();
+
+    const words = title
+      .split(" ")
+      .filter((w) => w.length >= 5)
+      .slice(0, 3);
+
+    for (const word of words) {
+
+      if (!keywordMap[word]) {
+        keywordMap[word] = slug;
+      }
+
+    }
+
+  }
+
+  const sortedKeywords = Object
+    .keys(keywordMap)
+    .sort((a, b) => b.length - a.length);
 
   const keywordUsage: Record<
     string,
     number
   > = {};
-
-  const sortedKeywords = Object
-    .keys(keywordMap)
-    .sort((a, b) => b.length - a.length);
 
   /* =============================
      PROTECT CODE BLOCKS
@@ -314,7 +291,6 @@ export function injectInternalLinks(
         )
           return match;
 
-        // spacing control
         if (offset - lastIndex < 120)
           return match;
 
@@ -325,12 +301,13 @@ export function injectInternalLinks(
         lastIndex = offset;
 
         return `[${match}](${url})`;
+
       }
     );
   }
 
   /* =============================
-     RESTORE PROTECTED BLOCKS
+     RESTORE BLOCKS
   ============================= */
 
   content = content.replace(
