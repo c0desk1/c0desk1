@@ -1,10 +1,18 @@
 import type { CollectionEntry } from "astro:content";
 
+import { contentGraph } from "./contentGraph";
+
 /* ================================
    TYPES
 ================================ */
 type BlogPost = CollectionEntry<"blog">;
 type Portfolio = CollectionEntry<"portfolio">;
+
+type GraphNode = {
+  topic: string;
+  keywords: string[];
+  urls: string[];
+};
 
 /* ================================
    BLOG SCORING ENGINE
@@ -142,4 +150,49 @@ export function getSmartRelatedProjects(
     .sort((a, b) => b.score - a.score)
     .slice(0, limit)
     .map((item) => item.project);
+}
+
+export function findRelevantLinks(content: string) {
+  const lowerContent = content.toLowerCase();
+
+  const matches: {
+    keyword: string;
+    url: string;
+    score: number;
+  }[] = [];
+
+  for (const node of contentGraph as any) {
+    for (const keyword of node.keywords) {
+      if (lowerContent.includes(keyword.toLowerCase())) {
+        matches.push({
+          keyword,
+          url: node.urls[0],
+          score: keyword.length
+        });
+      }
+    }
+  }
+
+  return matches.sort((a, b) => b.score - a.score);
+}
+
+export function injectInternalLinks(content: string): string {
+  const matches = findRelevantLinks(content);
+
+  let result = content;
+  const used = new Set<string>();
+
+  for (const match of matches) {
+    if (used.has(match.keyword)) continue;
+
+    const regex = new RegExp(`\\b(${match.keyword})\\b`, "i");
+
+    result = result.replace(regex, (text) => {
+      used.add(match.keyword);
+
+      return `<a href="${match.url}" class="text-emerald-500 hover:underline">${text}</a>`;
+    });
+  }
+
+  return result;
 }
