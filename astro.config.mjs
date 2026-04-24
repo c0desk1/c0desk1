@@ -20,7 +20,7 @@ export default defineConfig({
     mdx(), 
     partytown({
       config: {
-        forward: ['dataLayer.push', 'gtag', 'ym'],
+        forward: ['adsbygoogle.push', 'dataLayer.push', 'gtag', 'ym'],
       },
     }),
   ]
