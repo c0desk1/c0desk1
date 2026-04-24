@@ -125,9 +125,8 @@ const schema = {
 <script type="application/ld+json" set:html={JSON.stringify(schema)} />
 
 <article>
-  <Container size="md" class="pt-8 md:pt-16 mb-8 md:mb-10">
+  <Container size="sm" class="pt-8 md:pt-16 mb-8 md:mb-10">
     <Breadcrumb items={breadcrumbItems} />
-
     <BlogHeader
       title={title}
       pubDate={pubDate}
@@ -138,7 +137,6 @@ const schema = {
       authorTitle={author?.title}
       featured={featured}
     />
-
     {image && (
       <BlogFeaturedImage
         image={image}
@@ -147,10 +145,9 @@ const schema = {
       />
     )}
   </Container>
-
-  <Container size="md" class="pb-16">
+  <Container size="sm" class="my-8">
     {tocHeadings.length > 0 && (
-      <div class="mb-8 md:mb-10 px-4 md:px-8">
+      <div class="mb-8 md:mb-10">
         <BlogTOC headings={tocHeadings} />
       </div>
     )}
@@ -159,13 +156,12 @@ const schema = {
         <Content components={{ img: Image, hr: HR }} />
       </InternalLink>
     </BlogContent>
-    <BackToTop align="center" />
   </Container>
-  <section class="section-divider mt-4 md:mt-8 px-4 md:px-8">
-    <Container size="md">
+  <section class="section-divider my-8">
+    <Container size="sm">
+      <BackToTop align="center" />
       <BlogRelatedPosts posts={relatedPosts} />
     </Container>
   </section>
-
 </article>
 </BaseLayout>

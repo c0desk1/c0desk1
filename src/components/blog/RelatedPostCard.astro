@@ -6,55 +6,46 @@ import { siteConfig } from '@/config/site';
 import { categoryLabels } from '@/config/blog';
 import { formatDateCompact } from '@/lib/utils';
 
-interface Props { post: CollectionEntry<'blog'>; }
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
 
 const { post } = Astro.props;
 const { data, id } = post;
-const { title, pubDate, category, description, author } = data;
+const { title, pubDate, category, description } = data;
 
 const formattedDate = formatDateCompact(pubDate);
 
-const authorName = siteConfig.author.name;
-const authorAvatar = siteConfig.author.avatar;
-const authorSlug = siteConfig.author.slug;
+const author = siteConfig.author;
 ---
 
 <a
   href={`/blog/${id}/`}
-  class="group flex flex-col h-full py-4 md:py-8 transition-all duration-200 overflow-hidden"
+  class="group block py-6"
   aria-label={`Read article: ${title}`}
 >
-  <div class="flex items-center justify-between mb-8">
-    <span class="text-[13px] group-hover:text-zinc-900 dark:group-hover:text-white transition-colors text-zinc-500 tracking-tight">
+  <div class="flex items-center justify-between text-[13px] text-zinc-500 mb-3">
+    <span class="tracking-tight">
       {categoryLabels[category]}
     </span>
-
-    <time datetime={pubDate.toISOString()} class="text-[13px] text-zinc-500">
+    <time datetime={pubDate.toISOString()}>
       {formattedDate}
     </time>
   </div>
-  <div class="flex flex-col gap-4">
-    <h3 class="text-base font-semibold text-black dark:text-white line-clamp-3">
-      {title}
-    </h3>
-
-    <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed line-clamp-3 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">
-      {description}
-    </p>
-  </div>
-  <a
-    href={`/author/${authorSlug}`}
-    class="mt-auto pt-10 flex items-center gap-3 group/author"
-  >
-    {authorAvatar && (
-      <img
-        src={authorAvatar}
-        alt={authorName}
-        class="w-6 h-6 rounded-full object-cover grayscale border border-zinc-200 dark:border-zinc-800 group-hover/author:grayscale-0 transition"
-      />
-    )}
-    <span class="text-[13px] font-medium text-zinc-500 dark:text-zinc-400 group-hover/author:text-zinc-900 dark:group-hover/author:text-white transition">
-      {authorName}
+  <h3 class="text-base md:text-lg font-semibold text-zinc-900 dark:text-zinc-100 line-clamp-3 group-hover:text-black dark:group-hover:text-white transition-colors tracking-tight">
+    {title}
+  </h3>
+  <p class="mt-4 text-[14px] text-zinc-500 dark:text-zinc-400 leading-relaxed line-clamp-3 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 transition-colors">
+    {description}
+  </p>
+  <div class="mt-8 flex items-center gap-2 opacity-80 group-hover:opacity-100 transition">
+    <img
+      src={author.avatar}
+      alt={author.name}
+      class="w-5 h-5 rounded-full object-cover grayscale group-hover:grayscale-0 transition"
+    />
+    <span class="text-[13px] text-zinc-500 dark:text-zinc-400">
+      {author.name}
     </span>
-  </a>
+  </div>
 </a>

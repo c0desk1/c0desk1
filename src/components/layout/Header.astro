@@ -9,12 +9,13 @@ import Container from "../ui/Container.astro";
 <header class="sticky top-0 z-50 w-full border-b border-black/20 dark:border-white/5 bg-white/70 dark:bg-black/50 backdrop-blur-xl">
   <Container size="md">
     <div class="relative flex h-14 items-center">
-      <div class="flex items-center">
+      <div class="flex items-center gap-4">
         <Logo />
-      </div>
-      <div class="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center">
         <DesktopNav />
       </div>
+      <!-- <div class="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center">
+        <DesktopNav />
+      </div>-->
       <div class="ml-auto flex items-center gap-2">
         <ThemeToggle />
         <MobileNav />
