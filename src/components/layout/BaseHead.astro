@@ -38,6 +38,8 @@ const formattedTitle =
   title && title !== siteConfig.name
     ? `${title} | ${siteConfig.name}`
     : siteConfig.name;
+
+// ================= IMAGE =================
 let fullImageURL: string;
 
 if (!image) {
@@ -55,9 +57,11 @@ if (!image) {
 const lastModified =
   modifiedTime?.toISOString() ?? publishedTime?.toISOString();
 
+// ================= SEO GRAPH =================
 const graph = {
   "@context": "https://schema.org",
   "@graph": [
+
     {
       "@type": "WebSite",
       "@id": `${siteURL}#website`,
@@ -66,6 +70,7 @@ const graph = {
       description: siteConfig.description,
       inLanguage: "id-ID"
     },
+
     {
       "@type": "Organization",
       "@id": `${siteURL}#organization`,
@@ -76,41 +81,57 @@ const graph = {
         url: `${siteURL}/favicon.svg`
       }
     },
+
     {
       "@type": "WebPage",
-      "@id": canonical.toString(),
+      "@id": `${canonical.toString()}#webpage`,
       url: canonical.toString(),
       name: formattedTitle,
       description,
       inLanguage: "id-ID",
+
       isPartOf: { "@id": `${siteURL}#website` },
+      about: { "@id": `${siteURL}#organization` },
+
       primaryImageOfPage: {
         "@type": "ImageObject",
         url: fullImageURL
       },
-      breadcrumb: { "@id": `${canonical}#breadcrumb` }
+
+      breadcrumb: {
+        "@id": `${canonical.toString()}#breadcrumb`
+      }
     },
+
     ...(type === "article" ? [
       {
         "@type": "BlogPosting",
         "@id": `${canonical.toString()}#article`,
         headline: title,
         url: canonical.toString(),
+
         image: {
           "@type": "ImageObject",
           url: fullImageURL,
           width: 1200,
           height: 630
         },
+
         author: {
           "@type": "Person",
           name: siteConfig.author
         },
+
         publisher: { "@id": `${siteURL}#organization` },
+
+        mainEntityOfPage: {
+          "@id": `${canonical.toString()}#webpage`
+        },
+
         datePublished: publishedTime?.toISOString(),
         dateModified: lastModified,
-        keywords: tags.join(", "),
-        mainEntityOfPage: canonical.toString()
+
+        keywords: tags.length ? tags.join(", ") : undefined
       }
     ] : [])
   ]
@@ -130,15 +151,10 @@ const graph = {
   <meta name="robots" content="noindex,nofollow" />
 ) : (
   <>
-    <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1" />
+    <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
     <meta name="googlebot" content="index,follow" />
   </>
 )}
-
-<!-- PRELOAD -->
-<!-- <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin /> -->
-<!-- <link rel="preconnect" href="https://mc.yandex.ru" crossorigin /> -->
-<link rel="preload" href="/fonts/Geist.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
 
 <!-- OPEN GRAPH -->
 <meta property="og:type" content={type} />
@@ -157,10 +173,13 @@ const graph = {
 <meta name="twitter:image" content={fullImageURL} />
 <meta name="twitter:creator" content={siteConfig.links?.twitter} />
 
+<!-- PERFORMANCE -->
+<link rel="preload" href="/fonts/Geist.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+
 <!-- STRUCTURED DATA -->
 <script type="application/ld+json" set:html={JSON.stringify(graph)} />
 
-<!-- TAGS -->
+<!-- VERIFICATION -->
 <meta name="google-site-verification" content="ZxoHYWipAMoGhvwVi5nxolWsZOntrYkNkVcG9HTfFZQ" />
 <meta name="yandex-verification" content="1878480c0d7b5510" />
 
