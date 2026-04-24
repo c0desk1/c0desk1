@@ -5,12 +5,10 @@ interface Props {
 }
 
 const { allPosts } = Astro.props;
-// Mengambil konten teks yang ada di dalam slot
 const html = await Astro.slots.render('default');
 
 let processedHtml = html;
 
-// Kita urutkan kata kunci dari judul post lain
 const keywordMap: Record<string, string> = {};
 allPosts.forEach(post => {
   const words = post.data.title
@@ -26,14 +24,44 @@ allPosts.forEach(post => {
 
 const sortedKeywords = Object.keys(keywordMap).sort((a, b) => b.length - a.length);
 
-// Injeksi link (Sangat disarankan hanya mengganti teks di luar tag HTML)
-// Untuk simplifikasi, kita replace langsung namun pastikan tidak merusak tag
 for (const keyword of sortedKeywords) {
   const url = keywordMap[keyword];
-  // Regex ini mencoba menghindari kata kunci yang sudah ada di dalam tag <a href...>
   const regex = new RegExp(`\\b(${keyword})\\b(?![^<]*>|[^<>]*<\/a>)`, "gi");
-  processedHtml = processedHtml.replace(regex, `<a href="${url}" class="text-primary underline hover:text-primary/80 transition-colors">〄 $1</a>`);
+
+  processedHtml = processedHtml.replace(regex, (match, p1, offset) => {
+    const textBefore = processedHtml.substring(0, offset);
+    const isInsideCode = /<(code|pre)[^>]*>[^<]*$/i.test(textBefore);
+    const isInsideHeading = /<(h1|h2|h3|h4|h5|h6)[^>]*>[^<]*$/i.test(textBefore);
+    
+    if (isInsideCode || isInsideHeading) {
+      return match;
+    }
+    return `<a href="${url}" class="internal-link">〄 ${match}</a>`;
+  });
 }
 ---
 
 <Fragment set:html={processedHtml} />
+
+<style is:global>
+  .internal-link {
+    @apply inline-flex items-center gap-1 no-underline transition-all duration-200;
+    color: inherit;
+    font-weight: 500;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+  }
+
+  :global(.dark) .internal-link {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .internal-link:hover {
+    @apply text-black dark:text-white;
+    border-bottom-color: currentColor;
+    background-color: rgba(0,0,0,0.03);
+  }
+
+  :global(.dark) .internal-link:hover {
+    background-color: rgba(255,255,255,0.05);
+  }
+</style>
