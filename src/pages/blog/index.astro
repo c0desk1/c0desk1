@@ -19,10 +19,6 @@ const publishedPosts = allPosts.filter(
 
 const posts = sortByDate(publishedPosts);
 
-const featuredPosts = posts
-  .filter((p) => p.data.featured)
-  .slice(0, 3);
-
 const regularPosts = posts.filter((p) => !p.data.featured);
 
 // ================= SEO =================
@@ -31,7 +27,7 @@ const seoData = {
   description:
     "Catatan dari balik layar tentang sistem, kreativitas, dan eksplorasi dunia digital modern.",
   type: "website" as const,
-  canonicalURL: "/blog",
+  canonicalURL: "/blog/",
 };
 ---
 
@@ -39,16 +35,6 @@ const seoData = {
   <section aria-label="Blog introduction">
     <BlogHero />
   </section>
-  {featuredPosts.length > 0 && (
-    <section aria-label="Featured articles">
-      <Container size="lg" class="mb-12">
-        <BlogList
-          allPosts={featuredPosts}
-          featuredPosts={[]}
-        />
-      </Container>
-    </section>
-  )}
   <section aria-label="All articles">
     <Container size="lg" class="mb-16">
       <BlogList
