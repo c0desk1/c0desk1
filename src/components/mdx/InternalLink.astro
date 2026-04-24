@@ -7,8 +7,7 @@ interface Props {
 const { allPosts } = Astro.props;
 const html = await Astro.slots.render('default');
 
-let processedHtml = html;
-
+// 1. Siapkan Keyword Map
 const keywordMap: Record<string, string> = {};
 allPosts.forEach(post => {
   const words = post.data.title
@@ -24,21 +23,43 @@ allPosts.forEach(post => {
 
 const sortedKeywords = Object.keys(keywordMap).sort((a, b) => b.length - a.length);
 
-for (const keyword of sortedKeywords) {
-  const url = keywordMap[keyword];
-  const regex = new RegExp(`\\b(${keyword})\\b(?![^<]*>|[^<>]*<\/a>)`, "gi");
+// 2. LOGIKA ANTI-BOCOR: Split HTML berdasarkan Tag
+// Regex ini memecah string menjadi array: [teks, <tag>, teks, <tag>, ...]
+const parts = html.split(/(<[^>]+>)/g);
 
-  processedHtml = processedHtml.replace(regex, (match, p1, offset) => {
-    const textBefore = processedHtml.substring(0, offset);
-    const isInsideCode = /<(code|pre)[^>]*>[^<]*$/i.test(textBefore);
-    const isInsideHeading = /<(h1|h2|h3|h4|h5|h6)[^>]*>[^<]*$/i.test(textBefore);
+const processedParts = parts.map((part) => {
+  // Jika ini adalah tag HTML, biarkan apa adanya (JANGAN DISENTUH)
+  if (part.startsWith('<')) {
+    return part;
+  }
+
+  // Jika ini adalah teks biasa, lakukan injeksi link
+  let text = part;
+  
+  // Kita cek apakah teks ini berada di area terlarang secara manual
+  // Namun dengan Split, kita sudah otomatis melindungi isi atribut tag (seperti src, href, class)
+  
+  for (const keyword of sortedKeywords) {
+    const url = keywordMap[keyword];
+    const regex = new RegExp(`\\b(${keyword})\\b`, "gi");
     
-    if (isInsideCode || isInsideHeading) {
-      return match;
-    }
-    return `<a href="${url}" class="internal-link">〄 ${match}</a>`;
-  });
-}
+    // Vercel Style Injection
+    text = text.replace(regex, `<a href="${url}" class="internal-link">〄 $1</a>`);
+  }
+  
+  return text;
+});
+
+let processedHtml = processedParts.join('');
+
+/**
+ * PROTEKSI EXTRA: 
+ * Karena kita menggunakan MDX, heading dan codeblock biasanya dibungkus tag <h1>...</h1> atau <pre>...
+ * Kita gunakan Regex terakhir untuk membersihkan link yang "terlanjur" masuk ke tag terlarang tersebut.
+ */
+processedHtml = processedHtml.replace(/<(h[1-6]|pre|code|button)[^>]*>([\s\S]*?)<\/\1>/gi, (match) => {
+  return match.replace(/<a href="\/blog\/[^"]*" class="internal-link">〄 (.*?)<\/a>/gi, '$1');
+});
 ---
 
 <Fragment set:html={processedHtml} />
@@ -49,6 +70,7 @@ for (const keyword of sortedKeywords) {
     color: inherit;
     font-weight: 500;
     border-bottom: 1px solid rgba(0,0,0,0.1);
+    text-decoration: none !important;
   }
 
   :global(.dark) .internal-link {
@@ -58,10 +80,7 @@ for (const keyword of sortedKeywords) {
   .internal-link:hover {
     @apply text-black dark:text-white;
     border-bottom-color: currentColor;
-    background-color: rgba(0,0,0,0.03);
-  }
-
-  :global(.dark) .internal-link:hover {
-    background-color: rgba(255,255,255,0.05);
+    background-color: rgba(0,0,0,0.04);
+    border-radius: 2px;
   }
 </style>
