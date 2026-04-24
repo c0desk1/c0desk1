@@ -7,26 +7,32 @@ interface Props {
   name?: string;
   avatar?: string;
   title?: string;
+  slug?: string;
 }
 
-const { name, avatar, title } = Astro.props;
+const { name, avatar, title, slug } = Astro.props;
 
-const authorName = name || siteConfig.author;
-const authorAvatar = avatar || siteConfig.authorAvatar;
-const authorTitle = title || siteConfig.authorTitle;
+const authorName = name || siteConfig.author.name;
+const authorAvatar = avatar || siteConfig.author.avatar;
+const authorTitle = title || siteConfig.author.title;
+const authorSlug = slug || siteConfig.author.slug;
 ---
 
-<div class="flex justify-center items-center gap-3 text-xs md:text-sm" aria-label={`Author: ${authorName}`}>
+<a
+  href={`/author/${authorSlug}`}
+  class="flex justify-center items-center gap-3 text-xs md:text-sm group"
+  aria-label={`Author: ${authorName}`}
+>
   {authorAvatar && (
     <img
       src={authorAvatar}
       alt={`Avatar of ${authorName}`}
-      class="w-6 h-6 rounded-full object-cover opacity-90"
-      loading="lazy"
+      class="w-6 h-6 rounded-full object-cover opacity-90 group-hover:opacity-100 transition"
+      loading="eager"
     />
   )}
   <div class="flex gap-2 leading-tight">
-    <div class="text-zinc-900 dark:text-zinc-100">
+    <div class="text-zinc-900 dark:text-zinc-100 group-hover:underline">
       {authorName}
     </div>
     {authorTitle && (
@@ -35,4 +41,4 @@ const authorTitle = title || siteConfig.authorTitle;
       </div>
     )}
   </div>
-</div>
+</a>
