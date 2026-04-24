@@ -8,7 +8,7 @@ export const siteConfig = {
   	avatar: "/images/author/author.jpg",
   	title: "Author",
   	bio: "Eksplorasi workflow digital, AI tools, musik, anime, dan game dari perspektif kreator modern yang membangun di era otomatisasi."
-  }
+  },
   authorAvatar: "/images/author/author.jpg",
   authorTitle: "Author",
   description: "Eksplorasi workflow digital, AI tools, musik, anime, dan game dari perspektif kreator modern yang membangun di era otomatisasi.",
