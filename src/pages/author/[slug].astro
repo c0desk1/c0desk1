@@ -7,35 +7,25 @@ import { categoryLabels } from "@/config/blog";
 import { formatDateCompact } from "@/lib/utils";
 
 export async function getStaticPaths() {
-  return [
-    {
-      params: { slug: siteConfig.author.slug }
-    }
-  ];
+  return [{ params: { slug: siteConfig.author.slug } }];
 }
 
 const { slug } = Astro.params;
-
 const posts = await getCollection("blog", ({ data }) => !data.draft);
 
-const authorPosts = posts.filter((post) => {
-  const authorSlug =
-    post.data.author?.slug ||
-    siteConfig.author.slug;
-
-  return authorSlug === slug;
-});
+const authorPosts = posts
+  .filter((post) => (post.data.author?.slug || siteConfig.author.slug) === slug)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const author = siteConfig.author;
 
 const seo = {
-  title: `Artikel oleh ${author.name}`,
+  title: `${author.name} — Artikel`,
   description: author.bio,
   url: `${siteConfig.url}/author/${author.slug}`
 };
 ---
 
-<!-- AUTHOR SCHEMA -->
 <script type="application/ld+json" set:html={JSON.stringify({
   "@context": "https://schema.org",
   "@type": "Person",
@@ -45,67 +35,76 @@ const seo = {
   "image": `${siteConfig.url}${author.avatar}`,
   "jobTitle": author.title,
   "description": author.bio,
-  "sameAs": [
-    siteConfig.social.github,
-    siteConfig.social.twitter,
-    siteConfig.social.linkedin
-  ],
-  "worksFor": {
-    "@type": "Organization",
-    "name": siteConfig.name
-  }
+  "sameAs": [siteConfig.social.github, siteConfig.social.twitter, siteConfig.social.linkedin],
+  "worksFor": { "@type": "Organization", "name": siteConfig.name }
 })} />
 
 <BaseLayout title={seo.title} description={seo.description}>
-  <Container size="md" class="px-4 md:px-8 py-16">
-
-    <!-- HEADER -->
-    <div class="flex items-center gap-4">
+  <Container size="md" class="py-16 md:py-24">
+    
+    <header class="flex flex-col md:flex-row gap-6 items-start md:items-center pb-12 border-b border-zinc-100 dark:border-zinc-800">
       <img
         src={author.avatar}
         alt={author.name}
-        class="w-14 h-14 rounded-full object-cover"
+        class="w-20 h-20 rounded-full border border-zinc-200 dark:border-zinc-800 p-1 object-cover grayscale hover:grayscale-0 transition-all duration-500"
       />
 
-      <div>
-        <h1 class="text-2xl font-semibold">
+      <div class="space-y-2">
+        <h1 class="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
           {author.name}
         </h1>
-
-        <p class="text-sm text-zinc-500">
+        <p class="text-zinc-500 dark:text-zinc-400 font-medium">
           {author.title}
         </p>
-
-        <p class="mt-2 text-sm text-zinc-500 max-w-xl">
+        <p class="text-sm leading-relaxed text-zinc-500 dark:text-zinc-400 max-w-2xl">
           {author.bio}
         </p>
       </div>
-    </div>
+    </header>
 
-    <!-- STATS -->
-    <div class="mt-8 text-sm text-zinc-500">
-      {authorPosts.length} Artikel
-    </div>
+    <div class="mt-12 space-y-1">
+      <h2 class="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-400 mb-8">
+        Writing — {authorPosts.length} posts
+      </h2>
 
-    <!-- POSTS -->
-    <div class="mt-10 grid gap-6">
-      {authorPosts.map((post) => (
-        <a href={`/blog/${post.id}`} class="block">
-          <div class="text-xs md:text-sm text-zinc-500 items-center justify-between">
-            {formatDateCompact(post.data.pubDate)}
-			{categoryLabels[post.data.category]}
-          </div>
+      <div class="grid gap-1">
+        {authorPosts.map((post) => (
+          <a 
+            href={`/blog/${post.id}`} 
+            class="group relative -mx-4 flex flex-col space-y-2 p-4 transition-all duration-200 hover:bg-zinc-50 dark:hover:bg-zinc-900/50 rounded-xl"
+          >
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+              <h3 class="text-lg font-medium text-zinc-900 dark:text-zinc-100 group-hover:text-black dark:group-hover:text-white transition-colors">
+                {post.data.title}
+              </h3>
+              
+              <div class="flex items-center gap-3 text-xs font-mono text-zinc-400">
+                <span class="px-2 py-0.5 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900">
+                  {categoryLabels[post.data.category] ?? post.data.category}
+                </span>
+                <time datetime={post.data.pubDate.toISOString()}>
+                  {formatDateCompact(post.data.pubDate)}
+                </time>
+              </div>
+            </div>
 
-          <div class="text-lg md:text-xl font-semibold line-clamp-3">
-            {post.data.title}
-          </div>
-
-          <p class="text-sm text-zinc-500 line-clamp-3">
-            {post.data.description}
-          </p>
-        </a>
-      ))}
+            <p class="text-sm leading-relaxed text-zinc-500 dark:text-zinc-400 line-clamp-2 max-w-3xl">
+              {post.data.description}
+            </p>
+            
+            <div class="pt-2 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 text-xs font-medium text-zinc-900 dark:text-zinc-100">
+              Baca artikel <span class="text-lg leading-none">→</span>
+            </div>
+          </a>
+        ))}
+      </div>
     </div>
 
   </Container>
 </BaseLayout>
+
+<style>
+  h1, h2, h3 {
+    letter-spacing: -0.02em;
+  }
+</style>
