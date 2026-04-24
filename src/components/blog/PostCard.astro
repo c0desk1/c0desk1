@@ -15,18 +15,16 @@ const { title, description, pubDate, category, author } = data;
 
 const formattedDate = formatDateCompact(pubDate);
 
-// FIX: structured author fallback
 const authorName = author?.name || siteConfig.author.name;
 const authorAvatar = author?.avatar || siteConfig.author.avatar;
 ---
 
 <a
   href={`/blog/${id}/`}
-  class="group flex flex-col h-full p-4 md:p-8 transition-all duration-200 overflow-hidden"
+  class="group flex flex-col h-full transition-all duration-200 overflow-hidden"
   aria-label={`Read article: ${title}`}
 >
 
-  <!-- CATEGORY + DATE -->
   <div class="flex items-center justify-between mb-8">
     <span class="text-[13px] group-hover:text-zinc-900 dark:group-hover:text-white transition-colors text-zinc-500 tracking-tight">
       {categoryLabels[category]}
