@@ -1,7 +1,7 @@
 ---
 // src/pages/blog/[...slug].astro
 
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 
 import { siteConfig } from "@/config/site";
@@ -13,6 +13,7 @@ import Breadcrumb from "@/components/ui/Breadcrumb.astro";
 import BlogHeader from "@/components/blog/BlogHeader.astro";
 import BlogFeaturedImage from "@/components/blog/BlogFeaturedImage.astro";
 import BlogContent from "@/components/blog/BlogContent.astro";
+import BlogTOC from "@/components/blog/BlogTOC.astro";
 import BlogRelatedPosts from "@/components/blog/BlogRelatedPosts.astro";
 import BackToTop from "@/components/ui/BackToTop.astro";
 
@@ -20,13 +21,12 @@ import Image from "@/components/mdx/Image.astro";
 import HR from "@/components/mdx/HR.astro";
 
 import {
-filterHeadingsForTOC,
-getReadingTime
+  filterHeadingsForTOC,
+  getReadingTime
 } from "@/lib/utils";
 
 import {
   getSmartRelatedPosts,
-  injectInternalLinks,
   remarkInternalLinks
 } from "@/lib/botEngine";
 
@@ -67,7 +67,7 @@ const allPosts = await getCollection(
 );
 
 
-// ================= INTERNAL LINK INJECTION =================
+// ================= RENDER MDX + INTERNAL LINKS =================
 
 const { Content, headings } =
   await render(post, {
@@ -119,10 +119,16 @@ const seoImage =
   siteConfig.ogImage;
 
 
+// ================= TOC =================
+
+const tocHeadings =
+  filterHeadingsForTOC(headings);
+
+
 // ================= READING TIME =================
 
 const readingTime =
-  getReadingTime(injectedBody);
+  getReadingTime(post.body);
 
 
 // ================= BREADCRUMB =================
@@ -220,36 +226,66 @@ const schema = {
           imageCaption || imageAlt
         }
       />
+
     )}
+
   </Container>
 
 
-  {/* CONTENT TEST MODE */}
+  {/* CONTENT */}
+
   <Container
     size="sm"
     class="pt-4 md:pt-8 pb-12"
   >
+
+    {tocHeadings.length > 0 && (
+
+      <div class="mb-8 md:mb-10 px-4 md:px-8">
+
+        <BlogTOC
+          headings={tocHeadings}
+        />
+
+      </div>
+
+    )}
+
     <div class="px-4 md:px-8">
+
       <BlogContent>
+
         <Content
-  components={{
-    img: Image,
-    hr: HR
-  }}
-/>
+          components={{
+            img: Image,
+            hr: HR
+          }}
+        />
+
       </BlogContent>
+
     </div>
+
   </Container>
+
+
   <BackToTop align="center" />
 
 
   {/* RELATED */}
+
   <section class="section-divider mt-4 md:mt-8 px-4 md:px-8">
+
     <Container size="md">
+
       <BlogRelatedPosts
         posts={relatedPosts}
       />
+
     </Container>
+
   </section>
+
 </article>
+
 </BaseLayout>
