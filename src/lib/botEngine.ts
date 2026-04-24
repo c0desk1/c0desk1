@@ -178,152 +178,71 @@ export function injectInternalLinks(
   content: string,
   allPosts: BlogPost[]
 ): string {
-
-  const MAX_TOTAL_LINKS = 8;
+  const MAX_TOTAL_LINKS = 10;
   const MAX_PER_KEYWORD = 2;
-
   let totalLinks = 0;
   let lastIndex = -1000;
-
-  /* =============================
-     BUILD KEYWORD MAP
-  ============================= */
 
   const keywordMap: Record<string, string> = {};
 
   for (const post of allPosts) {
-
     const slug = `/blog/${post.id}/`;
-
-    const title = post.data.title.toLowerCase();
-
-    const words = title
-      .split(" ")
-      .filter((w) => w.length >= 5)
-      .slice(0, 3);
+    
+    const words = post.data.title
+      .toLowerCase()
+      .replace(/[^\w\s]/g, '')
+      .split(/\s+/)
+      .filter((w) => w.length >= 4);
 
     for (const word of words) {
-
       if (!keywordMap[word]) {
         keywordMap[word] = slug;
       }
-
     }
-
   }
 
-  const sortedKeywords = Object
-    .keys(keywordMap)
-    .sort((a, b) => b.length - a.length);
+  const sortedKeywords = Object.keys(keywordMap).sort((a, b) => b.length - a.length);
 
-  const keywordUsage: Record<
-    string,
-    number
-  > = {};
-
-  /* =============================
-     PROTECT CODE BLOCKS
-  ============================= */
+  console.log("=== LINK ENGINE DEBUG ===");
+  console.log("Total Kata Kunci Terdaftar:", sortedKeywords.length);
 
   const codeBlocks: string[] = [];
-
-  content = content.replace(
-    /```[\s\S]*?```/g,
-    (match) => {
-      codeBlocks.push(match);
-      return `__CODE_BLOCK_${codeBlocks.length - 1}__`;
-    }
-  );
-
-  /* =============================
-     PROTECT EXISTING LINKS
-  ============================= */
+  content = content.replace(/```[\s\S]*?```/g, (match) => {
+    codeBlocks.push(match);
+    return `__CODE_BLOCK_${codeBlocks.length - 1}__`;
+  });
 
   const links: string[] = [];
-
-  content = content.replace(
-    /\[.*?\]\(.*?\)/g,
-    (match) => {
-      links.push(match);
-      return `__LINK_${links.length - 1}__`;
-    }
-  );
-
-  /* =============================
-     PROTECT HEADINGS
-  ============================= */
+  content = content.replace(/\[.*?\]\(.*?\)/g, (match) => {
+    links.push(match);
+    return `__LINK_${links.length - 1}__`;
+  });
 
   const headings: string[] = [];
-
-  content = content.replace(
-    /^#{1,6} .*/gm,
-    (match) => {
-      headings.push(match);
-      return `__HEADING_${headings.length - 1}__`;
-    }
-  );
-
-  /* =============================
-     LINK INJECTION
-  ============================= */
+  content = content.replace(/^#{1,6} .*/gm, (match) => {
+    headings.push(match);
+    return `__HEADING_${headings.length - 1}__`;
+  });
 
   for (const keyword of sortedKeywords) {
-
-    keywordUsage[keyword] = 0;
-
     const url = keywordMap[keyword];
+    const regex = new RegExp(`\\b(${keyword})\\b`, "gi");
 
-    const regex = new RegExp(
-      `\\b(${keyword})\\b`,
-      "gi"
-    );
+    content = content.replace(regex, (match, p1, offset) => {
+    
+      if (totalLinks >= MAX_TOTAL_LINKS) return match;
+      if (offset - lastIndex < 80) return match;
 
-    content = content.replace(
-      regex,
-      (match, offset) => {
-
-        if (totalLinks >= MAX_TOTAL_LINKS)
-          return match;
-
-        if (
-          keywordUsage[keyword] >=
-          MAX_PER_KEYWORD
-        )
-          return match;
-
-        if (offset - lastIndex < 120)
-          return match;
-
-        keywordUsage[keyword]++;
-
-        totalLinks++;
-
-        lastIndex = offset;
-
-        return `[♠ ${match}](${url})`;
-
-      }
-    );
+      totalLinks++;
+      lastIndex = offset;
+      return `[♠ ${match}](${url})`;
+    });
   }
+  
+  content = content.replace(/__HEADING_(\d+)__/g, (_, i) => headings[Number(i)]);
+  content = content.replace(/__LINK_(\d+)__/g, (_, i) => links[Number(i)]);
+  content = content.replace(/__CODE_BLOCK_(\d+)__/g, (_, i) => codeBlocks[Number(i)]);
 
-  /* =============================
-     RESTORE BLOCKS
-  ============================= */
-
-  content = content.replace(
-    /__HEADING_(\d+)__/g,
-    (_, i) => headings[Number(i)]
-  );
-
-  content = content.replace(
-    /__LINK_(\d+)__/g,
-    (_, i) => links[Number(i)]
-  );
-
-  content = content.replace(
-    /__CODE_BLOCK_(\d+)__/g,
-    (_, i) => codeBlocks[Number(i)]
-  );
-
+  console.log("Link berhasil disuntikkan:", totalLinks);
   return content;
 }
