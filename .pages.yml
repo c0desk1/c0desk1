@@ -112,7 +112,7 @@ content:
         list: true
         options:
           max: 5
-      - name: categories
+      - name: category
         label: Kategori
         type: select
         default: general
