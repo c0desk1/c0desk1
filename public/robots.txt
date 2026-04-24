@@ -4,6 +4,9 @@ Allow: /rss.xml
 
 User-agent: *
 Allow: /
+Allow: /favicon.ico
+Allow: /favicon.svg
+Allow: /apple-touch-icon.png
 
 # Disallow
 Disallow: /api/
