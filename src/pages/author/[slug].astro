@@ -17,13 +17,12 @@ const { slug } = Astro.params;
 
 const posts = await getCollection("blog", ({ data }) => !data.draft);
 
-const authorPosts = posts.filter((post) => {
-  return post.data.author?.slug === slug;
-});
+const authorPosts = posts.filter((post) =>
+  post.data.author?.name === author.name
+);
 
 const author = siteConfig.author;
 
-// SEO
 const seo = {
   title: `Artikel oleh ${author.name}`,
   description: author.bio || `Kumpulan artikel dari ${author.name}`,
@@ -31,7 +30,6 @@ const seo = {
 };
 ---
 
-<!-- ================= AUTHOR SCHEMA ================= -->
 <script type="application/ld+json" set:html={JSON.stringify({
   "@context": "https://schema.org",
   "@type": "Person",
@@ -54,32 +52,24 @@ const seo = {
 
 <BaseLayout title={seo.title} description={seo.description}>
   <Container size="md" class="py-12">
-
-    <!-- ================= AUTHOR HEADER ================= -->
     <div class="flex items-center gap-4">
       <img
         src={author.avatar}
         alt={author.name}
         class="w-14 h-14 rounded-full object-cover"
       />
-
       <div>
         <h1 class="text-2xl font-semibold text-zinc-900 dark:text-white">
           {author.name}
         </h1>
-
         <p class="text-zinc-500 text-sm">
           {author.title}
         </p>
-
-        <!-- BIO -->
         <p class="mt-2 text-sm text-zinc-500 leading-relaxed max-w-xl">
           {author.bio}
         </p>
       </div>
     </div>
-
-    <!-- ================= AUTHOR STATS ================= -->
     <div class="flex gap-6 mt-8 text-sm text-zinc-500">
       <div>
         <span class="font-medium text-zinc-900 dark:text-white">
@@ -88,8 +78,6 @@ const seo = {
         {" "}Artikel
       </div>
     </div>
-
-    <!-- ================= POSTS ================= -->
     <div class="mt-10 grid gap-6">
       {authorPosts.map((post) => (
         <a
