@@ -27,24 +27,32 @@ const {
 ---
 
 <header class="w-full max-w-3xl mx-auto text-center px-4 md:px-8">
+
+  <!-- TITLE -->
   <h1
     class="
-      text-2xl
-      sm:text-3xl
-      md:text-4xl
-      lg:text-5xl
-      font-semibold
-      tracking-tight
-      text-zinc-900
-      dark:text-zinc-100
+      text-2xl sm:text-3xl md:text-4xl lg:text-5xl
+      font-semibold tracking-tight
+      text-zinc-900 dark:text-zinc-100
       leading-[1.15]
-      mb-4
+      mb-6
     "
   >
     {title}
   </h1>
+
+  <!-- META FIRST (SEO SIGNAL STRONGER) -->
+  <div class="mb-4">
+    <BlogMeta 
+      pubDate={pubDate}
+      readingTime={readingTime}
+      featured={featured}
+    />
+  </div>
+
+  <!-- AUTHOR SECOND -->
   {authorName && (
-    <div class="mb-3">
+    <div>
       <BlogAuthor 
         name={authorName}
         avatar={authorAvatar}
@@ -52,9 +60,5 @@ const {
       />
     </div>
   )}
-  <BlogMeta 
-    pubDate={pubDate}
-    readingTime={readingTime}
-    featured={featured}
-  />
+
 </header>
