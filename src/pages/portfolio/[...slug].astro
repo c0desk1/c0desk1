@@ -7,7 +7,10 @@ import { getCollection, render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 
 import { siteConfig } from "@/config/site";
-import { formatDateCompact, getRelatedProjects } from "@/lib/utils";
+
+import { formatDateCompact } from "@/lib/utils";
+
+import { getSmartRelatedProjects } from "@/lib/botEngine";
 
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/ui/Container.astro";
@@ -77,7 +80,7 @@ const seoImage =
 // ================= RELATED =================
 const allProjects = await getCollection("portfolio", ({ data }) => !data.draft);
 
-const relatedProjects = getRelatedProjects(project, allProjects, 2);
+const relatedProjects = getSmartRelatedProjects(project, allProjects, 2);
 
 // ================= NORMALIZED DATA =================
 const displayGallery = Array.isArray(gallery) ? gallery : [];
