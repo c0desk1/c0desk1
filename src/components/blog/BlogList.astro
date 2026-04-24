@@ -44,7 +44,7 @@ const postsData = posts.map((post) => ({
         <h2 class="text-3xl md:text-4xl font-semibold">Terbaru.</h2>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 divide-black/20 dark:divide-white/5">
+      <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 divide-black/20 dark:divide-white/5 p-4 md:px-8">
         {posts.map((post) => (
           <PostCard post={post} />
         ))}
