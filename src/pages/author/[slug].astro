@@ -93,7 +93,7 @@ const seo = {
         <a href={`/blog/${post.id}`} class="block">
           <div class="text-xs md:text-sm text-zinc-500 items-center justify-between">
             {formatDateCompact(post.data.pubDate)}
-			{categoryLabels(post.data.category)}
+			{categoryLabels[post.data.category]}
           </div>
 
           <div class="text-lg md:text-xl font-semibold line-clamp-3">
