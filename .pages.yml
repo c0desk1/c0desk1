@@ -115,6 +115,7 @@ content:
       - name: categories
         label: Kategori
         type: select
+        default: general
         options:
            values:
               - name: general
