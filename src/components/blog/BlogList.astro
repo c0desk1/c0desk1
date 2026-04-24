@@ -13,13 +13,17 @@ interface Props {
 
 const { posts, variant = "default" } = Astro.props;
 
+// SAFE mapping (tanpa post.body error)
 const postsData = posts.map((post) => ({
   id: post.id,
   title: post.data.title,
   description: post.data.description,
   pubDate: post.data.pubDate.toISOString(),
   formattedDate: formatDateCompact(post.data.pubDate),
-  readingTime: getReadingTime(post.body),
+
+  // FIX: fallback kalau body tidak tersedia
+  readingTime: getReadingTime(post.body || post.data.description || ""),
+
   author: post.data.author?.name,
   authorAvatar: post.data.author?.avatar,
   category: post.data.category
@@ -28,7 +32,6 @@ const postsData = posts.map((post) => ({
 
 <div class="border border-black/20 dark:border-white/5 overflow-hidden">
 
-  {/* FEATURED MODE */}
   {variant === "featured" && (
     <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-black/20 dark:divide-white/5">
       {posts.map((post) => (
@@ -37,17 +40,13 @@ const postsData = posts.map((post) => ({
     </div>
   )}
 
-  {/* DEFAULT MODE */}
   {variant === "default" && (
     <>
       <div class="mb-8 flex items-center justify-between p-4 md:p-8">
         <h2 class="text-3xl md:text-4xl font-semibold">Terbaru.</h2>
       </div>
 
-      <div
-        id="posts-container"
-        class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 divide-black/20 dark:divide-white/5"
-      >
+      <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 divide-black/20 dark:divide-white/5">
         {posts.map((post) => (
           <PostCard post={post} />
         ))}
@@ -57,7 +56,6 @@ const postsData = posts.map((post) => ({
 
 </div>
 
-<!-- LOAD MORE DATA -->
 <script type="application/json" id="posts-data">
   {JSON.stringify(postsData)}
 </script>
