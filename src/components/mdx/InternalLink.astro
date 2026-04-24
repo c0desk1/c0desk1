@@ -1,31 +1,39 @@
 ---
-// src/components/blog/InternalLink.astro
+// src/components/mdx/InternalLink.astro
 interface Props {
   allPosts: any[];
 }
 
 const { allPosts } = Astro.props;
-const slotContent = await Astro.slots.render('default');
+// Mengambil konten teks yang ada di dalam slot
+const html = await Astro.slots.render('default');
 
-let finalContent = slotContent;
+let processedHtml = html;
 
-for (const post of allPosts) {
+// Kita urutkan kata kunci dari judul post lain
+const keywordMap: Record<string, string> = {};
+allPosts.forEach(post => {
   const words = post.data.title
     .toLowerCase()
     .replace(/[^\w\s]/g, "")
     .split(/\s+/)
     .filter((w: string) => w.length >= 5);
+  
+  words.forEach((word: string) => {
+    if (!keywordMap[word]) keywordMap[word] = `/blog/${post.id}/`;
+  });
+});
 
-  for (const word of words) {
-    const regex = new RegExp(`\\b(${word})\\b`, "gi");
-    if (regex.test(finalContent)) {
-       finalContent = finalContent.replace(
-         regex, 
-         `<a href="/blog/${post.id}/" class="text-primary underline">〄 $1</a>`
-       );
-       break; 
-    }
-  }
+const sortedKeywords = Object.keys(keywordMap).sort((a, b) => b.length - a.length);
+
+// Injeksi link (Sangat disarankan hanya mengganti teks di luar tag HTML)
+// Untuk simplifikasi, kita replace langsung namun pastikan tidak merusak tag
+for (const keyword of sortedKeywords) {
+  const url = keywordMap[keyword];
+  // Regex ini mencoba menghindari kata kunci yang sudah ada di dalam tag <a href...>
+  const regex = new RegExp(`\\b(${keyword})\\b(?![^<]*>|[^<>]*<\/a>)`, "gi");
+  processedHtml = processedHtml.replace(regex, `<a href="${url}" class="text-primary underline hover:text-primary/80 transition-colors">〄 $1</a>`);
 }
 ---
-<span set:html={finalContent} />
+
+<Fragment set:html={processedHtml} />
