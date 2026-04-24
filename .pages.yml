@@ -116,7 +116,7 @@ content:
         label: Kategori
         type: select
         options:
-           value:
+           values:
               - name: general
                 label: General
               - name: web-dev
