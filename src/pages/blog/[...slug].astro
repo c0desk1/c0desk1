@@ -3,6 +3,7 @@
 
 import { getCollection, render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
+
 import { siteConfig } from "@/config/site";
 import { categoryLabels } from "@/config/blog";
 
@@ -48,8 +49,8 @@ const {
   title,
   description,
   pubDate,
-  tags,
   updatedDate,
+  tags,
   category,
   image,
   imageAlt,
@@ -61,6 +62,7 @@ const {
 
 const { Content, headings } = await render(post);
 
+// ================= RELATED CONTENT =================
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 const relatedPosts = getRelatedPosts(post, allPosts, 3);
 
@@ -72,13 +74,40 @@ const seoImage = seo?.ogImage || image || siteConfig.ogImage;
 // ================= CONTENT METRICS =================
 const tocHeadings = filterHeadingsForTOC(headings);
 const readingTime = getReadingTime(post.body);
-const lastUpdated = formatDate(updatedDate || pubDate);
 
-// ================= BREADCRUMB DATA =================
+// ================= BREADCRUMB =================
 const breadcrumbItems = [
   { name: "Blog", href: "/blog/" },
   { name: categoryLabels[category], href: `/category/${category}/` }
 ];
+
+// ================= SCHEMA (SEO POWER LAYER) =================
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: seoTitle,
+  description: seoDescription,
+  image: seoImage,
+  datePublished: pubDate,
+  dateModified: updatedDate || pubDate,
+  author: {
+    "@type": "Person",
+    name: author?.name || siteConfig.author
+  },
+  publisher: {
+    "@type": "Organization",
+    name: siteConfig.name,
+    logo: {
+      "@type": "ImageObject",
+      url: `${siteConfig.url}/favicon.svg`
+    }
+  },
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": Astro.url.href
+  },
+  keywords: tags?.join(", ") || ""
+};
 ---
 
 <BaseLayout
@@ -92,9 +121,12 @@ const breadcrumbItems = [
   container={false}
 >
 
+  {/* STRUCTURED DATA */}
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
   <article>
 
-    {/* HEADER SECTION */}
+    {/* HEADER BLOCK */}
     <Container size="md" class="pt-8 md:pt-16 pb-8">
 
       <Breadcrumb items={breadcrumbItems} />
@@ -120,7 +152,7 @@ const breadcrumbItems = [
 
     </Container>
 
-    {/* CONTENT SECTION */}
+    {/* CONTENT BLOCK */}
     <Container size="sm" class="pt-4 md:pt-8 pb-12">
 
       {/* TABLE OF CONTENTS */}
@@ -130,7 +162,7 @@ const breadcrumbItems = [
         </div>
       )}
 
-      {/* MAIN CONTENT */}
+      {/* ARTICLE CONTENT */}
       <div class="px-4 md:px-8">
         <BlogContent>
           <Content
@@ -141,16 +173,19 @@ const breadcrumbItems = [
           />
         </BlogContent>
       </div>
+
     </Container>
 
     {/* UTILITIES */}
     <BackToTop align="center" />
 
-    {/* RELATED POSTS */}
+    {/* RELATED CONTENT */}
     <section class="section-divider mt-4 md:mt-8 px-4 md:px-8">
       <Container size="md">
         <BlogRelatedPosts posts={relatedPosts} />
       </Container>
     </section>
+
   </article>
+
 </BaseLayout>
