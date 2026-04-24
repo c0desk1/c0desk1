@@ -178,40 +178,42 @@ export function getSmartRelatedProjects(
 
 export function remarkInternalLinks(allPosts: any[]) {
   const keywordMap: Record<string, string> = {};
-  allPosts.forEach(post => {
+  allPosts.forEach((post) => {
     const slug = `/blog/${post.id}/`;
     const words = post.data.title
       .toLowerCase()
-      .replace(/[^\w\s]/g, '')
+      .replace(/[^\w\s]/g, "")
       .split(/\s+/)
-      .filter((w: string) => w.length >= 4);
-    
-    words.forEach((word: string) => {
+      .filter((w) => w.length >= 4);
+
+    words.forEach((word) => {
       if (!keywordMap[word]) keywordMap[word] = slug;
     });
   });
 
   const sortedKeywords = Object.keys(keywordMap).sort((a, b) => b.length - a.length);
-
   return (tree: any) => {
     visit(tree, "text", (node, index, parent) => {
-      if (parent && ["link", "code", "inlineCode"].includes(parent.type)) return;
+      if (!parent || ["link", "code", "inlineCode", "heading"].includes(parent.type)) {
+        return;
+      }
 
       let value = node.value;
-      
+      let hasChange = false;
+
       for (const keyword of sortedKeywords) {
+        const url = keywordMap[keyword];       
         const regex = new RegExp(`\\b(${keyword})\\b`, "gi");
-        
+
         if (regex.test(value)) {
-          const url = keywordMap[keyword];
-          const newValue = value.replace(regex, `<a href="${url}" class="internal-link">♠ $1</a>`);
-          
-          if (newValue !== value) {
-            node.type = "html";
-            node.value = newValue;
-            break;
-          }
+          value = value.replace(regex, `<a href="${url}" class="internal-link">〄 $1</a>`);
+          hasChange = true;
         }
+      }
+
+      if (hasChange) {
+        node.type = "html";
+        node.value = value;
       }
     });
   };
