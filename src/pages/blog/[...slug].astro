@@ -71,7 +71,7 @@ const allPosts = await getCollection(
 
 const { Content, headings } = await render(post, {
   remarkPlugins: [
-    [remarkInternalLinks, allPosts]
+    remarkInternalLinks(allPosts)
   ]
 });
 
