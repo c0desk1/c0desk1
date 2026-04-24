@@ -11,17 +11,11 @@ import BlogList from "@/components/blog/BlogList.astro";
 import { sortByDate } from "@/lib/utils";
 
 // ================= DATA =================
-const allPosts = await getCollection("blog");
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 
-const publishedPosts = allPosts.filter(
-  (p: CollectionEntry<"blog">) => !p.data.draft
-);
+const posts = sortByDate(allPosts);
 
-const posts = sortByDate(publishedPosts);
-
-const featuredPosts = posts
-  .filter((p) => p.data.featured)
-  .slice(0, 3);
+const featuredPosts = posts.filter((p) => p.data.featured === true);
 
 const regularPosts = posts.filter((p) => !p.data.featured);
 
@@ -36,30 +30,25 @@ const seoData = {
 ---
 
 <BaseLayout {...seoData}>
-  {/* HERO / INTRO SECTION */}
+
   <section aria-label="Blog introduction">
     <BlogHero />
   </section>
 
-  {/* FEATURED POSTS */}
+  {/* FEATURED */}
   {featuredPosts.length > 0 && (
     <section aria-label="Featured articles">
       <Container size="lg" class="mb-12">
-        <BlogList
-          allPosts={featuredPosts}
-          featuredPosts={[]}
-        />
+        <BlogList posts={featuredPosts} variant="featured" />
       </Container>
     </section>
   )}
 
-  {/* MAIN FEED */}
+  {/* REGULAR */}
   <section aria-label="All articles">
     <Container size="lg" class="mb-16">
-      <BlogList
-        allPosts={regularPosts}
-        featuredPosts={[]}
-      />
+      <BlogList posts={regularPosts} variant="default" />
     </Container>
   </section>
+
 </BaseLayout>
