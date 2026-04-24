@@ -14,7 +14,7 @@ allPosts.forEach(post => {
     .replace(/[^\w\s]/g, "")
     .split(/\s+/)
     .filter((w: string) => w.length >= 5)
-    .slice(0, 3);
+    .slice(0, 2);
 
   words.forEach((word: string) => {
     if (!keywordMap[word]) {
@@ -27,7 +27,6 @@ const sortedKeywords = Object.keys(keywordMap).sort((a, b) => b.length - a.lengt
 
 const forbiddenBlocks: string[] = [];
 
-// 1. Proteksi tag bawaan MDX/HTML
 let protectedHtml = html.replace(
   /<(h[1-6]|pre|code|button|a|svg|kbd|[A-Z][A-Za-z0-9]*)[^>]*>[\s\S]*?<\/\1>/g,
   (match) => {
@@ -40,45 +39,43 @@ const parts = protectedHtml.split(/(<[^>]+>)/g);
 
 let totalLinks = 0;
 const MAX_LINKS = 8;
-const usedKeywords = new Set(); // Tambahan: Biar satu kata kunci nggak muncul berkali-kali
+const MIN_DISTANCE = 120;
+const usedKeywords = new Set<string>();
 
 const processedParts = parts.map((part) => {
   if (part.startsWith("<")) return part;
 
   let text = part;
+  let lastIndex = -999;
 
   for (const keyword of sortedKeywords) {
     if (totalLinks >= MAX_LINKS) break;
     if (usedKeywords.has(keyword)) continue;
 
     const url = keywordMap[keyword];
-    
-    // REGEX FIX: Gunakan Lookahead untuk mastiin kita nggak ganti teks di dalam href yang baru dibuat
-    // Kita juga pastiin keyword nggak parsial (boundary \b)
+    if (url === Astro.url.pathname) continue;
+
     const regex = new RegExp(`\\b(${keyword})\\b(?![^<]*>)`, "gi");
 
-    if (regex.test(text)) {
-      text = text.replace(regex, (match) => {
-        if (totalLinks >= MAX_LINKS) return match;
-        
+    if (text.search(regex) !== -1) {
+      text = text.replace(regex, (match, offset) => {
+        if (offset - lastIndex < MIN_DISTANCE || totalLinks >= MAX_LINKS) {
+          return match;
+        }
+
         totalLinks++;
-        usedKeywords.add(keyword); // Tandai kata kunci sudah dipakai
-        
-        // Kita pakai placeholder sementara untuk link baru agar tidak kena hajar loop keyword lain
+        lastIndex = offset;
+        usedKeywords.add(keyword);
+
         forbiddenBlocks.push(`<a href="${url}" class="internal-link">〄 ${match}</a>`);
         return `__BLOCK_${forbiddenBlocks.length - 1}__`;
       });
     }
   }
-
   return text;
 });
 
 let finalHtml = processedParts.join("");
-
-// 2. Restore semua block (termasuk link internal yang baru kita bikin)
-// Kita lakukan dua kali untuk mastiin semua placeholder terbongkar
-finalHtml = finalHtml.replace(/__BLOCK_(\d+)__/g, (_, i) => forbiddenBlocks[Number(i)]);
 finalHtml = finalHtml.replace(/__BLOCK_(\d+)__/g, (_, i) => forbiddenBlocks[Number(i)]);
 ---
 
