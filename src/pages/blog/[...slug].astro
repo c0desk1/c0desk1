@@ -1,19 +1,19 @@
 ---
 // src/pages/blog/[...slug].astro
 
-import { getCollection, render } from 'astro:content';
-import type { CollectionEntry } from 'astro:content';
-import { siteConfig } from '@/config/site';
-import { categoryLabels } from '@/config/blog';
+import { getCollection, render } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import { siteConfig } from "@/config/site";
+import { categoryLabels } from "@/config/blog";
 
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import Container from '@/components/ui/Container.astro';
-import Breadcrumb from '@/components/ui/Breadcrumb.astro';
-import BlogHeader from '@/components/blog/BlogHeader.astro';
-import BlogFeaturedImage from '@/components/blog/BlogFeaturedImage.astro';
-import BlogContent from '@/components/blog/BlogContent.astro';
-import BlogTOC from '@/components/blog/BlogTOC.astro';
-import BlogRelatedPosts from '@/components/blog/BlogRelatedPosts.astro';
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Breadcrumb from "@/components/ui/Breadcrumb.astro";
+import BlogHeader from "@/components/blog/BlogHeader.astro";
+import BlogFeaturedImage from "@/components/blog/BlogFeaturedImage.astro";
+import BlogContent from "@/components/blog/BlogContent.astro";
+import BlogTOC from "@/components/blog/BlogTOC.astro";
+import BlogRelatedPosts from "@/components/blog/BlogRelatedPosts.astro";
 import BackToTop from "@/components/ui/BackToTop.astro";
 
 import Image from "@/components/mdx/Image.astro";
@@ -24,23 +24,26 @@ import {
   getRelatedPosts,
   formatDate,
   getReadingTime
-} from '@/lib/utils';
+} from "@/lib/utils";
 
+// ================= STATIC PATHS =================
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
 
-  return posts.map((post: CollectionEntry<'blog'>) => ({
+  return posts.map((post: CollectionEntry<"blog">) => ({
     params: { slug: post.id },
-    props: { post },
+    props: { post }
   }));
 }
 
+// ================= PROPS =================
 interface Props {
-  post: CollectionEntry<'blog'>;
+  post: CollectionEntry<"blog">;
 }
 
 const { post } = Astro.props;
 
+// ================= DATA =================
 const {
   title,
   description,
@@ -58,17 +61,24 @@ const {
 
 const { Content, headings } = await render(post);
 
-const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 const relatedPosts = getRelatedPosts(post, allPosts, 3);
 
+// ================= SEO FALLBACK SYSTEM =================
 const seoTitle = seo?.title || title;
 const seoDescription = seo?.description || description;
 const seoImage = seo?.ogImage || image || siteConfig.ogImage;
 
+// ================= CONTENT METRICS =================
 const tocHeadings = filterHeadingsForTOC(headings);
-
 const readingTime = getReadingTime(post.body);
 const lastUpdated = formatDate(updatedDate || pubDate);
+
+// ================= BREADCRUMB DATA =================
+const breadcrumbItems = [
+  { name: "Blog", href: "/blog/" },
+  { name: categoryLabels[category], href: `/category/${category}/` }
+];
 ---
 
 <BaseLayout
@@ -81,37 +91,46 @@ const lastUpdated = formatDate(updatedDate || pubDate);
   tags={tags}
   container={false}
 >
-<article>
-  <Container size="md" class="pt-8 md:pt-16 pb-8">
-    <Breadcrumb
-      items={[
-        { name: 'Blog', href: '/blog/' },
-        { name: categoryLabels[category], href: `/category/${category}/` },
-      ]}
-    />
-    <BlogHeader
-      title={title}
-      pubDate={pubDate}
-      updatedDate={updatedDate}
-      readingTime={readingTime}
-      authorName={author?.name}
-      authorAvatar={author?.avatar}
-      authorTitle={author?.title}
-      featured={featured}
-    />
-    {image && (
-      <BlogFeaturedImage
-        image={image}
-        alt={imageAlt || title}
-        caption={imageCaption || imageAlt}
+
+  <article>
+
+    {/* HEADER SECTION */}
+    <Container size="md" class="pt-8 md:pt-16 pb-8">
+
+      <Breadcrumb items={breadcrumbItems} />
+
+      <BlogHeader
+        title={title}
+        pubDate={pubDate}
+        updatedDate={updatedDate}
+        readingTime={readingTime}
+        authorName={author?.name}
+        authorAvatar={author?.avatar}
+        authorTitle={author?.title}
+        featured={featured}
       />
-    )}
+
+      {image && (
+        <BlogFeaturedImage
+          image={image}
+          alt={imageAlt || title}
+          caption={imageCaption || imageAlt}
+        />
+      )}
+
+    </Container>
+
+    {/* CONTENT SECTION */}
     <Container size="sm" class="pt-4 md:pt-8 pb-12">
+
+      {/* TABLE OF CONTENTS */}
       {tocHeadings.length > 0 && (
         <div class="mb-8 md:mb-10 px-4 md:px-8">
           <BlogTOC headings={tocHeadings} />
         </div>
       )}
+
+      {/* MAIN CONTENT */}
       <div class="px-4 md:px-8">
         <BlogContent>
           <Content
@@ -123,10 +142,15 @@ const lastUpdated = formatDate(updatedDate || pubDate);
         </BlogContent>
       </div>
     </Container>
+
+    {/* UTILITIES */}
     <BackToTop align="center" />
+
+    {/* RELATED POSTS */}
     <section class="section-divider mt-4 md:mt-8 px-4 md:px-8">
-      <BlogRelatedPosts posts={relatedPosts} />
+      <Container size="md">
+        <BlogRelatedPosts posts={relatedPosts} />
+      </Container>
     </section>
-  </Container>
-</article>
+  </article>
 </BaseLayout>
