@@ -16,7 +16,10 @@ import BlogContent from "@/components/blog/BlogContent.astro";
 import BlogRelatedPosts from "@/components/blog/BlogRelatedPosts.astro";
 import BackToTop from "@/components/ui/BackToTop.astro";
 
-import { getReadingTime } from "@/lib/utils";
+import {
+filterHeadingsForTOC,
+getReadingTime
+} from "@/lib/utils";
 
 import {
   getSmartRelatedPosts,
@@ -224,7 +227,7 @@ const schema = {
     <div class="px-4 md:px-8">
       <BlogContent>
         <div
-          
+          class="prose-custom"
           set:html={injectedBody}
         />
       </BlogContent>
