@@ -1,63 +1,82 @@
 ---
 // src/pages/portfolio/index.astro
 
-import { getCollection } from 'astro:content';
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import Container from '@/components/ui/Container.astro';
-import PortfolioHero from '@/components/portfolio/PortfolioHero.astro';
-import PortfolioFeatured from '@/components/portfolio/PortfolioFeatured.astro';
-import PortfolioList from '@/components/portfolio/PortfolioList.astro';
-import PortfolioSidebar from '@/components/portfolio/PortfolioSidebar.astro';
+import { getCollection } from "astro:content";
+
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import PortfolioHero from "@/components/portfolio/PortfolioHero.astro";
+import PortfolioFeatured from "@/components/portfolio/PortfolioFeatured.astro";
+import PortfolioList from "@/components/portfolio/PortfolioList.astro";
+import PortfolioSidebar from "@/components/portfolio/PortfolioSidebar.astro";
 
 import {
   sortByDate,
   getAllTechStacks,
   filterByFeatured,
   filterByDraft
-} from '@/lib/utils';
+} from "@/lib/utils";
 
-const allProjects = await getCollection('portfolio');
+// ================= DATA =================
+const allProjects = await getCollection("portfolio");
 
-const projects = sortByDate(filterByDraft(allProjects), 'date');
+const projects = sortByDate(
+  filterByDraft(allProjects),
+  "date"
+);
 
 const featuredProjects = filterByFeatured(projects);
 const featuredProject = featuredProjects?.[0];
 
-const regularProjects = projects.filter(p => !p.data.featured);
+const regularProjects = projects.filter((p) => !p.data.featured);
 
 const recentProjects = regularProjects.slice(0, 3);
 const allTechStacks = getAllTechStacks(projects);
 const popularTech = allTechStacks.slice(0, 8);
 
+// ================= SEO =================
 const seoData = {
   title: "Portfolio & Projects",
-  description: "A collection of my work including web applications, design systems, and digital experiences.",
+  description:
+    "Koleksi karya digital, mulai dari web application, sistem desain, hingga eksperimen teknologi dan UI/UX modern.",
+  type: "website" as const,
+  canonicalURL: "/portfolio"
 };
 ---
 
-<BaseLayout {...seoData} type="website">
-  <PortfolioHero />
-  <Container size="md" class="py-10 md:py-12">
-    <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-12">
-      <div class="min-w-0">
-        {featuredProject && (
-          <PortfolioFeatured project={featuredProject} />
-        )}
-        <div class="mt-12">
-           <PortfolioList
-            projects={regularProjects}
-            totalCount={projects.length}
-          />
+<BaseLayout {...seoData}>
+    {/* HERO SECTION */}
+    <section aria-label="Portfolio introduction">
+      <PortfolioHero />
+    </section>
+    {/* CONTENT GRID */}
+    <Container size="lg" class="py-8 md:py-16">
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-12">
+        {/* MAIN CONTENT */}
+        <div class="min-w-0">
+          {/* FEATURED PROJECT */}
+          {featuredProject && (
+            <section aria-label="Featured project">
+              <PortfolioFeatured project={featuredProject} />
+            </section>
+          )}
+          {/* PROJECT LIST */}
+          <section aria-label="All projects" class="mt-12">
+            <PortfolioList
+              projects={regularProjects}
+              totalCount={projects.length}
+            />
+          </section>
         </div>
+        {/* SIDEBAR */}
+        <aside aria-label="Portfolio sidebar">
+          <div class="lg:sticky lg:top-24 h-fit">
+            <PortfolioSidebar
+              popularTech={popularTech}
+              recentProjects={recentProjects}
+            />
+          </div>
+        </aside>
       </div>
-      <aside>
-        <div class="lg:sticky lg:top-24 h-fit">
-          <PortfolioSidebar
-            popularTech={popularTech}
-            recentProjects={recentProjects}
-          />
-        </div>
-      </aside>
-    </div>
-  </Container>
+    </Container>
 </BaseLayout>
