@@ -19,23 +19,34 @@ export async function GET(context: any) {
     items: sorted.map((post) => {
       const url = new URL(`blog/${post.id}/`, site).toString();
 
-      const author = post.data.author?.name || siteConfig.author.name;
+      const authorName =
+        post.data.author?.name || siteConfig.author.name;
+
+      const tags = post.data.tags ?? [];
+      const category = post.data.category;
 
       return {
         title: post.data.title,
         link: url,
         pubDate: post.data.pubDate,
+
         description: post.data.description,
 
         categories: [
-          post.data.category,
-          ...(post.data.tags ?? [])
+          category,
+          ...tags
         ].filter(Boolean),
-        author,
+
+        author: authorName,
+
         guid: url,
+
         customData: `
-          <author>${author}</author>
-          <category>${post.data.category ?? ""}</category>
+          <author>${authorName}</author>
+          <category>${category ?? ""}</category>
+          <tags>${tags.join(",")}</tags>
+          <topic>${category ?? ""}</topic>
+          <canonical>${url}</canonical>
         `
       };
     }),
@@ -43,7 +54,7 @@ export async function GET(context: any) {
     customData: `
       <language>id-ID</language>
       <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
-      <generator>${siteConfig.name} RSS Feed</generator>
+      <generator>${siteConfig.name} RSS Engine</generator>
       <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
     `
   });
