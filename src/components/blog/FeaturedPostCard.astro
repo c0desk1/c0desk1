@@ -19,7 +19,7 @@ const authorAvatar = author?.avatar || siteConfig.author.avatar;
 
 <a
   href={`/blog/${id}/`}
-  class="group flex flex-col h-full transition-colors duration-200 hover:bg-black/5 dark:hover:bg-white/5 overflow-hidden"
+  class="group flex flex-col h-full py-6 md:py-8 hover:bg-black/5 dark:hover:bg-zinc-800/40 transition-colors duration-200 overflow-hidden"
 >
   <div class="mb-6">
     <div class="w-12 h-12 flex items-center justify-center border border-zinc-200 dark:border-zinc-800 rounded-lg bg-white dark:bg-black group-hover:border-zinc-400 dark:group-hover:border-zinc-600 transition-colors">
@@ -29,7 +29,6 @@ const authorAvatar = author?.avatar || siteConfig.author.avatar;
     </div>
   </div>
 
-  <!-- DATE -->
   <div class="mb-6">
     <time
       datetime={pubDate.toISOString()}
@@ -39,9 +38,8 @@ const authorAvatar = author?.avatar || siteConfig.author.avatar;
     </time>
   </div>
 
-  <!-- CONTENT -->
   <div class="flex flex-col gap-6 mb-10">
-    <h2 class="text-lg md:text-2xl font-semibold tracking-tighter text-zinc-900 dark:text-white leading-[1.05]">
+    <h2 class="text-lg md:text-2xl font-semibold tracking-tighter text-zinc-900 dark:text-white leading-[1.05] line-clamp-4">
       {title}
     </h2>
 
@@ -50,7 +48,6 @@ const authorAvatar = author?.avatar || siteConfig.author.avatar;
     </p>
   </div>
 
-  <!-- AUTHOR -->
   <div class="mt-auto flex items-center gap-3">
     {authorAvatar && (
       <img

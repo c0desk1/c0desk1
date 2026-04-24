@@ -2,15 +2,11 @@
 // src/pages/blog/index.astro
 
 import { getCollection } from "astro:content";
-import type { CollectionEntry } from "astro:content";
-
+import { sortByDate } from "@/lib/utils";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/ui/Container.astro";
 import BlogHero from "@/components/blog/BlogHero.astro";
 import BlogList from "@/components/blog/BlogList.astro";
-import { sortByDate } from "@/lib/utils";
-
-// ================= DATA =================
 
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 
@@ -19,8 +15,6 @@ const posts = sortByDate(allPosts);
 const featuredPosts = posts.filter((p) => p.data.featured);
 const regularPosts = posts.filter((p) => !p.data.featured);
 
-// ================= SEO =================
-
 const seoData = {
   title: "Blog & Insights",
   description:
@@ -28,8 +22,6 @@ const seoData = {
   type: "website" as const,
   canonicalURL: "https://c0desk1.my.id/blog/"
 };
-
-// ================= SCHEMA =================
 
 const schema = {
   "@context": "https://schema.org",
@@ -45,31 +37,20 @@ const schema = {
 ---
 
 <BaseLayout {...seoData}>
-
-  <!-- STRUCTURED DATA -->
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
-
-  <!-- HERO (ASSUME H1 INSIDE) -->
   <section aria-label="Blog introduction">
     <BlogHero />
   </section>
-
-  <!-- FEATURED -->
-  {featuredPosts.length > 0 && (
-    <section aria-label="Featured articles">
-      <Container size="lg" class="mb-12">
+  <Container size="md" class="py-10 md:py-20">
+    {featuredPosts.length > 0 && (
+      <section aria-label="Featured articles" class="items-center mb-16">
         <h2 class="sr-only">Featured Posts</h2>
         <BlogList posts={featuredPosts} variant="featured" />
-      </Container>
-    </section>
-  )}
-
-  <!-- REGULAR -->
-  <section aria-label="All articles">
-    <Container size="lg" class="mb-16">
+      </section>
+    )}
+    <section aria-label="All articles" class="items-center mb-8">
       <h2 class="sr-only">All Posts</h2>
       <BlogList posts={regularPosts} variant="default" />
-    </Container>
-  </section>
-
+    </section>
+  </Container>
 </BaseLayout>

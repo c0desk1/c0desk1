@@ -1,5 +1,4 @@
 ---
-// src/components/blog/FeaturedPostCard.astro
 import type { CollectionEntry } from 'astro:content';
 import { siteConfig } from '@/config/site';
 import { categoryLabels } from '@/config/blog';
@@ -11,49 +10,51 @@ interface Props {
 
 const { post } = Astro.props;
 const { data, id } = post;
+
 const { title, description, pubDate, category, author } = data;
 
 const formattedDate = formatDateCompact(pubDate);
+
 const authorName = author?.name || siteConfig.author.name;
 const authorAvatar = author?.avatar || siteConfig.author.avatar;
 ---
 
 <a
   href={`/blog/${id}/`}
-  class="group flex flex-col h-full transition-all duration-200"
-  aria-label={`Baca artikel: ${title}`}
+  class="group flex flex-col h-full py-6 md:py-8 transition-all duration-200 overflow-hidden"
+  aria-label={`Read article: ${title}`}
 >
-  {/* Meta: Category & Date */}
-  <div class="flex items-center justify-between mb-4">
-    <span class="text-xs font-medium uppercase tracking-wide text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">
+  <div class="flex items-center justify-between mb-8">
+    <span class="text-[13px] group-hover:text-zinc-900 dark:group-hover:text-white transition-colors text-zinc-500 tracking-tight">
       {categoryLabels[category]}
     </span>
-    <time datetime={pubDate.toISOString()} class="text-xs text-zinc-500">
+
+    <time
+      datetime={pubDate.toISOString()}
+      class="text-[13px] text-zinc-500"
+    >
       {formattedDate}
     </time>
   </div>
-
-  {/* Title & Description */}
-  <div class="flex flex-col gap-3">
-    <h2 class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors line-clamp-2">
+  <div class="flex flex-col gap-4">
+    <h2 class="text-lg md:text-xl font-semibold tracking-tighter text-zinc-900 dark:text-white leading-[1.1] line-clamp-3 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors">
       {title}
     </h2>
-    <p class="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed line-clamp-2">
+
+    <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed line-clamp-3 mb-6 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">
       {description}
     </p>
   </div>
-
-  {/* Author */}
-  <div class="mt-6 flex items-center gap-2 pt-2">
+  <div class="mt-auto flex items-center gap-3">
     {authorAvatar && (
       <img
         src={authorAvatar}
-        alt=""
-        class="w-5 h-5 rounded-full object-cover"
+        alt={`Author avatar ${authorName}`}
+        class="w-6 h-6 rounded-full object-cover"
         loading="lazy"
       />
     )}
-    <span class="text-xs font-medium text-zinc-500">
+    <span class="text-[13px] font-medium text-zinc-500 dark:text-zinc-400">
       {authorName}
     </span>
   </div>

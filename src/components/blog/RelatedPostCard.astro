@@ -14,10 +14,9 @@ const { title, pubDate, category, description, author } = data;
 
 const formattedDate = formatDateCompact(pubDate);
 
-// author sudah structured entity
-const authorName = author?.name || siteConfig.author.name;
-const authorAvatar = author?.avatar || siteConfig.author.avatar;
-const authorSlug = author?.slug || siteConfig.author.slug;
+const authorName = siteConfig.author.name;
+const authorAvatar = siteConfig.author.avatar;
+const authorSlug = siteConfig.author.slug;
 ---
 
 <a
@@ -25,8 +24,6 @@ const authorSlug = author?.slug || siteConfig.author.slug;
   class="group flex flex-col h-full py-4 md:py-8 transition-all duration-200 overflow-hidden"
   aria-label={`Read article: ${title}`}
 >
-
-  <!-- CATEGORY + DATE -->
   <div class="flex items-center justify-between mb-8">
     <span class="text-[13px] group-hover:text-zinc-900 dark:group-hover:text-white transition-colors text-zinc-500 tracking-tight">
       {categoryLabels[category]}
@@ -36,8 +33,6 @@ const authorSlug = author?.slug || siteConfig.author.slug;
       {formattedDate}
     </time>
   </div>
-
-  <!-- CONTENT -->
   <div class="flex flex-col gap-4">
     <h3 class="text-base font-semibold text-black dark:text-white line-clamp-3">
       {title}
@@ -47,8 +42,6 @@ const authorSlug = author?.slug || siteConfig.author.slug;
       {description}
     </p>
   </div>
-
-  <!-- AUTHOR -->
   <a
     href={`/author/${authorSlug}`}
     class="mt-auto pt-10 flex items-center gap-3 group/author"

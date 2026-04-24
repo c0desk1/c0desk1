@@ -37,8 +37,6 @@ const {
   tags = [],
   header = true,
   footer = true,
-  container = true,
-  containerSize = "md"
 } = Astro.props;
 ---
 
@@ -79,17 +77,7 @@ const {
     </div>
     {header && <Header />}
     <main>
-      {container ? (
-        <Container size={containerSize}>
-          <slot />
-        </Container>
-      ) : (
-        <slot />
-      )}
-      {import.meta.env.PROD && (
-  		<Container size={containerSize}>
-  		</Container>
-		)}  
+      <slot />
     </main>
     {footer && <Footer />}
   </body>

@@ -148,26 +148,19 @@ const schema = {
     )}
   </Container>
 
-  <Container size="sm" class="pb-16">
-
+  <Container size="md" class="pb-16">
     {tocHeadings.length > 0 && (
       <div class="mb-8 md:mb-10 px-4 md:px-8">
         <BlogTOC headings={tocHeadings} />
       </div>
     )}
-
-    <div class="px-4 md:px-8">
-      <BlogContent>
-        <InternalLink allPosts={allPosts}>
-          <Content components={{ img: Image, hr: HR }} />
-        </InternalLink>
-      </BlogContent>
-    </div>
-
+    <BlogContent>
+      <InternalLink allPosts={allPosts}>
+        <Content components={{ img: Image, hr: HR }} />
+      </InternalLink>
+    </BlogContent>
+    <BackToTop align="center" />
   </Container>
-
-  <BackToTop align="center" />
-
   <section class="section-divider mt-4 md:mt-8 px-4 md:px-8">
     <Container size="md">
       <BlogRelatedPosts posts={relatedPosts} />

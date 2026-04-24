@@ -1,14 +1,24 @@
 // src/config/site.ts
 
+export type Author = {
+  name: string;
+  slug: string;
+  avatar: string;
+  title: string;
+  bio: string;
+};
+
 export const siteConfig = {
   name: "c0desk1",
+
   author: {
-  	name: "Bima Akbar",
-  	slug: "bima-akbar",
-  	avatar: "/images/author/author.jpg",
-  	title: "Author",
-  	bio: "Eksplorasi workflow digital, AI tools, musik, anime, dan game dari perspektif kreator modern yang membangun di era otomatisasi."
-  },
+    name: "Bima Akbar",
+    slug: "bima-akbar",
+    avatar: "/images/author/author.jpg",
+    title: "Author",
+    bio: "Eksplorasi workflow digital..."
+  } satisfies Author,
+
   description: "Eksplorasi workflow digital, AI tools, musik, anime, dan game dari perspektif kreator modern yang membangun di era otomatisasi.",
   url: "https://c0desk1.my.id/",
   ogImage: "/images/c0desk1-og.webp",
@@ -29,9 +39,9 @@ export const siteConfig = {
   },
   
   navItems: [
-    { href: "/blog", label: "Blog" },
-    { href: "/portfolio", label: "Portfolio" },
-    { href: "/about", label: "Tentang" }
+    { href: "/blog/", label: "Blog" },
+    { href: "/portfolio/", label: "Portfolio" },
+    { href: "/about/", label: "Tentang" }
   ],
   
   social: {
@@ -41,4 +51,4 @@ export const siteConfig = {
   }
 }
 
-export type SiteConfig = typeof siteConfig;
+export type SiteConfig = typeof siteConfig;

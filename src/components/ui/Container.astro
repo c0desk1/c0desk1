@@ -20,6 +20,6 @@ const sizeClasses: Record<string, string> = {
 const sizeClass = sizeClasses[size] || sizeClasses.md;
 ---
 
-<Component class={`mx-auto px-2 ${sizeClass} ${className}`}>
+<Component class={`mx-auto px-4 md:px-8 ${sizeClass} ${className}`}>
   <slot />
 </Component>

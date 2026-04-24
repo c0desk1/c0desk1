@@ -26,9 +26,7 @@ const {
 } = Astro.props;
 ---
 
-<header class="w-full max-w-3xl mx-auto text-center px-4 md:px-8">
-
-  <!-- TITLE -->
+<header class="w-full mx-auto text-center">
   <h1
     class="
       text-2xl sm:text-3xl md:text-4xl lg:text-5xl
@@ -40,8 +38,6 @@ const {
   >
     {title}
   </h1>
-
-  <!-- META FIRST (SEO SIGNAL STRONGER) -->
   <div class="mb-4">
     <BlogMeta 
       pubDate={pubDate}
@@ -49,8 +45,6 @@ const {
       featured={featured}
     />
   </div>
-
-  <!-- AUTHOR SECOND -->
   {authorName && (
     <div>
       <BlogAuthor 

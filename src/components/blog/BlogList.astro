@@ -2,9 +2,10 @@
 // src/components/blog/BlogList.astro
 
 import type { CollectionEntry } from "astro:content";
+import { formatDateCompact, getReadingTime } from "@/lib/utils";
 import PostCard from "./PostCard.astro";
 import FeaturedPostCard from "./FeaturedPostCard.astro";
-import { formatDateCompact, getReadingTime } from "@/lib/utils";
+
 
 interface Props {
   posts: CollectionEntry<"blog">[];
@@ -19,55 +20,36 @@ const postsData = posts.map((post) => ({
   description: post.data.description,
   pubDate: post.data.pubDate.toISOString(),
   formattedDate: formatDateCompact(post.data.pubDate),
-
   readingTime: getReadingTime(post.body || post.data.description || ""),
-
   author: post.data.author?.name,
   authorAvatar: post.data.author?.avatar,
   category: post.data.category
 }));
 ---
 
-<div class="overflow-hidden">
-
+<div class="relative items-center overflow-hidden">
   {variant === "featured" && (
-    <!-- Vercel style for featured posts -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-black/10 dark:bg-white/10 rounded-xl overflow-hidden">
-      {posts.map((post, index) => (
-        <div class={index === 0 ? "bg-white dark:bg-black" : "bg-white dark:bg-black"}>
-          <FeaturedPostCard post={post} />
-        </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 divide-y md:divide-y-0 divide-black/20 dark:divide-white/5">
+      {posts.map((post) => (
+        <FeaturedPostCard post={post} />
       ))}
     </div>
   )}
-
   {variant === "default" && (
     <>
-      <div class="mb-10 flex items-center justify-between">
-        <h2 class="text-2xl md:text-3xl font-medium tracking-tight text-zinc-900 dark:text-zinc-100">
-          Latest articles
-        </h2>
-        <a 
-          href="/blog" 
-          class="text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300 transition-colors"
-        >
-          View all →
-        </a>
+      <div class="flex items-end justify-start mb-8">
+        <div class="space-y-1">
+          <h2 class="text-3xl md:text-4xl font-semibold tracking-tighter">Terbaru.</h2>
+        </div>
       </div>
-
-      <!-- Vercel style grid with subtle gaps -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 divide-y md:divide-y-0 divide-black/20 dark:divide-white/5">
         {posts.map((post) => (
-          <div class="group relative rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-200 hover:shadow-sm">
-            <PostCard post={post} />
-          </div>
+          <PostCard post={post} />
         ))}
       </div>
     </>
   )}
-
 </div>
-
 <script type="application/json" id="posts-data">
   {JSON.stringify(postsData)}
 </script>

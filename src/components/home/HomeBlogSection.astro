@@ -12,24 +12,16 @@ const { posts } = Astro.props;
 ---
 
 <section class="section-divider">
-  <Container size="md" class="py-8 md:py-16">
-    <div class="flex items-end justify-between mb-6">
+  <Container size="md" class="py-10 md:py-20">
+    <div class="flex items-end justify-start mb-8">
       <div class="space-y-1">
         <h2 class="text-3xl md:text-4xl font-semibold tracking-tighter">
            Terbaru
         </h2>
       </div>
-      <a
-        href="/blog"
-        class="group flex items-center gap-1 px-2 py-1.5 rounded-full hover:bg-black/5 dark:hover:bg-white/5 text-center text-xs md:text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors"
-      >
-        <span>Lihat semua</span>
-        <span class="opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-transform">→</span>
-      </a>
     </div>
     {posts.length > 0 ? (
-      <!-- Perubahan ada di sini: dari divide-y md:divide-y-0 ... menjadi gap-6 -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 divide-y md:divide-y-0 divide-black/20 dark:divide-white/5">
 		    {posts.map(post => (
       		<PostCard post={post} />
   		  ))}
@@ -41,5 +33,11 @@ const { posts } = Astro.props;
         </p>
       </div>
     )}
+    <div class="flex justify-center-safe py-8">
+      <a href="/blog/"
+        class="group flex items-center px-2 md:px-3 py-1.5 rounded-full border border-black/5 dark:border-zinc-800 hover:bg-black/5 dark:hover:bg-white/5 text-center text-sm md:text-[13px] text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors">
+        <span>Lihat semua</span>
+      </a>
+    </div>
   </Container>
 </section>

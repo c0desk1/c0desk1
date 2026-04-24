@@ -11,29 +11,21 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
-
 const posts = await getCollection("blog", ({ data }) => !data.draft);
 
 const authorPosts = posts
-  .filter(
-    (post) =>
-      (post.data.author?.slug || siteConfig.author.slug) === slug
-  )
-  .sort(
-    (a, b) =>
-      b.data.pubDate.getTime() - a.data.pubDate.getTime()
-  );
+  .filter((post) => (post.data.author?.slug || siteConfig.author.slug) === slug)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
 const author = siteConfig.author;
 
 const seo = {
-  title: `${author.name}`,
+  title: `${author.name} — Writing`,
   description: author.bio,
-  url: `${siteConfig.url}/author/${author.slug}`
+  url: `${siteConfig.url}/author/${author.slug}/`
 };
 ---
 
-<!-- JSON-LD (SEO kuat untuk author entity) -->
 <script type="application/ld+json" set:html={JSON.stringify({
   "@context": "https://schema.org",
   "@type": "Person",
@@ -43,84 +35,81 @@ const seo = {
   "image": `${siteConfig.url}${author.avatar}`,
   "jobTitle": author.title,
   "description": author.bio,
-  "sameAs": [
-    siteConfig.social.github,
-    siteConfig.social.twitter,
-    siteConfig.social.linkedin
-  ],
-  "worksFor": {
-    "@type": "Organization",
-    "name": siteConfig.name
-  }
+  "sameAs": [siteConfig.social.github, siteConfig.social.twitter, siteConfig.social.linkedin],
+  "worksFor": { "@type": "Organization", "name": siteConfig.name }
 })} />
 
 <BaseLayout title={seo.title} description={seo.description}>
-  <Container size="md" class="py-20">
-
-    <!-- ================= HEADER (Vercel-like minimal) ================= -->
-    <header class="mb-16">
-      <div class="flex items-center gap-5">
-
-        <img
-          src={author.avatar}
-          alt={author.name}
-          class="w-14 h-14 rounded-full object-cover"
-        />
-
-        <div class="space-y-1">
-          <h1 class="text-2xl md:text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white">
-            {author.name}
-          </h1>
-
-          <p class="text-sm text-zinc-500 dark:text-zinc-400">
-            {author.title}
-          </p>
+  <Container size="md" class="py-12 md:py-20">
+    
+    <header class="mb-12 md:mb-16">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div class="flex items-center gap-4">
+          <div class="relative group">
+            <div class="absolute -inset-1 bg-linear-to-r from-zinc-200 to-zinc-100 dark:from-zinc-800 dark:to-zinc-900 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+            <img
+              src={author.avatar}
+              alt={author.name}
+              class="relative w-16 h-16 rounded-full object-cover border border-zinc-200 dark:border-zinc-800"
+              loading="eager"
+            />
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+              {author.name}
+            </h1>
+            <p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+              {author.title}
+            </p>
+          </div>
+        </div>
+        
+        <div class="flex flex-col items-start md:items-end">
+          <span class="text-[13px] text-zinc-400 font-semibold mb-1">Total Konten</span>
+          <span class="text-2xl font-light text-zinc-900 dark:text-zinc-100">
+            {authorPosts.length.toString().padStart(2, '0')}
+          </span>
         </div>
       </div>
-
-      <p class="mt-5 max-w-2xl text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
+      
+      <p class="mt-8 text-base leading-relaxed text-zinc-600 dark:text-zinc-400 max-w-2xl">
         {author.bio}
       </p>
-
-      <div class="mt-6 text-xs text-zinc-400">
-        {authorPosts.length} posts
-      </div>
     </header>
 
-    <!-- ================= POSTS LIST (Vercel style: no card) ================= -->
-    <section class="border-t border-zinc-200 dark:border-zinc-800">
-
-      <div class="space-y-0">
+    <section class="relative">
+      <div class="absolute top-0 left-0 w-full h-px bg-zinc-200 dark:bg-zinc-800"></div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 -ml-px">
         {authorPosts.map((post) => (
           <a
-            href={`/blog/${post.id}`}
-            class="group block py-6 divide-y divide-zinc-100 dark:divide-zinc-800"
+            href={`/blog/${post.id}/`}
+            class="group relative flex flex-col h-full p-6 md:p-8 border-l border-b border-zinc-200 dark:border-zinc-800 transition-all duration-300 hover:bg-zinc-50 dark:hover:bg-zinc-900/30"
           >
-
-            <!-- meta row -->
-            <div class="flex items-center justify-between text-xs text-zinc-400">
-              <span>
+            <div class="flex justify-between items-center gap-3 mb-6">
+              <span class="text-xs md:text-[13px] text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 transition-colors">
                 {categoryLabels[post.data.category] ?? post.data.category}
               </span>
-
-              <time datetime={post.data.pubDate.toISOString()}>
+              <time class="text-xs md:text-[13px] text-zinc-400" datetime={post.data.pubDate.toISOString()}>
                 {formatDateCompact(post.data.pubDate)}
               </time>
             </div>
 
-            <!-- title -->
-            <h2 class="mt-2 text-base md:text-lg font-medium text-zinc-900 dark:text-zinc-100 group-hover:text-black dark:group-hover:text-white transition-colors">
+            <h2 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100 line-clamp-3 transition-transform duration-300">
               {post.data.title}
             </h2>
 
-            <!-- description -->
-            <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400 line-clamp-2">
+            <p class="mt-3 text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed line-clamp-4 grow mb-6">
               {post.data.description}
             </p>
-
           </a>
         ))}
       </div>
+      <div class="absolute top-0 right-0 w-px h-full bg-zinc-200 dark:bg-zinc-800 hidden md:block"></div>
     </section>
   </Container>
 </BaseLayout>
+<style>
+  h1, h2 {
+    letter-spacing: -0.02em;
+  }
+</style>
