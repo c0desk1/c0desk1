@@ -1,5 +1,6 @@
 ---
 // src/components/ui/Breadcrumb.astro
+import { siteConfig } from "@/config/site";
 
 interface Props {
   items: Array<{ name: string; href: string }>;
@@ -7,18 +8,23 @@ interface Props {
 
 const { items = [] } = Astro.props;
 
-const siteURL = Astro.site ?? "https://c0desk1.my.id";
+if (!items.length) return;
+
+const baseURL =
+  Astro.site ?? siteConfig.url ?? "https://c0desk1.my.id";
+
 const breadcrumbId = `${Astro.url.pathname}#breadcrumb`;
 
 const breadcrumbSchema = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "@id": breadcrumbId,
+
   itemListElement: items.map((item, index) => ({
     "@type": "ListItem",
     position: index + 1,
     name: item.name,
-    item: new URL(item.href, siteURL).toString()
+    item: new URL(item.href, baseURL).toString()
   }))
 };
 ---
@@ -48,6 +54,8 @@ const breadcrumbSchema = {
     ))}
   </ol>
 </nav>
-{items.length > 0 && (
-  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
-)}
+
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(breadcrumbSchema)}
+/>
