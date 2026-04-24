@@ -112,6 +112,27 @@ content:
         list: true
         options:
           max: 5
+      - name: categories
+        label: Kategori
+        type: select
+        options:
+           value:
+              - name: general
+                label: General
+              - name: web-dev
+                label: Web Develoment
+              - name: ai
+                label: AI
+              - name: anime
+                label: Anime
+              - name: automation
+                label: Automation
+              - name: game
+                label: Game
+              - name: tutorials
+                label: Tutorial
+              - name: workflow
+                label: Workflow
       
       - name: image
         label: Cover
