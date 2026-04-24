@@ -99,6 +99,8 @@ Kalau lu takut salah hapus, tambahin `-WhatIf` di akhir baris `Remove-Item`. Nan
 
 Script di atas nggak bakal guna kalau lu harus buka-tulis tiap hari. Lu harus pake Task Scheduler bawaan Windows:
 
+<Steps>
+
 ### Step 1 Cari Task Scheduler di Start Menu.
 
 ### Step 2
@@ -118,6 +120,7 @@ Di bagian Program/script isi: `powershell.exe`.
 Di bagian Add arguments, masukin:
 `-ExecutionPolicy Bypass -File "C:\Path\Ke\Script\Lu.ps1"`.
 
+</Steps>
 
 Selesai! Sekarang tiap pagi pas lu nyalain PC, script itu bakal jalan sendiri di *background*.
 
