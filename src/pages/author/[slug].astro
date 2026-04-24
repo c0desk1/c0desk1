@@ -1,0 +1,80 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import { getCollection } from "astro:content";
+import { siteConfig } from "@/config/site";
+import { formatDateCompact } from "@/lib/utils";
+
+export async function getStaticPaths() {
+  return [
+    {
+      params: { slug: siteConfig.author.slug }
+    }
+  ];
+}
+
+const { slug } = Astro.params;
+
+// ambil semua blog
+const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+// filter by author slug (sementara pakai simple match)
+const authorPosts = posts.filter((post) => {
+  const authorSlug =
+    post.data.author?.slug ||
+    siteConfig.author.slug;
+
+  return authorSlug === slug;
+});
+
+const author = siteConfig.author;
+
+// SEO data
+const seo = {
+  title: `Artikel oleh ${author.name}`,
+  description: `Kumpulan artikel dari ${author.name}`,
+};
+---
+
+<BaseLayout title={seo.title} description={seo.description}>
+  <Container size="md" class="py-12">
+
+    <!-- AUTHOR HEADER -->
+    <div class="flex items-center gap-4 mb-10">
+      <img
+        src={author.avatar}
+        class="w-14 h-14 rounded-full"
+        alt={author.name}
+      />
+
+      <div>
+        <h1 class="text-2xl font-semibold text-zinc-900 dark:text-white">
+          {author.name}
+        </h1>
+        <p class="text-zinc-500">
+          {author.title}
+        </p>
+      </div>
+    </div>
+
+    <!-- POSTS -->
+    <div class="grid gap-6">
+      {authorPosts.map((post) => (
+        <a href={`/blog/${post.id}`} class="block">
+          <div class="text-sm text-zinc-500">
+            {formatDateCompact(post.data.pubDate)}
+          </div>
+
+          <div class="text-lg font-medium text-zinc-900 dark:text-white">
+            {post.data.title}
+          </div>
+
+          <p class="text-sm text-zinc-500 line-clamp-2">
+            {post.data.description}
+          </p>
+        </a>
+      ))}
+    </div>
+
+  </Container>
+</BaseLayout>
