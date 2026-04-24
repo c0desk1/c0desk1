@@ -13,17 +13,14 @@ const { title, description, pubDate, author } = data;
 
 const formattedDate = formatDateCompact(pubDate);
 
-// FIX: structured author fallback
 const authorName = author?.name || siteConfig.author.name;
 const authorAvatar = author?.avatar || siteConfig.author.avatar;
 ---
 
 <a
   href={`/blog/${id}/`}
-  class="group flex flex-col h-full p-4 md:p-8 transition-colors duration-200 hover:bg-black/5 dark:hover:bg-white/5 overflow-hidden"
+  class="group flex flex-col h-full transition-colors duration-200 hover:bg-black/5 dark:hover:bg-white/5 overflow-hidden"
 >
-
-  <!-- ICON -->
   <div class="mb-6">
     <div class="w-12 h-12 flex items-center justify-center border border-zinc-200 dark:border-zinc-800 rounded-lg bg-white dark:bg-black group-hover:border-zinc-400 dark:group-hover:border-zinc-600 transition-colors">
       <span class="text-sm md:text-lg font-semibold text-zinc-900 dark:text-white">
