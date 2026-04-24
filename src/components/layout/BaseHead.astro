@@ -2,6 +2,7 @@
 // src/components/layout/BaseHead.astro
 import { siteConfig } from "@/config/site";
 import Analytics from "./Analytics.astro";
+import Ads from "./Ads.astro";
 
 interface Props {
   title?: string;
@@ -178,3 +179,4 @@ if (type === "website") {
 <meta name="yandex-verification" content="1878480c0d7b5510" />
 
 <Analytics />
+<Ads />
