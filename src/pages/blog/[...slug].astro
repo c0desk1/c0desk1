@@ -19,6 +19,7 @@ import BackToTop from "@/components/ui/BackToTop.astro";
 
 import Image from "@/components/mdx/Image.astro";
 import HR from "@/components/mdx/HR.astro";
+import InternalLink from "@/components/mdx/InternalLink.astro";
 
 import {
   filterHeadingsForTOC,
@@ -26,8 +27,7 @@ import {
 } from "@/lib/utils";
 
 import {
-  getSmartRelatedPosts,
-  remarkInternalLinks
+  getSmartRelatedPosts
 } from "@/lib/botEngine";
 
 
@@ -69,11 +69,8 @@ const allPosts = await getCollection(
 
 // ================= RENDER MDX + INTERNAL LINKS =================
 
-const { Content, headings } = await render(post, {
-  remarkPlugins: [
-    remarkInternalLinks(allPosts)
-  ]
-});
+const { Content, headings } = await render(post);
+
 
 // ================= RELATED =================
 
@@ -253,12 +250,9 @@ const schema = {
 
       <BlogContent>
 
-        <Content
-          components={{
-            img: Image,
-            hr: HR
-          }}
-        />
+        <InternalLink allPosts={allPosts}>
+          <Content components={{ img: Image, hr: HR }} />
+        </InternalLink>
 
       </BlogContent>
 
