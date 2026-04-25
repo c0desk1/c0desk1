@@ -53,7 +53,6 @@ media:
     output: /images/portfolio/og
     categories: [image]
 
-
     
 content:
   - name: blog
@@ -65,15 +64,6 @@ content:
       fields: [image, title, pubDate, draft, featured]
       sort: ["pubDate desc"]
       
-    actions:
-      - name: rebuild-blog
-        label: Rebuild Blog Index
-        scope: collection
-        workflow: rebuild-blog.yml
-        confirm:
-          title: "Rebuild Blog?"
-          message: "Ini akan memicu rebuild index blog."
-          button: "Ya, Rebuild"
     fields:
       - name: title
         label: Judul
@@ -143,11 +133,11 @@ content:
           rename: true
       
       - name: imageAlt
-        label: Cover Alt
+        label: Alt
         type: string
 
       - name: imageCaption
-        label: Cover Caption
+        label: Caption
         type: string
 
       - name: body
@@ -186,6 +176,11 @@ content:
           - name: title
             label: Deskripsi
             type: string
+
+          - name: slug
+            label: Slug
+            type: string
+            default: "bima-akbar"
       
       - name: seo
         label: SEO
@@ -276,15 +271,15 @@ content:
           media: portfolio-images
       
       - name: imageAlt
-        label: Cover Alt
+        label: Alt
         type: string
         
       - name: imageCaption
-        label: Cover Caption
+        label: Caption
         type: string
       
       - name: gallery
-        label: Gambar Gallery
+        label: Gallery
         type: image
         required: false
         fields:
