@@ -84,6 +84,7 @@ const displayGallery = Array.isArray(gallery) ? gallery : [];
 <article>
   <Section size="lg">
     <Container size="md">
+      <h2 class="sr-only">Portfolio Header</h2>
       <Breadcrumb
         items={[
           { name: "Portfolio", href: "/portfolio/" },
@@ -106,6 +107,7 @@ const displayGallery = Array.isArray(gallery) ? gallery : [];
   </Section>
   {image && (
     <Section size="none">
+      <h2 class="sr-only">Portfolio Image Content</h2>
       <PortfolioFeaturedImage
         src={image}
         alt={imageAlt || title}
@@ -114,10 +116,12 @@ const displayGallery = Array.isArray(gallery) ? gallery : [];
     </Section>
   )}
   <Section size="md">
+    <h2 class="sr-only">Portfolio Metrics</h2>
     <PortfolioMetrics metrics={metrics} />
   </Section>
   <Section size="lg">
     <Container size="md">
+      <h2 class="sr-only">Portfolio Content</h2>
       {(challenge || solution || result) && (
         <div class="space-y-6 mb-10 border-b border-zinc-100 dark:border-zinc-800 pb-8">
           {challenge && (
@@ -159,6 +163,7 @@ const displayGallery = Array.isArray(gallery) ? gallery : [];
   </Section>
   <Section size="md">
     <Container size="md">
+      <h2 class="sr-only">Portfolio Image Gallery</h2>
       <PortfolioGallery
         images={displayGallery}
         title={title}
@@ -167,6 +172,7 @@ const displayGallery = Array.isArray(gallery) ? gallery : [];
   </Section>
   <Section size="lg">
     <Container size="md">
+      <h2 class="sr-only">Portfolio related Content</h2>
       <PortfolioRelated projects={relatedProjects} />
       <BackToTop showBorder align="center" />
     </Container>
