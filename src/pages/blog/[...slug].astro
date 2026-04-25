@@ -127,53 +127,55 @@ const schema = {
   tags={tags}
   container={false}
 >
-
-<script type="application/ld+json" set:html={JSON.stringify(schema)} />
-<article class="relative">
-  <Section size="sm">
-    <Container size="sm">
-      <Breadcrumb items={breadcrumbItems} />
-      <BlogHeader
-        title={title}
-        pubDate={pubDate}
-        readingTime={readingTime}
-        authorName={author?.name}
-        authorAvatar={author?.avatar}
-        authorTitle={author?.title}
-        featured={featured}
-      />
-      {image && (
-        <BlogFeaturedImage
-          image={image}
-          alt={imageAlt || title}
-          caption={imageCaption || imageAlt}
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <article class="relative">
+    <Section size="sm">
+      <Container size="sm">
+        <h2 class="sr-only">Article Header</h2>
+        <Breadcrumb items={breadcrumbItems} />
+        <BlogHeader
+          title={title}
+          pubDate={pubDate}
+          readingTime={readingTime}
+          authorName={author?.name}
+          authorAvatar={author?.avatar}
+          authorTitle={author?.title}
+          featured={featured}
         />
-      )}
-    </Container>
-  </Section>
-  <Section size="sm">
-    <Container size="sm">
-      {tocHeadings.length > 0 && (
-        <BlogTOC headings={tocHeadings} />
-      )}
-      <BlogContent>
-        <InternalLink allPosts={allPosts}>
-          <Content
-            components={{
-              img: Image,
-              hr: HR
-            }}
+        {image && (
+          <BlogFeaturedImage
+            image={image}
+            alt={imageAlt || title}
+            caption={imageCaption || imageAlt}
           />
-        </InternalLink>
-      </BlogContent>
-    </Container>
-  </Section>
-  <Section size="md" class="section-divider">
-    <Container size="sm">
-      <BackToTop align="center" />
-      <BlogRelatedPosts posts={relatedPosts} />
-    </Container>
-  </Section>
-</article>
-<ReadingProgress />
+        )}
+      </Container>
+    </Section>
+    <Section size="sm">
+      <Container size="sm">
+        <h2 class="sr-only">Article Content</h2>
+        {tocHeadings.length > 0 && (
+          <BlogTOC headings={tocHeadings} />
+        )}
+        <BlogContent>
+          <InternalLink allPosts={allPosts}>
+            <Content
+              components={{
+                img: Image,
+                hr: HR
+              }}
+            />
+          </InternalLink>
+        </BlogContent>
+      </Container>
+    </Section>
+    <Section size="md" class="section-divider">
+      <Container size="sm">
+        <h2 class="sr-only">Related Posts</h2>
+        <BackToTop align="center" />
+        <BlogRelatedPosts posts={relatedPosts} />
+      </Container>
+    </Section>
+  </article>
+  <ReadingProgress />
 </BaseLayout>
