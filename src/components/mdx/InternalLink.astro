@@ -97,7 +97,7 @@ finalHtml = finalHtml.replace(/__BLOCK_(\d+)__/g, (_, i) => forbiddenBlocks[Numb
   border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-:global(.dark) .internal-link {
+.dark .internal-link {
   background-color: rgba(255, 255, 255, 0.06);
   color: #ededed;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -109,7 +109,7 @@ finalHtml = finalHtml.replace(/__BLOCK_(\d+)__/g, (_, i) => forbiddenBlocks[Numb
   transform: translateY(-1px);
 }
 
-:global(.dark) .internal-link:hover {
+.dark .internal-link:hover {
   background-color: rgba(255, 255, 255, 0.12);
   border-color: rgba(255, 255, 255, 0.25);
 }
