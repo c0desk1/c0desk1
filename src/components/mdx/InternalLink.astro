@@ -91,6 +91,12 @@ finalHtml = finalHtml.replace(/__BLOCK_(\d+)__/g, (_, i) => forbiddenBlocks[Numb
   font-size: 0.875rem;
   font-weight: 500;
   text-decoration: none !important;
+  vertical-align: baseline;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   background-color: rgba(0, 0, 0, 0.05);
   color: #171717;
@@ -112,5 +118,24 @@ finalHtml = finalHtml.replace(/__BLOCK_(\d+)__/g, (_, i) => forbiddenBlocks[Numb
 .dark .internal-link:hover {
   background-color: rgba(255, 255, 255, 0.12);
   border-color: rgba(255, 255, 255, 0.25);
+}
+
+.internal-link:active {
+  background-color: #d4d4d4;
+  border-color: #a3a3a3;
+}
+
+.dark .internal-link:active {
+  background-color: #333;
+  border-color: #525252;
+}
+
+.internal-link:focus-visible {
+  outline: 2px solid #a3a3a3;
+  outline-offset: 1px;
+}
+
+.dark .internal-link:focus-visible {
+  outline-color: #525252;
 }
 </style>
