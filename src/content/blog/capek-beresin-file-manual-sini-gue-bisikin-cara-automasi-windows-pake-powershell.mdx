@@ -1,0 +1,132 @@
+---
+title: Capek Beresin File Manual? Sini Gue Bisikin Cara Automasi Windows Pake
+  PowerShell!
+description: Capek ngerapiin file manual? Sini gue ajarin bikin script
+  PowerShell buat auto-rename & delete file di Windows. Anti-error & praktis,
+  biar PC lu kerja!
+pubDate: 2026-04-20T15:09
+updatedDate: 2026-04-20T15:09
+tags:
+  - PowerShell Indonesia
+  - Automasi Windows
+  - Tips Produktivitas
+  - Scripting
+  - Tutorial Windows
+category: tutorials
+image: /images/blog/powershell-preview.webp
+imageAlt: Sebuah terminal PowerShell modern mengambang di dalam lingkungan
+  pabrik industri yang terbuat dari beton dan baja, menunjukkan automasi file
+  digital dengan efek cahaya neon biru.
+imageCaption: Di mana presisi industri bertemu dengan automasi digital Windows.
+draft: false
+featured: false
+author:
+  name: Bima Akbar
+  avatar: /images/author/author.jpg
+  title: Author
+seo:
+  title: "Cara Automasi Windows: Script PowerShell buat Auto Rename & Delete File"
+  description: Bosen ngerapiin file manual? Sini gue ajarin bikin script
+    PowerShell buat auto-rename & delete di Windows. Anti-error & praktis, biar
+    PC lu kerja!
+  ogImage: /images/blog/og/og-powershell-tips-auto-rename-delete-file.webp
+---
+import Callout from "@/components/mdx/Callout.astro";
+import CodeGroup from "@/components/mdx/CodeGroup.astro";
+import Steps from "@/components/mdx/Steps.astro";
+
+Lu pernah nggak sih ngerasa kayak robot pas lagi ngerapiin folder? Misal, lu abis download ratusan aset desain atau foto, terus namanya berantakan semua kayak `IMG_999_final_banget_v2.jpg`. Atau yang lebih parah, folder "Downloads" lu udah penuh sampah file dari zaman Majapahit yang bikin SSD lu jerit-jerit?
+
+Kalo lu masih *rename* atau *delete* satu-satu pake klik kanan... asli, lu buang-buang waktu berharga lu.
+
+---
+
+Di artikel ini, gue mau kasih tau cara bikin script PowerShell sederhana biar Windows lu kerja sendiri. Lu tinggal duduk manis sambil ngopi, biar script gue yang beresin sisanya.
+
+## PowerShell: Bukan Cuma Layar Biru Biasa
+
+Banyak yang nanya, *"Kenapa nggak pake CMD aja, Bang?"*. Gini ya, PowerShell itu jauh lebih "pinter" dibanding CMD. Dia bisa baca objek. Jadi kalau lu mau nyari file yang ukurannya di atas 1GB atau file yang nggak pernah dibuka selama setahun, PowerShell bisa nemuin itu dengan gampang banget.
+
+### Jurus Auto-Rename: Biar Folder Lu Estetik
+
+Katakanlah lu punya folder isi foto-foto dari kamera yang namanya `DSC001`, `DSC002`, dsb. Terus lu pengen ubah jadi `Projek_Keren_001`.
+
+Sikat Pake Kode Ini:
+
+<CodeGroup titles={["Powershell"]}>
+
+```powershell
+# Ganti path-nya ke folder tujuan lu ya!
+$folderPath = "C:\Users\Gue\Documents\Project_Aset"
+
+# Ambil semua file, terus ganti namanya
+Get-ChildItem -Path $folderPath | ForEach-Object {
+    $namaBaru = $_.Name -replace "DSC", "Projek_Keren"
+    Rename-Item -Path $_.FullName -NewName $namaBaru
+}
+```
+</CodeGroup>
+
+
+Kenapa Gini?:
+
+1. `Get-ChildItem`: Ini cara lu bilang ke PowerShell, *"Eh, tolong liatin isi folder ini dong."*
+
+2. `-replace`: Ini perintah paling sakti buat nuker kata-kata sampah jadi kata-kata yang lu mau.
+
+### Jurus Auto-Delete: Buang Mantan... Eh, File Sampah!
+
+Gue yakin folder Temp atau Downloads lu itu sarang hantu. Nah, kita bisa bikin script yang otomatis hapus file yang udah lebih dari 30 hari nggak lu sentuh.
+
+Copy-Paste Kode Ini:
+
+<CodeGroup titles={["Powershell"]}>
+
+```powershell
+# Target folder sampah lu
+$pathSampah = "D:\Downloads\Trash"
+$batasHari = 30
+
+# Cari yang udah jamuran, terus sikat!
+Get-ChildItem -Path $pathSampah -Recurse | Where-Object {
+    $_.LastWriteTime -lt (Get-Date).AddDays(-$batasHari)
+} | Remove-Item -Force
+```
+</CodeGroup>
+
+Kalau lu takut salah hapus, tambahin `-WhatIf` di akhir baris `Remove-Item`. Nanti PowerShell cuma bakal pamer, "Nih file yang BAKAL gue hapus," tanpa beneran ngehapus. Jadi lu bisa cek dulu.
+
+## Cara Biar Run Otomatis (Gak Perlu Klik-Klik Lagi)
+
+Script di atas nggak bakal guna kalau lu harus buka-tulis tiap hari. Lu harus pake Task Scheduler bawaan Windows:
+
+<Steps>
+
+### Step 1
+
+Cari Task Scheduler di Start Menu.
+
+### Step 2
+
+Pilih Create Basic Task, kasih nama "Bersih-Bersih Folder".
+
+### Step 3
+
+Di bagian Action, pilih Start a Program.
+
+### Step 4
+
+Di bagian Program/script isi: `powershell.exe`.
+
+### Step 5
+
+Di bagian Add arguments, masukin:
+`-ExecutionPolicy Bypass -File "C:\Path\Ke\Script\Lu.ps1"`.
+
+</Steps>
+
+Selesai! Sekarang tiap pagi pas lu nyalain PC, script itu bakal jalan sendiri di *background*.
+
+## Kesimpulan
+
+Hari gini masih manual? Sayang banget skill lu. Dengan automasi kecil kayak gini, lu udah selangkah lebih maju buat jadi power user yang efisien.

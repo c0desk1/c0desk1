@@ -1,0 +1,50 @@
+---
+// src/components/blog/BlogTOC.astro
+
+import { filterHeadingsForTOC } from '@/lib/utils';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+const tocHeadings = filterHeadingsForTOC(headings);
+---
+
+<div class="mx-auto max-w-3xl my-4 md:my-8">
+  {tocHeadings.length > 0 && (
+  <nav class="not-prose rounded-xl border border-black/20 dark:border-white/5 bg-zinc-50/50 dark:bg-black/90 p-6">
+    <h2 class="mb-4 text-[13px] font-semibold text-black dark:text-white">
+      Daftar Isi
+    </h2>
+    <ul class="space-y-2">
+      {tocHeadings.map(h => (
+        <li
+          class:list={[
+            "text-[13px] leading-snug",
+            h.depth === 3
+              ? "pl-4"
+              : ""
+          ]}
+        >
+          <a
+            href={`#${h.slug}`}
+            class="group flex items-start gap-2 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors duration-150"
+          >
+            <span class="mt-[6px] h-[3px] w-[3px] shrink-0 rounded-full bg-zinc-400 dark:bg-zinc-600"></span>
+            <span class="leading-snug">
+              {h.text}
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
+</div>

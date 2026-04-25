@@ -1,0 +1,136 @@
+---
+// src/pages/author/[slug].astro
+
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import Icon from "@/components/ui/Icon.astro";
+
+import { getCollection } from "astro:content";
+import { siteConfig } from "@/config/site";
+import { categoryLabels } from "@/config/blog";
+import { formatDateCompact } from "@/lib/utils";
+
+export async function getStaticPaths() {
+  return [{ params: { slug: siteConfig.author.slug } }];
+}
+
+const { slug } = Astro.params;
+
+const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+const authorPosts = posts
+  .filter(
+    (post) =>
+      (post.data.author?.slug || siteConfig.author.slug) === slug
+  )
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const author = siteConfig.author;
+
+const seo = {
+  title: author.name,
+  description: author.bio,
+  url: `${siteConfig.url}/author/${author.slug}/`,
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": `${seo.url}#person`,
+  name: author.name,
+  url: seo.url,
+  image: `${siteConfig.url}${author.avatar}`,
+  jobTitle: author.title,
+  description: author.bio,
+  mainEntityOfPage: {
+    "@type": "CollectionPage",
+    "@id": seo.url
+  },
+  sameAs: [
+    siteConfig.social?.github,
+    siteConfig.social?.twitter,
+    siteConfig.social?.linkedin,
+  ].filter(Boolean),
+})} />
+
+<BaseLayout title={seo.title} description={seo.description}>
+  <Container size="lg" class="py-16">
+    <div class="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-14">
+      <aside class="space-y-6">
+        <div class="flex items-center gap-3">
+          <img
+            src={author.avatar}
+            alt={author.name}
+            class="w-10 h-10 rounded-full"
+          />
+          <div>
+            <p class="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+              {author.name}
+            </p>
+            <p class="text-xs text-zinc-500">
+              {author.title}
+            </p>
+          </div>
+        </div>
+        <p class="text-sm text-zinc-500 leading-relaxed">
+          {author.bio}
+        </p>
+        <div class="text-xs text-zinc-400">
+          {authorPosts.length} posts
+        </div>
+        <div class="flex items-center gap-3 pt-2">
+
+          {siteConfig.social?.github && (
+            <a href={siteConfig.social.github} class="text-zinc-400 hover:text-zinc-900 dark:hover:text-white">
+              <Icon name="github" class="w-4 h-4" />
+            </a>
+          )}
+
+          {siteConfig.social?.twitter && (
+            <a href={siteConfig.social.twitter} class="text-zinc-400 hover:text-zinc-900 dark:hover:text-white">
+              <Icon name="twitter" class="w-4 h-4" />
+            </a>
+          )}
+
+          {siteConfig.social?.linkedin && (
+            <a href={siteConfig.social.linkedin} class="text-zinc-400 hover:text-zinc-900 dark:hover:text-white">
+              <Icon name="linkedin" class="w-4 h-4" />
+            </a>
+          )}
+
+        </div>
+
+      </aside>
+      <Section size="none">
+        <h2 class="sr-only">{author.name} Articles</h2>
+        <div class="border-x border-b border-zinc-200/60 dark:border-zinc-800/60">
+          <div class="space-y-0">
+            {authorPosts.map((post, i) => (
+              <article class="relative px-4 py-6 border-t border-zinc-100/70 dark:border-zinc-800/60 group">
+                <span class="absolute left-[-5px] top-14 w-2 h-2 rounded-full bg-zinc-300 dark:bg-zinc-700 group-hover:bg-zinc-900 dark:group-hover:bg-white transition"></span>
+                <div class="flex items-center justify-between text-[11px] text-zinc-400 uppercase tracking-wide">
+                  <span>
+                    {categoryLabels[post.data.category] ?? post.data.category}
+                  </span>
+                  <time datetime={post.data.pubDate.toISOString()}>
+                    {formatDateCompact(post.data.pubDate)}
+                  </time>
+                </div>
+                <a href={`/blog/${post.id}/`} class="block mt-1">
+                  <h2 class="text-base font-medium text-zinc-900 dark:text-zinc-100 group-hover:text-black dark:group-hover:text-white transition">
+                    {post.data.title}
+                  </h2>
+                  <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400 line-clamp-2 leading-relaxed">
+                    {post.data.description}
+                  </p>
+                </a>
+              </article>
+            ))}
+          </div>
+        </div>
+      </Section>
+    </div>
+  </Container>
+</BaseLayout>
