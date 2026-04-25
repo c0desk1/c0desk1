@@ -23,11 +23,9 @@ Allow: /
 Allow: /blog/
 Allow: /portfolio/
 Allow: /about/
-Crawl-delay: 1
 
 User-agent: Yandex
 Allow: /
-Crawl-delay: 2
 
 Sitemap: https://c0desk1.my.id/sitemap-index.xml
 Sitemap: https://c0desk1.my.id/rss.xml
