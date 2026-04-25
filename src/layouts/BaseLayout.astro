@@ -35,8 +35,6 @@ const {
   header = true,
   footer = true,
 } = Astro.props;
-
-const YM_ID = 108731154;
 ---
 
 <!DOCTYPE html>
@@ -69,6 +67,25 @@ const YM_ID = 108731154;
       modifiedTime={modifiedTime}
       tags={tags}
     />
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2TKFP229HJ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-2TKFP229HJ', {
+        anonymize_ip: true,
+        send_page_view: true
+      });
+      
+      // Track page view untuk Astro View Transitions (perbaiki typo)
+      document.addEventListener('astro:after-swap', () => {
+        gtag('event', 'page_view', {
+          page_path: window.location.pathname,
+        });
+      });
+    </script>
   </head>
   <body class="bg-white dark:bg-black text-zinc-950 dark:text-zinc-50 font-medium">
     <div aria-hidden="true" class="pointer-events-none fixed inset-0 z-0">
@@ -83,8 +100,8 @@ const YM_ID = 108731154;
     
     {footer && <Footer />}
     
-    <!-- Yandex.Metrika -->
-    <script type="text/javascript">
+    <!-- Yandex.Metrika counter -->
+    <script>
       (function(m,e,t,r,i,k,a){
         m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
         m[i].l=1*new Date();
@@ -111,5 +128,6 @@ const YM_ID = 108731154;
         <img src="https://mc.yandex.ru/watch/108731154" style="position:absolute; left:-9999px;" alt="" />
       </div>
     </noscript>
+    <!-- /Yandex.Metrika counter -->
   </body>
 </html>
