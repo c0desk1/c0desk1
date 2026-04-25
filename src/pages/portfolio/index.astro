@@ -1,0 +1,58 @@
+---
+// src/pages/portfolio/index.astro
+
+import { getCollection } from "astro:content";
+
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import Grid from "@/components/ui/Grid.astro";
+
+import PortfolioHero from "@/components/portfolio/PortfolioHero.astro";
+import PortfolioCard from "@/components/portfolio/PortfolioCard.astro";
+
+import {
+  sortByDate,
+  filterByFeatured,
+  filterByDraft
+} from "@/lib/utils";
+
+const allProjects = await getCollection("portfolio");
+
+const projects = sortByDate(filterByDraft(allProjects), "date");
+
+const featuredProjects = filterByFeatured(projects);
+const featuredProject = featuredProjects?.[0];
+
+const regularProjects = projects.filter((p) => !p.data.featured);
+
+const seoData = {
+  title: "Portfolio & Projects",
+  description:
+    "Koleksi karya digital, mulai dari web application, sistem desain, hingga eksperimen teknologi dan UI/UX modern.",
+  type: "website" as const,
+  canonicalURL: "/portfolio/"
+};
+---
+
+<BaseLayout {...seoData}>
+  <Section size="xl">
+    <Container size="lg">
+      <PortfolioHero />
+    </Container>
+  </Section>
+  <Section size="lg">
+    <Container size="lg">
+      {featuredProject && (
+        <div class="mb-10">
+          <PortfolioCard project={featuredProject} />
+        </div>
+      )}
+      <Grid cols="cards" gap="md">
+        {regularProjects.map((project) => (
+          <PortfolioCard project={project} />
+        ))}
+      </Grid>
+    </Container>
+  </Section>
+</BaseLayout>

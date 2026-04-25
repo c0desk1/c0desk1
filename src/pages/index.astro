@@ -1,0 +1,46 @@
+---
+// src/pages/index.astro
+
+import { getCollection } from "astro:content";
+import { sortByDate } from "@/lib/utils";
+import { siteConfig } from "@/config/site";
+
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+
+import Hero from "@/components/ui/Hero.astro";
+import BlogSection from "@/components/section/BlogSection.astro";
+import PortfolioSection from "@/components/section/PortfolioSection.astro";
+
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const blogPosts = sortByDate(allPosts).slice(0, 6);
+
+const allProjects = await getCollection("portfolio", ({ data }) => !data.draft);
+const portfolioProjects = sortByDate(allProjects, "date").slice(0, 2);
+
+const seoData = {
+  title: siteConfig.name,
+  description: siteConfig.description,
+  type: "website" as const,
+  canonicalURL: siteConfig.url,
+};
+---
+
+<BaseLayout {...seoData}>
+    <Section id="hero" size="xl" aria-label="Hero section">
+        <Container size="lg"> 
+            <Hero />
+        </Container>
+    </Section>
+    <Section id="blog" size="md" aria-label="Latest articles">
+        <Container size="lg">
+            <BlogSection posts={blogPosts} />
+        </Container>
+    </Section>
+    <Section id="portfolio" size="md" aria-label="Featured projects">
+        <Container size="lg">
+            <PortfolioSection projects={portfolioProjects} />
+        </Container>
+    </Section>
+</BaseLayout>

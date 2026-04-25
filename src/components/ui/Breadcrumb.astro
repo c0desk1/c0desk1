@@ -1,0 +1,61 @@
+---
+// src/components/ui/Breadcrumb.astro
+import { siteConfig } from "@/config/site";
+
+interface Props {
+  items: Array<{ name: string; href: string }>;
+}
+
+const { items = [] } = Astro.props;
+
+if (!items.length) return;
+
+const baseURL =
+  Astro.site ?? siteConfig.url ?? "https://c0desk1.my.id";
+
+const breadcrumbId = `${Astro.url.pathname}#breadcrumb`;
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "@id": breadcrumbId,
+
+  itemListElement: items.map((item, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    name: item.name,
+    item: new URL(item.href, baseURL).toString()
+  }))
+};
+---
+
+<nav aria-label="Breadcrumb" class="flex justify-center pb-8">
+  <ol class="flex flex-wrap items-center gap-x-2 text-xs md:text-sm text-zinc-400 dark:text-zinc-500">
+    {items.map((item, index) => (
+      <li class="flex items-center gap-x-2">
+        {index > 0 && (
+          <span aria-hidden="true" class="text-zinc-300 dark:text-zinc-700">
+            /
+          </span>
+        )}
+        {index === items.length - 1 ? (
+          <span aria-current="page" class="text-zinc-600 dark:text-zinc-400">
+            {item.name}
+          </span>
+        ) : (
+          <a
+            href={item.href}
+            class="hover:text-emerald-500 dark:hover:text-white transition"
+          >
+            {item.name}
+          </a>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(breadcrumbSchema)}
+/>

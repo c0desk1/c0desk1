@@ -1,0 +1,71 @@
+---
+// src/pages/blog/index.astro
+
+import { getCollection } from "astro:content";
+import { sortByDate } from "@/lib/utils";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import BlogHero from "@/components/blog/BlogHero.astro";
+import BlogList from "@/components/blog/BlogList.astro";
+
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+
+const posts = sortByDate(allPosts);
+
+const featuredPosts = posts.filter((p) => p.data.featured);
+const regularPosts = posts.filter((p) => !p.data.featured);
+
+const seoData = {
+  title: "Blog & Insights",
+  description:
+    "Catatan dari balik layar tentang sistem, kreativitas, dan eksplorasi dunia digital modern.",
+  type: "website" as const,
+  canonicalURL: "https://c0desk1.my.id/blog/"
+};
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: seoData.title,
+  description: seoData.description,
+  url: seoData.canonicalURL,
+  mainEntity: {
+    "@type": "ItemList",
+    numberOfItems: posts.length
+  }
+};
+---
+
+<BaseLayout {...seoData}>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <Section id="blog-hero" size="xl" aria-label="Blog introduction">
+    <Container size="lg">
+      <BlogHero />
+    </Container>
+  </Section>
+  {featuredPosts.length > 0 && (
+    <Section id="featured-posts" size="lg" aria-label="Featured articles">
+      <Container size="lg">
+        <h2 class="sr-only">
+          Featured Posts
+        </h2>
+        <BlogList
+          posts={featuredPosts}
+          variant="featured"
+        />
+      </Container>
+    </Section>
+  )}
+  <Section id="all-posts" size="lg" aria-label="All articles">
+    <Container size="lg">
+      <h2 class="sr-only">
+        All Posts
+      </h2>
+      <BlogList
+        posts={regularPosts}
+        variant="default"
+      />
+    </Container>
+  </Section>
+</BaseLayout>

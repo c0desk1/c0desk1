@@ -1,0 +1,13 @@
+---
+interface Props {}
+
+const symbol = "▼";
+---
+
+<div class="my-4 md:my-8 flex items-center gap-4" aria-hidden="true">
+  <div class="h-px flex-1 bg-black/20 dark:bg-white/5"></div>
+  <span class="text-zinc-400 dark:text-zinc-500 text-xs select-none">
+    {symbol}
+  </span>
+  <div class="h-px flex-1 bg-black/20 dark:bg-white/5"></div>
+</div>

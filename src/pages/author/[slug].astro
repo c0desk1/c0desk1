@@ -1,0 +1,146 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import { getCollection } from "astro:content";
+import { siteConfig } from "@/config/site";
+import { categoryLabels } from "@/config/blog";
+import { formatDateCompact } from "@/lib/utils";
+
+export async function getStaticPaths() {
+  return [{ params: { slug: siteConfig.author.slug } }];
+}
+
+const { slug } = Astro.params;
+
+const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+const authorPosts = posts
+  .filter(
+    (post) =>
+      (post.data.author?.slug || siteConfig.author.slug) === slug
+  )
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const author = siteConfig.author;
+
+const seo = {
+  title: `${author.name} — Writing`,
+  description: author.bio,
+  url: `${siteConfig.url}/author/${author.slug}/`,
+};
+---
+
+<!-- JSON-LD -->
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": `${seo.url}#person`,
+  name: author.name,
+  url: seo.url,
+  image: `${siteConfig.url}${author.avatar}`,
+  jobTitle: author.title,
+  description: author.bio,
+  sameAs: [
+    siteConfig.social.github,
+    siteConfig.social.twitter,
+    siteConfig.social.linkedin,
+  ],
+  worksFor: {
+    "@type": "Organization",
+    name: siteConfig.name,
+  },
+})} />
+
+<BaseLayout title={seo.title} description={seo.description}>
+  <Container size="md" class="py-16 md:py-20">
+
+    <!-- HEADER -->
+    <header class="mb-14 md:mb-16">
+
+      <div class="flex items-start justify-between gap-6">
+
+        <!-- AUTHOR INFO -->
+        <div class="flex items-center gap-4">
+
+          <img
+            src={author.avatar}
+            alt={author.name}
+            class="w-16 h-16 rounded-full object-cover border border-zinc-200 dark:border-zinc-800"
+            loading="eager"
+          />
+
+          <div>
+            <h1 class="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+              {author.name}
+            </h1>
+
+            <p class="text-sm text-zinc-500 dark:text-zinc-400">
+              {author.title}
+            </p>
+          </div>
+
+        </div>
+
+        <!-- STATS -->
+        <div class="text-right">
+          <p class="text-xs text-zinc-400 mb-1">Articles</p>
+          <p class="text-2xl font-light text-zinc-900 dark:text-zinc-100 tabular-nums">
+            {String(authorPosts.length).padStart(2, "0")}
+          </p>
+        </div>
+
+      </div>
+
+      <p class="mt-8 text-base leading-relaxed text-zinc-600 dark:text-zinc-400 max-w-2xl">
+        {author.bio}
+      </p>
+
+    </header>
+
+    <!-- GRID -->
+    <section class="relative border-t border-zinc-200 dark:border-zinc-800">
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+
+        {authorPosts.map((post) => (
+          <a
+            href={`/blog/${post.id}/`}
+            class="group relative flex flex-col p-6 md:p-8 border-l border-b border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900/30 transition-colors"
+          >
+
+            <!-- META -->
+            <div class="flex justify-between text-xs text-zinc-400 mb-5">
+              <span class="group-hover:text-zinc-900 dark:group-hover:text-zinc-200 transition">
+                {categoryLabels[post.data.category] ?? post.data.category}
+              </span>
+
+              <time datetime={post.data.pubDate.toISOString()}>
+                {formatDateCompact(post.data.pubDate)}
+              </time>
+            </div>
+
+            <!-- TITLE -->
+            <h2 class="text-lg font-medium text-zinc-900 dark:text-zinc-100 leading-snug line-clamp-3">
+              {post.data.title}
+            </h2>
+
+            <!-- DESC -->
+            <p class="mt-3 text-sm text-zinc-500 dark:text-zinc-400 line-clamp-4 flex-1">
+              {post.data.description}
+            </p>
+
+          </a>
+        ))}
+
+      </div>
+
+    </section>
+
+  </Container>
+</BaseLayout>
+
+<style>
+  h1, h2 {
+    letter-spacing: -0.02em;
+  }
+</style>
