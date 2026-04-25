@@ -18,28 +18,30 @@ export async function GET(context: any) {
 
     items: sorted.map((post) => {
       const url = new URL(`blog/${post.id}/`, site).toString();
-
       const authorName =
         post.data.author?.name || siteConfig.author.name;
-
       const category = post.data.category;
-
       const tags = post.data.tags ?? [];
+      const imageUrl = post.data.image ? new URL(post.data.image, site).toString() : null;
 
       return {
         title: post.data.title,
         link: url,
         pubDate: post.data.pubDate,
-
         description: post.data.description,
-
-        // SEO signal ringan & valid RSS
         categories: [
           category,
           ...tags
         ].filter(Boolean),
 
         author: authorName,
+        ...(imageUrl && {
+          enclosure: {
+            url: imageUrl,
+            length: 0,
+            type: 'image/jpeg',
+          },
+        }),
 
         guid: url
       };
