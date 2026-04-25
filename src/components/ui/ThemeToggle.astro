@@ -1,21 +1,20 @@
 ---
-// src/components/ui/ThemeToggle.astro
 import Icon from "./Icon.astro";
 ---
 
 <button 
   id="theme-toggle" 
   aria-label="Toggle theme" 
-  class="p-2 text-zinc-500 hover:text-zinc-900 rounded-full dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-all duration-200 cursor-pointer"
+  class="flex items-center justify-center p-2 text-zinc-500 hover:text-zinc-900 rounded-full dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-all duration-200 cursor-pointer"
 >
-  <div class="relative w-5 h-5">
-    <div id="theme-sun" class="absolute inset-0 transition-all duration-200 scale-100 dark:scale-0 opacity-100 dark:opacity-0">
+  <span class="relative inline-block w-5 h-5">
+    <span id="theme-sun" class="absolute inset-0 transition-all duration-200 scale-100 dark:scale-0 opacity-100 dark:opacity-0">
       <Icon name="sun" class="w-5 h-5" />
-    </div>
-    <div id="theme-moon" class="absolute inset-0 transition-all duration-200 scale-0 dark:scale-100 opacity-0 dark:opacity-100">
+    </span>
+    <span id="theme-moon" class="absolute inset-0 transition-all duration-200 scale-0 dark:scale-100 opacity-0 dark:opacity-100">
       <Icon name="moon" class="w-5 h-5" />
-    </div>
-  </div>
+    </span>
+  </span>
 </button>
 
 <script>
