@@ -10,17 +10,18 @@
   .steps-container {
     position: relative;
   }
+  
   .steps-container h3 {
     counter-increment: step;
     position: relative;
 
-    font-size: 0.95rem !important;
+    font-size: 1.25rem !important;
     font-weight: 600 !important;
 
     margin-top: 2.25rem !important;
     margin-bottom: 0.75rem !important;
 
-    line-height: 1.6rem !important;
+    line-height: 1.5rem !important;
     color: #18181b !important;
   }
 
@@ -37,7 +38,6 @@
     position: absolute;
     left: calc(-2.25rem - 0.875rem - 1px);
     top: 0;
-
     width: 1.75rem;
     height: 1.75rem;
     border-radius: 9999px;
@@ -59,14 +59,14 @@
 
   .steps-container p,
   .steps-container li {
-    font-size: 0.875rem;
-    line-height: 1.625rem !important;
-    color: #18181b;
+    font-size: 0.95rem;
+    line-height: 1.65rem !important;
+    color: #3f3f46;
   }
 
   .dark .steps-container p,
   .dark .steps-container li {
-    color: #e4e4e7;
+	color: #d4d4d8d2;
   }
 
   .steps-container ul,
@@ -105,7 +105,6 @@
   .steps-container ol > li::before {
     counter-increment: list-item;
     content: counter(list-item);
-
     position: absolute;
     left: 0.6rem;
     top: 0.15rem;
