@@ -171,7 +171,7 @@ const graph = {
 <meta name="twitter:title" content={formattedTitle} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={fullImageURL} />
-<meta name="twitter:creator" content={siteConfig.links?.twitter} />
+<meta name="twitter:creator" content={siteConfig.links?.twitter?.replace('https://twitter.com/', '@')} />
 
 <!-- PERFORMANCE -->
 <link rel="preload" href="/fonts/Geist.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
