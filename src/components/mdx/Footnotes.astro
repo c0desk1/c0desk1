@@ -15,13 +15,13 @@ const { sources } = Astro.props;
 ---
 
 <section class="section-divider mt-16 pt-8 not-prose">
-  <p class="text-[11px] font-bold tracking-[0.2em] text-zinc-400 mb-6">
+  <h3 class="text-[13px] font-semibold text-zinc-400 mb-6">
     Referensi
-  </p>
+  </h3>
   <ol class="space-y-3">
     {sources.map((s) => (
       <li id={`fn-${s.id}`} class="group flex gap-3 text-[13px] text-zinc-500 dark:text-zinc-400 scroll-mt-32">
-        <span class="shrink-0 font-mono text-[10px] text-zinc-400 mt-1">[{s.id}]</span>
+        <span class="shrink-0 font-mono text-[11px] text-zinc-400 mt-1">[{s.id}]</span>
         <div class="leading-relaxed">
           {s.link ? (
             <a href={s.link} target="_blank" rel="noopener" class="hover:text-emerald-500">
