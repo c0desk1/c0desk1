@@ -41,13 +41,17 @@ const seoData = {
       <PortfolioHero />
     </Container>
   </Section>
+
   <Section size="lg">
     <Container size="lg">
+      <h2 class="sr-only">Featured Project</h2>
       {featuredProject && (
         <div class="mb-10">
           <PortfolioCard project={featuredProject} />
         </div>
       )}
+
+      <h2 class="sr-only">All Projects</h2>
       <Grid cols="cards" gap="md">
         {regularProjects.map((project) => (
           <PortfolioCard project={project} />
