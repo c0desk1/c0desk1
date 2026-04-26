@@ -39,16 +39,22 @@ const seo = {
   "@context": "https://schema.org",
   "@type": "Person",
   "@id": `${seo.url}#person`,
-  name: author.name,
-  url: seo.url,
-  image: `${siteConfig.url}${author.avatar}`,
-  jobTitle: author.title,
-  description: author.bio,
-  mainEntityOfPage: {
-    "@type": "CollectionPage",
-    "@id": seo.url
+  "name": author.name,
+  "url": seo.url,
+  "image": {
+    "@type": "ImageObject",
+    "url": `${siteConfig.url}${author.avatar}`,
+    "width": 96,
+    "height": 96
   },
-  sameAs: [
+  "jobTitle": author.title,
+  "description": author.bio,
+  "mainEntityOfPage": {
+    "@type": "CollectionPage",
+    "@id": seo.url,
+    "name": `Artikel oleh ${author.name}`
+  },
+  "sameAs": [
     siteConfig.social?.github,
     siteConfig.social?.twitter,
     siteConfig.social?.linkedin,
