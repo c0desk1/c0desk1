@@ -107,7 +107,8 @@ const graph = {
       {
         "@type": "BlogPosting",
         "@id": `${canonical.toString()}#article`,
-        headline: title,
+        name: title,
+		headline: title,
         url: canonical.toString(),
 
         image: {
@@ -118,9 +119,10 @@ const graph = {
         },
 
         author: {
-          "@type": "Person",
-          name: siteConfig.author
-        },
+  		"@type": "Person",
+  		"name": siteConfig.author.name,
+  		"url": `${siteURL}/author/${siteConfig.author.slug}/`
+		},
 
         publisher: { "@id": `${siteURL}#organization` },
 
@@ -181,8 +183,8 @@ const graph = {
 
 <!-- VERIFICATION -->
 <meta name="google-site-verification" content="ZxoHYWipAMoGhvwVi5nxolWsZOntrYkNkVcG9HTfFZQ" />
-<meta name="yandex-verification" content="1878480c0d7b5510" />
 <meta name="google-adsense-account" content="ca-pub-4943136052113535">
+<meta name="yandex-verification" content="1878480c0d7b5510" />
 
 <!-- <Analytics /> -->
 <!-- <Ads /> -->
