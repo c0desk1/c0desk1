@@ -139,7 +139,7 @@ const webPageSchema = shouldRenderWebPage ? [{
   "description": description,
   "inLanguage": "id-ID",
   "isPartOf": { "@id": `${siteURL}#website` },
-  "about": type === "profile" ? { "@id": `${siteURL}#person` } : { "@id": `${siteURL}#organization` }
+  "about": type === "profile" ? { "@id": `${siteURL}#person` } : { "@id": `${siteURL}#organization` },
   "primaryImageOfPage": {
     "@type": "ImageObject",
     "url": fullImageURL
