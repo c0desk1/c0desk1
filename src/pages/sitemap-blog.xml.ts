@@ -12,22 +12,32 @@ export const GET: APIRoute = async () => {
     b.data.pubDate.getTime() - a.data.pubDate.getTime()
   );
 
-  const postsSitemap = sortedPosts.map(post => `
+  const postsSitemap = sortedPosts.map(post => {
+    const lastModDate = post.data.updatedDate || post.data.pubDate;
+    return `
   <url>
     <loc>${new URL(`blog/${post.id}/`, siteUrl).toString()}</loc>
-    <lastmod>${post.data.updatedDate?.toISOString() || post.data.pubDate.toISOString()}</lastmod>
-  </url>`).join('');
+    <lastmod>${lastModDate.toISOString()}</lastmod>
+  </url>`;
+  }).join('');
+
+  const latestPost = sortedPosts[0];
+  const indexLastMod = latestPost 
+    ? (latestPost.data.updatedDate || latestPost.data.pubDate).toISOString()
+    : new Date().toISOString();
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>${new URL('blog/', siteUrl).toString()}</loc>
-    <lastmod>${sortedPosts[0]?.data.pubDate.toISOString()}</lastmod>
-  </url>
-  ${postsSitemap}
+    <lastmod>${indexLastMod}</lastmod>
+  </url>${postsSitemap}
 </urlset>`;
 
   return new Response(sitemap, {
-    headers: { 'Content-Type': 'application/xml' },
+    headers: { 
+      'Content-Type': 'application/xml',
+      'Cache-Control': 'public, max-age=0, must-revalidate'
+    },
   });
 };
