@@ -139,7 +139,7 @@ const webPageSchema = shouldRenderWebPage ? [{
   "description": description,
   "inLanguage": "id-ID",
   "isPartOf": { "@id": `${siteURL}#website` },
-  "about": { "@id": `${siteURL}#organization` },
+  "about": type === "profile" ? { "@id": `${siteURL}#person` } : { "@id": `${siteURL}#organization` }
   "primaryImageOfPage": {
     "@type": "ImageObject",
     "url": fullImageURL
@@ -173,26 +173,6 @@ const articleSchema = type === "article" ? [{
   "keywords": tags.length ? tags.join(", ") : undefined
 }] : [];
 
-// BreadcrumbList
-const breadcrumbSchema = !isHomepage ? [{
-  "@type": "BreadcrumbList",
-  "@id": `${canonical.toString()}#breadcrumb`,
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Beranda",
-      "item": siteURL
-    },
-    {
-      "@type": "ListItem",
-      "position": 2,
-      "name": title || "Halaman",
-      "item": canonical.toString()
-    }
-  ]
-}] : [];
-
 const graph = {
   "@context": "https://schema.org",
   "@graph": [
@@ -200,8 +180,7 @@ const graph = {
     personSchema,
     ...websiteSchema,
     ...webPageSchema,
-    ...articleSchema,
-    ...breadcrumbSchema
+    ...articleSchema
   ]
 };
 ---
@@ -243,7 +222,6 @@ const graph = {
 
 <!-- SOCIAL MEDIA -->
 <meta name="pinterest-rich-pin" content="true" />
-<meta property="fb:app_id" content="YOUR_APP_ID" />
 
 <!-- PERFORMANCE -->
 <link rel="preload" href="/fonts/Geist.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
