@@ -26,14 +26,48 @@ const seoData = {
 
 const schema = {
   "@context": "https://schema.org",
-  "@type": "CollectionPage",
-  name: seoData.title,
-  description: seoData.description,
-  url: seoData.canonicalURL,
-  mainEntity: {
-    "@type": "ItemList",
-    numberOfItems: posts.length
-  }
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": `${seoData.canonicalURL}#collectionpage`,
+      "url": seoData.canonicalURL,
+      "name": seoData.title,
+      "description": seoData.description,
+      "isPartOf": {
+        "@id": `${siteConfig.url}#website`
+      },
+      "breadcrumb": {
+        "@id": `${seoData.canonicalURL}#breadcrumb`
+      },
+      "mainEntity": {
+        "@type": "ItemList",
+        "numberOfItems": posts.length,
+        "itemListElement": posts.slice(0, 10).map((post, i) => ({
+          "@type": "ListItem",
+          "position": i + 1,
+          "url": `${siteConfig.url}blog/${post.id}/`,
+          "name": post.data.title
+        }))
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${seoData.canonicalURL}#breadcrumb`,
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": siteConfig.url
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog"
+        }
+      ]
+    }
+  ]
 };
 ---
 
