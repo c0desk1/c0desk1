@@ -13,6 +13,7 @@ interface Props {
   modifiedTime?: Date;
   tags?: string[];
   category?: string;
+  author?: any;
 
 }
 
@@ -26,6 +27,7 @@ const {
   modifiedTime,
   tags = [],
   category,
+  author,
 } = Astro.props;
 
 const siteURL = Astro.site?.toString() ?? siteConfig.url;
@@ -83,10 +85,10 @@ const organizationSchema = {
 const personSchema = {
   "@type": "Person",
   "@id": `${siteURL}#person`,
-  "name": siteConfig.author.name,
+  "name": author?.name || siteConfig.author.name,
   "url": new URL(`author/${siteConfig.author.slug}/`, siteURL).toString(),
   "jobTitle": "Music Producer, Stock Contributor, Developer",
-  "description": siteConfig.author.bio,
+  "description": author?.bio || siteConfig.author.bio,
   "knowsAbout": [
     "FL Studio", 
     "Music Production", 
@@ -190,12 +192,27 @@ const graph = {
 };
 ---
 
-<!-- BASIC SEO -->
+<!-- BASIC -->
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>{formattedTitle}</title>
 <meta name="description" content={description} />
+<meta name="author" content={siteConfig.author.name} />
+
+<meta name="format-detection" content="telephone=no, date=no, email=no, address=no" />
+<meta name="msapplication-TileColor" content="#38B66B" />
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+
+<!-- Canonical -->
 <link rel="canonical" href={canonical.toString()} />
+
+<!-- Favicon -->
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest" />
 
 <!-- ROBOTS -->
 {noIndex ? (
@@ -228,8 +245,24 @@ const graph = {
 <!-- SOCIAL MEDIA -->
 <meta name="pinterest-rich-pin" content="true" />
 
+{type === "article" && (
+  <>
+    {publishedTime && <meta property="article:published_time" content={publishedTime.toISOString()} />}
+    {modifiedTime && <meta property="article:modified_time" content={modifiedTime.toISOString()} />}
+    
+    <meta property="article:author" content={author?.name || siteConfig.author.name} />
+    
+    {category && <meta property="article:section" content={category} />}
+    
+    {tags.map((tag) => (
+      <meta property="article:tag" content={tag} />
+    ))}
+  </>
+)}
+
 <!-- PERFORMANCE -->
 <link rel="preload" href="/fonts/Geist.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="preconnect" href="https://c0desk1-api.dev-c0desk1.workers.dev" />
 
 <!-- STRUCTURED DATA -->
 <script type="application/ld+json" set:html={JSON.stringify(graph)} />
