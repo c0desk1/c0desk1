@@ -4,25 +4,12 @@ Allow: /rss.xml
 
 User-agent: *
 Allow: /
-Allow: /blog/
-Allow: /portfolio/
-Allow: /about/
-Allow: /author/
-Allow: /category/
-Allow: /sitemap*.xml
-Allow: /rss.xml
-Allow: /favicon.ico
-Allow: /favicon.svg
-Allow: /apple-touch-icon.png
-
 Disallow: /404/
 Disallow: /api/
+Disallow: /category/
 
 User-agent: Googlebot
 Allow: /
-Allow: /blog/
-Allow: /portfolio/
-Allow: /about/
 
 User-agent: Yandex
 Allow: /
