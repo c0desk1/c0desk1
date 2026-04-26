@@ -1,0 +1,44 @@
+name: Telegram Notification
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/content/blog/**.mdx'
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Get New Post Data and Notify
+        run: |
+          # Cari file .md yang baru ditambahkan atau diubah di commit terakhir
+          NEW_FILE=$(git diff --name-only HEAD^ HEAD | grep 'src/content/blog/.*\.md' | head -n 1)
+          
+          if [ -z "$NEW_FILE" ]; then
+            echo "Gak ada postingan baru. Skip."
+            exit 0
+          fi
+
+          # Ekstrak Judul dan Deskripsi dari Frontmatter (pake grep sederhana)
+          TITLE=$(grep '^title:' "$NEW_FILE" | sed 's/title: //;s/"//g;s/'\''//g')
+          DESC=$(grep '^description:' "$NEW_FILE" | sed 's/description: //;s/"//g;s/'\''//g')
+          SLUG=$(basename "$NEW_FILE" .md)
+          URL="https://c0desk1.my.id/blog/$SLUG"
+
+          echo "Mengirim notifikasi untuk: $TITLE"
+
+          curl -X POST "${{ secrets.TG_ENGINE_URL }}/api/broadcast" \
+            -H "Authorization: Bearer ${{ secrets.TG_ENGINE_ADMIN_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"title\": \"$TITLE\",
+              \"description\": \"$DESC\",
+              \"url\": \"$URL\"
+            }"
