@@ -2,37 +2,57 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Container from '@/components/ui/Container.astro';
 import Button from '@/components/ui/Button.astro';
+import { siteConfig } from '@/config/site';
+
+const siteURL = Astro.site?.toString()?? siteConfig.url;
+const canonicalURL = new URL('404/', siteURL).toString();
+
+const seoData = {
+  title: "404 - Page Not Found",
+  description: "Halaman yang kamu cari tidak ditemukan.",
+  noIndex: true,
+  type: "website" as const
+};
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": `${canonicalURL}#webpage`,
+  "url": canonicalURL,
+  "name": "404 - Page Not Found"
+};
 ---
 
-<BaseLayout title="404: Tidak ditemukan">
+<BaseLayout {...seoData}>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
   <Container size="md" class="py-8 md:py-16">
     <div class="flex flex-col items-center justify-center py-20 md:py-32 text-center">
-    <span class="text-sm text-zinc-400 dark:text-zinc-600 mb-4">
-      Error 404
-    </span>
-    
-    <h2 class="text-4xl md:text-5xl font-bold tracking-tighter mb-6">
-      Page not found.
-    </h2>
-    
-    <p class="text-zinc-500 dark:text-zinc-400 max-w-md leading-relaxed mb-10">
-      Halaman yang Anda cari tidak ada atau telah dipindahkan ke alamat lain.
-    </p>
+      <span class="text-sm text-zinc-400 dark:text-zinc-600 mb-4">
+        Error 404
+      </span>
+      
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tighter mb-6">
+        Page not found.
+      </h1>
+      
+      <p class="text-zinc-500 dark:text-zinc-400 max-w-md leading-relaxed mb-10">
+        Halaman yang Anda cari tidak ada atau telah dipindahkan ke alamat lain.
+      </p>
 
-    <div class="flex flex-col sm:flex-row items-center gap-4">
-      <Button href="/blog/" variant="secondary" size="md">
-        Baca Blog
-      </Button>
-      <Button href="/" variant="secondary" size="md">
-        Halaman depan
-      </Button>
-    </div>
+      <div class="flex flex-col sm:flex-row items-center gap-4">
+        <Button href={new URL('blog/', siteURL).toString()} variant="secondary" size="md">
+          Baca Blog
+        </Button>
+        <Button href={siteURL} variant="secondary" size="md">
+          Halaman depan
+        </Button>
+      </div>
 
-    <div class="mt-20 opacity-10 dark:opacity-5">
-      <svg class="w-12 h-12" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M2 4h20L12 21Z" />
-      </svg>
+      <div class="mt-20 opacity-10 dark:opacity-5">
+        <svg class="w-12 h-12" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M2 4h20L12 21Z" />
+        </svg>
+      </div>
     </div>
-  </div>
   </Container>
 </BaseLayout>
