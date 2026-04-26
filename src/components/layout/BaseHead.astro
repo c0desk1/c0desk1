@@ -128,8 +128,12 @@ const websiteSchema = isHomepage ? [{
     "target": {
       "@type": "EntryPoint",
       "urlTemplate": siteURL + "?q={search_term_string}"
-	},
-    "query-input": "required name=search_term_string"
+    },
+    "query-input": {
+      "@type": "PropertyValueSpecification",
+      "valueRequired": true,
+      "valueName": "search_term_string"
+    }
   }
 }] : [];
 
