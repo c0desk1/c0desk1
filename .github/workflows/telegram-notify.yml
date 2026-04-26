@@ -19,7 +19,7 @@ jobs:
 
       - name: Detect and Notify
         run: |
-          # Ambil file MD/MDX yang berubah di commit terakhir
+          # Cari file yang berubah
           CHANGED_FILE=$(git diff --name-only HEAD^ HEAD | grep -E 'src/content/(blog|portfolio)/.*\.(md|mdx)' | head -n 1)
           
           if [ -z "$CHANGED_FILE" ]; then
@@ -27,13 +27,33 @@ jobs:
             exit 0
           fi
 
-          # Tentukan Tipe & Base Path
+          # Tentukan Tipe
           if [[ "$CHANGED_FILE" == *"blog"* ]]; then
             TYPE="Blog Post"
             BASE_PATH="blog"
           else
             TYPE="Project"
             BASE_PATH="portfolio"
+          fi
+
+          # Ekstrak Frontmatter (pake sed yang lebih bersih)
+          TITLE=$(grep '^title:' "$CHANGED_FILE" | head -1 | sed 's/title: //;s/"//g;s/'\''//g')
+          DESC=$(grep -E '^(description|synopsis):' "$CHANGED_FILE" | head -1 | sed -E 's/^(description|synopsis): //;s/"//g;s/'\''//g')
+          
+          # Ambil ID Gambar
+          FILE_ID=$(grep '^image:' "$CHANGED_FILE" | head -1 | sed 's/image: //;s/"//g;s/'\''//g' | grep -oE '[^/]+$' || echo "")
+          
+          # Buat Slug
+          SLUG=$(basename "$CHANGED_FILE" | sed -E 's/\.(md|mdx)$//')
+          URL="https://c0desk1.my.id/$BASE_PATH/$SLUG"
+
+          echo "🚀 Sending to Telegram: [$TYPE] $TITLE"
+
+          # Eksekusi Broadcast
+          curl -X POST "${{ secrets.TG_ENGINE_URL }}/api/broadcast" \
+            -H "Authorization: Bearer ${{ secrets.TG_ENGINE_ADMIN_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"title\": \"[$TYPE] $TITLE\", \"description\": \"$DESC\", \"url\": \"$URL\", \"fileId\": \"$FILE_ID\"}"
           fi
 
           # Ekstrak Data Frontmatter
