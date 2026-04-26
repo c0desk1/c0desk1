@@ -5,12 +5,12 @@ import Container from '@/components/ui/Container.astro';
 import Breadcrumb from '@/components/ui/Breadcrumb.astro';
 import { siteConfig } from '@/config/site';
 
-const siteURL = Astro.site?.toString()?? siteConfig.url;
-const canonicalURL = new URL(Astro.url.pathname, siteURL).toString(); // /about/
+const siteURL = Astro.site?.toString() ?? siteConfig.url;
+const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
 const seoData = {
   title: "Tentang",
-  description: "Tentang saya dan cara saya membangun pengalaman digital.",
+  description: "Music producer, Adobe Stock contributor, dan developer dari Indonesia. Ngulik teknologi, game, anime, dan workflow kreatif. Bikin audio, visual, dan sistem otomasi buat kreator yang males ribet.",
   type: "website" as const
 };
 
@@ -28,34 +28,17 @@ const schema = {
       "url": canonicalURL,
       "name": "Tentang c0desk1",
       "description": seoData.description,
-      "isPartOf": {
-        "@id": `${siteURL}#website`
-      },
-      "about": {
-        "@id": `${siteURL}#person`
-      },
-      "breadcrumb": {
-        "@id": `${canonicalURL}#breadcrumb`
-      },
-      "mainEntity": {
-        "@id": `${siteURL}#person`
-      }
+      "isPartOf": { "@id": `${siteURL}#website` },
+      "about": { "@id": `${siteURL}#person` },
+      "breadcrumb": { "@id": `${canonicalURL}#breadcrumb` },
+      "mainEntity": { "@id": `${siteURL}#person` }
     },
     {
       "@type": "BreadcrumbList",
       "@id": `${canonicalURL}#breadcrumb`,
       "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": siteURL
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Tentang"
-        }
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": siteURL },
+        { "@type": "ListItem", "position": 2, "name": "Tentang" }
       ]
     }
   ]
@@ -67,57 +50,112 @@ const schema = {
   <div class="border-b border-zinc-100 dark:border-zinc-900">
     <Container size="md" class="py-12 md:py-16">
       <Breadcrumb items={breadcrumbItems} />
-      <div class="space-y-4 mt-6 text-center">
+      <div class="space-y-6 mt-6 text-center">
         <h1 class="text-4xl md:text-6xl font-semibold tracking-tight text-zinc-900 dark:text-white">
-          Tentang
+          Tentang c0desk1
         </h1>
-        <p class="text-base md:text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
-          {siteConfig.author.bio}
+        <p class="text-base md:text-lg leading-relaxed text-zinc-600 dark:text-zinc-400 max-w-3xl mx-auto">
+          Gue {siteConfig.author.name}. Music producer yang pake FL Studio, stock contributor di Adobe Stock, dan developer yang suka ngotomasi hal-hal repetitif. Intinya: kalau bisa diautomasi, ngapain manual.
         </p>
       </div>
     </Container>
   </div>
   <Container size="md" class="py-12 md:py-16">
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-16">
-      <div class="space-y-12">
+      <div class="space-y-16">
         <section>
-          <h2 class="text-sm font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-4">
-            Tentang
+          <h2 class="text-sm font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-6">
+            Kenapa c0desk1
           </h2>
-          <p class="text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
-            Saya {siteConfig.author.name}, frontend engineer dari Indonesia. Fokus pada performa, aksesibilitas, dan UI yang jelas.
-          </p>
+          <div class="space-y-4 text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p>
+              Awalnya cuma nyari cara biar kerjaan kreatif ga makan waktu. Bikin beat di FL Studio kelamaan? Bikin preset. Upload foto ke Adobe Stock satu-satu capek? Bikin script. Deploy website bolak-balik ke dashboard? Automasi pake CI/CD.
+            </p>
+            <p>
+              Lama-lama sadar, banyak kreator ngalamin masalah yang sama. Sibuk beresin teknis sampe lupa berkarya. Dari situ c0desk1 lahir — tempat gue dokumentasiin semua workflow, tools, dan eksperimen biar orang lain ga perlu ngulang mistake yang sama.
+            </p>
+          </div>
         </section>
-        
+
         <section>
-          <h2 class="text-sm font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-4">
-            Focus
+          <h2 class="text-sm font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-6">
+            Yang gue kerjain
           </h2>
-          <div class="space-y-3">
-            <p class="text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
-              Fokus membangun produk web yang cepat, accessible, dan maintainable. 
-            </p>
-            <p class="text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
-              Eksplorasi workflow modern dengan Astro, TypeScript, dan AI tools untuk automasi.
-            </p>
+          <div class="space-y-6">
+            <div>
+              <h3 class="text-lg font-medium text-zinc-900 dark:text-white mb-2">Music Production</h3>
+              <p class="text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                Bikin beat, sound design, dan scoring pake FL Studio. Spesialis di musik buat konten: YouTube, podcast, game indie. Suka eksperimen genre — dari lo-fi buat anime AMV sampe synthwave buat tech review. 
+              </p>
+            </div>
+            <div>
+              <h3 class="text-lg font-medium text-zinc-900 dark:text-white mb-2">Stock Contributor</h3>
+              <p class="text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                Aktif jual aset foto & video di Adobe Stock. Fokus di niche tech, workspace, gaming setup, dan abstract visual yang sering dibutuhin kreator. Udah tembus ribuan download karena ngerti apa yang dicari buyer.
+              </p>
+            </div>
+            <div>
+              <h3 class="text-lg font-medium text-zinc-900 dark:text-white mb-2">Developer</h3>
+              <p class="text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                Ngoding tools buat automasi workflow kreatif. Metadata generator buat Adobe Stock, script PowerShell buat batch processing, sampe web app pake Astro + TypeScript. Prinsipnya: kalau gue ngulang 3x, berarti harus diautomasi.
+              </p>
+            </div>
+            <div>
+              <h3 class="text-lg font-medium text-zinc-900 dark:text-white mb-2">Content & Eksplorasi</h3>
+              <p class="text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                Bahas teknologi, game, anime, dan hal unik lainnya dari sudut pandang kreator. Bukan review doang — tapi gimana workflow di baliknya. Contoh: workflow bikin animasi 3D sinematik, atau cara setup FL Studio biar ga nge-lag pas live.
+              </p>
+            </div>
           </div>
         </section>
         
         <section>
-          <h2 class="text-sm font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-4">
-            Tools
+          <h2 class="text-sm font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-6">
+            Tools & Tech Stack
           </h2>
-          <div class="flex flex-wrap gap-2">
-            {["Astro", "Tailwind CSS", "TypeScript", "React", "Figma", "Vercel"].map((t) => (
-              <span class="px-2.5 py-1 text-sm text-zinc-600 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800">
-                {t}
-              </span>
-            ))}
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="text-sm font-medium text-zinc-900 dark:text-white mb-3">Creative</h3>
+              <div class="flex flex-wrap gap-2">
+                {["FL Studio", "Adobe Stock", "Photoshop", "Premiere Pro", "Blender"].map((t) => (
+                  <span class="px-2.5 py-1 text-sm text-zinc-600 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h3 class="text-sm font-medium text-zinc-900 dark:text-white mb-3">Development</h3>
+              <div class="flex flex-wrap gap-2">
+                {["Astro", "TypeScript", "Tailwind CSS", "Python", "PowerShell", "Vercel"].map((t) => (
+                  <span class="px-2.5 py-1 text-sm text-zinc-600 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 class="text-sm font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-6">
+            Prinsip Kerja
+          </h2>
+          <div class="space-y-4">
+            <p class="text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
+              <strong class="text-zinc-900 dark:text-white">1. Automate the boring stuff.</strong> Waktu kreator harusnya dipake mikir ide, bukan rename file 200x.
+            </p>
+            <p class="text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
+              <strong class="text-zinc-900 dark:text-white">2. Build in public.</strong> Semua eksperimen, gagal, berhasil — gue share. Biar orang lain bisa skip bagian trial-error.
+            </p>
+            <p class="text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
+              <strong class="text-zinc-900 dark:text-white">3. Medium ga penting, output yang penting.</strong> Mau beat, foto, kode, artikel — kalau bisa bikin workflow orang lain lebih cepat, gue bikin.
+            </p>
           </div>
         </section>
       </div>
       
-      <aside class="space-y-8">
+      <aside class="space-y-8 lg:sticky lg:top-24 lg:self-start">
         <div>
           <h3 class="text-xs font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-3">
             Contact
@@ -129,6 +167,9 @@ const schema = {
             <a href={siteConfig.links.github} class="block text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
               GitHub
             </a>
+            <a href={siteConfig.social?.twitter} class="block text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
+              Twitter / X
+            </a>
           </div>
         </div>
         
@@ -139,7 +180,7 @@ const schema = {
           <div class="flex items-center gap-2">
             <span class="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
             <p class="text-sm text-zinc-600 dark:text-zinc-400">
-              Not available for work
+              Building in public
             </p>
           </div>
         </div>
@@ -149,8 +190,19 @@ const schema = {
             Location
           </h3>
           <p class="text-sm text-zinc-600 dark:text-zinc-400">
-            Indonesia <span class="text-zinc-400 dark:text-zinc-600">(UTC+7)</span>
+            Pekanbaru, Indonesia <span class="text-zinc-400 dark:text-zinc-600">(UTC+7)</span>
           </p>
+        </div>
+
+        <div>
+          <h3 class="text-xs font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-3">
+            Currently
+          </h3>
+          <div class="space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
+            <p>• Eksperimen AI metadata generator</p>
+            <p>• Produksi beat pack buat YouTuber</p>
+            <p>• Nulis workflow automasi Adobe Stock</p>
+          </div>
         </div>
       </aside>
     </div>
