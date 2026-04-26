@@ -127,7 +127,7 @@ const websiteSchema = isHomepage ? [{
     "@type": "SearchAction",
     "target": {
       "@type": "EntryPoint",
-      "urlTemplate": new URL("search/?q={search_term_string}", siteURL).toString()
+      "urlTemplate": new URL("search/", siteURL).toString() + "?q={search_term_string}"
     },
     "query-input": "required name=search_term_string"
   }
