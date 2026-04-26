@@ -17,4 +17,10 @@ export default defineConfig({
     // sitemap(), 
     mdx(),
   ],
+  image: {
+    domains: [
+		'c0desk1-api.dev-c0desk1.workers.dev',
+		'api.telegram.org'
+	],
+  },
 });
