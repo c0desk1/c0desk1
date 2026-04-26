@@ -12,6 +12,8 @@ interface Props {
   publishedTime?: Date;
   modifiedTime?: Date;
   tags?: string[];
+  category: string;
+
 }
 
 const {
@@ -22,7 +24,8 @@ const {
   noIndex = false,
   publishedTime,
   modifiedTime,
-  tags = []
+  tags = [],
+  category,
 } = Astro.props;
 
 const siteURL = Astro.site?.toString() ?? siteConfig.url;
@@ -170,7 +173,8 @@ const articleSchema = type === "article" ? [{
   },
   "datePublished": publishedTime?.toISOString(),
   "dateModified": modifiedTime?.toISOString() ?? publishedTime?.toISOString(),
-  "keywords": tags.length ? tags.join(", ") : undefined
+  "keywords": tags.length ? tags.join(", ") : undefined,
+  "articleSection": category
 }] : [];
 
 const graph = {
