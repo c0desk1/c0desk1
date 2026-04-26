@@ -14,5 +14,8 @@ Allow: /
 User-agent: Yandex
 Allow: /
 
+User-agent: Bingbot
+Allow: /
+
 Sitemap: https://c0desk1.my.id/sitemap-index.xml
 Sitemap: https://c0desk1.my.id/rss.xml
