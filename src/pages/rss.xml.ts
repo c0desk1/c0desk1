@@ -18,6 +18,7 @@ export async function GET(context: any) {
     site,
     items: await Promise.all(sorted.map(async (post) => {
       const url = new URL(`blog/${post.id}/`, site).toString();
+      
       const authorEntry = await getEntry(post.data.author);
       const authorName = authorEntry?.data.name || siteConfig.author.name;
       

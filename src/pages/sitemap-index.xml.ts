@@ -25,7 +25,7 @@ ${sitemaps.map(sitemap => `  <sitemap>
   return new Response(sitemapIndex, {
     headers: { 
       'Content-Type': 'application/xml',
-      'Cache-Control': 'public, max-age=0, must-revalidate'
+      'Cache-Control': 'public, max-age=3600, s-maxage=3600'
     },
   });
 };

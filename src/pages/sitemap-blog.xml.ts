@@ -14,10 +14,13 @@ export const GET: APIRoute = async () => {
 
   const postsSitemap = sortedPosts.map(post => {
     const lastModDate = post.data.updatedDate || post.data.pubDate;
+    
     return `
   <url>
     <loc>${new URL(`blog/${post.id}/`, siteUrl).toString()}</loc>
     <lastmod>${lastModDate.toISOString()}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>`;
   }).join('');
 
@@ -31,13 +34,15 @@ export const GET: APIRoute = async () => {
   <url>
     <loc>${new URL('blog/', siteUrl).toString()}</loc>
     <lastmod>${indexLastMod}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
   </url>${postsSitemap}
 </urlset>`;
 
   return new Response(sitemap, {
     headers: { 
       'Content-Type': 'application/xml',
-      'Cache-Control': 'public, max-age=0, must-revalidate'
+      'Cache-Control': 'public, max-age=3600, s-maxage=3600'
     },
   });
 };

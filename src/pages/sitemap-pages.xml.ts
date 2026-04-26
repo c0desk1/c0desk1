@@ -5,8 +5,8 @@ import { siteConfig } from '@/config/site';
 const siteUrl = siteConfig.url;
 
 const pages = [
-  { url: '' },
-  { url: 'about/' },
+  { url: '', priority: '1.0', changefreq: 'daily' },
+  { url: 'about/', priority: '0.9', changefreq: 'monthly' },
 ];
 
 export const GET: APIRoute = () => {
@@ -17,13 +17,15 @@ export const GET: APIRoute = () => {
 ${pages.map(page => `  <url>
     <loc>${new URL(page.url, siteUrl).toString()}</loc>
     <lastmod>${buildDate}</lastmod>
+    <changefreq>${page.changefreq}</changefreq>
+    <priority>${page.priority}</priority>
   </url>`).join('\n')}
 </urlset>`;
 
   return new Response(sitemap, {
     headers: { 
       'Content-Type': 'application/xml',
-      'Cache-Control': 'public, max-age=0, must-revalidate'
+      'Cache-Control': 'public, max-age=3600, s-maxage=3600'
     },
   });
 };
