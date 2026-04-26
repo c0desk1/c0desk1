@@ -3,41 +3,32 @@
 import Icon from "./Icon.astro";
 ---
 
-<button 
-  id="search-button" 
-  aria-label="Search" 
-  class="hidden sm:flex items-center gap-2 px-3 py-1.5 text-sm text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white bg-zinc-50 dark:bg-zinc-900/50 hover:bg-zinc-100 dark:hover:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-800 transition-all duration-200"
+<button
+  id="search-trigger"
+  type="button"
+  aria-label="Search"
+  class="group relative flex items-center justify-center sm:justify-between gap-2 p-2 sm:px-3 sm:py-1.5 text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white sm:bg-zinc-100/50 sm:dark:bg-zinc-800/50 sm:border sm:border-zinc-200/60 sm:dark:border-zinc-800 rounded-md sm:rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800/80 sm:hover:border-zinc-300 dark:sm:hover:border-zinc-700 transition-all duration-200 cursor-pointer"
 >
-  <Icon name="search" class="w-4 h-4" />
-  <span>Search</span>
-</button>
-
-<button 
-  id="search-button-mobile" 
-  aria-label="Search" 
-  class="sm:hidden p-2 text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-all duration-200"
->
-  <Icon name="search" class="w-4 h-4" />
+  <div class="flex items-center gap-2">
+    <Icon name="search" class="w-4 h-4" />
+    <span class="hidden sm:inline text-sm text-zinc-400 dark:text-zinc-500">Cari...</span>
+  </div>
+  <kbd class="hidden sm:inline-flex items-center px-1.5 py-0.5 text-xs font-mono text-zinc-400 bg-white dark:bg-black border border-zinc-200/60 dark:border-zinc-800 rounded-sm">
+    ⌘+K
+  </kbd>
 </button>
 
 <script>
-  (function() {
-    const searchBtn = document.getElementById('search-button');
-    const searchBtnMobile = document.getElementById('search-button-mobile');
-    
-    const openSearch = () => {
-      const event = new CustomEvent('open-search', { bubbles: true });
-      document.dispatchEvent(event);
-    };
-    
-    if (searchBtn) searchBtn.addEventListener('click', openSearch);
-    if (searchBtnMobile) searchBtnMobile.addEventListener('click', openSearch);
-    
-    document.addEventListener('keydown', (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        openSearch();
-      }
-    });
-  })();
+  const openSearch = () => {
+    document.dispatchEvent(new CustomEvent("open-search"));
+  };
+
+  document.getElementById("search-trigger")?.addEventListener("click", openSearch);
+
+  document.addEventListener("keydown", (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+      e.preventDefault();
+      openSearch();
+    }
+  });
 </script>

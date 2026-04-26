@@ -4,6 +4,7 @@ import DesktopNav from "./DesktopNav.astro";
 import MobileNav from "./MobileNav.astro";
 import ThemeToggle from "@/components/ui/ThemeToggle.astro";
 import Container from "../ui/Container.astro";
+import SearchButton from "../ui/SearchButton.astro";
 ---
 
 <header class="sticky top-0 z-50 w-full border-b border-black/10 dark:border-white/10 bg-white dark:bg-black">
@@ -14,6 +15,7 @@ import Container from "../ui/Container.astro";
         <DesktopNav />
       </div>
       <div class="ml-auto flex items-center gap-2">
+        <SearchButton />
         <ThemeToggle />
         <MobileNav />
       </div>

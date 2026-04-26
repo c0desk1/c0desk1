@@ -1,0 +1,105 @@
+---
+// src/pages/search.astro
+
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import { getCollection } from "astro:content";
+import { siteConfig } from "@/config/site";
+import { categoryLabels } from "@/config/blog";
+import { formatDateCompact } from "@/lib/utils";
+
+const url = new URL(Astro.request.url);
+const rawQuery = url.searchParams.get("q") || "";
+const query = rawQuery.toLowerCase();
+
+const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+const results = query
+  ? posts.filter((post) => {
+      const title = post.data.title.toLowerCase();
+      const desc = post.data.description.toLowerCase();
+      const category = (post.data.category || "").toLowerCase();
+
+      return (
+        title.includes(query) ||
+        desc.includes(query) ||
+        category.includes(query)
+      );
+    })
+  : [];
+
+const seo = {
+  title: rawQuery ? `Search: ${rawQuery}` : "Search",
+  description: "Search articles on c0desk1",
+  canonicalURL: `${siteConfig.url}/search`,
+  url: `${siteConfig.url}/search?q=${encodeURIComponent(rawQuery)}`,
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "SearchResultsPage",
+  name: seo.title,
+  url: seo.url,
+})} />
+
+<BaseLayout 
+  title={seo.title} 
+  description={seo.description}
+  canonicalURL={seo.canonicalURL}
+  noIndex={true}
+>
+  <Container size="md" class="py-16">
+    <Section size="sm">
+      <h1 class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+        Cari
+      </h1>
+      <p class="mt-2 text-sm text-zinc-500">
+        Hasil: <span class="text-zinc-900 dark:text-zinc-100">{rawQuery || "—"}</span>
+      </p>
+    </Section>
+    <Section size="none">
+      <div class="relative">
+        <div class="absolute left-3 top-0 bottom-0 w-px bg-zinc-200/60 dark:bg-zinc-800/60" />
+        <div class="space-y-10">
+          {rawQuery && results.length > 0 && results.map((post) => (
+            <article class="relative pl-10 group">
+              <span class="absolute left-0 top-2 w-2.5 h-2.5 rounded-full bg-zinc-300 dark:bg-zinc-700 group-hover:bg-black dark:group-hover:bg-white transition" />
+              <a href={`/blog/${post.id}/`} class="block">
+                <div class="flex items-center justify-between text-[11px] text-zinc-400 uppercase tracking-wide">
+                  <span>
+                    {categoryLabels[post.data.category] ?? post.data.category}
+                  </span>
+                  <time datetime={post.data.pubDate.toISOString()}>
+                    {formatDateCompact(post.data.pubDate)}
+                  </time>
+                </div>
+                <h2 class="mt-1 text-base font-medium text-zinc-900 dark:text-zinc-100 group-hover:text-black dark:group-hover:text-white transition">
+                  {post.data.title}
+                </h2>
+                <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400 line-clamp-2">
+                  {post.data.description}
+                </p>
+              </a>
+            </article>
+          ))}
+        </div>
+        {rawQuery && results.length === 0 && (
+          <div class="py-16 text-center">
+            <p class="text-sm text-zinc-500">
+              No results found for "{rawQuery}"
+            </p>
+          </div>
+        )}
+        {!rawQuery && (
+          <div class="py-16 text-center">
+            <p class="text-sm text-zinc-500">
+              Type a search query to find articles
+            </p>
+          </div>
+        )}
+      </div>
+    </Section>
+  </Container>
+</BaseLayout>
