@@ -15,25 +15,9 @@ const searchData = posts.map(p => ({
   category: p.data.category?.id || "",
   url: `/blog/${p.id}/`
 }));
-
-const searchSchema = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "@id": `${siteURL}#website`,
-  "url": siteURL,
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": {
-      "@type": "EntryPoint",
-      "urlTemplate": `${siteURL}?q={search_term_string}`
-    },
-    "query-input": "required name=search_term_string"
-  }
-};
+
 ---
-<Container size="md">
-  <script type="application/ld+json" set:html={JSON.stringify(searchSchema)} />
-
+<Container size="md">
   <div
     id="search-modal"
     class="fixed inset-0 z-50 hidden"
