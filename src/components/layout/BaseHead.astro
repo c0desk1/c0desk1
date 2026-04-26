@@ -1,9 +1,6 @@
 ---
 // src/components/layout/BaseHead.astro
-
 import { siteConfig } from "@/config/site";
-// import Analytics from "./Analytics.astro";
-// import Ads from "./Ads.astro";
 
 interface Props {
   title?: string;
@@ -29,126 +26,136 @@ const {
 } = Astro.props;
 
 const siteURL = Astro.site?.toString().replace(/\/$/, '') ?? siteConfig.url.replace(/\/$/, '');
-
 const canonical = Astro.props.canonicalURL
   ? new URL(Astro.props.canonicalURL, siteURL)
   : new URL(Astro.url.pathname, siteURL);
 
-const formattedTitle =
-  title && title !== siteConfig.name
-    ? `${title} | ${siteConfig.name}`
-    : siteConfig.name;
+const formattedTitle = title && title !== siteConfig.name ? `${title} | ${siteConfig.name}` : siteConfig.name;
 
 // ================= IMAGE =================
 let fullImageURL: string;
-
 if (!image) {
   fullImageURL = new URL(siteConfig.ogImage, siteURL).toString();
 } else if (typeof image === "string") {
-  fullImageURL = image.startsWith("http")
-    ? image
-    : new URL(image, siteURL).toString();
+  fullImageURL = image.startsWith("http") ? image : new URL(image, siteURL).toString();
 } else if (typeof image?.src === "string") {
   fullImageURL = new URL(image.src, siteURL).toString();
 } else {
   fullImageURL = new URL(siteConfig.ogImage, siteURL).toString();
 }
 
-const lastModified =
-  modifiedTime?.toISOString() ?? publishedTime?.toISOString();
+// ================= PAGE TYPE CHECK =================
+const pathname = Astro.url.pathname;
+const isHomepage = pathname === '/';
+const isBlogIndex = pathname === '/blog/' || pathname === '/blog';
+const isPortfolioIndex = pathname === '/portfolio/' || pathname === '/portfolio';
+const isAuthorPage = pathname.startsWith('/author/');
 
-// ================= SEO GRAPH =================
+// ================= SCHEMA GRAPH =================
+const organizationSchema = {
+  "@type": "Organization",
+  "@id": `${siteURL}#organization`,
+  "name": siteConfig.name,
+  "url": siteURL,
+  "logo": {
+    "@type": "ImageObject",
+    "url": new URL("/favicon.svg", siteURL).toString(),
+    "width": 512,
+    "height": 512
+  },
+  "sameAs": [
+    siteConfig.social?.github,
+    siteConfig.social?.twitter,
+    siteConfig.social?.linkedin,
+  ].filter(Boolean)
+};
+
+const personSchema = {
+  "@type": "Person",
+  "@id": `${siteURL}#person`,
+  "name": siteConfig.author.name,
+  "url": new URL(`/author/${siteConfig.author.slug}/`, siteURL).toString(),
+  "image": {
+    "@type": "ImageObject",
+    "url": new URL(siteConfig.author.avatar, siteURL).toString(),
+    "width": 96,
+    "height": 96
+  },
+  "worksFor": { "@id": `${siteURL}#organization` }
+};
+
+// WebSite + SearchAction
+const websiteSchema = isHomepage ? [{
+  "@type": "WebSite",
+  "@id": `${siteURL}#website`,
+  "url": siteURL,
+  "name": siteConfig.name,
+  "description": siteConfig.description,
+  "inLanguage": "id-ID",
+  "publisher": { "@id": `${siteURL}#organization` },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": `${siteURL}/search?q={search_term_string}`
+    },
+    "query-input": "required name=search_term_string"
+  }
+}] : [];
+
+// WebPage
+const shouldRenderWebPage = !isHomepage && !isBlogIndex && !isPortfolioIndex && !isAuthorPage && type !== "article";
+
+const webPageSchema = shouldRenderWebPage ? [{
+  "@type": "WebPage",
+  "@id": `${canonical.toString()}#webpage`,
+  "url": canonical.toString(),
+  "name": formattedTitle,
+  "description": description,
+  "inLanguage": "id-ID",
+  "isPartOf": { "@id": `${siteURL}#website` },
+  "about": { "@id": `${siteURL}#organization` },
+  "primaryImageOfPage": {
+    "@type": "ImageObject",
+    "url": fullImageURL
+  },
+  "breadcrumb": {
+    "@id": `${canonical.toString()}#breadcrumb`
+  }
+}] : [];
+
+// Article schema
+const articleSchema = type === "article" ? [{
+  "@type": "BlogPosting",
+  "@id": `${canonical.toString()}#article`,
+  "name": title,
+  "headline": title,
+  "description": description,
+  "url": canonical.toString(),
+  "image": {
+    "@type": "ImageObject",
+    "url": fullImageURL,
+    "width": 1200,
+    "height": 630
+  },
+  "author": { "@id": `${siteURL}#person` },
+  "publisher": { "@id": `${siteURL}#organization` },
+  "mainEntityOfPage": {
+    "@id": `${canonical.toString()}#webpage`
+  },
+  "datePublished": publishedTime?.toISOString(),
+  "dateModified": modifiedTime?.toISOString() ?? publishedTime?.toISOString(),
+  "keywords": tags.length ? tags.join(", ") : undefined
+}] : [];
+
 const graph = {
   "@context": "https://schema.org",
   "@graph": [
-    {
-      "@type": "WebSite",
-      "@id": `${siteURL}#website`,
-      "url": siteURL,
-      "name": siteConfig.name,
-      "description": siteConfig.description,
-      "inLanguage": "id-ID",
-      "publisher": { "@id": `${siteURL}#organization` },
-      "potentialAction": {
-      "@type": "SearchAction",
-        "target": {
-          "@type": "EntryPoint",
-          "urlTemplate": `${siteURL}/search?q={search_term_string}`
-        },
-        "query-input": "required name=search_term_string"
-      }
-    },
-    {
-      "@type": "Organization",
-      "@id": `${siteURL}#organization`,
-      "name": siteConfig.name,
-      "url": siteURL,
-      "logo": {
-        "@type": "ImageObject",
-        "url": new URL("/favicon.svg", siteURL).toString(),
-        "width": 512,
-        "height": 512
-      },
-      "sameAs": [
-        siteConfig.social?.github,
-        siteConfig.social?.twitter,
-        siteConfig.social?.linkedin,
-      ].filter(Boolean)
-    },
-    {
-      "@type": "Person",
-      "@id": `${siteURL}#person`,
-      "name": siteConfig.author.name,
-      "url": new URL(`/author/${siteConfig.author.slug}/`, siteURL).toString(),
-      "image": {
-        "@type": "ImageObject",
-        "url": new URL(siteConfig.author.avatar, siteURL).toString(),
-        "width": 96,
-        "height": 96
-      },
-      "worksFor": { "@id": `${siteURL}#organization` }
-    },
-    {
-      "@type": "WebPage",
-      "@id": `${canonical.toString()}#webpage`,
-      "url": canonical.toString(),
-      "name": formattedTitle,
-      "description": description,
-      "inLanguage": "id-ID",
-      "isPartOf": { "@id": `${siteURL}#website` },
-      "about": { "@id": `${siteURL}#organization` },
-      "primaryImageOfPage": {
-        "@type": "ImageObject",
-        "url": fullImageURL
-      },
-      "breadcrumb": {
-        "@id": `${canonical.toString()}#breadcrumb`
-      }
-    },
-    ...(type === "article" ? [
-      {
-        "@type": "BlogPosting",
-        "@id": `${canonical.toString()}#article`,
-        "name": title,
-        "headline": title,
-        "description": description,
-        "url": canonical.toString(),
-        "image": {
-          "@type": "ImageObject",
-          "url": fullImageURL,
-          "width": 1200,
-          "height": 630
-        },
-        "author": { "@id": `${siteURL}#person` },
-        "publisher": { "@id": `${siteURL}#organization` },
-        "mainEntityOfPage": {
-          "@id": `${canonical.toString()}#webpage`
-        },
-        "datePublished": publishedTime?.toISOString(),
-        "dateModified": lastModified,
-        "keywords": tags.length ? tags.join(", ") : undefined
-      }
-    ] : [])
+    organizationSchema,
+    personSchema,
+    ...websiteSchema,
+    ...webPageSchema,
+    ...articleSchema
   ]
 };
 ---
@@ -156,7 +163,6 @@ const graph = {
 <!-- BASIC SEO -->
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-
 <title>{formattedTitle}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonical.toString()} />
@@ -199,6 +205,3 @@ const graph = {
 <meta name="google-site-verification" content="ZxoHYWipAMoGhvwVi5nxolWsZOntrYkNkVcG9HTfFZQ" />
 <meta name="google-adsense-account" content="ca-pub-4943136052113535">
 <meta name="yandex-verification" content="1878480c0d7b5510" />
-
-<!-- <Analytics /> -->
-<!-- <Ads /> -->
