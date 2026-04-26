@@ -15,6 +15,7 @@ interface Props {
   publishedTime?: Date;
   modifiedTime?: Date;
   tags?: string[];
+  category?: string;
   header?: boolean;
   footer?: boolean;
   container?: boolean;
@@ -61,11 +62,6 @@ const {
         anonymize_ip: true,
         send_page_view: true
       });
-      document.addEventListener('astro:after-swap', () => {
-        gtag('event', 'page_view', {
-          page_path: window.location.pathname,
-        });
-      });
     </script>
   </head>
   <body class="bg-white dark:bg-black text-zinc-950 dark:text-zinc-50 font-medium">
@@ -99,9 +95,6 @@ const {
         url: location.href, 
         accurateTrackBounce: true, 
         trackLinks: true
-      });
-      document.addEventListener('astro:after-swap', () => {
-        ym(108731154, 'hit', window.location.href);
       });
     </script>
     <noscript>
