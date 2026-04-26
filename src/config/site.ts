@@ -16,10 +16,10 @@ export const siteConfig = {
     slug: "bima-akbar",
     avatar: "/images/author/author.jpg",
     title: "Author",
-    bio: "Hanya seorang amatiran yang menyukai hal-hal baru."
+    bio: "Music producer FL Studio, Adobe Stock contributor, dan developer. Suka ngulik teknologi, game, anime, dan hal-hal unik lainnya. Semua gue tuangin jadi musik, visual, atau tools biar workflow kreator lebih autopilot."
   } satisfies Author,
 
-  description: "Eksplorasi workflow digital, AI tools, musik, anime, dan game dari perspektif kreator modern yang membangun di era otomatisasi.",
+  description: Music producer, Adobe Stock contributor, dan developer. Bahas teknologi, game, anime, dan apapun yang gue anggap unik. Bikin audio, visual, dan sistem otomasi buat kreator.",
   url: "https://c0desk1.my.id/",
   ogImage: "/images/c0desk1-og.webp",
   keywords: [
