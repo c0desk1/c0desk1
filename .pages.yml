@@ -1,5 +1,3 @@
-# .pages.yml
-
 media:
   - name: images
     label: Image
@@ -29,39 +27,23 @@ media:
     output: /images/blog
     categories: [image]
 
-  - name: blog-og
-    label: Blog OG
-    input: public/images/blog/og
-    output: /images/blog/og
-    categories: [image]
-    
   - name: portfolio-images
     label: Portfolio Images
     input: public/images/portfolio
     output: /images/portfolio
     categories: [image]
 
-  - name: portfolio-gallery
-    label: Portfolio Gallery
-    input: public/images/portfolio/gallery
-    output: /images/portfolio/gallery
-    categories: [image]
-
-  - name: portfolio-og
-    label: Portfolio OG
-    input: public/images/portfolio/og
-    output: /images/portfolio/og
-    categories: [image]
-
-    
 content:
+  # ==========================================
+  # BLOG COLLECTION
+  # ==========================================
   - name: blog
     label: Blog Posts
     type: collection
     path: src/content/blog
     filename: "{primary}.mdx"
     view:
-      fields: [image, title, pubDate, draft, featured]
+      fields: [image.src, title, pubDate, draft]
       sort: ["pubDate desc"]
       
     fields:
@@ -69,319 +51,136 @@ content:
         label: Judul
         type: string
         required: true
-        options:
-          maxlength: 100
       
       - name: description
         label: Deskripsi
         type: text
         required: true
-        options:
-          maxlength: 160
-          rows: 3
       
       - name: pubDate
-        label: Tanggal
+        label: Tanggal Terbit
         type: date
         required: true
         options:
-          time: true
-          format: yyyy-MM-dd'T'HH:mm
-      
-      - name: updatedDate
-        label: Tanggal diperbarui
-        type: date
-        required: false
+          format: yyyy-MM-dd'T'HH:mm:ssXXX
+
+      - name: image
+        label: Cover Image
+        type: object
+        fields:
+          - name: src
+            label: Image File
+            type: image
+            options:
+              media: blog-images
+          - name: alt
+            label: Alt Text
+            type: string
+            required: true
+
+      - name: author
+        label: Author (Reference)
+        type: select
         options:
-          time: true
-          format: yyyy-MM-dd'T'HH:mm
-      
+          values: authors
+
+      - name: category
+        label: Kategori (Reference)
+        type: select
+        options:
+          values: categories
+
       - name: tags
         label: Tags
         type: string
         list: true
-        options:
-          max: 5
-      - name: category
-        label: Kategori
-        type: select
-        default: general
-        options:
-           values:
-              - name: general
-                label: General
-                
-              - name: web-dev
-                label: Web Develoment
-              - name: ai
-                label: AI
-                
-              - name: anime
-                label: Anime
-                
-              - name: automation
-                label: Automation
-                
-              - name: content-creator
-                label: Content Creator
-              - name: game
-                label: Game
-                
-              - name: tips
-                label: Tips
-                
-              - name: tutorials
-                label: Tutorial
-                
-              - name: workflow
-                label: Workflow
-      
-      - name: image
-        label: Cover
-        type: image
-        options:
-          media: blog-images
-          rename: true
-          
-      - name: image
-        label: cover
-        type: string
-      
-      - name: imageAlt
-        label: Alt
-        type: string
 
-      - name: imageCaption
-        label: Caption
-        type: string
-
-      - name: body
-        label: Konten
-        type: rich-text
-        options:
-          media: blog-images
-          switcher: true
-      
       - name: draft
-        label: Draft
+        label: Draft Mode
         type: boolean
         default: false
-      
+
       - name: featured
-        label: Unggulan
+        label: Featured Post
         type: boolean
         default: false
-      
-      - name: author
-        label: Author
-        type: object
-        fields:
-          - name: name
-            label: Nama
-            type: string
-            default: "Bima Akbar"
-            
-          - name: avatar
-            label: Avatar
-            type: image
-            options:
-              media: blog-author
-              rename: true
 
-          - name: avatar
-            label: Avatar
-            type: string
-            default: "https://c0desk1-api.dev-c0desk1.workers.dev/img/AgACAgUAAxkBAAMIae4rCILWne6NI4IwUwABigyHvpiqAAIdFGsbXxxwV5IOkWnp4HhKAQADAgADeAADOwQ"
-            
-          - name: title
-            label: Title
-            type: string
-            default: "Author"
-
-          - name: slug
-            label: Slug
-            type: string
-            default: "bima-akbar"
-      
       - name: seo
-        label: SEO
+        label: SEO Metadata
         type: object
         fields:
           - name: title
-            label: Judul
             type: string
-            options:
-              maxlength: 100
-              
           - name: description
-            label: Deskripsi
             type: text
-            options:
-              maxlength: 160
-              
-          - name: ogImage
-            label: Gambar OG
-            type: image
-            options:
-              media: blog-og
-              rename: true
-              
-          - name: ogImage
-            label: Gambar OG
-            type: string
-            
+          - name: noIndex
+            type: boolean
+            default: false
 
+  # ==========================================
+  # PORTFOLIO COLLECTION
+  # ==========================================
   - name: portfolio
     label: Portfolio Projects
     type: collection
     path: src/content/portfolio
     filename: "{primary}.mdx"
-    
     view:
-      fields: [title, date, featured, draft]
-      sort: ["date desc"]
+      fields: [image.src, title, pubDate, featured]
+      sort: ["pubDate desc"]
     
-    fields:      
+    fields:
       - name: title
-        label: Judul
+        label: Project Name
         type: string
         required: true
-        options:
-          maxlength: 80
       
       - name: description
-        label: Deskripsi
+        label: Brief
         type: text
         required: true
-        options:
-          maxlength: 200
-          rows: 3
-      
-      - name: date
-        label: Tanggal
+
+      - name: pubDate
+        label: Project Date
         type: date
-        required: true
-        options:
-          time: true
-          format: yyyy-MM-dd'T'HH:mm
-      
-      - name: updatedDate
-        label: Tanggal diperbarui
-        type: date
-        required: false
-        options:
-          time: true
-          format: yyyy-MM-dd'T'HH:mm
-      
-      - name: techStack
-        label: Tech Stack
-        type: string
-        list: true
-        options:
-          min: 1
-          max: 10
-      
-      - name: demoUrl
-        label: Demo URL
-        type: string
-        required: false
-      
-      - name: repoUrl
-        label: Repository URL
-        type: string
-        required: false
+        required: true # Audit: Portfolio wajib pake pubDate sesuai Zod Memory kita
       
       - name: image
-        label: Cover
-        type: image
-        options:
-          media: portfolio-images
-      
-      - name: imageAlt
-        label: Alt
-        type: string
-        
-      - name: imageCaption
-        label: Caption
-        type: string
-      
-      - name: gallery
-        label: Gallery
-        type: image
-        required: false
+        label: Project Cover
+        type: object
         fields:
-          - name: image
-            label: Gallery Image
+          - name: src
             type: image
             options:
-              multiple: true
-              media: portfolio-gallery
+              media: portfolio-images
+          - name: alt
+            type: string
+
+      - name: techStack
+        label: Technologies
+        type: string
+        list: true
+
+      - name: metrics
+        label: Performance (Lighthouse)
+        type: object
+        fields:
+          - name: performance
+            type: number
+          - name: accessibility
+            type: number
+          - name: seo
+            type: number
+
+      - name: demoUrl
+        label: Live Demo
+        type: string
       
+      - name: repoUrl
+        label: Source Code
+        type: string
+
       - name: draft
         label: Draft
         type: boolean
         default: false
-      
-      - name: featured
-        label: Unggulan
-        type: boolean
-        default: false
-      
-      - name: client
-        label: Client
-        type: string
-        required: false
-      
-      - name: role
-        label: Aturan
-        type: string
-        required: false
-      
-      - name: duration
-        label: Durasi
-        type: string
-        required: false
-      
-      - name: metrics
-        label: Performance
-        type: object
-        fields:
-          - name: performance
-            label: Performa
-            type: number
-            options:
-              min: 0
-              max: 100
-          - name: accessibility
-            label: Aksebilitas
-            type: number
-            options:
-              min: 0
-              max: 100
-          - name: seo
-            label: SEO
-            type: number
-            options:
-              min: 0
-              max: 100
-      
-      - name: challenge
-        label: Tantangan
-        type: text
-        required: false
-        options:
-          rows: 4
-      
-      - name: solution
-        label: The Solution
-        type: text
-        required: false
-        options:
-          rows: 4
-      
-      - name: result
-        label: Hasil
-        type: text
-        required: false
-        options:
-          rows: 4
