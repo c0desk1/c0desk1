@@ -58,7 +58,6 @@ const lastModified =
   modifiedTime?.toISOString() ?? publishedTime?.toISOString();
 
 // ================= SEO GRAPH =================
-// ================= SEO GRAPH =================
 const graph = {
   "@context": "https://schema.org",
   "@graph": [
@@ -84,12 +83,12 @@ const graph = {
       "@id": `${siteURL}#organization`,
       "name": siteConfig.name,
       "url": siteURL,
-      "logo": {
-        "@type": "ImageObject",
-        "url": `${siteURL}/favicon.svg`,
-        "width": 512,
-        "height": 512
-      },
+      logo: {
+  		"@type": "ImageObject",
+  		"url": new URL("/favicon.svg", siteURL).toString(),
+  		"width": 512,
+  		"height": 512
+		}
       "sameAs": [
         siteConfig.social?.github,
         siteConfig.social?.twitter,
