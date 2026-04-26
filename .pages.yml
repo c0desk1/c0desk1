@@ -131,6 +131,10 @@ content:
         options:
           media: blog-images
           rename: true
+          
+      - name: image
+        label: cover
+        type: string
       
       - name: imageAlt
         label: Alt
@@ -191,17 +195,23 @@ content:
             type: string
             options:
               maxlength: 100
+              
           - name: description
             label: Deskripsi
             type: text
             options:
               maxlength: 160
+              
           - name: ogImage
             label: Gambar OG
             type: image
             options:
               media: blog-og
               rename: true
+              
+          - name: ogImage
+            label: Gambar OG
+            type: string
             
 
   - name: portfolio
