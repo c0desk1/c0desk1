@@ -40,7 +40,7 @@ const seoData = {
 
 const breadcrumbItems = [
   { name: 'Home', href: siteURL },
-  { name: author.name }
+  { name: author.name, href: canonicalURL }
 ];
 
 const schema = {
@@ -61,7 +61,7 @@ const schema = {
       "@id": `${canonicalURL}#breadcrumb`,
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Home", "item": siteURL },
-        { "@type": "ListItem", "position": 2, "name": author.name }
+        { "@type": "ListItem", "position": 2, "name": author.name, "item": canonicalURL }
       ]
     }
   ]
