@@ -8,28 +8,26 @@ const siteUrl = siteConfig.url;
 export const GET: APIRoute = async () => {
   const projects = await getCollection('portfolio', ({ data }) => !data.draft);
   
-  const projectsSitemap = projects.map(project => `
+  const sortedProjects = projects.sort((a, b) => 
+    b.data.date.getTime() - a.data.date.getTime()
+  );
+
+  const projectsSitemap = sortedProjects.map(project => `
   <url>
-    <loc>${siteUrl}/portfolio/${project.id}/</loc>
+    <loc>${new URL(`portfolio/${project.id}/`, siteUrl).toString()}</loc>
     <lastmod>${project.data.updatedDate?.toISOString() || project.data.date.toISOString()}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>${project.data.featured ? 0.8 : 0.6}</priority>
   </url>`).join('');
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    <url>
-        <loc>${siteUrl}/portfolio/</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    ${projectsSitemap}
-    </urlset>`;
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>${new URL('portfolio/', siteUrl).toString()}</loc>
+    <lastmod>${sortedProjects[0]?.data.updatedDate?.toISOString() || sortedProjects[0]?.data.date.toISOString()}</lastmod>
+  </url>
+  ${projectsSitemap}
+</urlset>`;
 
   return new Response(sitemap, {
-    headers: {
-      'Content-Type': 'application/xml',
-      'Cache-Control': 'public, max-age=3600',
-    },
+    headers: { 'Content-Type': 'application/xml' },
   });
 };
