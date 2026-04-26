@@ -5,7 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'src/content/blog/**.mdx'
+      - 'src/content/blog/**/*.{md,mdx}'
+      - 'src/content/portfolio/**/*.{md,mdx}'
 
 jobs:
   notify:
@@ -16,29 +17,46 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Get New Post Data and Notify
+      - name: Detect and Notify
         run: |
-          # Cari file .md yang baru ditambahkan atau diubah di commit terakhir
-          NEW_FILE=$(git diff --name-only HEAD^ HEAD | grep 'src/content/blog/.*\.md' | head -n 1)
+          # Ambil file MD/MDX yang berubah di commit terakhir
+          CHANGED_FILE=$(git diff --name-only HEAD^ HEAD | grep -E 'src/content/(blog|portfolio)/.*\.(md|mdx)' | head -n 1)
           
-          if [ -z "$NEW_FILE" ]; then
-            echo "Gak ada postingan baru. Skip."
+          if [ -z "$CHANGED_FILE" ]; then
+            echo "No relevant content changes detected."
             exit 0
           fi
 
-          # Ekstrak Judul dan Deskripsi dari Frontmatter (pake grep sederhana)
-          TITLE=$(grep '^title:' "$NEW_FILE" | sed 's/title: //;s/"//g;s/'\''//g')
-          DESC=$(grep '^description:' "$NEW_FILE" | sed 's/description: //;s/"//g;s/'\''//g')
-          SLUG=$(basename "$NEW_FILE" .md)
-          URL="https://c0desk1.my.id/blog/$SLUG"
+          # Tentukan Tipe & Base Path
+          if [[ "$CHANGED_FILE" == *"blog"* ]]; then
+            TYPE="Blog Post"
+            BASE_PATH="blog"
+          else
+            TYPE="Project"
+            BASE_PATH="portfolio"
+          fi
 
-          echo "Mengirim notifikasi untuk: $TITLE"
+          # Ekstrak Data Frontmatter
+          TITLE=$(grep '^title:' "$CHANGED_FILE" | head -1 | sed 's/title: //;s/"//g;s/'\''//g')
+          DESC=$(grep -E '^(description|synopsis):' "$CHANGED_FILE" | head -1 | sed -E 's/^(description|synopsis): //;s/"//g;s/'\''//g')
+          
+          # Ambil File ID Telegram (jika ada di field image)
+          # Mendukung format: image: "https://.../img/FILE_ID"
+          FILE_ID=$(grep '^image:' "$CHANGED_FILE" | head -1 | sed 's/image: //;s/"//g;s/'\''//g' | grep -oE '[^/]+$')
+          
+          # Buat Slug & URL
+          SLUG=$(basename "$CHANGED_FILE" | sed -E 's/\.(md|mdx)$//')
+          URL="https://c0desk1.my.id/$BASE_PATH/$SLUG"
 
+          echo "🚀 Sending to Telegram: [$TYPE] $TITLE"
+
+          # Tembak ke Cloudflare Worker
           curl -X POST "${{ secrets.TG_ENGINE_URL }}/api/broadcast" \
             -H "Authorization: Bearer ${{ secrets.TG_ENGINE_ADMIN_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d "{
-              \"title\": \"$TITLE\",
+              \"title\": \"[$TYPE] $TITLE\",
               \"description\": \"$DESC\",
-              \"url\": \"$URL\"
+              \"url\": \"$URL\",
+              \"fileId\": \"$FILE_ID\"
             }"
