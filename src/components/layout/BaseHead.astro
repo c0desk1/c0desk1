@@ -28,7 +28,7 @@ const {
   tags = []
 } = Astro.props;
 
-const siteURL = Astro.site ?? siteConfig.url;
+const siteURL = Astro.site?.toString().replace(/\/$/, '') ?? siteConfig.url.replace(/\/$/, '');
 
 const canonical = Astro.props.canonicalURL
   ? new URL(Astro.props.canonicalURL, siteURL)
@@ -99,10 +99,10 @@ const graph = {
       "@type": "Person",
       "@id": `${siteURL}#person`,
       "name": siteConfig.author.name,
-      "url": `${siteURL}/author/${siteConfig.author.slug}/`,
+      "url": new URL(`/author/${siteConfig.author.slug}/`, siteURL).toString(),
       "image": {
         "@type": "ImageObject",
-        "url": `${siteURL}${siteConfig.author.avatar}`,
+        "url": new URL(siteConfig.author.avatar, siteURL).toString(),
         "width": 96,
         "height": 96
       },
