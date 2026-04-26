@@ -70,10 +70,10 @@ const graph = {
       "inLanguage": "id-ID",
       "publisher": { "@id": `${siteURL}#organization` },
       "potentialAction": {
-        "@type": "SearchAction",
+      "@type": "SearchAction",
         "target": {
           "@type": "EntryPoint",
-          "urlTemplate": `${siteURL}search?q={search_term_string}`
+          "urlTemplate": `${siteURL}/search?q={search_term_string}`
         },
         "query-input": "required name=search_term_string"
       }
@@ -83,12 +83,12 @@ const graph = {
       "@id": `${siteURL}#organization`,
       "name": siteConfig.name,
       "url": siteURL,
-      logo: {
-  		"@type": "ImageObject",
-  		"url": new URL("/favicon.svg", siteURL).toString(),
-  		"width": 512,
-  		"height": 512
-		},
+      "logo": {
+        "@type": "ImageObject",
+        "url": new URL("/favicon.svg", siteURL).toString(),
+        "width": 512,
+        "height": 512
+      },
       "sameAs": [
         siteConfig.social?.github,
         siteConfig.social?.twitter,
@@ -186,6 +186,7 @@ const graph = {
 <meta name="twitter:title" content={formattedTitle} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={fullImageURL} />
+<meta name="twitter:site" content="@c0desk1" />
 <meta name="twitter:creator" content={siteConfig.links?.twitter?.replace('https://twitter.com/', '@')} />
 
 <!-- PERFORMANCE -->
