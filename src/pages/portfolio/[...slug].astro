@@ -70,44 +70,46 @@ const displayGallery = Array.isArray(gallery)? gallery : [];
 
 const canonicalURL = `${siteConfig.url}portfolio/${project.id}/`;
 
+const creativeWorkSchema = {
+  "@type": "CreativeWork",
+  "@id": `${canonicalURL}#creativework`,
+  "url": canonicalURL,
+  "name": title,
+  "headline": title,
+  "description": description,
+  "image": image? {
+    "@type": "ImageObject",
+    "url": `${siteConfig.url}${image}`,
+    "caption": imageCaption || imageAlt || title
+  } : undefined,
+  "dateCreated": date?.toISOString(),
+  "dateModified": updatedDate?.toISOString() || date?.toISOString(),
+  "creator": {
+    "@type": "Person",
+    "name": siteConfig.author.name,
+    "url": `${siteConfig.url}author/${siteConfig.author.slug}/`
+  },
+  "publisher": {
+    "@id": `${siteConfig.url}#organization`
+  },
+  "keywords": techStack?.join(", "),
+  "isPartOf": {
+    "@id": `${siteConfig.url}portfolio/#collectionpage`
+  },
+  "mainEntityOfPage": {
+    "@id": `${canonicalURL}#webpage`
+  },
+ ...(client && { "client": { "@type": "Organization", "name": client } }),
+ ...(role && { "contributor": { "@type": "Person", "name": siteConfig.author.name, "roleName": role } }),
+ ...(duration && { "timeRequired": duration }),
+ ...(demoUrl && { "workExample": { "@type": "WebSite", "url": demoUrl } }),
+ ...(repoUrl && { "codeRepository": repoUrl })
+};
+
 const schema = {
   "@context": "https://schema.org",
   "@graph": [
-    {
-      "@type": "CreativeWork",
-      "@id": `${canonicalURL}#creativework`,
-      "url": canonicalURL,
-      "name": title,
-      "headline": title,
-      "description": description,
-      "image": image? {
-        "@type": "ImageObject",
-        "url": `${siteConfig.url}${image}`,
-        "caption": imageCaption || imageAlt || title
-      } : undefined,
-      "dateCreated": date?.toISOString(),
-      "dateModified": updatedDate?.toISOString() || date?.toISOString(),
-      "creator": {
-        "@type": "Person",
-        "name": siteConfig.author.name,
-        "url": `${siteConfig.url}author/${siteConfig.author.slug}/`
-      },
-      "publisher": {
-        "@id": `${siteConfig.url}#organization`
-      },
-      "keywords": techStack?.join(", "),
-      "isPartOf": {
-        "@id": `${siteConfig.url}portfolio/#collectionpage`
-      },
-      "mainEntityOfPage": {
-        "@id": `${canonicalURL}#webpage`
-      },
-     ...(client && { "client": { "@type": "Organization", "name": client } }),
-     ...(role && { "contributor": { "@type": "Person", "name": siteConfig.author.name, "roleName": role } }),
-     ...(duration && { "timeRequired": duration }),
-     ...(demoUrl && { "workExample": { "@type": "WebSite", "url": demoUrl } }),
-     ...(repoUrl && { "codeRepository": repoUrl })
-    },
+    creativeWorkSchema,
     {
       "@type": "BreadcrumbList",
       "@id": `${canonicalURL}#breadcrumb`,
@@ -190,7 +192,7 @@ const schema = {
   </Section>
   {image && (
     <Section size="none">
-      <Container size="sm" id={schema["@graph"][0].image? `${canonicalURL}#primaryimage` : undefined}>
+      <Container size="sm" id={creativeWorkSchema.image? "primaryimage" : undefined}>
         <h2 class="sr-only">Portfolio Image Content</h2>
         <PortfolioFeaturedImage
           src={image}
