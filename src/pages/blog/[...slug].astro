@@ -74,7 +74,7 @@ const seoTitle = seo?.title || title;
 const seoDescription = seo?.description || description;
 const seoImage = seo?.ogImage || image || siteConfig.ogImage;
 
-const schemaAuthorName = author?.name || siteConfig.author;
+const schemaAuthorName = author?.name || siteConfig.author.name || "c0desk1";
 
 const tocHeadings = filterHeadingsForTOC(headings);
 
@@ -91,6 +91,7 @@ const breadcrumbItems = [
 const schema = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
+  name: seoTitle,
   headline: seoTitle,
   description: seoDescription,
   image: seoImage,
