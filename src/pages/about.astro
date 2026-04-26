@@ -5,13 +5,87 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Container from '@/components/ui/Container.astro';
 import Breadcrumb from '@/components/ui/Breadcrumb.astro';
 import { siteConfig } from '@/config/site';
+
+const seoData = {
+  title: "About",
+  description: "Tentang saya dan cara saya membangun pengalaman digital.",
+  type: "website" as const,
+  canonicalURL: `${siteConfig.url}about/`
+};
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "AboutPage",
+      "@id": `${seoData.canonicalURL}#aboutpage`,
+      "url": seoData.canonicalURL,
+      "name": "About c0desk1",
+      "description": seoData.description,
+      "isPartOf": {
+        "@id": `${siteConfig.url}#website`
+      },
+      "about": {
+        "@id": `${siteConfig.url}#person`
+      },
+      "breadcrumb": {
+        "@id": `${seoData.canonicalURL}#breadcrumb`
+      },
+      "mainEntity": {
+        "@id": `${siteConfig.url}#person`
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": `${siteConfig.url}#person`,
+      "name": siteConfig.author.name,
+      "url": `${siteConfig.url}author/${siteConfig.author.slug}/`,
+      "image": {
+        "@type": "ImageObject",
+        "url": `${siteConfig.url}${siteConfig.author.avatar}`,
+        "width": 96,
+        "height": 96
+      },
+      "jobTitle": "Frontend Engineer",
+      "description": siteConfig.author.bio,
+      "worksFor": {
+        "@id": `${siteConfig.url}#organization`
+      },
+      "sameAs": [
+        siteConfig.social?.github,
+        siteConfig.social?.twitter,
+        siteConfig.social?.linkedin
+      ].filter(Boolean),
+      "knowsAbout": ["Astro", "Tailwind CSS", "TypeScript", "React"],
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "ID",
+        "addressRegion": "Indonesia"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${seoData.canonicalURL}#breadcrumb`,
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": siteConfig.url
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "About"
+        }
+      ]
+    }
+  ]
+};
 ---
 
-<BaseLayout 
-  title="About"
-  description="Tentang saya dan cara saya membangun pengalaman digital."
-  type="website"
->
+<BaseLayout {...seoData}>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
   <div class="border-b border-zinc-100 dark:border-zinc-900">
     <Container size="md" class="py-12 md:py-16">
       <Breadcrumb items={[
@@ -41,34 +115,25 @@ import { siteConfig } from '@/config/site';
         </section>
         
         <section>
-          <h2 class="text-sm font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-4">
-            Experience
-          </h2>
-          <div class="space-y-6">
-            <div>
-              <p class="text-sm text-zinc-500 dark:text-zinc-500 mb-1">2024 — sekarang</p>
-              <p class="text-base font-medium text-zinc-900 dark:text-white">Frontend Engineer</p>
-              <p class="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Vercel — Remote</p>
-            </div>
-            <div>
-              <p class="text-sm text-zinc-500 dark:text-zinc-500 mb-1">2022 — 2024</p>
-              <p class="text-base font-medium text-zinc-900 dark:text-white">UI/UX Designer</p>
-              <p class="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Creative Studio — Jakarta</p>
-            </div>
-            <div>
-              <p class="text-sm text-zinc-500 dark:text-zinc-500 mb-1">2020 — 2022</p>
-              <p class="text-base font-medium text-zinc-900 dark:text-white">Freelance Developer</p>
-              <p class="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Self-employed — Remote</p>
-            </div>
-          </div>
-        </section>
+  <h2 class="text-sm font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-4">
+    Focus
+  </h2>
+  <div class="space-y-3">
+    <p class="text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
+      Fokus membangun produk web yang cepat, accessible, dan maintainable. 
+    </p>
+    <p class="text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
+      Eksplorasi workflow modern dengan Astro, TypeScript, dan AI tools untuk automasi.
+    </p>
+  </div>
+</section>
         
         <section>
           <h2 class="text-sm font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-4">
             Tools
           </h2>
           <div class="flex flex-wrap gap-2">
-            {["Astro", "Tailwind CSS", "TypeScript", "React", "Figma", "Vercel"].map((t, i) => (
+            {["Astro", "Tailwind CSS", "TypeScript", "React", "Figma", "Vercel"].map((t) => (
               <span class="px-2.5 py-1 text-sm text-zinc-600 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800">
                 {t}
               </span>
