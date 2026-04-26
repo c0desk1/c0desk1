@@ -58,82 +58,96 @@ const lastModified =
   modifiedTime?.toISOString() ?? publishedTime?.toISOString();
 
 // ================= SEO GRAPH =================
+// ================= SEO GRAPH =================
 const graph = {
   "@context": "https://schema.org",
   "@graph": [
-
     {
       "@type": "WebSite",
       "@id": `${siteURL}#website`,
-      url: siteURL,
-      name: siteConfig.name,
-      description: siteConfig.description,
-      inLanguage: "id-ID"
+      "url": siteURL,
+      "name": siteConfig.name,
+      "description": siteConfig.description,
+      "inLanguage": "id-ID",
+      "publisher": { "@id": `${siteURL}#organization` },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": `${siteURL}search?q={search_term_string}`
+        },
+        "query-input": "required name=search_term_string"
+      }
     },
-
     {
       "@type": "Organization",
       "@id": `${siteURL}#organization`,
-      name: siteConfig.name,
-      url: siteURL,
-      logo: {
+      "name": siteConfig.name,
+      "url": siteURL,
+      "logo": {
         "@type": "ImageObject",
-        url: `${siteURL}/favicon.svg`
-      }
+        "url": `${siteURL}/favicon.svg`,
+        "width": 512,
+        "height": 512
+      },
+      "sameAs": [
+        siteConfig.social?.github,
+        siteConfig.social?.twitter,
+        siteConfig.social?.linkedin,
+      ].filter(Boolean)
     },
-
+    {
+      "@type": "Person",
+      "@id": `${siteURL}#person`,
+      "name": siteConfig.author.name,
+      "url": `${siteURL}/author/${siteConfig.author.slug}/`,
+      "image": {
+        "@type": "ImageObject",
+        "url": `${siteURL}${siteConfig.author.avatar}`,
+        "width": 96,
+        "height": 96
+      },
+      "worksFor": { "@id": `${siteURL}#organization` }
+    },
     {
       "@type": "WebPage",
       "@id": `${canonical.toString()}#webpage`,
-      url: canonical.toString(),
-      name: formattedTitle,
-      description,
-      inLanguage: "id-ID",
-
-      isPartOf: { "@id": `${siteURL}#website` },
-      about: { "@id": `${siteURL}#organization` },
-
-      primaryImageOfPage: {
+      "url": canonical.toString(),
+      "name": formattedTitle,
+      "description": description,
+      "inLanguage": "id-ID",
+      "isPartOf": { "@id": `${siteURL}#website` },
+      "about": { "@id": `${siteURL}#organization` },
+      "primaryImageOfPage": {
         "@type": "ImageObject",
-        url: fullImageURL
+        "url": fullImageURL
       },
-
-      breadcrumb: {
+      "breadcrumb": {
         "@id": `${canonical.toString()}#breadcrumb`
       }
     },
-
     ...(type === "article" ? [
       {
         "@type": "BlogPosting",
         "@id": `${canonical.toString()}#article`,
-        name: title,
-		headline: title,
-        url: canonical.toString(),
-
-        image: {
+        "name": title,
+        "headline": title,
+        "description": description,
+        "url": canonical.toString(),
+        "image": {
           "@type": "ImageObject",
-          url: fullImageURL,
-          width: 1200,
-          height: 630
+          "url": fullImageURL,
+          "width": 1200,
+          "height": 630
         },
-
-        author: {
-  		"@type": "Person",
-  		"name": siteConfig.author.name,
-  		"url": `${siteURL}/author/${siteConfig.author.slug}/`
-		},
-
-        publisher: { "@id": `${siteURL}#organization` },
-
-        mainEntityOfPage: {
+        "author": { "@id": `${siteURL}#person` },
+        "publisher": { "@id": `${siteURL}#organization` },
+        "mainEntityOfPage": {
           "@id": `${canonical.toString()}#webpage`
         },
-
-        datePublished: publishedTime?.toISOString(),
-        dateModified: lastModified,
-
-        keywords: tags.length ? tags.join(", ") : undefined
+        "datePublished": publishedTime?.toISOString(),
+        "dateModified": lastModified,
+        "keywords": tags.length ? tags.join(", ") : undefined
       }
     ] : [])
   ]
