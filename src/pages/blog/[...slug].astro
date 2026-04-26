@@ -4,7 +4,7 @@ import { getCollection, render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 
 import { siteConfig } from "@/config/site";
-// import { categoryLabels } from "@/config/blog";
+import { categoryLabels } from "@/config/blog";
 
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/ui/Container.astro";
@@ -69,7 +69,8 @@ const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
 const breadcrumbItems = [
   { name: "Home", href: siteURL },
-  { name: "Blog", href: new URL("blog/", siteURL).toString() }
+  { name: "Blog", href: new URL("blog/", siteURL).toString() },
+  { name: title, href: canonicalURL }
 ];
 
 const schema = {
@@ -88,9 +89,16 @@ const schema = {
       "position": 2,
       "name": "Blog",
       "item": new URL("blog/", siteURL).toString()
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": title,
+      "item": canonicalURL
     }
   ]
 };
+
 ---
 
 <BaseLayout
@@ -101,6 +109,7 @@ const schema = {
   publishedTime={pubDate}
   modifiedTime={updatedDate}
   tags={tags}
+  category={category}
   container={false}
 >
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
