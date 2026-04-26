@@ -1,6 +1,9 @@
+# ==========================================
+# 1. MEDIA CONFIG (Telegram & Local Backup)
+# ==========================================
 media:
   - name: images
-    label: Image
+    label: Local Backup
     input: public/images
     output: /images
     rename: safe
@@ -15,28 +18,17 @@ media:
           message: "Ini akan memproses semua gambar di folder images."
           button: "Ya, Optimize"
           
-  - name: blog-author
-    label: Authors
-    input: public/images/author
-    output: /images/author
-    categories: [image]
-
   - name: blog-images
     label: Blog Images
     input: public/images/blog
     output: /images/blog
     categories: [image]
 
-  - name: portfolio-images
-    label: Portfolio Images
-    input: public/images/portfolio
-    output: /images/portfolio
-    categories: [image]
-
+# ==========================================
+# 2. CONTENT COLLECTIONS
+# ==========================================
 content:
-  # ==========================================
-  # BLOG COLLECTION
-  # ==========================================
+  # --- BLOG ---
   - name: blog
     label: Blog Posts
     type: collection
@@ -45,68 +37,62 @@ content:
     view:
       fields: [image.src, title, pubDate, draft]
       sort: ["pubDate desc"]
-      
     fields:
       - name: title
         label: Judul
         type: string
         required: true
-      
       - name: description
         label: Deskripsi
         type: text
         required: true
-      
       - name: pubDate
         label: Tanggal Terbit
         type: date
         required: true
         options:
-          format: yyyy-MM-dd'T'HH:mm:ssXXX
-
+          time: true
+          format: yyyy-MM-dd'T'HH:mm
+      - name: updatedDate
+        label: Diperbarui
+        type: date
       - name: image
-        label: Cover Image
+        label: Cover (Telegram URL)
         type: object
         fields:
           - name: src
-            label: Image File
-            type: image
-            options:
-              media: blog-images
+            type: string
+            default: "https://c0desk1-api.dev-c0desk1.workers.dev/img/..."
           - name: alt
-            label: Alt Text
             type: string
             required: true
-
       - name: author
         label: Author (Reference)
         type: select
         options:
           values: authors
-
       - name: category
         label: Kategori (Reference)
         type: select
         options:
           values: categories
-
       - name: tags
         label: Tags
         type: string
         list: true
-
+      - name: body
+        label: Konten
+        type: rich-text
       - name: draft
-        label: Draft Mode
+        label: Draft
         type: boolean
         default: false
-
       - name: featured
-        label: Featured Post
+        label: Unggulan
         type: boolean
         default: false
-
       - name: seo
-        label: SEO Metadata
+        label: SEO
         type: object
         fields:
           - name: title
@@ -117,9 +103,7 @@ content:
             type: boolean
             default: false
 
-  # ==========================================
-  # PORTFOLIO COLLECTION
-  # ==========================================
+  # --- PORTFOLIO ---
   - name: portfolio
     label: Portfolio Projects
     type: collection
@@ -128,41 +112,43 @@ content:
     view:
       fields: [image.src, title, pubDate, featured]
       sort: ["pubDate desc"]
-    
-    fields:
+    fields:      
       - name: title
-        label: Project Name
+        label: Judul
         type: string
         required: true
-      
       - name: description
-        label: Brief
+        label: Deskripsi
         type: text
         required: true
-
       - name: pubDate
-        label: Project Date
+        label: Tanggal Project
         type: date
-        required: true # Audit: Portfolio wajib pake pubDate sesuai Zod Memory kita
-      
+        required: true
       - name: image
         label: Project Cover
         type: object
         fields:
           - name: src
-            type: image
-            options:
-              media: portfolio-images
+            type: string
           - name: alt
             type: string
-
       - name: techStack
-        label: Technologies
+        label: Tech Stack
         type: string
         list: true
-
+      - name: demoUrl
+        label: Demo URL
+        type: string
+      - name: repoUrl
+        label: Repository URL
+        type: string
+      - name: gallery
+        label: Gallery (Telegram Links)
+        type: string
+        list: true
       - name: metrics
-        label: Performance (Lighthouse)
+        label: Lighthouse Metrics
         type: object
         fields:
           - name: performance
@@ -171,16 +157,89 @@ content:
             type: number
           - name: seo
             type: number
-
-      - name: demoUrl
-        label: Live Demo
-        type: string
-      
-      - name: repoUrl
-        label: Source Code
-        type: string
-
       - name: draft
         label: Draft
         type: boolean
         default: false
+
+  # --- AUTHORS ---
+  - name: authors
+    label: Authors
+    type: collection
+    path: src/content/authors
+    filename: "{primary}.json"
+    fields:
+      - name: name
+        label: Nama
+        type: string
+        required: true
+      - name: role
+        label: Role
+        type: string
+      - name: avatar
+        label: Avatar URL
+        type: string
+      - name: bio
+        label: Bio
+        type: text
+      - name: organization
+        label: Organization (Ref)
+        type: select
+        options:
+          values: organizations
+      - name: social
+        label: Socials
+        type: object
+        fields:
+          - name: github
+            type: string
+          - name: twitter
+            type: string
+
+  # --- CATEGORIES ---
+  - name: categories
+    label: Categories
+    type: collection
+    path: src/content/categories
+    filename: "{primary}.json"
+    fields:
+      - name: name
+        label: Name
+        type: string
+        required: true
+      - name: slug
+        label: ID / Slug
+        type: string
+        required: true
+      - name: description
+        label: Deskripsi
+        type: text
+      - name: parent
+        label: Parent Category (Ref)
+        type: select
+        options:
+          values: categories
+
+  # --- SETTINGS (ORGANIZATIONS) ---
+  - name: organizations
+    label: Site Settings
+    type: collection
+    path: src/content/settings
+    filename: "site.json"
+    fields:
+      - name: name
+        label: Site Name
+        type: string
+      - name: url
+        label: Website URL
+        type: string
+      - name: logo
+        label: Logo URL
+        type: string
+      - name: contactEmail
+        label: Email
+        type: string
+      - name: socialLinks
+        label: Global Socials
+        type: string
+        list: true
