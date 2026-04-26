@@ -33,33 +33,48 @@ const seo = {
   description: author.bio,
   url: `${siteConfig.url}/author/${author.slug}/`,
 };
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ProfilePage",
+      "@id": `${seo.url}#profilepage`,
+      "url": seo.url,
+      "name": `Artikel oleh ${author.name}`,
+      "description": author.bio,
+      "isPartOf": { "@id": `${siteConfig.url}#website` },
+      "about": { "@id": `${siteConfig.url}#person` },
+      "mainEntity": { "@id": `${siteConfig.url}#person` }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${seo.url}#breadcrumb`,
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": siteConfig.url
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Author",
+          "item": `${siteConfig.url}author/`
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": author.name
+        }
+      ]
+    }
+  ]
+};
 ---
 
-<script type="application/ld+json" set:html={JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "@id": `${seo.url}#person`,
-  "name": author.name,
-  "url": seo.url,
-  "image": {
-    "@type": "ImageObject",
-    "url": `${siteConfig.url}${author.avatar}`,
-    "width": 96,
-    "height": 96
-  },
-  "jobTitle": author.title,
-  "description": author.bio,
-  "mainEntityOfPage": {
-    "@type": "CollectionPage",
-    "@id": seo.url,
-    "name": `Artikel oleh ${author.name}`
-  },
-  "sameAs": [
-    siteConfig.social?.github,
-    siteConfig.social?.twitter,
-    siteConfig.social?.linkedin,
-  ].filter(Boolean),
-})} />
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
 
 <BaseLayout title={seo.title} description={seo.description}>
   <Container size="lg" class="py-16">
