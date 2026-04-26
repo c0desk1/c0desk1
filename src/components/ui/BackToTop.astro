@@ -1,0 +1,32 @@
+---
+// src/components/ui/BackToTop.astro
+
+import Button from './Button.astro';
+
+interface Props {
+  showBorder?: boolean;
+  align?: 'left' | 'center' | 'right';
+}
+
+const { showBorder = true, align = 'left' } = Astro.props;
+
+const alignClasses = {
+  left: 'text-left',
+  center: 'text-center',
+  right: 'text-right'
+};
+---
+
+<div class:list={[
+  showBorder ? 'pt-4 md:pt-8' : '',
+  alignClasses[align]
+]}>
+  <Button href="#top" variant='secondary'>
+    <span class="transition-transform duration-200 group-hover:-translate-y-0.5">
+      ↑
+    </span>
+    <span>
+      Kembali ke atas
+    </span>
+  </Button>
+</div>

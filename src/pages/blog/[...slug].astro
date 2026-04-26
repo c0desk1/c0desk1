@@ -1,0 +1,176 @@
+---
+import { getCollection, render, getEntry } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+
+import { siteConfig } from "@/config/site";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+
+import Breadcrumb from "@/components/ui/Breadcrumb.astro";
+import BlogHeader from "@/components/blog/BlogHeader.astro";
+import BlogFeaturedImage from "@/components/blog/BlogFeaturedImage.astro";
+import BlogContent from "@/components/blog/BlogContent.astro";
+import BlogTOC from "@/components/blog/BlogTOC.astro";
+import BlogRelatedPosts from "@/components/blog/BlogRelatedPosts.astro";
+import BackToTop from "@/components/ui/BackToTop.astro";
+
+import Image from "@/components/mdx/Image.astro";
+import HR from "@/components/mdx/HR.astro";
+
+import { filterHeadingsForTOC, getReadingTime } from "@/lib/utils";
+import { getSmartRelatedPosts } from "@/lib/botEngine";
+import ReadingProgress from "@/components/ui/ReadingProgress.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  return posts.map((post: CollectionEntry<"blog">) => ({
+    params: { slug: post.id },
+    props: { post }
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props;
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+
+const authorEntry = await getEntry(post.data.author);
+const categoryEntry = await getEntry(post.data.category);
+
+const { Content, headings } = await render(post);
+const relatedPosts = getSmartRelatedPosts(post, allPosts, 3);
+
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  tags,
+  image,
+  seo
+} = post.data;
+
+const seoImage = {
+  src: seo?.ogImage || image.src || siteConfig.ogImage,
+  alt: image.alt || title
+};
+
+const seoCategory = {
+  name: categoryEntry?.data.name || "Blog",
+  description: categoryEntry?.data.description || "",
+  slug: categoryEntry?.id || "blog"
+};
+
+const seoTitle = seo?.title || title;
+const seoDescription = seo?.description || description;
+
+const tocHeadings = filterHeadingsForTOC(headings);
+const readingTime = getReadingTime(post.body || "");
+
+const siteURL = Astro.site?.toString() ?? siteConfig.url;
+const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
+
+const breadcrumbItems = [
+  { name: "Home", href: siteURL },
+  { name: "Blog", href: new URL("blog/", siteURL).toString() },
+  { name: title, href: canonicalURL }
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "@id": `${canonicalURL}#article`,
+      "isPartOf": { "@id": `${siteURL}#website` },
+      "author": {
+        "@type": "Person",
+        "name": authorEntry?.data.name || siteConfig.author.name,
+        "url": siteURL
+      },
+      "headline": title,
+      "datePublished": pubDate.toISOString(),
+      "dateModified": updatedDate?.toISOString() || pubDate.toISOString(),
+      "description": description,
+      "image": new URL(seoImage.src, siteURL).toString(),
+      "publisher": { "@id": `${siteURL}#organization` }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${canonicalURL}#breadcrumb`,
+      "itemListElement": breadcrumbItems.map((item, index) => ({
+        "@type": "ListItem",
+        "position": index + 1,
+        "item": { "@id": item.href, "name": item.name }
+      }))
+    }
+  ]
+};
+---
+
+<BaseLayout
+  title={seoTitle}
+  description={seoDescription}
+  image={seoImage}
+  type="article"
+  publishedTime={pubDate}
+  modifiedTime={updatedDate}
+  tags={tags}
+  category={seoCategory}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  
+  <article class="relative my-4 md:my-8">
+    <h1 class="sr-only">{title}</h1>
+    
+    <Section size="sm">
+      <Container size="sm">
+        <h2 class="sr-only">Article Header</h2>
+        <Breadcrumb items={breadcrumbItems} />
+        
+        <BlogHeader
+          title={title}
+          pubDate={pubDate}
+          readingTime={readingTime}
+          authorName={authorEntry?.data.name}
+          authorAvatar={authorEntry?.data.avatar}
+          authorTitle={authorEntry?.data.role}
+        />
+        
+        {image && (
+          <BlogFeaturedImage
+            image={image.src}
+            alt={image.alt || title}
+            caption={(image as any).caption}
+          />
+        )}
+        
+        {tocHeadings.length > 0 && (
+          <BlogTOC headings={tocHeadings} />
+        )}
+      </Container>
+    </Section>
+
+    <Section size="sm" class="section-divider">
+      <Container size="sm">
+        <h2 class="sr-only">Article Content</h2>
+        <BlogContent>
+          <Content components={{ img: Image, hr: HR }} />
+        </BlogContent>
+      </Container>
+    </Section>
+
+    <Section size="md" class="section-divider">
+      <Container size="sm">
+        <h2 class="sr-only">Related Posts</h2>
+        <BackToTop align="center" />
+        <BlogRelatedPosts posts={relatedPosts} />
+      </Container>
+    </Section>
+  </article>
+  
+  <ReadingProgress />
+</BaseLayout>

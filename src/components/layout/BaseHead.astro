@@ -1,0 +1,210 @@
+---
+// src/components/layout/BaseHead.astro
+import { siteConfig } from "@/config/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: { src: string; alt: string };
+  canonicalURL?: URL | string;
+  type?: "website" | "article" | "profile";
+  noIndex?: boolean;
+  publishedTime?: Date;
+  modifiedTime?: Date;
+  tags?: string[];
+  category?: { name: string; description?: string; slug: string };
+  author?: { name: string; role: string; avatar: string; bio: string; slug: string };
+  seo?: {
+    title?: string;
+    description?: string;
+    ogImage?: string;
+    canonical?: string;
+    noIndex?: boolean;
+  };
+}
+
+const {
+  title: propsTitle,
+  description: propsDescription,
+  image: propsImage,
+  seo,
+  type = "website",
+  publishedTime,
+  modifiedTime,
+  tags = [],
+  category,
+  author,
+} = Astro.props;
+
+const siteURL = Astro.site?.toString() ?? siteConfig.url;
+
+// ================= 1. DYNAMIC DATA RESOLVER =================
+const activeAuthor = {
+  name: author?.name || siteConfig.author.name,
+  role: author?.role || siteConfig.author.title,
+  avatar: author?.avatar || siteConfig.author.avatar,
+  bio: author?.bio || siteConfig.author.bio,
+  slug: author?.slug || siteConfig.author.slug,
+};
+
+const seoData = {
+  title: seo?.title || propsTitle || siteConfig.name,
+  description: seo?.description || propsDescription || siteConfig.description,
+  canonical: seo?.canonical 
+    ? new URL(seo.canonical, siteURL) 
+    : (Astro.props.canonicalURL ? new URL(Astro.props.canonicalURL, siteURL) : new URL(Astro.url.pathname, siteURL)),
+  noIndex: seo?.noIndex ?? Astro.props.noIndex ?? false,
+};
+
+const formattedTitle = seoData.title === siteConfig.name ? siteConfig.name : `${seoData.title} — ${siteConfig.name}`;
+
+// Image Logic
+let ogImageURL: string;
+const rawImage = seo?.ogImage || propsImage?.src;
+if (!rawImage) {
+  ogImageURL = new URL(siteConfig.ogImage, siteURL).toString();
+} else {
+  ogImageURL = rawImage.startsWith("http") ? rawImage : new URL(rawImage, siteURL).toString();
+}
+
+// ================= 2. PAGE CONTEXT =================
+const pathname = Astro.url.pathname;
+const isHomepage = pathname === '/';
+
+// ================= 3. THE ULTIMATE JSON-LD GRAPH =================
+const schemaGraph: any[] = [
+  // A. Organization
+  {
+    "@type": "Organization",
+    "@id": `${siteURL}#organization`,
+    "name": siteConfig.name,
+    "url": siteURL,
+    "logo": {
+      "@type": "ImageObject",
+      "@id": `${siteURL}#logo`,
+      "url": new URL("favicon.svg", siteURL).toString(),
+      "width": 512, "height": 512
+    },
+    "sameAs": [
+      siteConfig.social?.github,
+      siteConfig.social?.twitter,
+      siteConfig.social?.linkedin
+    ].filter(Boolean)
+  },
+  // B. Person
+  {
+    "@type": "Person",
+    "@id": `${siteURL}#person`,
+    "name": activeAuthor.name,
+    "jobTitle": activeAuthor.role,
+    "description": activeAuthor.bio,
+    "image": activeAuthor.avatar,
+    "url": new URL(`author/${activeAuthor.slug}/`, siteURL).toString(),
+    "worksFor": { "@id": `${siteURL}#organization` }
+  },
+  // C. WebPage
+  {
+    "@type": "WebPage",
+    "@id": `${seoData.canonical}#webpage`,
+    "url": seoData.canonical.toString(),
+    "name": formattedTitle,
+    "description": seoData.description,
+    "isPartOf": { "@id": `${siteURL}#website` },
+    "breadcrumb": { "@id": `${seoData.canonical}#breadcrumb` },
+    "inLanguage": "id-ID",
+    "potentialAction": [{ "@type": "ReadAction", "target": [seoData.canonical.toString()] }]
+  }
+];
+
+// D. WebSite
+if (isHomepage) {
+  schemaGraph.push({
+    "@type": "WebSite",
+    "@id": `${siteURL}#website`,
+    "url": siteURL,
+    "name": siteConfig.name,
+    "publisher": { "@id": `${siteURL}#organization` },
+    "potentialAction": [{
+      "@type": "SearchAction",
+      "target": { "@type": "EntryPoint", "urlTemplate": `${siteURL}search?q={search_term_string}` },
+      "query-input": "required name=search_term_string"
+    }]
+  });
+}
+
+// E. Breadcrumb List
+schemaGraph.push({
+  "@type": "BreadcrumbList",
+  "@id": `${seoData.canonical}#breadcrumb`,
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": siteURL },
+    category ? { "@type": "ListItem", "position": 2, "name": category.name, "item": new URL(`category/${category.slug}/`, siteURL).toString() } : null,
+    { "@type": "ListItem", "position": category ? 3 : 2, "name": seoData.title, "item": seoData.canonical.toString() }
+  ].filter(Boolean)
+});
+
+// F. BlogPosting
+if (type === "article") {
+  schemaGraph.push({
+    "@type": "BlogPosting",
+    "@id": `${seoData.canonical}#article`,
+    "headline": seoData.title,
+    "description": seoData.description,
+    "author": { "@id": `${siteURL}#person` },
+    "publisher": { "@id": `${siteURL}#organization` },
+    "datePublished": publishedTime?.toISOString(),
+    "dateModified": modifiedTime?.toISOString() || publishedTime?.toISOString(),
+    "image": { "@type": "ImageObject", "@id": `${seoData.canonical}#primaryimage`, "url": ogImageURL, "width": 1200, "height": 630 },
+    "mainEntityOfPage": { "@id": `${seoData.canonical}#webpage` },
+    "articleSection": category?.name,
+    "keywords": tags.join(", ")
+  });
+}
+---
+
+<link rel="preconnect" href="https://c0desk1-api.dev-c0desk1.workers.dev" crossorigin />
+<link rel="dns-prefetch" href="https://c0desk1-api.dev-c0desk1.workers.dev" />
+<link rel="preload" href="/fonts/Geist.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>{formattedTitle}</title>
+<meta name="description" content={seoData.description} />
+<meta name="author" content={activeAuthor.name} />
+
+<link rel="canonical" href={seoData.canonical.toString()} />
+<meta name="robots" content={seoData.noIndex ? "noindex,nofollow" : "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"} />
+<meta name="googlebot" content={seoData.noIndex ? "noindex,nofollow" : "index,follow"} />
+
+<meta property="og:type" content={type === "article" ? "article" : "website"} />
+<meta property="og:title" content={formattedTitle} />
+<meta property="og:description" content={seoData.description} />
+<meta property="og:url" content={seoData.canonical.toString()} />
+<meta property="og:site_name" content={siteConfig.name} />
+<meta property="og:image" content={ogImageURL} />
+<meta property="og:image:secure_url" content={ogImageURL} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="id_ID" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={formattedTitle} />
+<meta name="twitter:description" content={seoData.description} />
+<meta name="twitter:image" content={ogImageURL} />
+<meta name="twitter:site" content="@c0desk1" />
+<meta name="twitter:creator" content="@c0desk1" />
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+<meta name="theme-color" content="#38B66B" />
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<script type="application/ld+json" set:html={JSON.stringify({ "@context": "https://schema.org", "@graph": schemaGraph })} />
+
+<meta name="google-site-verification" content="ZxoHYWipAMoGhvwVi5nxolWsZOntrYkNkVcG9HTfFZQ" />
+<meta name="google-adsense-account" content="ca-pub-4943136052113535" />
+<meta name="yandex-verification" content="1878480c0d7b5510" />

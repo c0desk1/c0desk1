@@ -1,0 +1,84 @@
+---
+interface Props {
+  titles?: string[];
+}
+
+const { titles = ["Code"] } = Astro.props;
+---
+
+<div class="code-group not-prose mx-auto max-w-3xl my-8 overflow-hidden rounded-xl border border-zinc-300 bg-white shadow-sm dark:border-white/5 dark:bg-black">
+  <div class="flex items-center justify-between border-b border-zinc-200 bg-zinc-50 px-2 dark:border-white/5 dark:bg-black">
+    <div class="flex overflow-x-auto no-scrollbar">
+      {titles.map((title, index) => (
+        <button
+          data-code-tab={index}
+          class="relative px-4 py-2.5 text-xs font-semibold tracking-wide text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 data-[active=true]:text-zinc-900 dark:data-[active=true]:text-white"
+        >
+          {title}
+          <div class="absolute bottom-0 left-0 h-0.5 rounded-full w-full scale-x-0 bg-zinc-900 transition-transform duration-200 dark:bg-white [button[data-active=true]>&]:scale-x-100"></div>
+        </button>
+      ))}
+    </div>
+
+    <button class="copy-button p-2 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 cursor-pointer" aria-label="Copy code">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="copy-icon"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="check-icon hidden text-emerald-500"><polyline points="20 6 9 17 4 12"/></svg>
+    </button>
+  </div>
+
+  <div class="code-group-content [&_pre]:m-0! [&_pre]:rounded-none! [&_pre]:border-none! [&_pre]:bg-transparent!">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .code-group-content > :global(*:not(:first-child)) {
+    display: none;
+  }
+</style>
+
+<script>
+  const initCodeGroup = () => {
+    const groups = document.querySelectorAll('.code-group');
+
+    groups.forEach(group => {
+      const tabs = group.querySelectorAll('[data-code-tab]');
+      const contents = group.querySelector('.code-group-content')?.children;
+      const copyBtn = group.querySelector('.copy-button');
+
+      if (!tabs.length || !contents) return;
+
+      const activate = (index: number) => {
+        tabs.forEach((tab, i) => {
+          tab.setAttribute('data-active', (i === index).toString());
+          if (contents[i]) {
+            (contents[i] as HTMLElement).style.display = i === index ? 'block' : 'none';
+          }
+        });
+      };
+
+      tabs.forEach((tab, i) => tab.addEventListener('click', () => activate(i)));
+      copyBtn?.addEventListener('click', async () => {
+        const activeContent = Array.from(contents).find(c => (c as HTMLElement).style.display !== 'none');
+        const code = activeContent?.querySelector('code')?.innerText;
+        
+        if (code) {
+          await navigator.clipboard.writeText(code);
+          copyBtn.querySelector('.copy-icon')?.classList.add('hidden');
+          copyBtn.querySelector('.check-icon')?.classList.remove('hidden');
+          setTimeout(() => {
+            copyBtn.querySelector('.copy-icon')?.classList.remove('hidden');
+            copyBtn.querySelector('.check-icon')?.classList.add('hidden');
+          }, 2000);
+        }
+      });
+
+      activate(0);
+    });
+  };
+
+  initCodeGroup();
+  document.addEventListener('astro:after-swap', initCodeGroup);
+</script>
