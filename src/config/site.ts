@@ -16,7 +16,7 @@ export const siteConfig = {
     slug: "bima-akbar",
     avatar: "/images/author/author.jpg",
     title: "Author",
-    bio: "Hanya seorang seorang amatiran yang suka hal-hal baru."
+    bio: "Hanya seorang amatiran yang menyukai hal-hal baru."
   } satisfies Author,
 
   description: "Eksplorasi workflow digital, AI tools, musik, anime, dan game dari perspektif kreator modern yang membangun di era otomatisasi.",
