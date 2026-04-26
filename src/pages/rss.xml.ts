@@ -11,7 +11,7 @@ export async function GET(context: any) {
     .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
     .slice(0, 30);
 
-  return rss({
+  const response = await rss({
     title: siteConfig.name,
     description: siteConfig.description,
     site,
@@ -47,4 +47,8 @@ export async function GET(context: any) {
       media: "http://search.yahoo.com/mrss/"
     }
   });
+
+  response.headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
+
+  return response;
 }
