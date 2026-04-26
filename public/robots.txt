@@ -1,21 +1,13 @@
 # robots.txt
-User-agent: FeedFetcher-Google
-Allow: /rss.xml
-
 User-agent: *
 Allow: /
 Disallow: /404/
 Disallow: /api/
-Disallow: /category/
 
-User-agent: Googlebot
-Allow: /
+# RSS
+User-agent: FeedFetcher-Google
+Allow: /rss.xml
 
-User-agent: Yandex
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
+# Peta Situs
 Sitemap: https://c0desk1.my.id/sitemap-index.xml
 Sitemap: https://c0desk1.my.id/rss.xml
