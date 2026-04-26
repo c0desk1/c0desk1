@@ -61,7 +61,7 @@ const searchData = posts.map(p => ({
         </div>
 
         <!-- Results -->
-        <div id="search-results" class="max-h- overflow-y-auto">
+        <div id="search-results" class="max-h-[60vh] overflow-y-auto">
           <div class="py-14 items-center text-center">
             <svg class="mx-auto w-8 h-8 text-zinc-300 dark:text-zinc-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -167,7 +167,7 @@ const searchData = posts.map(p => ({
           <div class="text-sm md:text-lg font-medium text-black dark:text-white truncate">
             ${p.title}
           </div>
-          <div class="mt-0.5 text- text-zinc-500 line-clamp-1">
+          <div class="mt-0.5 text-xs md:text-[13px] text-zinc-500 line-clamp-1">
             ${p.desc}
           </div>
         </div>
@@ -180,7 +180,6 @@ const searchData = posts.map(p => ({
   closeBtn?.addEventListener("click", close);
   backdrop.addEventListener("click", close);
 
-  // Ini yang kurang - listener ESC
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" &&!modal.classList.contains("hidden")) {
       e.preventDefault();
@@ -226,6 +225,20 @@ const searchData = posts.map(p => ({
   });
 
   modal.setAttribute("inert", "");
+  
+  document.addEventListener("DOMContentLoaded", () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const q = urlParams.get("q");
+    
+    if (q) {
+      setTimeout(() => {
+        open(); // Buka modal
+        input.value = q;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }, 100);
+    }
+  });
 </script>
 
 <style>
