@@ -4,8 +4,7 @@ import Container from '@/components/ui/Container.astro';
 import Button from '@/components/ui/Button.astro';
 import { siteConfig } from '@/config/site';
 
-const siteURL = Astro.site?.toString()?? siteConfig.url;
-const canonicalURL = new URL('404/', siteURL).toString();
+const siteURL = Astro.site?.toString() ?? siteConfig.url;
 
 const seoData = {
   title: "404 - Page Not Found",
@@ -13,18 +12,9 @@ const seoData = {
   noIndex: true,
   type: "website" as const
 };
-
-const schema = {
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "@id": `${canonicalURL}#webpage`,
-  "url": canonicalURL,
-  "name": "404 - Page Not Found"
-};
 ---
 
 <BaseLayout {...seoData}>
-  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
   <Container size="md" class="py-8 md:py-16">
     <div class="flex flex-col items-center justify-center py-20 md:py-32 text-center">
       <span class="text-sm text-zinc-400 dark:text-zinc-600 mb-4">
