@@ -1,11 +1,10 @@
 ---
 // src/pages/blog/[...slug].astro
-
 import { getCollection, render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 
 import { siteConfig } from "@/config/site";
-import { categoryLabels } from "@/config/blog";
+// import { categoryLabels } from "@/config/blog";
 
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/ui/Container.astro";
@@ -22,25 +21,16 @@ import BackToTop from "@/components/ui/BackToTop.astro";
 import Image from "@/components/mdx/Image.astro";
 import HR from "@/components/mdx/HR.astro";
 
-import {
-  filterHeadingsForTOC,
-  getReadingTime
-} from "@/lib/utils";
-
-import {
-  getSmartRelatedPosts
-} from "@/lib/botEngine";
+import { filterHeadingsForTOC, getReadingTime } from "@/lib/utils";
+import { getSmartRelatedPosts } from "@/lib/botEngine";
 import ReadingProgress from "@/components/ui/ReadingProgress.astro";
 
 export async function getStaticPaths() {
-
-  const posts = await getCollection("blog", ({ data }) => !data.draft);
-
+  const posts = await getCollection("blog", ({ data }) =>!data.draft);
   return posts.map((post: CollectionEntry<"blog">) => ({
     params: { slug: post.id },
     props: { post }
   }));
-
 }
 
 interface Props {
@@ -48,11 +38,8 @@ interface Props {
 }
 
 const { post } = Astro.props;
-
-const allPosts = await getCollection("blog", ({ data }) => !data.draft);
-
+const allPosts = await getCollection("blog", ({ data }) =>!data.draft);
 const { Content, headings } = await render(post);
-
 const relatedPosts = getSmartRelatedPosts(post, allPosts, 3);
 
 const {
@@ -74,47 +61,33 @@ const seoTitle = seo?.title || title;
 const seoDescription = seo?.description || description;
 const seoImage = seo?.ogImage || image || siteConfig.ogImage;
 
-const schemaAuthorName = author?.name || siteConfig.author.name || "c0desk1";
-
 const tocHeadings = filterHeadingsForTOC(headings);
-
 const readingTime = getReadingTime(post.body);
 
+const siteURL = Astro.site?.toString()?? siteConfig.url;
+const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
+
 const breadcrumbItems = [
-  { name: "Blog", href: "/blog/" },
-  {
-    name: categoryLabels[category],
-    href: `/category/${category.toLowerCase()}/`
-  }
+  { name: "Home", href: siteURL },
+  { name: "Blog", href: new URL("blog/", siteURL).toString() }
 ];
 
 const schema = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
-  "@id": `${Astro.url.href}#breadcrumb`,
+  "@id": `${canonicalURL}#breadcrumb`,
   "itemListElement": [
     {
       "@type": "ListItem",
       "position": 1,
       "name": "Home",
-      "item": siteConfig.url
+      "item": siteURL
     },
     {
       "@type": "ListItem",
       "position": 2,
       "name": "Blog",
-      "item": `${siteConfig.url}blog/`
-    },
-    {
-      "@type": "ListItem",
-      "position": 3,
-      "name": categoryLabels[category],
-      "item": `${siteConfig.url}category/${category.toLowerCase()}/`
-    },
-    {
-      "@type": "ListItem",
-      "position": 4,
-      "name": title
+      "item": new URL("blog/", siteURL).toString()
     }
   ]
 };
@@ -162,12 +135,7 @@ const schema = {
       <Container size="sm">
         <h2 class="sr-only">Article Content</h2>
         <BlogContent>
-          <Content
-            components={{
-              img: Image,
-              hr: HR
-            }}
-          />
+          <Content components={{ img: Image, hr: HR }} />
         </BlogContent>
       </Container>
     </Section>

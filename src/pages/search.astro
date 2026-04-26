@@ -1,6 +1,5 @@
 ---
 // src/pages/search.astro
-
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
@@ -13,10 +12,10 @@ const url = new URL(Astro.request.url);
 const rawQuery = url.searchParams.get("q") || "";
 const query = rawQuery.toLowerCase();
 
-const posts = await getCollection("blog", ({ data }) => !data.draft);
+const posts = await getCollection("blog", ({ data }) =>!data.draft);
 
 const results = query
-  ? posts.filter((post) => {
+ ? posts.filter((post) => {
       const title = post.data.title.toLowerCase();
       const desc = post.data.description.toLowerCase();
       const category = (post.data.category || "").toLowerCase();
@@ -29,10 +28,12 @@ const results = query
     })
   : [];
 
+const siteURL = Astro.site?.toString()?? siteConfig.url;
+const canonicalURL = new URL("search/", siteURL).toString();
+
 const seoData = {
-  title: rawQuery ? `Search: ${rawQuery}` : "Search",
+  title: rawQuery? `Search: ${rawQuery}` : "Search",
   description: "Search articles on c0desk1",
-  canonicalURL: `${siteConfig.url}search`,
   noIndex: true,
   type: "website" as const
 };
@@ -41,14 +42,14 @@ const schema = {
   "@context": "https://schema.org",
   "@type": "SearchResultsPage",
   "name": seoData.title,
-  "url": `${siteConfig.url}search?q=${encodeURIComponent(rawQuery)}`,
+  "url": canonicalURL,
   "mainEntity": {
     "@type": "ItemList",
     "numberOfItems": results.length,
     "itemListElement": results.slice(0, 10).map((post, i) => ({
       "@type": "ListItem",
       "position": i + 1,
-      "url": `${siteConfig.url}blog/${post.id}/`
+      "url": new URL(`blog/${post.id}/`, siteURL).toString()
     }))
   }
 };
@@ -73,10 +74,10 @@ const schema = {
           {rawQuery && results.length > 0 && results.map((post) => (
             <article class="relative pl-10 group">
               <span class="absolute left-0 top-2 w-2.5 h-2.5 rounded-full bg-zinc-300 dark:bg-zinc-700 group-hover:bg-black dark:group-hover:bg-white transition" />
-              <a href={`/blog/${post.id}/`} class="block">
-                <div class="flex items-center justify-between text-[11px] text-zinc-400 uppercase tracking-wide">
+              <a href={new URL(`blog/${post.id}/`, siteURL).toString()} class="block">
+                <div class="flex items-center justify-between text- text-zinc-400 uppercase tracking-wide">
                   <span>
-                    {categoryLabels[post.data.category] ?? post.data.category}
+                    {categoryLabels[post.data.category]?? post.data.category}
                   </span>
                   <time datetime={post.data.pubDate.toISOString()}>
                     {formatDateCompact(post.data.pubDate)}

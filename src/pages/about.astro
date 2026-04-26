@@ -1,54 +1,60 @@
 ---
 // src/pages/about.astro
-
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Container from '@/components/ui/Container.astro';
 import Breadcrumb from '@/components/ui/Breadcrumb.astro';
 import { siteConfig } from '@/config/site';
 
+const siteURL = Astro.site?.toString()?? siteConfig.url;
+const canonicalURL = new URL(Astro.url.pathname, siteURL).toString(); // /about/
+
 const seoData = {
-  title: "About",
+  title: "Tentang",
   description: "Tentang saya dan cara saya membangun pengalaman digital.",
-  type: "website" as const,
-  canonicalURL: `${siteConfig.url}about/`
+  type: "website" as const
 };
+
+const breadcrumbItems = [
+  { name: 'Home', href: siteURL },
+  { name: 'Tentang', href: canonicalURL }
+];
 
 const schema = {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "AboutPage",
-      "@id": `${seoData.canonicalURL}#aboutpage`,
-      "url": seoData.canonicalURL,
-      "name": "About c0desk1",
+      "@id": `${canonicalURL}#aboutpage`,
+      "url": canonicalURL,
+      "name": "Tentang c0desk1",
       "description": seoData.description,
       "isPartOf": {
-        "@id": `${siteConfig.url}#website`
+        "@id": `${siteURL}#website`
       },
       "about": {
-        "@id": `${siteConfig.url}#person`
+        "@id": `${siteURL}#person`
       },
       "breadcrumb": {
-        "@id": `${seoData.canonicalURL}#breadcrumb`
+        "@id": `${canonicalURL}#breadcrumb`
       },
       "mainEntity": {
-        "@id": `${siteConfig.url}#person`
+        "@id": `${siteURL}#person`
       }
     },
     {
       "@type": "BreadcrumbList",
-      "@id": `${seoData.canonicalURL}#breadcrumb`,
+      "@id": `${canonicalURL}#breadcrumb`,
       "itemListElement": [
         {
           "@type": "ListItem",
           "position": 1,
           "name": "Home",
-          "item": siteConfig.url
+          "item": siteURL
         },
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "About"
+          "name": "Tentang"
         }
       ]
     }
@@ -60,13 +66,10 @@ const schema = {
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
   <div class="border-b border-zinc-100 dark:border-zinc-900">
     <Container size="md" class="py-12 md:py-16">
-      <Breadcrumb items={[
-        { name: 'Home', href: '/' },
-        { name: 'About', href: '/about/' }
-      ]} />
+      <Breadcrumb items={breadcrumbItems} />
       <div class="space-y-4 mt-6 text-center">
         <h1 class="text-4xl md:text-6xl font-semibold tracking-tight text-zinc-900 dark:text-white">
-          About
+          Tentang
         </h1>
         <p class="text-base md:text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
           {siteConfig.author.bio}
@@ -79,7 +82,7 @@ const schema = {
       <div class="space-y-12">
         <section>
           <h2 class="text-sm font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-4">
-            About
+            Tentang
           </h2>
           <p class="text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
             Saya {siteConfig.author.name}, frontend engineer dari Indonesia. Fokus pada performa, aksesibilitas, dan UI yang jelas.
@@ -87,18 +90,18 @@ const schema = {
         </section>
         
         <section>
-  <h2 class="text-sm font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-4">
-    Focus
-  </h2>
-  <div class="space-y-3">
-    <p class="text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
-      Fokus membangun produk web yang cepat, accessible, dan maintainable. 
-    </p>
-    <p class="text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
-      Eksplorasi workflow modern dengan Astro, TypeScript, dan AI tools untuk automasi.
-    </p>
-  </div>
-</section>
+          <h2 class="text-sm font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-4">
+            Focus
+          </h2>
+          <div class="space-y-3">
+            <p class="text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
+              Fokus membangun produk web yang cepat, accessible, dan maintainable. 
+            </p>
+            <p class="text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
+              Eksplorasi workflow modern dengan Astro, TypeScript, dan AI tools untuk automasi.
+            </p>
+          </div>
+        </section>
         
         <section>
           <h2 class="text-sm font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-4">

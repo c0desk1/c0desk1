@@ -1,6 +1,5 @@
 ---
 // src/pages/portfolio/index.astro
-
 import { getCollection } from "astro:content";
 import { siteConfig } from "@/config/site";
 
@@ -25,11 +24,13 @@ const featuredProjects = filterByFeatured(projects);
 const featuredProject = featuredProjects?.[0];
 const regularProjects = projects.filter((p) =>!p.data.featured);
 
+const siteURL = Astro.site?.toString()?? siteConfig.url;
+const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
+
 const seoData = {
   title: "Portfolio & Projects",
   description: "Koleksi karya digital, mulai dari web application, sistem desain, hingga eksperimen teknologi dan UI/UX modern.",
   type: "website" as const,
-  canonicalURL: `${siteConfig.url}portfolio/`
 };
 
 const schema = {
@@ -37,44 +38,51 @@ const schema = {
   "@graph": [
     {
       "@type": "CollectionPage",
-      "@id": `${seoData.canonicalURL}#collectionpage`,
-      "url": seoData.canonicalURL,
+      "@id": `${canonicalURL}#collectionpage`,
+      "url": canonicalURL,
       "name": seoData.title,
       "description": seoData.description,
       "isPartOf": {
-        "@id": `${siteConfig.url}#website`
+        "@id": `${siteURL}#website`
       },
       "breadcrumb": {
-        "@id": `${seoData.canonicalURL}#breadcrumb`
+        "@id": `${canonicalURL}#breadcrumb`
       },
       "mainEntity": {
         "@type": "ItemList",
         "numberOfItems": projects.length,
-        "itemListElement": projects.slice(0, 10).map((project, i) => ({
-          "@type": "ListItem",
-          "position": i + 1,
-          "item": {
-            "@type": "CreativeWork",
-            "@id": `${siteConfig.url}portfolio/${project.id}/`,
-            "url": `${siteConfig.url}portfolio/${project.id}/`,
-            "name": project.data.title,
-            "description": project.data.description,
-            "image": project.data.image? `${siteConfig.url}${project.data.image}` : undefined,
-            "dateCreated": project.data.date?.toISOString(),
-            "creator": { "@id": `${siteConfig.url}#person` }
-          }
-        }))
+        "itemListElement": projects.slice(0, 10).map((project, i) => {
+          const projectURL = new URL(`portfolio/${project.id}/`, siteURL).toString();
+          const imageURL = project.data.image
+           ? new URL(project.data.image, siteURL).toString()
+            : undefined;
+
+          return {
+            "@type": "ListItem",
+            "position": i + 1,
+            "item": {
+              "@type": "CreativeWork",
+              "@id": projectURL,
+              "url": projectURL,
+              "name": project.data.title,
+              "description": project.data.description,
+              "image": imageURL,
+              "dateCreated": project.data.date?.toISOString(),
+              "creator": { "@id": `${siteURL}#person` }
+            }
+          };
+        })
       }
     },
     {
       "@type": "BreadcrumbList",
-      "@id": `${seoData.canonicalURL}#breadcrumb`,
+      "@id": `${canonicalURL}#breadcrumb`,
       "itemListElement": [
         {
           "@type": "ListItem",
           "position": 1,
           "name": "Home",
-          "item": siteConfig.url
+          "item": siteURL
         },
         {
           "@type": "ListItem",

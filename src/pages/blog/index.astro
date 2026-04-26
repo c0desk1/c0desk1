@@ -1,6 +1,5 @@
 ---
 // src/pages/blog/index.astro
-
 import { getCollection } from "astro:content";
 import { sortByDate } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
@@ -11,18 +10,17 @@ import BlogHero from "@/components/blog/BlogHero.astro";
 import BlogList from "@/components/blog/BlogList.astro";
 
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
-
 const posts = sortByDate(allPosts);
-
 const featuredPosts = posts.filter((p) => p.data.featured);
 const regularPosts = posts.filter((p) => !p.data.featured);
 
+const siteURL = Astro.site?.toString() ?? siteConfig.url;
+const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
+
 const seoData = {
   title: "Blog & Insights",
-  description:
-    "Catatan dari balik layar tentang sistem, kreativitas, dan eksplorasi dunia digital modern.",
+  description: "Catatan dari balik layar tentang sistem, kreativitas, dan eksplorasi dunia digital modern.",
   type: "website" as const,
-  canonicalURL: `${siteConfig.url}blog/`
 };
 
 const schema = {
@@ -30,37 +28,40 @@ const schema = {
   "@graph": [
     {
       "@type": "CollectionPage",
-      "@id": `${seoData.canonicalURL}#collectionpage`,
-      "url": seoData.canonicalURL,
+      "@id": `${canonicalURL}#collectionpage`,
+      "url": canonicalURL,
       "name": seoData.title,
       "description": seoData.description,
       "isPartOf": {
-        "@id": `${siteConfig.url}#website`
+        "@id": `${siteURL}#website`
       },
       "breadcrumb": {
-        "@id": `${seoData.canonicalURL}#breadcrumb`
+        "@id": `${canonicalURL}#breadcrumb`
       },
       "mainEntity": {
         "@type": "ItemList",
         "numberOfItems": posts.length,
-        "itemListElement": posts.slice(0, 10).map((post, i) => ({
-          "@type": "ListItem",
-          "position": i + 1,
-          "url": `${siteConfig.url}blog/${post.id}/`,
-          "name": post.data.title,
-          "datePublished": post.data.pubDate.toISOString()
-        }))
+        "itemListElement": posts.slice(0, 10).map((post, i) => {
+          const url = new URL(`blog/${post.id}/`, siteURL).toString();
+          return {
+            "@type": "ListItem",
+            "position": i + 1,
+            "url": url,
+            "name": post.data.title,
+            "datePublished": post.data.pubDate.toISOString()
+          };
+        })
       }
     },
     {
       "@type": "BreadcrumbList",
-      "@id": `${seoData.canonicalURL}#breadcrumb`,
+      "@id": `${canonicalURL}#breadcrumb`,
       "itemListElement": [
         {
           "@type": "ListItem",
           "position": 1,
           "name": "Home",
-          "item": siteConfig.url
+          "item": siteURL
         },
         {
           "@type": "ListItem",
@@ -83,25 +84,15 @@ const schema = {
   {featuredPosts.length > 0 && (
     <Section id="featured-posts" size="lg" aria-label="Featured articles">
       <Container size="md">
-        <h2 class="sr-only">
-          Featured Posts
-        </h2>
-        <BlogList
-          posts={featuredPosts}
-          variant="featured"
-        />
+        <h2 class="sr-only">Featured Posts</h2>
+        <BlogList posts={featuredPosts} variant="featured" />
       </Container>
     </Section>
   )}
   <Section id="all-posts" size="lg" aria-label="All articles">
     <Container size="md">
-      <h2 class="sr-only">
-        All Posts
-      </h2>
-      <BlogList
-        posts={regularPosts}
-        variant="default"
-      />
+      <h2 class="sr-only">All Posts</h2>
+      <BlogList posts={regularPosts} variant="default" />
     </Container>
   </Section>
 </BaseLayout>

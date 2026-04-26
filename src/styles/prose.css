@@ -264,9 +264,11 @@
 }
 
 .prose-custom li {
+  font-size: 0.9rem;
   color: #3f3f46;
   margin-bottom: 1.25rem;
   padding-left: 0.1rem;
+  
 }
 
 .dark .prose-custom li {

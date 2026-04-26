@@ -68,7 +68,8 @@ const relatedProjects = getSmartRelatedProjects(project, allProjects, 2);
 
 const displayGallery = Array.isArray(gallery)? gallery : [];
 
-const canonicalURL = `${siteConfig.url}portfolio/${project.id}/`;
+const siteURL = Astro.site?.toString()?? siteConfig.url;
+const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
 const seoData = {
   title: seoTitle,
@@ -77,9 +78,15 @@ const seoData = {
   type: "website" as const,
   publishedTime: date,
   modifiedTime: updatedDate,
-  tags: techStack,
-  canonicalURL: `${siteConfig.url}portfolio/${project.id}/`
+  tags: techStack
 };
+
+const breadcrumbItems = [
+  { name: "Home", href: siteURL },
+  { name: "Portfolio", href: new URL("portfolio/", siteURL).toString() }
+];
+
+const imageURL = image ? new URL(image, siteURL).toString() : undefined;
 
 const creativeWorkSchema = {
   "@type": "CreativeWork",
@@ -90,17 +97,17 @@ const creativeWorkSchema = {
   "description": description,
   "image": image ? {
     "@type": "ImageObject",
-    "url": `${siteConfig.url}${image}`,
+    "url": imageURL,
     "caption": imageCaption || imageAlt || title
   } : undefined,
   "dateCreated": date?.toISOString(),
   "dateModified": updatedDate?.toISOString() || date?.toISOString(),
-  "creator": { "@id": `${siteConfig.url}#person` },
-  "publisher": { "@id": `${siteConfig.url}#organization` },
+  "creator": { "@id": `${siteURL}#person` },
+  "publisher": { "@id": `${siteURL}#organization` },
   "keywords": techStack?.join(", "),
-  "isPartOf": { "@id": `${siteConfig.url}portfolio/#collectionpage` },
+  "isPartOf": { "@id": new URL("portfolio/", siteURL).toString() + "#collectionpage" },
   ...(client && { "client": { "@type": "Organization", "name": client } }),
-  ...(role && { "contributor": { "@id": `${siteConfig.url}#person`, "roleName": role } }),
+  ...(role && { "contributor": { "@id": `${siteURL}#person`, "roleName": role } }),
   ...(duration && { "timeRequired": duration }),
   ...(demoUrl && { "workExample": { "@type": "WebSite", "url": demoUrl } }),
   ...(repoUrl && { "codeRepository": repoUrl })
@@ -114,9 +121,8 @@ const schema = {
       "@type": "BreadcrumbList",
       "@id": `${canonicalURL}#breadcrumb`,
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home", "item": siteConfig.url },
-        { "@type": "ListItem", "position": 2, "name": "Portfolio", "item": `${siteConfig.url}portfolio/` },
-        { "@type": "ListItem", "position": 3, "name": title }
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": siteURL },
+        { "@type": "ListItem", "position": 2, "name": "Portfolio", "item": new URL("portfolio/", siteURL).toString() }
       ]
     }
   ]
@@ -131,12 +137,7 @@ const schema = {
   <Section size="lg">
     <Container size="sm">
       <h2 class="sr-only">Portfolio Header</h2>
-      <Breadcrumb
-        items={[
-          { name: "Portfolio", href: "/portfolio/" },
-          { name: title, href: "#" }
-        ]}
-      />
+      <Breadcrumb items={breadcrumbItems} />
       <PortfolioHeader
         title={title}
         date={date}
@@ -196,13 +197,23 @@ const schema = {
           )}
           {result && (
             <div>
-              <h2 class="sr-only">Portfolio Image Gallery</h2>
-              <PortfolioGallery
-                images={displayGallery}
-                title={title}
-              />
+              <h2 class="text-lg font-semibold text-zinc-900 dark:text-white mb-2">
+                Hasil
+              </h2>
+              <p class="text-zinc-600 dark:text-zinc-400">
+                {result}
+              </p>
             </div>
           )}
+        </div>
+      )}
+      {displayGallery.length > 0 && (
+        <div class="mb-10">
+          <h2 class="sr-only">Portfolio Image Gallery</h2>
+          <PortfolioGallery
+            images={displayGallery}
+            title={title}
+          />
         </div>
       )}
       <div class="prose-custom">

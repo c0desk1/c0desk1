@@ -52,6 +52,10 @@
     overflow-x: hidden;
   }
 
+  main {
+    min-height: 100vh;
+  }
+
   img,
   picture,
   video,
@@ -70,6 +74,19 @@
   ::-moz-selection {
     background-color: #10b981;
     color: #ffffff;
+  }
+
+  ::-webkit-scrollbar-track { 
+    background: transparent; 
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgb(212 212 216);
+    border-radius: 3px;
+  }
+  
+ .dark ::-webkit-scrollbar-thumb {
+    background: rgb(63 63 70);
   }
 
   .dark ::selection {
