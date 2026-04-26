@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets'; 
 
 import { siteConfig } from '@/config/site';
 import { categoryLabels } from '@/config/blog';
@@ -43,11 +44,13 @@ const authorAvatar = author?.avatar || siteConfig.author.avatar;
   </div>
   <div class="mt-auto flex items-center gap-3 pt-6">
     {authorAvatar && (
-      <img
+      <Image
         src={authorAvatar}
         alt={`Author avatar ${authorName}`}
+        width={24}
+        height={24}
         class="w-6 h-6 rounded-full object-cover"
-        loading="lazy"
+        loading="eager"
       />
     )}
     <span class="text-[13px] text-zinc-500 dark:text-zinc-400">
