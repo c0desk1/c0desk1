@@ -56,6 +56,8 @@ const isSearchPage = pathname === '/search/';
 const shouldRenderWebPage = !isHomepage && !isBlogIndex && !isPortfolioIndex && !isAuthorPage && !isAboutPage && !isSearchPage && type !== "article";
 
 // ================= SCHEMA GRAPH =================
+
+//Organization
 const organizationSchema = {
   "@type": "Organization",
   "@id": `${siteURL}#organization`,
@@ -74,13 +76,25 @@ const organizationSchema = {
   ].filter(Boolean)
 };
 
+// Person
 const personSchema = {
   "@type": "Person",
   "@id": `${siteURL}#person`,
   "name": siteConfig.author.name,
   "url": new URL(`author/${siteConfig.author.slug}/`, siteURL).toString(),
-  "jobTitle": siteConfig.author.title,
+  "jobTitle": "Music Producer, Stock Contributor, Developer",
   "description": siteConfig.author.bio,
+  "knowsAbout": [
+    "FL Studio", 
+    "Music Production", 
+    "Adobe Stock", 
+    "Web Development", 
+    "Automation",
+    "Gaming",
+    "Anime",
+    "Technology",
+    "Content Creation"
+  ],
   "mainEntityOfPage": { "@id": new URL(`author/${siteConfig.author.slug}/`, siteURL).toString() },
   "image": {
     "@type": "ImageObject",
@@ -88,15 +102,20 @@ const personSchema = {
     "width": 96,
     "height": 96
   },
-  "worksFor": { "@id": `${siteURL}#organization` }
+  "worksFor": { "@id": `${siteURL}#organization` },
+  "sameAs": [
+    siteConfig.social?.github,
+    siteConfig.social?.twitter,
+    siteConfig.social?.linkedin,
+  ].filter(Boolean)
 };
 
-// WebSite + SearchAction
+// WebSite
 const websiteSchema = isHomepage ? [{
   "@type": "WebSite",
   "@id": `${siteURL}#website`,
   "keywords": siteConfig.keywords.join(", "),
-  "url": siteURL, // https://c0desk1.my.id/
+  "url": siteURL,
   "name": siteConfig.name,
   "description": siteConfig.description,
   "inLanguage": "id-ID",
@@ -105,12 +124,13 @@ const websiteSchema = isHomepage ? [{
     "@type": "SearchAction",
     "target": {
       "@type": "EntryPoint",
-      "urlTemplate": `${siteURL}search/?q={search_term_string}`
+      "urlTemplate": new URL("search/?q={search_term_string}", siteURL).toString()
     },
     "query-input": "required name=search_term_string"
   }
 }] : [];
 
+// WebPage
 const webPageSchema = shouldRenderWebPage ? [{
   "@type": "WebPage",
   "@id": `${canonical.toString()}#webpage`,
@@ -129,7 +149,7 @@ const webPageSchema = shouldRenderWebPage ? [{
   }
 }] : [];
 
-// Article schema
+// Article
 const articleSchema = type === "article" ? [{
   "@type": "BlogPosting",
   "@id": `${canonical.toString()}#article`,
@@ -153,6 +173,26 @@ const articleSchema = type === "article" ? [{
   "keywords": tags.length ? tags.join(", ") : undefined
 }] : [];
 
+// BreadcrumbList
+const breadcrumbSchema = !isHomepage ? [{
+  "@type": "BreadcrumbList",
+  "@id": `${canonical.toString()}#breadcrumb`,
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Beranda",
+      "item": siteURL
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": title || "Halaman",
+      "item": canonical.toString()
+    }
+  ]
+}] : [];
+
 const graph = {
   "@context": "https://schema.org",
   "@graph": [
@@ -160,14 +200,15 @@ const graph = {
     personSchema,
     ...websiteSchema,
     ...webPageSchema,
-    ...articleSchema
+    ...articleSchema,
+    ...breadcrumbSchema
   ]
 };
 ---
 
 <!-- BASIC SEO -->
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>{formattedTitle}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonical.toString()} />
@@ -199,6 +240,10 @@ const graph = {
 <meta name="twitter:image" content={fullImageURL} />
 <meta name="twitter:site" content="@c0desk1" />
 <meta name="twitter:creator" content={siteConfig.links?.twitter?.replace('https://twitter.com/', '@')} />
+
+<!-- SOCIAL MEDIA -->
+<meta name="pinterest-rich-pin" content="true" />
+<meta property="fb:app_id" content="YOUR_APP_ID" />
 
 <!-- PERFORMANCE -->
 <link rel="preload" href="/fonts/Geist.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
