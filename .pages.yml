@@ -187,6 +187,11 @@ content:
             options:
               media: blog-author
               rename: true
+
+          - name: avatar
+            label: Avatar
+            type: string
+            default: "https://c0desk1-api.dev-c0desk1.workers.dev/img/AgACAgUAAxkBAAMIae4rCILWne6NI4IwUwABigyHvpiqAAIdFGsbXxxwV5IOkWnp4HhKAQADAgADeAADOwQ"
             
           - name: title
             label: Title
