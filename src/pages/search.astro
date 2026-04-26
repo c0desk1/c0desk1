@@ -29,27 +29,34 @@ const results = query
     })
   : [];
 
-const seo = {
+const seoData = {
   title: rawQuery ? `Search: ${rawQuery}` : "Search",
   description: "Search articles on c0desk1",
-  canonicalURL: `${siteConfig.url}/search`,
-  url: `${siteConfig.url}/search?q=${encodeURIComponent(rawQuery)}`,
+  canonicalURL: `${siteConfig.url}search`,
+  noIndex: true,
+  type: "website" as const
 };
----
 
-<script type="application/ld+json" set:html={JSON.stringify({
+const schema = {
   "@context": "https://schema.org",
   "@type": "SearchResultsPage",
-  name: seo.title,
-  url: seo.url,
-})} />
+  "name": seoData.title,
+  "url": `${siteConfig.url}search?q=${encodeURIComponent(rawQuery)}`,
+  "mainEntity": {
+    "@type": "ItemList",
+    "numberOfItems": results.length,
+    "itemListElement": results.slice(0, 10).map((post, i) => ({
+      "@type": "ListItem",
+      "position": i + 1,
+      "url": `${siteConfig.url}blog/${post.id}/`
+    }))
+  }
+};
+---
+---
 
-<BaseLayout 
-  title={seo.title} 
-  description={seo.description}
-  canonicalURL={seo.canonicalURL}
-  noIndex={true}
->
+<BaseLayout {...seoData}>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
   <Container size="md" class="py-16">
     <Section size="sm">
       <h1 class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">

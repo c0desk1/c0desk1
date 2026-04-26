@@ -36,34 +36,6 @@ const schema = {
       }
     },
     {
-      "@type": "Person",
-      "@id": `${siteConfig.url}#person`,
-      "name": siteConfig.author.name,
-      "url": `${siteConfig.url}author/${siteConfig.author.slug}/`,
-      "image": {
-        "@type": "ImageObject",
-        "url": `${siteConfig.url}${siteConfig.author.avatar}`,
-        "width": 96,
-        "height": 96
-      },
-      "jobTitle": "Frontend Engineer",
-      "description": siteConfig.author.bio,
-      "worksFor": {
-        "@id": `${siteConfig.url}#organization`
-      },
-      "sameAs": [
-        siteConfig.social?.github,
-        siteConfig.social?.twitter,
-        siteConfig.social?.linkedin
-      ].filter(Boolean),
-      "knowsAbout": ["Astro", "Tailwind CSS", "TypeScript", "React"],
-      "address": {
-        "@type": "PostalAddress",
-        "addressCountry": "ID",
-        "addressRegion": "Indonesia"
-      }
-    },
-    {
       "@type": "BreadcrumbList",
       "@id": `${seoData.canonicalURL}#breadcrumb`,
       "itemListElement": [

@@ -90,30 +90,33 @@ const breadcrumbItems = [
 
 const schema = {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  name: seoTitle,
-  headline: seoTitle,
-  description: seoDescription,
-  image: seoImage,
-  datePublished: pubDate,
-  dateModified: updatedDate || pubDate,
-  author: {
-    "@type": "Person",
-    name: schemaAuthorName
-  },
-  publisher: {
-    "@type": "Organization",
-    name: siteConfig.name,
-    logo: {
-      "@type": "ImageObject",
-      url: `${siteConfig.url}/favicon.svg`
+  "@type": "BreadcrumbList",
+  "@id": `${Astro.url.href}#breadcrumb`,
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": siteConfig.url
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Blog",
+      "item": `${siteConfig.url}blog/`
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": categoryLabels[category],
+      "item": `${siteConfig.url}category/${category.toLowerCase()}/`
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "name": title
     }
-  },
-  mainEntityOfPage: {
-    "@type": "WebPage",
-    "@id": Astro.url.href
-  },
-  keywords: tags?.join(", ") || ""
+  ]
 };
 ---
 

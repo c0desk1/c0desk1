@@ -47,7 +47,8 @@ const schema = {
           "@type": "ListItem",
           "position": i + 1,
           "url": `${siteConfig.url}blog/${post.id}/`,
-          "name": post.data.title
+          "name": post.data.title,
+          "datePublished": post.data.pubDate.toISOString()
         }))
       }
     },

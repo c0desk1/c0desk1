@@ -28,19 +28,20 @@ const authorPosts = posts
 
 const author = siteConfig.author;
 
-const seo = {
+const seoData = {
   title: author.name,
   description: author.bio,
-  url: `${siteConfig.url}/author/${author.slug}/`,
-};
+  type: "profile" as const,
+  canonicalURL: `${siteConfig.url}author/${author.slug}/`
+}
 
 const schema = {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "ProfilePage",
-      "@id": `${seo.url}#profilepage`,
-      "url": seo.url,
+      "@id": `${seoData.canonicalURL}#profilepage`,
+      "url": seoData.canonicalURL,
       "name": `Artikel oleh ${author.name}`,
       "description": author.bio,
       "isPartOf": { "@id": `${siteConfig.url}#website` },
@@ -49,25 +50,11 @@ const schema = {
     },
     {
       "@type": "BreadcrumbList",
-      "@id": `${seo.url}#breadcrumb`,
+      "@id": `${seoData.canonicalURL}#breadcrumb`,
       "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": siteConfig.url
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Author",
-          "item": `${siteConfig.url}author/`
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": author.name
-        }
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": siteConfig.url },
+        { "@type": "ListItem", "position": 2, "name": "Author", "item": `${siteConfig.url}author/` },
+        { "@type": "ListItem", "position": 3, "name": author.name }
       ]
     }
   ]
@@ -76,7 +63,7 @@ const schema = {
 
 <script type="application/ld+json" set:html={JSON.stringify(schema)} />
 
-<BaseLayout title={seo.title} description={seo.description}>
+<BaseLayout {...seoData}>
   <Container size="lg" class="py-16">
     <div class="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-14">
       <aside class="space-y-6">

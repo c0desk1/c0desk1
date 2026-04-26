@@ -61,10 +61,7 @@ const schema = {
             "description": project.data.description,
             "image": project.data.image? `${siteConfig.url}${project.data.image}` : undefined,
             "dateCreated": project.data.date?.toISOString(),
-            "creator": {
-              "@type": "Person",
-              "name": siteConfig.author.name
-            }
+            "creator": { "@id": `${siteConfig.url}#person` }
           }
         }))
       }

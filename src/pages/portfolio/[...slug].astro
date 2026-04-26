@@ -70,6 +70,17 @@ const displayGallery = Array.isArray(gallery)? gallery : [];
 
 const canonicalURL = `${siteConfig.url}portfolio/${project.id}/`;
 
+const seoData = {
+  title: seoTitle,
+  description: seoDescription,
+  image: seoImage,
+  type: "website" as const,
+  publishedTime: date,
+  modifiedTime: updatedDate,
+  tags: techStack,
+  canonicalURL: `${siteConfig.url}portfolio/${project.id}/`
+};
+
 const creativeWorkSchema = {
   "@type": "CreativeWork",
   "@id": `${canonicalURL}#creativework`,
@@ -77,33 +88,22 @@ const creativeWorkSchema = {
   "name": title,
   "headline": title,
   "description": description,
-  "image": image? {
+  "image": image ? {
     "@type": "ImageObject",
     "url": `${siteConfig.url}${image}`,
     "caption": imageCaption || imageAlt || title
   } : undefined,
   "dateCreated": date?.toISOString(),
   "dateModified": updatedDate?.toISOString() || date?.toISOString(),
-  "creator": {
-    "@type": "Person",
-    "name": siteConfig.author.name,
-    "url": `${siteConfig.url}author/${siteConfig.author.slug}/`
-  },
-  "publisher": {
-    "@id": `${siteConfig.url}#organization`
-  },
+  "creator": { "@id": `${siteConfig.url}#person` },
+  "publisher": { "@id": `${siteConfig.url}#organization` },
   "keywords": techStack?.join(", "),
-  "isPartOf": {
-    "@id": `${siteConfig.url}portfolio/#collectionpage`
-  },
-  "mainEntityOfPage": {
-    "@id": `${canonicalURL}#webpage`
-  },
- ...(client && { "client": { "@type": "Organization", "name": client } }),
- ...(role && { "contributor": { "@type": "Person", "name": siteConfig.author.name, "roleName": role } }),
- ...(duration && { "timeRequired": duration }),
- ...(demoUrl && { "workExample": { "@type": "WebSite", "url": demoUrl } }),
- ...(repoUrl && { "codeRepository": repoUrl })
+  "isPartOf": { "@id": `${siteConfig.url}portfolio/#collectionpage` },
+  ...(client && { "client": { "@type": "Organization", "name": client } }),
+  ...(role && { "contributor": { "@id": `${siteConfig.url}#person`, "roleName": role } }),
+  ...(duration && { "timeRequired": duration }),
+  ...(demoUrl && { "workExample": { "@type": "WebSite", "url": demoUrl } }),
+  ...(repoUrl && { "codeRepository": repoUrl })
 };
 
 const schema = {
@@ -114,55 +114,16 @@ const schema = {
       "@type": "BreadcrumbList",
       "@id": `${canonicalURL}#breadcrumb`,
       "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": siteConfig.url
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Portfolio",
-          "item": `${siteConfig.url}portfolio/`
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": title
-        }
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": siteConfig.url },
+        { "@type": "ListItem", "position": 2, "name": "Portfolio", "item": `${siteConfig.url}portfolio/` },
+        { "@type": "ListItem", "position": 3, "name": title }
       ]
-    },
-    {
-      "@type": "WebPage",
-      "@id": `${canonicalURL}#webpage`,
-      "url": canonicalURL,
-      "name": seoTitle,
-      "description": seoDescription,
-      "isPartOf": {
-        "@id": `${siteConfig.url}#website`
-      },
-      "breadcrumb": {
-        "@id": `${canonicalURL}#breadcrumb`
-      },
-      "primaryImageOfPage": image? {
-        "@id": `${canonicalURL}#primaryimage`
-      } : undefined
     }
   ]
 };
 ---
 
-<BaseLayout
-  title={seoTitle}
-  description={seoDescription}
-  image={seoImage}
-  type="article"
-  publishedTime={date}
-  modifiedTime={updatedDate}
-  tags={techStack}
-  container={false}
->
+<BaseLayout {...seoData} container={false}>
 <script type="application/ld+json" set:html={JSON.stringify(schema)} />
 
 <article>

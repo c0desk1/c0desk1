@@ -7,7 +7,7 @@ interface Props {
   description?: string;
   image?: any;
   canonicalURL?: URL | string;
-  type?: "website" | "article";
+  type?: "website" | "article" | "profile";
   noIndex?: boolean;
   publishedTime?: Date;
   modifiedTime?: Date;
@@ -50,6 +50,9 @@ const isHomepage = pathname === '/';
 const isBlogIndex = pathname === '/blog/' || pathname === '/blog';
 const isPortfolioIndex = pathname === '/portfolio/' || pathname === '/portfolio';
 const isAuthorPage = pathname.startsWith('/author/');
+const isAboutPage = pathname === '/about/' || pathname === '/about';
+const isSearchPage = pathname === '/search' || pathname === '/search/';
+const shouldRenderWebPage = !isHomepage && !isBlogIndex && !isPortfolioIndex && !isAuthorPage && !isAboutPage && !isSearchPage && type !== "article";
 
 // ================= SCHEMA GRAPH =================
 const organizationSchema = {
@@ -75,6 +78,7 @@ const personSchema = {
   "@id": `${siteURL}#person`,
   "name": siteConfig.author.name,
   "url": new URL(`/author/${siteConfig.author.slug}/`, siteURL).toString(),
+  "mainEntityOfPage": { "@id": new URL(`/author/${siteConfig.author.slug}/`, siteURL).toString() },
   "image": {
     "@type": "ImageObject",
     "url": new URL(siteConfig.author.avatar, siteURL).toString(),
@@ -102,9 +106,6 @@ const websiteSchema = isHomepage ? [{
     "query-input": "required name=search_term_string"
   }
 }] : [];
-
-// WebPage
-const shouldRenderWebPage = !isHomepage && !isBlogIndex && !isPortfolioIndex && !isAuthorPage && type !== "article";
 
 const webPageSchema = shouldRenderWebPage ? [{
   "@type": "WebPage",
@@ -178,7 +179,7 @@ const graph = {
 )}
 
 <!-- OPEN GRAPH -->
-<meta property="og:type" content={type} />
+<meta property="og:type" content={type === "article" ? "article" : type === "profile" ? "profile" : "website"} />
 <meta property="og:title" content={formattedTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={fullImageURL} />

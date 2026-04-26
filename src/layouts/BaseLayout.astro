@@ -1,17 +1,16 @@
 ---
-// src/layouts/BaseLayout.astro
 import "@/styles/global.css";
 import BaseHead from "@/components/layout/BaseHead.astro";
-
 import Header from "@/components/layout/Header.astro";
 import Footer from "@/components/layout/Footer.astro";
+import Search from "@/components/layout/Search.astro";
 
 interface Props {
   title?: string;
   description?: string;
   image?: any; 
   canonicalURL?: URL | string;
-  type?: "website" | "article";
+  type?: "website" | "article" | "profile";
   noIndex?: boolean;
   publishedTime?: Date;
   modifiedTime?: Date;
@@ -23,17 +22,11 @@ interface Props {
 }
 
 const { 
-  title, 
-  description, 
-  image, 
-  canonicalURL, 
-  type = "website",
-  noIndex = false,
-  publishedTime,
-  modifiedTime,
-  tags = [],
   header = true,
   footer = true,
+  container = true,
+  containerSize = 'lg',
+  ...seoProps 
 } = Astro.props;
 ---
 
@@ -56,21 +49,11 @@ const {
         }
       })();
     </script>
-    <BaseHead 
-      title={title}
-      description={description}
-      image={image} 
-      canonicalURL={canonicalURL}
-      type={type}
-      noIndex={noIndex}
-      publishedTime={publishedTime}
-      modifiedTime={modifiedTime}
-      tags={tags}
-    />
+    <BaseHead {...seoProps} />
     
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2TKFP229HJ"></script>
-    <script>
+    <script is:inline>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
@@ -78,8 +61,6 @@ const {
         anonymize_ip: true,
         send_page_view: true
       });
-      
-      // Track page view untuk Astro View Transitions (perbaiki typo)
       document.addEventListener('astro:after-swap', () => {
         gtag('event', 'page_view', {
           page_path: window.location.pathname,
@@ -94,14 +75,14 @@ const {
     
     {header && <Header />}
     
-    <main>
+    <main class={container ? `container-${containerSize} mx-auto` : ''}>
       <slot />
+      <Search />
     </main>
     
     {footer && <Footer />}
     
-    <!-- Yandex.Metrika counter -->
-    <script>
+    <script is:inline>
       (function(m,e,t,r,i,k,a){
         m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
         m[i].l=1*new Date();
@@ -128,6 +109,5 @@ const {
         <img src="https://mc.yandex.ru/watch/108731154" style="position:absolute; left:-9999px;" alt="" />
       </div>
     </noscript>
-    <!-- /Yandex.Metrika counter -->
   </body>
 </html>
