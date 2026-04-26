@@ -1,12 +1,13 @@
 // src/pages/rss.xml.ts
 import rss from "@astrojs/rss";
-import { getCollection } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 import { siteConfig } from "@/config/site";
 
 export async function GET(context: any) {
   const site = context.site ?? siteConfig.url;
 
   const posts = await getCollection("blog", ({ data }) => !data.draft);
+  
   const sorted = posts
     .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
     .slice(0, 30);
@@ -15,30 +16,35 @@ export async function GET(context: any) {
     title: siteConfig.name,
     description: siteConfig.description,
     site,
-    items: sorted.map((post) => {
+    items: await Promise.all(sorted.map(async (post) => {
       const url = new URL(`blog/${post.id}/`, site).toString();
-      const authorName = post.data.author?.name || siteConfig.author.name;
-      const category = post.data.category;
+      const authorEntry = await getEntry(post.data.author);
+      const authorName = authorEntry?.data.name || siteConfig.author.name;
+      
+      const categoryId = post.data.category.id;
       const tags = post.data.tags ?? [];
-      const imageUrl = post.data.image ? new URL(post.data.image, site).toString() : null;
+      
+      const imageUrl = post.data.image?.src 
+        ? new URL(post.data.image.src, site).toString() 
+        : null;
 
       return {
         title: post.data.title,
         link: url,
         pubDate: post.data.pubDate,
         description: post.data.description,
-        categories: [category, ...tags].filter(Boolean),
+        categories: [categoryId, ...tags].filter(Boolean),
         customData: `
           <dc:creator>${authorName}</dc:creator>
           ${imageUrl ? `<media:content url="${imageUrl}" medium="image" />` : ''}
         `,
         guid: url
       };
-    }),
+    })),
     customData: `
       <language>id-ID</language>
       <lastBuildDate>${sorted[0]?.data.pubDate.toUTCString() || new Date().toUTCString()}</lastBuildDate>
-      <generator>${siteConfig.name} RSS Engine</generator>
+      <generator>Astro Content Engine</generator>
       <atom:link href="${new URL('rss.xml', site).toString()}" rel="self" type="application/rss+xml" />
     `,
     xmlns: {
@@ -48,7 +54,8 @@ export async function GET(context: any) {
     }
   });
 
-  response.headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
+  response.headers.set('Cache-Control', 'public, max-age=3600, s-maxage=3600');
+  response.headers.set('Content-Type', 'application/xml');
 
   return response;
 }
