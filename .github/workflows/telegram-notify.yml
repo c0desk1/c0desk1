@@ -5,30 +5,57 @@ on:
     branches:
       - main
     paths:
-      - 'src/content/blog/**/*.{md,mdx}'
-      - 'src/content/portfolio/**/*.{md,mdx}'
+      - 'src/content/blog/**/*.md'
+      - 'src/content/blog/**/*.mdx'
+      - 'src/content/portfolio/**/*.md'
+      - 'src/content/portfolio/**/*.mdx'
 
 jobs:
   notify:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 2
 
-      - name: Detect and Notify
+      - name: Detect changed content
+        id: detect
         run: |
-          # Cari file yang berubah
-          CHANGED_FILE=$(git diff --name-only HEAD^ HEAD | grep -E 'src/content/(blog|portfolio)/.*\.(md|mdx)' | head -n 1)
-          
-          if [ -z "$CHANGED_FILE" ]; then
+          echo "🔍 Detecting changed files..."
+
+          CHANGED_FILES=$(git diff --name-only \
+            ${{ github.event.before }} \
+            ${{ github.sha }} \
+            | grep -E 'src/content/(blog|portfolio)/.*\.(md|mdx)' || true)
+
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+
+          FIRST_FILE=$(echo "$CHANGED_FILES" | head -n 1)
+
+          if [ -z "$FIRST_FILE" ]; then
             echo "No relevant content changes detected."
+            echo "found=false" >> $GITHUB_OUTPUT
             exit 0
           fi
 
-          # Tentukan Tipe
-          if [[ "$CHANGED_FILE" == *"blog"* ]]; then
+          echo "Found file: $FIRST_FILE"
+
+          echo "file=$FIRST_FILE" >> $GITHUB_OUTPUT
+          echo "found=true" >> $GITHUB_OUTPUT
+
+
+      - name: Extract metadata
+        if: steps.detect.outputs.found == 'true'
+        id: meta
+        run: |
+          FILE="${{ steps.detect.outputs.file }}"
+
+          echo "📄 Reading file: $FILE"
+
+          if [[ "$FILE" == *"blog"* ]]; then
             TYPE="Blog Post"
             BASE_PATH="blog"
           else
@@ -36,47 +63,45 @@ jobs:
             BASE_PATH="portfolio"
           fi
 
-          # Ekstrak Frontmatter (pake sed yang lebih bersih)
-          TITLE=$(grep '^title:' "$CHANGED_FILE" | head -1 | sed 's/title: //;s/"//g;s/'\''//g')
-          DESC=$(grep -E '^(description|synopsis):' "$CHANGED_FILE" | head -1 | sed -E 's/^(description|synopsis): //;s/"//g;s/'\''//g')
-          
-          # Ambil ID Gambar
-          FILE_ID=$(grep '^image:' "$CHANGED_FILE" | head -1 | sed 's/image: //;s/"//g;s/'\''//g' | grep -oE '[^/]+$' || echo "")
-          
-          # Buat Slug
-          SLUG=$(basename "$CHANGED_FILE" | sed -E 's/\.(md|mdx)$//')
+          TITLE=$(grep '^title:' "$FILE" | head -1 \
+            | sed 's/title: //;s/"//g;s/'\''//g')
+
+          DESC=$(grep -E '^(description|synopsis):' "$FILE" | head -1 \
+            | sed -E 's/^(description|synopsis): //;s/"//g;s/'\''//g')
+
+          FILE_ID=$(grep '^image:' "$FILE" | head -1 \
+            | sed 's/image: //;s/"//g;s/'\''//g' \
+            | grep -oE '[^/]+$' || true)
+
+          SLUG=$(basename "$FILE" \
+            | sed -E 's/\.(md|mdx)$//')
+
           URL="https://c0desk1.my.id/$BASE_PATH/$SLUG"
 
-          echo "🚀 Sending to Telegram: [$TYPE] $TITLE"
+          echo "TYPE=$TYPE"
+          echo "TITLE=$TITLE"
+          echo "DESC=$DESC"
+          echo "FILE_ID=$FILE_ID"
+          echo "URL=$URL"
 
-          # Eksekusi Broadcast
-          curl -X POST "${{ secrets.TG_ENGINE_URL }}/api/broadcast" \
-            -H "Authorization: Bearer ${{ secrets.TG_ENGINE_ADMIN_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d "{\"title\": \"[$TYPE] $TITLE\", \"description\": \"$DESC\", \"url\": \"$URL\", \"fileId\": \"$FILE_ID\"}"
-          fi
+          echo "type=$TYPE" >> $GITHUB_OUTPUT
+          echo "title=$TITLE" >> $GITHUB_OUTPUT
+          echo "desc=$DESC" >> $GITHUB_OUTPUT
+          echo "fileId=$FILE_ID" >> $GITHUB_OUTPUT
+          echo "url=$URL" >> $GITHUB_OUTPUT
 
-          # Ekstrak Data Frontmatter
-          TITLE=$(grep '^title:' "$CHANGED_FILE" | head -1 | sed 's/title: //;s/"//g;s/'\''//g')
-          DESC=$(grep -E '^(description|synopsis):' "$CHANGED_FILE" | head -1 | sed -E 's/^(description|synopsis): //;s/"//g;s/'\''//g')
-          
-          # Ambil File ID Telegram (jika ada di field image)
-          # Mendukung format: image: "https://.../img/FILE_ID"
-          FILE_ID=$(grep '^image:' "$CHANGED_FILE" | head -1 | sed 's/image: //;s/"//g;s/'\''//g' | grep -oE '[^/]+$')
-          
-          # Buat Slug & URL
-          SLUG=$(basename "$CHANGED_FILE" | sed -E 's/\.(md|mdx)$//')
-          URL="https://c0desk1.my.id/$BASE_PATH/$SLUG"
 
-          echo "🚀 Sending to Telegram: [$TYPE] $TITLE"
+      - name: Send to Telegram
+        if: steps.detect.outputs.found == 'true'
+        run: |
+          echo "🚀 Sending Telegram notification..."
 
-          # Tembak ke Cloudflare Worker
           curl -X POST "${{ secrets.TG_ENGINE_URL }}/api/broadcast" \
             -H "Authorization: Bearer ${{ secrets.TG_ENGINE_ADMIN_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d "{
-              \"title\": \"[$TYPE] $TITLE\",
-              \"description\": \"$DESC\",
-              \"url\": \"$URL\",
-              \"fileId\": \"$FILE_ID\"
+              \"title\": \"[${{ steps.meta.outputs.type }}] ${{ steps.meta.outputs.title }}\",
+              \"description\": \"${{ steps.meta.outputs.desc }}\",
+              \"url\": \"${{ steps.meta.outputs.url }}\",
+              \"fileId\": \"${{ steps.meta.outputs.fileId }}\"
             }"
