@@ -13,6 +13,9 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()]
   },
+  build: {
+    inlineStylesheets: 'always'
+  },
   integrations: [
     // sitemap(), 
     mdx(),
