@@ -14,7 +14,7 @@ export const siteConfig = {
   author: {
     name: "Bima Akbar",
     slug: "bima-akbar",
-    avatar: "/images/author/author.jpg",
+    avatar: "https://c0desk1-api.dev-c0desk1.workers.dev/img/AgACAgUAAxkBAAMIae4rCILWne6NI4IwUwABigyHvpiqAAIdFGsbXxxwV5IOkWnp4HhKAQADAgADeAADOwQ",
     title: "Author",
     bio: "Music producer FL Studio, Adobe Stock contributor, dan developer. Suka ngulik teknologi, game, anime, dan hal-hal unik lainnya. Semua gue tuangin jadi musik, visual, atau tools biar workflow kreator lebih autopilot."
   } satisfies Author,
