@@ -4,7 +4,21 @@
 media:
   - name: images
     label: Local Backup
-    path: public/images
+    input: public/images
+    output: /images
+    rename: safe
+    categories: [image]
+    extensions: [png, jpg, webp, svg]
+    commit:
+      templates:
+        create: "meta(media): upload {filename}"
+        delete: "meta(media): delete {filename}"
+
+  - name: blog-images
+    label: Blog Images
+    input: public/images/blog
+    output: /images/blog
+    categories: [image]
 
 # ==========================================
 # 2. CONTENT COLLECTIONS (SYNCED TO ZOD)
