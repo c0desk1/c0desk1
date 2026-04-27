@@ -1,7 +1,9 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/ui/Container.astro";
-import Section from "@/components/ui/Section.astro"; // Using your Section component
+import Section from "@/components/ui/Section.astro";
+import Button from "@/components/ui/Button.astro";
+import Icon from "@/components/ui/Icon.astro";
 import { getCollection, getEntry } from "astro:content";
 import { Image } from 'astro:assets';
 import { siteConfig } from "@/config/site";
@@ -56,84 +58,87 @@ const authorCategory = {
 ---
 
 <BaseLayout {...seoData} category={authorCategory}>
-    {/* Profile Header Section */}
-    <Section size="lg" class="border-b border-zinc-100 dark:border-zinc-900 bg-white dark:bg-black">
-      <Container size="lg">
-        <div class="max-w-2xl mx-auto flex flex-col items-center text-center">
-          <h2 class="sr-only">Author Profile</h2>
-          
-          {/* Avatar */}
-          <div class="mb-8">
-            <Image 
-              src={author.data.avatar} 
-              alt={author.data.name}
-              width={100}
-              height={100}
-              loading={"eager"}
-              class="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover border border-zinc-200 dark:border-zinc-800 p-1 bg-white dark:bg-black transition-colors"
-            />
-          </div>
-          
-          {/* Name & Role */}
-          <h1 class="text-4xl md:text-5xl font-bold tracking-tighter text-zinc-900 dark:text-white mb-3">
-            {author.data.name}
-          </h1>
-          <p class="text-base text-zinc-500 dark:text-zinc-400 font-medium tracking-tight mb-6">
-            {author.data.role}
-          </p>
-          
-          {/* Bio */}
-          <p class="text-zinc-600 dark:text-zinc-400 max-w-md mx-auto leading-relaxed text-[17px]">
-            {author.data.bio}
-          </p>
-          
-          {/* Social Links */}
-          {Object.values(socialLinks).some(Boolean) && (
-            <div class="mt-8 flex justify-center gap-6">
-              {Object.entries(socialLinks).map(([platform, url]) => (
-                url && (
-                  <a 
-                    href={url} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    class="text-[13px] font-medium text-zinc-400 hover:text-black dark:hover:text-white transition-colors underline underline-offset-4 decoration-zinc-200 dark:decoration-zinc-800"
-                  >
-                    {platform.charAt(0).toUpperCase() + platform.slice(1)}
-                  </a>
-                )
-              ))}
-            </div>
-          )}
-          
-          {/* Post count Badge */}
-          <div class="mt-8 px-3 py-1 rounded-full border border-zinc-200 dark:border-zinc-800">
-            <span class="text-[11px] font-bold uppercase tracking-widest text-zinc-500">{authorPosts.length} Articles</span>
-          </div>
+  {/* Header Profile Section */}
+  <Section size="lg" class="border-b border-zinc-100 dark:border-zinc-900 bg-white dark:bg-black">
+    <Container size="lg">
+      <div class="max-w-2xl mx-auto flex flex-col items-center text-center">
+        <h2 class="sr-only">Author Information</h2>
+        
+        {/* Avatar */}
+        <div class="mb-8">
+          <Image 
+            src={author.data.avatar} 
+            alt={author.data.name}
+            width={112}
+            height={112}
+            loading={"eager"}
+            class="w-28 h-28 rounded-full object-cover border border-zinc-200 dark:border-zinc-800 p-1 bg-white dark:bg-black"
+          />
         </div>
-      </Container>
-    </Section>
+        
+        {/* Identity */}
+        <h1 class="text-4xl md:text-5xl font-bold tracking-tighter text-zinc-900 dark:text-white mb-2">
+          {author.data.name}
+        </h1>
+        <p class="text-lg text-zinc-500 dark:text-zinc-400 tracking-tight mb-6">
+          {author.data.role}
+        </p>
+        
+        {/* Bio */}
+        <p class="text-zinc-600 dark:text-zinc-400 max-w-md mx-auto leading-relaxed text-base mb-8">
+          {author.data.bio}
+        </p>
+        
+        {/* Social Links using your Button & Icon Components */}
+        <div class="flex flex-wrap justify-center gap-3">
+          {socialLinks.github && (
+            <Button href={socialLinks.github} variant="secondary" size="sm" target="_blank">
+              <Icon name="github" class="w-4 h-4" />
+              GitHub
+            </Button>
+          )}
+          {socialLinks.twitter && (
+            <Button href={socialLinks.twitter} variant="secondary" size="sm" target="_blank">
+              <Icon name="twitter" class="w-4 h-4" />
+              Twitter
+            </Button>
+          )}
+          {socialLinks.linkedIn && (
+            <Button href={socialLinks.linkedIn} variant="secondary" size="sm" target="_blank">
+              <Icon name="linkedin" class="w-4 h-4" />
+              LinkedIn
+            </Button>
+          )}
+        </div>
+      </div>
+    </Container>
+  </Section>
 
-    {/* Posts Section */}
-    <Section size="lg" class="bg-white dark:bg-black">
-      <Container size="lg">
-        <div class="max-w-3xl mx-auto">
-          <h2 class="sr-only">Published Articles by {author.data.name}</h2>
-          
-          <div class="divide-y divide-zinc-100 dark:divide-zinc-900">
-            {postsWithCategory.map((post) => (
-              <article class="group py-10 first:pt-0">
-                <a href={`/blog/${post.id}/`} class="block space-y-3">
+  {/* Article Feed */}
+  <Section size="lg" class="bg-white dark:bg-black">
+    <Container size="lg">
+      <div class="max-w-3xl mx-auto">
+        <div class="flex items-center justify-between mb-12">
+          <h2 class="text-xs font-bold uppercase tracking-[0.2em] text-zinc-400">
+            Latest Articles
+          </h2>
+          <div class="h-px flex-1 mx-4 bg-zinc-100 dark:bg-zinc-900"></div>
+          <span class="text-xs font-medium text-zinc-400">{authorPosts.length} posts</span>
+        </div>
+        
+        <div class="flex flex-col">
+          {postsWithCategory.map((post) => (
+            <article class="group">
+              <a href={`/blog/${post.id}/`} class="block py-10 transition-opacity active:opacity-70">
+                <div class="flex flex-col gap-3">
                   <div class="flex items-center gap-3">
-                    <time class="text-[13px] text-zinc-400 tracking-tight">
+                    <time class="text-[13px] text-zinc-400 tracking-tight font-medium">
                       {formatDateCompact(post.data.pubDate)}
                     </time>
                     {post.categoryData && (
-                      <>
-                        <span class="text-zinc-200 dark:text-zinc-800">/</span>
-                        <span class="text-[13px] font-medium text-zinc-500 dark:text-zinc-400 tracking-tight">
-                          {post.categoryData.name}
-                        </span>
-                      </>
+                      <span class="text-[13px] px-2 py-0.5 rounded bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-500 font-medium">
+                        {post.categoryData.name}
+                      </span>
                     )}
                   </div>
                   
@@ -144,17 +149,19 @@ const authorCategory = {
                   <p class="text-[16px] text-zinc-500 dark:text-zinc-500 leading-snug line-clamp-2 max-w-2xl">
                     {post.data.description}
                   </p>
-                </a>
-              </article>
-            ))}
-          </div>
-          
-          {authorPosts.length === 0 && (
-            <div class="text-center py-20 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-2xl">
-              <p class="text-sm tracking-tight text-zinc-400 italic">No publications yet.</p>
-            </div>
-          )}
+                </div>
+              </a>
+              <div class="h-px bg-zinc-100 dark:bg-zinc-900 w-full group-last:hidden" />
+            </article>
+          ))}
         </div>
-      </Container>
-    </Section>
+        
+        {authorPosts.length === 0 && (
+          <div class="py-20 text-center rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-800">
+            <p class="text-sm text-zinc-400">No articles published yet.</p>
+          </div>
+        )}
+      </div>
+    </Container>
+  </Section>
 </BaseLayout>
