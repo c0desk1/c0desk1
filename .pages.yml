@@ -64,7 +64,7 @@ content:
           collection: authors
           value: "{path}"
           pattern: "^[a-z0-9-]+$"
-          label: "{name}"
+          label: "{author.name}"
           multiple: true
           
       - name: category
