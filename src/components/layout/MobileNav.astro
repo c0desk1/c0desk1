@@ -1,6 +1,15 @@
 ---
 // src/components/layout/MobileNav.astro
 import { siteConfig } from "@/config/site";
+import { getEntry } from 'astro:content';
+
+let settings;
+try {
+  settings = await getEntry('settings', 'site');
+} catch (error) {
+  console.warn('Settings not found, using siteConfig fallback');
+}
+const siteData = settings?.data || siteConfig;
 ---
 
 <div class="md:hidden relative">
@@ -20,7 +29,7 @@ import { siteConfig } from "@/config/site";
     class="absolute right-0 top-full mt-8 w-52 origin-top-right rounded-xl border border-black/10 dark:border-white/10 bg-white/95 dark:bg-black/95 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_10px_30px_rgba(0,0,0,0.4)] opacity-0 invisible scale-95 transition-all duration-200 z-50"
   >
     <nav class="flex flex-col p-2">
-      {siteConfig.navItems.map(item => (
+      {siteData.navItems?.map(item => (
         <a 
           href={item.href}
           class="px-3 py-2 rounded-md text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
@@ -29,22 +38,16 @@ import { siteConfig } from "@/config/site";
         </a>
       ))}
       <div class="h-px bg-black/10 dark:bg-white/10 my-2"></div>
-      <a 
-        href={siteConfig.social.github}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="px-3 py-2 rounded-md text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
-      >
-        GitHub
-      </a>
-      <a 
-        href={siteConfig.social.twitter}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="px-3 py-2 rounded-md text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
-      >
-        X
-      </a>
+      {siteData.social?.github && (
+        <a 
+          href={siteData.social.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="px-3 py-2 rounded-md text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+        >
+          GitHub
+        </a>
+      )}
     </nav>
   </div>
 </div>

@@ -53,6 +53,14 @@ const settings = defineCollection({
     googleAnalyticsId: z.string().optional(),
     yandexVerification: z.string().optional(),
     yandexMetrikaId: z.string().optional(),
+     navItems: z.array(z.object({
+      href: z.string(),
+      label: z.string(),
+    })).default([
+      { href: "/blog/", label: "Blog" },
+      { href: "/portfolio/", label: "Portfolio" },
+      { href: "/about/", label: "Tentang" },
+    ]),
   }),
 });
 

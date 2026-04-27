@@ -1,17 +1,26 @@
 ---
 // src/components/layout/DesktopNav.astro
-
 import NavLink from "../ui/NavLink.astro";
 import { siteConfig } from "@/config/site";
+import { getEntry } from 'astro:content';
+
+let settings;
+try {
+  settings = await getEntry('settings', 'site');
+} catch (error) {
+  console.warn('Settings not found, using siteConfig fallback');
+}
+const siteData = settings?.data || siteConfig;
 
 const currentPath = Astro.url.pathname;
+const navItems = siteData.navItems || siteConfig.navItems
 ---
 
 <nav
   class="hidden md:flex items-center gap-2 ml-2"
   aria-label="Main navigation"
 >
-  {siteConfig.navItems.map((item) => {
+  {navItems.map((item: { href: string; label: string }) => {
     const isActive =
       currentPath === item.href ||
       (item.href !== "/" && currentPath.startsWith(item.href));

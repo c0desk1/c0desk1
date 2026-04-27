@@ -1,8 +1,17 @@
 ---
 // src/components/ui/Logo.astro
-// @ts-nocheck
 import Icon from "./Icon.astro";
 import { siteConfig } from "@/config/site";
+import { getEntry } from 'astro:content';
+
+
+let settings;
+try {
+  settings = await getEntry('settings', 'site');
+} catch (error) {
+  console.warn('Settings not found, using siteConfig fallback');
+}
+const siteData = settings?.data || siteConfig;
 ---
 
 <a 
@@ -17,6 +26,6 @@ import { siteConfig } from "@/config/site";
     </div>
   </div>
   <span class="hidden text-xl font-semibold font-mono tracking-tight text-zinc-900 dark:text-white">
-    {siteConfig.name}
+    {siteData.siteName}
   </span>
 </a>
