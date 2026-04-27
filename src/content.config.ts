@@ -43,13 +43,11 @@ const authors = defineCollection({
 
 
 const categories = defineCollection({
-  loader: glob({ pattern: "**/*.{json,md}", base: "./src/content/categories" }),
+  loader: glob({ pattern: "**/*.json", base: "./src/content/categories" }),
   schema: z.object({
-    name: z.string(),
-    description: z.string().max(160),
     slug: z.string(),
-    parent: reference('categories').optional(),
-    seo: seoSchema.optional(),
+    name: z.string(),
+    description: z.string().optional(),
   }),
 });
 
