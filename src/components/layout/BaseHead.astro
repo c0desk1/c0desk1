@@ -144,6 +144,7 @@ if (orgData) {
   });
 }
 
+// Person
 schemaGraph.push({
   "@type": "Person",
   "@id": `${siteURL}#person`,
@@ -155,6 +156,7 @@ schemaGraph.push({
   ...(orgData || siteData.siteName ? { "worksFor": { "@id": `${siteURL}#organization` } } : {})
 });
 
+// Webpage
 schemaGraph.push({
   "@type": "WebPage",
   "@id": `${seoData.canonical}#webpage`,
@@ -167,6 +169,7 @@ schemaGraph.push({
   "potentialAction": [{ "@type": "ReadAction", "target": [seoData.canonical.toString()] }]
 });
 
+// Website
 if (isHomepage) {
   schemaGraph.push({
     "@type": "WebSite",
@@ -182,16 +185,20 @@ if (isHomepage) {
   });
 }
 
-schemaGraph.push({
-  "@type": "BreadcrumbList",
-  "@id": `${seoData.canonical}#breadcrumb`,
-  "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Home", "item": siteURL },
-    category ? { "@type": "ListItem", "position": 2, "name": category.name, "item": new URL(`category/${category.slug}/`, siteURL).toString() } : null,
-    { "@type": "ListItem", "position": category ? 3 : 2, "name": seoData.title, "item": seoData.canonical.toString() }
-  ].filter(Boolean)
-});
+// Breadcrumb
+if (!isHomepage) {
+  schemaGraph.push({
+    "@type": "BreadcrumbList",
+    "@id": `${seoData.canonical}#breadcrumb`,
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": siteURL },
+      category ? { "@type": "ListItem", "position": 2, "name": category.name, "item": new URL(`category/${category.slug}/`, siteURL).toString() } : null,
+      { "@type": "ListItem", "position": category ? 3 : 2, "name": seoData.title, "item": seoData.canonical.toString() }
+    ].filter(Boolean)
+  });
+}
 
+// Articles
 if (type === "article") {
   schemaGraph.push({
     "@type": "BlogPosting",
@@ -209,6 +216,7 @@ if (type === "article") {
   });
 }
 
+// Creative Work
 if (type === "creativeWork") {
   schemaGraph.push({
     "@type": "CreativeWork",
