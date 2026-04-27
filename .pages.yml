@@ -56,6 +56,10 @@ content:
           - name: alt
             label: Alt
             type: string
+
+          - name: caption
+            label: Caption
+            type: text
             
       - name: author
         label: Author
@@ -64,9 +68,8 @@ content:
           collection: authors
           value: "{path}"
           label: "{name}"
-          
-          multiple: true
-          
+          # Hapus multiple: true → single reference
+        
       - name: category
         label: Kategori
         type: reference
@@ -175,6 +178,7 @@ content:
         label: Tech Stack
         type: string
         list: true
+        
       - name: client
         label: Client
         type: string
@@ -227,7 +231,7 @@ content:
         label: Gallery
         type: string
         list: true
-      # --- Metadata & SEO ---
+        
       - name: pubDate
         label: Tanggal Project
         type: date
@@ -327,8 +331,16 @@ content:
             label: X
             type: string
             
-          - name: linkedin
+          - name: linkedIn
             label: LinkedIn
+            type: string
+            
+          - name: instagram
+            label: Instagram
+            type: string
+            
+          - name: youtube
+            label: YouTube
             type: string
 
   # --- CATEGORIES ---
@@ -352,14 +364,13 @@ content:
       - name: description
         label: Deskripsi
         type: text
-        
 
-  # --- SETTINGS (ORGANIZATIONS) ---
+  # --- ORGANIZATIONS (Company/Brand) ---
   - name: organizations
-    label: Site Settings
+    label: Organizations
     type: collection
-    path: src/content/settings
-    filename: "site.json"
+    path: src/content/organizations
+    filename: "{primary}.json"
     view:
       fields: [name]
     fields:
@@ -382,17 +393,87 @@ content:
       - name: contactEmail
         label: Email
         type: string
+
+  # --- SETTINGS (Website Config) ---
+  - name: settings
+    label: Site Settings
+    type: file
+    path: src/content/settings/site.json
+    view:
+      fields: [siteName]
+    fields:
+      - name: siteName
+        label: Nama Site
+        type: string
         
-      - name: socialLinks
+      - name: siteDescription
+        label: Deskripsi
+        type: text
+        
+      - name: siteUrl
+        label: URL
+        type: string
+        
+      - name: siteLogo
+        label: Logo
+        type: string
+        
+      - name: siteMail
+        label: Email
+        type: string
+        
+      - name: social
         label: Sosial Media
+        type: object
+        fields:
+          - name: github
+            label: GitHub
+            type: string
+            
+          - name: twitter
+            label: Twitter
+            type: string
+            
+          - name: instagram
+            label: Instagram
+            type: string
+            
+          - name: youtube
+            label: YouTube
+            type: string
+            
+      - name: defaultSeo
+        label: Default SEO
+        type: object
+        fields:
+          - name: title
+            label: Title
+            type: string
+            
+          - name: description
+            label: Description
+            type: text
+            
+          - name: ogImage
+            label: OG Image
+            type: string
+            
+      - name: googleAnalyticsId
+        label: Google Analytics ID
         type: string
-        list: true
         
-      - name: analyticsId
-        label: Analysis ID
+      - name: googleSiteVerification
+        label: Google Site Verification
         type: string
         
-      - name: adsenseId
-        label: Adsense ID
+      - name: googleAdsenseId
+        label: Google Adsense ID
         type: string
         
+      - name: yandexVerification
+        label: Yandex Verification
+        type: string
+        
+      - name: yandexMetrikaId
+        label: Yandex Metrika ID
+        type: string
