@@ -62,9 +62,8 @@ content:
         type: reference
         options:
           collection: authors
-          search: "name"
           value: "{path}"
-          label: "{primary}"
+          label: "{name}"
           
           multiple: true
           
