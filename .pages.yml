@@ -21,7 +21,7 @@ media:
     categories: [image]
 
 # ==========================================
-# 2. CONTENT COLLECTIONS (SYNCED TO ZOD)
+# 2. CONTENT COLLECTIONS
 # ==========================================
 content:
   # --- BLOG ---
@@ -92,6 +92,17 @@ content:
           - name: noIndex
             type: boolean
 
+      - name: body
+        label: Konten
+        type: rich-text
+        options:
+          format: markdown
+          media: blog-images
+          path: public/images/blog
+          switcher: true
+          rename: safe
+        
+
   # --- PORTFOLIO ---
   - name: portfolio
     label: Portfolio Projects
@@ -160,6 +171,15 @@ content:
             type: text
           - name: noIndex
             type: boolean
+
+      - name: body
+        label: Detail Case
+        type: rich-text
+        options:
+          format: markdown
+          media: images
+          path: public/images/portfolio
+          rename: true
 
   # --- AUTHORS ---
   - name: authors
