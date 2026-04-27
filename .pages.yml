@@ -1,5 +1,5 @@
 # ==========================================
-# 1. MEDIA CONFIG (Telegram & Local Backup)
+# 1. MEDIA CONFIG
 # ==========================================
 media:
   - name: images
@@ -9,14 +9,6 @@ media:
     rename: safe
     categories: [image]
     extensions: [png, jpg, webp]
-    actions:
-      - name: optimize-images
-        label: Optimize All Images
-        workflow: optimize-images.yml
-        confirm:
-          title: "Optimize Images?"
-          message: "Ini akan memproses semua gambar di folder images."
-          button: "Ya, Optimize"
           
   - name: blog-images
     label: Blog Images
@@ -47,7 +39,7 @@ content:
         type: text
         required: true
       - name: pubDate
-        label: Tanggal Terbit
+        label: Tanggal Terbit (pubDate)
         type: date
         required: true
         options:
@@ -57,13 +49,14 @@ content:
         label: Diperbarui
         type: date
       - name: image
-        label: Cover (Telegram URL)
+        label: Cover Image
         type: object
         fields:
           - name: src
+            label: URL / Path
             type: string
-            default: "https://c0desk1-api.dev-c0desk1.workers.dev/img/..."
           - name: alt
+            label: Alt Text
             type: string
             required: true
       - name: author
@@ -92,7 +85,7 @@ content:
         type: boolean
         default: false
       - name: seo
-        label: SEO
+        label: SEO Settings
         type: object
         fields:
           - name: title
@@ -144,7 +137,7 @@ content:
         label: Repository URL
         type: string
       - name: gallery
-        label: Gallery (Telegram Links)
+        label: Gallery (Image Links)
         type: string
         list: true
       - name: metrics
@@ -174,7 +167,7 @@ content:
         type: string
         required: true
       - name: role
-        label: Role
+        label: Role / Job Title
         type: string
       - name: avatar
         label: Avatar URL
@@ -182,11 +175,6 @@ content:
       - name: bio
         label: Bio
         type: text
-      - name: organization
-        label: Organization (Ref)
-        type: select
-        options:
-          values: organizations
       - name: social
         label: Socials
         type: object
@@ -214,11 +202,6 @@ content:
       - name: description
         label: Deskripsi
         type: text
-      - name: parent
-        label: Parent Category (Ref)
-        type: select
-        options:
-          values: categories
 
   # --- SETTINGS (ORGANIZATIONS) ---
   - name: organizations
