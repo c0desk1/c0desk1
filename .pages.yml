@@ -4,20 +4,10 @@
 media:
   - name: images
     label: Local Backup
-    input: public/images
-    output: /images
-    rename: safe
-    categories: [image]
-    extensions: [png, jpg, webp]
-          
-  - name: blog-images
-    label: Blog Images
-    input: public/images/blog
-    output: /images/blog
-    categories: [image]
+    path: public/images
 
 # ==========================================
-# 2. CONTENT COLLECTIONS
+# 2. CONTENT COLLECTIONS (SYNCED TO ZOD)
 # ==========================================
 content:
   # --- BLOG ---
@@ -26,64 +16,53 @@ content:
     type: collection
     path: src/content/blog
     filename: "{primary}.mdx"
-    view:
-      fields: [image.src, title, pubDate, draft]
-      sort: ["pubDate desc"]
     fields:
       - name: title
         label: Judul
         type: string
-        required: true
       - name: description
         label: Deskripsi
         type: text
-        required: true
-      - name: pubDate
-        label: Tanggal Terbit (pubDate)
-        type: date
-        required: true
-        options:
-          time: true
-          format: yyyy-MM-dd'T'HH:mm
-      - name: updatedDate
-        label: Diperbarui
-        type: date
       - name: image
-        label: Cover Image
+        label: Featured Image
         type: object
         fields:
           - name: src
-            label: URL / Path
             type: string
           - name: alt
-            label: Alt Text
             type: string
-            required: true
       - name: author
-        label: Author (Reference)
-        type: select
+        label: Author
+        type: reference
         options:
-          values: authors
+          collection: authors
+          value: "{path}"
+          label: "{name}"
       - name: category
-        label: Kategori (Reference)
-        type: select
+        label: Kategori
+        type: reference
         options:
-          values: categories
+          collection: categories
+          value: "{path}"
+          label: "{name}"
       - name: tags
         label: Tags
         type: string
         list: true
-      - name: body
-        label: Konten
-        type: rich-text
+      # --- Metadata Shared ---
+      - name: pubDate
+        label: Tanggal Terbit
+        type: date
+      - name: updatedDate
+        label: Tanggal Update
+        type: date
       - name: draft
-        label: Draft
+        label: Draft Mode
         type: boolean
-        default: false
       - name: featured
         label: Unggulan
         type: boolean
-        default: false
+      # --- SEO Shared ---
       - name: seo
         label: SEO Settings
         type: object
@@ -92,9 +71,12 @@ content:
             type: string
           - name: description
             type: text
+          - name: ogImage
+            type: string
+          - name: canonical
+            type: string
           - name: noIndex
             type: boolean
-            default: false
 
   # --- PORTFOLIO ---
   - name: portfolio
@@ -102,24 +84,12 @@ content:
     type: collection
     path: src/content/portfolio
     filename: "{primary}.mdx"
-    view:
-      fields: [image.src, title, pubDate, featured]
-      sort: ["pubDate desc"]
     fields:      
       - name: title
-        label: Judul
         type: string
-        required: true
       - name: description
-        label: Deskripsi
         type: text
-        required: true
-      - name: pubDate
-        label: Tanggal Project
-        type: date
-        required: true
       - name: image
-        label: Project Cover
         type: object
         fields:
           - name: src
@@ -130,18 +100,17 @@ content:
         label: Tech Stack
         type: string
         list: true
+      - name: client
+        type: string
+      - name: role
+        type: string
+      - name: duration
+        type: string
       - name: demoUrl
-        label: Demo URL
         type: string
       - name: repoUrl
-        label: Repository URL
         type: string
-      - name: gallery
-        label: Gallery (Image Links)
-        type: string
-        list: true
       - name: metrics
-        label: Lighthouse Metrics
         type: object
         fields:
           - name: performance
@@ -150,10 +119,33 @@ content:
             type: number
           - name: seo
             type: number
+      - name: challenge
+        type: string
+      - name: solution
+        type: string
+      - name: result
+        type: string
+      - name: gallery
+        type: string
+        list: true
+      # --- Metadata & SEO ---
+      - name: pubDate
+        type: date
+      - name: updatedDate
+        type: date
       - name: draft
-        label: Draft
         type: boolean
-        default: false
+      - name: featured
+        type: boolean
+      - name: seo
+        type: object
+        fields:
+          - name: title
+            type: string
+          - name: description
+            type: text
+          - name: noIndex
+            type: boolean
 
   # --- AUTHORS ---
   - name: authors
@@ -163,25 +155,28 @@ content:
     filename: "{primary}.json"
     fields:
       - name: name
-        label: Nama
         type: string
-        required: true
       - name: role
-        label: Role / Job Title
         type: string
       - name: avatar
-        label: Avatar URL
         type: string
       - name: bio
-        label: Bio
         type: text
+      - name: organization
+        label: Organization
+        type: reference
+        options:
+          collection: organizations
+          value: "{path}"
+          label: "{name}"
       - name: social
-        label: Socials
         type: object
         fields:
           - name: github
             type: string
           - name: twitter
+            type: string
+          - name: linkedin
             type: string
 
   # --- CATEGORIES ---
@@ -192,16 +187,24 @@ content:
     filename: "{primary}.json"
     fields:
       - name: name
-        label: Name
         type: string
-        required: true
-      - name: slug
-        label: ID / Slug
-        type: string
-        required: true
       - name: description
-        label: Deskripsi
         type: text
+      - name: slug
+        type: string
+      - name: parent
+        type: reference
+        options:
+          collection: categories
+          value: "{path}"
+          label: "{name}"
+      - name: seo
+        type: object
+        fields:
+          - name: title
+            type: string
+          - name: noIndex
+            type: boolean
 
   # --- SETTINGS (ORGANIZATIONS) ---
   - name: organizations
@@ -211,18 +214,20 @@ content:
     filename: "site.json"
     fields:
       - name: name
-        label: Site Name
+        type: string
+      - name: legalName
         type: string
       - name: url
-        label: Website URL
         type: string
       - name: logo
-        label: Logo URL
         type: string
       - name: contactEmail
-        label: Email
         type: string
       - name: socialLinks
-        label: Global Socials
         type: string
         list: true
+      - name: analyticsId
+        type: string
+      - name: adsenseId
+        type: string
+        
