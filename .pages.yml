@@ -74,7 +74,7 @@ content:
           collection: categories
           value: "{slug}"
           pattern: "^[a-z0-9-]+$"
-          label: "{name}"
+          label: "{categories.name}"
           
       - name: tags
         label: Tags
