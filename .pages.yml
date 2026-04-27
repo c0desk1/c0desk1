@@ -142,7 +142,7 @@ content:
 
   # --- PORTFOLIO ---
   - name: portfolio
-    label: Portfolio Projects
+    label: Portfolio
     type: collection
     path: src/content/portfolio
     filename: "{primary}.mdx"
