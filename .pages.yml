@@ -67,8 +67,7 @@ content:
         options:
           collection: authors
           value: "{path}"
-          label: "{name}"
-          # Hapus multiple: true → single reference
+          label: "{fields.name}"
         
       - name: category
         label: Kategori
@@ -76,7 +75,7 @@ content:
         options:
           collection: categories
           value: "{slug}"
-          label: "{name}"
+          label: "{fields.name}"
           
       - name: tags
         label: Tags
