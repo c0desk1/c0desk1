@@ -63,7 +63,7 @@ content:
         options:
           collection: authors
           value: "{path}"
-          label: "{name}"
+          label: "{fields.<name>}"
           multiple: true
           
       - name: category
@@ -72,7 +72,7 @@ content:
         options:
           collection: categories
           value: "{slug}"
-          label: "{name}"
+          label: "{fields.<name>}"
           
       - name: tags
         label: Tags
