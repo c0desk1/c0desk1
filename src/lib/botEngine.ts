@@ -1,7 +1,5 @@
 import { visit } from "unist-util-visit";
-
 import type { CollectionEntry } from "astro:content";
-
 
 /* ================================
    TYPES
@@ -18,57 +16,36 @@ export function scoreBlogRelation(
   source: BlogPost,
   target: BlogPost
 ): number {
-
   let score = 0;
 
-  // CATEGORY MATCH
   if (source.data.category === target.data.category) {
     score += 6;
   }
 
-  // TAG OVERLAP
   const sourceTags = source.data.tags || [];
   const targetTags = target.data.tags || [];
 
-  const overlap = sourceTags.filter((tag) =>
-    targetTags.includes(tag)
-  ).length;
-
+  const overlap = sourceTags.filter((tag: string) => targetTags.includes(tag)).length;
   score += overlap * 4;
 
-  // FEATURED BOOST
   if (target.data.featured) {
     score += 2;
   }
 
-  // RECENCY BOOST
   const sourceDate = new Date(source.data.pubDate).getTime();
   const targetDate = new Date(target.data.pubDate).getTime();
 
-  const diffDays =
-    Math.abs(sourceDate - targetDate) /
-    (1000 * 60 * 60 * 24);
+  const diffDays = Math.abs(sourceDate - targetDate) / (1000 * 60 * 60 * 24);
 
   if (diffDays <= 30) score += 2;
   if (diffDays <= 7) score += 3;
 
-  // KEYWORD SOFT MATCH
-  const sourceText =
-    (source.data.title + " " +
-      source.data.description).toLowerCase();
+  const sourceText = (source.data.title + " " + source.data.description).toLowerCase();
+  const targetText = (target.data.title + " " + target.data.description).toLowerCase();
 
-  const targetText =
-    (target.data.title + " " +
-      target.data.description).toLowerCase();
+  const keywords = sourceText.split(" ").slice(0, 8);
 
-  const keywords = sourceText
-    .split(" ")
-    .slice(0, 8);
-
-  const keywordHits = keywords.filter((k) =>
-    k.length > 4 && targetText.includes(k)
-  ).length;
-
+  const keywordHits = keywords.filter((k: string) => k.length > 4 && targetText.includes(k)).length;
   score += keywordHits;
 
   return score;
@@ -83,7 +60,6 @@ export function getSmartRelatedPosts(
   allPosts: BlogPost[],
   limit = 3
 ): BlogPost[] {
-
   return allPosts
     .filter((post) => post.id !== source.id)
     .map((target) => ({
@@ -103,45 +79,33 @@ export function scorePortfolioRelation(
   source: Portfolio,
   target: Portfolio
 ): number {
-
   let score = 0;
 
   // TECH STACK OVERLAP
   const sourceTech = source.data.techStack || [];
   const targetTech = target.data.techStack || [];
 
-  const overlap = sourceTech.filter((t) =>
-    targetTech.includes(t)
-  ).length;
-
+  const overlap = sourceTech.filter((t: string) => targetTech.includes(t)).length;
   score += overlap * 5;
 
   // FEATURED BOOST
   if (target.data.featured) score += 2;
 
   // CLIENT MATCH
-  if (
-    source.data.client &&
-    source.data.client === target.data.client
-  ) {
+  if (source.data.client && source.data.client === target.data.client) {
     score += 3;
   }
 
   // ROLE MATCH
-  if (
-    source.data.role &&
-    source.data.role === target.data.role
-  ) {
+  if (source.data.role && source.data.role === target.data.role) {
     score += 2;
   }
 
   // RECENCY
-  const sourceDate = new Date(source.data.date).getTime();
-  const targetDate = new Date(target.data.date).getTime();
+  const sourceDate = new Date(source.data.pubDate).getTime();
+  const targetDate = new Date(target.data.pubDate).getTime();
 
-  const diffDays =
-    Math.abs(sourceDate - targetDate) /
-    (1000 * 60 * 60 * 24);
+  const diffDays = Math.abs(sourceDate - targetDate) / (1000 * 60 * 60 * 24);
 
   if (diffDays <= 60) score += 2;
 
@@ -157,15 +121,11 @@ export function getSmartRelatedProjects(
   allProjects: Portfolio[],
   limit = 2
 ): Portfolio[] {
-
   return allProjects
     .filter((p) => p.id !== source.id)
     .map((target) => ({
       project: target,
-      score: scorePortfolioRelation(
-        source,
-        target
-      )
+      score: scorePortfolioRelation(source, target)
     }))
     .sort((a, b) => b.score - a.score)
     .slice(0, limit)
@@ -176,22 +136,24 @@ export function getSmartRelatedProjects(
    AUTO INTERNAL LINK ENGINE
 ================================ */
 
-export function remarkInternalLinks(allPosts: any[]) {
+export function remarkInternalLinks(allPosts: BlogPost[]) {
   const keywordMap: Record<string, string> = {};
+  
   allPosts.forEach((post) => {
     const slug = `/blog/${post.id}/`;
     const words = post.data.title
       .toLowerCase()
       .replace(/[^\w\s]/g, "")
       .split(/\s+/)
-      .filter((w) => w.length >= 4);
+      .filter((w: string) => w.length >= 4);
 
-    words.forEach((word) => {
+    words.forEach((word: string) => {
       if (!keywordMap[word]) keywordMap[word] = slug;
     });
   });
 
   const sortedKeywords = Object.keys(keywordMap).sort((a, b) => b.length - a.length);
+  
   return (tree: any) => {
     visit(tree, "text", (node, index, parent) => {
       if (!parent || ["link", "code", "inlineCode", "heading"].includes(parent.type)) {
@@ -202,7 +164,7 @@ export function remarkInternalLinks(allPosts: any[]) {
       let hasChange = false;
 
       for (const keyword of sortedKeywords) {
-        const url = keywordMap[keyword];       
+        const url = keywordMap[keyword];
         const regex = new RegExp(`\\b(${keyword})\\b`, "gi");
 
         if (regex.test(value)) {
@@ -219,28 +181,25 @@ export function remarkInternalLinks(allPosts: any[]) {
   };
 }
 
+/* ================================
+   POST TOPIC GRAPH
+================================ */
+
 export function getPostTopicGraph(
-  post: CollectionEntry<"blog">,
-  allPosts: CollectionEntry<"blog">[]
-) {
+  post: BlogPost,
+  allPosts: BlogPost[]
+): BlogPost[] {
   const tags = post.data.tags ?? [];
   const category = post.data.category;
 
   const related = allPosts
     .filter((p) => p.id !== post.id)
     .map((p) => {
-      const sharedTags =
-        (p.data.tags ?? []).filter((t) => tags.includes(t)).length;
-
-      const sameCategory =
-        p.data.category === category ? 2 : 0;
-
+      const sharedTags = (p.data.tags ?? []).filter((t: string) => tags.includes(t)).length;
+      const sameCategory = p.data.category === category ? 2 : 0;
       const score = sharedTags + sameCategory;
 
-      return {
-        post: p,
-        score
-      };
+      return { post: p, score };
     })
     .filter((r) => r.score > 0)
     .sort((a, b) => b.score - a.score);
