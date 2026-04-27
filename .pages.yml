@@ -342,26 +342,6 @@ content:
         label: Slug
         type: string
         
-      - name: parent
-        label: Hubungan
-        type: reference
-        options:
-          collection: categories
-          value: "{slug}"
-          label: "{name}"
-          
-      - name: seo
-        label: SEO
-        type: object
-        fields:
-          - name: title
-            label: Judul
-            type: string
-            
-          - name: noIndex
-            label: Index
-            type: boolean
-            default: false
 
   # --- SETTINGS (ORGANIZATIONS) ---
   - name: organizations
