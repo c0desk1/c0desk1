@@ -62,8 +62,8 @@ content:
         type: reference
         options:
           collection: authors
-          search: "name,email,fields.role"
-          value: "{primary}"
+          search: "name"
+          value: "{path}"
           label: "{primary}"
           
           multiple: true
