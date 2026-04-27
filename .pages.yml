@@ -56,7 +56,7 @@ content:
         type: reference
         options:
           collection: authors
-          value: "{path}"
+          value: "{slug}"
           label: "{name}"
           multiple: true
           
@@ -65,8 +65,8 @@ content:
         type: reference
         options:
           collection: categories
-          value: "{path}"
-          label: "{category.name}"
+          value: "{slug}"
+          label: "{name}"
           
       - name: tags
         label: Tags
@@ -304,7 +304,7 @@ content:
         type: reference
         options:
           collection: organizations
-          value: "{path}"
+          value: "{primary}"
           label: "{name}"
           
       - name: social
@@ -347,8 +347,8 @@ content:
         type: reference
         options:
           collection: categories
-          value: "{path}"
-          label: "{label}"
+          value: "{primary}"
+          label: "{name}"
           
       - name: seo
         label: SEO
