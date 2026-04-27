@@ -1,0 +1,46 @@
+---
+// src/components/author/Author.astro
+import { siteConfig } from '@/config/site';
+import { Image } from 'astro:assets';
+
+interface Props {
+  name?: string;
+  avatar?: string;
+  title?: string;
+  slug?: string;
+}
+
+const { name, avatar, title, slug } = Astro.props;
+
+const authorName = name || siteConfig.author?.name || siteConfig.siteName;
+const authorAvatar = avatar || siteConfig.author?.avatar || siteConfig.siteLogo;
+const authorTitle = title || siteConfig.author?.title || "Author";
+const authorSlug = slug || siteConfig.author?.slug || "author";
+---
+
+<a
+  href={`/author/${authorSlug}/`}
+  class="flex justify-center items-center gap-2 text-[13px] md:text-sm group"
+  aria-label={`Author: ${authorName}`}
+>
+  {authorAvatar && (
+    <Image
+      src={authorAvatar}
+      alt={`Avatar of ${authorName}`}
+      width={18}
+      height={18}
+      class="w-6 h-6 rounded-full object-cover"
+      loading="lazy"
+    />
+  )}
+  <div class="flex items-center gap-1 leading-tight">
+    <span class="text-black dark:text-white">
+      {authorName}
+    </span>
+    {authorTitle && (
+      <span class="text-zinc-500 dark:text-zinc-400">
+        {authorTitle}
+      </span>
+    )}
+  </div>
+</a>

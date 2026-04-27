@@ -1,0 +1,83 @@
+---
+title: "Adogen: AI-Powered Metadata Automation"
+description: Membangun sistem otomasi metadata gambar untuk kontributor
+  mikrostock menggunakan Astro, Cloudflare Workers, dan Vision AI.
+image:
+  src: /images/blog/hero-adogen.webp
+  alt: Preview Dashboard Adogen
+techStack:
+  - Astro
+  - Tailwind CSS
+  - TypeScript
+  - Cloudflare Workers
+  - Groq AI
+  - Zod
+client: Personal Project / Open Tools
+role: Fullstack Developer & UI/UX Designer
+duration: 3 Minggu
+demoUrl: https://dev-adogen.bimasaktiakbarr.workers.dev
+repoUrl: https://github.com/bimaakbar/adogen
+metrics:
+  performance: 100
+  accessibility: 100
+  seo: 100
+challenge: Kontributor stok foto menghabiskan 60% waktu untuk urusan
+  administratif metadata. Masalahnya adalah analisa visual masal (batch) dengan
+  biaya rendah namun tetap akurat.
+solution: Integrasi Vision AI (Llama 3.2 & Pixtral) melalui Cloudflare Workers
+  dengan implementasi client-side image resizing untuk efisiensi bandwidth.
+result: Memangkas waktu input metadata dari 5 menit menjadi kurang dari 10 detik
+  per gambar, serta mendukung batch upload hingga 50 gambar sekaligus.
+gallery:
+  - /images/blog/adogen-preview.webp
+pubDate: 2026-04-27
+updatedDate: 2026-04-27
+draft: false
+featured: true
+seo:
+  title: Generator Metadata AI Tercepat untuk Kontributor Indonesia
+  description: Stop buang waktu input keyword manual. Gunakan Adogen untuk
+    optimasi SEO Adobe Stock secara otomatis dan gratis.
+  noIndex: false
+---
+import CodeGroup from "@/components/mdx/CodeGroup.astro";
+
+# Project Journey
+
+Membangun Adogen bukan sekadar membuat wrapper AI, melainkan menyelesaikan masalah nyata yang dihadapi kontributor stock photo di Indonesia. Fokus utama saya adalah pada kecepatan dan privasi data.
+
+## Key Features & Technical Decisions
+
+### Performa "Burag" dengan Astro & Tailwind
+
+Memilih **Astro** adalah keputusan krusial karena hampir semua interaksi bersifat statis kecuali pada bagian antrean gambar. Dengan meminimalkan pengiriman JavaScript ke browser, aplikasi ini mencapai skor **Lighthouse 100/100** dengan mudah.
+
+### Keamanan Data dengan Model "Bring Your Own Key"
+
+Alih-alih membebankan biaya langganan kepada user, saya menerapkan sistem *BYOK (Bring Your Own Key)*. User memasukkan API Key Groq/Mistral mereka sendiri yang disimpan secara aman di `localStorage` browser. Ini memastikan:
+
+- Biaya operasional server hampir nol ($0).
+- Privasi gambar user terjaga karena tidak disimpan di server saya.
+
+### Arsitektur Antrean (Queue Management)
+
+Untuk menangani *Rate Limit* dari provider AI gratisan, saya membangun sistem antrean dengan **Safe Delay Logic**. Sistem ini memastikan request dikirim satu per satu dengan jeda waktu tertentu untuk menghindari error `429 Too Requests`.
+
+### Robust CSV Sanitization
+
+Data dari AI seringkali mengandung karakter ilegal atau format yang berantakan. Saya membangun utilitas khusus menggunakan **TypeScript** untuk membersihkan baris baru (`\n`), menghapus simbol terlarang (`©`, `™`), dan memastikan limitasi 50 keyword terpenuhi.
+
+<CodeGroup titles={["Typescript"]}>
+
+```typescript
+// Contoh logika sanitasi yang saya gunakan
+const clean = (str: string) => {
+  return str
+    .replace(/\r?\n|\r/g, " ")
+    .replace(/[™®©]/g, "")
+    .replace(/"/g, '""')
+    .trim();
+};
+```
+
+</ CodeGroup>

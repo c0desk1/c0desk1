@@ -1,0 +1,39 @@
+---
+import PostCard from '@/components/blog/PostCard.astro';
+import Button from '@/components/ui/Button.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+}
+
+const { posts } = Astro.props;
+---
+
+<div class="section-divider py-10 md:py-20">
+  <div class="mb-8">
+    <h2 class="text-2xl md:text-3xl font-semibold text-black dark:text-white">
+      Postingan Terbaru
+    </h2>
+  </div>
+
+  {posts.length > 0 ? (
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 divide-y md:divide-y-0 divide-black/20 dark:divide-white/5">
+      {posts.map(post => (
+        <PostCard post={post} />
+      ))}
+    </div>
+  ) : (
+    <div class="py-12 text-center border border-dashed border-neutral-200 dark:border-neutral-800 rounded-lg">
+      <p class="text-neutral-500 dark:text-neutral-400 text-sm md:text-lg">
+        Belum ada postingan blog.
+      </p>
+    </div>
+  )}
+
+  <div class="flex justify-center mt-8">
+    <Button href="/blog/" variant="secondary" size="md">
+      Lihat semua
+    </Button>
+  </div>
+</div>

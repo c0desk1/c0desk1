@@ -1,0 +1,27 @@
+{
+  "siteName": "c0desk1",
+  "siteDescription": "Music producer, Adobe Stock contributor, dan developer. Bahas teknologi, game, anime, dan apapun yang gue anggap unik. Bikin audio, visual, dan sistem otomasi buat kreator.",
+  "siteUrl": "https://c0desk1.my.id/",
+  "siteMail": "hallo@c0desk1.my.id",
+  "siteLogo": "/org/c0desk1-logo.svg",
+  
+  "social": {
+    "github": "https://github.com/dev-c0desk1",
+    "twitter": "https://twitter.com/c0desk1"
+  },
+  
+  "defaultSeo": {
+    "title": "c0desk1",
+    "description": "Music producer, Adobe Stock contributor, dan developer. Bahas teknologi, game, anime, dan apapun yang gue anggap unik. Bikin audio, visual, dan sistem otomasi buat kreator.",
+    "ogImage": "/org/c0desk1-og.webp"
+  },
+  
+  
+  "googleSiteVerification": "ZxoHYWipAMoGhvwVi5nxolWsZOntrYkNkVcG9HTfFZQ",
+  "yandexVerification": "1878480c0d7b5510",
+
+  "googleAdsenseId": "ca-pub-4943136052113535",
+  
+  "googleAnalyticsId": "G-2TKFP229HJ",
+  "yandexMetrikaId": "108731154"
+}

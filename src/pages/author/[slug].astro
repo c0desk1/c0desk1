@@ -1,0 +1,153 @@
+---
+// src/pages/author/[slug].astro
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import { getCollection, getEntry } from "astro:content";
+import { Image } from 'astro:assets';
+import { siteConfig } from "@/config/site";
+import { formatDateCompact } from "@/lib/utils";
+
+export async function getStaticPaths() {
+  const authors = await getCollection("authors");
+  return authors.map((author) => ({
+    params: { slug: author.id },
+    props: { author },
+  }));
+}
+
+const { author } = Astro.props;
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+
+const authorPosts = allPosts
+  .filter((post) => post.data.author?.id === author.id)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const postsWithCategory = await Promise.all(
+  authorPosts.map(async (post) => {
+    const category = post.data.category ? await getEntry(post.data.category) : null;
+    return { ...post, categoryData: category?.data };
+  })
+);
+
+const siteURL = Astro.site?.toString() ?? siteConfig.siteUrl;
+const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
+
+const socialLinks = author.data.social || {};
+
+const seoData = {
+  title: author.data.name,
+  description: author.data.bio,
+  type: "profile" as const,
+  canonicalURL,
+  author: {
+    name: author.data.name,
+    role: author.data.role,
+    avatar: author.data.avatar,
+    bio: author.data.bio,
+    slug: author.id,
+  },
+};
+---
+
+<BaseLayout {...seoData}>
+  <main>
+    {/* Hero Section */}
+    <div class="border-b border-zinc-100 dark:border-zinc-800">
+      <Container size="lg" class="py-16 md:py-24">
+        <div class="max-w-2xl mx-auto text-center">
+          {/* Avatar */}
+          <div class="w-24 h-24 md:w-32 md:h-32 mx-auto mb-6">
+            <Image 
+              src={author.data.avatar} 
+              alt={author.data.name}
+              width={96}
+              height={96}
+              loading={"eager"}
+              class="w-full h-full rounded-full object-cover border-2 border-zinc-200 dark:border-zinc-800"
+            />
+          </div>
+          
+          {/* Name & Role */}
+          <h1 class="text-3xl md:text-4xl font-semibold tracking-tight text-zinc-900 dark:text-white mb-2">
+            {author.data.name}
+          </h1>
+          <p class="text-sm text-emerald-600 dark:text-emerald-500 font-mono mb-4">
+            {author.data.role}
+          </p>
+          
+          {/* Bio */}
+          <p class="text-zinc-600 dark:text-zinc-400 max-w-md mx-auto">
+            {author.data.bio}
+          </p>
+          
+          {/* Social Links */}
+          {Object.values(socialLinks).some(Boolean) && (
+            <div class="mt-6 flex justify-center gap-4">
+              {socialLinks.github && (
+                <a href={socialLinks.github} target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors text-sm">
+                  GitHub
+                </a>
+              )}
+              {socialLinks.twitter && (
+                <a href={socialLinks.twitter} target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors text-sm">
+                  Twitter
+                </a>
+              )}
+              {socialLinks.linkedIn && (
+                <a href={socialLinks.linkedIn} target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors text-sm">
+                  LinkedIn
+                </a>
+              )}
+            </div>
+          )}
+          
+          {/* Post count */}
+          <div class="mt-6 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+            <span class="text-[11px] font-mono text-zinc-500">{authorPosts.length} articles</span>
+          </div>
+        </div>
+      </Container>
+    </div>
+
+    {/* Posts Section */}
+    <Container size="lg" class="py-16 md:py-24">
+      <div class="max-w-3xl mx-auto">
+        <div class="space-y-px">
+          {postsWithCategory.map((post) => (
+            <article class="group py-8 border-b border-zinc-100 dark:border-zinc-800 last:border-0">
+              <a href={`/blog/${post.id}/`} class="block">
+                <div class="flex flex-col md:flex-row md:items-center gap-3 md:gap-6 mb-2">
+                  <time class="text-[13px] text-zinc-500 font-mono tabular-nums">
+                    {formatDateCompact(post.data.pubDate)}
+                  </time>
+                  {post.categoryData && (
+                    <>
+                      <span class="hidden md:inline text-zinc-300 dark:text-zinc-700">•</span>
+                      <span class="text-[13px] text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors">
+                        {post.categoryData.name}
+                      </span>
+                    </>
+                  )}
+                </div>
+                
+                <h2 class="text-xl md:text-2xl font-medium tracking-tight text-zinc-900 dark:text-white mb-2 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors">
+                  {post.data.title}
+                </h2>
+                
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 line-clamp-2 leading-relaxed">
+                  {post.data.description}
+                </p>
+              </a>
+            </article>
+          ))}
+        </div>
+        
+        {authorPosts.length === 0 && (
+          <div class="text-center py-12">
+            <p class="text-zinc-400 dark:text-zinc-600">No articles yet.</p>
+          </div>
+        )}
+      </div>
+    </Container>
+  </main>
+</BaseLayout>

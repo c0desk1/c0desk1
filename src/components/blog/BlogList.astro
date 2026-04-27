@@ -1,0 +1,38 @@
+---
+// src/components/blog/BlogList.astro
+
+import type { CollectionEntry } from "astro:content";
+import Grid from "@/components/ui/Grid.astro";
+import PostCard from "./PostCard.astro";
+import FeaturedPostCard from "./FeaturedPostCard.astro";
+
+interface Props {
+  posts: CollectionEntry<"blog">[];
+  variant?: "featured" | "default";
+}
+
+const { posts, variant = "default" } = Astro.props;
+
+const gridMode =
+  variant === "featured"
+    ? "featured"
+    : "cards";
+---
+
+<div class="relative overflow-hidden min-w-0">
+  {variant === "default" && (
+    <div class="flex items-end justify-start mb-8">
+      <h2 class="text-3xl md:text-4xl font-semibold tracking-tighter">
+        Terbaru.
+      </h2>
+    </div>
+  )}
+  
+  <Grid cols={gridMode} gap="sm" class="min-w-0 items-start my-4 md:my-8">
+    {posts.map((post) => (
+      variant === "featured"
+        ? <FeaturedPostCard post={post} />
+        : <PostCard post={post} />
+    ))}
+  </Grid>
+</div>

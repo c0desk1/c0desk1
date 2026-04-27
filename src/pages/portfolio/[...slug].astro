@@ -1,0 +1,199 @@
+---
+// src/pages/portfolio/[...slug].astro
+import "@/styles/prose.css";
+
+import { getCollection, render } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+
+import { siteConfig } from "@/config/site";
+import { getSmartRelatedProjects } from "@/lib/botEngine";
+
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+
+import Breadcrumb from "@/components/ui/Breadcrumb.astro";
+import BackToTop from "@/components/ui/BackToTop.astro";
+
+import PortfolioHeader from "@/components/portfolio/PortfolioHeader.astro";
+import PortfolioMetrics from "@/components/portfolio/PortfolioMetrics.astro";
+import PortfolioGallery from "@/components/portfolio/PortfolioGallery.astro";
+import PortfolioRelated from "@/components/portfolio/PortfolioRelated.astro";
+import PortfolioFeaturedImage from "@/components/portfolio/PortfolioFeaturedImage.astro";
+import ReadingProgress from "@/components/ui/ReadingProgress.astro";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("portfolio", ({ data }) => !data.draft);
+  return projects.map((project: CollectionEntry<"portfolio">) => ({
+    params: { slug: project.id },
+    props: { project }
+  }));
+}
+
+interface Props {
+  project: CollectionEntry<"portfolio">;
+}
+
+const { project } = Astro.props;
+
+const data = project.data;
+
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  techStack,
+  demoUrl,
+  repoUrl,
+  image,
+  gallery,
+  featured,
+  client,
+  role,
+  duration,
+  challenge,
+  solution,
+  result,
+  metrics,
+  seo
+} = data;
+
+const { Content } = await render(project);
+
+const seoTitle = seo?.title || title;
+const seoDescription = seo?.description || description;
+const seoImage = {
+  src: seo?.ogImage || image?.src || siteConfig.defaultSeo?.ogImage || siteConfig.ogImage,
+  alt: image?.alt || title
+};
+
+const allProjects = await getCollection("portfolio", ({ data }) => !data.draft);
+const relatedProjects = getSmartRelatedProjects(project, allProjects, 2);
+
+const displayGallery = Array.isArray(gallery) ? gallery : [];
+
+const siteURL = Astro.site?.toString() ?? siteConfig.siteUrl;
+const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
+
+const seoData = {
+  title: seoTitle,
+  description: seoDescription,
+  image: seoImage,
+  type: "creativeWork" as const,
+  publishedTime: pubDate,
+  modifiedTime: updatedDate || pubDate,
+  tags: techStack,
+  canonicalURL,
+};
+
+const breadcrumbItems = [
+  { name: "Home", href: siteURL },
+  { name: "Portfolio", href: new URL("portfolio/", siteURL).toString() },
+  { name: title, href: canonicalURL }
+];
+
+---
+
+<BaseLayout 
+  {...seoData}
+  client={client}
+  role={role}
+  duration={duration}
+  demoUrl={demoUrl}
+  repoUrl={repoUrl}
+>
+  <article>
+    <h1 class="sr-only">{title}</h1>
+    <Section size="lg">
+      <Container size="sm">
+        <h2 class="sr-only">Portfolio Header</h2>
+        <Breadcrumb items={breadcrumbItems} />
+        <PortfolioHeader
+          title={title}
+          date={pubDate}
+          updatedDate={updatedDate}
+          featured={featured}
+          client={client}
+          role={role}
+          duration={duration}
+          techStack={techStack}
+          demoUrl={demoUrl}
+          repoUrl={repoUrl}
+        />
+      </Container>
+    </Section>
+
+    {image && (
+      <Section size="none">
+        <Container size="sm">
+          <h2 class="sr-only">Portfolio Image Content</h2>
+          <PortfolioFeaturedImage
+            src={image.src}
+            alt={image.alt || title}
+            caption={(image as any).caption || title}
+          />
+        </Container>
+      </Section>
+    )}
+
+    <Section size="md">
+      <Container size="sm">
+        <h2 class="sr-only">Portfolio Metrics</h2>
+        <PortfolioMetrics metrics={metrics} />
+      </Container>
+    </Section>
+
+    <Section size="lg">
+      <Container size="sm">
+        <h2 class="sr-only">Portfolio Content</h2>
+        
+        {(challenge || solution || result) && (
+          <div class="space-y-6 mb-10 border-b border-zinc-100 dark:border-zinc-800 pb-8">
+            {challenge && (
+              <div>
+                <h2 class="text-[11px] font-mono uppercase tracking-[0.2em] text-zinc-400 mb-2">Tantangan</h2>
+                <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed">{challenge}</p>
+              </div>
+            )}
+            {solution && (
+              <div>
+                <h2 class="text-[11px] font-mono uppercase tracking-[0.2em] text-zinc-400 mb-2">Solusi</h2>
+                <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed">{solution}</p>
+              </div>
+            )}
+            {result && (
+              <div>
+                <h2 class="text-[11px] font-mono uppercase tracking-[0.2em] text-zinc-400 mb-2">Hasil</h2>
+                <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed">{result}</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {displayGallery.length > 0 && (
+          <div class="mb-12">
+            <h2 class="prose-custom mb-4">Gallery</h2>
+            <PortfolioGallery
+              images={displayGallery}
+              title={title}
+            />
+          </div>
+        )}
+
+        <div class="prose-custom">
+          <Content />
+        </div>
+      </Container>
+    </Section>
+
+    <Section size="lg">
+      <Container size="sm">
+        <h2 class="sr-only">Portfolio related Content</h2>
+        <PortfolioRelated projects={relatedProjects} />
+        <BackToTop showBorder align="center" />
+      </Container>
+    </Section>
+  </article>
+  <ReadingProgress />
+</BaseLayout>
