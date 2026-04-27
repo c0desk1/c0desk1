@@ -3,7 +3,7 @@
 # ==========================================
 media:
   - name: images
-    label: Local Backup
+    label: Gallery Media
     input: public/images
     output: /images
     rename: safe
@@ -26,7 +26,7 @@ media:
 content:
   # --- BLOG ---
   - name: blog
-    label: Blog Posts
+    label: Blog
     type: collection
     path: src/content/blog
     filename: "{primary}.mdx"
@@ -34,63 +34,96 @@ content:
       - name: title
         label: Judul
         type: string
+        
       - name: description
         label: Deskripsi
         type: text
+        
       - name: image
-        label: Featured Image
+        label: Cover
         type: object
         fields:
           - name: src
+            label: Link
             type: string
+            
           - name: alt
+            label: Alt
             type: string
+            
+          - name: caption
+            label: Caption
+            type: text
+            
       - name: author
         label: Author
         type: reference
         options:
           collection: authors
           value: "{path}"
-          label: "{name}"
+          label: "{label}"
+          
       - name: category
         label: Kategori
         type: reference
         options:
           collection: categories
           value: "{path}"
-          label: "{name}"
+          label: "{label}"
+          
       - name: tags
         label: Tags
         type: string
         list: true
+        
       # --- Metadata Shared ---
       - name: pubDate
         label: Tanggal Terbit
         type: date
+        options:
+          time: true
+          format: yyyy-MM-dd'T'HH:mm
+        
       - name: updatedDate
         label: Tanggal Update
         type: date
+        options:
+          time: true
+          format: yyyy-MM-dd'T'HH:mm
+        
       - name: draft
-        label: Draft Mode
+        label: Draft
         type: boolean
+        
       - name: featured
         label: Unggulan
         type: boolean
+        
       # --- SEO Shared ---
       - name: seo
-        label: SEO Settings
+        label: SEO
         type: object
         fields:
           - name: title
+            label: Judul
             type: string
+            
           - name: description
+            label: Deskripsi
             type: text
+            
           - name: ogImage
+            label: OG Cover
             type: string
+            
           - name: canonical
+            label: Url
             type: string
+            
           - name: noIndex
+            label: Jangan index halaman
             type: boolean
+            default: false
 
       - name: body
         label: Konten
@@ -111,66 +144,126 @@ content:
     filename: "{primary}.mdx"
     fields:      
       - name: title
+        label: Judul
         type: string
+        
       - name: description
+        label: Deskripsi
         type: text
+        
       - name: image
+        label: Cover
         type: object
         fields:
           - name: src
+            label: Link
             type: string
+            
           - name: alt
+            label: Alt
             type: string
+
+          - name: caption
+            label: Caption
+            type: text
+            
       - name: techStack
         label: Tech Stack
         type: string
         list: true
       - name: client
+        label: Client
         type: string
+        
       - name: role
+        label: Role
         type: string
+        
       - name: duration
+        label: Durasi
         type: string
+        
       - name: demoUrl
+        label: Demo
         type: string
+        
       - name: repoUrl
+        label: Repo
         type: string
+        
       - name: metrics
+        label: Metrik
         type: object
         fields:
           - name: performance
+            label: Performa
             type: number
+            
           - name: accessibility
+            label: Aksebilitas
             type: number
+            
           - name: seo
+            label: SEO
             type: number
+            
       - name: challenge
+        label: Tantangan
         type: string
+        
       - name: solution
+        label: Solusi
         type: string
+        
       - name: result
+        label: Hasil
         type: string
+        
       - name: gallery
+        label: Gallery
         type: string
         list: true
       # --- Metadata & SEO ---
       - name: pubDate
+        label: Tanggal Project
         type: date
+        options:
+          time: true
+          format: yyyy-MM-dd'T'HH:mm
+          
       - name: updatedDate
+        label: Tanggal Update
         type: date
+        options:
+          time: true
+          format: yyyy-MM-dd'T'HH:mm
+          
       - name: draft
+        label: Draft
         type: boolean
+        default: false
+        
       - name: featured
+        label: Unggulan
         type: boolean
+        default: false
+        
       - name: seo
+        label: SEO
         type: object
         fields:
           - name: title
+            label: Judul
             type: string
+            
           - name: description
+            label: Deskripsi
             type: text
+            
           - name: noIndex
+            label: Jangan index halaman?
             type: boolean
+            default: false
 
       - name: body
         label: Detail Case
@@ -189,28 +282,43 @@ content:
     filename: "{primary}.json"
     fields:
       - name: name
+        label: Nama
         type: string
+        
       - name: role
+        label: Jabatan
         type: string
+        
       - name: avatar
+        label: Avatar
         type: string
+        
       - name: bio
+        label: Bio
         type: text
+        
       - name: organization
-        label: Organization
+        label: Organisasi
         type: reference
         options:
           collection: organizations
           value: "{path}"
-          label: "{name}"
+          label: "{label}"
+          
       - name: social
+        label: Sosial Media
         type: object
         fields:
           - name: github
+            label: Github
             type: string
+            
           - name: twitter
+            label: X
             type: string
+            
           - name: linkedin
+            label: LinkedIn
             type: string
 
   # --- CATEGORIES ---
@@ -221,24 +329,37 @@ content:
     filename: "{primary}.json"
     fields:
       - name: name
+        label: Nama Kategori
         type: string
+        
       - name: description
+        label: Deskripsi
         type: text
+        
       - name: slug
+        label: Slug
         type: string
+        
       - name: parent
+        label: Hubungan
         type: reference
         options:
           collection: categories
           value: "{path}"
-          label: "{name}"
+          label: "{label}"
+          
       - name: seo
+        label: SEO
         type: object
         fields:
           - name: title
+            label: Judul
             type: string
+            
           - name: noIndex
+            label: Index
             type: boolean
+            default: false
 
   # --- SETTINGS (ORGANIZATIONS) ---
   - name: organizations
@@ -248,20 +369,35 @@ content:
     filename: "site.json"
     fields:
       - name: name
+        label: Nama
         type: string
+        
       - name: legalName
+        label: Nama Legal
         type: string
+        
       - name: url
+        label: Website
         type: string
+        
       - name: logo
+        label: Logo
         type: string
+        
       - name: contactEmail
+        label: Email
         type: string
+        
       - name: socialLinks
+        label: Sosial Media
         type: string
         list: true
+        
       - name: analyticsId
+        label: Analysis ID
         type: string
+        
       - name: adsenseId
+        label: Adsense ID
         type: string
         
