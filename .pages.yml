@@ -61,7 +61,7 @@ content:
         options:
           collection: authors
           value: "{path}"
-          label: "{author.name}"
+          label: "{authors.name}"
           multiple: true
           
       - name: category
@@ -123,7 +123,7 @@ content:
             type: string
             
           - name: noIndex
-            label: Index halaman?
+            label: Jangan index halaman?
             type: boolean
             default: false
 
@@ -261,9 +261,13 @@ content:
           - name: description
             label: Deskripsi
             type: text
+
+          - name: ogImage
+            label: OG Cover
+            type: string
             
           - name: noIndex
-            label: Index halaman?
+            label: Jangan index halaman?
             type: boolean
             default: false
 
