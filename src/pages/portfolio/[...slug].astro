@@ -87,6 +87,12 @@ const seoData = {
   canonicalURL,
 };
 
+const portfolioCategory = {
+  name: "Portfolio",
+  slug: "portfolio",
+  description: "Koleksi karya digital"
+};
+
 const breadcrumbItems = [
   { name: "Home", href: siteURL },
   { name: "Portfolio", href: new URL("portfolio/", siteURL).toString() },
@@ -97,6 +103,7 @@ const breadcrumbItems = [
 
 <BaseLayout 
   {...seoData}
+  category={portfolioCategory}
   client={client}
   role={role}
   duration={duration}
