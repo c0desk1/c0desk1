@@ -30,8 +30,12 @@ content:
     type: collection
     path: src/content/blog
     filename: "{primary}.mdx"
+    
     view:
-      fields: [title, author, category, publishDate]
+      primary: title
+      sort: [pubDate]
+      fields: [title, author, category, pubDate]
+      
     fields:
       - name: title
         label: Judul
@@ -59,6 +63,7 @@ content:
         options:
           collection: authors
           value: "{path}"
+          pattern: "^[a-z0-9-]+$"
           label: "{name}"
           multiple: true
           
@@ -68,6 +73,7 @@ content:
         options:
           collection: categories
           value: "{slug}"
+          pattern: "^[a-z0-9-]+$"
           label: "{name}"
           
       - name: tags
