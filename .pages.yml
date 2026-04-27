@@ -65,8 +65,8 @@ content:
         type: reference
         options:
           collection: categories
-          value: "{path}"
-          label: "{category.name}"
+          value: "{slug}"
+          label: "{name}"
           
       - name: tags
         label: Tags
