@@ -316,7 +316,7 @@ content:
         options:
           collection: organizations
           value: "{path}"
-          label: "{name}"
+          label: "{fields.name}"
           
       - name: social
         label: Sosial Media
