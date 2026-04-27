@@ -63,7 +63,7 @@ content:
         options:
           collection: authors
           value: "{path}"
-          label: "{primary}"
+          label: "{name}"
           multiple: true
           
       - name: category
@@ -72,7 +72,7 @@ content:
         options:
           collection: categories
           value: "{slug}"
-          label: "{primary}"
+          label: "{name}"
           
       - name: tags
         label: Tags
@@ -339,6 +339,11 @@ content:
     view:
       fields: [name, slug]
     fields:
+      - name: slug
+        label: Slug
+        type: string
+        pattern: "^[a-z0-9-]+$"
+        
       - name: name
         label: Nama Kategori
         type: string
@@ -346,10 +351,6 @@ content:
       - name: description
         label: Deskripsi
         type: text
-        
-      - name: slug
-        label: Slug
-        type: string
         
 
   # --- SETTINGS (ORGANIZATIONS) ---
