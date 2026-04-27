@@ -51,17 +51,13 @@ content:
             label: Alt
             type: string
             
-          - name: caption
-            label: Caption
-            type: text
-            
       - name: author
         label: Author
         type: reference
         options:
           collection: authors
           value: "{path}"
-          label: "{authors.name}"
+          label: "{name}"
           multiple: true
           
       - name: category
