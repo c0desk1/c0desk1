@@ -186,17 +186,30 @@ if (isHomepage) {
 }
 
 // Breadcrumb
-if (!isHomepage) {
-  schemaGraph.push({
-    "@type": "BreadcrumbList",
-    "@id": `${seoData.canonical}#breadcrumb`,
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": siteURL },
-      category ? { "@type": "ListItem", "position": 2, "name": category.name, "item": new URL(`category/${category.slug}/`, siteURL).toString() } : null,
-      { "@type": "ListItem", "position": category ? 3 : 2, "name": seoData.title, "item": seoData.canonical.toString() }
-    ].filter(Boolean)
-  });
-}
+schemaGraph.push({
+  "@type": "BreadcrumbList",
+  "@id": `${seoData.canonical}#breadcrumb`,
+  "itemListElement": [
+    { 
+      "@type": "ListItem", 
+      "position": 1, 
+      "name": "Home", 
+      "item": siteURL 
+    },
+    ...(!isHomepage && category ? [{ 
+      "@type": "ListItem", 
+      "position": 2, 
+      "name": category.name, 
+      "item": new URL(`category/${category.slug}/`, siteURL).toString() 
+    }] : []),
+    ...(!isHomepage ? [{ 
+      "@type": "ListItem", 
+      "position": category ? 3 : 2, 
+      "name": seoData.title, 
+      "item": seoData.canonical.toString() 
+    }] : [])
+  ].filter(Boolean)
+});
 
 // Articles
 if (type === "article") {
