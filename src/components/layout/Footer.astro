@@ -4,6 +4,7 @@ import { siteConfig } from "@/config/site";
 import { getEntry } from "astro:content";
 import Container from "../ui/Container.astro";
 import Section from "../ui/Section.astro";
+import StatusPanel from "../layout/StatusPanel.astro";
 
 let settings;
 try {
@@ -15,141 +16,48 @@ try {
 const siteData = settings?.data || siteConfig;
 ---
 
-<footer class="border-t border-black/10 dark:border-white/10 bg-white dark:bg-black relative">
-
+<footer class="border-t border-zinc-100 dark:border-zinc-900 bg-white dark:bg-black relative overflow-hidden">
   <Section size="sm">
     <Container size="lg">
-
-      <div class="grid grid-cols-1 sm:grid-cols-3 items-center gap-4 text-[13px] text-zinc-500 dark:text-zinc-400">
-
-        <!-- LEFT -->
-        <div class="flex justify-center sm:justify-start">
-          <a
-            href="#top"
-            class="text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition"
-            aria-label="Back to top"
-          >
+      <div class="grid grid-cols-1 md:grid-cols-3 items-center gap-3">
+        <div class="flex justify-center md:justify-start">
+          <a href="#top" class="text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition" aria-label="Back to top">
             <span>▼</span>
           </a>
         </div>
 
-        <!-- CENTER (BADGE) -->
-        <div class="flex items-center justify-center gap-3">
-
+        <div class="flex items-center justify-center gap-4">
           <button
             id="status-toggle"
-            class="flex items-center gap-2 px-2 py-1 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition"
+            class="group flex items-center gap-2.5 px-3 py-1.5 rounded-full border border-zinc-100 dark:border-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all active:scale-95"
           >
-            <span id="status-dot" class="w-2 h-2 rounded-full bg-gray-400"></span>
-            <span id="status-label" class="text-[12px]">Loading...</span>
+            <span class="relative flex h-2 w-2">
+              <span id="status-pulse" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
+              <span id="status-dot" class="relative inline-flex rounded-full h-2 w-2 bg-zinc-400"></span>
+            </span>
+            <span id="status-label" class="text-[12px] font-medium text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-100 transition-colors">
+              Loading Systems...
+            </span>
           </button>
 
-          <!-- Yandex Badge -->
           <a
             href="https://webmaster.yandex.ru/siteinfo/?site=https://c0desk1.my.id"
             target="_blank"
-            class="opacity-80 hover:opacity-100 transition"
+            class="grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all"
           >
             <img
               src="https://yandex.ru/cycounter?https://c0desk1.my.id&theme=dark&lang=en"
-              class="h-5 sm:h-6 w-auto rounded-full"
+              alt="Yandex"
+              class="h-5 w-auto"
               loading="lazy"
             />
           </a>
-
         </div>
-
-        <!-- RIGHT -->
-        <div class="flex justify-center sm:justify-end">
+        <div class="text-[13px] text-zinc-400 dark:text-zinc-500 tracking-tight text-center md:text-right">
           © {new Date().getFullYear()} {siteData.siteName}
         </div>
-
       </div>
-
     </Container>
   </Section>
-
-  <!-- ================= STATUS PANEL ================= -->
-  <div
-    id="status-panel"
-    class="fixed bottom-0 left-0 right-0 translate-y-full transition-transform duration-300 bg-white dark:bg-black border-t border-black/10 dark:border-white/10 p-4 z-50"
-  >
-    <div class="max-w-lg mx-auto space-y-2 text-sm">
-
-      <div class="flex justify-between">
-        <span>API</span>
-        <span id="s-api">...</span>
-      </div>
-
-      <div class="flex justify-between">
-        <span>WEB</span>
-        <span id="s-web">...</span>
-      </div>
-
-      <div class="flex justify-between">
-        <span>CDN</span>
-        <span id="s-cdn">...</span>
-      </div>
-
-      <div class="flex justify-between">
-        <span>BOT</span>
-        <span id="s-bot">...</span>
-      </div>
-
-    </div>
-  </div>
-
+  <StatusPanel />
 </footer>
-
-<!-- ================= CLIENT SCRIPT ================= -->
-<script type="module">
-  const API =
-  (typeof import.meta !== "undefined" &&
-    import.meta.env?.PUBLIC_STATUS_API) ||
-  "https://c0desk1-api.dev-c0desk1.workers.dev";
-
-  const dot = document.getElementById("status-dot");
-  const label = document.getElementById("status-label");
-
-  const panel = document.getElementById("status-panel");
-  const toggle = document.getElementById("status-toggle");
-
-  function color(status) {
-    if (status === "operational") return "bg-green-500";
-    if (status === "degraded") return "bg-yellow-500";
-    return "bg-red-500";
-  }
-
-  async function load() {
-    try {
-      const res = await fetch(`${API}/status/all`);
-      const data = await res.json();
-
-      const overall = data.overall;
-
-      dot.className = `w-2 h-2 rounded-full ${color(overall)}`;
-
-      label.textContent =
-        overall === "operational"
-          ? "All Systems Operational"
-          : overall === "degraded"
-          ? "Degraded Performance"
-          : "Major Outage";
-
-      data.services.forEach((s) => {
-        const el = document.getElementById(`s-${s.name}`);
-        if (el) el.textContent = s.status;
-      });
-
-    } catch {
-      dot.className = "w-2 h-2 rounded-full bg-gray-400";
-      label.textContent = "Status unavailable";
-    }
-  }
-
-  toggle?.addEventListener("click", () => {
-    panel?.classList.toggle("translate-y-full");
-  });
-
-  load();
-</script>
