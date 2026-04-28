@@ -49,7 +49,7 @@ const {
   repoUrl,
 } = Astro.props;
 
-// ================= AMBIL DATA SETTINGS (dengan fallback) =================
+// ================= DATA SETTINGS =================
 let settings;
 try {
   settings = await getEntry('settings', 'site');
@@ -59,7 +59,7 @@ try {
 
 const siteData = settings?.data || siteConfig;
 
-// ================= AMBIL DATA ORGANIZATION =================
+// ================= DATA ORGANIZATION =================
 let org;
 if (orgFromProps) {
   org = { data: orgFromProps };
@@ -308,7 +308,7 @@ const twitterUsername = siteData.social?.twitter?.split('/').pop() || siteConfig
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', '${analyticsId}');
+          gtag('config', '{analyticsId}');
         </script>
       </>
     );
