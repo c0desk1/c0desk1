@@ -1,5 +1,6 @@
 ---
 // src/components/blog/BlogFeaturedImage.astro
+import { Image } from 'astro:assets';
 
 interface Props {
   image: string; 
@@ -20,7 +21,7 @@ const finalCaption = caption || alt;
         aria-hidden="true"
       ></div>
       
-      <img
+      <Image
         src={image}
         alt={alt || caption || "Featured image"}
         width={1280}
