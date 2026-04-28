@@ -3,6 +3,7 @@
 import { siteConfig } from "@/config/site";
 import { getEntry } from 'astro:content';
 import Container from "../ui/Container.astro";
+import Section from "../ui/Section.astro";
 
 let settings;
 try {
@@ -14,48 +15,53 @@ const siteData = settings?.data || siteConfig;
 ---
 
 <footer class="border-t border-black/10 dark:border-white/10 bg-white dark:bg-black">
-  <Container size="lg">
-    <div class="flex flex-col sm:flex-row justify-between items-center gap-4 py-6 text-[13px] text-zinc-500 dark:text-zinc-400">
-      
-      <!-- Left -->
-      <div class="flex items-center gap-2">
-        <span>
-          © {new Date().getFullYear()} {siteData.siteName}
-        </span>
-      </div>
-
-      <!-- Right -->
-      <div class="flex items-center gap-4">
-
-        <!-- Yandex Badge -->
-        <a 
-          href="https://webmaster.yandex.ru/siteinfo/?site=https://c0desk1.my.id"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-block opacity-70 hover:opacity-100 transition"
-          aria-label="Yandex Site Quality Index"
-        >
-          <img 
-            src="https://yandex.ru/cycounter?https://c0desk1.my.id&theme=dark&lang=en"
-            width="88"
-            height="31"
-            alt="Yandex SQI"
-            class="rounded-full"
-            loading="lazy"
-          />
-        </a>
-
-        <!-- Back to top -->
-        <a
-          href="/"
-          class="inline-flex items-center justify-center text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors duration-150"
-          aria-label="Home"
-        >
-          <span class="text-sm">
-            ▲
+  <Section size="sm">
+    <Container size="lg">
+      <h2 class="sr-only">"Footer"</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 items-center gap-4 text-[13px] text-zinc-500 dark:text-zinc-400">
+        <div class="flex justify-center sm:justify-start">
+          <a
+            href="/"
+            class="inline-flex items-center justify-center text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+            aria-label="Back to top"
+          >
+            <span class="text-sm leading-none">▼</span>
+          </a>
+        </div>
+        <div class="flex items-center justify-center gap-2">
+          <a 
+            href="https://webmaster.yandex.ru/siteinfo/?site=https://c0desk1.my.id"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex opacity-80 hover:opacity-100 transition"
+          >
+            <img 
+              src="https://yandex.ru/cycounter?https://c0desk1.my.id&theme=dark&lang=en"
+              alt="Yandex SQI"
+              class="h-5 sm:h-6 w-auto rounded-full"
+              loading="lazy"
+            />
+          </a>
+          <a 
+            href="https://stats.uptimerobot.com/VUGEqPRhOD"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex opacity-80 hover:opacity-100 transition"
+          >
+            <img 
+              src="https://stats.uptimerobot.com/VUGEqPRhOD/banner-1"
+              alt="Uptime Status"
+              class="h-5 sm:h-6 w-auto"
+              loading="lazy"
+            />
+          </a>
+        </div>
+        <div class="flex justify-center sm:justify-end">
+          <span>
+            © {new Date().getFullYear()} {siteData.siteName}
           </span>
-        </a>
+        </div>
       </div>
-    </div>
-  </Container>
+    </Container>
+  </Section>
 </footer>
