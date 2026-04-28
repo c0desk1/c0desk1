@@ -297,6 +297,11 @@ content:
       - name: name
         label: Nama
         type: string
+
+      - name: slug
+        label: Slug
+        type: string
+        default: "bima-akbar"
         
       - name: role
         label: Jabatan
