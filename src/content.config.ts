@@ -67,6 +67,7 @@ const settings = defineCollection({
 const authors = defineCollection({
   loader: glob({ pattern: "**/*.{json,md}", base: "./src/content/authors" }),
   schema: z.object({
+    slug: z.string().optional(),
     name: z.string(),
     role: z.string(),
     avatar: z.string(),
