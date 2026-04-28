@@ -74,7 +74,7 @@ content:
         type: reference
         options:
           collection: categories
-          value: "{slug}"
+          value: "{fields.slug}"
           label: "{fields.name}"
           
       - name: tags
