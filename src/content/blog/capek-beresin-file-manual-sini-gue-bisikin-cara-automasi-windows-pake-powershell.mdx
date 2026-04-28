@@ -63,8 +63,7 @@ Get-ChildItem -Path $folderPath | ForEach-Object {
     Rename-Item -Path $_.FullName -NewName $namaBaru
 }
 ```
-
-
+</CodeGroup>
 
 Kenapa Gini?:
 
@@ -90,7 +89,7 @@ Get-ChildItem -Path $pathSampah -Recurse | Where-Object {
 } | Remove-Item -Force
 ```
 
-
+</CodeGroup>
 
 Kalau lu takut salah hapus, tambahin `-WhatIf` di akhir baris `Remove-Item`. Nanti PowerShell cuma bakal pamer, "Nih file yang BAKAL gue hapus," tanpa beneran ngehapus. Jadi lu bisa cek dulu.
 
@@ -98,7 +97,7 @@ Kalau lu takut salah hapus, tambahin `-WhatIf` di akhir baris `Remove-Item`. Nan
 
 Script di atas nggak bakal guna kalau lu harus buka-tulis tiap hari. Lu harus pake Task Scheduler bawaan Windows:
 
-
+<Steps>
 
 ### Step 1
 
@@ -121,7 +120,7 @@ Di bagian Program/script isi: `powershell.exe`.
 Di bagian Add arguments, masukin:
 `-ExecutionPolicy Bypass -File "C:\Path\Ke\Script\Lu.ps1"`.
 
-
+</Steps>
 
 Selesai! Sekarang tiap pagi pas lu nyalain PC, script itu bakal jalan sendiri di *background*.
 
