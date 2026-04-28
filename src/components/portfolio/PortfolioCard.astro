@@ -1,6 +1,7 @@
 ---
 // src/components/portfolio/PortfolioCard.astro
 import type { CollectionEntry } from "astro:content";
+import { Image } from 'astro:assets';
 import { formatDateCompact } from "@/lib/utils";
 
 interface Props {
@@ -28,7 +29,7 @@ const {
   class="group block relative"
 >
   <div class="relative overflow-hidden rounded-2xl bg-zinc-100 dark:bg-zinc-900 mb-4">
-    <img
+    <Image
       src={image.src}
       alt={image.alt ?? title}
       width={800}
