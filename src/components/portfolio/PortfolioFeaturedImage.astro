@@ -1,6 +1,7 @@
 ---
 // src/components/portfolio/PortfolioHeroImage.astro
 import Container from "../ui/Container.astro";
+import { Image } from 'astro:assets';
 
 interface Props {
   src: any;
@@ -20,7 +21,7 @@ const finalCaption = caption || alt;
       <div class="relative aspect-video overflow-hidden">
         <div class="absolute aspect-video inset-0 bg-zinc-100 dark:bg-zinc-900 animate-pulse" aria-hidden="true"></div>
         
-        <img
+        <Image
           src={finalSrc}
           alt={alt || "Portfolio hero image"}
           width={1280}
