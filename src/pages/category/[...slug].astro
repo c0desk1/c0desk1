@@ -39,6 +39,12 @@ const seoData = {
   canonicalURL,
 };
 
+const blogCategory = {
+  name: "Blog",
+  slug: "blog",
+  description: "Semua artikel blog"
+};
+
 const breadcrumbItems = [
   { name: "Home", href: siteURL },
   { name: "Blog", href: new URL("blog/", siteURL).toString() },
@@ -46,7 +52,7 @@ const breadcrumbItems = [
 ];
 ---
 
-<BaseLayout {...seoData}>
+<BaseLayout {...seoData} category={blogCategory}>
     <Container size="lg" class="pt-8">
       <Breadcrumb items={breadcrumbItems} />
     </Container>
