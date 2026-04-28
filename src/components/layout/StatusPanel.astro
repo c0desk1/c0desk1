@@ -10,17 +10,17 @@ const services = ['api', 'web', 'cdn', 'bot'];
 
 <div
   id="status-panel"
-  class="fixed bottom-0 left-0 right-0 translate-y-full transition-transform duration-500 cubic-bezier(0.4, 0, 0.2, 1) bg-black border-t border-zinc-900 z-100 shadow-[0_-20px_50px_-12px_rgba(0,0,0,0.5)]"
+  class="fixed bottom-0 left-0 right-0 translate-y-full transition-transform duration-500 cubic-bezier(0.4, 0, 0.2, 1) bg-white dark:bg-black border-t broder-black/20 dark:border-zinc-900 z-100 shadow-[0_-20px_50px_-12px_rgba(0,0,0,0.5)]"
 >
   <div class="max-w-screen-lg mx-auto p-6 md:p-10">
     <div class="flex items-center justify-between mb-10">
       <div class="flex items-center gap-3">
         <div id="panel-dot" class="w-2 h-2 rounded-full bg-zinc-700"></div>
-        <h3 class="text-[10px] font-bold uppercase tracking-[0.4em] text-zinc-500">
+        <h3 class="text-[13px] font-semibold text-black dark:text-white">
           Status Sistem
         </h3>
       </div>
-      <button id="close-panel" class="p-2 -mr-2 text-zinc-400 hover:text-white transition-colors" aria-label="Close panel">
+      <button id="close-panel" class="p-2 -mr-2 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-black/10 dark:hover:bg-zinc-800/50 rounded-full transition-colors" aria-label="Close panel">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
       </button>
     </div>
@@ -29,8 +29,8 @@ const services = ['api', 'web', 'cdn', 'bot'];
       {services.map((id) => (
         <div class="flex flex-col gap-4">
           <div class="flex items-center justify-between">
-            <span class="text-[13px] font-bold tracking-tight text-white uppercase">{id}</span>
-            <span id={`s-${id}-text`} class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Memeriksa</span>
+            <span class="text-[13px] font-semibold uppercase text-white">{id}</span>
+            <span id={`s-${id}-text`} class="text-[10px] font-bold text-zinc-500">Memeriksa</span>
           </div>
           
           <div class="flex flex-wrap gap-[3px] w-full">
@@ -42,7 +42,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
             ))}
           </div>
 
-          <div class="flex justify-between text-[9px] font-bold uppercase tracking-widest text-zinc-600">
+          <div class="flex justify-between text-[11px] font-semibold text-zinc-600">
             <span>30 Hari Terakhir</span>
             <span id={`s-${id}-uptime`} class="text-zinc-500">Stabilitas: --</span>
           </div>
@@ -55,12 +55,11 @@ const services = ['api', 'web', 'cdn', 'bot'];
 <script>
   interface ServiceData {
     name: string;
-    status: 'operational' | 'degraded' | 'outage';
+    status: 'Operational' | 'Degraded' | 'Outage';
   }
 
   const API_URL = "https://c0desk1-api.dev-c0desk1.workers.dev";
   
-  // Element Selectors
   const panel = document.getElementById("status-panel");
   const overlay = document.getElementById("status-overlay");
   const toggle = document.getElementById("status-toggle");
@@ -71,7 +70,6 @@ const services = ['api', 'web', 'cdn', 'bot'];
   const footerDot = document.getElementById("status-dot");
   const footerPulse = document.getElementById("status-pulse");
 
-  // --- PANEL CONTROLS ---
   function openStatus() {
     panel?.classList.remove("translate-y-full");
     overlay?.classList.remove("opacity-0", "pointer-events-none");
@@ -88,19 +86,19 @@ const services = ['api', 'web', 'cdn', 'bot'];
 
   function updateUI(overall: string, services: ServiceData[]) {
     const colors: Record<string, string> = {
-      operational: "#10b981", 
-      degraded: "#f59e0b",
-      outage: "#ef4444"
+      Operational: "#10b981", 
+      Degraded: "#f59e0b",
+      Outage: "#ef4444"
     };
 
     const accent = colors[overall] || "#3f3f46";
 
-    if (footerLabel) footerLabel.textContent = overall === "operational" ? "Systems Normal" : overall.toUpperCase();
+    if (footerLabel) footerLabel.textContent = overall === "Operational" ? "All Systems is Normal" : overall;
     if (footerDot) footerDot.style.backgroundColor = accent;
     if (footerPulse) footerPulse.style.backgroundColor = accent;
     if (panelDot) {
         panelDot.style.backgroundColor = accent;
-        panelDot.className = `w-2 h-2 rounded-full ${overall === 'operational' ? '' : 'animate-pulse'}`;
+        panelDot.className = `w-2 h-2 rounded-full ${overall === 'Operational' ? '' : 'animate-pulse'}`;
     }
 
     services.forEach((s) => {
@@ -113,17 +111,17 @@ const services = ['api', 'web', 'cdn', 'bot'];
         textEl.style.color = colors[s.status] || "#71717a";
       }
 
-      if (uptimeEl && s.status === 'operational') uptimeEl.textContent = "Stability: 100%";
+      if (uptimeEl && s.status === 'Operational') uptimeEl.textContent = "Stability: 100%";
 
       dots.forEach((dot, index) => {
-        if (s.status === 'operational') {
+        if (s.status === 'Operational') {
           setTimeout(() => {
-            dot.style.backgroundColor = colors.operational;
+            dot.style.backgroundColor = colors.Operational;
             dot.style.borderColor = "transparent";
             dot.style.opacity = (Math.random() * (1 - 0.4) + 0.4).toString();
           }, index * 15);
-        } else if (s.status === 'outage' && index === 39) {
-          dot.style.backgroundColor = colors.outage;
+        } else if (s.status === 'Outage' && index === 39) {
+          dot.style.backgroundColor = colors.Outage;
           dot.style.borderColor = "transparent";
           dot.style.opacity = "1";
         }
@@ -138,7 +136,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
       const data = await res.json();
       updateUI(data.overall, data.services);
     } catch (e) {
-      if (footerLabel) footerLabel.textContent = "OFFLINE";
+      if (footerLabel) footerLabel.textContent = "Offline";
     }
   }
 
