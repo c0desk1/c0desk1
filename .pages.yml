@@ -292,7 +292,7 @@ content:
     path: src/content/authors
     filename: "{primary}.json"
     view:
-      fields: [name, role]
+      fields: [name, role, slug]
     fields:
       - name: name
         label: Nama
