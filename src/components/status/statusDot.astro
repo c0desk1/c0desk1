@@ -1,0 +1,20 @@
+---
+// src/components/status/StatusDot.astro
+const { status } = Astro.props;
+
+const color =
+  status === "operational"
+    ? "bg-green-500"
+    : status === "degraded"
+    ? "bg-yellow-500"
+    : "bg-red-500";
+
+const pulse = status !== "operational";
+---
+
+<span class="relative flex h-2 w-2">
+  {pulse && (
+    <span class={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-75 ${color}`} />
+  )}
+  <span class={`relative inline-flex rounded-full h-2 w-2 ${color}`} />
+</span>
