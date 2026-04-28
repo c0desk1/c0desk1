@@ -1,6 +1,7 @@
 ---
 // src/components/author/Author.astro
 import { siteConfig } from '@/config/site';
+import { Image } from 'astro:assets';
 
 interface Props {
   name?: string;
@@ -23,7 +24,7 @@ const authorSlug = slug || siteConfig.author?.slug || "author";
   aria-label={`Author: ${authorName}`}
 >
   {authorAvatar && (
-    <img
+    <Image
       src={authorAvatar}
       alt={`Avatar of ${authorName}`}
       width={18}
