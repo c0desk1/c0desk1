@@ -2,34 +2,34 @@
   "siteName": "c0desk1",
   "siteDescription": "Music producer, Adobe Stock contributor, dan developer. Bahas teknologi, game, anime, dan apapun yang gue anggap unik. Bikin audio, visual, dan sistem otomasi buat kreator.",
   "siteUrl": "https://c0desk1.my.id/",
-  "siteMail": "hallo@c0desk1.my.id",
   "siteLogo": "/org/c0desk1-logo.svg",
-  
+  "siteMail": "hallo@c0desk1.my.id",
   "social": {
     "github": "https://github.com/dev-c0desk1",
     "twitter": "https://twitter.com/c0desk1"
   },
-  
+  "navItems": [
+    {
+      "href": "/blog/",
+      "label": "Blog"
+    },
+    {
+      "href": "/portfolio/",
+      "label": "Portfolio"
+    },
+    {
+      "href": "/about/",
+      "label": "Tentang"
+    }
+  ],
   "defaultSeo": {
     "title": "c0desk1",
     "description": "Music producer, Adobe Stock contributor, dan developer. Bahas teknologi, game, anime, dan apapun yang gue anggap unik. Bikin audio, visual, dan sistem otomasi buat kreator.",
     "ogImage": "/org/c0desk1-og.webp"
   },
-
-  "navItems": [
-    { "href": "/blog/", "label": "Blog" },
-    { "href": "/portfolio/", "label": "Portfolio" },
-    { "href": "/about/", "label": "Tentang" },
-    { "href": "/contact/", "label": "Kontak" },
-    { "href": "/newsletter/", "label": "Newsletter" }
-  ],
-  
-  
-  "googleSiteVerification": "ZxoHYWipAMoGhvwVi5nxolWsZOntrYkNkVcG9HTfFZQ",
-  "yandexVerification": "1878480c0d7b5510",
-
-  "googleAdsenseId": "ca-pub-4943136052113535",
-  
   "googleAnalyticsId": "G-2TKFP229HJ",
+  "googleSiteVerification": "ZxoHYWipAMoGhvwVi5nxolWsZOntrYkNkVcG9HTfFZQ",
+  "googleAdsenseId": "ca-pub-4943136052113535",
+  "yandexVerification": "1878480c0d7b5510",
   "yandexMetrikaId": "108731154"
 }
