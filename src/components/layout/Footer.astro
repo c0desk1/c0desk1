@@ -1,34 +1,56 @@
 ---
 // src/components/layout/Footer.astro
 import { siteConfig } from "@/config/site";
-import { getEntry } from 'astro:content';
+import { getEntry } from "astro:content";
 import Container from "../ui/Container.astro";
 import Section from "../ui/Section.astro";
 
+import StatusBadge from "@/components/status/statusBadge.astro";
+import StatusPanel from "@/components/status/statusPanel.astro";
+import { fetchStatusAll } from "@/lib/status";
+
 let settings;
 try {
-  settings = await getEntry('settings', 'site');
+  settings = await getEntry("settings", "site");
 } catch (error) {
-  console.warn('Settings not found, using siteConfig fallback');
+  console.warn("Settings not found, using siteConfig fallback");
 }
 const siteData = settings?.data || siteConfig;
+
+const status = await fetchStatusAll();
 ---
 
-<footer class="border-t border-black/10 dark:border-white/10 bg-white dark:bg-black">
+<footer class="border-t border-black/10 dark:border-white/10 bg-white dark:bg-black relative">
+
   <Section size="sm">
     <Container size="lg">
-      <h2 class="sr-only">"Footer"</h2>
+      <h2 class="sr-only">Footer</h2>
+
       <div class="grid grid-cols-1 sm:grid-cols-3 items-center gap-4 text-[13px] text-zinc-500 dark:text-zinc-400">
+
+        <!-- LEFT: back button -->
         <div class="flex justify-center sm:justify-start">
           <a
-            href="/"
+            href="#top"
             class="inline-flex items-center justify-center text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
             aria-label="Back to top"
           >
             <span class="text-sm leading-none">▼</span>
           </a>
         </div>
-        <div class="flex items-center justify-center gap-2">
+
+        <!-- CENTER: STATUS + BADGES -->
+        <div class="flex items-center justify-center gap-3">
+
+          <!-- Vercel-style status badge (CLICKABLE) -->
+          <button
+            id="status-toggle"
+            class="inline-flex items-center gap-2 px-2 py-1 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition"
+          >
+            <StatusBadge data={status} />
+          </button>
+
+          <!-- existing badges -->
           <a 
             href="https://webmaster.yandex.ru/siteinfo/?site=https://c0desk1.my.id"
             target="_blank"
@@ -42,26 +64,24 @@ const siteData = settings?.data || siteConfig;
               loading="lazy"
             />
           </a>
-          <a 
-            href="https://stats.uptimerobot.com/VUGEqPRhOD"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex opacity-80 hover:opacity-100 transition"
-          >
-            <img 
-              src="https://stats.uptimerobot.com/VUGEqPRhOD/banner-1"
-              alt="Uptime Status"
-              class="h-5 sm:h-6 w-auto"
-              loading="lazy"
-            />
-          </a>
+
         </div>
+
+        <!-- RIGHT: copyright -->
         <div class="flex justify-center sm:justify-end">
           <span>
             © {new Date().getFullYear()} {siteData.siteName}
           </span>
         </div>
+
       </div>
     </Container>
   </Section>
+
+  <!-- STATUS PANEL (SLIDE UP) -->
+  <StatusPanel data={status} />
+
 </footer>
+
+<!-- CLIENT HOOK -->
+<script type="module" src="/src/islands/statusClient.ts"></script>
