@@ -21,9 +21,8 @@ export default defineConfig({
     mdx(),
   ],
   image: {
-    domains: [
-		'c0desk1-api.dev-c0desk1.workers.dev',
-		'api.telegram.org'
-	],
+    remotePatterns: [
+      { protocol: 'https', hostname: 'c0desk1-api.dev-c0desk1.workers.dev' }
+    ],
   },
 });
