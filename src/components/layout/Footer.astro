@@ -43,12 +43,12 @@ const siteData = settings?.data || siteConfig;
           <a
             href="https://webmaster.yandex.ru/siteinfo/?site=https://c0desk1.my.id"
             target="_blank"
-            class="grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all"
+            class="hidden grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all"
           >
             <img
               src="https://yandex.ru/cycounter?https://c0desk1.my.id&theme=dark&lang=en"
               alt="Yandex"
-              class="h-5 w-auto"
+              class="h-5 w-auto rounded-md"
               loading="lazy"
             />
           </a>
@@ -61,3 +61,9 @@ const siteData = settings?.data || siteConfig;
   </Section>
   <StatusPanel />
 </footer>
+
+<style is:global>
+  #status-label {
+    text-transform: capitalize;
+  }
+</style>
