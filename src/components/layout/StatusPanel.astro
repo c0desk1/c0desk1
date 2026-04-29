@@ -98,6 +98,8 @@ const services = ['api', 'web', 'cdn', 'bot'];
       Outage: "#ef4444"
     };
 
+    // ================= SAFETY LAYER =================
+    overall = overall || "Operational";
     const accent = colors[overall] || "#3f3f46";
 
     if (footerLabel) {
@@ -115,29 +117,41 @@ const services = ['api', 'web', 'cdn', 'bot'];
         (overall === "Operational" ? "" : "animate-pulse");
     }
 
-    services.forEach((s) => {
+    // ================= SAFE LOOP =================
+    (services || []).forEach((s) => {
 
-      const textEl = document.getElementById(`s-${s.name}-text`);
-      const uptimeEl = document.getElementById(`s-${s.name}-uptime`);
-      const bars = document.querySelectorAll(`[data-bar^="${s.name}-"]`);
+      const name = s.name;
+
+      const status = s.status || "Outage";
+      const latency = s.latency ?? "-";
+
+      const textEl = document.getElementById(`s-${name}-text`);
+      const uptimeEl = document.getElementById(`s-${name}-uptime`);
+      const bars = document.querySelectorAll(`[data-bar^="${name}-"]`);
 
       if (textEl) {
-        textEl.textContent = `${s.status} • ${s.latency ?? '-'}ms`;
-        textEl.style.color = colors[s.status] || "#71717a";
+        textEl.textContent = `${status} • ${latency}ms`;
+        textEl.style.color = colors[status] || "#71717a";
       }
 
+      // ================= SAFE UPTIME =================
       if (uptimeEl) {
-        uptimeEl.textContent = `Stabilitas: ${s.uptime ?? 100}%`;
+        const uptime = typeof s.uptime === "number" ? s.uptime : 100;
+        uptimeEl.textContent = `Stabilitas: ${uptime}%`;
       }
 
-      if (Array.isArray(s.history)) {
-        s.history.forEach((h, i) => {
-          const el = bars[i];
-          if (!el) return;
+      // ================= SAFE HISTORY =================
+      const history = Array.isArray(s.history)
+        ? s.history.slice(-40)
+        : [];
 
-          el.style.backgroundColor = colors[h.status] || "#333";
-        });
-      }
+      history.forEach((h, i) => {
+        const el = bars[i];
+        if (!el) return;
+
+        const hStatus = h?.status || "Outage";
+        el.style.backgroundColor = colors[hStatus] || "#333";
+      });
     });
   }
 
