@@ -5,7 +5,7 @@
 <div class="fixed top-0 left-0 w-full h-[2px] z-100 pointer-events-none">
   <div
     id="reading-bar"
-    class="h-full w-0 bg-emerald-500 transition-[width,opacity] duration-150 ease-linear"
+    class="h-full w-0 bg-black dark:bg-white rounded-full transition-[width,opacity] duration-150 ease-linear"
   ></div>
 </div>
 
@@ -22,7 +22,6 @@
       const rect = article.getBoundingClientRect();
       const articleHeight = article.scrollHeight;
       const windowHeight = window.innerHeight;
-
       const max = articleHeight - windowHeight;
 
       const progress = max > 0
@@ -36,9 +35,7 @@
     if (scrollHandler) {
       window.removeEventListener('scroll', scrollHandler);
     }
-
     scrollHandler = updateProgress;
-
     window.addEventListener('scroll', scrollHandler, { passive: true });
 
     updateProgress();
