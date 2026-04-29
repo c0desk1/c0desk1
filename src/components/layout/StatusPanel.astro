@@ -29,7 +29,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
       {services.map((id) => (
         <div class="flex flex-col gap-4">
           <div class="flex items-center justify-between">
-            <span class="text-[13px] font-semibold uppercase text-black dark:text-white">{id}</span>
+            <span class="text-[13px] font-semibold uppercase text-white">{id}</span>
             <span id={`s-${id}-text`} class="text-[10px] font-bold text-zinc-500">Memeriksa</span>
           </div>
           
@@ -56,6 +56,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
   interface ServiceData {
     name: string;
     status: 'Operational' | 'Degraded' | 'Outage';
+    latency?: number | null;
   }
 
   const API_URL = "https://c0desk1-api.dev-c0desk1.workers.dev";
@@ -107,7 +108,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
       const uptimeEl = document.getElementById(`s-${s.name}-uptime`);
       
       if (textEl) {
-        textEl.textContent = s.status;
+        textEl.textContent = `${s.status} • ${s.latency ?? '-'}ms`;
         textEl.style.color = colors[s.status] || "#71717a";
       }
 
