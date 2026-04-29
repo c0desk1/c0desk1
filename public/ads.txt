@@ -1,8 +1,8 @@
 yandex.com, 324262497, DIRECT
-google.com, pub-4943136052113535, DIRECT, f08c47fec0942fa0
 google.com, pub-5533854580432370, RESELLER, f08c47fec0942fa0
 improvedigital.com, 2031, RESELLER
 uis.mobfox.com, 165, RESELLER
 hyperad.tech, 215, RESELLER
 betweendigital.com, 43554, RESELLER
-contextweb.com, 562899, RESELLER, 89ff185a4c4e857c
+Contextweb.com, 562899, RESELLER, 89ff185a4c4e857c
+hyperad.tech, 150, RESELLER
