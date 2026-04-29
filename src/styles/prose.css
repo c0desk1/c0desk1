@@ -28,7 +28,31 @@
 .prose-custom h2,
 .prose-custom h3 {
   position: relative;
-  scroll-margin-top: 80px;
+  scroll-margin-top: 56px;
+}
+
+.prose-custom ul:first-child,
+.prose-custom ol:first-child,
+.prose-custom p:first-child,
+.prose-custom h1:first-child,
+.prose-custom h2:first-child,
+.prose-custom h3:first-child,
+.prose-custom h4:first-child,
+.prose-custom h5:first-child,
+.prose-custom h6:first-child {
+  margin-top: 0!important;
+}
+
+.prose-custom ul:last-child,
+.prose-custom ol:last-child,
+.prose-custom p:last-child,
+.prose-custom h1:last-child,
+.prose-custom h2:last-child,
+.prose-custom h3:last-child,
+.prose-custom h4:last-child,
+.prose-custom h5:last-child,
+.prose-custom h6:last-child {
+  margin-bottom: 0!important;
 }
 
 .prose-custom h1 {
