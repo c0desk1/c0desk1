@@ -13,6 +13,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
   class="fixed bottom-0 left-0 right-0 translate-y-full transition-transform duration-500 cubic-bezier(0.4, 0, 0.2, 1) bg-white dark:bg-black border-t broder-black/20 dark:border-zinc-900 z-100 shadow-[0_-20px_50px_-12px_rgba(0,0,0,0.5)]"
 >
   <div class="max-w-screen-lg mx-auto p-6 md:p-10">
+    
     <div class="flex items-center justify-between mb-10">
       <div class="flex items-center gap-3">
         <div id="panel-dot" class="w-2 h-2 rounded-full bg-zinc-700"></div>
@@ -20,19 +21,24 @@ const services = ['api', 'web', 'cdn', 'bot'];
           Status Sistem
         </h3>
       </div>
-      <button id="close-panel" class="p-2 -mr-2 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-black/10 dark:hover:bg-zinc-800/50 rounded-full transition-colors cursor-pointer" aria-label="Close panel">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+
+      <button id="close-panel" class="p-2 -mr-2 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-black/10 dark:hover:bg-zinc-800/50 rounded-full transition-colors cursor-pointer">
+        ✕
       </button>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12">
+
       {services.map((id) => (
         <div class="flex flex-col gap-4">
+
           <div class="flex items-center justify-between">
             <span class="text-[13px] font-semibold uppercase text-white">{id}</span>
-            <span id={`s-${id}-text`} class="text-[10px] font-bold text-zinc-500">Memeriksa</span>
+            <span id={`s-${id}-text`} class="text-[10px] font-bold text-zinc-500">
+              Loading
+            </span>
           </div>
-          
+
           <div class="flex flex-wrap gap-[3px] w-full">
             {Array.from({ length: 40 }).map((_, i) => (
               <div 
@@ -44,27 +50,26 @@ const services = ['api', 'web', 'cdn', 'bot'];
 
           <div class="flex justify-between text-[11px] font-semibold text-zinc-600">
             <span>30 Hari Terakhir</span>
-            <span id={`s-${id}-uptime`} class="text-zinc-500">Stabilitas: --</span>
+            <span id={`s-${id}-uptime`} class="text-zinc-500">
+              Stabilitas: --
+            </span>
           </div>
+
         </div>
       ))}
+
     </div>
   </div>
 </div>
 
-<script>
-  interface ServiceData {
-    name: string;
-    status: 'Operational' | 'Degraded' | 'Outage';
-    latency?: number | null;
-  }
-
+<script is:inline>
   const API_URL = "https://c0desk1-api.dev-c0desk1.workers.dev";
-  
+
   const panel = document.getElementById("status-panel");
   const overlay = document.getElementById("status-overlay");
   const toggle = document.getElementById("status-toggle");
   const closeBtn = document.getElementById("close-panel");
+
   const panelDot = document.getElementById("panel-dot");
 
   const footerLabel = document.getElementById("status-label");
@@ -85,62 +90,66 @@ const services = ['api', 'web', 'cdn', 'bot'];
     document.body.style.overflow = "";
   }
 
-  function updateUI(overall: string, services: ServiceData[]) {
-    const colors: Record<string, string> = {
-      Operational: "#10b981", 
+  function updateUI(overall, services) {
+
+    const colors = {
+      Operational: "#10b981",
       Degraded: "#f59e0b",
       Outage: "#ef4444"
     };
 
     const accent = colors[overall] || "#3f3f46";
 
-    if (footerLabel) footerLabel.textContent = overall === "Operational" ? "All Systems is Normal" : overall;
+    if (footerLabel) {
+      footerLabel.textContent =
+        overall === "Operational" ? "All Systems is Normal" : overall;
+    }
+
     if (footerDot) footerDot.style.backgroundColor = accent;
     if (footerPulse) footerPulse.style.backgroundColor = accent;
+
     if (panelDot) {
-        panelDot.style.backgroundColor = accent;
-        panelDot.className = `w-2 h-2 rounded-full ${overall === 'Operational' ? '' : 'animate-pulse'}`;
+      panelDot.style.backgroundColor = accent;
+      panelDot.className =
+        "w-2 h-2 rounded-full " +
+        (overall === "Operational" ? "" : "animate-pulse");
     }
 
     services.forEach((s) => {
+
       const textEl = document.getElementById(`s-${s.name}-text`);
-      const dots = document.querySelectorAll(`[data-bar^="${s.name}-"]`) as NodeListOf<HTMLElement>;
       const uptimeEl = document.getElementById(`s-${s.name}-uptime`);
-      
+      const bars = document.querySelectorAll(`[data-bar^="${s.name}-"]`);
+
       if (textEl) {
         textEl.textContent = `${s.status} • ${s.latency ?? '-'}ms`;
         textEl.style.color = colors[s.status] || "#71717a";
       }
 
-      if (uptimeEl && s.status === 'Operational') uptimeEl.textContent = "Stability: 100%";
+      if (uptimeEl) {
+        uptimeEl.textContent = `Stabilitas: ${s.uptime ?? 100}%`;
+      }
 
-      dots.forEach((dot, index) => {
-        if (s.status === 'Operational') {
-          setTimeout(() => {
-            dot.style.backgroundColor = colors.Operational;
-            dot.style.borderColor = "transparent";
-            dot.style.opacity = (Math.random() * (1 - 0.4) + 0.4).toString();
-          }, index * 15);
-        } else if (s.status === 'Outage' && index === 39) {
-          dot.style.backgroundColor = colors.Outage;
-          dot.style.borderColor = "transparent";
-          dot.style.opacity = "1";
-        }
-      });
+      if (Array.isArray(s.history)) {
+        s.history.forEach((h, i) => {
+          const el = bars[i];
+          if (!el) return;
+
+          el.style.backgroundColor = colors[h.status] || "#333";
+        });
+      }
     });
   }
 
   async function fetchStatus() {
     try {
       const res = await fetch(`${API_URL}/status/all?t=${Date.now()}`);
-
       if (!res.ok) throw new Error();
 
       const data = await res.json();
-
       updateUI(data.overall, data.services);
-      
-    } catch (e) {
+
+    } catch {
       if (footerLabel) footerLabel.textContent = "Offline";
     }
   }
@@ -148,7 +157,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
   toggle?.addEventListener("click", openStatus);
   closeBtn?.addEventListener("click", closeStatus);
   overlay?.addEventListener("click", closeStatus);
-  
+
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeStatus();
   });
