@@ -10,9 +10,6 @@ const services = ['api', 'web', 'cdn', 'bot'];
 
 <div
   id="status-panel"
-  role="dialog"
-  aria-modal="true"
-  aria-label="Status Sistem"
   class="fixed bottom-0 left-0 right-0 translate-y-full transition-transform duration-500 cubic-bezier(0.4, 0, 0.2, 1) bg-white dark:bg-black border-t border-black/20 dark:border-zinc-900 z-100 shadow-[0_-20px_50px_-12px_rgba(0,0,0,0.5)]"
 >
   <div class="max-w-screen-lg mx-auto p-6 md:p-10">
@@ -25,12 +22,8 @@ const services = ['api', 'web', 'cdn', 'bot'];
         </h3>
       </div>
 
-      <button 
-        id="close-panel" 
-        aria-label="Tutup panel status"
-        class="p-2 -mr-2 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-black/10 dark:hover:bg-zinc-800/50 rounded-full transition-colors cursor-pointer"
-      >
-        ✕
+      <button id="close-panel" class="p-2 -mr-2 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-black/10 dark:hover:bg-zinc-800/50 rounded-full transition-colors cursor-pointer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
       </button>
     </div>
 
@@ -40,9 +33,9 @@ const services = ['api', 'web', 'cdn', 'bot'];
         <div class="flex flex-col gap-4">
 
           <div class="flex items-center justify-between">
-            <span class="text-[13px] font-semibold uppercase text-black dark:text-white">{id}</span>
-            <span id={`s-${id}-text`} class="text-[10px] font-bold text-zinc-500">
-              Loading
+            <span class="text-[13px] font-semibold uppercase text-white">{id}</span>
+            <span id={`s-${id}-text`} class="text-[13px] font-medium text-zinc-500">
+              Memuat...
             </span>
           </div>
 
@@ -55,10 +48,10 @@ const services = ['api', 'web', 'cdn', 'bot'];
             ))}
           </div>
 
-          <div class="flex justify-between text-[11px] font-semibold text-zinc-600">
-            <span>30 Hari Terakhir</span>
-            <span id={`s-${id}-uptime`} class="text-zinc-500">
-              Stabilitas: --
+          <div class="flex justify-between text-[13px] font-medium text-zinc-600">
+            <span>80 Menit Terakhir</span>
+            <span id={`s-${id}-metrics`} class="text-zinc-500">
+              --
             </span>
           </div>
 
@@ -66,6 +59,12 @@ const services = ['api', 'web', 'cdn', 'bot'];
       ))}
 
     </div>
+
+    <div class="mt-12 pt-6 border-t border-zinc-900 flex justify-between items-center text-[13px] font-medium text-zinc-500">
+      <span id="last-updated-text">Menunggu sinkronisasi...</span>
+      <a href="#" class="hover:text-white transition-colors">Lihat Log Insiden</a>
+    </div>
+
   </div>
 </div>
 
@@ -78,10 +77,19 @@ const services = ['api', 'web', 'cdn', 'bot'];
   const closeBtn = document.getElementById("close-panel");
 
   const panelDot = document.getElementById("panel-dot");
-
   const footerLabel = document.getElementById("status-label");
   const footerDot = document.getElementById("status-dot");
   const footerPulse = document.getElementById("status-pulse");
+  const lastUpdatedEl = document.getElementById("last-updated-text");
+
+  let latestUpdateTs = null;
+
+  function getRelativeTime(timestamp) {
+    const diff = Math.floor((Date.now() - timestamp) / 1000);
+    if (diff < 60) return "Diperbarui baru saja";
+    const minutes = Math.floor(diff / 60);
+    return `Diperbarui ${minutes}m yang lalu`;
+  }
 
   function openStatus() {
     panel?.classList.remove("translate-y-full");
@@ -97,20 +105,18 @@ const services = ['api', 'web', 'cdn', 'bot'];
     document.body.style.overflow = "";
   }
 
-  function updateUI(overall, services) {
-
+  function updateUI(overall, services, updatedTs) {
     const colors = {
       Operational: "#10b981",
       Degraded: "#f59e0b",
       Outage: "#ef4444"
     };
 
-    // ================= SAFETY LAYER =================
     overall = overall || "Operational";
     const accent = colors[overall] || "#3f3f46";
 
     if (footerLabel) {
-      footerLabel.textContent = overall === "Operational" ? "All Systems is Normal" : overall;
+      footerLabel.textContent = overall === "Operational" ? "Semua Sistem Normal" : overall;
     }
 
     if (footerDot) footerDot.style.backgroundColor = accent;
@@ -121,14 +127,18 @@ const services = ['api', 'web', 'cdn', 'bot'];
       panelDot.className = "w-2 h-2 rounded-full " + (overall === "Operational" ? "" : "animate-pulse");
     }
 
-    // ================= SAFE LOOP =================
+    if (updatedTs) {
+      latestUpdateTs = updatedTs;
+      if (lastUpdatedEl) lastUpdatedEl.textContent = getRelativeTime(latestUpdateTs);
+    }
+
     (services || []).forEach((s) => {
       const name = s.name;
       const status = s.status || "Outage";
       const latency = s.latency ?? "-";
 
       const textEl = document.getElementById(`s-${name}-text`);
-      const uptimeEl = document.getElementById(`s-${name}-uptime`);
+      const metricsEl = document.getElementById(`s-${name}-metrics`);
       const bars = document.querySelectorAll(`[data-bar^="${name}-"]`);
 
       if (textEl) {
@@ -136,16 +146,27 @@ const services = ['api', 'web', 'cdn', 'bot'];
         textEl.style.color = colors[status] || "#71717a";
       }
 
-      if (uptimeEl) {
-        const uptime = typeof s.uptime === "number" ? s.uptime : 100;
-        uptimeEl.textContent = `Stabilitas: ${uptime}%`;
+      const history = Array.isArray(s.history) ? s.history.slice(-40) : [];
+      
+      let avgLatencyDisplay = "";
+      if (history.length > 0) {
+        const validLatencies = history.filter(h => typeof h.latency === 'number');
+        if (validLatencies.length > 0) {
+          const totalPing = validLatencies.reduce((acc, curr) => acc + curr.latency, 0);
+          const avgPing = Math.round(totalPing / validLatencies.length);
+          avgLatencyDisplay = `${avgPing}ms`;
+        }
       }
 
-      const history = Array.isArray(s.history) ? s.history.slice(-40) : [];
+      if (metricsEl) {
+        const uptime = typeof s.uptime === "number" ? s.uptime : 100;
+        metricsEl.textContent = `${uptime}% Uptime ${avgLatencyDisplay ? `• Rata-rata ${avgLatencyDisplay}` : ''}`;
+      }
+
       const startIndex = 40 - history.length;
-      
+
       bars.forEach(el => {
-        if (el) el.style.backgroundColor = "#18181b";
+        if(el) el.style.backgroundColor = "#18181b";
       });
 
       history.forEach((h, i) => {
@@ -159,31 +180,29 @@ const services = ['api', 'web', 'cdn', 'bot'];
 
   async function fetchStatus() {
     try {
-      const res = await fetch(`${API_URL}/status/all?t=${Date.now()}`, {
-        cache: 'no-store'
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const res = await fetch(`${API_URL}/status/all?t=${Date.now()}`);
+      if (!res.ok) throw new Error();
+
       const data = await res.json();
-      updateUI(data.overall, data.services);
-    } catch (err) {
-      console.error("Status fetch failed:", err);
+      updateUI(data.overall, data.services, data.updated);
+    } catch {
       if (footerLabel) footerLabel.textContent = "Offline";
     }
   }
 
-  // Hanya tambahkan event listener jika elemen toggle tersedia
-  if (toggle) {
-    toggle.addEventListener("click", openStatus);
-  } else {
-    console.warn("Status toggle element (#status-toggle) not found – make sure it exists in your layout");
-  }
-
+  toggle?.addEventListener("click", openStatus);
   closeBtn?.addEventListener("click", closeStatus);
   overlay?.addEventListener("click", closeStatus);
 
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeStatus();
   });
+
+  setInterval(() => {
+    if (latestUpdateTs && lastUpdatedEl) {
+      lastUpdatedEl.textContent = getRelativeTime(latestUpdateTs);
+    }
+  }, 60000);
 
   fetchStatus();
   setInterval(fetchStatus, 120000);
