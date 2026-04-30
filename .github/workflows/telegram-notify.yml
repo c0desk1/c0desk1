@@ -96,7 +96,7 @@ jobs:
         run: |
           echo "🚀 Sending Telegram notification..."
 
-          curl -X POST "${{ secrets.TG_ENGINE_URL }}/api/broadcast" \
+          curl -X POST "${{ secrets.TG_ENGINE_URL }}/api/v1/broadcast" \
             -H "Authorization: Bearer ${{ secrets.TG_ENGINE_ADMIN_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d "{
