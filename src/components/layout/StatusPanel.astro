@@ -14,7 +14,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
 >
   <div class="max-w-screen-lg mx-auto p-6 md:p-10">
     
-    <div class="flex items-start justify-between mb-10 border-b border-zinc-900/50 pb-6">
+    <div class="flex items-start justify-between mb-8 border-b border-zinc-900/50 pb-6">
       <div class="flex items-start gap-3">
         <div id="panel-dot" class="w-2.5 h-2.5 rounded-full bg-zinc-700 mt-1"></div>
         <div class="flex flex-col gap-1">
@@ -28,21 +28,29 @@ const services = ['api', 'web', 'cdn', 'bot'];
       </div>
 
       <button id="close-panel" class="p-2 -mr-2 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-black/10 dark:hover:bg-zinc-800/50 rounded-full transition-colors cursor-pointer">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
       </button>
     </div>
 
-    <div class="flex flex-col w-full mt-4">
+    <div class="flex flex-col w-full">
       {services.map((id) => (
-        <div class="mb-6 pb-6 border-b border-zinc-900/50">
+        <div class="mb-6 pb-4">
           
-          <span class="text-[12px] sm:text-[13px] font-semibold uppercase text-white mb-2 block tracking-wider">{id}</span>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+               <span class="text-[12px] sm:text-[13px] font-semibold uppercase text-white">{id}</span>
+               <span id={`s-${id}-status-text`} class="text-[11px] sm:text-[12px] font-medium text-zinc-600"></span>
+            </div>
+            <span id={`s-${id}-metrics`} class="text-[12px] sm:text-[13px] font-medium text-zinc-500">
+              --
+            </span>
+          </div>
           
-          <div class="flex flex-wrap gap-[2px] w-full py-1">
+          <div class="flex gap-[2px] w-full">
             {Array.from({ length: 40 }).map((_, i) => (
               <div 
                 data-bar={`${id}-${i}`}
-                class="w-1.5 h-6 rounded-[1px] bg-zinc-900 transition-all duration-300 border border-white/5"
+                class="flex-1 h-6 rounded-[1px] bg-zinc-900 transition-all duration-300 border border-white/5"
               ></div>
             ))}
           </div>
@@ -59,22 +67,17 @@ const services = ['api', 'web', 'cdn', 'bot'];
 
   const panel = document.getElementById("status-panel");
   const overlay = document.getElementById("status-overlay");
-  const toggle = document.getElementById("status-toggle");
   const closeBtn = document.getElementById("close-panel");
-
   const panelDot = document.getElementById("panel-dot");
-  const footerLabel = document.getElementById("status-label");
-  const footerDot = document.getElementById("status-dot");
-  const footerPulse = document.getElementById("status-pulse");
   const lastUpdatedEl = document.getElementById("last-updated-text");
 
   let latestUpdateTs = null;
 
   function getRelativeTime(timestamp) {
     const diff = Math.floor((Date.now() - timestamp) / 1000);
-    if (diff < 60) return "Diperbarui baru saja";
+    if (diff < 60) return "Baru saja";
     const minutes = Math.floor(diff / 60);
-    return `Diperbarui ${minutes}m yang lalu`;
+    return `${minutes}m yang lalu`;
   }
 
   function openStatus() {
@@ -101,7 +104,6 @@ const services = ['api', 'web', 'cdn', 'bot'];
     overall = overall || "Operational";
     const accent = colors[overall] || "#3f3f46";
 
-    // Header updates (Dot & Time)
     if (panelDot) {
       panelDot.style.backgroundColor = accent;
       panelDot.className = "w-2.5 h-2.5 rounded-full " + (overall === "Operational" ? "" : "animate-pulse");
@@ -109,29 +111,49 @@ const services = ['api', 'web', 'cdn', 'bot'];
 
     if (updatedTs) {
       latestUpdateTs = updatedTs;
-      if (lastUpdatedEl) lastUpdatedEl.textContent = getRelativeTime(latestUpdateTs);
+      if (lastUpdatedEl) lastUpdatedEl.textContent = `Pengecekan otomatis: ${getRelativeTime(latestUpdateTs)}`;
     }
 
     (services || []).forEach((s) => {
       const name = s.name;
       const status = s.status || "Outage";
+      
+      const metricsEl = document.getElementById(`s-${name}-metrics`);
+      const statusTextEl = document.getElementById(`s-${name}-status-text`);
       const bars = document.querySelectorAll(`[data-bar^="${name}-"]`);
 
-      // Calculate bar placement from right
+      // Update Status Ringkas (misal: "Operational • 15ms")
+      if (statusTextEl) {
+        statusTextEl.textContent = `• ${s.latency ?? '-'}ms`;
+        statusTextEl.style.color = colors[status];
+      }
+
       const history = Array.isArray(s.history) ? s.history.slice(-40) : [];
+      
+      // Kalkulasi Rata-rata Latensi & Uptime
+      let avgLatencyDisplay = "";
+      if (history.length > 0) {
+        const validLatencies = history.filter(h => typeof h.latency === 'number');
+        if (validLatencies.length > 0) {
+          const totalPing = validLatencies.reduce((acc, curr) => acc + curr.latency, 0);
+          const avgPing = Math.round(totalPing / validLatencies.length);
+          avgLatencyDisplay = `${avgPing}ms`;
+        }
+      }
+
+      if (metricsEl) {
+        const uptime = typeof s.uptime === "number" ? s.uptime : 100;
+        metricsEl.textContent = `${uptime}% Uptime ${avgLatencyDisplay ? `• Avg ${avgLatencyDisplay}` : ''}`;
+      }
+
+      // Render Bars
       const startIndex = 40 - history.length;
+      bars.forEach(el => { if(el) el.style.backgroundColor = "#111"; });
 
-      // Reset bars to default deep black
-      bars.forEach(el => {
-        if(el) el.style.backgroundColor = "#18181b"; // bg-zinc-900
-      });
-
-      // Color bars based on historical status
       history.forEach((h, i) => {
         const el = bars[startIndex + i];
         if (!el) return;
-        const hStatus = h?.status || "Outage";
-        el.style.backgroundColor = colors[hStatus] || "#333";
+        el.style.backgroundColor = colors[h?.status || "Outage"];
       });
     });
   }
@@ -140,27 +162,22 @@ const services = ['api', 'web', 'cdn', 'bot'];
     try {
       const res = await fetch(`${API_URL}/status/all?t=${Date.now()}`);
       if (!res.ok) throw new Error();
-
       const data = await res.json();
-      // Update UI with historical data, but only process bars
       updateUI(data.overall, data.services, data.updated);
     } catch {
-      if (footerLabel) footerLabel.textContent = "Offline";
+      if (lastUpdatedEl) lastUpdatedEl.textContent = "Offline";
     }
   }
 
-  toggle?.addEventListener("click", openStatus);
+  // Event Listeners
+  document.getElementById("status-toggle")?.addEventListener("click", openStatus);
   closeBtn?.addEventListener("click", closeStatus);
   overlay?.addEventListener("click", closeStatus);
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeStatus(); });
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeStatus();
-  });
-
-  // Ticks every 60 seconds to update the "2m yang lalu" text dynamically without fetching
   setInterval(() => {
     if (latestUpdateTs && lastUpdatedEl) {
-      lastUpdatedEl.textContent = getRelativeTime(latestUpdateTs);
+      lastUpdatedEl.textContent = `Pengecekan otomatis: ${getRelativeTime(latestUpdateTs)}`;
     }
   }, 60000);
 
