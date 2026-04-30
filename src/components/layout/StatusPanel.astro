@@ -72,6 +72,10 @@ const services = ['api', 'web', 'cdn', 'bot'];
   const panelDot = document.getElementById("panel-dot");
   const lastUpdatedEl = document.getElementById("last-updated-text");
 
+  const footerLabel = document.getElementById("status-label");
+  const footerDot = document.getElementById("status-dot");
+  const footerPulse = document.getElementById("status-pulse");
+
   let latestUpdateTs = null;
 
   function getRelativeTime(timestamp) {
@@ -105,6 +109,12 @@ const services = ['api', 'web', 'cdn', 'bot'];
     overall = overall || "Operational";
     const accent = colors[overall] || "#3f3f46";
 
+    if (footerLabel) {
+      footerLabel.textContent = overall === "Operational" ? "Semua Sistem Normal" : overall;
+    }
+    if (footerDot) footerDot.style.backgroundColor = accent;
+    if (footerPulse) footerPulse.style.backgroundColor = accent;
+
     if (panelDot) {
       panelDot.style.backgroundColor = accent;
       panelDot.className = "w-2.5 h-2.5 rounded-full " + (overall === "Operational" ? "" : "animate-pulse");
@@ -123,7 +133,6 @@ const services = ['api', 'web', 'cdn', 'bot'];
       const statusTextEl = document.getElementById(`s-${name}-status-text`);
       const bars = document.querySelectorAll(`[data-bar^="${name}-"]`);
 
-      // Update Status Ringkas (misal: "Operational • 15ms")
       if (statusTextEl) {
         statusTextEl.textContent = `• ${s.latency ?? '-'}ms`;
         statusTextEl.style.color = colors[status];
@@ -131,7 +140,6 @@ const services = ['api', 'web', 'cdn', 'bot'];
 
       const history = Array.isArray(s.history) ? s.history.slice(-40) : [];
       
-      // Kalkulasi Rata-rata Latensi & Uptime
       let avgLatencyDisplay = "";
       if (history.length > 0) {
         const validLatencies = history.filter(h => typeof h.latency === 'number');
@@ -147,7 +155,6 @@ const services = ['api', 'web', 'cdn', 'bot'];
         metricsEl.textContent = `${uptime}% Uptime ${avgLatencyDisplay ? `• Avg ${avgLatencyDisplay}` : ''}`;
       }
 
-      // Render Bars
       const startIndex = 40 - history.length;
       bars.forEach(el => { if(el) el.style.backgroundColor = "#111"; });
 
@@ -167,10 +174,10 @@ const services = ['api', 'web', 'cdn', 'bot'];
       updateUI(data.overall, data.services, data.updated);
     } catch {
       if (lastUpdatedEl) lastUpdatedEl.textContent = "Offline";
+      if (footerLabel) footerLabel.textContent = "Offline";
+      if (footerDot) footerDot.style.backgroundColor = "#ef4444";
     }
   }
-
-  // Event Listeners
   document.getElementById("status-toggle")?.addEventListener("click", openStatus);
   closeBtn?.addEventListener("click", closeStatus);
   overlay?.addEventListener("click", closeStatus);
