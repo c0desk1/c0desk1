@@ -27,7 +27,7 @@ export default defineConfig({
   ],
   image: {
     remotePatterns: [
-      { protocol: 'https', hostname: 'c0desk1-cdn.dev-c0desk1.workers.dev' }
+      { protocol: 'https', hostname: 'cdn.c0desk1.my.id' }
     ],
   },
 });
