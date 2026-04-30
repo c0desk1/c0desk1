@@ -46,14 +46,15 @@ const services = ['api', 'web', 'cdn', 'bot'];
             </span>
           </div>
           
-          <div class="flex gap-[2px] w-full">
+                    <div class="flex justify-between w-full py-1">
             {Array.from({ length: 40 }).map((_, i) => (
               <div 
                 data-bar={`${id}-${i}`}
-                class="flex-1 h-6 rounded-[1px] bg-zinc-900 transition-all duration-300 border border-white/5"
+                class="w-[1.5px] h-6 bg-[#111] transition-colors duration-300"
               ></div>
             ))}
           </div>
+
           
         </div>
       ))}
