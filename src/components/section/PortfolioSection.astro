@@ -17,7 +17,7 @@ const { projects } = Astro.props;
     </h2>
   </div>
   {projects.length > 0 ? (
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 divide-y md:divide-y-0 divide-black/20 dark:divide-white/5">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 divide-y md:divide-y-0 divide-black/20 dark:divide-white/5">
       {projects.map((project) => (
         <ProjectCard project={project} />
       ))}
