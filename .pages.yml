@@ -397,7 +397,62 @@ content:
         label: Email
         type: string
 
-  # --- SETTINGS (Website Config) ---
+  # --- LEGAL PAGE ---
+  - name: legal
+    label: Halaman
+    type: collection
+    path: src/content/legal
+    filename: "{primary}.mdx"
+    view:
+      fields: [title, lastUpdated]
+    fields:
+       - name: title
+         label: Judul
+         type: string
+
+       - name: description
+         label: Deskripsi
+         type: string
+
+       - name: lastUpdated
+         label: Tanggal Diperbarui
+         type: date
+         options:
+           time: true
+           format: yyyy-MM-dd'T'HH:mm
+       - name: body
+         label: Konten
+         type: rich-text
+         options:
+          format: markdown
+          media: images
+          path: public/images
+          switcher: true
+          rename: safe
+          
+       - name: seo
+         label: SEO
+         type: object
+         fields:
+          - name: title
+            label: Judul
+            type: string
+            
+          - name: description
+            label: Deskripsi
+            type: text
+
+          - name: ogImage
+            label: OG Cover
+            type: string
+            
+          - name: noIndex
+            label: Jangan index halaman?
+            type: boolean
+            default: false
+         
+
+  # --- SETTINGS ---
   - name: settings
     label: Site Settings
     type: file
@@ -445,8 +500,22 @@ content:
             label: YouTube
             type: string
             
+      
       - name: navItems
         label: Navigation Menu
+        type: object
+        list: true
+        fields:
+          - name: href
+            label: URL
+            type: string
+
+          - name: label
+            label: Label
+            type: string
+
+      - name: footerSection
+        label: Navigasi Bawah
         type: object
         list: true
         fields:
