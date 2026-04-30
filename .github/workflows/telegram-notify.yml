@@ -14,15 +14,16 @@ concurrency:
 jobs:
   notify:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 2
 
       - name: Get changed files
         id: changed
-        uses: tj-actions/changed-files@v44
+        uses: tj-actions/changed-files@v47.0.6
         with:
           files: |
             src/content/blog/**/*.{md,mdx}
@@ -38,11 +39,9 @@ jobs:
           echo "📄 Changed files:"
           echo "$FILES"
 
-          # Loop semua file yg berubah, ga cuma 1
           for FILE in $FILES; do
             echo "--- Processing: $FILE ---"
 
-            # 1. Tentuin tipe & path
             if [[ "$FILE" == *"/blog/"* ]]; then
               TYPE="Blog Post"
               BASE_PATH="blog"
@@ -51,44 +50,51 @@ jobs:
               BASE_PATH="portfolio"
             fi
 
-            # 2. Parse frontmatter pake yq, lebih aman dari grep
-            sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
-            sudo chmod +x /usr/local/bin/yq
-
-            # Ambil frontmatter antara --- pertama & kedua
             FRONTMATTER=$(sed -n '/^---$/,/^---$/p' "$FILE" | sed '1d;$d')
 
             TITLE=$(echo "$FRONTMATTER" | yq -r '.title // "Untitled"')
-            DESC=$(echo "$FRONTMATTER" | yq -r '.description //.synopsis // ""')
+            DESC=$(echo "$FRONTMATTER" | yq -r '.description // .synopsis // ""')
             RAW_IMAGE=$(echo "$FRONTMATTER" | yq -r '.image // ""')
-
-            # 3. Extract file ID dari URL Google Drive/Cloudinary/etc
-            FILE_ID=$(echo "$RAW_IMAGE" | grep -oE '[A-Za-z0-9_-]{25,}' | head -1 || true)
-
-            # 4. Generate URL
             SLUG=$(basename "$FILE" | sed -E 's/\.(md|mdx)$//')
             URL="https://c0desk1.my.id/$BASE_PATH/$SLUG"
+
+            # =========================
+            # IMAGE LOGIC (IMPORTANT FIX)
+            # =========================
+
+            IMAGE_URL=""
+            FILE_ID=""
+
+            if [[ "$RAW_IMAGE" =~ ^https?:// ]]; then
+              IMAGE_URL="$RAW_IMAGE"
+            fi
+
+            FILE_ID=$(echo "$RAW_IMAGE" | grep -oE '[A-Za-z0-9_-]{25,}' | head -1 || true)
+
+            if [[ "$FILE_ID" == "image:" ]]; then
+              FILE_ID=""
+            fi
 
             echo "TYPE=$TYPE"
             echo "TITLE=$TITLE"
             echo "DESC=$DESC"
             echo "URL=$URL"
+            echo "IMAGE_URL=$IMAGE_URL"
             echo "FILE_ID=$FILE_ID"
 
-            # 5. Escape JSON pake jq biar aman dari karakter "
             JSON_PAYLOAD=$(jq -n \
               --arg title "[$TYPE] $TITLE" \
               --arg desc "$DESC" \
               --arg url "$URL" \
+              --arg imageUrl "$IMAGE_URL" \
               --arg fileId "$FILE_ID" \
-              '{title: $title, description: $desc, url: $url, fileId: $fileId}')
+              '{title: $title, description: $desc, url: $url, imageUrl: $imageUrl, fileId: $fileId}')
 
-            echo "🚀 Sending to Telegram..."
+            echo "🚀 Sending..."
             curl -sS -X POST "$TG_ENGINE_URL/api/v1/broadcast" \
               -H "Authorization: Bearer $TG_ENGINE_ADMIN_TOKEN" \
               -H "Content-Type: application/json" \
               -d "$JSON_PAYLOAD"
 
-            echo "Done: $FILE"
-            sleep 1 # Rate limit biar ga spam
+            sleep 1
           done
