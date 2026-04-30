@@ -41,6 +41,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
               <span class="text-[11px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">{id}</span>
               <span id={`s-${id}-status-text`} class="text-[11px] font-medium opacity-80"></span>
             </div>
+            <span id={`s-${id}-details`} class="text-[9px] font-mono uppercase text-zinc-500 opacity-60 leading-none"></span>
             <span id={`s-${id}-metrics`} class="text-[12px] sm:text-[13px] font-medium text-zinc-500">
               --
             </span>
@@ -184,10 +185,15 @@ const services = ['api', 'web', 'cdn', 'bot'];
       const metricsEl = document.getElementById(`s-${name}-metrics`);
       const statusTextEl = document.getElementById(`s-${name}-status-text`);
       const bars = document.querySelectorAll(`[data-bar^="${name}-"]`);
+      const detailsEl = document.getElementById(`s-${name}-details`)
 
       if (statusTextEl) {
         statusTextEl.textContent = `• ${s.latency ?? '-'}ms`;
         statusTextEl.style.color = colors[status];
+      }
+
+      if (detailsEl) {
+        detailsEl.textContent = s.details || ''; 
       }
 
       const history = Array.isArray(s.history) ? s.history.slice(-40) : [];
