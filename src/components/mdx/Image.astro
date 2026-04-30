@@ -8,13 +8,13 @@ interface Props {
 }
 
 const { src, alt = "", title } = Astro.props;
-const caption = title || alt;
 const optimizedSrc = isCdnUrl(src) ? cdnImage(src, { q: 85 }) : src;
+const caption = title || alt;
 ---
 
 <figure class="mx-auto max-w-2xl my-4 md:my-8 overflow-hidden">
   <img
-    src={optimizedSrc}
+    src={src}
     alt={alt}
     loading="lazy"
     decoding="async"
