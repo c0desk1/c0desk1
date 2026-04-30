@@ -65,6 +65,11 @@ const services = ['api', 'web', 'cdn', 'bot'];
     </div>
 
     <div class="panel-footer">
+      <div class="footer-status">
+        <span id="status-dot" class="footer-status-dot"></span>
+        <span id="status-label" class="footer-status-label">Memeriksa status...</span>
+        <span id="status-pulse" class="footer-status-pulse"></span>
+      </div>
       <span class="footer-note">Memperbarui otomatis setiap 5 menit</span>
       <button id="refresh-btn" class="refresh-btn">
         <svg id="refresh-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
@@ -494,7 +499,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
 <script is:inline>
 (function() {
   const API_URL = "/api/status";
-
+ 
   const panel     = document.getElementById("status-panel");
   const overlay   = document.getElementById("status-overlay");
   const closeBtn  = document.getElementById("close-panel");
@@ -504,32 +509,32 @@ const services = ['api', 'web', 'cdn', 'bot'];
   const footerLabel   = document.getElementById("status-label");
   const footerDot     = document.getElementById("status-dot");
   const footerPulse   = document.getElementById("status-pulse");
-
+ 
   let latestUpdateTs = null;
   let hasFetched = false;
   const intervals = [];
-
+ 
   const STATUS_COLORS = {
     Fast:        "#0ea5e9",
     Operational: "#22c55e",
     Warning:     "#f59e0b",
     Outage:      "#ef4444",
   };
-
+ 
   function getRelativeTime(ts) {
     const d = Math.floor((Date.now() - ts) / 1000);
-    if (d < 30)   return "Baru saja";
-    if (d < 60)   return `${d} detik lalu`;
-    if (d < 3600) return `${Math.floor(d / 60)} menit lalu`;
-    return "Beberapa saat lalu";
+    if (d < 30)   return "Just now";
+    if (d < 60)   return `${d}s ago`;
+    if (d < 3600) return `${Math.floor(d / 60)}m ago`;
+    return "A while ago";
   }
-
+ 
   function toggleDetails(id) {
     const el = document.getElementById(`details-${id}`);
     if (el) el.classList.toggle("hidden");
   }
   window.toggleDetails = toggleDetails;
-
+ 
   function openStatus() {
     panel?.classList.add("open");
     overlay?.classList.add("visible");
@@ -541,82 +546,76 @@ const services = ['api', 'web', 'cdn', 'bot'];
       hasFetched = true;
       intervals.push(setInterval(fetchStatus, 300000));
       intervals.push(setInterval(() => {
-        if (latestUpdateTs && lastUpdatedEl && panel?.classList.contains('open')) {
+        if (latestUpdateTs && lastUpdatedEl)
           lastUpdatedEl.textContent = `Auto-check: ${getRelativeTime(latestUpdateTs)}`;
-        }
       }, 10000));
     }
   }
-
+ 
   function closeStatus() {
     panel?.classList.remove("open");
     overlay?.classList.remove("visible");
     document.body.style.overflow = "";
   }
-
+ 
   function updateFooter(overall) {
     const accent = STATUS_COLORS[overall] || "#888";
-    if (footerLabel) {
-      if (overall === "Operational") footerLabel.textContent = "Semua Sistem Normal";
-      else if (overall === "Warning") footerLabel.textContent = "Peringatan";
-      else if (overall === "Outage") footerLabel.textContent = "Gangguan";
-      else footerLabel.textContent = overall || "Memeriksa...";
-    }
-    if (footerDot) footerDot.style.backgroundColor = accent;
+    if (footerLabel) footerLabel.textContent = overall === "Operational" ? "All Systems Normal" : overall;
+    if (footerDot)   footerDot.style.backgroundColor = accent;
     if (footerPulse) footerPulse.style.backgroundColor = accent;
   }
-
-  // async function fetchFooterStatus() {
-  //  try {
-  //    const res = await fetch(API_URL);
-  //    if (!res.ok) throw new Error();
-  //    const data = await res.json();
-  //    updateFooter(data.overall || "Operational");
-  //  } catch {
-  //    if (footerLabel) footerLabel.textContent = "Gagal terhubung";
-  //   if (footerDot) footerDot.style.backgroundColor = STATUS_COLORS.Outage;
-  //    if (footerPulse) footerPulse.style.backgroundColor = STATUS_COLORS.Outage;
-  //  }
-  // }
-
+ 
+  async function fetchFooterStatus() {
+    try {
+      const res = await fetch(API_URL);
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      updateFooter(data.overall || "Operational");
+    } catch {
+      if (footerLabel) footerLabel.textContent = "Offline";
+      if (footerDot)   footerDot.style.backgroundColor = STATUS_COLORS.Outage;
+      if (footerPulse) footerPulse.style.backgroundColor = STATUS_COLORS.Outage;
+    }
+  }
+ 
   function updateUI(overall, services, updatedTs) {
     overall = overall || "Operational";
     const accent = STATUS_COLORS[overall] || "#888";
-
+ 
     updateFooter(overall);
-
+ 
     if (panelDot) {
       panelDot.style.backgroundColor = accent;
       if (overall !== "Operational") panelDot.classList.add("pulse");
       else panelDot.classList.remove("pulse");
     }
-
+ 
     if (updatedTs) {
       latestUpdateTs = updatedTs;
       if (lastUpdatedEl)
-        lastUpdatedEl.textContent = `Diperbarui ${getRelativeTime(latestUpdateTs)}`;
+        lastUpdatedEl.textContent = `Updated ${getRelativeTime(latestUpdateTs)}`;
     }
-
+ 
     (services || []).forEach((s) => {
       const name   = s.name;
       const status = s.status || "Outage";
-
+ 
       const summaryEl  = document.getElementById(`s-${name}-details-summary`);
       const uptimeEl   = document.getElementById(`s-${name}-uptime-val`);
       const nodeEl     = document.getElementById(`s-${name}-node-val`);
       const metricsEl  = document.getElementById(`s-${name}-metrics`);
       const latencyEl  = document.getElementById(`s-${name}-status-text`);
       const bars       = document.querySelectorAll(`[data-bar^="${name}-"]`);
-
+ 
       if (summaryEl) summaryEl.textContent = s.details || "—";
-      if (uptimeEl)  uptimeEl.textContent  = `${s.uptime ?? 0}% (40 cek terakhir)`;
-      if (nodeEl)    nodeEl.textContent    = s.details || "Node tidak dikenal";
-
+      if (uptimeEl)  uptimeEl.textContent  = `${s.uptime ?? 0}% (last 40 checks)`;
+      if (nodeEl)    nodeEl.textContent    = s.details || "Unknown node";
+ 
       if (latencyEl) {
         latencyEl.textContent = `${s.latency ?? "—"}ms`;
         latencyEl.style.color = STATUS_COLORS[status] || "#888";
       }
-
+ 
       if (metricsEl) {
         const up  = typeof s.uptime === "number" ? s.uptime : 100;
         const history = Array.isArray(s.history) ? s.history : [];
@@ -624,36 +623,32 @@ const services = ['api', 'web', 'cdn', 'bot'];
         const avg     = valid.length
           ? Math.round(valid.reduce((a, c) => a + c.latency, 0) / valid.length)
           : null;
-        let metricsText = `${up}% waktu aktif`;
-        if (avg !== null && !isNaN(avg)) {
-          metricsText += ` · rata-rata ${avg}ms`;
-        }
-        metricsEl.textContent = metricsText;
+        metricsEl.textContent = `${up}% uptime${avg !== null ? ` · avg ${avg}ms` : ""}`;
       }
-
+ 
       const history    = Array.isArray(s.history) ? s.history.slice(-40) : [];
       const startIndex = 40 - history.length;
-
+ 
       bars.forEach(el => {
         el.style.backgroundColor = "";
         el.style.opacity = "0.3";
         el.removeAttribute("data-info");
       });
-
+ 
       history.forEach((h, i) => {
         const el = bars[startIndex + i];
         if (!el) return;
-
+ 
         let color = STATUS_COLORS.Outage;
         if (h.status === "Operational") {
           if (h.latency < 50)   color = STATUS_COLORS.Fast;
           else if (h.latency > 1000) color = STATUS_COLORS.Warning;
           else                   color = STATUS_COLORS.Operational;
         }
-
+ 
         el.style.backgroundColor = color;
         el.style.opacity = "1";
-
+ 
         if (h.ts) {
           const time = new Date(h.ts).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
           const detail = h.details ? ` · ${h.details}` : "";
@@ -662,10 +657,10 @@ const services = ['api', 'web', 'cdn', 'bot'];
       });
     });
   }
-
+ 
   async function fetchStatus() {
     if (refreshBtn) refreshBtn.classList.add("spinning");
-    if (lastUpdatedEl) lastUpdatedEl.textContent = "Memperbarui...";
+    if (lastUpdatedEl) lastUpdatedEl.textContent = "Updating...";
     try {
       const res  = await fetch(API_URL);
       if (!res.ok) throw new Error();
@@ -678,32 +673,26 @@ const services = ['api', 'web', 'cdn', 'bot'];
       if (refreshBtn) refreshBtn.classList.remove("spinning");
     }
   }
-
+ 
   panel?.addEventListener("touchstart", (e) => {
     const bar = e.target.closest("[data-bar]");
     if (!bar) return;
     e.preventDefault();
     const info = bar.getAttribute("data-info");
     if (info && lastUpdatedEl) lastUpdatedEl.textContent = info;
-    setTimeout(() => {
-      if (latestUpdateTs && lastUpdatedEl)
-        lastUpdatedEl.textContent = `Diperbarui ${getRelativeTime(latestUpdateTs)}`;
-    }, 3000);
   }, { passive: false });
-
+ 
   document.addEventListener("astro:before-swap", () => {
     intervals.forEach(clearInterval);
   });
-
-  const toggleBtn = document.getElementById("status-toggle");
-  if (toggleBtn) toggleBtn.addEventListener("click", openStatus);
-  
+ 
+  document.getElementById("status-toggle")?.addEventListener("click", openStatus);
   closeBtn?.addEventListener("click", closeStatus);
   overlay?.addEventListener("click", closeStatus);
   refreshBtn?.addEventListener("click", () => { if (hasFetched) fetchStatus(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeStatus(); });
-
-  // fetchFooterStatus();
-  // setInterval(fetchFooterStatus, 300000);
+ 
+  fetchFooterStatus();
+  setInterval(fetchFooterStatus, 300000);
 })();
 </script>
