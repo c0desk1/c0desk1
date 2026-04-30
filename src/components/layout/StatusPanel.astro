@@ -34,32 +34,37 @@ const services = ['api', 'web', 'cdn', 'bot'];
 
     <div class="flex flex-col w-full">
       {services.map((id) => (
-        <div class="mb-6 pb-4">
+        <div class="mb-6 pb-4 group cursor-pointer" onclick={`document.getElementById('details-${id}').classList.toggle('hidden')`}>
           
           <div class="flex items-center justify-between mb-3">
             <div class="flex flex-col gap-1">
               <div class="flex items-center gap-2">
-                <span class="text-[12px] sm:text-[13px] font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
-                  {id}
-                </span>
+                <span class="text-[11px] font-bold uppercase tracking-widest text-zinc-400 group-hover:text-white transition-colors">{id}</span>
                 <span id={`s-${id}-status-text`} class="text-[11px] font-medium opacity-80"></span>
               </div>
-              <span id={`s-${id}-details`} class="text-[11px] uppercase text-zinc-500 opacity-60 leading-none tracking-tighter"></span>
+              <span id={`s-${id}-details-summary`} class="text-[9px] font-mono uppercase text-zinc-500 opacity-60"></span>
             </div>
-            <span id={`s-${id}-metrics`} class="text-[12px] sm:text-[13px] text-zinc-500">
-              --
-            </span>
+            <span id={`s-${id}-metrics`} class="text-[12px] sm:text-[13px] font-medium text-zinc-500">--</span>
+          </div>
+
+          <div id={`details-${id}`} class="hidden mb-4 p-3 bg-zinc-900/50 border border-zinc-800 rounded-sm">
+              <div class="grid grid-cols-2 gap-4">
+                  <div>
+                      <p class="text-[10px] text-zinc-500 uppercase font-bold">Riwayat Waktu Aktif</p>
+                      <p id={`s-${id}-uptime-val`} class="text-xs text-white font-mono">Menghitung...</p>
+                  </div>
+                  <div>
+                      <p class="text-[10px] text-zinc-500 uppercase font-bold">Identitas Node</p>
+                      <p id={`s-${id}-node-val`} class="text-xs text-white font-mono">Mengidentifikasi...</p>
+                  </div>
+              </div>
           </div>
           
           <div class="flex justify-between w-full py-1 relative">
             {Array.from({ length: 40 }).map((_, i) => (
-              <div 
-                data-bar={`${id}-${i}`}
-                class="w-[1.5px] h-6 bg-[#111] transition-colors duration-300 cursor-help"
-              ></div>
+              <div data-bar={`${id}-${i}`} class="w-[1.5px] h-6 bg-[#111] transition-all duration-300"></div>
             ))}
           </div>
-          
         </div>
       ))}
     </div>
@@ -68,29 +73,22 @@ const services = ['api', 'web', 'cdn', 'bot'];
 </div>
 
 <style>
-  [data-bar] {
-    transition: background-color 0.2s ease, transform 0.1s ease;
-  }
-
-  [data-bar]:hover {
-    transform: scaleY(1.2);
-    filter: brightness(1.2);
-  }
-
   [data-bar]:hover::after {
     content: attr(data-info);
     position: absolute;
-    bottom: 32px;
+    bottom: 35px;
     left: 50%;
     transform: translateX(-50%);
     background: #000;
     color: #fff;
-    padding: 2px 6px;
-    border-radius: 2px;
-    font-size: 9px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 10px;
     font-family: 'Geist Mono', monospace;
+    white-space: nowrap;
     border: 1px solid #333;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    z-index: 50;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
   }
 
   #status-panel {
@@ -171,7 +169,12 @@ const services = ['api', 'web', 'cdn', 'bot'];
   }
 
   function updateUI(overall, services, updatedTs) {
-    const colors = { Operational: "#10b981", Degraded: "#f59e0b", Outage: "#ef4444" };
+    const colors = { 
+      Fast: "#22d3ee",
+      Operational: "#10b981",
+      Warning: "#f59e0b",
+      Outage: "#ef4444"
+    };
     overall = overall || "Operational";
     const accent = colors[overall] || "#3f3f46";
 
@@ -190,6 +193,16 @@ const services = ['api', 'web', 'cdn', 'bot'];
     (services || []).forEach((s) => {
       const name = s.name;
       const status = s.status || "Outage";
+
+      const detailsSummaryEl = document.getElementById(`s-${name}-details-summary`);
+      if (detailsSummaryEl) detailsSummaryEl.textContent = s.details || '';
+
+      const uptimeValEl = document.getElementById(`s-${name}-uptime-val`);
+      const nodeValEl = document.getElementById(`s-${name}-node-val`);
+      
+      if (uptimeValEl) uptimeValEl.textContent = `${s.uptime || 0}% (40 Pengecekan Terakhir)`;
+      if (nodeValEl) nodeValEl.textContent = s.details || 'Unknown Node';
+
       const metricsEl = document.getElementById(`s-${name}-metrics`);
       const statusTextEl = document.getElementById(`s-${name}-status-text`);
       const bars = document.querySelectorAll(`[data-bar^="${name}-"]`);
@@ -205,6 +218,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
       }
 
       const history = Array.isArray(s.history) ? s.history.slice(-40) : [];
+      
       const validLatencies = history.filter(h => typeof h.latency === 'number');
       const avgLatencyDisplay = validLatencies.length
         ? `${Math.round(validLatencies.reduce((a, c) => a + c.latency, 0) / validLatencies.length)}ms`
@@ -216,8 +230,10 @@ const services = ['api', 'web', 'cdn', 'bot'];
       }
 
       const startIndex = 40 - history.length;
+
       bars.forEach(el => {
         if (!el) return;
+
         el.style.backgroundColor = "#18181b";
         el.style.opacity = "0.3";
         el.removeAttribute('data-info');
@@ -226,14 +242,21 @@ const services = ['api', 'web', 'cdn', 'bot'];
       history.forEach((h, i) => {
         const el = bars[startIndex + i];
         if (!el) return;
-        el.style.backgroundColor = colors[h?.status || "Outage"];
+
+        let barColor = colors.Outage;
+        if (h.status === 'Operational') {
+          if (h.latency > 0 && h.latency < 50) barColor = colors.Fast;
+          else if (h.latency > 1000) barColor = colors.Warning;
+          else barColor = colors.Operational;
+        }
+
+        el.style.backgroundColor = barColor;
         el.style.opacity = "1";
+        
         if (h.ts) {
           const time = new Date(h.ts).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
           const detailLog = h.details ? ` • ${h.details}` : '';
-          
           el.setAttribute('data-info', `${time} • ${h.latency}ms${detailLog}`);
-          el.setAttribute('data-info', `${time} • ${h.latency}ms`);
         }
       });
     });
