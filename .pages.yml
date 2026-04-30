@@ -489,7 +489,3 @@ content:
       - name: yandexVerification
         label: Yandex Verification
         type: string
-        
-      - name: yandexMetrikaId
-        label: Yandex Metrika ID
-        type: string
