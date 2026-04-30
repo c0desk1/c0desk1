@@ -1,5 +1,7 @@
 ---
 // src/pages/blog/[...slug].astro
+export const prerender = true;
+
 import { getCollection, render, getEntry } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 
