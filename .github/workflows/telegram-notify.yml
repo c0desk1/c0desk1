@@ -2,116 +2,93 @@ name: Telegram Notification
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
     paths:
-      - 'src/content/blog/**/*.md'
-      - 'src/content/blog/**/*.mdx'
-      - 'src/content/portfolio/**/*.md'
-      - 'src/content/portfolio/**/*.mdx'
+      - 'src/content/blog/**/*.{md,mdx}'
+      - 'src/content/portfolio/**/*.{md,mdx}'
+
+concurrency:
+  group: telegram-notify-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   notify:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 2
 
-      - name: Detect changed content
-        id: detect
+      - name: Get changed files
+        id: changed
+        uses: tj-actions/changed-files@v44
+        with:
+          files: |
+            src/content/blog/**/*.{md,mdx}
+            src/content/portfolio/**/*.{md,mdx}
+
+      - name: Parse & Send to Telegram
+        if: steps.changed.outputs.any_changed == 'true'
+        env:
+          TG_ENGINE_URL: ${{ secrets.TG_ENGINE_URL }}
+          TG_ENGINE_ADMIN_TOKEN: ${{ secrets.TG_ENGINE_ADMIN_TOKEN }}
+          FILES: ${{ steps.changed.outputs.all_changed_files }}
         run: |
-          echo "🔍 Detecting changed files..."
+          echo "📄 Changed files:"
+          echo "$FILES"
 
-          CHANGED_FILES=$(git diff --name-only \
-            ${{ github.event.before }} \
-            ${{ github.sha }} \
-            | grep -E 'src/content/(blog|portfolio)/.*\.(md|mdx)' || true)
+          # Loop semua file yg berubah, ga cuma 1
+          for FILE in $FILES; do
+            echo "--- Processing: $FILE ---"
 
-          echo "Changed files:"
-          echo "$CHANGED_FILES"
+            # 1. Tentuin tipe & path
+            if [[ "$FILE" == *"/blog/"* ]]; then
+              TYPE="Blog Post"
+              BASE_PATH="blog"
+            else
+              TYPE="Project"
+              BASE_PATH="portfolio"
+            fi
 
-          FIRST_FILE=$(echo "$CHANGED_FILES" | head -n 1)
+            # 2. Parse frontmatter pake yq, lebih aman dari grep
+            sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+            sudo chmod +x /usr/local/bin/yq
 
-          if [ -z "$FIRST_FILE" ]; then
-            echo "No relevant content changes detected."
-            echo "found=false" >> $GITHUB_OUTPUT
-            exit 0
-          fi
+            # Ambil frontmatter antara --- pertama & kedua
+            FRONTMATTER=$(sed -n '/^---$/,/^---$/p' "$FILE" | sed '1d;$d')
 
-          echo "Found file: $FIRST_FILE"
+            TITLE=$(echo "$FRONTMATTER" | yq -r '.title // "Untitled"')
+            DESC=$(echo "$FRONTMATTER" | yq -r '.description //.synopsis // ""')
+            RAW_IMAGE=$(echo "$FRONTMATTER" | yq -r '.image // ""')
 
-          echo "file=$FIRST_FILE" >> $GITHUB_OUTPUT
-          echo "found=true" >> $GITHUB_OUTPUT
+            # 3. Extract file ID dari URL Google Drive/Cloudinary/etc
+            FILE_ID=$(echo "$RAW_IMAGE" | grep -oE '[A-Za-z0-9_-]{25,}' | head -1 || true)
 
+            # 4. Generate URL
+            SLUG=$(basename "$FILE" | sed -E 's/\.(md|mdx)$//')
+            URL="https://c0desk1.my.id/$BASE_PATH/$SLUG"
 
-      - name: Extract metadata
-		if: steps.detect.outputs.found == 'true'
-		id: meta
-		run: | FILE="${{ steps.detect.outputs.file }}"
-				
-			echo "📄 Reading file: $FILE"
-			if [[ "$FILE" == *"blog"* ]]; then
-			TYPE="Blog Post"
-			BASE_PATH="blog"
-			else
-				TYPE="Project"
-				BASE_PATH="portfolio"
-			fi
+            echo "TYPE=$TYPE"
+            echo "TITLE=$TITLE"
+            echo "DESC=$DESC"
+            echo "URL=$URL"
+            echo "FILE_ID=$FILE_ID"
 
-    TITLE=$(grep '^title:' "$FILE" | head -1 \
-      | sed 's/title: //;s/"//g;s/'\''//g')
+            # 5. Escape JSON pake jq biar aman dari karakter "
+            JSON_PAYLOAD=$(jq -n \
+              --arg title "[$TYPE] $TITLE" \
+              --arg desc "$DESC" \
+              --arg url "$URL" \
+              --arg fileId "$FILE_ID" \
+              '{title: $title, description: $desc, url: $url, fileId: $fileId}')
 
-    DESC=$(grep -E '^(description|synopsis):' "$FILE" | head -1 \
-      | sed -E 's/^(description|synopsis): //;s/"//g;s/'\''//g')
+            echo "🚀 Sending to Telegram..."
+            curl -sS -X POST "$TG_ENGINE_URL/api/v1/broadcast" \
+              -H "Authorization: Bearer $TG_ENGINE_ADMIN_TOKEN" \
+              -H "Content-Type: application/json" \
+              -d "$JSON_PAYLOAD"
 
-    # ===== FIX IMAGE PARSING =====
-    RAW_IMAGE=$(grep '^image:' "$FILE" | head -1 \
-      | sed 's/image: //;s/"//g;s/'\''//g')
-
-    FILE_ID=$(echo "$RAW_IMAGE" | grep -oE '[^/]+$' || true)
-
-    if [[ -z "$FILE_ID" || "$FILE_ID" == "image:" ]]; then
-      FILE_ID=""
-    fi
-
-    if [[ -n "$FILE_ID" && ! "$FILE_ID" =~ ^[A-Za-z0-9_-]{10,}$ ]]; then
-      FILE_ID=""
-    fi
-    # ============================
-
-    SLUG=$(basename "$FILE" \
-      | sed -E 's/\.(md|mdx)$//')
-
-    URL="https://c0desk1.my.id/$BASE_PATH/$SLUG"
-
-    echo "TYPE=$TYPE"
-    echo "TITLE=$TITLE"
-    echo "DESC=$DESC"
-    echo "RAW_IMAGE=$RAW_IMAGE"
-    echo "FINAL_FILE_ID=$FILE_ID"
-    echo "URL=$URL"
-
-    echo "type=$TYPE" >> $GITHUB_OUTPUT
-    echo "title=$TITLE" >> $GITHUB_OUTPUT
-    echo "desc=$DESC" >> $GITHUB_OUTPUT
-    echo "fileId=$FILE_ID" >> $GITHUB_OUTPUT
-    echo "url=$URL" >> $GITHUB_OUTPUT
-
-
-      - name: Send to Telegram
-        if: steps.detect.outputs.found == 'true'
-        run: |
-          echo "🚀 Sending Telegram notification..."
-
-          curl -X POST "${{ secrets.TG_ENGINE_URL }}/api/v1/broadcast" \
-            -H "Authorization: Bearer ${{ secrets.TG_ENGINE_ADMIN_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d "{
-              \"title\": \"[${{ steps.meta.outputs.type }}] ${{ steps.meta.outputs.title }}\",
-              \"description\": \"${{ steps.meta.outputs.desc }}\",
-              \"url\": \"${{ steps.meta.outputs.url }}\",
-              \"fileId\": \"${{ steps.meta.outputs.fileId }}\"
-            }"
+            echo "Done: $FILE"
+            sleep 1 # Rate limit biar ga spam
+          done
