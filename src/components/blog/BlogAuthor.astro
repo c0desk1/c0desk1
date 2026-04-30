@@ -2,6 +2,7 @@
 // src/components/author/Author.astro
 import { siteConfig } from '@/config/site';
 import { Image } from 'astro:assets';
+import { cdnImage, isCdnUrl } from '@/lib/utils';
 
 interface Props {
   name?: string;
@@ -16,6 +17,8 @@ const authorName = name || siteConfig.author?.name || siteConfig.siteName;
 const authorAvatar = avatar || siteConfig.author?.avatar || siteConfig.siteLogo;
 const authorTitle = title || siteConfig.author?.title || "Author";
 const authorSlug = slug || siteConfig.author?.slug || "author";
+
+const optimizedAvatar = isCdnUrl(authorAvatar) ? cdnImage(authorAvatar, { w: 48, h: 48, q: 80 }) : authorAvatar;
 ---
 
 <a
@@ -25,7 +28,7 @@ const authorSlug = slug || siteConfig.author?.slug || "author";
 >
   {authorAvatar && (
     <Image
-      src={authorAvatar}
+      src={optimizedAvatar}
       alt={`Avatar of ${authorName}`}
       width={18}
       height={18}
