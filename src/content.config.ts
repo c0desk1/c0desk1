@@ -52,7 +52,6 @@ const settings = defineCollection({
     googleAdsenseId: z.string().optional(),
     googleAnalyticsId: z.string().optional(),
     yandexVerification: z.string().optional(),
-    yandexMetrikaId: z.string().optional(),
      navItems: z.array(z.object({
       href: z.string(),
       label: z.string(),
