@@ -1,6 +1,7 @@
 ---
 // src/components/portfolio/PortfolioGallery.astro
 import { Image } from 'astro:assets';
+import { cdnImage, isCdnUrl } from '@/lib/utils';
 
 interface ImageItem {
   src: string;
@@ -23,7 +24,7 @@ const getAlt = (img: string | ImageItem, index: number) => {
   if (typeof img === "object" && img.alt) return img.alt;
   return `${title} Showcase ${index + 1}`;
 };
-
+const optimizedSrc = isCdnUrl(src) ? cdnImage(src, { q: 85 }) : src;
 ---
 
 {images && images.length > 0 && (
@@ -47,7 +48,7 @@ const getAlt = (img: string | ImageItem, index: number) => {
               <div class="absolute inset-0 bg-zinc-100 dark:bg-zinc-900 animate-pulse" aria-hidden="true" />
               
               <Image
-                src={src}
+                src={optimizedSrc}
                 alt={alt}
                 width={1280}
                 height={720}
