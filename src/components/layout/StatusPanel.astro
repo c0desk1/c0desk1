@@ -3,155 +3,487 @@
 const services = ['api', 'web', 'cdn', 'bot'];
 ---
 
-<div 
-  id="status-overlay" 
-  class="fixed inset-0 bg-black/60 backdrop-blur-sm z-90 opacity-0 pointer-events-none transition-opacity duration-500"
+<div
+  id="status-overlay"
+  class="status-overlay"
 ></div>
 
-<div
-  id="status-panel"
-  class="fixed bottom-0 left-0 right-0 translate-y-full transition-transform duration-500 cubic-bezier(0.4, 0, 0.2, 1) bg-white dark:bg-black border-t border-black/20 dark:border-zinc-900 z-100 shadow-[0_-20px_50px_-12px_rgba(0,0,0,0.5)]"
->
-  <div class="max-w-screen-lg mx-auto p-6 md:p-10">
-    
-    <div class="flex items-start justify-between mb-8 border-b border-zinc-900/50 pb-6">
-      <div class="flex items-start gap-3">
-        <div id="panel-dot" class="w-2.5 h-2.5 rounded-full bg-zinc-700 mt-1"></div>
-        <div class="flex flex-col gap-1">
-          <h3 class="text-[12px] sm:text-[13px] font-semibold text-black dark:text-white leading-none">
-            Status Sistem
-          </h3>
-          <span id="last-updated-text" class="text-[11px] sm:text-[12px] font-medium text-zinc-500">
-            Menunggu sinkronisasi...
-          </span>
+<div id="status-panel" class="status-panel">
+
+  <div class="panel-inner">
+
+    <div class="panel-header">
+      <div class="header-left">
+        <span id="panel-dot" class="header-dot"></span>
+        <div>
+          <p class="header-title">System Status</p>
+          <p id="last-updated-text" class="header-sub">Waiting for sync...</p>
         </div>
       </div>
-
-      <button id="close-panel" aria-label="Tutup panel status" class="p-2 -mr-2 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-black/10 dark:hover:bg-zinc-800/50 rounded-full transition-colors cursor-pointer">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      <button id="close-panel" class="close-btn" aria-label="Close status panel">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
       </button>
     </div>
 
-    <div class="flex flex-col w-full">
+    <div class="services-list">
       {services.map((id) => (
-        <div class="mb-6 pb-4 group cursor-pointer" onclick={`document.getElementById('details-${id}').classList.toggle('hidden')`}>
-          
-          <div class="flex items-center justify-between mb-3">
-            <div class="flex flex-col gap-1">
-              <div class="flex items-center gap-2">
-                <span class="text-[11px] font-bold uppercase tracking-widest text-zinc-400 group-hover:text-white transition-colors">{id}</span>
-                <span id={`s-${id}-status-text`} class="text-[11px] font-medium opacity-80"></span>
-              </div>
-              <span id={`s-${id}-details-summary`} class="text-[9px] font-mono uppercase text-zinc-500 opacity-60"></span>
+        <div class="service-row" onclick={`toggleDetails('${id}')`}>
+
+          <div class="service-top">
+            <div class="service-left">
+              <span class="service-name">{id.toUpperCase()}</span>
+              <span id={`s-${id}-status-text`} class="service-latency"></span>
             </div>
-            <span id={`s-${id}-metrics`} class="text-[12px] sm:text-[13px] font-medium text-zinc-500">--</span>
+            <span id={`s-${id}-metrics`} class="service-metrics">—</span>
           </div>
 
-          <div id={`details-${id}`} class="hidden mb-4 p-3 bg-zinc-900/50 border border-zinc-800 rounded-sm">
-              <div class="grid grid-cols-2 gap-4">
-                  <div>
-                      <p class="text-[10px] text-zinc-500 uppercase font-bold">Riwayat Waktu Aktif</p>
-                      <p id={`s-${id}-uptime-val`} class="text-xs text-white font-mono">Menghitung...</p>
-                  </div>
-                  <div>
-                      <p class="text-[10px] text-zinc-500 uppercase font-bold">Identitas Node</p>
-                      <p id={`s-${id}-node-val`} class="text-xs text-white font-mono">Mengidentifikasi...</p>
-                  </div>
-              </div>
-          </div>
-          
-          <div class="flex justify-between w-full py-1 relative">
+          <div class="bars-wrap">
             {Array.from({ length: 40 }).map((_, i) => (
-              <div data-bar={`${id}-${i}`} class="w-[1.5px] h-6 bg-[#111] transition-all duration-300"></div>
+              <div data-bar={`${id}-${i}`} class="bar"></div>
             ))}
           </div>
+
+          <div id={`details-${id}`} class="service-detail hidden">
+            <div class="detail-grid">
+              <div>
+                <p class="detail-label">Uptime History</p>
+                <p id={`s-${id}-uptime-val`} class="detail-val">Calculating...</p>
+              </div>
+              <div>
+                <p class="detail-label">Node Identity</p>
+                <p id={`s-${id}-node-val`} class="detail-val">Identifying...</p>
+              </div>
+              <div>
+                <p class="detail-label">Last Check</p>
+                <p id={`s-${id}-details-summary`} class="detail-val">—</p>
+              </div>
+            </div>
+          </div>
+
         </div>
       ))}
+    </div>
+
+    <div class="panel-footer">
+      <span class="footer-note">Auto-refreshes every 5 minutes</span>
+      <button id="refresh-btn" class="refresh-btn">
+        <svg id="refresh-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+        Refresh
+      </button>
     </div>
 
   </div>
 </div>
 
 <style>
-  [data-bar]:hover::after {
-    content: attr(data-info);
-    position: absolute;
-    bottom: 35px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #000;
-    color: #fff;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 10px;
-    font-family: 'Geist Mono', monospace;
-    white-space: nowrap;
-    border: 1px solid #333;
-    z-index: 50;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  /* ── Reset & base ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── Overlay ── */
+  .status-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 90;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+  .status-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
   }
 
-  #status-panel {
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  /* ── Panel ── */
+  .status-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    transform: translateY(100%);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    background: #ffffff;
+    border-top: 1px solid #e5e5e5;
+    box-shadow: 0 -8px 40px rgba(0,0,0,0.08);
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+  .status-panel.open {
+    transform: translateY(0);
+  }
+
+  /* Dark mode */
+  @media (prefers-color-scheme: dark) {
+    .status-panel {
+      background: #0a0a0a;
+      border-top-color: #1a1a1a;
+      box-shadow: 0 -8px 40px rgba(0,0,0,0.6);
+    }
+  }
+
+  /* ── Inner layout ── */
+  .panel-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 20px 20px 16px;
+  }
+  @media (min-width: 640px) {
+    .panel-inner {
+      padding: 28px 32px 20px;
+    }
+  }
+
+  /* ── Header ── */
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 4px;
+  }
+  @media (prefers-color-scheme: dark) {
+    .panel-header { border-bottom-color: #1a1a1a; }
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .header-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #666;
+    flex-shrink: 0;
+    transition: background 0.3s;
+  }
+  .header-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: #0a0a0a;
+    line-height: 1.3;
+  }
+  @media (prefers-color-scheme: dark) {
+    .header-title { color: #fafafa; }
+  }
+  .header-sub {
+    font-size: 12px;
+    color: #888;
+    line-height: 1.3;
+    margin-top: 1px;
+  }
+
+  .close-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    border: 1px solid #e5e5e5;
+    background: transparent;
+    color: #666;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .close-btn:hover {
+    background: #f5f5f5;
+    border-color: #d5d5d5;
+    color: #0a0a0a;
+  }
+  @media (prefers-color-scheme: dark) {
+    .close-btn {
+      border-color: #2a2a2a;
+      color: #666;
+    }
+    .close-btn:hover {
+      background: #1a1a1a;
+      border-color: #3a3a3a;
+      color: #fafafa;
+    }
+  }
+
+  /* ── Service row ── */
+  .services-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .service-row {
+    padding: 16px 0;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .service-row:last-child {
+    border-bottom: none;
+  }
+  @media (prefers-color-scheme: dark) {
+    .service-row { border-bottom-color: #141414; }
+    .service-row:last-child { border-bottom: none; }
+  }
+
+  .service-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .service-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .service-name {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: #888;
+    font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace;
+    transition: color 0.15s;
+  }
+  .service-row:hover .service-name {
+    color: #0a0a0a;
+  }
+  @media (prefers-color-scheme: dark) {
+    .service-row:hover .service-name { color: #fafafa; }
+  }
+  .service-latency {
+    font-size: 12px;
+    font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace;
+    font-weight: 500;
+    opacity: 0.9;
+  }
+  .service-metrics {
+    font-size: 12px;
+    color: #888;
+    font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace;
+  }
+
+  /* ── Bars ── */
+  .bars-wrap {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 28px;
+    position: relative;
+  }
+  .bar {
+    flex: 1;
+    height: 100%;
+    background: #f0f0f0;
+    border-radius: 2px;
+    transition: background 0.2s, opacity 0.2s, transform 0.1s;
+    position: relative;
+    cursor: default;
+  }
+  .bar:hover {
+    transform: scaleY(1.15);
+    transform-origin: bottom;
+    z-index: 1;
+  }
+  @media (prefers-color-scheme: dark) {
+    .bar { background: #1c1c1c; }
+  }
+
+  /* Tooltip */
+  .bar[data-info]:hover::after {
+    content: attr(data-info);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0a0a0a;
+    color: #fafafa;
+    padding: 5px 8px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace;
+    white-space: nowrap;
+    border: 1px solid #2a2a2a;
+    z-index: 50;
+    pointer-events: none;
+  }
+  @media (prefers-color-scheme: dark) {
+    .bar[data-info]:hover::after {
+      background: #fafafa;
+      color: #0a0a0a;
+      border-color: #e0e0e0;
+    }
+  }
+
+  /* ── Service detail ── */
+  .service-detail {
+    margin-top: 12px;
+    padding: 14px 16px;
+    background: #f7f7f7;
+    border: 1px solid #ebebeb;
+    border-radius: 8px;
+  }
+  .service-detail.hidden { display: none; }
+
+  @media (prefers-color-scheme: dark) {
+    .service-detail {
+      background: #111;
+      border-color: #222;
+    }
+  }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+  }
+  .detail-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #aaa;
+    margin-bottom: 3px;
+  }
+  .detail-val {
+    font-size: 12px;
+    font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace;
+    color: #333;
+  }
+  @media (prefers-color-scheme: dark) {
+    .detail-val { color: #ccc; }
+  }
+
+  /* ── Footer ── */
+  .panel-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid #f0f0f0;
+  }
+  @media (prefers-color-scheme: dark) {
+    .panel-footer { border-top-color: #1a1a1a; }
+  }
+  .footer-note {
+    font-size: 12px;
+    color: #aaa;
+  }
+  .refresh-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid #e5e5e5;
+    background: transparent;
+    font-size: 12px;
+    font-weight: 500;
+    color: #555;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .refresh-btn:hover {
+    background: #f5f5f5;
+    border-color: #d5d5d5;
+    color: #0a0a0a;
+  }
+  .refresh-btn.spinning svg {
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  @media (prefers-color-scheme: dark) {
+    .refresh-btn {
+      border-color: #2a2a2a;
+      color: #888;
+    }
+    .refresh-btn:hover {
+      background: #1a1a1a;
+      border-color: #3a3a3a;
+      color: #fafafa;
+    }
+  }
+
+  /* ── Dot pulse animation ── */
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .header-dot.pulse {
+    animation: pulse-dot 1.5s ease-in-out infinite;
   }
 </style>
 
 <script is:inline>
+(function() {
   const API_URL = "/api/status";
 
-  const panel = document.getElementById("status-panel");
-  const overlay = document.getElementById("status-overlay");
-  const closeBtn = document.getElementById("close-panel");
-  const panelDot = document.getElementById("panel-dot");
+  const panel     = document.getElementById("status-panel");
+  const overlay   = document.getElementById("status-overlay");
+  const closeBtn  = document.getElementById("close-panel");
+  const refreshBtn = document.getElementById("refresh-btn");
+  const panelDot  = document.getElementById("panel-dot");
   const lastUpdatedEl = document.getElementById("last-updated-text");
-  const footerLabel = document.getElementById("status-label");
-  const footerDot = document.getElementById("status-dot");
-  const footerPulse = document.getElementById("status-pulse");
+  const footerLabel   = document.getElementById("status-label");
+  const footerDot     = document.getElementById("status-dot");
+  const footerPulse   = document.getElementById("status-pulse");
 
   let latestUpdateTs = null;
   let hasFetched = false;
   const intervals = [];
 
-  function getRelativeTime(timestamp) {
-    const diff = Math.floor((Date.now() - timestamp) / 1000);
-    if (diff < 30) return "Sekarang";
-    if (diff < 60) return `${diff} detik yang lalu`;
-    if (diff < 3600) return `${Math.floor(diff / 60)}m yang lalu`;
-    return "Lama yang lalu";
+  const STATUS_COLORS = {
+    Fast:        "#0ea5e9",
+    Operational: "#22c55e",
+    Warning:     "#f59e0b",
+    Outage:      "#ef4444",
+  };
+
+  function getRelativeTime(ts) {
+    const d = Math.floor((Date.now() - ts) / 1000);
+    if (d < 30)   return "Just now";
+    if (d < 60)   return `${d}s ago`;
+    if (d < 3600) return `${Math.floor(d / 60)}m ago`;
+    return "A while ago";
   }
 
-  function openStatus() {
-    panel?.classList.remove("translate-y-full");
-    overlay?.classList.remove("opacity-0", "pointer-events-none");
-    overlay?.classList.add("opacity-100", "pointer-events-auto");
-    document.body.style.overflow = "hidden";
+  function toggleDetails(id) {
+    const el = document.getElementById(`details-${id}`);
+    if (el) el.classList.toggle("hidden");
+  }
+  window.toggleDetails = toggleDetails;
 
+  function openStatus() {
+    panel?.classList.add("open");
+    overlay?.classList.add("visible");
+    document.body.style.overflow = "hidden";
     if (!hasFetched) {
       fetchStatus();
       hasFetched = true;
-      
       intervals.push(setInterval(fetchStatus, 300000));
-      
       intervals.push(setInterval(() => {
-        if (latestUpdateTs && lastUpdatedEl) {
-          lastUpdatedEl.textContent = `Pengecekan otomatis: ${getRelativeTime(latestUpdateTs)}`;
-        }
+        if (latestUpdateTs && lastUpdatedEl)
+          lastUpdatedEl.textContent = `Auto-check: ${getRelativeTime(latestUpdateTs)}`;
       }, 10000));
     }
   }
 
   function closeStatus() {
-    panel?.classList.add("translate-y-full");
-    overlay?.classList.remove("opacity-100", "pointer-events-auto");
-    overlay?.classList.add("opacity-0", "pointer-events-none");
+    panel?.classList.remove("open");
+    overlay?.classList.remove("visible");
     document.body.style.overflow = "";
   }
 
   function updateFooter(overall) {
-    const colors = { Operational: "#10b981", Degraded: "#f59e0b", Outage: "#ef4444" };
-    const accent = colors[overall] || "#3f3f46";
-    if (footerLabel) footerLabel.textContent = overall === "Operational" ? "Semua Sistem Normal" : overall;
-    if (footerDot) footerDot.style.backgroundColor = accent;
+    const accent = STATUS_COLORS[overall] || "#888";
+    if (footerLabel) footerLabel.textContent = overall === "Operational" ? "All Systems Normal" : overall;
+    if (footerDot)   footerDot.style.backgroundColor = accent;
     if (footerPulse) footerPulse.style.backgroundColor = accent;
   }
 
@@ -163,123 +495,113 @@ const services = ['api', 'web', 'cdn', 'bot'];
       updateFooter(data.overall || "Operational");
     } catch {
       if (footerLabel) footerLabel.textContent = "Offline";
-      if (footerDot) footerDot.style.backgroundColor = "#ef4444";
-      if (footerPulse) footerPulse.style.backgroundColor = "#ef4444";
+      if (footerDot)   footerDot.style.backgroundColor = STATUS_COLORS.Outage;
+      if (footerPulse) footerPulse.style.backgroundColor = STATUS_COLORS.Outage;
     }
   }
 
   function updateUI(overall, services, updatedTs) {
-    const colors = { 
-      Fast: "#22d3ee",
-      Operational: "#10b981",
-      Warning: "#f59e0b",
-      Outage: "#ef4444"
-    };
     overall = overall || "Operational";
-    const accent = colors[overall] || "#3f3f46";
+    const accent = STATUS_COLORS[overall] || "#888";
 
     updateFooter(overall);
 
     if (panelDot) {
       panelDot.style.backgroundColor = accent;
-      panelDot.className = "w-2.5 h-2.5 rounded-full " + (overall === "Operational" ? "" : "animate-pulse");
+      if (overall !== "Operational") panelDot.classList.add("pulse");
+      else panelDot.classList.remove("pulse");
     }
 
     if (updatedTs) {
       latestUpdateTs = updatedTs;
-      if (lastUpdatedEl) lastUpdatedEl.textContent = `Pengecekan otomatis: ${getRelativeTime(latestUpdateTs)}`;
+      if (lastUpdatedEl)
+        lastUpdatedEl.textContent = `Updated ${getRelativeTime(latestUpdateTs)}`;
     }
 
     (services || []).forEach((s) => {
-      const name = s.name;
+      const name   = s.name;
       const status = s.status || "Outage";
 
-      const detailsSummaryEl = document.getElementById(`s-${name}-details-summary`);
-      if (detailsSummaryEl) detailsSummaryEl.textContent = s.details || '';
+      const summaryEl  = document.getElementById(`s-${name}-details-summary`);
+      const uptimeEl   = document.getElementById(`s-${name}-uptime-val`);
+      const nodeEl     = document.getElementById(`s-${name}-node-val`);
+      const metricsEl  = document.getElementById(`s-${name}-metrics`);
+      const latencyEl  = document.getElementById(`s-${name}-status-text`);
+      const bars       = document.querySelectorAll(`[data-bar^="${name}-"]`);
 
-      const uptimeValEl = document.getElementById(`s-${name}-uptime-val`);
-      const nodeValEl = document.getElementById(`s-${name}-node-val`);
-      
-      if (uptimeValEl) uptimeValEl.textContent = `${s.uptime || 0}% (40 Pengecekan Terakhir)`;
-      if (nodeValEl) nodeValEl.textContent = s.details || 'Unknown Node';
+      if (summaryEl) summaryEl.textContent = s.details || "—";
+      if (uptimeEl)  uptimeEl.textContent  = `${s.uptime ?? 0}% (last 40 checks)`;
+      if (nodeEl)    nodeEl.textContent    = s.details || "Unknown node";
 
-      const metricsEl = document.getElementById(`s-${name}-metrics`);
-      const statusTextEl = document.getElementById(`s-${name}-status-text`);
-      const bars = document.querySelectorAll(`[data-bar^="${name}-"]`);
-      const detailsEl = document.getElementById(`s-${name}-details`)
-
-      if (statusTextEl) {
-        statusTextEl.textContent = `• ${s.latency ?? '-'}ms`;
-        statusTextEl.style.color = colors[status];
+      if (latencyEl) {
+        latencyEl.textContent = `${s.latency ?? "—"}ms`;
+        latencyEl.style.color = STATUS_COLORS[status] || "#888";
       }
-
-      if (detailsEl) {
-        detailsEl.textContent = s.details || ''; 
-      }
-
-      const history = Array.isArray(s.history) ? s.history.slice(-40) : [];
-      
-      const validLatencies = history.filter(h => typeof h.latency === 'number');
-      const avgLatencyDisplay = validLatencies.length
-        ? `${Math.round(validLatencies.reduce((a, c) => a + c.latency, 0) / validLatencies.length)}ms`
-        : "";
 
       if (metricsEl) {
-        const uptime = typeof s.uptime === "number" ? s.uptime : 100;
-        metricsEl.textContent = `${uptime}% Uptime${avgLatencyDisplay ? ` • Avg ${avgLatencyDisplay}` : ''}`;
+        const up  = typeof s.uptime === "number" ? s.uptime : 100;
+        const history = Array.isArray(s.history) ? s.history : [];
+        const valid   = history.filter(h => typeof h.latency === "number");
+        const avg     = valid.length
+          ? Math.round(valid.reduce((a, c) => a + c.latency, 0) / valid.length)
+          : null;
+        metricsEl.textContent = `${up}% uptime${avg !== null ? ` · avg ${avg}ms` : ""}`;
       }
 
+      const history    = Array.isArray(s.history) ? s.history.slice(-40) : [];
       const startIndex = 40 - history.length;
 
       bars.forEach(el => {
-        if (!el) return;
-
-        el.style.backgroundColor = "#18181b";
+        el.style.backgroundColor = "";
         el.style.opacity = "0.3";
-        el.removeAttribute('data-info');
+        el.removeAttribute("data-info");
       });
 
       history.forEach((h, i) => {
         const el = bars[startIndex + i];
         if (!el) return;
 
-        let barColor = colors.Outage;
-        if (h.status === 'Operational') {
-          if (h.latency > 0 && h.latency < 50) barColor = colors.Fast;
-          else if (h.latency > 1000) barColor = colors.Warning;
-          else barColor = colors.Operational;
+        let color = STATUS_COLORS.Outage;
+        if (h.status === "Operational") {
+          if (h.latency < 50)   color = STATUS_COLORS.Fast;
+          else if (h.latency > 1000) color = STATUS_COLORS.Warning;
+          else                   color = STATUS_COLORS.Operational;
         }
 
-        el.style.backgroundColor = barColor;
+        el.style.backgroundColor = color;
         el.style.opacity = "1";
-        
+
         if (h.ts) {
-          const time = new Date(h.ts).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-          const detailLog = h.details ? ` • ${h.details}` : '';
-          el.setAttribute('data-info', `${time} • ${h.latency}ms${detailLog}`);
+          const time = new Date(h.ts).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+          const detail = h.details ? ` · ${h.details}` : "";
+          el.setAttribute("data-info", `${time} · ${h.latency}ms${detail}`);
         }
       });
     });
   }
 
   async function fetchStatus() {
-    if (lastUpdatedEl) lastUpdatedEl.textContent = "Memperbarui...";
+    if (refreshBtn) refreshBtn.classList.add("spinning");
+    if (lastUpdatedEl) lastUpdatedEl.textContent = "Updating...";
     try {
-      const res = await fetch(API_URL);
+      const res  = await fetch(API_URL);
       if (!res.ok) throw new Error();
       const data = await res.json();
       updateUI(data.overall, data.services, data.updated);
     } catch {
       if (lastUpdatedEl) lastUpdatedEl.textContent = "Offline";
       updateFooter("Outage");
+    } finally {
+      if (refreshBtn) refreshBtn.classList.remove("spinning");
     }
   }
 
-  document.getElementById("status-panel")?.addEventListener('touchstart', (e) => {
-    const bar = e.target.closest('[data-bar]');
+  // Touch tooltip on mobile
+  panel?.addEventListener("touchstart", (e) => {
+    const bar = e.target.closest("[data-bar]");
     if (!bar) return;
     e.preventDefault();
-    const info = bar.getAttribute('data-info');
+    const info = bar.getAttribute("data-info");
     if (info && lastUpdatedEl) lastUpdatedEl.textContent = info;
   }, { passive: false });
 
@@ -290,8 +612,10 @@ const services = ['api', 'web', 'cdn', 'bot'];
   document.getElementById("status-toggle")?.addEventListener("click", openStatus);
   closeBtn?.addEventListener("click", closeStatus);
   overlay?.addEventListener("click", closeStatus);
+  refreshBtn?.addEventListener("click", () => { if (hasFetched) fetchStatus(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeStatus(); });
 
   fetchFooterStatus();
   setInterval(fetchFooterStatus, 300000);
+})();
 </script>
