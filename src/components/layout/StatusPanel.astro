@@ -230,6 +230,9 @@ const services = ['api', 'web', 'cdn', 'bot'];
         el.style.opacity = "1";
         if (h.ts) {
           const time = new Date(h.ts).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+          const detailLog = h.details ? ` • ${h.details}` : '';
+          
+          el.setAttribute('data-info', `${time} • ${h.latency}ms${detailLog}`);
           el.setAttribute('data-info', `${time} • ${h.latency}ms`);
         }
       });
