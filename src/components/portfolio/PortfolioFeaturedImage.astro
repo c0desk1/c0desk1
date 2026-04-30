@@ -13,8 +13,8 @@ interface Props {
 const { src, alt, caption } = Astro.props;
 
 const finalSrc = typeof src === "object" && src !== null ? (src.src || src) : src;
-const finalCaption = caption || alt;
 const optimizedSrc = isCdnUrl(finalSrc) ? cdnImage(finalSrc, { w: 1280, h: 720, q: 85 }) : finalSrc;
+const finalCaption = caption || alt;
 ---
 
 <div class="border-y border-zinc-200/60 dark:border-zinc-800/60 bg-white dark:bg-black">
@@ -47,4 +47,4 @@ const optimizedSrc = isCdnUrl(finalSrc) ? cdnImage(finalSrc, { w: 1280, h: 720, 
       )}
     </figure>
   </Container>
-</div>
+</div>
