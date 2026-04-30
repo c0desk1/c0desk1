@@ -48,47 +48,57 @@ jobs:
 
 
       - name: Extract metadata
-        if: steps.detect.outputs.found == 'true'
-        id: meta
-        run: |
-          FILE="${{ steps.detect.outputs.file }}"
+		if: steps.detect.outputs.found == 'true'
+		id: meta
+		run: | FILE="${{ steps.detect.outputs.file }}"
+				
+			echo "📄 Reading file: $FILE"
+			if [[ "$FILE" == *"blog"* ]]; then
+			TYPE="Blog Post"
+			BASE_PATH="blog"
+			else
+				TYPE="Project"
+				BASE_PATH="portfolio"
+			fi
 
-          echo "📄 Reading file: $FILE"
+    TITLE=$(grep '^title:' "$FILE" | head -1 \
+      | sed 's/title: //;s/"//g;s/'\''//g')
 
-          if [[ "$FILE" == *"blog"* ]]; then
-            TYPE="Blog Post"
-            BASE_PATH="blog"
-          else
-            TYPE="Project"
-            BASE_PATH="portfolio"
-          fi
+    DESC=$(grep -E '^(description|synopsis):' "$FILE" | head -1 \
+      | sed -E 's/^(description|synopsis): //;s/"//g;s/'\''//g')
 
-          TITLE=$(grep '^title:' "$FILE" | head -1 \
-            | sed 's/title: //;s/"//g;s/'\''//g')
+    # ===== FIX IMAGE PARSING =====
+    RAW_IMAGE=$(grep '^image:' "$FILE" | head -1 \
+      | sed 's/image: //;s/"//g;s/'\''//g')
 
-          DESC=$(grep -E '^(description|synopsis):' "$FILE" | head -1 \
-            | sed -E 's/^(description|synopsis): //;s/"//g;s/'\''//g')
+    FILE_ID=$(echo "$RAW_IMAGE" | grep -oE '[^/]+$' || true)
 
-          FILE_ID=$(grep '^image:' "$FILE" | head -1 \
-            | sed 's/image: //;s/"//g;s/'\''//g' \
-            | grep -oE '[^/]+$' || true)
+    if [[ -z "$FILE_ID" || "$FILE_ID" == "image:" ]]; then
+      FILE_ID=""
+    fi
 
-          SLUG=$(basename "$FILE" \
-            | sed -E 's/\.(md|mdx)$//')
+    if [[ -n "$FILE_ID" && ! "$FILE_ID" =~ ^[A-Za-z0-9_-]{10,}$ ]]; then
+      FILE_ID=""
+    fi
+    # ============================
 
-          URL="https://c0desk1.my.id/$BASE_PATH/$SLUG"
+    SLUG=$(basename "$FILE" \
+      | sed -E 's/\.(md|mdx)$//')
 
-          echo "TYPE=$TYPE"
-          echo "TITLE=$TITLE"
-          echo "DESC=$DESC"
-          echo "FILE_ID=$FILE_ID"
-          echo "URL=$URL"
+    URL="https://c0desk1.my.id/$BASE_PATH/$SLUG"
 
-          echo "type=$TYPE" >> $GITHUB_OUTPUT
-          echo "title=$TITLE" >> $GITHUB_OUTPUT
-          echo "desc=$DESC" >> $GITHUB_OUTPUT
-          echo "fileId=$FILE_ID" >> $GITHUB_OUTPUT
-          echo "url=$URL" >> $GITHUB_OUTPUT
+    echo "TYPE=$TYPE"
+    echo "TITLE=$TITLE"
+    echo "DESC=$DESC"
+    echo "RAW_IMAGE=$RAW_IMAGE"
+    echo "FINAL_FILE_ID=$FILE_ID"
+    echo "URL=$URL"
+
+    echo "type=$TYPE" >> $GITHUB_OUTPUT
+    echo "title=$TITLE" >> $GITHUB_OUTPUT
+    echo "desc=$DESC" >> $GITHUB_OUTPUT
+    echo "fileId=$FILE_ID" >> $GITHUB_OUTPUT
+    echo "url=$URL" >> $GITHUB_OUTPUT
 
 
       - name: Send to Telegram
