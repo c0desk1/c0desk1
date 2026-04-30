@@ -525,8 +525,8 @@ const services = ['api', 'web', 'cdn', 'bot'];
     const d = Math.floor((Date.now() - ts) / 1000);
     if (d < 30)   return "Just now";
     if (d < 60)   return `${d}s ago`;
-    if (d < 3600) return `${Math.floor(d / 60)}m ago`;
-    return "A while ago";
+    if (d < 3600) return `${Math.floor(d / 60)}m yang lalu`;
+    return "Beberapa waktu yang lalu";
   }
  
   function toggleDetails(id) {
@@ -547,7 +547,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
       intervals.push(setInterval(fetchStatus, 300000));
       intervals.push(setInterval(() => {
         if (latestUpdateTs && lastUpdatedEl)
-          lastUpdatedEl.textContent = `Auto-check: ${getRelativeTime(latestUpdateTs)}`;
+          lastUpdatedEl.textContent = `Periksa otomatis: ${getRelativeTime(latestUpdateTs)}`;
       }, 10000));
     }
   }
@@ -560,7 +560,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
  
   function updateFooter(overall) {
     const accent = STATUS_COLORS[overall] || "#888";
-    if (footerLabel) footerLabel.textContent = overall === "Operational" ? "All Systems Normal" : overall;
+    if (footerLabel) footerLabel.textContent = overall === "Operational" ? "Semua Sistem Normal" : overall;
     if (footerDot)   footerDot.style.backgroundColor = accent;
     if (footerPulse) footerPulse.style.backgroundColor = accent;
   }
@@ -593,7 +593,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
     if (updatedTs) {
       latestUpdateTs = updatedTs;
       if (lastUpdatedEl)
-        lastUpdatedEl.textContent = `Updated ${getRelativeTime(latestUpdateTs)}`;
+        lastUpdatedEl.textContent = `Diperbarui ${getRelativeTime(latestUpdateTs)}`;
     }
  
     (services || []).forEach((s) => {
@@ -608,8 +608,8 @@ const services = ['api', 'web', 'cdn', 'bot'];
       const bars       = document.querySelectorAll(`[data-bar^="${name}-"]`);
  
       if (summaryEl) summaryEl.textContent = s.details || "—";
-      if (uptimeEl)  uptimeEl.textContent  = `${s.uptime ?? 0}% (last 40 checks)`;
-      if (nodeEl)    nodeEl.textContent    = s.details || "Unknown node";
+      if (uptimeEl)  uptimeEl.textContent  = `${s.uptime ?? 0}% (40 cek terakhir)`;
+      if (nodeEl)    nodeEl.textContent    = s.details || "Node tidak dikenal";
  
       if (latencyEl) {
         latencyEl.textContent = `${s.latency ?? "—"}ms`;
@@ -623,7 +623,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
         const avg     = valid.length
           ? Math.round(valid.reduce((a, c) => a + c.latency, 0) / valid.length)
           : null;
-        metricsEl.textContent = `${up}% uptime${avg !== null ? ` · avg ${avg}ms` : ""}`;
+        metricsEl.textContent = `${up}% waktu aktif${avg !== null ? ` · avg ${avg}ms` : ""}`;
       }
  
       const history    = Array.isArray(s.history) ? s.history.slice(-40) : [];
@@ -692,7 +692,9 @@ const services = ['api', 'web', 'cdn', 'bot'];
   refreshBtn?.addEventListener("click", () => { if (hasFetched) fetchStatus(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeStatus(); });
  
-  fetchFooterStatus();
-  setInterval(fetchFooterStatus, 300000);
+  document.addEventListener("DOMContentLoaded", () => {
+    fetchStatus();
+    setInterval(fetchStatus, 300000);
+  });
 })();
 </script>
