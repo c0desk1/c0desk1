@@ -7,7 +7,7 @@ import Icon from "@/components/ui/Icon.astro";
 import { getCollection, getEntry } from "astro:content";
 import { Image } from 'astro:assets';
 import { siteConfig } from "@/config/site";
-import { formatDateCompact } from "@/lib/utils";
+import { formatDateCompact, cdnImage, isCdnUrl } from "@/lib/utils";
 
 export async function getStaticPaths() {
   const authors = await getCollection("authors");
@@ -55,6 +55,8 @@ const authorCategory = {
   slug: "author",
   description: "Daftar penulis"
 };
+
+const optimizedAvatar = isCdnUrl(author.data.avatar) ? cdnImage(author.data.avatar, { w: 112, h: 112, q: 85 }) : author.data.avatar;
 ---
 
 <BaseLayout {...seoData} category={authorCategory}>
@@ -67,7 +69,7 @@ const authorCategory = {
         {/* Avatar */}
         <div class="mb-8">
           <Image 
-            src={author.data.avatar} 
+            src={optimizedAvatar} 
             alt={author.data.name}
             width={112}
             height={112}
