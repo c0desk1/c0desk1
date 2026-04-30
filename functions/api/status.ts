@@ -1,21 +1,23 @@
-
-interface ServiceBinding {
-  fetch: typeof fetch;
-}
+// functions/api/status.ts
 
 interface Env {
-  API_WORKER: ServiceBinding;
+  API_WORKER: { fetch: typeof fetch };
 }
 
-export async function onRequest(context: { env: Env }) {
-  const { env } = context;
-  const apiWorker = env.API_WORKER;
+export const onRequestGet = async (context: { request: Request, env: Env, next: Function }) => {
+  const url = new URL(context.request.url);
+
+  if (!url.pathname.startsWith('/api/status')) {
+    return context.next(); 
+  }
+
+  const apiWorker = context.env.API_WORKER;
 
   if (!apiWorker) {
-    return new Response(
-      JSON.stringify({ error: "Binding API_WORKER tidak ditemukan" }), 
-      { status: 500, headers: { "Content-Type": "application/json" } }
-    );
+    return new Response(JSON.stringify({ error: "Binding API_WORKER tidak ditemukan" }), { 
+      status: 500, 
+      headers: { "Content-Type": "application/json" } 
+    });
   }
 
   try {
@@ -30,9 +32,6 @@ export async function onRequest(context: { env: Env }) {
       }
     });
   } catch (e) {
-    return new Response(
-      JSON.stringify({ error: "Gagal mengambil data dari Worker" }), 
-      { status: 500, headers: { "Content-Type": "application/json" } }
-    );
+    return new Response(JSON.stringify({ error: "Gagal fetch Worker API" }), { status: 500 });
   }
-}
+};
