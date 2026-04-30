@@ -12,9 +12,7 @@ export default defineConfig({
   site: siteConfig.siteUrl,
   trailingSlash: "always",
   output: 'server',
-  adapter: cloudflare({
-    runtime: { mode: 'local' }
-  }),
+  adapter: cloudflare(),
   vite: {
     plugins: [tailwindcss()]
   },
