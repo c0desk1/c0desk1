@@ -97,7 +97,7 @@
   margin-left: 0.5rem;
   color: #a1a1aa;
   font-weight: 400;
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   vertical-align: middle;
 }
 
@@ -120,7 +120,7 @@
 }
 
 .dark .prose-custom p {
-  color: #e9e9e9;
+  color: #e9e9e9c0;
 }
 
 /* ==================== LINKS ==================== */

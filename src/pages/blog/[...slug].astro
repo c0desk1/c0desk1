@@ -110,6 +110,7 @@ const breadcrumbItems = [
   canonicalURL={canonicalURL}
 >
   <article class="relative my-4 md:my-8">
+    
     <h1 class="sr-only">{title}</h1>
     
     <Section size="sm">
@@ -151,13 +152,14 @@ const breadcrumbItems = [
     </Section>
 
     <Section size="md" class="section-divider">
-      <Container size="sm">
+      <Container size="md">
         <h2 class="sr-only">Related Posts</h2>
         <BackToTop align="center" />
         <BlogRelatedPosts posts={relatedPosts} />
       </Container>
     </Section>
   </article>
-  
+
   <ReadingProgress />
+
 </BaseLayout>

@@ -7,14 +7,25 @@ import Icon from "./Icon.astro";
   id="search-trigger"
   type="button"
   aria-label="Search"
-  class="group relative flex items-center justify-center sm:justify-between gap-2 p-2 sm:px-2 sm:py-1 text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white sm:bg-zinc-100/50 sm:dark:bg-black sm:border sm:border-zinc-200/60 sm:dark:border-zinc-800 rounded-md sm:rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800/80 sm:hover:border-zinc-300 dark:sm:hover:border-zinc-700 cursor-pointer"
+  class="group flex items-center justify-center sm:justify-between gap-2
+       w-auto sm:w-[280px] md:w-[360px]
+       p-2 sm:px-3 sm:py-2
+       rounded-xl
+       sm:bg-white/70 sm:dark:bg-black/40
+       sm:border sm:border-neutral-200 sm:dark:border-neutral-800
+       sm:hover:bg-white sm:dark:hover:bg-neutral-900
+       backdrop-blur-md"
 >
-  <div class="flex items-center gap-2">
-    <Icon name="search" class="w-5 h-5" />
-    <span class="hidden sm:inline text-sm text-zinc-500 dark:text-zinc-600">Cari...</span>
+  <div class="flex items-center gap-2 text-neutral-500 dark:text-neutral-400">
+    <Icon name="search" class="w-4 h-4" />
+    <span class="hidden sm:inline text-sm">Search...</span>
   </div>
-  <kbd class="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[13px] font-mono text-zinc-500 dark:text-zinc-400 bg-white dark:bg-black border border-zinc-200/60 dark:border-zinc-800 rounded-sm">
-    ⌘+K
+
+  <kbd class="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 text-xs font-mono
+               text-neutral-500 dark:text-neutral-400
+               bg-neutral-100 dark:bg-neutral-900
+               border border-neutral-200 dark:border-neutral-800 rounded-md">
+    ⌘K
   </kbd>
 </button>
 
@@ -23,7 +34,8 @@ import Icon from "./Icon.astro";
     document.dispatchEvent(new CustomEvent("open-search"));
   };
 
-  document.getElementById("search-trigger")?.addEventListener("click", openSearch);
+  const btn = document.getElementById("search-trigger");
+  btn?.addEventListener("click", openSearch);
 
   document.addEventListener("keydown", (e) => {
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {

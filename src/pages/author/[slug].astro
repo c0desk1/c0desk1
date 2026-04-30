@@ -60,13 +60,11 @@ const optimizedAvatar = isCdnUrl(author.data.avatar) ? cdnImage(author.data.avat
 ---
 
 <BaseLayout {...seoData} category={authorCategory}>
-  {/* Header Profile Section */}
   <Section size="lg" class="border-b border-zinc-100 dark:border-zinc-900 bg-white dark:bg-black">
     <Container size="lg">
       <div class="max-w-2xl mx-auto flex flex-col items-center text-center">
         <h2 class="sr-only">Author Information</h2>
         
-        {/* Avatar */}
         <div class="mb-8">
           <Image 
             src={optimizedAvatar} 
@@ -78,20 +76,17 @@ const optimizedAvatar = isCdnUrl(author.data.avatar) ? cdnImage(author.data.avat
           />
         </div>
         
-        {/* Identity */}
         <h1 class="text-4xl md:text-5xl font-bold tracking-tighter text-zinc-900 dark:text-white mb-2">
           {author.data.name}
         </h1>
         <p class="text-lg text-zinc-500 dark:text-zinc-400 tracking-tight mb-6">
           {author.data.role}
         </p>
-        
-        {/* Bio */}
+
         <p class="text-zinc-600 dark:text-zinc-400 max-w-md mx-auto leading-relaxed text-base mb-8">
           {author.data.bio}
         </p>
-        
-        {/* Social Links using your Button & Icon Components */}
+
         <div class="flex flex-wrap justify-center gap-3">
           {socialLinks.github && (
             <Button href={socialLinks.github} variant="secondary" size="sm" target="_blank">

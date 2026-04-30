@@ -1,0 +1,84 @@
+---
+// src/components/sections/CTASection.astro
+import Button from "@/components/ui/Button.astro";
+import { siteConfig } from "@/config/site";
+
+interface Props {
+  siteData?: {
+    siteName?: string;
+    siteDescription?: string;
+    siteUrl?: string;
+  };
+}
+
+const { siteData } = Astro.props;
+
+const site = {
+  name: siteData?.siteName ?? siteConfig.siteName,
+  description: siteData?.siteDescription ?? siteConfig.siteDescription,
+  url: siteData?.siteUrl ?? siteConfig.siteUrl,
+};
+
+const feedUrl = `${site.url.replace(/\/$/, "")}/rss.xml`;
+---
+
+<div class="section-divider">
+  <div class="mx-auto max-w-6xl py-16 md:py-24">
+
+    <div class="grid gap-10 md:grid-cols-2 md:items-center">
+
+      <div class="space-y-6">
+        <div class="space-y-3">
+          <h2 class="text-2xl md:text-3xl font-semibold tracking-tight text-black dark:text-white">
+            Stay updated with {site.name}
+          </h2>
+
+          <p class="text-neutral-600 dark:text-neutral-400 text-sm md:text-base leading-relaxed max-w-md">
+            {site.description} Dapatkan update artikel terbaru langsung melalui feed tanpa algoritma.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap gap-3">
+          <Button href={feedUrl} variant="primary">
+            Subscribe Feed
+          </Button>
+
+          <Button href="/blog/" variant="secondary">
+            Browse Blog
+          </Button>
+        </div>
+
+        <p class="text-xs text-neutral-500 dark:text-neutral-500">
+          No spam. Just updates.
+        </p>
+      </div>
+
+      <!-- RIGHT: SECONDARY PANEL (VERCEL STYLE BLOCK) -->
+      <div class="relative rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 p-6 md:p-8 overflow-hidden">
+
+        <div class="space-y-4">
+          <p class="text-sm font-medium text-neutral-900 dark:text-white">
+            Why subscribe?
+          </p>
+
+          <ul class="space-y-2 text-sm text-neutral-600 dark:text-neutral-400">
+            <li>• Update artikel terbaru langsung</li>
+            <li>• Tanpa algoritma sosial media</li>
+            <li>• Ringan & bisa dipakai di RSS reader</li>
+          </ul>
+
+          <div class="pt-4">
+            <div class="flex items-center gap-2 text-xs text-neutral-500">
+              <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+              Live updates enabled
+            </div>
+          </div>
+        </div>
+
+        <!-- subtle glow (vercel-like feel) -->
+        <div class="absolute -top-20 -right-20 w-40 h-40 bg-black/5 dark:bg-white/5 blur-3xl rounded-full"></div>
+      </div>
+
+    </div>
+  </div>
+</div>

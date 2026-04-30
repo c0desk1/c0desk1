@@ -1,0 +1,156 @@
+---
+// src/pages/[id].astro
+import '@/styles/prose.css';
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/ui/Container.astro';
+import Breadcrumb from '@/components/ui/Breadcrumb.astro';
+import Section from '@/components/ui/Section.astro';
+import { siteConfig } from '@/config/site';
+import { getEntry, getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import { cdnImage, isCdnUrl, formatDate } from "@/lib/utils";
+
+export async function getStaticPaths() {
+  const legalPages = await getCollection('legal');
+  
+  return [
+    { params: { id: 'about' }, props: { page: null, isAbout: true } },
+    ...legalPages.map(page => ({
+      params: { id: page.id },
+      props: { page, isAbout: false },
+    })),
+  ];
+}
+
+const { page, isAbout } = Astro.props;
+
+// Hanya render jika ada page dan bukan about
+let Content = null;
+if (!isAbout && page) {
+  const rendered = await render(page);
+  Content = rendered.Content;
+}
+
+// Ambil settings
+let settings;
+try {
+  settings = await getEntry('settings', 'site');
+} catch (error) {
+  console.warn('Settings not found, using siteConfig fallback');
+}
+const siteData = settings?.data || siteConfig;
+
+const siteURL = Astro.site?.toString() ?? siteData.siteUrl;
+const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
+
+// SEO Data
+const seoData = isAbout
+  ? {
+      title: "About",
+      description: siteData.siteDescription,
+      type: "website" as const,
+      canonicalURL,
+    }
+  : {
+      title: page?.data.title || "Legal",
+      description: page?.data.description || siteData.siteDescription,
+      type: "website" as const,
+      canonicalURL,
+    };
+
+const breadcrumbItems = [
+  { name: 'Home', href: siteURL },
+  { name: page?.data.title || (isAbout ? 'About' : 'Legal'), href: canonicalURL },
+];
+
+const optimizedSiteLogo = isCdnUrl(siteData.siteLogo) 
+  ? cdnImage(siteData.siteLogo, { w: 112, h: 112, q: 85 }) 
+  : siteData.siteLogo;
+
+const formattedLastUpdated = page?.data.lastUpdated 
+  ? formatDate(page.data.lastUpdated, 'id-ID')
+  : null;
+---
+
+<BaseLayout {...seoData}>
+  {isAbout && (
+    <Section size="lg" class="border-b border-zinc-100 dark:border-zinc-800/50">
+      <Container size="md">
+        <Breadcrumb items={breadcrumbItems} />
+        
+        <div class="mt-12 md:mt-16 text-center max-w-3xl mx-auto">
+          <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden mx-auto mb-6 border-2 border-zinc-200 dark:border-zinc-800">
+            <Image 
+              src={optimizedSiteLogo} 
+              alt={siteData.siteName} 
+              width={96}
+              height={96}
+              loading="eager"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          
+          <h1 class="text-4xl md:text-5xl font-semibold tracking-tight text-zinc-900 dark:text-white mb-4">
+            {siteData.siteName}
+          </h1>
+          
+          <p class="text-[15px] text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto leading-relaxed font-medium">
+            {siteData.siteDescription}
+          </p>
+        </div>
+      </Container>
+    </Section>
+  )}
+
+  {!isAbout && (
+    <Section size="md" class="border-b border-zinc-100 dark:border-zinc-800/50">
+      <Container size="md">
+        <Breadcrumb items={breadcrumbItems} />
+        
+        <div class="mt-8 text-center">
+          <h1 class="text-3xl md:text-4xl font-semibold tracking-tight text-zinc-900 dark:text-white">
+            {page?.data.title}
+          </h1>
+          {formattedLastUpdated && (
+            <p class="mt-3 text-sm text-zinc-500 dark:text-zinc-400">
+              Terakhir diperbarui: {formattedLastUpdated}
+            </p>
+          )}
+        </div>
+      </Container>
+    </Section>
+  )}
+
+  <Section size="lg">
+    <Container size="sm">
+      <div class="mx-auto max-w-3xl">
+        {isAbout ? (
+          <div class="prose-custom text-center">
+            <p class="text-zinc-600 dark:text-zinc-400">
+              Halaman about sedang dalam pengembangan. Silakan cek kembali nanti.
+            </p>
+          </div>
+        ) : (
+          Content && (
+            <div class="prose-custom prose-h2:text-xl prose-h2:font-semibold prose-h2:mt-8 prose-h2:mb-4 prose-h2:text-zinc-900 dark:prose-h2:text-white">
+              <Content />
+            </div>
+          )
+        )}
+      </div>
+
+      {isAbout && (
+        <div class="mt-20 pt-10 border-t border-zinc-100 dark:border-zinc-800 text-center space-y-4">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            <span class="text-[11px] font-mono uppercase tracking-wider text-zinc-500">Kontak</span>
+          </div>
+          <p class="text-[14px] font-medium text-zinc-600 dark:text-zinc-400">
+            {siteData.siteMail}
+          </p>
+        </div>
+      )}
+    </Container>
+  </Section>
+</BaseLayout>

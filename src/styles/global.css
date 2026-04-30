@@ -75,12 +75,12 @@
   }
 
   ::selection {
-    background-color: #10b981;
+    background-color: #0a0a0a;
     color: #ffffff;
   }
 
   ::-moz-selection {
-    background-color: #10b981;
+    background-color: #0a0a0a;
     color: #ffffff;
   }
 
@@ -115,9 +115,14 @@
   }
 
   :focus-visible {
-    outline: 2px solid #10b981;
+    outline: 2px solid color-mix(in oklab, #000000 50%, transparent);
     outline-offset: 2px;
-    border-radius: 0.25rem;
+    border-radius: 4px;
+    transition: outline-color 0.15s ease;
+  }
+
+  .dark :focus-visible {
+    outline: 2px solid color-mix(in oklab, #FFFFFF 50%, transparent);
   }
 
   :focus:not(:focus-visible) {
@@ -140,7 +145,6 @@
   }
 }
 
-/* Utility classes */
 @layer utilities {
   .tracking-tighter {
     letter-spacing: -0.02em;
