@@ -6,7 +6,7 @@ import { getEntry } from 'astro:content';
 import { Image } from 'astro:assets'; 
 
 import { siteConfig } from '@/config/site';
-import { formatDateCompact } from '@/lib/utils';
+import { formatDateCompact, cdnImage, isCdnUrl } from '@/lib/utils';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -24,6 +24,7 @@ const formattedDate = formatDateCompact(pubDate);
 
 const authorName = authorEntry?.data.name || siteConfig.author.name;
 const authorAvatar = authorEntry?.data.avatar || siteConfig.author.avatar;
+const optimizedAvatar = isCdnUrl(authorAvatar) ? cdnImage(authorAvatar, { w: 48, h: 48, q: 80 }) : authorAvatar;
 
 const categoryName = categoryEntry?.data.name || category;
 ---
@@ -49,7 +50,7 @@ const categoryName = categoryEntry?.data.name || category;
   </p>
   <div class="mt-5 flex items-center gap-2">
     <Image
-      src={authorAvatar}
+      src={optimizedAvatar}
       alt={authorName}
       width={18}
       height={18}
