@@ -10,52 +10,52 @@ const services = ['api', 'web', 'cdn', 'bot'];
 
 <div id="status-panel" class="status-panel">
 
-  <div class="mx-auto max-w-[720px] p-5 sm:p-7 sm:pb-5">
+  <div class="panel-inner">
 
-    <div class="flex items-center justify-between border-b border-gray-200 pb-5 dark:border-gray-800 mb-1">
-      <div class="flex items-center gap-2.5">
-        <span id="panel-dot" class="header-dot h-2 w-2 rounded-full bg-gray-500 flex-shrink-0 transition-colors duration-300"></span>
+    <div class="panel-header">
+      <div class="header-left">
+        <span id="panel-dot" class="header-dot"></span>
         <div>
-          <p class="text-[13px] font-semibold tracking-[-0.01em] text-gray-900 dark:text-gray-50 leading-tight">System Status</p>
-          <p id="last-updated-text" class="text-xs text-gray-500 dark:text-gray-400 leading-tight mt-px">Waiting for sync...</p>
+          <p class="header-title">Status Sistem</p>
+          <p id="last-updated-text" class="header-sub">Menunggu sinkronisasi...</p>
         </div>
       </div>
-      <button id="close-panel" class="close-btn flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 dark:border-gray-800 bg-transparent text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-900 hover:border-gray-300 dark:hover:border-gray-700 hover:text-gray-900 dark:hover:text-gray-50 transition-all duration-150" aria-label="Close status panel">
+      <button id="close-panel" class="close-btn" aria-label="Tutup panel status">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
       </button>
     </div>
 
-    <div class="flex flex-col">
+    <div class="services-list">
       {services.map((id) => (
-        <div class="service-row cursor-pointer border-b border-gray-100 dark:border-gray-900 py-4 last:border-none transition-colors duration-100 hover:[&_.service-name]:text-gray-900 dark:hover:[&_.service-name]:text-gray-50" onclick={`toggleDetails('${id}')`}>
+        <div class="service-row" onclick={`toggleDetails('${id}')`}>
 
-          <div class="mb-2.5 flex items-center justify-between">
-            <div class="flex items-center gap-2">
-              <span class="service-name text-xs font-semibold tracking-[0.06em] text-gray-500 dark:text-gray-400 font-['Geist_Mono','SF_Mono',ui-monospace,monospace] transition-colors duration-150">{id.toUpperCase()}</span>
-              <span id={`s-${id}-status-text`} class="service-latency text-xs font-mono font-medium opacity-90"></span>
+          <div class="service-top">
+            <div class="service-left">
+              <span class="service-name">{id.toUpperCase()}</span>
+              <span id={`s-${id}-status-text`} class="service-latency"></span>
             </div>
-            <span id={`s-${id}-metrics`} class="service-metrics text-xs text-gray-500 dark:text-gray-400 font-mono">—</span>
+            <span id={`s-${id}-metrics`} class="service-metrics">—</span>
           </div>
 
-          <div class="bars-wrap flex h-7 items-end gap-[2px] relative">
+          <div class="bars-wrap">
             {Array.from({ length: 40 }).map((_, i) => (
-              <div data-bar={`${id}-${i}`} class="bar flex-1 h-full rounded-sm bg-gray-100 dark:bg-gray-900 transition-all duration-200 relative cursor-default"></div>
+              <div data-bar={`${id}-${i}`} class="bar"></div>
             ))}
           </div>
 
-          <div id={`details-${id}`} class="service-detail hidden mt-3 rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50 p-[14px_16px]">
-            <div class="detail-grid grid grid-cols-1 gap-3.5 sm:grid-cols-[repeat(auto-fit,minmax(140px,1fr))]">
+          <div id={`details-${id}`} class="service-detail hidden">
+            <div class="detail-grid">
               <div>
-                <p class="detail-label mb-0.5 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-400 dark:text-gray-500">Uptime History</p>
-                <p id={`s-${id}-uptime-val`} class="detail-val text-xs font-mono text-gray-700 dark:text-gray-300">Calculating...</p>
+                <p class="detail-label">Riwayat Waktu Aktif</p>
+                <p id={`s-${id}-uptime-val`} class="detail-val">Menghitung...</p>
               </div>
               <div>
-                <p class="detail-label mb-0.5 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-400 dark:text-gray-500">Node Identity</p>
-                <p id={`s-${id}-node-val`} class="detail-val text-xs font-mono text-gray-700 dark:text-gray-300">Identifying...</p>
+                <p class="detail-label">Identitas Node</p>
+                <p id={`s-${id}-node-val`} class="detail-val">Mengidentifikasi...</p>
               </div>
               <div>
-                <p class="detail-label mb-0.5 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-400 dark:text-gray-500">Last Check</p>
-                <p id={`s-${id}-details-summary`} class="detail-val text-xs font-mono text-gray-700 dark:text-gray-300">—</p>
+                <p class="detail-label">Pemeriksaan Terakhir</p>
+                <p id={`s-${id}-details-summary`} class="detail-val">—</p>
               </div>
             </div>
           </div>
@@ -64,9 +64,14 @@ const services = ['api', 'web', 'cdn', 'bot'];
       ))}
     </div>
 
-    <div class="panel-footer mt-4 flex items-center justify-between border-t border-gray-100 dark:border-gray-900 pt-[14px]">
-      <span class="footer-note text-xs text-gray-400 dark:text-gray-500">Auto-refreshes every 5 minutes</span>
-      <button id="refresh-btn" class="refresh-btn flex items-center gap-1.5 rounded-md border border-gray-200 dark:border-gray-800 bg-transparent px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-400 transition-all duration-150 hover:border-gray-300 dark:hover:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900 hover:text-gray-900 dark:hover:text-gray-50">
+    <div class="panel-footer">
+      <div class="footer-status">
+        <span id="status-dot" class="footer-status-dot"></span>
+        <span id="status-label" class="footer-status-label">Memeriksa status...</span>
+        <span id="status-pulse" class="footer-status-pulse"></span>
+      </div>
+      <span class="footer-note">Memperbarui otomatis setiap 5 menit</span>
+      <button id="refresh-btn" class="refresh-btn">
         <svg id="refresh-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
         Refresh
       </button>
@@ -79,7 +84,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
   .status-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     z-index: 90;
@@ -87,7 +92,6 @@ const services = ['api', 'web', 'cdn', 'bot'];
     pointer-events: none;
     transition: opacity 0.35s ease;
   }
-
   .status-overlay.visible {
     opacity: 1;
     pointer-events: auto;
@@ -102,12 +106,12 @@ const services = ['api', 'web', 'cdn', 'bot'];
     transform: translateY(100%);
     transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     background: #ffffff;
-    border-top: 1px solid #e5e5e5;
-    box-shadow: 0 -8px 40px rgba(0,0,0,0.08);
+    border-top: 1px solid #eaeaea;
+    box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.06);
     max-height: 85vh;
     overflow-y: auto;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
   }
 
   .status-panel.open {
@@ -115,17 +119,190 @@ const services = ['api', 'web', 'cdn', 'bot'];
   }
 
   .dark .status-panel {
-    background: #0a0a0a;
+    background: #000000;
     border-top-color: #1a1a1a;
-    box-shadow: 0 -8px 40px rgba(0,0,0,0.6);
+    box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.8);
   }
 
-  .header-dot.pulse {
-    animation: pulse-dot 1.5s ease-in-out infinite;
+  .panel-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 20px 20px 16px;
   }
 
-  .refresh-btn.spinning svg {
-    animation: spin 0.7s linear infinite;
+  @media (min-width: 640px) {
+    .panel-inner {
+      padding: 28px 32px 20px;
+    }
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eaeaea;
+    margin-bottom: 4px;
+  }
+
+  .dark .panel-header { 
+    border-bottom-color: #1a1a1a; 
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .header-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #888;
+    flex-shrink: 0;
+    transition: background 0.3s;
+  }
+
+  .header-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: #000000;
+    line-height: 1.3;
+  }
+
+  .dark .header-title { 
+    color: #ffffff; 
+  }
+
+  .header-sub {
+    font-size: 12px;
+    color: #888;
+    line-height: 1.3;
+    margin-top: 1px;
+  }
+
+  .close-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    border: 1px solid #eaeaea;
+    background: transparent;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .close-btn:hover {
+    background: #f5f5f5;
+    border-color: #d4d4d4;
+    color: #000000;
+  }
+
+  .dark .close-btn {
+    border-color: #2a2a2a;
+    color: #888;
+  }
+
+  .dark .close-btn:hover {
+    background: #1a1a1a;
+    border-color: #3a3a3a;
+    color: #ffffff;
+  }
+
+  .services-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .service-row {
+    padding: 16px 0;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+
+  .service-row:last-child {
+    border-bottom: none;
+  }
+
+  .dark .service-row { 
+    border-bottom-color: #141414; 
+  }
+
+  .service-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .service-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .service-name {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: #888;
+    font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace;
+    transition: color 0.15s;
+  }
+
+  .service-row:hover .service-name {
+    color: #000000;
+  }
+
+  .dark .service-row:hover .service-name { 
+    color: #ffffff; 
+  }
+
+  .service-latency {
+    font-size: 12px;
+    font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace;
+    font-weight: 500;
+    opacity: 0.9;
+  }
+
+  .service-metrics {
+    font-size: 12px;
+    color: #888;
+    font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace;
+  }
+
+  .bars-wrap {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 28px;
+    position: relative;
+  }
+
+  .bar {
+    flex: 1;
+    height: 100%;
+    background: #f0f0f0;
+    border-radius: 2px;
+    transition: background 0.2s, opacity 0.2s, transform 0.1s;
+    position: relative;
+    cursor: default;
+  }
+
+  .bar:hover {
+    transform: scaleY(1.15);
+    transform-origin: bottom;
+    z-index: 1;
+  }
+
+  .dark .bar { 
+    background: #1c1c1c; 
   }
 
   .bar[data-info]:hover::after {
@@ -134,8 +311,8 @@ const services = ['api', 'web', 'cdn', 'bot'];
     bottom: calc(100% + 6px);
     left: 50%;
     transform: translateX(-50%);
-    background: #0a0a0a;
-    color: #fafafa;
+    background: #000000;
+    color: #ffffff;
     padding: 5px 8px;
     border-radius: 5px;
     font-size: 11px;
@@ -147,28 +324,152 @@ const services = ['api', 'web', 'cdn', 'bot'];
   }
 
   .dark .bar[data-info]:hover::after {
-    background: #fafafa;
-    color: #0a0a0a;
+    background: #ffffff;
+    color: #000000;
     border-color: #e0e0e0;
   }
 
-  .bar:hover {
-    transform: scaleY(1.15);
-    transform-origin: bottom;
-    z-index: 1;
+  .service-detail {
+    margin-top: 12px;
+    padding: 14px 16px;
+    background: #fafafa;
+    border: 1px solid #eaeaea;
+    border-radius: 8px;
   }
 
-  .service-detail.hidden {
-    display: none;
+  .service-detail.hidden { 
+    display: none; 
+  }
+
+  .dark .service-detail {
+    background: #0a0a0a;
+    border-color: #1a1a1a;
+  }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+  }
+
+  .detail-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 3px;
+  }
+
+  .detail-val {
+    font-size: 12px;
+    font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace;
+    color: #333;
+  }
+
+  .dark .detail-val { 
+    color: #ccc; 
+  }
+
+  .panel-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid #f0f0f0;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .dark .panel-footer { 
+    border-top-color: #1a1a1a; 
+  }
+
+  .footer-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .footer-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #999;
+    transition: background-color 0.3s;
+  }
+
+  .footer-status-label {
+    font-size: 12px;
+    color: #666;
+    font-weight: 500;
+  }
+
+  .dark .footer-status-label {
+    color: #999;
+  }
+
+  .footer-status-pulse {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #999;
+    animation: pulse-dot 1.5s ease-in-out infinite;
+  }
+
+  .footer-note {
+    font-size: 12px;
+    color: #999;
+  }
+
+  .refresh-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid #eaeaea;
+    background: transparent;
+    font-size: 12px;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .refresh-btn:hover {
+    background: #f5f5f5;
+    border-color: #d4d4d4;
+    color: #000000;
+  }
+
+  .refresh-btn.spinning svg {
+    animation: spin 0.7s linear infinite;
   }
 
   @keyframes spin {
     to { transform: rotate(360deg); }
   }
 
+  .dark .refresh-btn {
+    border-color: #2a2a2a;
+    color: #888;
+  }
+
+  .dark .refresh-btn:hover {
+    background: #1a1a1a;
+    border-color: #3a3a3a;
+    color: #ffffff;
+  }
+
   @keyframes pulse-dot {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.4; }
+  }
+
+  .header-dot.pulse {
+    animation: pulse-dot 1.5s ease-in-out infinite;
   }
 </style>
 
@@ -182,6 +483,9 @@ const services = ['api', 'web', 'cdn', 'bot'];
   const refreshBtn = document.getElementById("refresh-btn");
   const panelDot  = document.getElementById("panel-dot");
   const lastUpdatedEl = document.getElementById("last-updated-text");
+  const footerLabel   = document.getElementById("status-label");
+  const footerDot     = document.getElementById("status-dot");
+  const footerPulse   = document.getElementById("status-pulse");
 
   let latestUpdateTs = null;
   let hasFetched = false;
@@ -196,10 +500,10 @@ const services = ['api', 'web', 'cdn', 'bot'];
 
   function getRelativeTime(ts) {
     const d = Math.floor((Date.now() - ts) / 1000);
-    if (d < 30)   return "Just now";
-    if (d < 60)   return `${d}s ago`;
-    if (d < 3600) return `${Math.floor(d / 60)}m ago`;
-    return "A while ago";
+    if (d < 30)   return "Baru saja";
+    if (d < 60)   return `${d} detik lalu`;
+    if (d < 3600) return `${Math.floor(d / 60)} menit lalu`;
+    return "Beberapa saat lalu";
   }
 
   function toggleDetails(id) {
@@ -229,24 +533,47 @@ const services = ['api', 'web', 'cdn', 'bot'];
     document.body.style.overflow = "";
   }
 
-  function updatePanelDot(overall) {
+  function updateFooter(overall) {
     const accent = STATUS_COLORS[overall] || "#888";
-    if (panelDot) {
-      panelDot.style.backgroundColor = accent;
-      if (overall !== "Operational") panelDot.classList.add("pulse");
-      else panelDot.classList.remove("pulse");
+    if (footerLabel) {
+      if (overall === "Operational") footerLabel.textContent = "Semua Sistem Normal";
+      else if (overall === "Warning") footerLabel.textContent = "Peringatan";
+      else if (overall === "Outage") footerLabel.textContent = "Gangguan";
+      else footerLabel.textContent = overall || "Memeriksa...";
+    }
+    if (footerDot) footerDot.style.backgroundColor = accent;
+    if (footerPulse) footerPulse.style.backgroundColor = accent;
+  }
+
+  async function fetchFooterStatus() {
+    try {
+      const res = await fetch(API_URL);
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      updateFooter(data.overall || "Operational");
+    } catch {
+      if (footerLabel) footerLabel.textContent = "Gagal terhubung";
+      if (footerDot) footerDot.style.backgroundColor = STATUS_COLORS.Outage;
+      if (footerPulse) footerPulse.style.backgroundColor = STATUS_COLORS.Outage;
     }
   }
 
   function updateUI(overall, services, updatedTs) {
     overall = overall || "Operational";
-    
-    updatePanelDot(overall);
+    const accent = STATUS_COLORS[overall] || "#888";
+
+    updateFooter(overall);
+
+    if (panelDot) {
+      panelDot.style.backgroundColor = accent;
+      if (overall !== "Operational") panelDot.classList.add("pulse");
+      else panelDot.classList.remove("pulse");
+    }
 
     if (updatedTs) {
       latestUpdateTs = updatedTs;
       if (lastUpdatedEl)
-        lastUpdatedEl.textContent = `Updated ${getRelativeTime(latestUpdateTs)}`;
+        lastUpdatedEl.textContent = `Diperbarui ${getRelativeTime(latestUpdateTs)}`;
     }
 
     (services || []).forEach((s) => {
@@ -261,8 +588,8 @@ const services = ['api', 'web', 'cdn', 'bot'];
       const bars       = document.querySelectorAll(`[data-bar^="${name}-"]`);
 
       if (summaryEl) summaryEl.textContent = s.details || "—";
-      if (uptimeEl)  uptimeEl.textContent  = `${s.uptime ?? 0}% (last 40 checks)`;
-      if (nodeEl)    nodeEl.textContent    = s.details || "Unknown node";
+      if (uptimeEl)  uptimeEl.textContent  = `${s.uptime ?? 0}% (40 cek terakhir)`;
+      if (nodeEl)    nodeEl.textContent    = s.details || "Node tidak dikenal";
 
       if (latencyEl) {
         latencyEl.textContent = `${s.latency ?? "—"}ms`;
@@ -276,7 +603,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
         const avg     = valid.length
           ? Math.round(valid.reduce((a, c) => a + c.latency, 0) / valid.length)
           : null;
-        metricsEl.textContent = `${up}% uptime${avg !== null ? ` · avg ${avg}ms` : ""}`;
+        metricsEl.textContent = `${up}% waktu aktif${avg !== null ? ` · rata-rata ${avg}ms` : ""}`;
       }
 
       const history    = Array.isArray(s.history) ? s.history.slice(-40) : [];
@@ -313,7 +640,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
 
   async function fetchStatus() {
     if (refreshBtn) refreshBtn.classList.add("spinning");
-    if (lastUpdatedEl) lastUpdatedEl.textContent = "Updating...";
+    if (lastUpdatedEl) lastUpdatedEl.textContent = "Memperbarui...";
     try {
       const res  = await fetch(API_URL);
       if (!res.ok) throw new Error();
@@ -321,28 +648,40 @@ const services = ['api', 'web', 'cdn', 'bot'];
       updateUI(data.overall, data.services, data.updated);
     } catch {
       if (lastUpdatedEl) lastUpdatedEl.textContent = "Offline";
-      updatePanelDot("Outage");
+      updateFooter("Outage");
     } finally {
       if (refreshBtn) refreshBtn.classList.remove("spinning");
     }
   }
 
+  // Touch tooltip untuk mobile
   panel?.addEventListener("touchstart", (e) => {
     const bar = e.target.closest("[data-bar]");
     if (!bar) return;
     e.preventDefault();
     const info = bar.getAttribute("data-info");
     if (info && lastUpdatedEl) lastUpdatedEl.textContent = info;
+    setTimeout(() => {
+      if (latestUpdateTs && lastUpdatedEl)
+        lastUpdatedEl.textContent = `Diperbarui ${getRelativeTime(latestUpdateTs)}`;
+    }, 3000);
   }, { passive: false });
 
   document.addEventListener("astro:before-swap", () => {
     intervals.forEach(clearInterval);
   });
 
-  document.getElementById("status-toggle")?.addEventListener("click", openStatus);
+  // Tombol untuk membuka panel (pastikan ada di layout)
+  const toggleBtn = document.getElementById("status-toggle");
+  if (toggleBtn) toggleBtn.addEventListener("click", openStatus);
+  
   closeBtn?.addEventListener("click", closeStatus);
   overlay?.addEventListener("click", closeStatus);
   refreshBtn?.addEventListener("click", () => { if (hasFetched) fetchStatus(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeStatus(); });
+
+  // Initial fetch
+  fetchFooterStatus();
+  setInterval(fetchFooterStatus, 300000);
 })();
 </script>
