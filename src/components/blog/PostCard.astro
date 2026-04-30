@@ -3,7 +3,7 @@ import type { CollectionEntry } from 'astro:content';
 import { getEntry } from 'astro:content';
 import { Image } from 'astro:assets'; 
 import { siteConfig } from '@/config/site';
-import { formatDateCompact } from '@/lib/utils';
+import { formatDateCompact, cdnImage, isCdnUrl } from '@/lib/utils';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -18,6 +18,8 @@ const categoryEntry = await getEntry(category);
 const authorEntry = author ? await getEntry(author) : null;
 const authorName = authorEntry?.data.name || siteConfig.author.name;
 const authorAvatar = authorEntry?.data.avatar || siteConfig.author.avatar;
+
+const optimizedAvatar = isCdnUrl(authorAvatar) ? cdnImage(authorAvatar, { w: 48, h: 48, q: 80 }) : authorAvatar;
 ---
 
 <a 
@@ -46,7 +48,7 @@ const authorAvatar = authorEntry?.data.avatar || siteConfig.author.avatar;
   <div class="mt-auto flex items-center gap-3 pt-6">
     {authorAvatar && (
       <Image
-        src={authorAvatar}
+        src={optimizedAvatar}
         alt={authorName}
         width={24}
         height={24}
