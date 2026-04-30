@@ -1,5 +1,4 @@
 ---
-// src/components/portfolio/PortfolioGallery.astro
 import { Image } from 'astro:assets';
 import { cdnImage, isCdnUrl } from '@/lib/utils';
 
@@ -24,46 +23,47 @@ const getAlt = (img: string | ImageItem, index: number) => {
   if (typeof img === "object" && img.alt) return img.alt;
   return `${title} Showcase ${index + 1}`;
 };
-const optimizedSrc = isCdnUrl(src) ? cdnImage(src, { q: 85 }) : src;
 ---
 
-{images && images.length > 0 && (
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-      {images.map((img, idx) => {
-        const src = getSrc(img);
-        const alt = getAlt(img, idx);
-        const isPrimary = idx === 0;
-        
-        if (!src) return null;
+{images.length > 0 && (
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+    {images.map((img, idx) => {
+      const src = getSrc(img);
+      const alt = getAlt(img, idx);
+      const isPrimary = idx === 0;
 
-        return (
-          <figure
-            class:list={[
-              "group relative overflow-hidden border border-zinc-200/70 dark:border-zinc-800/70 bg-zinc-50 dark:bg-zinc-950 transition-all duration-300",
-              isPrimary && "md:col-span-2"
-            ]}
-          >
-            <div class="relative aspect-video overflow-hidden">
-              <div class="absolute inset-0 bg-zinc-100 dark:bg-zinc-900 animate-pulse" aria-hidden="true" />
-              
-              <Image
-                src={optimizedSrc}
-                alt={alt}
-                width={1280}
-                height={720}
-                loading="lazy"
-                decoding="async"
-                class="relative z-10 h-full w-full object-cover transition duration-500 group-hover:scale-[1.01]"
-              />
-            </div>
-            
-            <div class="absolute top-2 left-2 z-20 px-1.5 py-0.5 bg-black/50 backdrop-blur-sm rounded text-[9px] font-mono text-white/70">
-              {String(idx + 1).padStart(2, "0")}
-            </div>
-          </figure>
-        );
-      })}
-    </div>
+      if (!src) return null;
 
+      const optimizedSrc = isCdnUrl(src)
+        ? cdnImage(src, { q: 85 })
+        : src;
+
+      return (
+        <figure
+          class:list={[
+            "group relative overflow-hidden border border-zinc-200/70 dark:border-zinc-800/70 bg-zinc-50 dark:bg-zinc-950 transition-all duration-300",
+            isPrimary && "md:col-span-2"
+          ]}
+        >
+          <div class="relative aspect-video overflow-hidden">
+            <div class="absolute inset-0 bg-zinc-100 dark:bg-zinc-900 animate-pulse" />
+
+            <Image
+              src={optimizedSrc}
+              alt={alt}
+              width={1280}
+              height={720}
+              loading="lazy"
+              decoding="async"
+              class="relative z-10 h-full w-full object-cover transition duration-500 group-hover:scale-[1.01]"
+            />
+          </div>
+
+          <div class="absolute top-2 left-2 z-20 px-1.5 py-0.5 bg-black/50 backdrop-blur-sm rounded text-[9px] font-mono text-white/70">
+            {String(idx + 1).padStart(2, "0")}
+          </div>
+        </figure>
+      );
+    })}
+  </div>
 )}
