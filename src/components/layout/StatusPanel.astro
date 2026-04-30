@@ -46,15 +46,14 @@ const services = ['api', 'web', 'cdn', 'bot'];
             </span>
           </div>
           
-                    <div class="flex justify-between w-full py-1">
+          <div class="flex justify-between w-full py-1 relative">
             {Array.from({ length: 40 }).map((_, i) => (
               <div 
                 data-bar={`${id}-${i}`}
-                class="w-[1.5px] h-6 bg-[#111] transition-colors duration-300"
+                class="w-[1.5px] h-6 bg-[#111] transition-colors duration-300 cursor-help"
               ></div>
             ))}
           </div>
-
           
         </div>
       ))}
@@ -63,8 +62,28 @@ const services = ['api', 'web', 'cdn', 'bot'];
   </div>
 </div>
 
+<style>
+  [data-bar]:hover::after {
+    content: attr(data-info);
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #000;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 500;
+    white-space: nowrap;
+    border: 1px solid #333;
+    z-index: 50;
+    pointer-events: none;
+  }
+</style>
+
 <script is:inline>
-  const API_URL = "https://api.c0desk1.my.id";
+  const API_URL = "/api/status"; 
 
   const panel = document.getElementById("status-panel");
   const overlay = document.getElementById("status-overlay");
@@ -156,19 +175,28 @@ const services = ['api', 'web', 'cdn', 'bot'];
       }
 
       const startIndex = 40 - history.length;
-      bars.forEach(el => { if(el) el.style.backgroundColor = "#111"; });
+      bars.forEach(el => { 
+        if(el) {
+          el.style.backgroundColor = "#111";
+          el.removeAttribute('data-info');
+        }
+      });
 
       history.forEach((h, i) => {
         const el = bars[startIndex + i];
         if (!el) return;
         el.style.backgroundColor = colors[h?.status || "Outage"];
+        if (h.ts) {
+          const time = new Date(h.ts).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+          el.setAttribute('data-info', `${time} • ${h.latency}ms`);
+        }
       });
     });
   }
 
   async function fetchStatus() {
     try {
-      const res = await fetch(`${API_URL}/status/all?t=${Date.now()}`);
+      const res = await fetch(API_URL);
       if (!res.ok) throw new Error();
       const data = await res.json();
       updateUI(data.overall, data.services, data.updated);
@@ -178,6 +206,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
       if (footerDot) footerDot.style.backgroundColor = "#ef4444";
     }
   }
+
   document.getElementById("status-toggle")?.addEventListener("click", openStatus);
   closeBtn?.addEventListener("click", closeStatus);
   overlay?.addEventListener("click", closeStatus);
