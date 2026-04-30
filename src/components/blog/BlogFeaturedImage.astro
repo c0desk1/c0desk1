@@ -1,6 +1,7 @@
 ---
 // src/components/blog/BlogFeaturedImage.astro
 import { Image } from 'astro:assets';
+import { cdnImage, isCdnUrl } from '@/lib/utils';
 
 interface Props {
   image: string; 
@@ -9,7 +10,7 @@ interface Props {
 }
 
 const { image, alt, caption } = Astro.props;
-
+const optimizedSrc = isCdnUrl(image) ? cdnImage(image, { w: 1280, h: 720, q: 85 }) : image;
 const finalCaption = caption || alt;
 ---
 
@@ -22,7 +23,7 @@ const finalCaption = caption || alt;
       ></div>
       
       <Image
-        src={image}
+        src={optimizedSrc}
         alt={alt || caption || "Featured image"}
         width={1280}
         height={720}
