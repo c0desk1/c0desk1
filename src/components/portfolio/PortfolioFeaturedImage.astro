@@ -2,6 +2,7 @@
 // src/components/portfolio/PortfolioHeroImage.astro
 import Container from "../ui/Container.astro";
 import { Image } from 'astro:assets';
+import { cdnImage, isCdnUrl } from '@/lib/utils';
 
 interface Props {
   src: any;
@@ -13,6 +14,7 @@ const { src, alt, caption } = Astro.props;
 
 const finalSrc = typeof src === "object" && src !== null ? (src.src || src) : src;
 const finalCaption = caption || alt;
+const optimizedSrc = isCdnUrl(finalSrc) ? cdnImage(finalSrc, { w: 1280, h: 720, q: 85 }) : finalSrc;
 ---
 
 <div class="border-y border-zinc-200/60 dark:border-zinc-800/60 bg-white dark:bg-black">
@@ -22,7 +24,7 @@ const finalCaption = caption || alt;
         <div class="absolute aspect-video inset-0 bg-zinc-100 dark:bg-zinc-900 animate-pulse" aria-hidden="true"></div>
         
         <Image
-          src={finalSrc}
+          src={optimizedSrc}
           alt={alt || "Portfolio hero image"}
           width={1280}
           height={720}
@@ -45,4 +47,4 @@ const finalCaption = caption || alt;
       )}
     </figure>
   </Container>
-</div>
+</div>
