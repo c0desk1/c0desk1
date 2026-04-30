@@ -5,11 +5,16 @@ import tailwindcss from '@tailwindcss/vite';
 // import sitemap from '@astrojs/sitemap';
 // import partytown from '@astrojs/partytown';
 import mdx from '@astrojs/mdx';
+import cloudflare from '@astrojs/cloudflare';
 
 // https://astro.build/config
 export default defineConfig({
   site: siteConfig.siteUrl,
   trailingSlash: "always",
+  output: 'server',
+  adapter: cloudflare({
+    runtime: { mode: 'local' }
+  }),
   vite: {
     plugins: [tailwindcss()]
   },
