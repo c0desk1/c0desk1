@@ -14,14 +14,14 @@ const services = ['api', 'web', 'cdn', 'bot'];
 >
   <div class="max-w-screen-lg mx-auto p-6 md:p-10">
     
-    <div class="flex items-start justify-between mb-10">
+    <div class="flex items-start justify-between mb-10 border-b border-zinc-900/50 pb-6">
       <div class="flex items-start gap-3">
         <div id="panel-dot" class="w-2.5 h-2.5 rounded-full bg-zinc-700 mt-1"></div>
         <div class="flex flex-col gap-1">
-          <h3 class="text-[14px] font-semibold text-black dark:text-white leading-none">
+          <h3 class="text-[12px] sm:text-[13px] font-semibold text-black dark:text-white leading-none">
             Status Sistem
           </h3>
-          <span id="last-updated-text" class="text-[12px] text-zinc-500 dark:text-zinc-400">
+          <span id="last-updated-text" class="text-[11px] sm:text-[12px] font-medium text-zinc-500">
             Menunggu sinkronisasi...
           </span>
         </div>
@@ -32,31 +32,21 @@ const services = ['api', 'web', 'cdn', 'bot'];
       </button>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12">
+    <div class="flex flex-col w-full mt-4">
       {services.map((id) => (
-        <div class="flex flex-col gap-4">
-          <div class="flex items-center justify-between">
-            <span class="text-[13px] font-semibold uppercase text-white tracking-wider">{id}</span>
-            <span id={`s-${id}-text`} class="text-[13px] font-medium text-zinc-500">
-              Memuat...
-            </span>
-          </div>
-
-          <div class="flex flex-wrap gap-[3px] w-full">
+        <div class="mb-6 pb-6 border-b border-zinc-900/50">
+          
+          <span class="text-[12px] sm:text-[13px] font-semibold uppercase text-white mb-2 block tracking-wider">{id}</span>
+          
+          <div class="flex flex-wrap gap-[2px] w-full py-1">
             {Array.from({ length: 40 }).map((_, i) => (
               <div 
                 data-bar={`${id}-${i}`}
-                class="w-3 h-3 rounded-[2px] bg-zinc-900 transition-all duration-300 border border-white/5"
+                class="w-1.5 h-6 rounded-[1px] bg-zinc-900 transition-all duration-300 border border-white/5"
               ></div>
             ))}
           </div>
-
-          <div class="flex justify-between text-[12px] font-medium text-zinc-600">
-            <span>80 Menit Terakhir</span>
-            <span id={`s-${id}-metrics`} class="text-zinc-500 uppercase">
-              --
-            </span>
-          </div>
+          
         </div>
       ))}
     </div>
@@ -111,13 +101,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
     overall = overall || "Operational";
     const accent = colors[overall] || "#3f3f46";
 
-    if (footerLabel) {
-      footerLabel.textContent = overall === "Operational" ? "Semua Sistem Normal" : overall;
-    }
-
-    if (footerDot) footerDot.style.backgroundColor = accent;
-    if (footerPulse) footerPulse.style.backgroundColor = accent;
-
+    // Header updates (Dot & Time)
     if (panelDot) {
       panelDot.style.backgroundColor = accent;
       panelDot.className = "w-2.5 h-2.5 rounded-full " + (overall === "Operational" ? "" : "animate-pulse");
@@ -131,40 +115,18 @@ const services = ['api', 'web', 'cdn', 'bot'];
     (services || []).forEach((s) => {
       const name = s.name;
       const status = s.status || "Outage";
-      const latency = s.latency ?? "-";
-
-      const textEl = document.getElementById(`s-${name}-text`);
-      const metricsEl = document.getElementById(`s-${name}-metrics`);
       const bars = document.querySelectorAll(`[data-bar^="${name}-"]`);
 
-      if (textEl) {
-        textEl.textContent = `${status} • ${latency}ms`;
-        textEl.style.color = colors[status] || "#71717a";
-      }
-
+      // Calculate bar placement from right
       const history = Array.isArray(s.history) ? s.history.slice(-40) : [];
-      
-      let avgLatencyDisplay = "";
-      if (history.length > 0) {
-        const validLatencies = history.filter(h => typeof h.latency === 'number');
-        if (validLatencies.length > 0) {
-          const totalPing = validLatencies.reduce((acc, curr) => acc + curr.latency, 0);
-          const avgPing = Math.round(totalPing / validLatencies.length);
-          avgLatencyDisplay = `${avgPing}ms`;
-        }
-      }
-
-      if (metricsEl) {
-        const uptime = typeof s.uptime === "number" ? s.uptime : 100;
-        metricsEl.textContent = `${uptime}% Uptime ${avgLatencyDisplay ? `• Avg ${avgLatencyDisplay}` : ''}`;
-      }
-
       const startIndex = 40 - history.length;
 
+      // Reset bars to default deep black
       bars.forEach(el => {
-        if(el) el.style.backgroundColor = "#18181b";
+        if(el) el.style.backgroundColor = "#18181b"; // bg-zinc-900
       });
 
+      // Color bars based on historical status
       history.forEach((h, i) => {
         const el = bars[startIndex + i];
         if (!el) return;
@@ -180,6 +142,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
       if (!res.ok) throw new Error();
 
       const data = await res.json();
+      // Update UI with historical data, but only process bars
       updateUI(data.overall, data.services, data.updated);
     } catch {
       if (footerLabel) footerLabel.textContent = "Offline";
@@ -194,6 +157,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
     if (e.key === "Escape") closeStatus();
   });
 
+  // Ticks every 60 seconds to update the "2m yang lalu" text dynamically without fetching
   setInterval(() => {
     if (latestUpdateTs && lastUpdatedEl) {
       lastUpdatedEl.textContent = getRelativeTime(latestUpdateTs);
