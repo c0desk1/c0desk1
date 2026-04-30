@@ -571,18 +571,18 @@ const services = ['api', 'web', 'cdn', 'bot'];
     if (footerPulse) footerPulse.style.backgroundColor = accent;
   }
 
-  async function fetchFooterStatus() {
-    try {
-      const res = await fetch(API_URL);
-      if (!res.ok) throw new Error();
-      const data = await res.json();
-      updateFooter(data.overall || "Operational");
-    } catch {
-      if (footerLabel) footerLabel.textContent = "Gagal terhubung";
-      if (footerDot) footerDot.style.backgroundColor = STATUS_COLORS.Outage;
-      if (footerPulse) footerPulse.style.backgroundColor = STATUS_COLORS.Outage;
-    }
-  }
+  // async function fetchFooterStatus() {
+  //  try {
+  //    const res = await fetch(API_URL);
+  //    if (!res.ok) throw new Error();
+  //    const data = await res.json();
+  //    updateFooter(data.overall || "Operational");
+  //  } catch {
+  //    if (footerLabel) footerLabel.textContent = "Gagal terhubung";
+  //   if (footerDot) footerDot.style.backgroundColor = STATUS_COLORS.Outage;
+  //    if (footerPulse) footerPulse.style.backgroundColor = STATUS_COLORS.Outage;
+  //  }
+  // }
 
   function updateUI(overall, services, updatedTs) {
     overall = overall || "Operational";
@@ -684,7 +684,6 @@ const services = ['api', 'web', 'cdn', 'bot'];
     }
   }
 
-  // Touch tooltip untuk mobile
   panel?.addEventListener("touchstart", (e) => {
     const bar = e.target.closest("[data-bar]");
     if (!bar) return;
@@ -701,7 +700,6 @@ const services = ['api', 'web', 'cdn', 'bot'];
     intervals.forEach(clearInterval);
   });
 
-  // Tombol untuk membuka panel (pastikan ada di layout)
   const toggleBtn = document.getElementById("status-toggle");
   if (toggleBtn) toggleBtn.addEventListener("click", openStatus);
   
@@ -710,8 +708,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
   refreshBtn?.addEventListener("click", () => { if (hasFetched) fetchStatus(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeStatus(); });
 
-  // Initial fetch
-  fetchFooterStatus();
-  setInterval(fetchFooterStatus, 300000);
+  // fetchFooterStatus();
+  // setInterval(fetchFooterStatus, 300000);
 })();
 </script>
