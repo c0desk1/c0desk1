@@ -2,6 +2,7 @@
 // src/components/blog/BlogMeta.astro
 import { formatDate } from '@/lib/utils';
 import CopyLink from "@/components/ui/CopyButton.astro";
+import Icon from '../ui/Icon.astro';
 
 interface Props {
   pubDate: Date;
@@ -15,7 +16,8 @@ const formattedDate = formatDate(pubDate);
 
 <div class="flex flex-wrap justify-between items-center gap-x-2 gap-y-1 text-[13px] md:text-sm text-(--fg-muted)">
   <div class="flex items-center gap-2">
-    <CopyLink />
+    
+    <Icon name="clock" class="w-5 h-5" />
     {readingTime && (
       <>
         <span class="whitespace-nowrap">
@@ -23,6 +25,7 @@ const formattedDate = formatDate(pubDate);
         </span>
       </>
     )}
+    <CopyLink />
   </div>
   <time datetime={pubDate.toISOString()} class="whitespace-nowrap">
     {formattedDate}
