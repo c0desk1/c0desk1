@@ -1,13 +1,11 @@
 ---
-interface Props {}
-
-const symbol = "▼";
+// src/components/mdx/Divider.astro
 ---
 
-<div class="my-4 md:my-8 flex items-center gap-4" aria-hidden="true">
-  <div class="h-px flex-1 bg-black/20 dark:bg-white/5"></div>
-  <span class="text-zinc-400 dark:text-zinc-500 text-xs select-none">
-    {symbol}
+<div class="my-6 md:my-10 flex items-center gap-4" aria-hidden="true">
+  <div class="h-px flex-1 bg-[var(--prose-border)]"></div>
+  <span class="text-[var(--prose-fg-subtle)] text-[10px] select-none tracking-widest">
+    ✦
   </span>
-  <div class="h-px flex-1 bg-black/20 dark:bg-white/5"></div>
+  <div class="h-px flex-1 bg-[var(--prose-border)]"></div>
 </div>
