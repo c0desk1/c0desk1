@@ -433,6 +433,39 @@
   to   { background-position:  200% center; }
 }
 
+/* ── Skeleton tokens — global ───────────────────────────────────────────── */
+@keyframes sk-shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%);  }
+}
+
+.sk-line,
+.sk-avatar,
+.sk-img {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-muted, #e5e7eb);
+}
+
+.sk-line   { border-radius: 4px; }
+.sk-avatar { border-radius: 9999px; flex-shrink: 0; }
+.sk-img    { display: block; }
+
+.sk-line::after,
+.sk-avatar::after,
+.sk-img::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--bg) 55%, transparent) 50%,
+    transparent 100%
+  );
+  animation: sk-shimmer 1.6s ease-in-out infinite;
+}
+
 /* ==================== REDUCED MOTION ==================== */
 
 @media (prefers-reduced-motion: reduce) {
