@@ -220,16 +220,16 @@ import Icon from "./Icon.astro";
 
     // ── Highlight
     const clearHighlight = () => {
-      if (!highlightMark) return;
-      const parent = highlightMark.parentNode;
-      if (parent) {
-        while (highlightMark.firstChild) {
-          parent.insertBefore(highlightMark.firstChild, highlightMark);
-        }
-        parent.removeChild(highlightMark);
-      }
-      highlightMark = null;
-    };
+  if (!highlightMark) return;
+  // Kembalikan el ke posisi mark, hapus mark
+  const el = highlightMark.firstElementChild;
+  if (el) {
+    highlightMark.replaceWith(el);
+  } else {
+    highlightMark.remove();
+  }
+  highlightMark = null;
+};
 
     // HANYA bagian highlightChunk yang perlu diganti di Listen.astro
 
