@@ -3,112 +3,434 @@
 import Icon from "./Icon.astro";
 ---
 
-<button 
-  id="listen-btn" 
-  aria-label="Dengarkan artikel" 
+<button
+  id="listen-btn"
+  aria-label="Dengarkan artikel"
   class="relative p-2 rounded-(--radius-full) text-(--fg-muted) hover:text-(--fg) hover:bg-(--bg-muted) group active:scale-95"
 >
   <div class="relative w-4.5 h-4.5 flex items-center justify-center">
-    <span id="icon-play" class="absolute inset-0 w-full h-full opacity-100 scale-100 transition-all duration-300">
+    <span id="icon-play" class="absolute inset-0 transition-all duration-300 opacity-100 scale-100">
       <Icon name="volume" class="w-4.5 h-4.5" />
     </span>
-    <span id="icon-stop" class="absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-50">
+    <span id="icon-stop" class="absolute inset-0 transition-all duration-300 opacity-0 scale-50">
       <Icon name="volume-mute" class="w-4.5 h-4.5" />
     </span>
   </div>
-  <span id="listen-tooltip" class="absolute -top-9 left-1/2 -translate-x-1/2 px-2 py-1 text-[12px] border border-(--border) font-medium bg-(--bg-subtle) text-(--fg) rounded-(--radius-md) opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-xl">
+  <span class="absolute -top-9 left-1/2 -translate-x-1/2 px-2 py-1 text-[12px] border border-(--border) font-medium bg-(--bg-subtle) text-(--fg) rounded-(--radius-md) opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-xl">
     Dengarkan
   </span>
 </button>
 
+<!-- TTS Player Modal -->
+<div
+  id="tts-modal"
+  role="region"
+  aria-label="Pemutar artikel"
+  class="tts-modal"
+  hidden
+>
+  <div class="tts-inner">
+    <!-- Info -->
+    <div class="tts-info">
+      <span class="tts-label">Sedang membaca</span>
+      <div class="tts-progress-wrap">
+        <div class="tts-progress-bar">
+          <div id="tts-progress-fill" class="tts-progress-fill"></div>
+        </div>
+        <span id="tts-counter" class="tts-counter">0 / 0</span>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="tts-controls">
+      <!-- Rewind -->
+      <button id="tts-prev" class="tts-btn" aria-label="Kalimat sebelumnya">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="19 20 9 12 19 4 19 20"></polygon>
+          <line x1="5" y1="19" x2="5" y2="5"></line>
+        </svg>
+      </button>
+
+      <!-- Play / Pause -->
+      <button id="tts-playpause" class="tts-btn tts-btn--primary" aria-label="Jeda">
+        <!-- Pause icon (ditampilkan saat playing) -->
+        <svg id="tts-icon-pause" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="6" y="4" width="4" height="16"></rect>
+          <rect x="14" y="4" width="4" height="16"></rect>
+        </svg>
+        <!-- Play icon (ditampilkan saat paused) -->
+        <svg id="tts-icon-play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+          style="display:none">
+          <polygon points="5 3 19 12 5 21 5 3"></polygon>
+        </svg>
+      </button>
+
+      <!-- Forward -->
+      <button id="tts-next" class="tts-btn" aria-label="Kalimat berikutnya">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="5 4 15 12 5 20 5 4"></polygon>
+          <line x1="19" y1="5" x2="19" y2="19"></line>
+        </svg>
+      </button>
+
+      <!-- Close -->
+      <button id="tts-close" class="tts-btn tts-btn--close" aria-label="Tutup pemutar">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  .tts-modal {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    z-index: 9999;
+    width: 18rem;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08);
+    padding: 0.875rem 1rem;
+    transform: translateY(0.5rem);
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    pointer-events: none;
+  }
+
+  .tts-modal:not([hidden]) {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+  }
+
+  /* hidden override agar transition bisa berjalan */
+  .tts-modal[hidden] {
+    display: block !important; /* biarkan elemen ada di DOM */
+    opacity: 0;
+    transform: translateY(0.5rem);
+    pointer-events: none;
+  }
+
+  .tts-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .tts-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .tts-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+
+  .tts-progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .tts-progress-bar {
+    flex: 1;
+    height: 3px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .tts-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--fg);
+    border-radius: 999px;
+    transition: width 0.3s ease;
+  }
+
+  .tts-counter {
+    font-size: 11px;
+    color: var(--fg-muted);
+    white-space: nowrap;
+    min-width: 3rem;
+    text-align: right;
+  }
+
+  .tts-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .tts-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-full, 999px);
+    border: none;
+    background: transparent;
+    color: var(--fg-muted);
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s, transform 0.1s;
+    flex-shrink: 0;
+  }
+
+  .tts-btn svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .tts-btn:hover {
+    color: var(--fg);
+    background: var(--bg-muted);
+  }
+
+  .tts-btn:active {
+    transform: scale(0.9);
+  }
+
+  .tts-btn--primary {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: var(--fg);
+    color: var(--bg);
+    border-radius: 999px;
+  }
+
+  .tts-btn--primary svg {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .tts-btn--primary:hover {
+    opacity: 0.85;
+    background: var(--fg);
+    color: var(--bg);
+  }
+
+  .tts-btn--close {
+    margin-left: 0.25rem;
+  }
+</style>
+
 <script>
-  const initListen = () => {
-    const btn = document.getElementById('listen-btn') as HTMLButtonElement | null;
-    const playIcon = document.getElementById('icon-play') as HTMLElement | null;
-    const stopIcon = document.getElementById('icon-stop') as HTMLElement | null;
-    const tooltip = document.getElementById('listen-tooltip') as HTMLElement | null;
+  (() => {
+    // ─── State ───────────────────────────────────────────────────────────────
+    let chunks: string[]  = [];
+    let currentIdx        = 0;
+    let isPlaying         = false;
+    let isPaused          = false;
+    let voice: SpeechSynthesisVoice | null = null;
 
-    if (!btn || !playIcon || !stopIcon || !tooltip) return;
+    const synth = window.speechSynthesis;
 
-    let isPlaying = false;
-    let synth = window.speechSynthesis;
+    // ─── DOM ─────────────────────────────────────────────────────────────────
+    const getEl = <T extends HTMLElement>(id: string) =>
+      document.getElementById(id) as T | null;
 
-    const chunkText = (text: string) => {
-      return text.match(/[^\.!\?]+[\.!\?]+/g) || [text];
+    const listenBtn    = () => getEl<HTMLButtonElement>('listen-btn');
+    const iconPlay     = () => getEl('icon-play');
+    const iconStop     = () => getEl('icon-stop');
+    const modal        = () => getEl('tts-modal');
+    const progressFill = () => getEl('tts-progress-fill');
+    const counter      = () => getEl('tts-counter');
+    const btnPlayPause = () => getEl<HTMLButtonElement>('tts-playpause');
+    const iconPause    = () => getEl('tts-icon-pause');
+    const iconPlayBtn  = () => getEl('tts-icon-play');
+    const btnPrev      = () => getEl<HTMLButtonElement>('tts-prev');
+    const btnNext      = () => getEl<HTMLButtonElement>('tts-next');
+    const btnClose     = () => getEl<HTMLButtonElement>('tts-close');
+
+    // ─── Helpers ─────────────────────────────────────────────────────────────
+    const chunkText = (text: string): string[] =>
+      text
+        .split(/(?<=[.!?])\s+|(?<=[:;])\s+|\n{2,}/)
+        .map(s => s.trim())
+        .filter(s => s.length > 3);
+
+    const getVoice = (): SpeechSynthesisVoice | null => {
+      const voices = synth.getVoices();
+      return voices.find(v => v.lang.startsWith('id')) ?? voices[0] ?? null;
     };
 
-    const toggleUI = (playing: boolean) => {
+    const setListenBtnState = (playing: boolean) => {
+      const ip = iconPlay(), is = iconStop();
+      if (!ip || !is) return;
       if (playing) {
-        playIcon.classList.replace('opacity-100', 'opacity-0');
-        playIcon.classList.replace('scale-100', 'scale-50');
-        stopIcon.classList.replace('opacity-0', 'opacity-100');
-        stopIcon.classList.replace('scale-50', 'scale-100');
-        tooltip.textContent = 'Berhenti';
+        ip.style.cssText = 'opacity:0;transform:scale(0.5)';
+        is.style.cssText = 'opacity:1;transform:scale(1)';
       } else {
-        stopIcon.classList.replace('opacity-100', 'opacity-0');
-        stopIcon.classList.replace('scale-100', 'scale-50');
-        playIcon.classList.replace('opacity-0', 'opacity-100');
-        playIcon.classList.replace('scale-50', 'scale-100');
-        tooltip.textContent = 'Dengarkan';
+        ip.style.cssText = 'opacity:1;transform:scale(1)';
+        is.style.cssText = 'opacity:0;transform:scale(0.5)';
       }
-      isPlaying = playing;
     };
 
-    const speakChunks = (chunks: string[]) => {
-      let currentChunk = 0;
-
-      const speakNext = () => {
-        if (currentChunk < chunks.length && isPlaying) {
-          const utterance = new SpeechSynthesisUtterance(chunks[currentChunk].trim());
-          const voices = synth.getVoices();
-          const idVoice = voices.find(v => v.lang.includes('id'));
-          
-          if (idVoice) utterance.voice = idVoice;
-          utterance.lang = 'id-ID';
-          
-          utterance.onend = () => {
-            currentChunk++;
-            speakNext();
-          };
-          
-          utterance.onerror = () => toggleUI(false);
-          synth.speak(utterance);
-        } else {
-          toggleUI(false);
-        }
-      };
-      speakNext();
+    const setPlayPauseIcon = (paused: boolean) => {
+      const pi = iconPause(), pli = iconPlayBtn();
+      if (!pi || !pli) return;
+      pi.style.display  = paused ? 'none'  : '';
+      pli.style.display = paused ? ''      : 'none';
     };
 
-    btn.addEventListener('click', () => {
-      if (isPlaying) {
-        synth.cancel();
-        toggleUI(false);
+    const updateProgress = () => {
+      const pct = chunks.length ? (currentIdx / chunks.length) * 100 : 0;
+      const pf = progressFill(), ct = counter();
+      if (pf) pf.style.width = `${pct}%`;
+      if (ct) ct.textContent = `${currentIdx} / ${chunks.length}`;
+    };
+
+    // ─── Modal show/hide (pakai hidden + CSS transition) ─────────────────────
+    const showModal = () => {
+      const m = modal();
+      if (!m) return;
+      m.removeAttribute('hidden');
+    };
+
+    const hideModal = () => {
+      const m = modal();
+      if (!m) return;
+      m.setAttribute('hidden', '');
+    };
+
+    // ─── Core TTS ────────────────────────────────────────────────────────────
+    const speakAt = (idx: number) => {
+      if (idx < 0 || idx >= chunks.length) {
+        stopAll();
         return;
       }
-      const article = document.getElementById('article-content') || 
-                      document.querySelector('article') || 
-                      document.querySelector('main');
-      
-      if (!article) return;
-      article.scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'start' 
-      });
-      
-      const rawText = (article as HTMLElement).innerText;
-      const cleanText = rawText.replace(/\s+/g, ' ').trim();
-      const chunks = chunkText(cleanText);
-      
-      if (chunks.length > 0 && chunks[0] !== "") {
-        toggleUI(true);
-        synth.cancel();
-        speakChunks(chunks);
-      }
-    });
-  };
+      synth.cancel();
+      currentIdx = idx;
+      updateProgress();
 
-  initListen();
-  document.addEventListener('astro:after-swap', initListen);
-  document.addEventListener('astro:page-load', initListen);
+      const utt = new SpeechSynthesisUtterance(chunks[idx]);
+      utt.lang  = 'id-ID';
+      if (voice) utt.voice = voice;
+
+      utt.onend = () => {
+        if (!isPlaying) return;   // sudah di-stop, abaikan
+        speakAt(currentIdx + 1);
+      };
+      utt.onerror = (e) => {
+        if (e.error === 'interrupted') return; // bukan error nyata
+        stopAll();
+      };
+
+      synth.speak(utt);
+      isPlaying = true;
+      isPaused  = false;
+      setListenBtnState(true);
+      setPlayPauseIcon(false);
+    };
+
+    const pauseResume = () => {
+      if (!isPlaying && !isPaused) return;
+      if (synth.paused || isPaused) {
+        synth.resume();
+        isPaused  = false;
+        isPlaying = true;
+        setPlayPauseIcon(false);
+      } else {
+        synth.pause();
+        isPaused  = true;
+        isPlaying = false;
+        setPlayPauseIcon(true);
+      }
+    };
+
+    const stopAll = () => {
+      synth.cancel();
+      isPlaying = false;
+      isPaused  = false;
+      setListenBtnState(false);
+      setPlayPauseIcon(false);
+      hideModal();
+      updateProgress();
+    };
+
+    // ─── Init (dipanggil tiap page swap) ─────────────────────────────────────
+    const init = () => {
+      // Resolve voice (async di beberapa browser)
+      if (synth.getVoices().length) {
+        voice = getVoice();
+      } else {
+        synth.addEventListener('voiceschanged', () => { voice = getVoice(); }, { once: true });
+      }
+
+      // Listen button
+      listenBtn()?.addEventListener('click', () => {
+        if (isPlaying || isPaused) {
+          stopAll();
+          return;
+        }
+
+        const article =
+          document.getElementById('article-content') ??
+          document.querySelector<HTMLElement>('article') ??
+          document.querySelector<HTMLElement>('main');
+
+        if (!article) return;
+
+        const rawText   = article.innerText;
+        const cleanText = rawText.replace(/\s+/g, ' ').trim();
+        chunks = chunkText(cleanText);
+
+        if (!chunks.length) return;
+
+        currentIdx = 0;
+        showModal();
+        speakAt(0);
+      });
+
+      // Modal controls
+      btnPlayPause()?.addEventListener('click', pauseResume);
+
+      btnPrev()?.addEventListener('click', () => {
+        const target = Math.max(0, currentIdx - 1);
+        speakAt(target);
+      });
+
+      btnNext()?.addEventListener('click', () => {
+        const target = Math.min(chunks.length - 1, currentIdx + 1);
+        speakAt(target);
+      });
+
+      btnClose()?.addEventListener('click', stopAll);
+    };
+
+    // ─── Mount ───────────────────────────────────────────────────────────────
+    // Gunakan satu event yang paling tepat. astro:page-load mencakup hard nav
+    // dan astro:after-swap untuk view transitions — pilih salah satu saja.
+    const alreadyInit = (window as any).__ttsInit;
+    if (!alreadyInit) {
+      (window as any).__ttsInit = true;
+      init();
+      document.addEventListener('astro:after-swap', () => {
+        // Reset state saat ganti halaman
+        synth.cancel();
+        isPlaying = false;
+        isPaused  = false;
+        chunks    = [];
+        currentIdx = 0;
+        init();
+      });
+    }
+  })();
 </script>
