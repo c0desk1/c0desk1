@@ -4,10 +4,15 @@ import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import Button from "@/components/ui/Button.astro";
 import Icon from "@/components/ui/Icon.astro";
-import { getCollection, getEntry } from "astro:content";
+import PostCard from "@/components/blog/PostCard.astro";
+
+import Breadcrumb from "@/components/ui/Breadcrumb.astro";
+import BackToTop from "@/components/ui/BackToTop.astro";
+
+import { getCollection } from "astro:content";
 import { Image } from 'astro:assets';
 import { siteConfig } from "@/config/site";
-import { formatDateCompact, cdnImage, isCdnUrl } from "@/lib/utils";
+import { cdnImage, isCdnUrl } from "@/lib/utils";
 
 export async function getStaticPaths() {
   const authors = await getCollection("authors");
@@ -24,17 +29,13 @@ const authorPosts = allPosts
   .filter((post) => post.data.author?.id === author.id)
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
-const postsWithCategory = await Promise.all(
-  authorPosts.map(async (post) => {
-    const category = post.data.category ? await getEntry(post.data.category) : null;
-    return { ...post, categoryData: category?.data };
-  })
-);
-
 const siteURL = Astro.site?.toString() ?? siteConfig.siteUrl;
 const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
-const socialLinks = author.data.social || {};
+const social = {
+  ...siteConfig.social,
+  ...(author.data.social || {})
+};
 
 const seoData = {
   title: author.data.name,
@@ -57,14 +58,24 @@ const authorCategory = {
 };
 
 const optimizedAvatar = isCdnUrl(author.data.avatar) ? cdnImage(author.data.avatar, { w: 112, h: 112, q: 85 }) : author.data.avatar;
+
+const seoBreadcrumbItems = [
+  { name: "Home", href: siteURL },
+  { name: "Author", href: new URL("authors/", siteURL).toString() },
+  { name: author.data.name, href: canonicalURL }
+];
+
+const Breadcrumbs = seoBreadcrumbItems.filter(item => 
+  item.name === "Home" || item.name === "Author"
+);
 ---
 
 <BaseLayout {...seoData} category={authorCategory}>
-  <Section size="lg" class="border-b border-zinc-100 dark:border-zinc-900 bg-white dark:bg-black">
-    <Container size="lg">
+  <Section size="lg">
+    <Container size="md">
       <div class="max-w-2xl mx-auto flex flex-col items-center text-center">
         <h2 class="sr-only">Author Information</h2>
-        
+        <Breadcrumb items={Breadcrumbs} />
         <div class="mb-8">
           <Image 
             src={optimizedAvatar} 
@@ -72,93 +83,52 @@ const optimizedAvatar = isCdnUrl(author.data.avatar) ? cdnImage(author.data.avat
             width={112}
             height={112}
             loading={"eager"}
-            class="w-28 h-28 rounded-full object-cover border border-zinc-200 dark:border-zinc-800 p-1 bg-white dark:bg-black"
+            decoding= async
+            class="w-28 h-28 rounded-full object-cover border border-(--border) p-1"
           />
         </div>
-        
-        <h1 class="text-4xl md:text-5xl font-bold tracking-tighter text-zinc-900 dark:text-white mb-2">
+        <h1 class="text-4xl md:text-5xl font-bold tracking-tighter text-(--fg) mb-2">
           {author.data.name}
         </h1>
-        <p class="text-lg text-zinc-500 dark:text-zinc-400 tracking-tight mb-6">
+        <p class="text-lg text-(--fg-subtle) tracking-tight mb-6">
           {author.data.role}
         </p>
 
-        <p class="text-zinc-600 dark:text-zinc-400 max-w-md mx-auto leading-relaxed text-base mb-8">
+        <p class="text-(--fg-muted) max-w-md mx-auto leading-relaxed text-base mb-8">
           {author.data.bio}
         </p>
 
         <div class="flex flex-wrap justify-center gap-3">
-          {socialLinks.github && (
-            <Button href={socialLinks.github} variant="secondary" size="sm" target="_blank">
-              <Icon name="github" class="w-4 h-4" />
-              GitHub
+          {Object.entries(social).map(([platform, url]) => (
+            <Button href={url} variant="secondary" size="sm" target="_blank">
+              <Icon name={platform.toLowerCase() as any} class="w-4 h-4" />
+              <span class="capitalize">{platform}</span>
             </Button>
-          )}
-          {socialLinks.twitter && (
-            <Button href={socialLinks.twitter} variant="secondary" size="sm" target="_blank">
-              <Icon name="twitter" class="w-4 h-4" />
-              Twitter
-            </Button>
-          )}
-          {socialLinks.linkedIn && (
-            <Button href={socialLinks.linkedIn} variant="secondary" size="sm" target="_blank">
-              <Icon name="linkedin" class="w-4 h-4" />
-              LinkedIn
-            </Button>
-          )}
+          ))}
         </div>
       </div>
     </Container>
   </Section>
-
-  {/* Article Feed */}
-  <Section size="lg" class="bg-white dark:bg-black">
-    <Container size="lg">
-      <div class="max-w-3xl mx-auto">
-        <div class="flex items-center justify-between mb-12">
-          <h2 class="text-xs font-bold uppercase tracking-[0.2em] text-zinc-400">
-            Latest Articles
-          </h2>
-          <div class="h-px flex-1 mx-4 bg-zinc-100 dark:bg-zinc-900"></div>
-          <span class="text-xs font-medium text-zinc-400">{authorPosts.length} posts</span>
-        </div>
-        
-        <div class="flex flex-col">
-          {postsWithCategory.map((post) => (
-            <article class="group">
-              <a href={`/blog/${post.id}/`} class="block py-10 transition-opacity active:opacity-70">
-                <div class="flex flex-col gap-3">
-                  <div class="flex items-center gap-3">
-                    <time class="text-[13px] text-zinc-400 tracking-tight font-medium">
-                      {formatDateCompact(post.data.pubDate)}
-                    </time>
-                    {post.categoryData && (
-                      <span class="text-[13px] px-2 py-0.5 rounded bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-500 font-medium">
-                        {post.categoryData.name}
-                      </span>
-                    )}
-                  </div>
-                  
-                  <h3 class="text-2xl font-bold tracking-tighter text-zinc-900 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-colors">
-                    {post.data.title}
-                  </h3>
-                  
-                  <p class="text-[16px] text-zinc-500 dark:text-zinc-500 leading-snug line-clamp-2 max-w-2xl">
-                    {post.data.description}
-                  </p>
-                </div>
-              </a>
-              <div class="h-px bg-zinc-100 dark:bg-zinc-900 w-full group-last:hidden" />
-            </article>
-          ))}
-        </div>
-        
-        {authorPosts.length === 0 && (
-          <div class="py-20 text-center rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-800">
-            <p class="text-sm text-zinc-400">No articles published yet.</p>
-          </div>
-        )}
+  <Section size="lg">
+    <Container size="md">
+      <div class="flex items-center justify-between mb-12">
+        <h2 class="text-xs font-bold uppercase tracking-[0.2em] text-zinc-400">
+          Artikel Terbaru
+        </h2>
+        <div class="h-px flex-1 mx-4 bg-zinc-100 dark:bg-zinc-900"></div>
+        <span class="text-xs font-medium text-zinc-400">{authorPosts.length} artikel</span>
       </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {authorPosts.map((post) => (
+          <PostCard post={post} />
+        ))}
+      </div>
+      {authorPosts.length === 0 && (
+        <div class="py-20 text-center rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-800">
+          <p class="text-sm text-zinc-400">Belum ada artikel yang diterbitkan.</p>
+        </div>
+      )}
     </Container>
+    <BackToTop align="center" />
   </Section>
 </BaseLayout>
