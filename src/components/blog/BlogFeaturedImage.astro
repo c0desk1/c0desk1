@@ -1,55 +1,41 @@
 ---
-// src/components/blog/BlogHeader.astro
-import BlogMeta from './BlogMeta.astro';
-import BlogAuthor from './BlogAuthor.astro';
+// src/components/blog/BlogFeaturedImage.astro
+import { Image } from 'astro:assets';
+import { cdnImage, isCdnUrl } from '@/lib/utils';
 
 interface Props {
-  title: string;
-  pubDate: Date;
-  readingTime: string;
-  authorName?: string;
-  authorAvatar?: string;
-  authorTitle?: string;
-  authorSlug: string;
+  image: string;
+  alt?: string;
+  caption?: string;
 }
 
-const {
-  title,
-  pubDate,
-  readingTime,
-  authorName,
-  authorAvatar,
-  authorTitle,
-  authorSlug
-} = Astro.props;
+const { image, alt, caption } = Astro.props;
+const optimizedSrc = isCdnUrl(image) ? cdnImage(image, { w: 1280, h: 720, q: 85 }) : image;
+const finalCaption = caption || alt;
 ---
 
-<header class="mx-auto max-w-3xl text-center">
-  <h1
-    class="
-      text-3xl sm:text-4xl md:text-5xl
-      font-semibold tracking-tight
-      text-[var(--prose-black)] dark:text-[var(--prose-white)]
-      leading-[1.15]
-      text-balance
-      mb-6 md:mb-8
-    "
-  >
-    {title}
-  </h1>
-
-  <div class="mb-6">
-    <BlogMeta pubDate={pubDate} readingTime={readingTime} />
-  </div>
-
-  {authorName && (
-    <div class="opacity-75">
-      <BlogAuthor
-        name={authorName}
-        avatar={authorAvatar}
-        title={authorTitle}
-        slug={authorSlug}
+<div class="prose-custom mx-auto max-w-3xl my-4 md:my-8">
+  <figure class="overflow-hidden space-y-3">
+    <!-- Skeleton loader -->
+    <div class="relative aspect-video overflow-hidden rounded-[var(--prose-radius-md)] border border-[var(--prose-border)]">
+      <div
+        class="absolute inset-0 animate-pulse bg-[var(--prose-surface)]"
+        aria-hidden="true"
+      />
+      <Image
+        src={optimizedSrc}
+        alt={alt || caption || "Featured image"}
+        width={1280}
+        height={720}
+        loading="eager"
+        decoding="async"
+        class="relative z-10 w-full h-full object-cover transition-opacity duration-500 opacity-0"
+        onload="this.classList.remove('opacity-0')"
       />
     </div>
-  )}
-</header>
+
+    {finalCaption && (
+      <figcaption>{finalCaption}</figcaption>
+    )}
+  </figure>
+</div>
