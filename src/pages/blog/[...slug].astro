@@ -145,19 +145,22 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
     </Section>
 
     <Section size="sm" class="section-divider">
-  	<Container size="sm"> <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start relative">      
-      	<aside class="lg:col-span-4 lg:sticky lg:top-[5rem] order-2 lg:order-1">
-        	{tocHeadings.length > 0 && (
-          	<TOC headings={tocHeadings} />
-        	)}
-      	</aside>
-      	<div id="article-content" class="prose-custom lg:col-span-8 order-1 lg:order-2">
-        	<h2 class="sr-only">Article Content</h2>
-        	<Content components={{ img: Image, hr: HR }} />
-     	</div>
-    	</div>
- 	 </Container>
+		<Container size="md"> 
+    		<div class="flex flex-col lg:grid lg:grid-cols-12 gap-8 lg:items-start relative">
+				<aside class="w-full lg:col-span-4 sticky top-[4.5rem] z-30">
+        			{tocHeadings.length > 0 && (
+          				<TOC headings={tocHeadings} />
+        			)}
+				</aside>
+				<div id="article-content" class="prose-custom w-full lg:col-span-8">
+        			<h2 class="sr-only">Article Content</h2>
+        			<Content components={{ img: Image, hr: HR }} />
+				</div>
+    		</div>
+		</Container>
 	</Section>
+
+
     <Section size="md" class="section-divider">
       <Container size="md">
         <h2 class="sr-only">Related Posts</h2>
@@ -166,5 +169,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
       </Container>
     </Section>
   </article>
+
   <ReadingProgress />
+
 </BaseLayout>
