@@ -31,7 +31,7 @@ const categoryName = categoryEntry?.data.name || category;
 
 <a
   href={`/blog/${id}/`}
-   class="group flex flex-col h-full rounded-(--radius-xl) border border-(--border) p-6 hover:border-(--border-strong) focus:outline-none focus:ring-2 focus:ring-(--accent-ring)"
+   class="group flex flex-col h-full rounded-(--radius-xl) border border-(--border) p-6 hover:border-(--border-strong) focus:outline-none focus:ring-2 focus:ring-(--border-strong)"
   aria-label={`Read article: ${title}`}
 >
   <div class="flex items-center justify-between text-[13px] text-(--fg-subtle) mb-2">
@@ -54,7 +54,7 @@ const categoryName = categoryEntry?.data.name || category;
       alt={authorName}
       width={48}
       height={48}
-      class="w-4 h-4 rounded-full object-cover"
+      class="w-4 h-4 rounded-full border border-(--border) object-cover"
       loading="lazy"
     />
     <span class="text-[13px] text-(--fg-subtle)">
