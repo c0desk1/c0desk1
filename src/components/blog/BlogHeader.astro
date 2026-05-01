@@ -2,7 +2,6 @@
 // src/components/blog/BlogHeader.astro
 import BlogMeta from './BlogMeta.astro';
 import BlogAuthor from './BlogAuthor.astro';
-import CopyLink from "@/components/ui/CopyButton.astro";
 import Listen from "@/components/ui/ListenButton.astro";
 
 interface Props {
@@ -45,17 +44,14 @@ const {
   </div>
 
   {authorName && (
-    <div class="opacity-75">
+    <div class="flex items-center text-center gap-2">
       <BlogAuthor
         name={authorName}
         avatar={authorAvatar}
         title={authorTitle}
         slug={authorSlug}
       />
+      <Listen />
     </div>
   )}
-<div class="flex items-center gap-4 pt-1">
-    <CopyLink />
-    <Listen />
-  </div>
 </header>
