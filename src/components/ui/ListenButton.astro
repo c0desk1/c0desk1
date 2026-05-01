@@ -231,34 +231,41 @@ import Icon from "./Icon.astro";
       highlightMark = null;
     };
 
-    const highlightChunk = (chunk: string) => {
-      if (!articleEl) return;
-      clearHighlight();
+    // HANYA bagian highlightChunk yang perlu diganti di Listen.astro
 
-      const needleRaw = chunk.slice(0, 30).trim();
-      if (!needleRaw) return;
+const highlightChunk = (chunk: string) => {
+  if (!articleEl) return;
+  clearHighlight();
 
-      const escaped = needleRaw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const re = new RegExp(escaped, 'i');
+  // Ambil 35 karakter pertama, normalisasi whitespace
+  const needleRaw = chunk.slice(0, 35).replace(/\s+/g, ' ').trim();
+  if (needleRaw.length < 4) return;
 
-      const candidates = articleEl.querySelectorAll<HTMLElement>(
-        'p, h1, h2, h3, h4, h5, h6, li, blockquote, td'
-      );
+  const escaped = needleRaw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const re = new RegExp(escaped, 'i');
 
-      for (const el of candidates) {
-        if (el.closest('button, nav, aside, [role="navigation"], .toc-container')) continue;
-        if (!re.test(el.innerText)) continue;
+  const candidates = articleEl.querySelectorAll<HTMLElement>(
+    'p, h1, h2, h3, h4, h5, h6, li, blockquote, td'
+  );
 
-        const mark = document.createElement('mark');
-        mark.className = 'tts-highlight';
-        el.parentNode?.insertBefore(mark, el);
-        mark.appendChild(el);
-        highlightMark = mark;
+  for (const el of candidates) {
+    if (el.closest('button, nav, aside, [role="navigation"], .toc-container')) continue;
 
-        mark.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        break;
-      }
-    };
+    // Normalisasi whitespace innerText sebelum match (MDX kadang sisipkan \n)
+    const elText = (el.innerText || el.textContent || '').replace(/\s+/g, ' ');
+    if (!re.test(elText)) continue;
+
+    // FIX: gunakan replaceWith agar mark menggantikan el di DOM secara atomik
+    const mark = document.createElement('mark');
+    mark.className = 'tts-highlight';
+    el.replaceWith(mark);   // mark masuk ke posisi el
+    mark.appendChild(el);   // el masuk ke dalam mark — DOM utuh, tidak ada glitch
+    highlightMark = mark;
+
+    mark.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    break;
+  }
+};
 
     // ── DOM helpers
     const $ = <T extends HTMLElement>(id: string) =>
