@@ -1,12 +1,14 @@
 {
   "name": "Bima Akbar",
   "slug": "bima-akbar",
-  "role": "Owner of c0desk1",
+  "role": "Owner",
   "avatar": "https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAAMIae4rCILWne6NI4IwUwABigyHvpiqAAIdFGsbXxxwV5IOkWnp4HhKAQADAgADeAADOwQ",
   "bio": "Web developer dan digital content creator yang fokus pada efisiensi workflow stock photography.",
   "organization": "src/content/organizations/c0desk1.json",
   "social": {
+    "facebook": "https://facebook.com/bimaakbarmusicc",
+    "instagram": "https://instagram.com/bimaakbarmusic",
     "twitter": "https://twitter.com/bimaakbarmusic",
-    "instagram": "https://instagram.com/bimaakbarmusic"
+    "tiktok": "https://tiktok.com/@bimaakbarmusicc"
   }
 }
