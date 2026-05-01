@@ -26,11 +26,11 @@ const optimizedAvatar = isCdnUrl(authorAvatar) ? cdnImage(authorAvatar, { w: 48,
 
 <a
   href={`/blog/${id}/`}
-  class="group flex flex-col h-full rounded-2xl border border-black/10 dark:border-white/10 p-6 transition-all duration-200 hover:bg-black/2 dark:hover:bg-white/2 hover:border-black/20 dark:hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
+  class="group flex flex-col h-full rounded-(--radius-xl) border border-(--border) p-6 hover:bg-(--bg-muted) hover:border-(--border-strong) focus:outline-none focus:ring-2 focus:ring-(--accent-ring)"
 >
   <div class="mb-6">
-    <div class="w-12 h-12 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-black group-hover:border-zinc-400 dark:group-hover:border-zinc-600">
-      <span class="text-sm md:text-lg font-semibold text-zinc-900 dark:text-white">
+    <div class="w-12 h-12 flex items-center justify-center rounded-full border border-(--border) bg-(--bg-subtle) group-hover:border-(--border-strong)">
+      <span class="text-sm md:text-lg font-semibold text-(--fg)">
         {title.charAt(0)}
       </span>
     </div>
@@ -38,16 +38,16 @@ const optimizedAvatar = isCdnUrl(authorAvatar) ? cdnImage(authorAvatar, { w: 48,
   <div class="mb-6">
     <time
       datetime={pubDate.toISOString()}
-      class="text-[13px] text-zinc-500 tracking-tight"
+      class="text-[13px] text-(--fg-subtle) tracking-tight"
     >
       {formattedDate}
     </time>
   </div>
   <div class="flex flex-col gap-5 mb-8">
-    <h2 class="text-lg md:text-2xl font-semibold tracking-tighter text-zinc-900 dark:text-white leading-[1.1] line-clamp-4 group-hover:text-zinc-600 dark:group-hover:text-zinc-300">
+    <h2 class="text-lg md:text-2xl font-semibold tracking-tighter text-(--fg) leading-[1.1] line-clamp-4">
       {title}
     </h2>
-    <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed line-clamp-6 group-hover:text-zinc-900 dark:group-hover:text-white">
+    <p class="text-sm text-(--fg-muted) leading-relaxed line-clamp-6 group-hover:text-(--fg)">
       {description}
     </p>
   </div>
@@ -62,7 +62,7 @@ const optimizedAvatar = isCdnUrl(authorAvatar) ? cdnImage(authorAvatar, { w: 48,
         loading="lazy"
       />
     )}
-    <span class="text-[13px] text-zinc-500 dark:text-zinc-400">
+    <span class="text-[13px] text-(--fg-subtle)">
       {authorName}
     </span>
   </div>
