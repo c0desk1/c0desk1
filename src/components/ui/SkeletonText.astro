@@ -1,0 +1,71 @@
+---
+// src/components/ui/SkeletonText.astro
+
+interface Props {
+  lines? : number;
+  size?  : 'sm' | 'base' | 'lg';
+  class? : string;
+}
+
+const {
+  lines = 3,
+  size  = 'base',
+  class: cls = '',
+} = Astro.props;
+
+const heightMap: Record<string, string> = {
+  sm  : '0.75rem',
+  base: '1rem',
+  lg  : '1.25rem',
+};
+const lineH = heightMap[size];
+const widthPattern = ['100%', '92%', '96%', '88%', '60%'];
+const lineWidths = Array.from({ length: lines }, (_, i) => {
+  if (i === lines - 1 && lines > 1) return '55%';
+  return widthPattern[i % (widthPattern.length - 1)];
+});
+---
+
+<div class:list={['skt-wrap', cls]} aria-hidden="true" role="presentation">
+  {lineWidths.map((w, i) => (
+    <div
+      class="skt-line"
+      style={`height:${lineH}; width:${w}; animation-delay:${i * 0.07}s`}
+    >
+      <div class="skt-shimmer"></div>
+    </div>
+  ))}
+</div>
+
+<style is:global>
+  @keyframes sk-shimmer {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(100%);  }
+  }
+
+  .skt-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .skt-line {
+    position: relative;
+    border-radius: 4px;
+    background: var(--bg-muted, #e5e7eb);
+    overflow: hidden;
+  }
+
+  .skt-shimmer {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in srgb, var(--bg) 60%, transparent) 50%,
+      transparent 100%
+    );
+    animation: sk-shimmer 1.6s ease-in-out infinite;
+  }
+</style>
