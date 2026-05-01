@@ -9,34 +9,73 @@
     "twitter": "https://twitter.com/c0desk1"
   },
   "navItems": [
-    { "href": "/blog/", "label": "Blog" },
-    { "href": "/portfolio/", "label": "Portfolio" },
-    { "href": "/about/", "label": "Tentang" }
+    {
+      "href": "/blog/",
+      "label": "Blog"
+    },
+    {
+      "href": "/portfolio/",
+      "label": "Portfolio"
+    },
+    {
+      "href": "/about/",
+      "label": "Tentang"
+    }
   ],
-  "footerSections": [
+  "footerSection": [
     {
       "title": "Navigasi",
       "items": [
-        { "href": "/blog/", "label": "Blog", "isExternal": false },
-        { "href": "/portfolio/", "label": "Portfolio", "isExternal": false },
-        { "href": "/about/", "label": "Tentang", "isExternal": false }
+        {
+          "href": "/blog/",
+          "label": "Blog",
+          "isExternal": false
+        },
+        {
+          "href": "/portfolio/",
+          "label": "Portfolio",
+          "isExternal": false
+        },
+        {
+          "href": "/contact/",
+          "label": "Kontak",
+          "isExternal": false
+        },
+        {
+          "href": "/about/",
+          "label": "Tentang",
+          "isExternal": false
+        }
       ]
     },
     {
       "title": "Legal",
       "items": [
-        { "href": "/privacy-policy/", "label": "Kebijakan Privasi", "isExternal": false },
-        { "href": "/terms-of-service/", "label": "Ketentuan Layanan", "isExternal": false },
-        { "href": "/disclaimer/", "label": "Disclaimer", "isExternal": false },
-        { "href": "/cookie-policy/", "label": "Kebijakan Cookie", "isExternal": false },
-        { "href": "/dmca/", "label": "DMCA", "isExternal": false }
-      ]
-    },
-    {
-      "title": "Social",
-      "items": [
-        { "href": "https://github.com/c0desk1", "label": "GitHub", "isExternal": true },
-        { "href": "https://twitter.com/c0desk1", "label": "Twitter", "isExternal": true }
+        {
+          "href": "/disclaimer/",
+          "label": "Disclaimer",
+          "isExternal": false
+        },
+        {
+          "href": "/privacy-policy/",
+          "label": "Kebijakan Privasi",
+          "isExternal": false
+        },
+        {
+          "href": "/terms-of-service/",
+          "label": "Ketentuan Layanan",
+          "isExternal": false
+        },
+        {
+          "href": "/cookie-policy/",
+          "label": "Kebijakan Cookie",
+          "isExternal": false
+        },
+        {
+          "href": "/dmca/",
+          "label": "DMCA & Copyright",
+          "isExternal": false
+        }
       ]
     }
   ],
