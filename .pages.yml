@@ -524,7 +524,7 @@ content:
             type: string
 
           - name: items
-            label: links
+            label: Item
             type: object
             list: true
             fields:
@@ -540,7 +540,6 @@ content:
                  label: Url Luar?
                  type: boolean
                  default: false
-         
 
       - name: defaultSeo
         label: Default SEO
