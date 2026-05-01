@@ -287,7 +287,7 @@ content:
 
   # --- AUTHORS ---
   - name: authors
-    label: Authors
+    label: Penulis
     type: collection
     path: src/content/authors
     filename: "{primary}.json"
@@ -364,7 +364,7 @@ content:
             
   # --- CATEGORIES ---
   - name: categories
-    label: Categories
+    label: Kategori
     type: collection
     path: src/content/categories
     filename: "{primary}.json"
@@ -386,7 +386,7 @@ content:
 
   # --- ORGANIZATIONS ---
   - name: organizations
-    label: Organizations
+    label: Perusahaan
     type: collection
     path: src/content/organizations
     filename: "{primary}.json"
@@ -470,7 +470,7 @@ content:
 
   # --- SETTINGS ---
   - name: settings
-    label: Site Settings
+    label: Pengaturan
     type: file
     path: src/content/settings/site.json
     view:
