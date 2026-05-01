@@ -62,8 +62,8 @@ const settings = defineCollection({
       	href: z.string(),
           label: z.string(),
           isExternal: z.boolean().default(false),
-      })
-    }),
+      })),
+    })),
   }),
 });
 
