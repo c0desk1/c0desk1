@@ -25,7 +25,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
         aria-expanded="false" 
         aria-controls="toc-list"
       >
-        <span class="text-sm md:text-[13px] font-semibold">Daftar Isi</span>
+        <span class="toc-trigger-text text-sm md:text-[13px] font-semibold">Daftar Isi</span>
         <Icon name="chevron-down" class="toc-chevron w-4 h-4" />
       </button>
       
@@ -46,14 +46,18 @@ const tocHeadings = filterHeadingsForTOC(headings);
 )}
 
 <style is:global>
-  /* Solusi Bug 2: Tambahkan jarak agar heading tidak tertutup header h-14 */
+  /*
+   * FIX BUG 1: scroll-margin-top harus cukup untuk header (h-14 = 3.5rem)
+   * ditambah sedikit breathing room. Nilai 4rem sudah cukup.
+   * Jangan set terlalu besar karena TOC sticky tidak ikut menambah offset saat scroll-to.
+   */
   :target {
-    scroll-margin-top: 5.5rem; 
+    scroll-margin-top: 4.5rem;
   }
-  
-  /* Atau jika menggunakan class prose */
-  .prose-custom h2, .prose-custom h3 {
-    scroll-margin-top: 5.5rem;
+
+  .prose-custom h2,
+  .prose-custom h3 {
+    scroll-margin-top: 4.5rem;
   }
 
   .toc-container {
@@ -86,13 +90,18 @@ const tocHeadings = filterHeadingsForTOC(headings);
     color: var(--fg);
   }
 
-  .toc-trigger span {
+  .toc-trigger-text {
     display: block;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 80%;
     transition: opacity 0.15s ease-in-out;
+  }
+
+  .toc-chevron {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
   }
 
   .toc-trigger[aria-expanded="true"] .toc-chevron {
@@ -103,8 +112,10 @@ const tocHeadings = filterHeadingsForTOC(headings);
     border-top: 1px solid var(--border);
     overflow-y: auto;
   }
-  
-  .toc-content[hidden] { display: none; }
+
+  .toc-content[hidden] {
+    display: none;
+  }
 
   .toc-ul {
     padding: 1rem;
@@ -125,11 +136,21 @@ const tocHeadings = filterHeadingsForTOC(headings);
     transition: color 0.2s;
   }
 
+  .toc-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--fg-muted);
+    flex-shrink: 0;
+    margin-top: 4px;
+    transition: background 0.2s, transform 0.2s;
+  }
+
   .active-link {
     color: var(--fg) !important;
     font-weight: 600;
   }
-  
+
   .active-link .toc-dot {
     background: var(--fg) !important;
     transform: scale(1.5);
@@ -137,16 +158,19 @@ const tocHeadings = filterHeadingsForTOC(headings);
 </style>
 
 <script>
-  const initTOC = () => {
-    const trigger = document.querySelector('.toc-trigger');
-    const triggerText = trigger?.querySelector('span');
-    const content = document.getElementById('toc-list');
-    const links = content?.querySelectorAll('.toc-link');
-    
-    if (!trigger || !content || !links || !triggerText) return;
-    
-    const defaultText = "Daftar Isi";
+  const HEADER_HEIGHT = 56; // h-14 = 3.5rem = 56px
 
+  const initTOC = () => {
+    const trigger = document.querySelector<HTMLButtonElement>('.toc-trigger');
+    const triggerText = trigger?.querySelector<HTMLElement>('.toc-trigger-text');
+    const content = document.getElementById('toc-list');
+    const links = content?.querySelectorAll<HTMLAnchorElement>('.toc-link');
+
+    if (!trigger || !content || !links || !triggerText) return;
+
+    const DEFAULT_TEXT = 'Daftar Isi';
+
+    // ─── Panel toggle ────────────────────────────────────────────────────────
     const closePanel = () => {
       trigger.setAttribute('aria-expanded', 'false');
       content.hidden = true;
@@ -154,57 +178,101 @@ const tocHeadings = filterHeadingsForTOC(headings);
 
     trigger.addEventListener('click', () => {
       const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
-      trigger.setAttribute('aria-expanded', (!isExpanded).toString());
+      trigger.setAttribute('aria-expanded', String(!isExpanded));
       content.hidden = isExpanded;
     });
 
     links.forEach(link => {
-      link.addEventListener('click', (e) => {
+      link.addEventListener('click', () => {
         if (window.innerWidth < 1024) closePanel();
       });
     });
 
-    // Reset ke "Daftar Isi" hanya jika benar-benar di paling atas
-    window.addEventListener('scroll', () => {
-      if (window.scrollY < 40) {
-        triggerText.innerText = defaultText;
-        links.forEach(l => l.classList.remove('active-link'));
+    // ─── Heading elements ────────────────────────────────────────────────────
+    const headingElements: HTMLElement[] = Array.from(links)
+      .map(link => {
+        const id = link.getAttribute('href')?.replace('#', '');
+        return id ? document.getElementById(id) : null;
+      })
+      .filter((el): el is HTMLElement => el !== null);
+
+    if (headingElements.length === 0) return;
+
+    // ─── Helper: set active link dengan fade ─────────────────────────────────
+    const setActiveLink = (link: Element | null) => {
+      links.forEach(l => l.classList.remove('active-link'));
+
+      if (!link) {
+        // FIX BUG 3: Kembalikan ke default saat tidak ada heading aktif
+        triggerText.style.opacity = '0';
+        setTimeout(() => {
+          triggerText.innerText = DEFAULT_TEXT;
+          triggerText.style.opacity = '1';
+        }, 80);
+        return;
       }
-    }, { passive: true });
 
-    const headingElements = Array.from(links).map(link => {
-      const id = link.getAttribute('href')?.replace('#', '');
-      return document.getElementById(id || '');
-    }).filter(h => h !== null) as HTMLElement[];
+      link.classList.add('active-link');
+      triggerText.style.opacity = '0';
+      setTimeout(() => {
+        triggerText.innerText = (link as HTMLElement).innerText;
+        triggerText.style.opacity = '1';
+      }, 80);
+    };
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        // Solusi Bug 1: Area deteksi dibuat pas di bawah header h-14 (top: 80px - 100px)
-        if (entry.isIntersecting && window.scrollY >= 40) {
-          const id = entry.target.getAttribute('id');
-          const correspondingLink = content.querySelector(`[href="#${id}"]`);
+    // ─── FIX BUG 2 & 3: Scroll-based detection menggunakan getBoundingClientRect ──
+    //
+    // IntersectionObserver sulit untuk kasus "heading pertama belum terlewat"
+    // dan "scroll balik ke atas". Solusi yang lebih andal: pakai scroll event
+    // dengan getBoundingClientRect untuk menentukan heading mana yang paling
+    // dekat dengan bagian atas viewport (tepat di bawah header).
+    //
+    const DETECTION_LINE = HEADER_HEIGHT + 8; // px dari top viewport — tepat di bawah header
 
-          if (correspondingLink) {
-            triggerText.style.opacity = "0";
-            setTimeout(() => {
-              triggerText.innerText = (correspondingLink as HTMLElement).innerText;
-              triggerText.style.opacity = "1";
-            }, 50);
-            
-            links.forEach(l => l.classList.remove('active-link'));
-            correspondingLink.classList.add('active-link');
-          }
+    const getActiveHeading = (): HTMLElement | null => {
+      // Cari heading terakhir yang sudah melewati garis deteksi (sudah di atas garis)
+      let active: HTMLElement | null = null;
+      for (const heading of headingElements) {
+        const rect = heading.getBoundingClientRect();
+        if (rect.top <= DETECTION_LINE) {
+          active = heading;
+        } else {
+          break;
         }
-      });
-    }, {
-      // Menaikkan batas atas (-80px) agar teks berganti tepat saat menyentuh header
-      rootMargin: '-80px 0px -80% 0px',
-      threshold: 0
-    });
+      }
+      return active;
+    };
 
-    headingElements.forEach(h => observer.observe(h));
+    const updateTOC = () => {
+      const activeHeading = getActiveHeading();
+
+      if (!activeHeading) {
+        // FIX BUG 3: Tidak ada heading yang aktif → reset ke default
+        setActiveLink(null);
+        return;
+      }
+
+      const id = activeHeading.getAttribute('id');
+      const correspondingLink = id
+        ? content.querySelector<HTMLAnchorElement>(`[href="#${id}"]`)
+        : null;
+
+      // Hanya update jika memang berubah (hindari flicker)
+      if (correspondingLink && !correspondingLink.classList.contains('active-link')) {
+        setActiveLink(correspondingLink);
+      }
+    };
+
+    // Jalankan sekali saat mount (untuk kasus deep link / page sudah ter-scroll)
+    updateTOC();
+
+    window.addEventListener('scroll', updateTOC, { passive: true });
   };
 
   initTOC();
-  document.addEventListener('astro:after-swap', initTOC);
+  document.addEventListener('astro:after-swap', () => {
+    // Cleanup listener lama sebelum reinit tidak perlu karena page swap
+    // mengganti DOM, tapi untuk keamanan kita tetap reinit
+    initTOC();
+  });
 </script>
