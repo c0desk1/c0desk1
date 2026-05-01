@@ -14,11 +14,11 @@ const { href, current = false } = Astro.props;
   aria-current={current ? "page" : undefined}
   class:list={[
 
-    "relative inline-flex items-center rounded-full px-3 py-2 text-sm font-medium transition-colors duration-150",
+    "relative inline-flex items-center rounded-full px-3 py-2 text-[13px] font-medium",
 
     current
-      ? "text-zinc-900 dark:text-zinc-100"
-      : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 hover:bg-black/10 dark:hover:bg-zinc-800/30"
+      ? "text-(--fg)"
+      : "text-(--fg-subtle) hover:text-(--fg) hover:bg-(--bg-subtle)"
 
   ]}
 >
@@ -27,7 +27,7 @@ const { href, current = false } = Astro.props;
   </span>
   {current && (
     <span
-      class="absolute inset-x-1 -bottom-[3px] h-[2px] rounded-full bg-zinc-900 dark:bg-zinc-100"
+      class="absolute inset-x-1 -bottom-[3px] h-[2px] rounded-full bg-(--fg)"
     ></span>
   )}
 </a>
