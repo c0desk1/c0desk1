@@ -14,13 +14,14 @@ import Section from "@/components/ui/Section.astro";
 
 import Breadcrumb from "@/components/ui/Breadcrumb.astro";
 import BackToTop from "@/components/ui/BackToTop.astro";
+import ReadingProgress from "@/components/ui/ReadingProgress.astro";
 
 import PortfolioHeader from "@/components/portfolio/PortfolioHeader.astro";
 import PortfolioMetrics from "@/components/portfolio/PortfolioMetrics.astro";
 import PortfolioGallery from "@/components/portfolio/PortfolioGallery.astro";
 import PortfolioRelated from "@/components/portfolio/PortfolioRelated.astro";
 import PortfolioFeaturedImage from "@/components/portfolio/PortfolioFeaturedImage.astro";
-import ReadingProgress from "@/components/ui/ReadingProgress.astro";
+import CaseStudy from "@/components/portfolio/portfolioCaseStudy.astro";
 
 export async function getStaticPaths() {
   const projects = await getCollection("portfolio", ({ data }) => !data.draft);
@@ -158,28 +159,12 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
       <Container size="sm">
         <h2 class="sr-only">Portfolio Content</h2>
         
-        {(challenge || solution || result) && (
-          <div class="space-y-6 mb-10 border-b border-zinc-100 dark:border-zinc-800 pb-8">
-            {challenge && (
-              <div>
-                <h2 class="text-[11px] font-mono uppercase tracking-[0.2em] text-zinc-400 mb-2">Tantangan</h2>
-                <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed">{challenge}</p>
-              </div>
-            )}
-            {solution && (
-              <div>
-                <h2 class="text-[11px] font-mono uppercase tracking-[0.2em] text-zinc-400 mb-2">Solusi</h2>
-                <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed">{solution}</p>
-              </div>
-            )}
-            {result && (
-              <div>
-                <h2 class="text-[11px] font-mono uppercase tracking-[0.2em] text-zinc-400 mb-2">Hasil</h2>
-                <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed">{result}</p>
-              </div>
-            )}
-          </div>
-        )}
+        <CaseStudy
+  		challenge={challenge}
+  		solution={solution}
+  		result={result}
+  		allowMultiple={true}
+		/>
 
         {displayGallery.length > 0 && (
           <div class="mb-12">
