@@ -1,7 +1,6 @@
 ---
 // src/components/search/SearchModal.astro
 import { getCollection, getEntry } from "astro:content";
-import Icon from "../ui/Icon.astro";
 
 const posts = await getCollection("blog", ({ data }) => !data.draft);
 
@@ -34,7 +33,6 @@ const searchData = await Promise.all(
     class="absolute inset-0 bg-(--bg)/50 backdrop-blur-sm opacity-0 transition-opacity duration-200"
   ></div>
 
-  <!-- Panel -->
   <div class="relative flex min-h-full items-start justify-center p-3 sm:pt-20">
     <div
       id="search-panel"
@@ -42,57 +40,81 @@ const searchData = await Promise.all(
              bg-(--bg) border border-(--border) rounded-(--radius-xl) shadow-2xl overflow-hidden"
     >
       <!-- Input row -->
-      <div class="flex items-center gap-2.5 px-3.5 border-b border-(--border) text-(--fg-muted)">
-        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+      <div class="flex items-center gap-2 px-3.5 border-b border-(--border)">
+        <!-- Search icon -->
+        <svg class="w-4 h-4 shrink-0 text-(--fg-muted)" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
           <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
         </svg>
+
         <input
           id="search-input"
           type="text"
           placeholder="Cari artikel…"
           aria-label="Cari artikel"
-          class="flex-1 py-3.5 text-sm bg-transparent text-(--fg) placeholder:text-(--fg-muted) outline-none"
+          class="flex-1 py-3.5 text-sm bg-transparent text-(--fg)
+                 placeholder:text-(--fg-muted) outline-none min-w-0"
           autocomplete="off"
           spellcheck="false"
         />
-        <!-- Clear -->
+
+        <!-- Clear input -->
         <button
           id="search-clear"
-          class="hidden p-1 rounded text-(--fg-muted) hover:text-(--fg) hover:bg-(--bg-muted) transition"
-          aria-label="Hapus pencarian"
+          class="hidden sm:hidden p-1 rounded text-(--fg-muted) hover:text-(--fg)
+                 hover:bg-(--bg-muted) transition shrink-0"
+          aria-label="Hapus teks pencarian"
+          tabindex="-1"
         >
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5"
             stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
             <path d="M18 6 6 18M6 6l12 12"/>
           </svg>
         </button>
+
+        <!-- 
+          Tombol CLOSE MODAL — mobile only.
+        -->
+        <button
+          id="search-close-mobile"
+          class="sm:hidden flex items-center justify-center p-1.5 -mr-1
+                 rounded-md text-(--fg-muted) hover:text-(--fg) hover:bg-(--bg-muted)
+                 transition shrink-0"
+          aria-label="Tutup pencarian"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M18 6 6 18M6 6l12 12"/>
+          </svg>
+        </button>
+
+        <!-- ESC badge — desktop only -->
         <kbd class="hidden sm:inline-flex shrink-0 items-center px-1.5 py-0.5 text-[12px]
-                    text-(--fg-muted) bg-(--bg-muted) border border-(--border) rounded-md">
+                    text-(--fg-muted) bg-(--bg-muted) border border-(--border) rounded-md
+                    pointer-events-none">
           ESC
         </kbd>
       </div>
 
       <!-- Results -->
       <div id="search-results" class="search-scroll max-h-[55vh] overflow-y-auto">
-        <!-- Diisi JS -->
+        <!-- diisi JS -->
       </div>
 
-      <!-- Footer -->
-      <div class="hidden sm:flex items-center justify-between px-3.5 py-2 border-t border-(--border)">
-        <div class="flex items-center gap-2 text-[12px] text-(--fg-muted)">
-          <span class="inline-flex items-center gap-1">
-            <kbd class="px-1.5 py-0.5 bg-(--bg-muted) border border-(--border) rounded text-[11px]">↑↓</kbd>
+      <!-- Footer — desktop only -->
+      <div class="hidden sm:flex items-center justify-between px-3.5 py-2
+                  border-t border-(--border) bg-(--bg-muted)">
+        <div class="flex items-center gap-3 text-[12px] text-(--fg-muted)">
+          <span class="inline-flex items-center gap-1.5">
+            <kbd class="px-1.5 py-0.5 bg-(--bg) border border-(--border) rounded text-[11px]">↑↓</kbd>
             Navigasi
           </span>
-          <span class="inline-flex items-center gap-1">
-            <kbd class="px-1.5 py-0.5 bg-(--bg-muted) border border-(--border) rounded text-[11px]">↵</kbd>
+          <span class="inline-flex items-center gap-1.5">
+            <kbd class="px-1.5 py-0.5 bg-(--bg) border border-(--border) rounded text-[11px]">↵</kbd>
             Buka
           </span>
         </div>
-        <span class="text-[11px] text-(--fg-muted)">
-          <span id="search-count"></span>
-        </span>
+        <span id="search-count" class="text-[11px] text-(--fg-muted)"></span>
       </div>
     </div>
   </div>
@@ -105,8 +127,6 @@ const searchData = await Promise.all(
     background: var(--border);
     border-radius: 3px;
   }
-
-  /* Highlight keyword dalam hasil */
   .search-hl {
     background: color-mix(in srgb, var(--fg) 12%, transparent);
     border-radius: 2px;
@@ -116,13 +136,14 @@ const searchData = await Promise.all(
 
 <script define:vars={{ searchData }}>
   (() => {
-    const modal    = document.getElementById('search-modal');
-    const backdrop = document.getElementById('search-backdrop');
-    const panel    = document.getElementById('search-panel');
-    const input    = document.getElementById('search-input');
-    const results  = document.getElementById('search-results');
-    const clearBtn = document.getElementById('search-clear');
-    const countEl  = document.getElementById('search-count');
+    const modal       = document.getElementById('search-modal');
+    const backdrop    = document.getElementById('search-backdrop');
+    const panel       = document.getElementById('search-panel');
+    const input       = document.getElementById('search-input');
+    const results     = document.getElementById('search-results');
+    const clearBtn    = document.getElementById('search-clear');
+    const closeMobile = document.getElementById('search-close-mobile');
+    const countEl     = document.getElementById('search-count');
 
     if (!modal || !backdrop || !panel || !input || !results) return;
 
@@ -130,55 +151,58 @@ const searchData = await Promise.all(
     let filtered  = [];
     let prevFocus = null;
 
-    // ── Fuzzy / scored search ───────────────────────────────────────────────
-    // Skor: exact title match > title includes > desc/category includes > fuzzy chars
+    // ── Helpers
+    const escHtml = (s) =>
+      String(s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+
+    const hlText = (str, q) => {
+      if (!q) return escHtml(str);
+      const safeQ = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return escHtml(str).replace(
+        new RegExp(`(${safeQ})`, 'gi'),
+        '<mark class="search-hl">$1</mark>'
+      );
+    };
+    
+    // ——— fuzzy
     const scoreMatch = (post, q) => {
       const tl = post.title.toLowerCase();
       const dl = post.desc.toLowerCase();
       const cl = post.category.toLowerCase();
+      if (tl === q)          return 100;
+      if (tl.startsWith(q)) return 80;
+      if (tl.includes(q))   return 60;
+      if (dl.includes(q))   return 40;
+      if (cl.includes(q))   return 30;
 
-      if (tl === q)              return 100;
-      if (tl.startsWith(q))     return 80;
-      if (tl.includes(q))       return 60;
-      if (dl.includes(q))       return 40;
-      if (cl.includes(q))       return 30;
-
-      // Fuzzy: semua karakter q harus muncul berurutan di title
       let qi = 0;
       for (let i = 0; i < tl.length && qi < q.length; i++) {
         if (tl[i] === q[qi]) qi++;
       }
-      if (qi === q.length) return 10;
-
-      return 0;
+      return qi === q.length ? 10 : 0;
     };
 
-    // Highlight keyword dalam string (aman dari XSS)
-    const hl = (str, q) => {
-      if (!q) return escHtml(str);
-      const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-      return escHtml(str).replace(
-        new RegExp(`(${escHtml(q).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'),
-        '<mark class="search-hl">$1</mark>'
-      );
-    };
-
-    const escHtml = (s) =>
-      s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-       .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-
-    // ── Render ──────────────────────────────────────────────────────────────
+    // ── Render
     const renderEmpty = (msg, sub) => {
       results.innerHTML = `
-        <div class="py-12 flex flex-col items-center text-center gap-1.5">
+        <div class="py-12 flex flex-col items-center gap-2 text-center">
           <svg class="w-7 h-7 text-(--fg-muted)" fill="none" stroke="currentColor"
             stroke-width="1.5" viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
           </svg>
           <p class="text-sm text-(--fg)">${msg}</p>
-          <p class="text-[13px] text-(--fg-muted)">${sub}</p>
+          <p class="text-[12px] text-(--fg-muted)">${sub}</p>
         </div>`;
       if (countEl) countEl.textContent = '';
+    };
+
+    const setActiveStyle = (items) => {
+      items.forEach((el, i) => {
+        el.classList.toggle('bg-(--bg-muted)', i === activeIdx);
+      });
     };
 
     const renderResults = (items, q) => {
@@ -186,26 +210,32 @@ const searchData = await Promise.all(
         renderEmpty('Tidak ditemukan', 'Coba kata kunci lain');
         return;
       }
-
       if (countEl) countEl.textContent = `${items.length} hasil`;
 
       results.innerHTML = items.map((p, i) => `
         <a
           href="${escHtml(p.url)}"
           data-idx="${i}"
-          class="sritem flex items-start gap-3 px-3.5 py-3 transition-colors
-                 hover:bg-(--bg-muted) focus:outline-none
+          class="sritem flex items-start gap-3 px-3.5 py-3
+                 hover:bg-(--bg-muted) transition-colors
                  ${i === activeIdx ? 'bg-(--bg-muted)' : ''}"
         >
-          <svg class="mt-0.5 w-4 h-4 shrink-0 text-(--fg-muted)" fill="none" stroke="currentColor"
-            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <svg class="mt-0.5 w-4 h-4 shrink-0 text-(--fg-muted)" fill="none"
+            stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round" viewBox="0 0 24 24">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
             <polyline points="14 2 14 8 20 8"/>
           </svg>
           <div class="min-w-0 flex-1">
-            <div class="text-sm font-medium text-(--fg) truncate">${hl(p.title, q)}</div>
-            <div class="mt-0.5 text-[12px] text-(--fg-muted) line-clamp-1">${hl(p.desc, q)}</div>
-            <div class="mt-1 text-[11px] text-(--fg-subtle)">${escHtml(p.category)}</div>
+            <div class="text-sm font-medium text-(--fg) truncate">
+              ${hlText(p.title, q)}
+            </div>
+            <div class="mt-0.5 text-[12px] text-(--fg-muted) line-clamp-1">
+              ${hlText(p.desc, q)}
+            </div>
+            <div class="mt-1 text-[11px] text-(--fg-subtle)">
+              ${escHtml(p.category)}
+            </div>
           </div>
         </a>
       `).join('');
@@ -217,7 +247,7 @@ const searchData = await Promise.all(
       renderEmpty('Cari artikel', 'Ketik untuk mulai mencari');
     };
 
-    // ── Open / Close ────────────────────────────────────────────────────────
+    // ── Open / Close
     const openModal = () => {
       prevFocus = document.activeElement;
       modal.classList.remove('hidden');
@@ -239,15 +269,20 @@ const searchData = await Promise.all(
         modal.classList.add('hidden');
         modal.setAttribute('inert', '');
         input.value = '';
-        clearBtn.classList.add('hidden');
+        
+		// Reset clear
+        if (clearBtn) clearBtn.classList.add('hidden');
         resetView();
         prevFocus?.focus();
       }, 200);
     };
 
-    // ── Events ──────────────────────────────────────────────────────────────
+    // ── Event listeners
     document.addEventListener('open-search', openModal);
     backdrop.addEventListener('click', closeModal);
+
+    closeMobile?.addEventListener('click', closeModal);
+
     clearBtn?.addEventListener('click', () => {
       input.value = '';
       clearBtn.classList.add('hidden');
@@ -262,15 +297,27 @@ const searchData = await Promise.all(
         return;
       }
       if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
-        e.preventDefault(); closeModal();
+        e.preventDefault();
+        closeModal();
       }
     });
 
-    // Input + debounce ringan
+    // Input — debounce 80ms
     let debounceTimer;
     input.addEventListener('input', () => {
       const q = input.value.trim();
-      clearBtn?.classList.toggle('hidden', !q);
+      
+      if (clearBtn) {
+        clearBtn.classList.toggle('hidden', !q);
+        if (q) {
+          clearBtn.classList.remove('hidden');
+          clearBtn.classList.add('sm:block');  // visible di sm+
+          clearBtn.classList.remove('sm:hidden');
+        } else {
+          clearBtn.classList.add('hidden');
+        }
+      }
+
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
         if (!q) { resetView(); return; }
@@ -285,7 +332,7 @@ const searchData = await Promise.all(
       }, 80);
     });
 
-    // Keyboard nav
+    // Keyboard navigation
     input.addEventListener('keydown', (e) => {
       const items = results.querySelectorAll('.sritem');
       if (!items.length) return;
@@ -300,11 +347,11 @@ const searchData = await Promise.all(
         e.preventDefault();
         items[activeIdx]?.click();
         return;
-      } else return;
+      } else {
+        return;
+      }
 
-      items.forEach((el, i) => {
-        el.classList.toggle('bg-(--bg-muted)', i === activeIdx);
-      });
+      setActiveStyle(items);
       items[activeIdx]?.scrollIntoView({ block: 'nearest' });
     });
 
