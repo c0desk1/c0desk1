@@ -530,7 +530,7 @@ content:
             label: Label
             type: string
 
-      - name: footerSection
+      - name: footerSections
         label: Navigasi Bawah
         list: true
         type: object
