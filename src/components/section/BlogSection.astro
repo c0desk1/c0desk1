@@ -12,20 +12,20 @@ const { posts } = Astro.props;
 
 <div class="section-divider py-4 md:py-8">
   <div class="mb-4 md:mb-8">
-    <h2 class="text-2xl md:text-3xl font-semibold text-black dark:text-white">
-      Postingan Terbaru
+    <h2 class="text-2xl md:text-3xl font-semibold text-(--fg)">
+      Postingan Terbaru.
     </h2>
   </div>
 
   {posts.length > 0 ? (
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 divide-y md:divide-y-0 divide-black/20 dark:divide-white/5">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 divide-y md:divide-y-0 divide-(--border)">
       {posts.map(post => (
         <PostCard post={post} />
       ))}
     </div>
   ) : (
-    <div class="py-12 text-center border border-dashed border-neutral-200 dark:border-neutral-800 rounded-lg">
-      <p class="text-neutral-500 dark:text-neutral-400 text-sm md:text-lg">
+    <div class="py-12 text-center border border-dashed border-(--border) rounded-lg">
+      <p class="text-(--fg-subtle) text-sm md:text-lg">
         Belum ada postingan blog.
       </p>
     </div>
