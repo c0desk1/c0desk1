@@ -37,11 +37,11 @@ const optimizedAvatar = isCdnUrl(authorAvatar) ? cdnImage(authorAvatar, { w: 48,
     />
   )}
   <div class="flex items-center gap-1 leading-tight">
-    <span class="text-black dark:text-white">
+    <span class="text-(--fg)">
       {authorName}
     </span>
     {authorTitle && (
-      <span class="text-zinc-500 dark:text-zinc-400">
+      <span class="text-(--fg-muted)">
         {authorTitle}
       </span>
     )}
