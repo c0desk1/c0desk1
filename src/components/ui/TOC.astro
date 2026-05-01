@@ -198,7 +198,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
       let currentHeadingId = "";
 
       headings.forEach(heading => {
-        const top = heading.offsetTop - 60;
+        const top = heading.offsetTop - 200;
         if (scrollPosition >= top) {
           currentHeadingId = heading.id;
         }
