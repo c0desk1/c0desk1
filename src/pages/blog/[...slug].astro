@@ -13,7 +13,7 @@ import Section from "@/components/ui/Section.astro";
 import Breadcrumb from "@/components/ui/Breadcrumb.astro";
 import BlogHeader from "@/components/blog/BlogHeader.astro";
 import BlogFeaturedImage from "@/components/blog/BlogFeaturedImage.astro";
-import TOC from "@/components/blog/TOC.astro";
+import TOC from "@/components/ui/TOC.astro";
 import BlogRelatedPosts from "@/components/blog/BlogRelatedPosts.astro";
 import BackToTop from "@/components/ui/BackToTop.astro";
 
@@ -158,8 +158,6 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
     	</div>
  	 </Container>
 	</Section>
-
-
     <Section size="md" class="section-divider">
       <Container size="md">
         <h2 class="sr-only">Related Posts</h2>
@@ -168,7 +166,5 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
       </Container>
     </Section>
   </article>
-
   <ReadingProgress />
-
 </BaseLayout>
