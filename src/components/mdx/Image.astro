@@ -13,7 +13,7 @@ const optimizedSrc = isCdnUrl(src) ? cdnImage(src, { q: 85 }) : src;
 const caption = title || alt;
 ---
 
-<figure class="prose-custom mx-auto max-w-3xl my-4 md:my-8 overflow-hidden">
+<figure class="prose-custom mx-auto max-w-3xl overflow-hidden">
   <img
     src={optimizedSrc}
     alt={alt}
