@@ -8,10 +8,10 @@ const { titles = ["Code"] } = Astro.props;
 ---
 
 <div
-  class="code-group not-prose mx-auto max-w-3xl my-8 overflow-hidden rounded-[var(--prose-radius-md)] border border-[var(--prose-border)] bg-[var(--prose-surface)]"
+  class="code-group not-prose mx-auto max-w-3xl my-8 overflow-hidden rounded-(--prose-radius-md) border border-(--prose-border) bg-(--prose-surface)"
 >
   <!-- Tab bar -->
-  <div class="flex items-center justify-between border-b border-[var(--prose-border)] px-2">
+  <div class="flex items-center justify-between border-b border-(--prose-border) px-2">
     <div class="flex overflow-x-auto no-scrollbar">
       {titles.map((title, index) => (
         <button
@@ -19,20 +19,20 @@ const { titles = ["Code"] } = Astro.props;
           class="
             relative px-4 py-2.5
             text-xs font-semibold tracking-wide
-            text-[var(--prose-fg-subtle)] hover:text-[var(--prose-fg)]
-            data-[active=true]:text-[var(--prose-fg)]
+            text-(--prose-fg-subtle) hover:text-(--prose-fg)
+            data-[active=true]:text-(--prose-fg)
             transition-colors duration-150
           "
         >
           {title}
-          <span class="absolute bottom-0 left-0 h-0.5 w-full rounded-full scale-x-0 bg-[var(--prose-emerald)] transition-transform duration-200 [button[data-active=true]>&]:scale-x-100" />
+          <span class="absolute bottom-0 left-0 h-0.5 w-full rounded-full scale-x-0 bg-(--prose-emerald) transition-transform duration-200 [button[data-active=true]>&]:scale-x-100" />
         </button>
       ))}
     </div>
 
     <!-- Copy button -->
     <button
-      class="copy-button p-2 text-[var(--prose-fg-subtle)] hover:text-[var(--prose-emerald)] cursor-pointer transition-colors duration-150"
+      class="copy-button p-2 text-(--prose-fg-subtle) hover:text-(--prose-emerald) cursor-pointer transition-colors duration-150"
       aria-label="Copy code"
     >
       <!-- Copy icon -->
@@ -41,7 +41,7 @@ const { titles = ["Code"] } = Astro.props;
         <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
       </svg>
       <!-- Check icon -->
-      <svg class="check-icon hidden text-[var(--prose-emerald)]" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <svg class="check-icon hidden text-(--prose-emerald)" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="20 6 9 17 4 12"/>
       </svg>
     </button>

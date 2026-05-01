@@ -1,17 +1,152 @@
 ---
 // src/components/mdx/Accordion.astro
-interface Props {
-  title: string;
+interface Item {
+  question: string;
+  answer: string;
 }
-
-const { title } = Astro.props;
+interface Props {
+  items: Item[];
+  allowMultiple?: boolean;
+}
+const { items = [], allowMultiple = false } = Astro.props;
 ---
 
-<details class="not-prose my-4 rounded-lg border border-zinc-200 dark:border-zinc-800">
-  <summary class="cursor-pointer p-4 font-medium text-zinc-900 dark:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900/50 transition-colors">
-    {title}
-  </summary>
-  <div class="border-t border-zinc-200 dark:border-zinc-800 p-4">
-    <slot />
-  </div>
-</details>
+<div
+  class="accordion not-prose mx-auto max-w-3xl my-8"
+  data-allow-multiple={allowMultiple ? "true" : "false"}
+>
+  {items.map((item, i) => (
+    <div class="accordion-item" data-index={i}>
+      <button
+        class="accordion-trigger"
+        aria-expanded="false"
+        aria-controls={`accordion-panel-${i}`}
+        id={`accordion-btn-${i}`}
+      >
+        <span class="accordion-question">{item.question}</span>
+        <svg class="accordion-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="m6 9 6 6 6-6"/>
+        </svg>
+      </button>
+      <div
+        class="accordion-panel"
+        id={`accordion-panel-${i}`}
+        role="region"
+        aria-labelledby={`accordion-btn-${i}`}
+        hidden
+      >
+        <div class="accordion-body">
+          <p set:html={item.answer} />
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+
+<style is:global>
+  .accordion {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md, 8px);
+    overflow: hidden;
+    divide-y: 1px;
+  }
+
+  .accordion-item {
+    border-bottom: 1px solid var(--border);
+  }
+  .accordion-item:last-child { border-bottom: none; }
+
+  .accordion-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 150ms ease;
+  }
+
+  .accordion-trigger:hover {
+    background-color: var(--bg-subtle);
+  }
+
+  .accordion-trigger:focus-visible {
+    outline: 2px solid var(--accent, #10b981);
+    outline-offset: -2px;
+  }
+
+  .accordion-question {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--fg);
+    line-height: 1.4;
+  }
+
+  .accordion-chevron {
+    flex-shrink: 0;
+    color: var(--fg-subtle);
+    transition: transform 200ms ease;
+  }
+
+  .accordion-trigger[aria-expanded="true"] .accordion-chevron {
+    transform: rotate(180deg);
+  }
+
+  .accordion-panel {
+    overflow: hidden;
+  }
+  .accordion-panel[hidden] { display: none; }
+
+  .accordion-body {
+    padding: 0 1.25rem 1rem;
+  }
+
+  .accordion-body p {
+    font-size: 0.875rem;
+    color: var(--fg-muted);
+    line-height: 1.7;
+    margin: 0;
+  }
+</style>
+
+<script>
+  const initAccordion = () => {
+    document.querySelectorAll<HTMLElement>('.accordion').forEach(root => {
+      const allowMultiple = root.dataset.allowMultiple === 'true';
+      const triggers = root.querySelectorAll<HTMLButtonElement>('.accordion-trigger');
+
+      const open = (trigger: HTMLButtonElement) => {
+        const panelId = trigger.getAttribute('aria-controls')!;
+        const panel = document.getElementById(panelId);
+        trigger.setAttribute('aria-expanded', 'true');
+        panel?.removeAttribute('hidden');
+      };
+
+      const close = (trigger: HTMLButtonElement) => {
+        const panelId = trigger.getAttribute('aria-controls')!;
+        const panel = document.getElementById(panelId);
+        trigger.setAttribute('aria-expanded', 'false');
+        panel?.setAttribute('hidden', '');
+      };
+
+      triggers.forEach(trigger => {
+        trigger.addEventListener('click', () => {
+          const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+
+          if (!allowMultiple) {
+            triggers.forEach(t => { if (t !== trigger) close(t); });
+          }
+
+          isOpen ? close(trigger) : open(trigger);
+        });
+      });
+    });
+  };
+
+  initAccordion();
+  document.addEventListener('astro:after-swap', initAccordion);
+</script>

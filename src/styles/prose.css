@@ -1,5 +1,4 @@
 /* src/styles/prose.css */
-
 @reference "@/styles/global.css";
 
 /* ==================== DESIGN TOKENS ==================== */
@@ -113,7 +112,6 @@
   margin-top: 3rem;
   margin-bottom: 0.875rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--prose-border);
   position: relative;
   scroll-margin-top: 64px;
 }
@@ -453,7 +451,6 @@
   font-weight: 600;
 }
 
-/* Task list */
 .prose-custom .contains-task-list {
   list-style: none;
   padding-left: 0;
@@ -544,10 +541,10 @@
   color: var(--prose-fg-muted);
 }
 
-/* Highlighted table row */
 .prose-custom tr.highlight td {
   background-color: #f0fdf4;
 }
+
 .dark .prose-custom tr.highlight td {
   background-color: #022c22;
 }
@@ -705,12 +702,12 @@
   max-width: none;
 }
 
-/* Variants */
 .prose-custom .callout-note {
   background-color: #eff6ff;
   border-color: #bfdbfe;
   color: #1e40af;
 }
+
 .dark .prose-custom .callout-note {
   background-color: #172554;
   border-color: #1d4ed8;
@@ -817,20 +814,20 @@
 .prose-custom .steps-container > h4 {
   position: relative;
   counter-increment: step;
-  padding-left: 2.25rem;
 }
 
 .prose-custom .steps-container > h3::before,
 .prose-custom .steps-container > h4::before {
   content: counter(step);
   position: absolute;
-  left: -2.5rem;
+  left: -2.55rem;
   top: 50%;
   transform: translateY(-50%);
   width: 1.625rem;
   height: 1.625rem;
-  background: var(--prose-emerald);
+  background: var(--prose-emerald-dim);
   color: var(--prose-white);
+  border: 1.2px solid var(--prose-border);
   font-size: 0.75rem;
   font-weight: 700;
   font-family: var(--prose-font-mono);
@@ -839,6 +836,12 @@
   align-items: center;
   justify-content: center;
   line-height: 1;
+}
+
+.dark .prose-custom .steps-container > h3::before,
+.dark .prose-custom .steps-container > h4::before {
+  background: var(--prose-black);
+  color: var(--prose-white);
 }
 
 .prose-custom .steps-container h3::after { content: none !important; }

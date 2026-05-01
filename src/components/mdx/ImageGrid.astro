@@ -17,7 +17,7 @@ const cols =
 
 <div class={`not-prose grid ${cols} gap-3 my-8 mx-auto max-w-3xl`}>
   {images.map((img) => (
-    <figure class="overflow-hidden rounded-[var(--prose-radius-md)] border border-[var(--prose-border)] bg-[var(--prose-surface)] m-0">
+    <figure class="overflow-hidden rounded-(--prose-radius-md) border border-(--prose-border) bg-(--prose-surface) m-0">
       <img
         src={img.src}
         alt={img.alt || ""}
@@ -26,7 +26,7 @@ const cols =
         class="w-full h-auto object-cover block"
       />
       {img.alt && (
-        <figcaption class="px-3 py-2 text-xs text-center text-[var(--prose-fg-subtle)] border-t border-[var(--prose-border)]">
+        <figcaption class="px-3 py-2 text-xs text-center text-(--prose-fg-subtle) border-t border-(--prose-border)">
           {img.alt}
         </figcaption>
       )}
