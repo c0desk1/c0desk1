@@ -1,19 +1,23 @@
 ---
 // src/components/ui/CopyLink.astro
-// @ts-nocheck
-import { copyToClipboard } from '@/lib/utils';
 ---
 
 <button 
   id="copy-link-btn" 
-  aria-label="Salin tautan halaman" 
-  class="relative p-2 rounded-md text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-all duration-200 group"
+  aria-label="Copy page link" 
+  class="relative p-2 rounded-md text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-all duration-200 group active:scale-95"
   data-url={Astro.url.href}
 >
-  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-  </svg>
-  <span class="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 text-[10px] font-mono bg-zinc-800 text-white rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+  <div class="relative w-5 h-5">
+    <svg id="icon-copy" class="absolute inset-0 w-full h-full transition-all duration-300 opacity-100 scale-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+    </svg>
+    <svg id="icon-check" class="absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-50 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+    </svg>
+  </div>
+
+  <span id="copy-tooltip" class="absolute -top-9 left-1/2 -translate-x-1/2 px-2 py-1 text-[11px] font-medium bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900 rounded-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-xl">
     Salin tautan
   </span>
 </button>
@@ -21,24 +25,45 @@ import { copyToClipboard } from '@/lib/utils';
 <script>
   import { copyToClipboard } from '@/lib/utils';
 
-  (function() {
+  const initCopy = () => {
     const btn = document.getElementById('copy-link-btn');
-    if (!btn) return;
+    const copyIcon = document.getElementById('icon-copy');
+    const checkIcon = document.getElementById('icon-check');
+    const tooltip = document.getElementById('copy-tooltip');
+
+    if (!btn || !copyIcon || !checkIcon || !tooltip) return;
 
     btn.addEventListener('click', async () => {
-      const url = btn.dataset.url;
+      const url = btn.getAttribute('data-url');
       if (!url) return;
       
       const success = await copyToClipboard(url);
+      
       if (success) {
-        const originalHTML = btn.innerHTML;
-        btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>`;
+        // Efek Visual Success
+        copyIcon.classList.replace('opacity-100', 'opacity-0');
+        copyIcon.classList.replace('scale-100', 'scale-50');
+        
+        checkIcon.classList.replace('opacity-0', 'opacity-100');
+        checkIcon.classList.replace('scale-50', 'scale-100');
+        
+        tooltip.textContent = 'Tersalin!';
+
         setTimeout(() => {
-          btn.innerHTML = originalHTML;
+          // Kembalikan ke Awal
+          copyIcon.classList.replace('opacity-0', 'opacity-100');
+          copyIcon.classList.replace('scale-50', 'scale-100');
+          
+          checkIcon.classList.replace('opacity-100', 'opacity-0');
+          checkIcon.classList.replace('scale-100', 'scale-50');
+          
+          tooltip.textContent = 'Salin tautan';
         }, 2000);
-      } else {
-        console.error('Gagal menyalin tautan');
       }
     });
-  })();
+  };
+
+  // Run on first load & after view transitions
+  initCopy();
+  document.addEventListener('astro:after-swap', initCopy);
 </script>
