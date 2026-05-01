@@ -48,14 +48,6 @@ export const siteConfig = {
         { href: `mailto:hallo@c0desk1.my.id`, label: "Email", isExternal: true },
         { href: "/contact", label: "Hubungi Kami" },
       ]
-    },
-    {
-      title: "Social",
-      items: [
-        { href: "https://github.com/c0desk1", label: "GitHub", isExternal: true },
-        { href: "https://twitter.com/c0desk1", label: "Twitter", isExternal: true },
-        { href: "https://linkedin.com/in/c0desk1", label: "LinkedIn", isExternal: true },
-      ]
     }
   ],
   
