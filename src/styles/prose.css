@@ -1,9 +1,4 @@
 /* src/styles/prose.css */
-/* ─────────────────────────────────────────────────────────────────────────────
-   Prose Custom — Vercel-inspired typography system
-   Accent: Emerald  |  Base: Pure #000000 / #FFFFFF
-   WCAG AA compliant · Responsive · Modern
-   ───────────────────────────────────────────────────────────────────────────── */
 
 @reference "@/styles/global.css";
 
@@ -84,7 +79,6 @@
   color: var(--prose-white);
 }
 
-/* First/last child reset for all headings */
 .prose-custom ul:first-child,
 .prose-custom ol:first-child,
 .prose-custom p:first-child,
@@ -105,7 +99,6 @@
 .prose-custom h5:last-child,
 .prose-custom h6:last-child { margin-bottom: 0 !important; }
 
-/* Heading scale — fluid via clamp */
 .prose-custom h1 {
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 700;
@@ -165,7 +158,6 @@
   margin-bottom: 0.25rem;
 }
 
-/* Anchor hash on hover — h2 & h3 */
 .prose-custom h2,
 .prose-custom h3 {
   cursor: pointer;
@@ -191,7 +183,6 @@
   opacity: 1;
 }
 
-/* Suppress hash in steps containers */
 .steps-container h3::after { content: none !important; }
 
 /* ==================== PARAGRAPH ==================== */
@@ -209,7 +200,6 @@
   color: var(--prose-fg-muted);
 }
 
-/* Allow full-width paragraphs inside wide containers */
 .prose-custom .prose-wide p {
   max-width: none;
 }
@@ -218,7 +208,7 @@
 
 .prose-custom a {
   color: var(--prose-emerald);
-  text-decoration: underline;
+  text-decoration: none;
   text-decoration-color: transparent;
   text-underline-offset: 3px;
   text-decoration-thickness: 1px;
@@ -335,7 +325,6 @@
   color: #c9d1d9;
 }
 
-/* Copy button (optional — hook via JS) */
 .prose-custom pre .copy-btn {
   position: absolute;
   top: 0.75rem;
@@ -1023,14 +1012,12 @@
   }
 }
 
-/* Focus ring — global within prose */
 .prose-custom :focus-visible {
   outline: 2px solid var(--prose-emerald);
   outline-offset: 2px;
   border-radius: var(--prose-radius-sm);
 }
 
-/* High contrast mode */
 @media (forced-colors: active) {
   .prose-custom a { color: LinkText; }
   .prose-custom code:not(pre code),
