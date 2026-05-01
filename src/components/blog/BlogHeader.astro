@@ -2,6 +2,8 @@
 // src/components/blog/BlogHeader.astro
 import BlogMeta from './BlogMeta.astro';
 import BlogAuthor from './BlogAuthor.astro';
+import CopyLink from "@/components/ui/LinkButton.astro";
+import Listen from "@/components/ui/ListenButton.astro";
 
 interface Props {
   title: string;
@@ -52,4 +54,8 @@ const {
       />
     </div>
   )}
+<div class="flex items-center gap-4 pt-1">
+    <CopyLink />
+    <Listen />
+  </div>
 </header>
