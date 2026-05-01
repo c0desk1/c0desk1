@@ -50,7 +50,6 @@ const tocHeadings = filterHeadingsForTOC(headings);
     position: sticky;
     top: 4.5rem;
     z-index: 40;
-    
     width: 100%;
   }
 
@@ -128,28 +127,42 @@ const tocHeadings = filterHeadingsForTOC(headings);
     background: var(--border);
     flex-shrink: 0;
   }
+  
+  .toc-link.text-\(--fg\) .toc-dot {
+    background: var(--fg);
+    transform: scale(1.5);
+    transition: all 0.2s;
+  }
+  
+  .toc-trigger span {
+	display: block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 80%;
+}
+
 
   @media (min-width: 1024px) {
-    .toc-container {
-      /* Anda bisa menyesuaikan ini jika layout Anda memiliki sidebar */
-    }
+    .toc-container {}
   }
 </style>
 
 <script>
   const initTOC = () => {
     const trigger = document.querySelector('.toc-trigger');
+    const triggerText = trigger?.querySelector('span');
     const content = document.getElementById('toc-list');
-
-    if (!trigger || !content) return;
+    const links = content?.querySelectorAll('.toc-link');
+    
+    if (!trigger || !content || !links || !triggerText) return;
 
     trigger.addEventListener('click', () => {
       const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
-      trigger.setAttribute('aria-expanded', !isExpanded ? 'true' : 'false');
+      trigger.setAttribute('aria-expanded', (!isExpanded).toString());
       content.hidden = isExpanded;
     });
 
-    const links = content.querySelectorAll('a');
     links.forEach(link => {
       link.addEventListener('click', () => {
         if (window.innerWidth < 1024) {
@@ -158,6 +171,45 @@ const tocHeadings = filterHeadingsForTOC(headings);
         }
       });
     });
+
+    const defaultText = "Daftar Isi";
+    const headingElements = Array.from(links).map(link => {
+      const id = link.getAttribute('href')?.replace('#', '');
+      return document.getElementById(id || '');
+    }).filter(h => h !== null) as HTMLElement[];
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '-100px 0px -70% 0px',
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const id = entry.target.getAttribute('id');
+        const correspondingLink = content.querySelector(`[href="#${id}"]`);
+
+        if (entry.isIntersecting) {
+          links.forEach(l => {
+            l.classList.remove('text-(--fg)', 'font-medium');
+            l.classList.add('text-(--fg-muted)');
+          });
+
+          if (correspondingLink) {
+            correspondingLink.classList.add('text-(--fg)', 'font-medium');
+            correspondingLink.classList.remove('text-(--fg-muted)');
+            triggerText.innerText = (correspondingLink as HTMLElement).innerText;
+          }
+        }
+      });
+
+      if (window.scrollY < 150) {
+        triggerText.innerText = defaultText;
+        links.forEach(l => l.classList.remove('text-(--fg)', 'font-medium'));
+      }
+    }, observerOptions);
+
+    headingElements.forEach(h => observer.observe(h));
   };
 
   initTOC();
