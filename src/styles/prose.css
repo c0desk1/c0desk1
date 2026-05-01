@@ -1,7 +1,7 @@
 /* src/styles/prose.css */
 @reference "@/styles/global.css";
 
-/* ==================== DESIGN TOKENS ==================== */
+/* ==================== TOKENS ==================== */
 
 :root {
   --prose-emerald:       #10b981;
@@ -584,7 +584,7 @@
   text-align: center;
   font-size: 0.8125rem;
   line-height: 1.5;
-  color: var(--prose-fg-subtle);
+  color: var(--prose-fg-muted);
   max-width: 60ch;
   margin: 0.75rem auto 0;
 }
