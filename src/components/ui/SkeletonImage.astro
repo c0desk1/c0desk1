@@ -1,0 +1,56 @@
+---
+// src/components/ui/SkeletonImage.astro
+
+interface Props {
+  aspect?  : string;
+  rounded? : string;
+  class?   : string;
+}
+
+const {
+  aspect  = 'video',
+  rounded = 'rounded-(--radius-lg)',
+  class: cls = '',
+} = Astro.props;
+
+const twKeywords = ['video', 'square', 'auto'];
+const isKeyword  = twKeywords.includes(aspect);
+const aspectClass = isKeyword ? `aspect-${aspect}` : '';
+const aspectStyle = !isKeyword ? `aspect-ratio: ${aspect};` : '';
+---
+
+<div
+  class:list={['skeleton-img', aspectClass, rounded, cls]}
+  style={aspectStyle}
+  aria-hidden="true"
+  role="presentation"
+>
+  <div class="skeleton-img-shimmer"></div>
+</div>
+
+<style is:global>
+  @keyframes sk-shimmer {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(100%);  }
+  }
+
+  .skeleton-img {
+    position: relative;
+    width: 100%;
+    background: var(--bg-muted, #e5e7eb);
+    overflow: hidden;
+  }
+
+  .skeleton-img-shimmer {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in srgb, var(--bg) 60%, transparent) 50%,
+      transparent 100%
+    );
+    animation: sk-shimmer 1.6s ease-in-out infinite;
+    pointer-events: none;
+  }
+</style>
