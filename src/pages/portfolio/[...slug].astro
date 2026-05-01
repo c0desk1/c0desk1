@@ -116,7 +116,7 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
 >
   <article>
     <h1 class="sr-only">{title}</h1>
-    <Section size="lg">
+    <Section size="sm">
       <Container size="sm">
         <h2 class="sr-only">Portfolio Header</h2>
         <Breadcrumb items={Breadcrumbs} />
@@ -134,9 +134,8 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
         />
       </Container>
     </Section>
-
     {image && (
-      <Section size="none">
+      <Section size="sm">
         <Container size="sm">
           <h2 class="sr-only">Portfolio Image Content</h2>
           <PortfolioFeaturedImage
@@ -147,25 +146,21 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
         </Container>
       </Section>
     )}
-
-    <Section size="md">
+    <Section size="sm">
       <Container size="sm">
-        <h2 class="sr-only">Portfolio Metrics</h2>
+        <h2 class="sr-only">Portfolio Metrics & Case Study</h2>
         <PortfolioMetrics metrics={metrics} />
-      </Container>
-    </Section>
-
-    <Section size="lg">
-      <Container size="sm">
-        <h2 class="sr-only">Portfolio Content</h2>
-        
         <PortfolioCaseStudy
   		challenge={challenge}
   		solution={solution}
   		result={result}
   		allowMultiple={true}
 		/>
-
+      </Container>
+    </Section>
+    <Section size="sm">
+      <Container size="sm">
+        <h2 class="sr-only">Portfolio Content</h2>
         {displayGallery.length > 0 && (
           <div class="mb-12">
             <h2 class="prose-custom mb-4">Gallery</h2>
@@ -175,14 +170,12 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
             />
           </div>
         )}
-
         <div class="prose-custom">
           <Content />
         </div>
       </Container>
     </Section>
-
-    <Section size="lg">
+    <Section size="sm">
       <Container size="sm">
         <h2 class="sr-only">Portfolio related Content</h2>
         <PortfolioRelated projects={relatedProjects} />
