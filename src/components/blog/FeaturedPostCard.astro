@@ -30,7 +30,7 @@ const optimizedAvatar = isCdnUrl(authorAvatar) ? cdnImage(authorAvatar, { w: 48,
 >
   <div class="mb-6">
     <div class="w-12 h-12 flex items-center justify-center rounded-full border border-(--border) bg-(--bg-subtle) group-hover:border-(--border-strong)">
-      <span class="text-sm md:text-lg font-semibold text-(--fg)">
+      <span class="text-sm md:text-lg font-semibold text-(--accent)">
         {title.charAt(0)}
       </span>
     </div>
@@ -58,7 +58,7 @@ const optimizedAvatar = isCdnUrl(authorAvatar) ? cdnImage(authorAvatar, { w: 48,
         alt={`Author ${authorName}`}
         width={48}
         height={48}
-        class="w-6 h-6 rounded-full object-cover"
+        class="w-6 h-6 rounded-full border border-(--border) object-cover"
         loading="lazy"
       />
     )}
