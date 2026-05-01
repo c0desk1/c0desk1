@@ -115,9 +115,35 @@ export function capitalizeWords(text: string): string {
     .join(' ');
 }
 
-export function generateExcerpt(content: string, maxLength: number = 160): string {
-  const plainText = content.replace(/<[^>]*>/g, '').replace(/[#*`>]/g, '');
-  return truncate(plainText, maxLength);
+export function generateExcerpt(content: string, maxLength: number = 200): string {
+  if (!content?.trim()) return '';
+
+  let text = content;
+  
+  text = text.replace(/^\s*---[\s\S]*?---\s*/, '');
+  
+  const lines = text.split('\n');
+  
+  const filteredLines = lines.filter(line => {
+    const trimmed = line.trim();
+    return !trimmed.startsWith('import ') && !trimmed.startsWith('// ') && !trimmed.startsWith('/*');
+  });
+  
+  text = filteredLines.join('\n');
+  text = text.replace(/\{\/\*[\s\S]*?\*\/\}/g, '');
+  text = text.replace(/<[^>]*>/g, ' ');
+  text = text.replace(/<\/[^>]*>/g, ' ');
+  text = text.replace(/^#{1,6}\s+/gm, '');
+  text = text.replace(/\*\*([^*]+)\*\*/g, '$1');
+  text = text.replace(/\*([^*]+)\*/g, '$1');
+  text = text.replace(/__([^_]+)__/g, '$1');
+  text = text.replace(/_([^_]+)_/g, '$1');
+  text = text.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
+  text = text.replace(/!\[[^\]]*\]\([^)]+\)/g, '');
+  text = text.replace(/`([^`]+)`/g, '$1');
+  text = text.replace(/[#*`>_\-+]/g, ' ');
+  text = text.replace(/\s+/g, ' ').trim();
+  return truncate(text, maxLength);
 }
 
 // ==================== READING TIME UTILITIES ====================
