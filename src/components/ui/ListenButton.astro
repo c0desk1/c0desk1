@@ -1,0 +1,79 @@
+---
+// src/components/ui/Listen.astro
+// @ts-nocheck
+---
+
+<button 
+  id="listen-btn" 
+  aria-label="Dengarkan artikel" 
+  class="relative p-2 rounded-md text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-all duration-200 group"
+>
+  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.414H4.5a.5.5 0 01-.5-.5v-5a.5.5 0 01.5-.5h1.086a.5.5 0 01.35.146l3.598 3.598c.18.18.416.264.653.233a.5.5 0 00.404-.456V6.99a.5.5 0 00.404-.456.75.75 0 00-.653.233l-3.331 3.33" />
+  </svg>
+  <span class="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 text-[10px] font-mono bg-zinc-800 text-white rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+    Dengarkan
+  </span>
+</button>
+
+<script>
+  (function() {
+    const btn = document.getElementById('listen-btn');
+    if (!btn) return;
+    
+    let isPlaying = false;
+    let utterance = null;
+    
+    const getArticleText = () => {
+      const article = document.querySelector('article') || document.querySelector('main');
+      if (!article) return '';
+      const clone = article.cloneNode(true);
+      clone.querySelectorAll('script, style, nav, aside, .toc, .related-posts, .feedback, .back-to-top').forEach(el => el.remove());
+      return clone.innerText || '';
+    };
+    
+    const stopSpeaking = () => {
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+      isPlaying = false;
+      btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.414H4.5a.5.5 0 01-.5-.5v-5a.5.5 0 01.5-.5h1.086a.5.5 0 01.35.146l3.598 3.598c.18.18.416.264.653.233a.5.5 0 00.404-.456V6.99a.5.5 0 00.404-.456.75.75 0 00-.653.233l-3.331 3.33" /></svg>`;
+    };
+    
+    const startSpeaking = () => {
+      const text = getArticleText();
+      if (!text) {
+        alert('Tidak ada teks yang dapat dibaca.');
+        return;
+      }
+      
+      if (!window.speechSynthesis) {
+        alert('Browser Anda tidak mendukung text-to-speech.');
+        return;
+      }
+      
+      utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'id-ID';
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
+      
+      utterance.onend = () => {
+        isPlaying = false;
+        btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.414H4.5a.5.5 0 01-.5-.5v-5a.5.5 0 01.5-.5h1.086a.5.5 0 01.35.146l3.598 3.598c.18.18.416.264.653.233a.5.5 0 00.404-.456V6.99a.5.5 0 00.404-.456.75.75 0 00-.653.233l-3.331 3.33" /></svg>`;
+      };
+      
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+      isPlaying = true;
+      btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+    };
+    
+    btn.addEventListener('click', () => {
+      if (isPlaying) {
+        stopSpeaking();
+      } else {
+        startSpeaking();
+      }
+    });
+  })();
+</script>
