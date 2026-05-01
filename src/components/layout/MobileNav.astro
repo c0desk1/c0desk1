@@ -2,6 +2,7 @@
 // src/components/layout/MobileNav.astro
 import { siteConfig } from "@/config/site";
 import { getEntry } from 'astro:content';
+import Icon from "../ui/Icon.astro";
 
 let settings;
 try {
@@ -20,9 +21,7 @@ const siteData = settings?.data || siteConfig;
     aria-controls="mobile-dropdown"
     class="p-2 rounded-md text-(--fg-muted) hover:text-(--fg) hover:bg-(--bg-subtle) focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400/50"
   >
-    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 8h16M4 16h16"/>
-    </svg>
+     <Icon name="menu" class="w-5 h-5" />
   </button>
   <div 
     id="mobile-dropdown"
