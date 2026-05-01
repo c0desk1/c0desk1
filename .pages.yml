@@ -368,7 +368,7 @@ content:
         label: Deskripsi
         type: text
 
-  # --- ORGANIZATIONS (Company/Brand) ---
+  # --- ORGANIZATIONS ---
   - name: organizations
     label: Organizations
     type: collection
@@ -516,11 +516,15 @@ content:
 
       - name: footerSection
         label: Navigasi Bawah
-        type: object
         list: true
+        type: object
         fields:
           - name: title
             label: Judul
+            type: string
+
+          - name: items
+            label: links
             type: object
             list: true
             fields:
