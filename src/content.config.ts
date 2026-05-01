@@ -55,50 +55,15 @@ const settings = defineCollection({
     navItems: z.array(z.object({
       href: z.string(),
       label: z.string(),
-    })).default([
-      { href: "/blog/", label: "Blog" },
-      { href: "/portfolio/", label: "Portfolio" },
-      { href: "/about/", label: "Tentang" },
-    ]),
-    footerSections: z.array(
-      z.object({
-        title: z.string(),
-        items: z.array(
-          z.object({
-            href: z.string(),
-            label: z.string(),
-            isExternal: z.boolean().default(false),
-          })
-        ),
+    })),
+    footerSections: z.array(z.object({
+      title: z.string(),
+      items: z.array(z.object({
+      	href: z.string(),
+          label: z.string(),
+          isExternal: z.boolean().default(false),
       })
-    ).default([
-      {
-        title: "Navigasi",
-        items: [
-          { href: "/blog/", label: "Blog", isExternal: false },
-          { href: "/portfolio/", label: "Portfolio", isExternal: false },
-          { href: "/about/", label: "Tentang", isExternal: false },
-        ],
-      },
-      {
-        title: "Legal",
-        items: [
-          { href: "/privacy-policy/", label: "Kebijakan Privasi", isExternal: false },
-          { href: "/terms-of-service/", label: "Ketentuan Layanan", isExternal: false },
-          { href: "/disclaimer/", label: "Disclaimer", isExternal: false },
-          { href: "/cookie-policy/", label: "Kebijakan Cookie", isExternal: false },
-          { href: "/dmca/", label: "DMCA", isExternal: false },
-        ],
-      },
-      {
-        title: "Social",
-        items: [
-          { href: "https://github.com/c0desk1", label: "GitHub", isExternal: true },
-          { href: "https://twitter.com/c0desk1", label: "Twitter", isExternal: true },
-          { href: "https://linkedin.com/in/c0desk1", label: "LinkedIn", isExternal: true },
-        ],
-      },
-    ])
+    }),
   }),
 });
 
