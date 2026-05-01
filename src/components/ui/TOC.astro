@@ -207,12 +207,8 @@ const tocHeadings = filterHeadingsForTOC(headings);
     // ── Core detection ──────────────────────────────────────────────────────
     //
     // DETECTION_LINE: titik di mana heading dianggap "aktif".
-    // Menggunakan 40% dari viewport height — heading baru aktif
-    // setelah posisinya sudah cukup jauh melewati header dan
-    // benar-benar dalam area baca utama, bukan hanya menyentuh
-    // bagian bawah header.
-    //
-    const getDetectionLine = () => HEADER_H + window.innerHeight * 0.35;
+    
+    const getDetectionLine = () => HEADER_H + 40 //window.innerHeight * 0.35;
 
     const getActiveHeading = (): HTMLElement | null => {
       const line = getDetectionLine();
@@ -230,7 +226,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
     const updateTOC = () => {
       const active = getActiveHeading();
 
-      if (active === currentActive) return; // tidak ada perubahan, skip
+      if (active === currentActive) return;
       currentActive = active;
 
       links.forEach(l => l.classList.remove('active-link'));
@@ -248,7 +244,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
       setLabel(link.innerText);
     };
 
-    updateTOC(); // run on mount (deep link / sudah ter-scroll)
+    updateTOC();
     window.addEventListener('scroll', updateTOC, { passive: true });
   };
 
