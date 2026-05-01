@@ -21,7 +21,7 @@ import PortfolioMetrics from "@/components/portfolio/PortfolioMetrics.astro";
 import PortfolioGallery from "@/components/portfolio/PortfolioGallery.astro";
 import PortfolioRelated from "@/components/portfolio/PortfolioRelated.astro";
 import PortfolioFeaturedImage from "@/components/portfolio/PortfolioFeaturedImage.astro";
-import CaseStudy from "@/components/portfolio/portfolioCaseStudy.astro";
+import PortfolioCaseStudy from "@/components/portfolio/PortfolioCaseStudy.astro";
 
 export async function getStaticPaths() {
   const projects = await getCollection("portfolio", ({ data }) => !data.draft);
@@ -159,7 +159,7 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
       <Container size="sm">
         <h2 class="sr-only">Portfolio Content</h2>
         
-        <CaseStudy
+        <PortfolioCaseStudy
   		challenge={challenge}
   		solution={solution}
   		result={result}
