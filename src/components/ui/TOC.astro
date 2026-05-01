@@ -51,6 +51,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
     top: 4.5rem;
     z-index: 40;
     width: 100%;
+    margin-bottom: 0px !important;
   }
 
   .toc-nav {
@@ -157,22 +158,21 @@ const tocHeadings = filterHeadingsForTOC(headings);
     
     if (!trigger || !content || !links || !triggerText) return;
 
+    const defaultText = "Daftar Isi";
+
     trigger.addEventListener('click', () => {
       const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
       trigger.setAttribute('aria-expanded', (!isExpanded).toString());
       content.hidden = isExpanded;
     });
 
-    links.forEach(link => {
-      link.addEventListener('click', () => {
-        if (window.innerWidth < 1024) {
-          trigger.setAttribute('aria-expanded', 'false');
-          content.hidden = true;
-        }
-      });
-    });
+    window.addEventListener('scroll', () => {
+      if (window.scrollY < 200) {
+        triggerText.innerText = defaultText;
+        links.forEach(l => l.classList.remove('active-link'));
+      }
+    }, { passive: true });
 
-    const defaultText = "Daftar Isi";
     const headingElements = Array.from(links).map(link => {
       const id = link.getAttribute('href')?.replace('#', '');
       return document.getElementById(id || '');
@@ -180,33 +180,24 @@ const tocHeadings = filterHeadingsForTOC(headings);
 
     const observerOptions = {
       root: null,
-      rootMargin: '-100px 0px -70% 0px',
+      rootMargin: '-100px 0px -80% 0px',
       threshold: 0
     };
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        const id = entry.target.getAttribute('id');
-        const correspondingLink = content.querySelector(`[href="#${id}"]`);
-
         if (entry.isIntersecting) {
-          links.forEach(l => {
-            l.classList.remove('text-(--fg)', 'font-medium');
-            l.classList.add('text-(--fg-muted)');
-          });
+          const id = entry.target.getAttribute('id');
+          const correspondingLink = content.querySelector(`[href="#${id}"]`);
 
           if (correspondingLink) {
-            correspondingLink.classList.add('text-(--fg)', 'font-medium');
-            correspondingLink.classList.remove('text-(--fg-muted)');
             triggerText.innerText = (correspondingLink as HTMLElement).innerText;
+            
+            links.forEach(l => l.classList.remove('active-link'));
+            correspondingLink.classList.add('active-link');
           }
         }
       });
-
-      if (window.scrollY < 150) {
-        triggerText.innerText = defaultText;
-        links.forEach(l => l.classList.remove('text-(--fg)', 'font-medium'));
-      }
     }, observerOptions);
 
     headingElements.forEach(h => observer.observe(h));
