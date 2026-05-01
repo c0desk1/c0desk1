@@ -2,6 +2,7 @@
 // src/components/ui/BackToTop.astro
 
 import Button from './Button.astro';
+import Icon from './Icon.astro';
 
 interface Props {
   showBorder?: boolean;
@@ -23,7 +24,7 @@ const alignClasses = {
 ]}>
   <Button href="#top" variant='secondary'>
     <span class="group-hover:-translate-y-0.5">
-      ↑
+      <Icon name="arrow-up" class="w-5 h-5" />
     </span>
     <span class="text-(--fg)">
       Kembali ke atas
