@@ -217,55 +217,40 @@ import Icon from "./Icon.astro";
         .split(/(?<=[.!?])\s+|(?<=[:;])\s+|\n{2,}/)
         .map(s => s.trim())
         .filter(s => s.length > 3);
+        
 
     // ── Highlight
+    let highlightedEl: HTMLElement | null = null;
+    
     const clearHighlight = () => {
-  if (!highlightMark) return;
-  // Kembalikan el ke posisi mark, hapus mark
-  const el = highlightMark.firstElementChild;
-  if (el) {
-    highlightMark.replaceWith(el);
-  } else {
-    highlightMark.remove();
-  }
-  highlightMark = null;
-};
+		highlightedEl?.classList.remove('tts-highlight');
+		highlightedEl = null;
+	};
 
-    // HANYA bagian highlightChunk yang perlu diganti di Listen.astro
+    const highlightChunk = (chunk: string) => {
+		if (!articleEl) return;
+		
+		clearHighlight();
+		const needleRaw = chunk.slice(0, 40).replace(/\s+/g, ' ').trim();
+		
+		if (needleRaw.length < 4) return;
 
-const highlightChunk = (chunk: string) => {
-  if (!articleEl) return;
-  clearHighlight();
-
-  // Ambil 35 karakter pertama, normalisasi whitespace
-  const needleRaw = chunk.slice(0, 35).replace(/\s+/g, ' ').trim();
-  if (needleRaw.length < 4) return;
-
-  const escaped = needleRaw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const re = new RegExp(escaped, 'i');
-
-  const candidates = articleEl.querySelectorAll<HTMLElement>(
-    'p, h1, h2, h3, h4, h5, h6, li, blockquote, td'
-  );
-
-  for (const el of candidates) {
-    if (el.closest('button, nav, aside, [role="navigation"], .toc-container')) continue;
-
-    // Normalisasi whitespace innerText sebelum match (MDX kadang sisipkan \n)
-    const elText = (el.innerText || el.textContent || '').replace(/\s+/g, ' ');
-    if (!re.test(elText)) continue;
-
-    // FIX: gunakan replaceWith agar mark menggantikan el di DOM secara atomik
-    const mark = document.createElement('mark');
-    mark.className = 'tts-highlight';
-    el.replaceWith(mark);   // mark masuk ke posisi el
-    mark.appendChild(el);   // el masuk ke dalam mark — DOM utuh, tidak ada glitch
-    highlightMark = mark;
-
-    mark.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    break;
-  }
-};
+		const escaped = needleRaw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+		const re = new RegExp(escaped, 'i');
+		const candidates = articleEl.querySelectorAll<HTMLElement>(
+			'p, h1, h2, h3, h4, h5, h6, li, blockquote, td'
+		);
+		for (const el of candidates) {
+			if (el.closest('button, nav, aside, [role="navigation"], .toc-container')) continue;
+			
+			const elText = (el.innerText ?? el.textContent ?? '').replace(/\s+/g, ' ');
+			if (!re.test(elText)) continue;
+			el.classList.add('tts-highlight');
+			highlightedEl = el;
+			el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+			break;
+		}
+	};
 
     // ── DOM helpers
     const $ = <T extends HTMLElement>(id: string) =>
