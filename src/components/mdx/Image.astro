@@ -6,9 +6,10 @@ interface Props {
   src: string;
   alt?: string;
   title?: string;
+  loading?: boolean;
 }
 
-const { src, alt = '', title } = Astro.props;
+const { src, alt = '', title, loading = true } = Astro.props;
 const optimizedSrc = !loading && src && isCdnUrl(src)
 	? cdnImage(src, { w: 1280, h: 720, q: 85 })
   : src ?? '';
