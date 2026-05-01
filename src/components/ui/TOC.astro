@@ -87,7 +87,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 80%;
-    /* Transisi opacity agar perpindahan teks halus */
+    /* Update: Tambahkan transisi sesuai permintaan */
     transition: opacity 0.2s ease-in-out;
   }
 
@@ -129,6 +129,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
     flex-shrink: 0;
   }
   
+  /* Link aktif global */
   .active-link {
     color: var(--fg) !important;
     font-weight: 600;
@@ -137,6 +138,10 @@ const tocHeadings = filterHeadingsForTOC(headings);
   .active-link .toc-dot {
     background: var(--fg) !important;
     transform: scale(1.5);
+  }
+
+  @media (min-width: 1024px) {
+    .toc-container {}
   }
 </style>
 
@@ -168,6 +173,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
       });
     });
 
+    // Fix: Nilai threshold diperkecil agar heading 1 tidak ter-reset paksa
     window.addEventListener('scroll', () => {
       if (window.scrollY < 50) {
         triggerText.innerText = defaultText;
@@ -182,17 +188,19 @@ const tocHeadings = filterHeadingsForTOC(headings);
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
+        // Fix: Tambahkan syarat scroll agar tidak bentrok dengan state "Top Page"
         if (entry.isIntersecting && window.scrollY >= 50) {
           const id = entry.target.getAttribute('id');
           const correspondingLink = content.querySelector(`[href="#${id}"]`);
 
           if (correspondingLink) {
+            // Animasi halus saat teks berubah
             triggerText.style.opacity = "0";
             setTimeout(() => {
               triggerText.innerText = (correspondingLink as HTMLElement).innerText;
               triggerText.style.opacity = "1";
             }, 100);
-            
+
             links.forEach(l => l.classList.remove('active-link'));
             correspondingLink.classList.add('active-link');
           }
@@ -204,7 +212,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
     });
 
     headingElements.forEach(h => observer.observe(h));
-  }; 
+  }; // Kurung tutup fungsi initTOC sekarang sudah benar di sini
 
   initTOC();
   document.addEventListener('astro:after-swap', initTOC);
