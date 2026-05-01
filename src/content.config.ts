@@ -1,5 +1,4 @@
-import { defineCollection, reference } from "astro:content";
-import { z } from "astro/zod";
+import { defineCollection, reference, z } from "astro:content";
 import { glob } from "astro/loaders";
 
 // ==========================================
@@ -21,6 +20,18 @@ const metadataSchema = z.object({
   featured: z.boolean().default(false),
 });
 
+const socialSchema = z.object({
+  github: z.string().optional(),
+  facebook: z.string().optional(),
+  instagram: z.string().optional(),
+  youtube: z.string().optional(),
+  twitter: z.string().optional(),
+  telegram: z.string().optional(),
+  whatsapp: z.string().optional(),
+  tiktok: z.string().optional(),
+  linkedIn: z.string().optional(),
+}).optional();
+
 // ==========================================
 // 2. CORE ENTITIES
 // ==========================================
@@ -30,24 +41,11 @@ const settings = defineCollection({
   schema: z.object({
     siteName: z.string(),
     siteDescription: z.string().max(200),
-    siteUrl: z.string().regex(/^https?:\/\/.+\..+/, "Must be a valid URL"),
+    siteUrl: z.string(),
     siteLogo: z.string(),
-    siteMail: z.string().regex(/^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/, "Must be a valid email"),
-    social: z.object({
-      github: z.string().regex(/^https?:\/\/.+\..+/, "Must be a valid URL").optional(),
-      facebook: z.string().regex(/^https?:\/\/.+\..+/, "Must be a valid URL").optional(),
-      instagram: z.string().regex(/^https?:\/\/.+\..+/, "Must be a valid URL").optional(),
-      youtube: z.string().regex(/^https?:\/\/.+\..+/, "Must be a valid URL").optional(),
-      twitter: z.string().regex(/^https?:\/\/.+\..+/, "Must be a valid URL").optional(),
-      telegram: z.string().regex(/^https?:\/\/.+\..+/, "Must be a valid URL").optional(),
-      whatsapp: z.string().regex(/^https?:\/\/.+\..+/, "Must be a valid URL").optional(),
-      tiktok: z.string().regex(/^https?:\/\/.+\..+/, "Must be a valid URL").optional(),
-    }).optional(),
-    defaultSeo: z.object({
-      title: z.string().optional(),
-      description: z.string().max(200).optional(),
-      ogImage: z.string().optional(),
-    }).optional(),
+    siteMail: z.string(),
+    social: socialSchema,
+    defaultSeo: seoSchema.optional(),
     googleSiteVerification: z.string().optional(),
     googleAdsenseId: z.string().optional(),
     googleAnalyticsId: z.string().optional(),
@@ -59,9 +57,9 @@ const settings = defineCollection({
     footerSections: z.array(z.object({
       title: z.string(),
       items: z.array(z.object({
-      	href: z.string(),
-          label: z.string(),
-          isExternal: z.boolean().default(false),
+        href: z.string(),
+        label: z.string(),
+        isExternal: z.boolean().default(false),
       })),
     })),
   }),
@@ -76,17 +74,7 @@ const authors = defineCollection({
     avatar: z.string(),
     bio: z.string(),
     organization: reference('organizations').optional(),
-    social: z.object({
-      github: z.string().regex(/^https?:\/\/.+\..+/, "Must be a valid URL").optional(),
-      facebook: z.string().regex(/^https?:\/\/.+\..+/, "Must be a valid URL").optional(),
-      instagram: z.string().regex(/^https?:\/\/.+\..+/, "Must be a valid URL").optional(),
-      youtube: z.string().regex(/^https?:\/\/.+\..+/, "Must be a valid URL").optional(),
-      twitter: z.string().regex(/^https?:\/\/.+\..+/, "Must be a valid URL").optional(),
-      telegram: z.string().regex(/^https?:\/\/.+\..+/, "Must be a valid URL").optional(),
-      whatsapp: z.string().regex(/^https?:\/\/.+\..+/, "Must be a valid URL").optional(),
-      tiktok: z.string().regex(/^https?:\/\/.+\..+/, "Must be a valid URL").optional(),
-      linkedIn: z.string().regex(/^https?:\/\/.+\..+/, "Must be a valid URL").optional(),
-    }).optional(),
+    social: socialSchema,
   }),
 });
 
@@ -99,15 +87,14 @@ const categories = defineCollection({
   }),
 });
 
-
 const organizations = defineCollection({
   loader: glob({ pattern: "**/*.json", base: "./src/content/organizations" }),
   schema: z.object({
     name: z.string(),
     legalName: z.string().optional(),
-    url: z.string().regex(/^https?:\/\/.+\..+/, "Must be a valid URL"),
+    url: z.string(),
     logo: z.string(),
-    contactEmail: z.string().email().optional(),
+    contactEmail: z.string().optional(),
   }),
 });
 
@@ -125,11 +112,9 @@ const blog = defineCollection({
       alt: z.string(),
       caption: z.string().optional(),
     }),
-
     author: reference("authors"),
     category: reference("categories"),
     tags: z.array(z.string()).default([]),
-    
     ...metadataSchema.shape,
     seo: seoSchema.optional(),
   }),
@@ -148,18 +133,17 @@ const portfolio = defineCollection({
     client: z.string().optional(),
     role: z.string().optional(),
     duration: z.string().optional(),
-    demoUrl: z.string().url().optional(),
-    repoUrl: z.string().url().optional(),
+    demoUrl: z.string().optional(),
+    repoUrl: z.string().optional(),
     metrics: z.object({
-      performance: z.number().optional(),
-      accessibility: z.number().optional(),
-      seo: z.number().optional(),
+      performance: z.number().min(0).max(100).optional(),
+      accessibility: z.number().min(0).max(100).optional(),
+      seo: z.number().min(0).max(100).optional(),
     }).optional(),
     challenge: z.string().optional(),
     solution: z.string().optional(),
     result: z.string().optional(),
     gallery: z.array(z.string()).optional(),
-    
     ...metadataSchema.shape,
     seo: seoSchema.optional(),
   }),
