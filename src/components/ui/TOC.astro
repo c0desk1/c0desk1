@@ -47,7 +47,6 @@ const tocHeadings = filterHeadingsForTOC(headings);
 )}
 
 <style is:global>
-  /* 1. Perbaikan Scroll To: Agar tidak tertutup header */
   :target {
     scroll-margin-top: 6rem;
   }
@@ -56,10 +55,9 @@ const tocHeadings = filterHeadingsForTOC(headings);
     scroll-margin-top: 6rem;
   }
 
-  /* 2. Container Sticky */
   .toc-container {
     position: sticky;
-    top: 5rem; /* h-14 (3.5rem) + safe gap */
+    top: 5rem;
     z-index: 40;
     width: 100%;
     margin-bottom: 0 !important;
@@ -162,7 +160,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
 
     const DEFAULT_TITLE = "Daftar Isi";
 
-    // --- LOGIKA ACCORDION ---
+    // --- ACCORDION ---
     const toggleTOC = (forceClose = false) => {
       const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
       if (forceClose || isExpanded) {
@@ -182,7 +180,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
       });
     });
 
-    // --- LOGIKA SCROLLSPY & AUTO-TITLE ---
+    // --- SCROLLSPY & AUTO-TITLE ---
     const headings = Array.from(links).map(link => {
       const id = link.getAttribute('href')?.substring(1);
       return document.getElementById(id || '');
@@ -191,19 +189,16 @@ const tocHeadings = filterHeadingsForTOC(headings);
     const updateActiveState = () => {
       const scrollPosition = window.scrollY;
 
-      // 1. Reset ke Default jika di paling atas
       if (scrollPosition < 100) {
         triggerText.innerText = DEFAULT_TITLE;
         links.forEach(l => l.classList.remove('is-active'));
         return;
       }
 
-      // 2. Cari heading mana yang sedang aktif
       let currentHeadingId = "";
-      
-      // Kita anggap heading aktif jika berada di area atas layar (offset 120px)
+
       headings.forEach(heading => {
-        const top = heading.offsetTop - 120;
+        const top = heading.offsetTop - 60;
         if (scrollPosition >= top) {
           currentHeadingId = heading.id;
         }
@@ -215,7 +210,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
           link.classList.toggle('is-active', isActive);
           
           if (isActive) {
-            // Update teks trigger jika berbeda (optimasi performa)
+
             if (triggerText.innerText !== (link as HTMLElement).innerText.trim()) {
               triggerText.innerText = (link as HTMLElement).innerText.trim();
             }
@@ -224,12 +219,10 @@ const tocHeadings = filterHeadingsForTOC(headings);
       }
     };
 
-    // Gunakan throttle atau requestAnimationFrame untuk scroll yang mulus
     window.addEventListener('scroll', updateActiveState, { passive: true });
-    updateActiveState(); // Jalankan sekali saat load
+    updateActiveState();
   };
 
-  // Run on initial load & view transitions
   setupTOC();
   document.addEventListener('astro:after-swap', setupTOC);
 </script>
