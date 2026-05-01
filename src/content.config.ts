@@ -7,7 +7,7 @@ import { glob } from "astro/loaders";
 
 const seoSchema = z.object({
   title: z.string().max(100).optional(),
-  description: z.string().min(10).max(160).optional(),
+  description: z.string().min(10).max(200).optional(),
   ogImage: z.string().optional(),
   canonical: z.string().optional(),
   noIndex: z.boolean().default(false),
