@@ -90,6 +90,11 @@
                       document.querySelector('main');
       
       if (!article) return;
+      article.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'start' 
+      });
+      
       const rawText = (article as HTMLElement).innerText;
       const cleanText = rawText.replace(/\s+/g, ' ').trim();
       const chunks = chunkText(cleanText);
