@@ -9,22 +9,22 @@ if (!items.length) return;
 ---
 
 <nav aria-label="Breadcrumb" class="flex justify-center pb-8">
-  <ol class="flex flex-wrap items-center gap-x-2 text-[13px] text-zinc-600 dark:text-zinc-500">
+  <ol class="flex flex-wrap items-center gap-x-2 text-[13px] text-(--fg-muted)">
     {items.map((item, index) => (
       <li class="flex items-center gap-x-2">
         {index > 0 && (
-          <span aria-hidden="true" class="text-zinc-300 dark:text-zinc-700">
+          <span aria-hidden="true" class="text-(--fg-subtle)">
             /
           </span>
         )}
         {index === items.length - 1? (
-          <span aria-current="page" class="text-zinc-600 dark:text-zinc-400">
+          <span aria-current="page" class="text-(--fg-muted)">
             {item.name}
           </span>
         ) : (
           <a
             href={item.href}
-            class="hover:text-emerald-500 dark:hover:text-white transition"
+            class="hover:text-(--fg)"
           >
             {item.name}
           </a>
