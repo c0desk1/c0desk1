@@ -488,8 +488,8 @@ const services = ['api', 'web', 'cdn', 'bot'];
  
   function getRelativeTime(ts) {
     const d = Math.floor((Date.now() - ts) / 1000);
-    if (d < 30)   return "Just now";
-    if (d < 60)   return `${d}s ago`;
+    if (d < 30)   return "Baru saja";
+    if (d < 60)   return `${d}d yang lalu`;
     if (d < 3600) return `${Math.floor(d / 60)}m yang lalu`;
     return "Beberapa waktu yang lalu";
   }
@@ -626,7 +626,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
  
   async function fetchStatus() {
     if (refreshBtn) refreshBtn.classList.add("spinning");
-    if (lastUpdatedEl) lastUpdatedEl.textContent = "Updating...";
+    if (lastUpdatedEl) lastUpdatedEl.textContent = "Memperbarui...";
     try {
       const res  = await fetch(API_URL);
       if (!res.ok) throw new Error();
