@@ -83,12 +83,16 @@ const readingTime = getReadingTime(post.body || "");
 const siteURL = Astro.site?.toString() ?? siteData.siteUrl;
 const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
-const breadcrumbItems = [
+const SeoBreadcrumbItems = [
   { name: "Home", href: siteURL },
   { name: "Blog", href: new URL("blog/", siteURL).toString() },
   { name: seoCategory.name, href: new URL(`category/${seoCategory.slug}/`, siteURL).toString() },
   { name: title, href: canonicalURL }
 ];
+
+const Breadcrumbs = SeoBreadcrumbItems.filter(item => 
+  item.name === "Blog" || item.name === seoCategory.name
+);
 ---
 
 <BaseLayout
@@ -116,7 +120,7 @@ const breadcrumbItems = [
     <Section size="sm">
       <Container size="sm">
         <h2 class="sr-only">Article Header</h2>
-        <Breadcrumb items={breadcrumbItems} />
+        <Breadcrumb items={Breadcrumbs} />
         
         <BlogHeader
           title={title}
