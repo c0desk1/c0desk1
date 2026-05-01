@@ -447,7 +447,7 @@
 
 .prose-custom ul > li::marker,
 .prose-custom ol > li::marker {
-  color: var(--prose-emerald);
+  color: var(--prose-fg-subtle);
   font-weight: 600;
 }
 
