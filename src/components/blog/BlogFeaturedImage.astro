@@ -5,7 +5,7 @@ import { cdnImage, isCdnUrl } from '@/lib/utils';
 
 interface Props {
   image: string;
-  alt?: string;
+  alt: string;
   caption?: string;
 }
 
@@ -15,16 +15,18 @@ const finalCaption = caption || alt;
 ---
 
 <figure class="prose-custom mx-auto max-w-3xl my-4 md:my-8 overflow-hidden">
-	<Image
-        src={optimizedSrc}
-        alt={alt}
-        width={1280}
-        height={720}
-        loading="eager"
-        decoding="async"
-        class="block w-full h-auto object-cover"
-      />
-    {finalCaption && (
-      <figcaption>{finalCaption}</figcaption>
-    )}
+  <div class="flex items-center border-2 border-(--border) rounded-(--radius-md)">
+    <Image
+      src={optimizedSrc}
+      alt={alt}
+      width={1280}
+      height={720}
+      loading="eager"
+      decoding="async"
+      class="block w-full h-auto object-cover"
+    />
+  </div>
+  {finalCaption && (
+    <figcaption>{finalCaption}</figcaption>
+  )}
 </figure>
