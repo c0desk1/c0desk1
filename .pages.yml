@@ -519,14 +519,25 @@ content:
         type: object
         list: true
         fields:
-          - name: href
-            label: URL
-            type: string
+          - name: title
+            label: Judul
+            type: object
+            list: true
+            fields:
+               - name: href
+                 label: URL
+                 type: string
+                 
+               - name: label
+                 label: Nama
+                 type: string
+                 
+               - name: isExternal
+                 label: Url Luar?
+                 type: boolean
+                 default: false
+         
 
-          - name: label
-            label: Label
-            type: string
-            
       - name: defaultSeo
         label: Default SEO
         type: object
