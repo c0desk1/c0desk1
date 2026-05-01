@@ -7,99 +7,148 @@ import Icon from "../ui/Icon.astro";
 let settings;
 try {
   settings = await getEntry('settings', 'site');
-} catch (error) {
-  console.warn('Settings not found, using siteConfig fallback');
-}
+} catch (error) {}
+
 const siteData = settings?.data || siteConfig;
+const nav      = siteData.navItems ?? [];
 ---
 
-<div class="md:hidden relative">
-  <button 
-    id="mobile-menu-button"
-    aria-label="Menu"
-    aria-expanded="false"
-    aria-controls="mobile-dropdown"
-    class="p-2 rounded-md text-(--fg-muted) hover:text-(--fg) hover:bg-(--bg-subtle) focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400/50"
-  >
-     <Icon name="menu" class="w-5 h-5" />
-  </button>
-  <div 
-    id="mobile-dropdown"
-    class="absolute right-0 top-full mt-8 w-52 origin-top-right rounded-xl border border-(--border) bg-(--bg) backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_10px_30px_rgba(0,0,0,0.4)] opacity-0 invisible scale-95 transition-all duration-200 z-50"
-  >
-    <nav class="flex flex-col p-2">
-      {siteData.navItems?.map(item => (
-        <a 
-          href={item.href}
-          class="px-3 py-2 rounded-md text-sm text-(--fg-muted) hover:text-(--fg) hover:bg-(--bg-subtle)"
-        >
-          {item.label}
-        </a>
-      ))}
-      <div class="h-px bg-(--border) my-2"></div>
-      {siteData.social?.github && (
-        <a 
-          href={siteData.social.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="px-3 py-2 rounded-md text-sm text-(--fg-muted) hover:text-(--fg) hover:bg-(--bg-subtle)"
-        >
-          GitHub
-        </a>
-      )}
-    </nav>
+<!-- Trigger button -->
+<button
+  id="mnav-btn"
+  aria-label="Buka menu"
+  aria-expanded="false"
+  aria-controls="mnav-sheet"
+  class="md:hidden p-2 rounded-md text-(--fg-muted) hover:text-(--fg) hover:bg-(--bg-muted)
+         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--border-strong)
+         transition active:scale-95"
+>
+  <Icon name="menu" class="w-5 h-5" />
+</button>
+
+<!-- Backdrop -->
+<div
+  id="mnav-backdrop"
+  class="md:hidden fixed inset-0 z-40 bg-(--bg)/60 backdrop-blur-sm
+         opacity-0 pointer-events-none transition-opacity duration-250"
+  aria-hidden="true"
+></div>
+
+<!-- Bottom sheet -->
+<div
+  id="mnav-sheet"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Menu navigasi"
+  class="md:hidden fixed bottom-0 left-0 right-0 z-50
+         bg-(--bg) border-t border-(--border)
+         rounded-t-(--radius-xl)
+         shadow-[0_-8px_40px_rgba(0,0,0,0.12)]
+         translate-y-full transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]
+         pb-[env(safe-area-inset-bottom)]"
+  inert
+>
+  <!-- Handle bar -->
+  <div class="flex justify-center pt-3 pb-1">
+    <div class="w-9 h-1 rounded-full bg-(--border)"></div>
   </div>
+
+  <!-- Nav links -->
+  <nav class="flex flex-col px-3 pt-2 pb-4 gap-0.5">
+    {nav.map(item => (
+      <a
+        href={item.href}
+        class="mnav-link flex items-center gap-3 px-3 py-3 rounded-(--radius-lg)
+               text-sm font-medium text-(--fg-muted)
+               hover:text-(--fg) hover:bg-(--bg-muted) transition-colors"
+      >
+        {item.label}
+      </a>
+    ))}
+
+    {(nav.length > 0 && siteData.social?.github) && (
+      <div class="h-px bg-(--border) my-1.5 mx-1"></div>
+    )}
+
+    {siteData.social?.github && (
+      <a
+        href={siteData.social.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mnav-link flex items-center gap-3 px-3 py-3 rounded-(--radius-lg)
+               text-sm font-medium text-(--fg-muted)
+               hover:text-(--fg) hover:bg-(--bg-muted) transition-colors"
+      >
+        <!-- GitHub icon inline agar tidak perlu Icon component -->
+        <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+        </svg>
+        GitHub
+      </a>
+    )}
+  </nav>
 </div>
 
 <script>
-  // @ts-nocheck
-  (function() {
-    const button = document.getElementById('mobile-menu-button');
-    const dropdown = document.getElementById('mobile-dropdown');
+  (() => {
+    const btn      = document.getElementById('mnav-btn');
+    const sheet    = document.getElementById('mnav-sheet');
+    const backdrop = document.getElementById('mnav-backdrop');
+    if (!btn || !sheet || !backdrop) return;
 
-    if (!button || !dropdown) return;
+    let open = false;
+    let startY = 0, currentY = 0, dragging = false;
 
-    let isOpen = false;
-
-    const openMenu = () => {
-      isOpen = true;
-
-      dropdown.classList.remove('opacity-0','invisible','scale-95');
-      dropdown.classList.add('opacity-100','visible','scale-100');
-
-      button.setAttribute('aria-expanded', 'true');
+    const openSheet = () => {
+      open = true;
+      sheet.removeAttribute('inert');
+      sheet.classList.remove('translate-y-full');
+      backdrop.classList.remove('opacity-0', 'pointer-events-none');
+      backdrop.classList.add('opacity-100');
+      btn.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
     };
 
-    const closeMenu = () => {
-      isOpen = false;
-
-      dropdown.classList.remove('opacity-100','visible','scale-100');
-      dropdown.classList.add('opacity-0','invisible','scale-95');
-
-      button.setAttribute('aria-expanded', 'false');
+    const closeSheet = () => {
+      open = false;
+      sheet.classList.add('translate-y-full');
+      backdrop.classList.remove('opacity-100');
+      backdrop.classList.add('opacity-0', 'pointer-events-none');
+      btn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      setTimeout(() => sheet.setAttribute('inert', ''), 300);
     };
 
-    const toggleMenu = (e) => {
-      e.stopPropagation();
-      isOpen ? closeMenu() : openMenu();
-    };
-
-    button.addEventListener('click', toggleMenu);
-
-    document.addEventListener('click', (e) => {
-      if (isOpen && !dropdown.contains(e.target) && e.target !== button) {
-        closeMenu();
-      }
+    btn.addEventListener('click', () => open ? closeSheet() : openSheet());
+    backdrop.addEventListener('click', closeSheet);
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && open) closeSheet();
     });
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && isOpen) {
-        closeMenu();
-      }
+    sheet.querySelectorAll('.mnav-link').forEach(link => {
+      link.addEventListener('click', closeSheet);
     });
 
-    dropdown.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', closeMenu);
+    // Swipe-to-close (touch)
+    sheet.addEventListener('touchstart', e => {
+      startY = e.touches[0].clientY;
+      dragging = true;
+    }, { passive: true });
+
+    sheet.addEventListener('touchmove', e => {
+      if (!dragging) return;
+      currentY = e.touches[0].clientY;
+      const delta = Math.max(0, currentY - startY);
+      sheet.style.transform = `translateY(${delta}px)`;
+    }, { passive: true });
+
+    sheet.addEventListener('touchend', () => {
+      dragging = false;
+      const delta = currentY - startY;
+      sheet.style.transform = '';
+      if (delta > 80) {
+        closeSheet();
+      }
     });
   })();
 </script>
