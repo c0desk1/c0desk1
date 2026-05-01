@@ -4,29 +4,39 @@ import { Image } from 'astro:assets';
 import { cdnImage, isCdnUrl } from '@/lib/utils';
 
 interface Props {
-  image: string;
-  alt: string;
+  image?: string;
+  alt?: string;
   caption?: string;
+  loading?: boolean;
 }
 
-const { image, alt, caption } = Astro.props;
-const optimizedSrc = isCdnUrl(image) ? cdnImage(image, { w: 1280, h: 720, q: 85 }) : image;
-const finalCaption = caption || alt;
+const { image, alt = '', caption, loading = false } = Astro.props;
+
+const optimizedSrc  = !loading && image && isCdnUrl(image)
+  ? cdnImage(image, { w: 1280, h: 720, q: 85 })
+  : image ?? '';
+const finalCaption  = caption || alt;
 ---
 
-<figure class="prose-custom mx-auto max-w-3xl my-4 md:my-8 overflow-hidden">
-  <div class="flex items-center border-2 border-(--border) rounded-(--radius-md)">
-    <Image
-      src={optimizedSrc}
-      alt={alt}
-      width={1280}
-      height={720}
-      loading="eager"
-      decoding="async"
-      class="block w-full h-auto object-cover"
-    />
-  </div>
-  {finalCaption && (
-    <figcaption>{finalCaption}</figcaption>
-  )}
-</figure>
+{loading ? (
+  <figure class="prose-custom mx-auto max-w-3xl my-4 md:my-8 overflow-hidden" aria-hidden="true">
+    <div class="flex items-center border-2 border-(--border) rounded-(--radius-md) overflow-hidden">
+      <div class="sk-img w-full" style="aspect-ratio:16/9;"></div>
+    </div>
+  </figure>
+) : (
+  <figure class="prose-custom mx-auto max-w-3xl my-4 md:my-8 overflow-hidden">
+    <div class="flex items-center border-2 border-(--border) rounded-(--radius-md)">
+      <Image
+        src={optimizedSrc}
+        alt={alt}
+        width={1280}
+        height={720}
+        loading="eager"
+        decoding="async"
+        class="block w-full h-auto object-cover"
+      />
+    </div>
+    {finalCaption && <figcaption>{finalCaption}</figcaption>}
+  </figure>
+)}
