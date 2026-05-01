@@ -3,11 +3,14 @@
 ---
 
 <kbd class="
-  mx-0.5 inline-flex items-center justify-center rounded-md border border-zinc-200 
-  bg-zinc-50 px-1.5 py-0.5 font-mono text-[11px] font-semibold text-zinc-800 
-  shadow-[0_2px_0_0_rgba(0,0,0,0.05)]
-  dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:shadow-[0_2px_0_0_rgba(255,255,255,0.1)]
-  align-middle
+  mx-0.5 inline-flex items-center justify-center align-middle
+  rounded-[var(--prose-radius-sm)]
+  border border-[var(--prose-border)] border-b-2
+  bg-[var(--prose-surface)]
+  px-1.5 py-0.5
+  font-mono text-[11px] font-semibold
+  text-[var(--prose-fg)]
+  shadow-[0_1px_0_var(--prose-border)]
 ">
   <slot />
 </kbd>
