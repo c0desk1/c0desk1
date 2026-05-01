@@ -1,66 +1,100 @@
 ---
+// src/components/blog/PostCard.astro
 import type { CollectionEntry } from 'astro:content';
 import { getEntry } from 'astro:content';
-import { Image } from 'astro:assets'; 
+import { Image } from 'astro:assets';
 import { siteConfig } from '@/config/site';
 import { generateExcerpt, formatDateCompact, cdnImage, isCdnUrl } from '@/lib/utils';
 
 interface Props {
-  post: CollectionEntry<'blog'>;
+  post?: CollectionEntry<'blog'>;
+  loading?: boolean;
 }
 
-const { post } = Astro.props;
-const { data, id } = post;
-const { title, description, pubDate, category, author } = data;
+const { post, loading = false } = Astro.props;
 
-const excerpt = generateExcerpt(post.body, 140);
+// Hanya resolve data jika tidak loading
+let title = '', excerpt = '', categoryName = '', pubDateISO = '', pubDateDisplay = '';
+let authorName = '', authorAvatar = '', optimizedAvatar = '', postUrl = '';
 
-const categoryEntry = await getEntry(category);
+if (!loading && post) {
+  const { data, id } = post;
+  const { title: t, description, pubDate, category, author } = data;
+  title = t;
 
-const authorEntry = author ? await getEntry(author) : null;
+  excerpt = generateExcerpt(post.body, 140);
+  const categoryEntry = await getEntry(category);
+  const authorEntry   = author ? await getEntry(author) : null;
 
-const authorName = authorEntry?.data.name || siteConfig.author.name;
-
-const authorAvatar = authorEntry?.data.avatar || siteConfig.author.avatar;
-
-const optimizedAvatar = isCdnUrl(authorAvatar) ? cdnImage(authorAvatar, { w: 48, h: 48, q: 80 }) : authorAvatar;
+  categoryName    = categoryEntry?.data.name || 'General';
+  pubDateISO      = pubDate.toISOString();
+  pubDateDisplay  = formatDateCompact(pubDate);
+  authorName      = authorEntry?.data.name   || siteConfig.author.name;
+  authorAvatar    = authorEntry?.data.avatar || siteConfig.author.avatar;
+  optimizedAvatar = isCdnUrl(authorAvatar)
+    ? cdnImage(authorAvatar, { w: 48, h: 48, q: 80 })
+    : authorAvatar;
+  postUrl = `/blog/${id}/`;
+}
 ---
 
-<a 
-  href={`/blog/${id}/`} 
-  aria-label={`Read article: ${title}`} 
-  class="group flex flex-col h-full rounded-(--radius-xl) border border-(--border) p-6 hover:border-(--border-strong) focus:outline-none focus:ring-2 focus:ring-(--border-strong)"
->
-  <div class="flex items-center justify-between mb-6">
-    <span class="text-[13px] text-(--fg-subtle) tracking-tight group-hover:text-(--fg)">
-      {categoryEntry?.data.name || "General"}
-    </span>
-    <time datetime={pubDate.toISOString()} class="text-[13px] text-(--fg-subtle)">
-      {formatDateCompact(pubDate)}
-    </time>
+{loading ? (
+  <!-- Skeleton PostCard -->
+  <div class="flex flex-col h-full rounded-(--radius-xl) border border-(--border) p-6" aria-hidden="true">
+    <div class="flex items-center justify-between mb-6">
+      <div class="sk-line" style="width:4.5rem;height:0.8rem;"></div>
+      <div class="sk-line" style="width:3.5rem;height:0.8rem;"></div>
+    </div>
+    <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-2">
+        <div class="sk-line" style="width:100%;height:1.25rem;"></div>
+        <div class="sk-line" style="width:85%; height:1.25rem;"></div>
+        <div class="sk-line" style="width:60%; height:1.25rem;"></div>
+      </div>
+      <div class="flex flex-col gap-2">
+        <div class="sk-line" style="width:100%;height:0.875rem;"></div>
+        <div class="sk-line" style="width:92%; height:0.875rem;"></div>
+        <div class="sk-line" style="width:75%; height:0.875rem;"></div>
+      </div>
+    </div>
+    <div class="mt-auto flex items-center gap-3 pt-6">
+      <div class="sk-avatar" style="width:1.5rem;height:1.5rem;"></div>
+      <div class="sk-line" style="width:5rem;height:0.8rem;"></div>
+    </div>
   </div>
-
-  <div class="flex flex-col gap-4">
-    <h2 class="text-lg md:text-xl font-semibold tracking-tighter text-(--fg) leading-[1.15] line-clamp-3">
-      {title}
-    </h2>
-    <p class="text-sm text-(--fg-muted) leading-relaxed line-clamp-3 group-hover:text-(--fg)">
-      {excerpt}
-    </p>
-  </div>
-
-  <div class="mt-auto flex items-center gap-3 pt-6">
-    {authorAvatar && (
-      <Image
-        src={optimizedAvatar}
-        alt={authorName}
-        width={48}
-        height={48}
-        class="w-6 h-6 rounded-full border border-(--border) object-cover"
-      />
-    )}
-    <span class="text-[13px] text-(--fg-subtle)">
-      {authorName}
-    </span>
-  </div>
-</a>
+) : (
+  <a
+    href={postUrl}
+    aria-label={`Read article: ${title}`}
+    class="group flex flex-col h-full rounded-(--radius-xl) border border-(--border) p-6 hover:border-(--border-strong) focus:outline-none focus:ring-2 focus:ring-(--border-strong)"
+  >
+    <div class="flex items-center justify-between mb-6">
+      <span class="text-[13px] text-(--fg-subtle) tracking-tight group-hover:text-(--fg)">
+        {categoryName}
+      </span>
+      <time datetime={pubDateISO} class="text-[13px] text-(--fg-subtle)">
+        {pubDateDisplay}
+      </time>
+    </div>
+    <div class="flex flex-col gap-4">
+      <h2 class="text-lg md:text-xl font-semibold tracking-tighter text-(--fg) leading-[1.15] line-clamp-3">
+        {title}
+      </h2>
+      <p class="text-sm text-(--fg-muted) leading-relaxed line-clamp-3 group-hover:text-(--fg)">
+        {excerpt}
+      </p>
+    </div>
+    <div class="mt-auto flex items-center gap-3 pt-6">
+      {authorAvatar && (
+        <Image
+          src={optimizedAvatar}
+          alt={authorName}
+          width={48}
+          height={48}
+          class="w-6 h-6 rounded-full border border-(--border) object-cover"
+        />
+      )}
+      <span class="text-[13px] text-(--fg-subtle)">{authorName}</span>
+    </div>
+  </a>
+)}
