@@ -13,37 +13,32 @@ interface Props {
 
 const { sources } = Astro.props;
 ---
-<div class="section-divider">
-  {sources.length > 0 && (
-    <div class="footnotes-section py-4 md:py-8">
-      <h3>Referensi</h3>
-      <ol>
-        {sources.map((s) => (
-          <li id={`fn-${s.id}`}>
-            <span class="footnote-number">{s.id}. </span>
-            <div class="footnote-content">
-              {s.link ? (
-                <a 
-                  href={s.link} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                >
-                  {s.text}
-                </a>
-              ) : (
-                <span>{s.text}</span>
-              )}
-              <a 
-                href={`#fnref-${s.id}`} 
-                class="footnote-backlink"
-                aria-label="Kembali ke referensi"
-              >
-                ↩
+
+{sources.length > 0 && (
+  <div class="prose-custom footnotes-section">
+    <h3>Referensi</h3>
+    <ol>
+      {sources.map((s) => (
+        <li id={`fn-${s.id}`}>
+          <span class="footnote-number">{s.id}</span>
+          <div class="footnote-content">
+            {s.link ? (
+              <a href={s.link} target="_blank" rel="noopener noreferrer">
+                {s.text}
               </a>
-            </div>
-          </li>
-        ))}
-      </ol>
-    </div>
-  )}
-</div>
+            ) : (
+              <span>{s.text}</span>
+            )}
+            <a
+              href={`#fnref-${s.id}`}
+              class="footnote-backlink"
+              aria-label="Kembali ke referensi"
+            >
+              ↩
+            </a>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+)}
