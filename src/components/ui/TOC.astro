@@ -20,23 +20,22 @@ const tocHeadings = filterHeadingsForTOC(headings);
 {tocHeadings.length > 0 && (
   <aside class="toc-container">
     <nav class="toc-nav">
-      <button 
-        class="toc-trigger" 
-        aria-expanded="false" 
+      <button
+        class="toc-trigger"
+        aria-expanded="false"
         aria-controls="toc-list"
-        id="toc-btn"
       >
-        <span class="toc-current-text text-sm md:text-[13px] font-semibold">Daftar Isi</span>
+        <span class="toc-trigger-text text-sm md:text-[13px] font-semibold">Daftar Isi</span>
         <Icon name="chevron-down" class="toc-chevron w-4 h-4" />
       </button>
-      
-      <div id="toc-list" class="toc-content" hidden aria-labelledby="toc-btn">
+
+      <div id="toc-list" class="toc-content" hidden>
         <ul class="toc-ul">
           {tocHeadings.map(h => (
             <li class:list={["toc-li", h.depth === 3 ? "pl-4" : ""]}>
-              <a href={`#${h.slug}`} class="toc-link group">
+              <a href={`#${h.slug}`} class="toc-link">
                 <span class="toc-dot"></span>
-                <span class="toc-text">{h.text}</span>
+                {h.text}
               </a>
             </li>
           ))}
@@ -48,16 +47,17 @@ const tocHeadings = filterHeadingsForTOC(headings);
 
 <style is:global>
   :target {
-    scroll-margin-top: 6rem;
+    scroll-margin-top: 4.5rem;
   }
-  
-  .prose-custom h2, .prose-custom h3 {
-    scroll-margin-top: 6rem;
+
+  .prose-custom h2,
+  .prose-custom h3 {
+    scroll-margin-top: 4.5rem;
   }
 
   .toc-container {
     position: sticky;
-    top: 5rem;
+    top: 4.5rem;
     z-index: 40;
     width: 100%;
     margin-bottom: 0 !important;
@@ -68,10 +68,9 @@ const tocHeadings = filterHeadingsForTOC(headings);
     border: 2px solid var(--border);
     border-radius: var(--radius-lg);
     overflow: hidden;
-    max-height: calc(100vh - 7rem);
+    max-height: calc(100vh - 6rem);
     display: flex;
     flex-direction: column;
-    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.05);
   }
 
   .toc-trigger {
@@ -86,31 +85,35 @@ const tocHeadings = filterHeadingsForTOC(headings);
     color: var(--fg);
   }
 
-  .toc-current-text {
+  .toc-trigger-text {
     display: block;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 85%;
-    text-align: left;
-    transition: opacity 0.2s ease;
+    max-width: 80%;
+    transition: opacity 0.15s ease-in-out;
   }
 
-  .toc-chevron { transition: transform 0.3s ease; }
-  .toc-trigger[aria-expanded="true"] .toc-chevron { transform: rotate(180deg); }
+  .toc-chevron {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .toc-trigger[aria-expanded="true"] .toc-chevron {
+    transform: rotate(180deg);
+  }
 
   .toc-content {
     border-top: 1px solid var(--border);
     overflow-y: auto;
-    background: var(--bg-subtle);
   }
-  
+
   .toc-content[hidden] { display: none; }
 
   .toc-ul {
     padding: 1rem;
-    margin: 0;
     list-style: none;
+    margin: 0;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -120,109 +123,135 @@ const tocHeadings = filterHeadingsForTOC(headings);
     display: flex;
     align-items: flex-start;
     gap: 0.5rem;
+    text-decoration: none;
     font-size: 13px;
     color: var(--fg-muted);
-    text-decoration: none;
-    transition: all 0.2s ease;
+    transition: color 0.2s;
   }
 
   .toc-dot {
-    margin-top: 6px;
-    height: 4px;
-    width: 4px;
-    border-radius: 99px;
-    background: var(--border);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--fg-muted);
     flex-shrink: 0;
-    transition: all 0.2s ease;
+    margin-top: 4px;
+    transition: background 0.2s, transform 0.2s;
   }
 
-  /* Active State */
-  .toc-link.is-active {
-    color: var(--fg);
+  .active-link {
+    color: var(--fg) !important;
     font-weight: 600;
   }
 
-  .toc-link.is-active .toc-dot {
-    background: var(--fg);
+  .active-link .toc-dot {
+    background: var(--fg) !important;
     transform: scale(1.5);
   }
 </style>
 
 <script>
-  const setupTOC = () => {
-    const container = document.querySelector('.toc-container');
-    const trigger = document.querySelector('.toc-trigger') as HTMLButtonElement;
-    const triggerText = trigger?.querySelector('.toc-current-text');
-    const content = document.getElementById('toc-list');
-    const links = document.querySelectorAll('.toc-link');
-    
-    if (!trigger || !content || !links.length || !triggerText) return;
+  const HEADER_H = 56; // h-14 = 56px
 
-    const DEFAULT_TITLE = "Daftar Isi";
+  const initTOC = () => {
+    const trigger     = document.querySelector<HTMLButtonElement>('.toc-trigger');
+    const triggerText = trigger?.querySelector<HTMLElement>('.toc-trigger-text');
+    const content     = document.getElementById('toc-list');
+    const links       = content?.querySelectorAll<HTMLAnchorElement>('.toc-link');
 
-    // --- ACCORDION ---
-    const toggleTOC = (forceClose = false) => {
-      const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
-      if (forceClose || isExpanded) {
-        trigger.setAttribute('aria-expanded', 'false');
-        content.hidden = true;
-      } else {
-        trigger.setAttribute('aria-expanded', 'true');
-        content.hidden = false;
-      }
+    if (!trigger || !content || !links?.length || !triggerText) return;
+
+    const DEFAULT_TEXT = 'Daftar Isi';
+
+    // ── Panel toggle ────────────────────────────────────────────────────────
+    const closePanel = () => {
+      trigger.setAttribute('aria-expanded', 'false');
+      content.hidden = true;
     };
 
-    trigger.addEventListener('click', () => toggleTOC());
+    trigger.addEventListener('click', () => {
+      const expanded = trigger.getAttribute('aria-expanded') === 'true';
+      trigger.setAttribute('aria-expanded', String(!expanded));
+      content.hidden = expanded;
+    });
 
     links.forEach(link => {
       link.addEventListener('click', () => {
-        if (window.innerWidth < 1024) toggleTOC(true);
+        if (window.innerWidth < 1024) closePanel();
       });
     });
 
-    // --- SCROLLSPY & AUTO-TITLE ---
-    const headings = Array.from(links).map(link => {
-      const id = link.getAttribute('href')?.substring(1);
-      return document.getElementById(id || '');
-    }).filter(Boolean) as HTMLElement[];
+    // ── Heading elements ────────────────────────────────────────────────────
+    const headingEls: HTMLElement[] = Array.from(links)
+      .map(l => {
+        const id = l.getAttribute('href')?.slice(1);
+        return id ? document.getElementById(id) : null;
+      })
+      .filter((el): el is HTMLElement => el !== null);
 
-    const updateActiveState = () => {
-      const scrollPosition = window.scrollY;
+    if (!headingEls.length) return;
 
-      if (scrollPosition < 100) {
-        triggerText.innerText = DEFAULT_TITLE;
-        links.forEach(l => l.classList.remove('is-active'));
+    // ── Active label fade ───────────────────────────────────────────────────
+    let fadeTimer: ReturnType<typeof setTimeout>;
+    let currentActive: HTMLElement | null = null;
+
+    const setLabel = (text: string) => {
+      clearTimeout(fadeTimer);
+      triggerText.style.opacity = '0';
+      fadeTimer = setTimeout(() => {
+        triggerText.textContent = text;
+        triggerText.style.opacity = '1';
+      }, 80);
+    };
+
+    // ── Core detection ──────────────────────────────────────────────────────
+    //
+    // DETECTION_LINE: titik di mana heading dianggap "aktif".
+    // Menggunakan 40% dari viewport height — heading baru aktif
+    // setelah posisinya sudah cukup jauh melewati header dan
+    // benar-benar dalam area baca utama, bukan hanya menyentuh
+    // bagian bawah header.
+    //
+    const getDetectionLine = () => HEADER_H + window.innerHeight * 0.35;
+
+    const getActiveHeading = (): HTMLElement | null => {
+      const line = getDetectionLine();
+      let active: HTMLElement | null = null;
+      for (const h of headingEls) {
+        if (h.getBoundingClientRect().top <= line) {
+          active = h;
+        } else {
+          break;
+        }
+      }
+      return active;
+    };
+
+    const updateTOC = () => {
+      const active = getActiveHeading();
+
+      if (active === currentActive) return; // tidak ada perubahan, skip
+      currentActive = active;
+
+      links.forEach(l => l.classList.remove('active-link'));
+
+      if (!active) {
+        setLabel(DEFAULT_TEXT);
         return;
       }
 
-      let currentHeadingId = "";
+      const id   = active.getAttribute('id');
+      const link = id ? content.querySelector<HTMLAnchorElement>(`[href="#${id}"]`) : null;
+      if (!link) return;
 
-      headings.forEach(heading => {
-        const top = heading.offsetTop - 100;
-        if (scrollPosition >= top) {
-          currentHeadingId = heading.id;
-        }
-      });
-
-      if (currentHeadingId) {
-        links.forEach(link => {
-          const isActive = link.getAttribute('href') === `#${currentHeadingId}`;
-          link.classList.toggle('is-active', isActive);
-          
-          if (isActive) {
-
-            if (triggerText.innerText !== (link as HTMLElement).innerText.trim()) {
-              triggerText.innerText = (link as HTMLElement).innerText.trim();
-            }
-          }
-        });
-      }
+      link.classList.add('active-link');
+      setLabel(link.innerText);
     };
 
-    window.addEventListener('scroll', updateActiveState, { passive: true });
-    updateActiveState();
+    updateTOC(); // run on mount (deep link / sudah ter-scroll)
+    window.addEventListener('scroll', updateTOC, { passive: true });
   };
 
-  setupTOC();
-  document.addEventListener('astro:after-swap', setupTOC);
+  initTOC();
+  document.addEventListener('astro:after-swap', initTOC);
 </script>
