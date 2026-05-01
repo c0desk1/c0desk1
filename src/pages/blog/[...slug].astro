@@ -13,7 +13,7 @@ import Section from "@/components/ui/Section.astro";
 import Breadcrumb from "@/components/ui/Breadcrumb.astro";
 import BlogHeader from "@/components/blog/BlogHeader.astro";
 import BlogFeaturedImage from "@/components/blog/BlogFeaturedImage.astro";
-import BlogTOC from "@/components/blog/BlogTOC.astro";
+import TOC from "@/components/blog/TOC.astro";
 import BlogRelatedPosts from "@/components/blog/BlogRelatedPosts.astro";
 import BackToTop from "@/components/ui/BackToTop.astro";
 
@@ -37,6 +37,7 @@ interface Props {
 }
 
 const { post } = Astro.props;
+
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 
 let settings;
@@ -78,6 +79,7 @@ const seoTitle = seo?.title || title;
 const seoDescription = seo?.description || description;
 
 const tocHeadings = filterHeadingsForTOC(headings);
+
 const readingTime = getReadingTime(post.body || "");
 
 const siteURL = Astro.site?.toString() ?? siteData.siteUrl;
@@ -139,21 +141,24 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
             caption={(image as any).caption}
           />
         )}
-        
-        {tocHeadings.length > 0 && (
-          <BlogTOC headings={tocHeadings} />
-        )}
       </Container>
     </Section>
 
     <Section size="sm" class="section-divider">
-      <Container size="sm">
-        <h2 class="sr-only">Article Content</h2>
-        <div id="article-content" class="prose-custom">
-          <Content components={{ img: Image, hr: HR }} />
-        </div>
-      </Container>
-    </Section>
+  	<Container size="sm"> <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start relative">      
+      	<aside class="lg:col-span-4 lg:sticky lg:top-[5rem] order-2 lg:order-1">
+        	{tocHeadings.length > 0 && (
+          	<TOC headings={tocHeadings} />
+        	)}
+      	</aside>
+      	<div id="article-content" class="prose-custom lg:col-span-8 order-1 lg:order-2">
+        	<h2 class="sr-only">Article Content</h2>
+        	<Content components={{ img: Image, hr: HR }} />
+     	</div>
+    	</div>
+ 	 </Container>
+	</Section>
+
 
     <Section size="md" class="section-divider">
       <Container size="md">
