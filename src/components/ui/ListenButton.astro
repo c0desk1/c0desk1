@@ -1,79 +1,103 @@
 ---
 // src/components/ui/Listen.astro
-// @ts-nocheck
 ---
 
 <button 
   id="listen-btn" 
   aria-label="Dengarkan artikel" 
-  class="relative p-2 rounded-md text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-all duration-200 group"
+  class="relative p-2 rounded-md text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-all duration-200 group active:scale-95"
 >
-  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.414H4.5a.5.5 0 01-.5-.5v-5a.5.5 0 01.5-.5h1.086a.5.5 0 01.35.146l3.598 3.598c.18.18.416.264.653.233a.5.5 0 00.404-.456V6.99a.5.5 0 00.404-.456.75.75 0 00-.653.233l-3.331 3.33" />
-  </svg>
-  <span class="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 text-[10px] font-mono bg-zinc-800 text-white rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+  <div class="relative w-5 h-5 flex items-center justify-center">
+    <svg id="icon-play" class="absolute inset-0 w-full h-full transition-all duration-300 opacity-100 scale-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.414H4.5a.5.5 0 01-.5-.5v-5a.5.5 0 01.5-.5h1.086a.5.5 0 01.35.146l3.598 3.598c.18.18.416.264.653.233a.5.5 0 00.404-.456V6.99a.5.5 0 00.404-.456.75.75 0 00-.653.233l-3.331 3.33" />
+    </svg>
+    <svg id="icon-stop" class="absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-50 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+  </div>
+
+  <span id="listen-tooltip" class="absolute -top-9 left-1/2 -translate-x-1/2 px-2 py-1 text-[11px] font-medium bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900 rounded-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-xl">
     Dengarkan
   </span>
 </button>
 
 <script>
-  (function() {
+  const initListen = () => {
     const btn = document.getElementById('listen-btn');
-    if (!btn) return;
-    
+    const playIcon = document.getElementById('icon-play');
+    const stopIcon = document.getElementById('icon-stop');
+    const tooltip = document.getElementById('listen-tooltip');
+
+    if (!btn || !playIcon || !stopIcon || !tooltip) return;
+
     let isPlaying = false;
+    let synth = window.speechSynthesis;
     let utterance = null;
-    
+
     const getArticleText = () => {
       const article = document.querySelector('article') || document.querySelector('main');
       if (!article) return '';
-      const clone = article.cloneNode(true);
-      clone.querySelectorAll('script, style, nav, aside, .toc, .related-posts, .feedback, .back-to-top').forEach(el => el.remove());
-      return clone.innerText || '';
+      // Clone untuk membersihkan elemen yang tidak perlu dibaca
+      const clone = article.cloneNode(true) as HTMLElement;
+      clone.querySelectorAll('script, style, nav, aside, .toc, button, svg, [aria-hidden="true"]').forEach(el => el.remove());
+      return clone.innerText.trim() || '';
     };
-    
-    const stopSpeaking = () => {
-      if (window.speechSynthesis) {
-        window.speechSynthesis.cancel();
-      }
-      isPlaying = false;
-      btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.414H4.5a.5.5 0 01-.5-.5v-5a.5.5 0 01.5-.5h1.086a.5.5 0 01.35.146l3.598 3.598c.18.18.416.264.653.233a.5.5 0 00.404-.456V6.99a.5.5 0 00.404-.456.75.75 0 00-.653.233l-3.331 3.33" /></svg>`;
-    };
-    
-    const startSpeaking = () => {
-      const text = getArticleText();
-      if (!text) {
-        alert('Tidak ada teks yang dapat dibaca.');
-        return;
-      }
-      
-      if (!window.speechSynthesis) {
-        alert('Browser Anda tidak mendukung text-to-speech.');
-        return;
-      }
-      
-      utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'id-ID';
-      utterance.rate = 0.9;
-      utterance.pitch = 1;
-      
-      utterance.onend = () => {
-        isPlaying = false;
-        btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.414H4.5a.5.5 0 01-.5-.5v-5a.5.5 0 01.5-.5h1.086a.5.5 0 01.35.146l3.598 3.598c.18.18.416.264.653.233a.5.5 0 00.404-.456V6.99a.5.5 0 00.404-.456.75.75 0 00-.653.233l-3.331 3.33" /></svg>`;
-      };
-      
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(utterance);
-      isPlaying = true;
-      btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
-    };
-    
-    btn.addEventListener('click', () => {
-      if (isPlaying) {
-        stopSpeaking();
+
+    const toggleUI = (playing: boolean) => {
+      if (playing) {
+        playIcon.classList.replace('opacity-100', 'opacity-0');
+        playIcon.classList.replace('scale-100', 'scale-50');
+        stopIcon.classList.replace('opacity-0', 'opacity-100');
+        stopIcon.classList.replace('scale-50', 'scale-100');
+        tooltip.textContent = 'Berhenti';
       } else {
-        startSpeaking();
+        stopIcon.classList.replace('opacity-100', 'opacity-0');
+        stopIcon.classList.replace('scale-100', 'scale-50');
+        playIcon.classList.replace('opacity-0', 'opacity-100');
+        playIcon.classList.replace('scale-50', 'scale-100');
+        tooltip.textContent = 'Dengarkan';
       }
-    });
-  })();
+      isPlaying = playing;
+    };
+
+    const handleSpeak = () => {
+      if (isPlaying) {
+        synth.cancel();
+        toggleUI(false);
+        return;
+      }
+
+      const text = getArticleText();
+      if (!text) return;
+
+      utterance = new SpeechSynthesisUtterance(text);
+      
+      // Pilih suara Indonesia yang tersedia
+      const voices = synth.getVoices();
+      const idVoice = voices.find(v => v.lang.startsWith('id'));
+      if (idVoice) utterance.voice = idVoice;
+
+      utterance.lang = 'id-ID';
+      utterance.rate = 1.0; 
+      utterance.pitch = 1;
+
+      utterance.onend = () => toggleUI(false);
+      utterance.onerror = () => toggleUI(false);
+
+      synth.cancel(); // Bersihkan antrean lama
+      synth.speak(utterance);
+      toggleUI(true);
+    };
+
+    btn.addEventListener('click', handleSpeak);
+
+    // Memastikan voices ter-load di beberapa browser
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = synth.getVoices;
+    }
+  };
+
+  // Jalankan saat load & view transitions
+  initListen();
+  document.addEventListener('astro:after-swap', initListen);
 </script>
