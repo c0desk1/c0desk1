@@ -93,12 +93,15 @@ const portfolioCategory = {
   description: "Koleksi karya digital"
 };
 
-const breadcrumbItems = [
+const seoBreadcrumbItems = [
   { name: "Home", href: siteURL },
   { name: "Portfolio", href: new URL("portfolio/", siteURL).toString() },
   { name: title, href: canonicalURL }
 ];
 
+const Breadcrumbs = seoBreadcrumbItems.filter(item => 
+  item.name === "Home" || item.name === "Portfolio"
+);
 ---
 
 <BaseLayout 
@@ -115,7 +118,7 @@ const breadcrumbItems = [
     <Section size="lg">
       <Container size="sm">
         <h2 class="sr-only">Portfolio Header</h2>
-        <Breadcrumb items={breadcrumbItems} />
+        <Breadcrumb items={Breadcrumbs} />
         <PortfolioHeader
           title={title}
           date={pubDate}
