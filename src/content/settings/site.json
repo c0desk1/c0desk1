@@ -30,7 +30,7 @@
         { "href": "/privacy-policy/", "label": "Kebijakan Privasi", "isExternal": false },
         { "href": "/terms-of-service/", "label": "Ketentuan Layanan", "isExternal": false },
         { "href": "/cookie-policy/", "label": "Kebijakan Cookie", "isExternal": false },
-        { "href": "/dmca/", "label": "DMCA & Hak cipta", "isExternal": false }
+        { "href": "/dmca/", "label": "DMCA & Hak Cipta", "isExternal": false }
       ]
     }
   ],
