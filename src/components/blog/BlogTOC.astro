@@ -35,9 +35,9 @@ const tocHeadings = filterHeadingsForTOC(headings);
         >
           <a
             href={`#${h.slug}`}
-            class="group flex items-start gap-2 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors duration-150"
+            class="group flex items-start gap-2 text-(--fg-muted) hover:text-(--fg)"
           >
-            <span class="mt-[6px] h-[3px] w-[3px] shrink-0 rounded-full bg-zinc-400 dark:bg-zinc-600"></span>
+            <span class="mt-[6px] h-[3px] w-[3px] shrink-0 rounded-full bg-(--bg-muted)"></span>
             <span class="leading-snug">
               {h.text}
             </span>
