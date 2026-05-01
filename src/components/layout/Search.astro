@@ -61,7 +61,7 @@ const searchData = await Promise.all(
         <!-- Clear input -->
         <button
           id="search-clear"
-          class="hidden sm:hidden p-1 rounded text-(--fg-muted) hover:text-(--fg)
+          class="hidden p-1 rounded text-(--fg-muted) hover:text-(--fg)
                  hover:bg-(--bg-muted) transition shrink-0"
           aria-label="Hapus teks pencarian"
           tabindex="-1"
@@ -307,16 +307,13 @@ const searchData = await Promise.all(
     input.addEventListener('input', () => {
       const q = input.value.trim();
       
-      if (clearBtn) {
-        clearBtn.classList.toggle('hidden', !q);
-        if (q) {
-          clearBtn.classList.remove('hidden');
-          clearBtn.classList.add('sm:block');  // visible di sm+
-          clearBtn.classList.remove('sm:hidden');
-        } else {
-          clearBtn.classList.add('hidden');
-        }
-      }
+      if (q) {
+		clearBtn?.classList.remove('hidden');
+    	closeMobile?.classList.add('hidden');
+  	} else {
+    	clearBtn?.classList.add('hidden');
+    	closeMobile?.classList.remove('hidden');
+  	}
 
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
