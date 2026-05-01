@@ -144,21 +144,22 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
       </Container>
     </Section>
 
-    <Section size="sm" class="section-divider">
+    <Section size="sm" class="section-divider !pt-0 lg:!pt-8">
 		<Container size="md"> 
-    		<div class="flex flex-col lg:grid lg:grid-cols-12 gap-8 lg:items-start relative">
-				<aside class="w-full lg:col-span-4 sticky top-[4.5rem] z-30">
-        			{tocHeadings.length > 0 && (
-          				<TOC headings={tocHeadings} />
-        			)}
-				</aside>
-				<div id="article-content" class="prose-custom w-full lg:col-span-8">
-        			<h2 class="sr-only">Article Content</h2>
-        			<Content components={{ img: Image, hr: HR }} />
-				</div>
-    		</div>
-		</Container>
-	</Section>
+    		<div class="flex flex-col lg:grid lg:grid-cols-12 gap-2 lg:gap-12 items-start relative">
+      		<aside class="w-full lg:col-span-4 sticky top-[4.5rem] z-30">
+        {tocHeadings.length > 0 && (
+          <TOC headings={tocHeadings} />
+        )}
+      </aside>
+      
+      <div id="article-content" class="prose-custom w-full lg:col-span-8">
+        <Content components={{ img: Image, hr: HR }} />
+      </div>
+    </div>
+  </Container>
+</Section>
+
 
 
     <Section size="md" class="section-divider">
