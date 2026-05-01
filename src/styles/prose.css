@@ -572,7 +572,7 @@
   width: 100%;
   height: auto;
   border-radius: var(--prose-radius-md);
-  border: 1px solid var(--prose-border);
+  border: 2px solid var(--prose-border);
   margin-inline: auto;
 }
 
