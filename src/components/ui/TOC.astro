@@ -1,0 +1,165 @@
+---
+// src/components/ui/TOC.astro
+import { filterHeadingsForTOC } from '@/lib/utils';
+import Icon from '@/components/ui/Icon.astro';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+const tocHeadings = filterHeadingsForTOC(headings);
+---
+
+{tocHeadings.length > 0 && (
+  <aside class="toc-container">
+    <nav class="toc-nav">
+      <button 
+        class="toc-trigger" 
+        aria-expanded="false" 
+        aria-controls="toc-list"
+      >
+        <span class="text-sm md:text-[13px] font-semibold">Daftar Isi</span>
+        <Icon name="chevron-down" class="toc-chevron w-4 h-4" />
+      </button>
+      
+      <div id="toc-list" class="toc-content" hidden>
+        <ul class="toc-ul">
+          {tocHeadings.map(h => (
+            <li class:list={["toc-li", h.depth === 3 ? "pl-4" : ""]}>
+              <a href={`#${h.slug}`} class="toc-link">
+                <span class="toc-dot"></span>
+                {h.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </nav>
+  </aside>
+)}
+
+<style is:global>
+  .toc-container {
+    position: sticky;
+    top: 4.5rem;
+    z-index: 40;
+    margin-bottom: 2rem;
+    width: 100%;
+  }
+
+  .toc-nav {
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    max-height: calc(100vh - 6rem);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .toc-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--fg);
+  }
+
+  .toc-trigger:hover {
+    background-color: var(--bg-subtle);
+  }
+
+  .toc-chevron {
+    transition: transform 0.3s ease;
+  }
+  .toc-trigger[aria-expanded="true"] .toc-chevron {
+    transform: rotate(180deg);
+  }
+
+  .toc-content {
+    border-top: 1px solid var(--border);
+    overflow-y: auto;
+  }
+  
+  .toc-content[hidden] {
+    display: none;
+  }
+
+  .toc-ul {
+    padding: 1rem;
+    list-style: none;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .toc-link {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    text-decoration: none;
+    font-size: 13px;
+    color: var(--fg-muted);
+    line-height: 1.4;
+    transition: color 0.2s;
+  }
+
+  .toc-link:hover {
+    color: var(--fg);
+  }
+
+  .toc-dot {
+    margin-top: 6px;
+    height: 4px;
+    width: 4px;
+    border-radius: 99px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 1024px) {
+    .toc-container {
+      /* Anda bisa menyesuaikan ini jika layout Anda memiliki sidebar */
+    }
+  }
+</style>
+
+<script>
+  const initTOC = () => {
+    const trigger = document.querySelector('.toc-trigger');
+    const content = document.getElementById('toc-list');
+
+    if (!trigger || !content) return;
+
+    trigger.addEventListener('click', () => {
+      const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
+      trigger.setAttribute('aria-expanded', !isExpanded ? 'true' : 'false');
+      content.hidden = isExpanded;
+    });
+
+    const links = content.querySelectorAll('a');
+    links.forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 1024) {
+          trigger.setAttribute('aria-expanded', 'false');
+          content.hidden = true;
+        }
+      });
+    });
+  };
+
+  initTOC();
+  document.addEventListener('astro:after-swap', initTOC);
+</script>
