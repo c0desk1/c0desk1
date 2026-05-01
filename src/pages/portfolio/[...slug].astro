@@ -116,7 +116,7 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
 >
   <article>
     <h1 class="sr-only">{title}</h1>
-    <Section size="sm">
+    <Section size="md">
       <Container size="sm">
         <h2 class="sr-only">Portfolio Header</h2>
         <Breadcrumb items={Breadcrumbs} />
@@ -162,8 +162,8 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
       <Container size="sm">
         <h2 class="sr-only">Portfolio Content</h2>
         {displayGallery.length > 0 && (
-          <div class="mb-12">
-            <h2 class="prose-custom mb-4">Gallery</h2>
+          <div class="prose-custom mb-12">
+            <h2 class="mb-4">Gallery</h2>
             <PortfolioGallery
               images={displayGallery}
               title={title}
