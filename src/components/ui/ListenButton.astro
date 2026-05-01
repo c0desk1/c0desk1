@@ -59,11 +59,12 @@ import Icon from "./Icon.astro";
 </div>
 
 <style is:global>
-  .tts-highlight {
-    background: color-mix(in srgb, var(--fg) 15%, transparent);
-    border-radius: 2px;
-    transition: background 0.2s;
-  }
+.tts-highlight {
+  background: color-mix(in srgb, var(--fg) 12%, transparent);
+  border-radius: 3px;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--fg) 8%, transparent);
+  transition: background 0.25s ease, box-shadow 0.25s ease;
+}
 
   .tts-bar {
     position: fixed;
