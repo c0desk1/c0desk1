@@ -46,6 +46,16 @@ const tocHeadings = filterHeadingsForTOC(headings);
 )}
 
 <style is:global>
+  /* Solusi Bug 2: Tambahkan jarak agar heading tidak tertutup header h-14 */
+  :target {
+    scroll-margin-top: 5.5rem; 
+  }
+  
+  /* Atau jika menggunakan class prose */
+  .prose-custom h2, .prose-custom h3 {
+    scroll-margin-top: 5.5rem;
+  }
+
   .toc-container {
     position: sticky;
     top: 4.5rem;
@@ -76,19 +86,17 @@ const tocHeadings = filterHeadingsForTOC(headings);
     color: var(--fg);
   }
 
-  .toc-trigger:hover { background-color: var(--bg-subtle); }
-
-  .toc-chevron { transition: transform 0.3s ease; }
-  .toc-trigger[aria-expanded="true"] .toc-chevron { transform: rotate(180deg); }
-
   .toc-trigger span {
     display: block;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 80%;
-    /* Update: Tambahkan transisi sesuai permintaan */
-    transition: opacity 0.2s ease-in-out;
+    transition: opacity 0.15s ease-in-out;
+  }
+
+  .toc-trigger[aria-expanded="true"] .toc-chevron {
+    transform: rotate(180deg);
   }
 
   .toc-content {
@@ -114,22 +122,9 @@ const tocHeadings = filterHeadingsForTOC(headings);
     text-decoration: none;
     font-size: 13px;
     color: var(--fg-muted);
-    line-height: 1.4;
     transition: color 0.2s;
   }
 
-  .toc-link:hover { color: var(--fg); }
-
-  .toc-dot {
-    margin-top: 6px;
-    height: 4px;
-    width: 4px;
-    border-radius: 99px;
-    background: var(--border);
-    flex-shrink: 0;
-  }
-  
-  /* Link aktif global */
   .active-link {
     color: var(--fg) !important;
     font-weight: 600;
@@ -138,10 +133,6 @@ const tocHeadings = filterHeadingsForTOC(headings);
   .active-link .toc-dot {
     background: var(--fg) !important;
     transform: scale(1.5);
-  }
-
-  @media (min-width: 1024px) {
-    .toc-container {}
   }
 </style>
 
@@ -168,14 +159,14 @@ const tocHeadings = filterHeadingsForTOC(headings);
     });
 
     links.forEach(link => {
-      link.addEventListener('click', () => {
+      link.addEventListener('click', (e) => {
         if (window.innerWidth < 1024) closePanel();
       });
     });
 
-    // Fix: Nilai threshold diperkecil agar heading 1 tidak ter-reset paksa
+    // Reset ke "Daftar Isi" hanya jika benar-benar di paling atas
     window.addEventListener('scroll', () => {
-      if (window.scrollY < 50) {
+      if (window.scrollY < 40) {
         triggerText.innerText = defaultText;
         links.forEach(l => l.classList.remove('active-link'));
       }
@@ -188,31 +179,31 @@ const tocHeadings = filterHeadingsForTOC(headings);
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        // Fix: Tambahkan syarat scroll agar tidak bentrok dengan state "Top Page"
-        if (entry.isIntersecting && window.scrollY >= 50) {
+        // Solusi Bug 1: Area deteksi dibuat pas di bawah header h-14 (top: 80px - 100px)
+        if (entry.isIntersecting && window.scrollY >= 40) {
           const id = entry.target.getAttribute('id');
           const correspondingLink = content.querySelector(`[href="#${id}"]`);
 
           if (correspondingLink) {
-            // Animasi halus saat teks berubah
             triggerText.style.opacity = "0";
             setTimeout(() => {
               triggerText.innerText = (correspondingLink as HTMLElement).innerText;
               triggerText.style.opacity = "1";
-            }, 100);
-
+            }, 50);
+            
             links.forEach(l => l.classList.remove('active-link'));
             correspondingLink.classList.add('active-link');
           }
         }
       });
     }, {
-      rootMargin: '-10% 0px -85% 0px',
+      // Menaikkan batas atas (-80px) agar teks berganti tepat saat menyentuh header
+      rootMargin: '-80px 0px -80% 0px',
       threshold: 0
     });
 
     headingElements.forEach(h => observer.observe(h));
-  }; // Kurung tutup fungsi initTOC sekarang sudah benar di sini
+  };
 
   initTOC();
   document.addEventListener('astro:after-swap', initTOC);
