@@ -62,7 +62,6 @@ const tocHeadings = filterHeadingsForTOC(headings);
     max-height: calc(100vh - 6rem);
     display: flex;
     flex-direction: column;
-    box-shadow: var(--shadow-sm);
   }
 
   .toc-trigger {
@@ -77,27 +76,19 @@ const tocHeadings = filterHeadingsForTOC(headings);
     color: var(--fg);
   }
 
-  .toc-trigger:hover {
-    background-color: var(--bg-subtle);
-  }
+  .toc-trigger:hover { background-color: var(--bg-subtle); }
+
+  .toc-chevron { transition: transform 0.3s ease; }
+  .toc-trigger[aria-expanded="true"] .toc-chevron { transform: rotate(180deg); }
 
   .toc-trigger span {
     display: block;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 85%;
-    text-align: left;
-    transition: opacity 0.2s ease;
-  }
-
-  .toc-chevron {
-    transition: transform 0.3s ease;
-    flex-shrink: 0;
-  }
-  
-  .toc-trigger[aria-expanded="true"] .toc-chevron {
-    transform: rotate(180deg);
+    max-width: 80%;
+    /* Transisi opacity agar perpindahan teks halus */
+    transition: opacity 0.2s ease-in-out;
   }
 
   .toc-content {
@@ -105,9 +96,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
     overflow-y: auto;
   }
   
-  .toc-content[hidden] {
-    display: none;
-  }
+  .toc-content[hidden] { display: none; }
 
   .toc-ul {
     padding: 1rem;
@@ -126,12 +115,10 @@ const tocHeadings = filterHeadingsForTOC(headings);
     font-size: 13px;
     color: var(--fg-muted);
     line-height: 1.4;
-    transition: all 0.2s ease;
+    transition: color 0.2s;
   }
 
-  .toc-link:hover {
-    color: var(--fg);
-  }
+  .toc-link:hover { color: var(--fg); }
 
   .toc-dot {
     margin-top: 6px;
@@ -140,9 +127,8 @@ const tocHeadings = filterHeadingsForTOC(headings);
     border-radius: 99px;
     background: var(--border);
     flex-shrink: 0;
-    transition: all 0.2s ease;
   }
-
+  
   .active-link {
     color: var(--fg) !important;
     font-weight: 600;
@@ -152,8 +138,6 @@ const tocHeadings = filterHeadingsForTOC(headings);
     background: var(--fg) !important;
     transform: scale(1.5);
   }
-
-  @media (min-width: 1024px) {}
 </style>
 
 <script>
@@ -180,14 +164,12 @@ const tocHeadings = filterHeadingsForTOC(headings);
 
     links.forEach(link => {
       link.addEventListener('click', () => {
-        if (window.innerWidth < 1024) {
-          closePanel();
-        }
+        if (window.innerWidth < 1024) closePanel();
       });
     });
 
     window.addEventListener('scroll', () => {
-      if (window.scrollY < 200) {
+      if (window.scrollY < 50) {
         triggerText.innerText = defaultText;
         links.forEach(l => l.classList.remove('active-link'));
       }
@@ -200,15 +182,19 @@ const tocHeadings = filterHeadingsForTOC(headings);
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && window.scrollY >= 50) {
           const id = entry.target.getAttribute('id');
           const correspondingLink = content.querySelector(`[href="#${id}"]`);
 
           if (correspondingLink) {
+            triggerText.style.opacity = "0";
+            setTimeout(() => {
+              triggerText.innerText = (correspondingLink as HTMLElement).innerText;
+              triggerText.style.opacity = "1";
+            }, 100);
+            
             links.forEach(l => l.classList.remove('active-link'));
             correspondingLink.classList.add('active-link');
-            
-            triggerText.innerText = (correspondingLink as HTMLElement).innerText;
           }
         }
       });
@@ -218,7 +204,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
     });
 
     headingElements.forEach(h => observer.observe(h));
-  };
+  }; 
 
   initTOC();
   document.addEventListener('astro:after-swap', initTOC);
