@@ -39,21 +39,17 @@ const {
     {title}
   </h1>
 
-  <div class="mb-4 md:mb-6">
-    <BlogMeta pubDate={pubDate} readingTime={readingTime} />
-  </div>
-
-  <div class="flex items-center justify-center gap-2">
+  <div class="flex items-center justify-center gap-1 mb-4 md:mb-6">
     {authorName && (
-      <div class="flex items-center">
-        <BlogAuthor
-          name={authorName}
-          avatar={authorAvatar}
-          title={authorTitle}
-          slug={authorSlug}
-        />
-      </div>
+      <BlogAuthor
+        name={authorName}
+        avatar={authorAvatar}
+        title={authorTitle}
+        slug={authorSlug}
+      />
     )}
     <Listen />
   </div>
+  
+  <BlogMeta pubDate={pubDate} readingTime={readingTime} />
 </header>
