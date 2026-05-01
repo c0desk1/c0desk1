@@ -1,0 +1,269 @@
+---
+// src/components/ui/Newsletter.astro
+// Props opsional untuk kustomisasi copy
+interface Props {
+  heading?    : string;
+  subheading? : string;
+  placeholder?: string;
+  btnLabel?   : string;
+  // action URL form (misal ConvertKit, Mailchimp endpoint)
+  action?     : string;
+}
+
+const {
+  heading     = 'Jangan lewatkan artikel terbaru',
+  subheading  = 'Kirim langsung ke inbox kamu. Tanpa spam, bisa unsubscribe kapan saja.',
+  placeholder = 'email@kamu.com',
+  btnLabel    = 'Berlangganan',
+  action      = '#',
+} = Astro.props;
+---
+
+<section class="nl-section">
+  <div class="nl-inner">
+    <!-- Icon dekoratif -->
+    <div class="nl-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect width="20" height="16" x="2" y="4" rx="2"/>
+        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+      </svg>
+    </div>
+
+    <!-- Copy -->
+    <div class="nl-copy">
+      <h2 class="nl-heading">{heading}</h2>
+      <p class="nl-sub">{subheading}</p>
+    </div>
+
+    <!-- Form -->
+    <div
+      id="nl-form-wrap"
+      class="nl-form-wrap"
+      role="form"
+      aria-label="Form berlangganan newsletter"
+    >
+      <input
+        id="nl-email"
+        type="email"
+        required
+        placeholder={placeholder}
+        autocomplete="email"
+        class="nl-input"
+        aria-label="Alamat email"
+      />
+      <button id="nl-submit" type="button" class="nl-btn">
+        <span id="nl-btn-label">{btnLabel}</span>
+        <!-- Spinner (hidden by default) -->
+        <svg
+          id="nl-spinner"
+          class="hidden nl-spinner"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+        >
+          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Status message -->
+    <p id="nl-status" class="nl-status" aria-live="polite" hidden></p>
+
+    <!-- Social proof opsional -->
+    <p class="nl-proof">
+      <svg class="inline w-3.5 h-3.5 mr-1 -mt-0.5" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      Data kamu aman. Tidak ada spam.
+    </p>
+  </div>
+</section>
+
+<style>
+  @keyframes nl-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  .nl-section {
+    width: 100%;
+    padding: 3rem 1rem;
+  }
+
+  .nl-inner {
+    max-width: 28rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    text-align: center;
+  }
+
+  .nl-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-muted);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    color: var(--fg-muted);
+  }
+
+  .nl-icon svg { width: 1.25rem; height: 1.25rem; }
+
+  .nl-copy { display: flex; flex-direction: column; gap: 0.4rem; }
+
+  .nl-heading {
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--fg);
+    margin: 0;
+  }
+
+  .nl-sub {
+    font-size: 0.875rem;
+    color: var(--fg-muted);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .nl-form-wrap {
+    width: 100%;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .nl-input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.6rem 0.875rem;
+    font-size: 0.875rem;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    color: var(--fg);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .nl-input::placeholder { color: var(--fg-muted); }
+  .nl-input:focus { border-color: var(--border-strong); }
+
+  .nl-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background: var(--fg);
+    color: var(--bg);
+    border: none;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+
+  .nl-btn:hover   { opacity: 0.85; }
+  .nl-btn:active  { transform: scale(0.97); }
+  .nl-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .nl-spinner {
+    width: 0.9rem;
+    height: 0.9rem;
+    animation: nl-spin 0.8s linear infinite;
+  }
+
+  .nl-status {
+    font-size: 0.8125rem;
+    border-radius: var(--radius-md);
+    padding: 0.5rem 0.875rem;
+  }
+
+  .nl-status.success {
+    color: #16a34a;
+    background: #dcfce7;
+  }
+
+  .nl-status.error {
+    color: #dc2626;
+    background: #fee2e2;
+  }
+
+  .nl-proof {
+    font-size: 0.75rem;
+    color: var(--fg-muted);
+    margin: 0;
+  }
+</style>
+
+<script>
+  (() => {
+    const emailInput = document.getElementById('nl-email')    as HTMLInputElement | null;
+    const submitBtn  = document.getElementById('nl-submit')   as HTMLButtonElement | null;
+    const btnLabel   = document.getElementById('nl-btn-label') as HTMLElement | null;
+    const spinner    = document.getElementById('nl-spinner')  as HTMLElement | null;
+    const status     = document.getElementById('nl-status')   as HTMLElement | null;
+
+    if (!emailInput || !submitBtn) return;
+
+    const setLoading = (on: boolean) => {
+      submitBtn.disabled = on;
+      if (btnLabel) btnLabel.style.display = on ? 'none' : '';
+      if (spinner)  spinner.classList.toggle('hidden', !on);
+    };
+
+    const showStatus = (msg: string, type: 'success' | 'error') => {
+      if (!status) return;
+      status.textContent = msg;
+      status.className   = `nl-status ${type}`;
+      status.hidden      = false;
+      setTimeout(() => { status.hidden = true; }, 5000);
+    };
+
+    submitBtn.addEventListener('click', async () => {
+      const email = emailInput.value.trim();
+
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showStatus('Masukkan alamat email yang valid.', 'error');
+        emailInput.focus();
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        // Ganti URL ini dengan endpoint newsletter kamu
+        // (ConvertKit, Mailchimp, Resend, custom API, dll)
+        const res = await fetch('/api/newsletter', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
+
+        if (!res.ok) throw new Error('Gagal');
+
+        emailInput.value = '';
+        showStatus('Berhasil! Cek inbox kamu untuk konfirmasi.', 'success');
+      } catch {
+        showStatus('Terjadi kesalahan. Coba lagi ya!', 'error');
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    // Submit on Enter
+    emailInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') submitBtn.click();
+    });
+  })();
+</script>
