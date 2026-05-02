@@ -62,7 +62,7 @@ import Icon from "./Icon.astro";
 	.tts-highlight {
   	background: color-mix(in srgb, var(--fg) 6%, transparent);
   	border-radius: 6px;
-  	padding: 2px 4px;
+  	padding: 3px 4px;
   	margin: -2px -4px;
   	box-shadow: 0 0 0 1px color-mix(in srgb, var(--fg) 12%, transparent);
   	animation: tts-pulse 1.5s ease-in-out infinite;
@@ -408,6 +408,34 @@ import Icon from "./Icon.astro";
     };
 
     init();
+    
+    // ── Handle
+	let wasPlayingBeforeHidden = false;
+
+	document.addEventListener('visibilitychange', () => {
+  	if (document.hidden) {
+
+    	if (isPlaying && !isPaused) {
+      	wasPlayingBeforeHidden = true;
+      	synth.pause();
+      	isPaused = true;
+      	setPlayPauseIcon(true);
+    	}
+  	} else {
+    	if (wasPlayingBeforeHidden) {
+      	wasPlayingBeforeHidden = false;
+
+      	setTimeout(() => {
+        	if (chunks.length && currentIdx < chunks.length) {
+          	synth.resume();
+          	isPlaying = true;
+          	isPaused = false;
+          	setPlayPauseIcon(false);
+        	}
+      	}, 200);
+    	}
+  	}
+	});
 
     document.addEventListener('astro:after-swap', () => {
       synth.cancel();
