@@ -1,0 +1,17 @@
+---
+// src/pages/offline.astro
+import Layout from "@/layouts/BaseLayout.astro";
+---
+
+<Layout title="Offline - c0desk1">
+  <div class="flex flex-col items-center justify-center min-h-[70vh] text-center px-4">
+    <svg class="w-24 h-24 text-(--fg-muted) mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18.364 5.636L15.536 8.464M15.536 5.636l2.828 2.828M12 4v16m-8-8h16" />
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h8" />
+    </svg>
+    <h1 class="text-3xl font-bold text-(--fg) mb-2">Anda Offline</h1>
+    <p class="text-(--fg-muted) max-w-md">
+      Koneksi internet terputus. Silakan cek kembali koneksi Anda dan coba lagi nanti.
+    </p>
+  </div>
+</Layout>
