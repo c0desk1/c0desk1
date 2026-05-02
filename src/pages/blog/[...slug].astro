@@ -116,14 +116,11 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
   canonicalURL={canonicalURL}
 >
   <article class="relative my-4 md:my-8">
-    
     <h1 class="sr-only">{title}</h1>
-    
     <Section size="sm">
-      <Container size="sm">
+      <Container size="md">
         <h2 class="sr-only">Article Header</h2>
         <Breadcrumb items={Breadcrumbs} />
-        
         <BlogHeader
           title={title}
           pubDate={pubDate}
@@ -144,8 +141,8 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
       </Container>
     </Section>
 
-    <Section size="sm" class="section-divider !pt-0 lg:!pt-8">
-		<Container size="sm"> 
+    <Section size="sm" class="section-divider pt-0! lg;pt-8!">
+		<Container size="md"> 
     		<div class="flex flex-col lg:grid lg:grid-cols-12 gap-2 lg:gap-12 items-start relative">
 				<aside class="w-full sticky top-15 z-40 lg:col-span-4 mb-4 md:mb-8 self-start">
         			{tocHeadings.length > 0 && (
