@@ -73,10 +73,8 @@ const GA_ID    = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
           </div>
         </div>
 
-        <!-- Toggles -->
         <div class="ck-toggles">
 
-          <!-- Functional — always on -->
           <label class="ck-toggle-row ck-toggle-row--disabled">
             <div class="ck-toggle-info">
               <span class="ck-toggle-name">Fungsional</span>
@@ -87,7 +85,6 @@ const GA_ID    = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
             </div>
           </label>
 
-          <!-- Analytics -->
           <label class="ck-toggle-row" id="ck-analytics-row">
             <div class="ck-toggle-info">
               <span class="ck-toggle-name">Analitik</span>
@@ -106,7 +103,6 @@ const GA_ID    = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
 
         </div>
 
-        <!-- Actions -->
         <div class="ck-actions">
           <button id="ck-reject-all" class="ck-btn ck-btn--ghost">Tolak semua</button>
           <button id="ck-save"       class="ck-btn ck-btn--outline">Simpan pilihan</button>
@@ -184,7 +180,6 @@ const GA_ID    = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
         z-index: 10000;
         width: min(22rem, calc(100vw - 2rem));
 
-        /* Slide-up + fade */
         opacity: 0;
         transform: translateY(1rem);
         transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
