@@ -33,7 +33,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
         <ul class="toc-ul">
           {tocHeadings.map(h => (
             <li class:list={["toc-li", h.depth === 3 ? "pl-4" : ""]}>
-              <a href={`#${h.slug}`} class="toc-link items-center justify-center">
+              <a href={`#${h.slug}`} class="toc-link">
                 <span class="toc-dot"></span>
                 {h.text}
               </a>
@@ -47,12 +47,12 @@ const tocHeadings = filterHeadingsForTOC(headings);
 
 <style is:global>
   :target {
-    scroll-margin-top: 4.5rem;
+    scroll-margin-top: 5rem;
   }
 
   .prose-custom h2,
   .prose-custom h3 {
-    scroll-margin-top: 4.5rem;
+    scroll-margin-top: 5rem;
   }
 
   .toc-container {
@@ -132,6 +132,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
   .toc-dot {
     width: 3px;
     height: 3px;
+    align-items: flex-start;
     border-radius: 50%;
     background: var(--fg-subtle);
     flex-shrink: 0;
