@@ -265,6 +265,23 @@ export function filterByFeatured<T extends { data: { featured?: boolean } }>(ite
   return items.filter(item => item.data.featured);
 }
 
+// ==================== SORT & FILTER UTILITIES ====================
+
+export function sortByDate<T extends { data: { pubDate?: Date | string | number; date?: Date | string | number } }>(
+  items: T[],
+  dateField: 'pubDate' | 'date' = 'pubDate'
+): T[] {
+  return [...items].sort((a, b) => {
+    const dateA = a.data[dateField];
+    const dateB = b.data[dateField];
+    if (!dateA || !dateB) return 0;
+    
+    const dA = ensureDate(dateA);
+    const dB = ensureDate(dateB);
+    return dB.getTime() - dA.getTime();
+  });
+}
+
 // ==================== SHARE ====================
 
 export function getShareUrls(url: string, title: string) {
