@@ -29,7 +29,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
 
     <div class="services-list">
       {services.map((id) => (
-        <div class="service-row" onclick="toggleDetails('${id}')">
+        <div class="service-row" onclick={`toggleDetails('${id}')`}>
 
           <div class="service-top">
             <div class="service-left">
