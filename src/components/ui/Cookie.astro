@@ -1,44 +1,156 @@
 ---
 // src/components/ui/Cookie.astro
+import { siteConfig } from "@/config/site";
+import { getEntry } from "astro:content";
+
+let settings;
+try {
+  settings = await getEntry('settings', 'site');
+} catch (error) {
+  console.warn('Settings not found, using siteConfig fallback');
+}
+const siteData = settings?.data || siteConfig;
+const GA_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
 ---
 
-<script is:inline>
+<script is:inline define:vars={{ GA_ID }}>
 (function() {
-  if (localStorage.getItem('cookie-consent') === 'accepted') {
+  const COOKIE_KEY = 'cookie-consent';
+
+  const consent = localStorage.getItem(COOKIE_KEY);
+  
+  if (consent === 'accepted') {
     return;
   }
   
-  if (localStorage.getItem('cookie-consent') === 'rejected') {
-    window['ga-disable-G-2TKFP229HJ'] = true;
+  if (consent === 'rejected') {
+    if (window.gtag) {
+      window['ga-disable-' + GA_ID] = true;
+    }
     return;
   }
   
   const banner = document.createElement('div');
   banner.id = 'cookie-banner';
   banner.innerHTML = `
-    <div class="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-md z-[200]
-                bg-(--bg) border border-(--border) rounded-(--radius-lg) shadow-lg p-4">
-      <p class="text-sm text-(--fg-muted) mb-3">
-        Kami menggunakan cookie untuk analytics. Lanjutkan berarti setuju.
-      </p>
-      <div class="flex gap-2">
-        <button id="accept-cookies" class="px-3 py-1.5 text-sm bg-(--accent) text-white rounded-md">Setuju</button>
-        <button id="reject-cookies" class="px-3 py-1.5 text-sm border border-(--border) rounded-md">Tolak</button>
+    <div class="cookie-bar">
+      <div class="cookie-container">
+        <div class="cookie-content">
+          <p class="cookie-text">
+            This website uses analytics cookies to understand how you interact with our content.
+          </p>
+          <div class="cookie-actions">
+            <button id="cookie-reject" class="cookie-button cookie-button-secondary">
+              Reject
+            </button>
+            <button id="cookie-accept" class="cookie-button cookie-button-primary">
+              Accept
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   `;
+  
   document.body.appendChild(banner);
   
-  document.getElementById('accept-cookies')?.addEventListener('click', () => {
-    localStorage.setItem('cookie-consent', 'accepted');
+  document.getElementById('cookie-accept')?.addEventListener('click', () => {
+    localStorage.setItem(COOKIE_KEY, 'accepted');
     banner.remove();
-    location.reload();
   });
   
-  document.getElementById('reject-cookies')?.addEventListener('click', () => {
-    localStorage.setItem('cookie-consent', 'rejected');
-    window['ga-disable-G-2TKFP229HJ'] = true;
+  document.getElementById('cookie-reject')?.addEventListener('click', () => {
+    localStorage.setItem(COOKIE_KEY, 'rejected');
+    if (window.gtag) {
+      window['ga-disable-' + GA_ID] = true;
+    }
     banner.remove();
   });
 })();
 </script>
+
+<style is:global>
+  .cookie-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 1rem;
+  }
+
+  .cookie-container {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  .cookie-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .cookie-text {
+    font-size: 0.875rem;
+    color: var(--fg-muted);
+    margin: 0;
+    flex: 1;
+  }
+
+  .cookie-actions {
+    display: flex;
+    gap: 1rem;
+    flex-shrink: 0;
+  }
+
+  .cookie-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    border: none;
+  }
+
+  .cookie-button-primary {
+    background: var(--fg);
+    color: var(--bg);
+  }
+
+  .cookie-button-primary:hover {
+    opacity: 0.8;
+  }
+
+  .cookie-button-secondary {
+    background: transparent;
+    color: var(--fg-muted);
+  }
+
+  .cookie-button-secondary:hover {
+    color: var(--fg);
+    background: var(--bg-muted);
+  }
+
+  .cookie-button:active {
+    transform: scale(0.98);
+  }
+
+  @media (max-width: 640px) {
+    .cookie-content {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .cookie-actions {
+      width: 100%;
+      justify-content: flex-end;
+    }
+  }
+</style>
