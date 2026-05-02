@@ -1,0 +1,93 @@
+---
+// src/components/ui/Toast.astro
+---
+
+<div id="toast-root" class="fixed bottom-4 right-4 z-200 flex flex-col gap-2"></div>
+
+<script>
+  type ToastType = 'success' | 'error' | 'info';
+  
+  interface ToastOptions {
+    duration?: number;
+    type?: ToastType;
+  }
+
+  let container: HTMLElement | null = null;
+
+  const getContainer = (): HTMLElement => {
+    if (container) return container;
+    container = document.getElementById('toast-root');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'toast-root';
+      container.className = 'fixed bottom-4 right-4 z-200 flex flex-col gap-2';
+      document.body.appendChild(container);
+    }
+    return container;
+  };
+
+  const getIcon = (type: ToastType): string => {
+    switch (type) {
+      case 'success':
+        return `<svg class="w-4.5 h-4.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round"stroke-linejoin="round"stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+      case 'error':
+        return `<svg class="w-4.5 h-4.5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round"stroke-linejoin="round"stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>`;
+      default:
+        return `<svg class="w-4.5 h-4.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round"stroke-linejoin="round"stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+    }
+  };
+
+  const getBorderColor = (type: ToastType): string => {
+    switch (type) {
+      case 'success': return 'border-l-4 border-l-emerald-500';
+      case 'error': return 'border-l-4 border-l-red-500';
+      default: return 'border-l-4 border-l-blue-500';
+    }
+  };
+
+  const showToast = (message: string, options: ToastOptions = {}) => {
+    const { duration = 3000, type = 'info' } = options;
+    const root = getContainer();
+    
+    const toast = document.createElement('div');
+    toast.className = `
+      bg-(--bg) border border-(--border) rounded-(--radius-lg)
+      px-4 py-3 text-sm shadow-lg
+      flex items-center gap-2 min-w-[200px] max-w-sm
+      ${getBorderColor(type)}
+      animate-slide-in-right
+    `;
+    
+    toast.innerHTML = `
+      ${getIcon(type)}
+      <span class="text-(--fg)">${message}</span>
+    `;
+    
+    root.appendChild(toast);
+    
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateX(100%)';
+      setTimeout(() => toast.remove(), 200);
+    }, duration);
+  };
+
+  (window as any).toast = { show: showToast };
+</script>
+
+<style is:global>
+  @keyframes slide-in-right {
+    from {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  .animate-slide-in-right {
+    animation: slide-in-right 0.2s ease-out;
+  }
+</style>
