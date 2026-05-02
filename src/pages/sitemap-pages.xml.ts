@@ -4,17 +4,24 @@ import { siteConfig } from '@/config/site';
 import { getEntry } from 'astro:content';
 
 let settings;
-  try {
-    settings = await getEntry('settings', 'site');
-  } catch (error) {
-    console.warn('Settings not found, using siteConfig fallback');
-  }
-  const siteData = settings?.data || siteConfig;
-  const siteUrl = siteData.siteUrl;
+try {
+  settings = await getEntry('settings', 'site');
+} catch (error) {
+  console.warn('Settings not found, using siteConfig fallback');
+}
+const siteData = settings?.data || siteConfig;
+let siteUrl = siteData.siteUrl;
+if (!siteUrl.endsWith('/')) siteUrl += '/';
 
 const pages = [
-  { url: '', priority: '1.0', changefreq: 'daily' },
-  { url: 'about/', priority: '0.9', changefreq: 'monthly' },
+  { url: '', priority: 1.0, changefreq: 'daily' },
+  { url: 'about/', priority: 0.8, changefreq: 'monthly' },
+  { url: 'contact/', priority: 0.8, changefreq: 'monthly' },
+  { url: 'disclaimer/', priority: 0.7, changefreq: 'monthly' },
+  { url: 'dmca/', priority: 0.7, changefreq: 'monthly' },
+  { url: 'privacy-policy/', priority: 0.7, changefreq: 'monthly' },
+  { url: 'terms-of-service/', priority: 0.7, changefreq: 'monthly' },
+  { url: 'cookie-policy/', priority: 0.7, changefreq: 'monthly' },
 ];
 
 export const GET: APIRoute = () => {
@@ -31,9 +38,9 @@ ${pages.map(page => `  <url>
 </urlset>`;
 
   return new Response(sitemap, {
-    headers: { 
+    headers: {
       'Content-Type': 'application/xml',
-      'Cache-Control': 'public, max-age=3600, s-maxage=3600'
+      'Cache-Control': 'public, max-age=3600, s-maxage=3600',
     },
   });
 };
