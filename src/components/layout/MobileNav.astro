@@ -29,7 +29,7 @@ const nav      = siteData.navItems ?? [];
 <!-- Backdrop -->
 <div
   id="mnav-backdrop"
-  class="md:hidden fixed inset-0 z-40 bg-(--bg)/60 backdrop-blur-sm
+  class="md:hidden fixed inset-0 z-100 bg-(--bg)/60 backdrop-blur-sm
          opacity-0 pointer-events-none transition-opacity duration-250"
   aria-hidden="true"
 ></div>
@@ -40,7 +40,7 @@ const nav      = siteData.navItems ?? [];
   role="dialog"
   aria-modal="true"
   aria-label="Menu navigasi"
-  class="md:hidden fixed bottom-0 left-0 right-0 z-100
+  class="md:hidden fixed bottom-0 left-0 right-0 z-200
          bg-(--bg) border-t border-(--border)
          rounded-t-(--radius-xl)
          shadow-[0_-8px_40px_rgba(0,0,0,0.12)]
