@@ -21,7 +21,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
   <aside class="toc-container">
     <nav class="toc-nav">
       <button
-        class="toc-trigger"
+        class="toc-trigger lg:hidden"
         aria-expanded="false"
         aria-controls="toc-list"
       >
@@ -29,7 +29,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
         <Icon name="chevron-down" class="toc-chevron w-4.5 h-4.5" />
       </button>
 
-      <div id="toc-list" class="toc-content" hidden>
+      <div id="toc-list" class="toc-content lg:block">
         <ul class="toc-ul">
           {tocHeadings.map(h => (
             <li class:list={["toc-li", h.depth === 3 ? "pl-4" : ""]}>
@@ -147,6 +147,12 @@ const tocHeadings = filterHeadingsForTOC(headings);
     background: var(--fg) !important;
     transform: scale(1.5);
   }
+
+	@media (min-width: 1024px) {
+		.toc-content {
+    		border-top: none;
+  		}
+	}
 </style>
 
 <script>
@@ -157,6 +163,15 @@ const tocHeadings = filterHeadingsForTOC(headings);
     const links = content?.querySelectorAll<HTMLAnchorElement>('.toc-link');
 
     if (!trigger ||!content ||!links?.length ||!triggerText) return;
+	
+	const isDesktop = window.innerWidth >= 1024;
+	if (isDesktop) {
+		content.hidden = false;
+		trigger.setAttribute('aria-expanded', 'true');
+	} else {
+		content.hidden = true;
+		trigger.setAttribute('aria-expanded', 'false');
+	}
 
     const DEFAULT_TEXT = 'Daftar Isi';
 
@@ -177,6 +192,16 @@ const tocHeadings = filterHeadingsForTOC(headings);
       });
     });
 
+	let resizeTimer: ReturnType<typeof setTimeout>;
+	window.addEventListener('resize', () => {
+		clearTimeout(resizeTimer);
+		resizeTimer = setTimeout(() => {
+			const isDesktopNow = window.innerWidth >= 1024;
+			content.hidden = !isDesktopNow;
+			trigger.setAttribute('aria-expanded', String(isDesktopNow));
+		}, 150);
+	});
+
     const headingEls: HTMLElement[] = Array.from(links)
      .map(l => {
         const id = l.getAttribute('href')?.slice(1);
@@ -196,7 +221,6 @@ const tocHeadings = filterHeadingsForTOC(headings);
       }, 80);
     };
 
-    // ── FIX: Pake IntersectionObserver
     const HEADER_H = 56;
     const TOC_TOP = 60;
     const OFFSET = HEADER_H + TOC_TOP;
@@ -225,7 +249,6 @@ const tocHeadings = filterHeadingsForTOC(headings);
           }
         });
 
-        // Fallback: kalo ga ada yg visible, ambil heading terakhir yg udah kelewat
         if (!active) {
           for (let i = headingEls.length - 1; i >= 0; i--) {
             if (headingEls[i].getBoundingClientRect().top < OFFSET) {
