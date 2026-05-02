@@ -160,7 +160,7 @@ schemaGraph.push({
   "name": formattedTitle,
   "description": seoData.description,
   "isPartOf": { "@id": `${siteURL}#website` },
-  "breadcrumb": { "@id": `${seoData.canonical}#breadcrumb` },
+  ...(!isHomepage && { "breadcrumb": { "@id": `${seoData.canonical}#breadcrumb` } }),
   "inLanguage": "id-ID",
   "potentialAction": [{ "@type": "ReadAction", "target": [seoData.canonical.toString()] }]
 });
