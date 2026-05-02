@@ -47,12 +47,12 @@ const tocHeadings = filterHeadingsForTOC(headings);
 
 <style is:global>
   :target {
-    scroll-margin-top: 5rem;
+    scroll-margin-top: 4.5rem;
   }
 
   .prose-custom h2,
   .prose-custom h3 {
-    scroll-margin-top: 5rem;
+    scroll-margin-top: 4.5rem;
   }
 
   .toc-container {
@@ -121,7 +121,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
 
   .toc-link {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 0.5rem;
     text-decoration: none;
     font-size: 13px;
@@ -132,11 +132,9 @@ const tocHeadings = filterHeadingsForTOC(headings);
   .toc-dot {
     width: 3px;
     height: 3px;
-    align-items: flex-start;
     border-radius: 50%;
     background: var(--fg-subtle);
     flex-shrink: 0;
-    margin-top: 4px;
     transition: background 0.2s, transform 0.2s;
   }
 
