@@ -1,12 +1,10 @@
 ---
 // src/components/ui/Newsletter.astro
-// Props opsional untuk kustomisasi copy
 interface Props {
   heading?    : string;
   subheading? : string;
   placeholder?: string;
   btnLabel?   : string;
-  // action URL form (misal ConvertKit, Mailchimp endpoint)
   action?     : string;
 }
 
@@ -208,25 +206,25 @@ const {
 
 <script>
   (() => {
-    const emailInput = document.getElementById('nl-email')    as HTMLInputElement | null;
-    const submitBtn  = document.getElementById('nl-submit')   as HTMLButtonElement | null;
-    const btnLabel   = document.getElementById('nl-btn-label') as HTMLElement | null;
-    const spinner    = document.getElementById('nl-spinner')  as HTMLElement | null;
-    const status     = document.getElementById('nl-status')   as HTMLElement | null;
+    const emailInput = document.getElementById('nl-email');
+    const submitBtn  = document.getElementById('nl-submit');
+    const btnLabel   = document.getElementById('nl-btn-label');
+    const spinner    = document.getElementById('nl-spinner');
+    const status     = document.getElementById('nl-status');
 
     if (!emailInput || !submitBtn) return;
 
-    const setLoading = (on: boolean) => {
+    const setLoading = (on) => {
       submitBtn.disabled = on;
       if (btnLabel) btnLabel.style.display = on ? 'none' : '';
-      if (spinner)  spinner.classList.toggle('hidden', !on);
+      if (spinner) spinner.classList.toggle('hidden', !on);
     };
 
-    const showStatus = (msg: string, type: 'success' | 'error') => {
+    const showStatus = (msg, type) => {
       if (!status) return;
       status.textContent = msg;
-      status.className   = `nl-status ${type}`;
-      status.hidden      = false;
+      status.className = `nl-status ${type}`;
+      status.hidden = false;
       setTimeout(() => { status.hidden = true; }, 5000);
     };
 
@@ -242,20 +240,29 @@ const {
       setLoading(true);
 
       try {
-        // Ganti URL ini dengan endpoint newsletter kamu
-        // (ConvertKit, Mailchimp, Resend, custom API, dll)
-        const res = await fetch('/api/newsletter', {
+        const res = await fetch('https://api.c0desk1.my.id/api/newsletter', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email }),
         });
 
-        if (!res.ok) throw new Error('Gagal');
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok) {
+          if (res.status === 409) {
+            showStatus('Email sudah terdaftar!', 'error');
+          } else {
+            showStatus(data.error || 'Terjadi kesalahan. Coba lagi ya!', 'error');
+          }
+          return;
+        }
 
         emailInput.value = '';
-        showStatus('Berhasil! Cek inbox kamu untuk konfirmasi.', 'success');
-      } catch {
-        showStatus('Terjadi kesalahan. Coba lagi ya!', 'error');
+        showStatus(data.message || 'Terima kasih telah berlangganan!', 'success');
+
+      } catch (err) {
+        console.error('[Newsletter] Error:', err);
+        showStatus('Gagal terhubung ke server. Coba lagi nanti.', 'error');
       } finally {
         setLoading(false);
       }
