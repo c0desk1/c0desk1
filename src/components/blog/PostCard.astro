@@ -11,19 +11,20 @@ interface Props {
   loading?: boolean;
 }
 
-const { post, loading = false } = Astro.props;
+const { post } = Astro.props;
 
-// Hanya resolve data jika tidak loading
 let title = '', excerpt = '', categoryName = '', pubDateISO = '', pubDateDisplay = '';
 let authorName = '', authorAvatar = '', optimizedAvatar = '', postUrl = '';
 
-if (!loading && post) {
+if (post) {
   const { data, id } = post;
-  const { title: t, description, pubDate, category, author } = data;
+  const { title: t, pubDate, category, author } = data;
   title = t;
 
-  excerpt = generateExcerpt(post.body, 140);
+excerpt = generateExcerpt(post.body || '', 140);
+
   const categoryEntry = await getEntry(category);
+
   const authorEntry   = author ? await getEntry(author) : null;
 
   categoryName    = categoryEntry?.data.name || 'General';
@@ -38,63 +39,38 @@ if (!loading && post) {
 }
 ---
 
-{loading ? (
-  <!-- Skeleton PostCard -->
-  <div class="flex flex-col h-full rounded-(--radius-xl) border border-(--border) p-6" aria-hidden="true">
-    <div class="flex items-center justify-between mb-6">
-      <div class="sk-line" style="width:4.5rem;height:0.8rem;"></div>
-      <div class="sk-line" style="width:3.5rem;height:0.8rem;"></div>
-    </div>
-    <div class="flex flex-col gap-4">
-      <div class="flex flex-col gap-2">
-        <div class="sk-line" style="width:100%;height:1.25rem;"></div>
-        <div class="sk-line" style="width:85%; height:1.25rem;"></div>
-        <div class="sk-line" style="width:60%; height:1.25rem;"></div>
-      </div>
-      <div class="flex flex-col gap-2">
-        <div class="sk-line" style="width:100%;height:0.875rem;"></div>
-        <div class="sk-line" style="width:92%; height:0.875rem;"></div>
-        <div class="sk-line" style="width:75%; height:0.875rem;"></div>
-      </div>
-    </div>
-    <div class="mt-auto flex items-center gap-3 pt-6">
-      <div class="sk-avatar" style="width:1.5rem;height:1.5rem;"></div>
-      <div class="sk-line" style="width:5rem;height:0.8rem;"></div>
-    </div>
+<a
+  href={postUrl}
+  aria-label={`Read article: ${title}`}
+  class="group flex flex-col h-full rounded-(--radius-xl) border border-(--border) p-6 hover:border-(--border-strong) focus:outline-none focus:ring-2 focus:ring-(--border-strong)">
+  <div class="flex items-center justify-between mb-6">
+    <span class="text-[13px] text-(--fg-subtle) tracking-tight group-hover:text-(--fg)">
+      {categoryName}
+    </span>
+    <time datetime={pubDateISO} class="text-[13px] text-(--fg-subtle)">
+      {pubDateDisplay}
+    </time>
   </div>
-) : (
-  <a
-    href={postUrl}
-    aria-label={`Read article: ${title}`}
-    class="group flex flex-col h-full rounded-(--radius-xl) border border-(--border) p-6 hover:border-(--border-strong) focus:outline-none focus:ring-2 focus:ring-(--border-strong)"
-  >
-    <div class="flex items-center justify-between mb-6">
-      <span class="text-[13px] text-(--fg-subtle) tracking-tight group-hover:text-(--fg)">
-        {categoryName}
-      </span>
-      <time datetime={pubDateISO} class="text-[13px] text-(--fg-subtle)">
-        {pubDateDisplay}
-      </time>
-    </div>
-    <div class="flex flex-col gap-4">
-      <h2 class="text-lg md:text-xl font-semibold tracking-tighter text-(--fg) leading-[1.15] line-clamp-3">
-        {title}
-      </h2>
-      <p class="text-sm text-(--fg-muted) leading-relaxed line-clamp-3 group-hover:text-(--fg)">
-        {excerpt}
-      </p>
-    </div>
-    <div class="mt-auto flex items-center gap-3 pt-6">
-      {authorAvatar && (
-        <Image
-          src={optimizedAvatar}
-          alt={authorName}
-          width={48}
-          height={48}
-          class="w-6 h-6 rounded-full border border-(--border) object-cover"
-        />
-      )}
-      <span class="text-[13px] text-(--fg-subtle)">{authorName}</span>
-    </div>
-  </a>
-)}
+  <div class="flex flex-col gap-4">
+    <h2 class="text-lg md:text-xl font-semibold tracking-tighter text-(--fg) leading-[1.15] line-clamp-3">
+      {title}
+    </h2>
+    <p class="text-sm text-(--fg-muted) leading-relaxed line-clamp-3 group-hover:text-(--fg)">
+      {excerpt}
+    </p>
+  </div>
+  <div class="mt-auto flex items-center gap-3 pt-6">
+    {authorAvatar && (
+      <Image
+        src={optimizedAvatar}
+        alt={authorName}
+        width={48}
+        height={48}
+        loading= eager
+        decoding= auto
+        class="w-6 h-6 rounded-full border border-(--border) object-cover"
+      />
+    )}
+    <span class="text-[13px] text-(--fg-subtle)">{authorName}</span>
+  </div>
+</a>
