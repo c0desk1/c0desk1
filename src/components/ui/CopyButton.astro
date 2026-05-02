@@ -7,22 +7,27 @@ import Icon from "./Icon.astro";
   id="copy-link-btn"
   aria-label="Salin tautan artikel"
   aria-live="polite"
-  class="relative p-2 rounded-(--radius-full) text-(--accent) hover:bg-(--bg-muted) group active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
+  class="relative p-1.5 rounded-(--radius-md) text-(--accent) hover:bg-(--bg-muted) group active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-200"
   data-url={Astro.url.href}>
-  <div class="flex items-center justify-center gap-1">
-    <div class="relative w-5 h-5 items-center">
-      <span id="icon-copy" class="absolute inset-0 w-full h-full transition-all duration-300">
-        <Icon name="link" class="w-4.5 h-4.5" />
+  <div class="flex items-center justify-center gap-1.5">
+    <div class="relative w-3.5 h-3.5 items-center">
+      <span id="icon-copy" class="absolute inset-0 w-full h-full transition-all duration-200">
+        <Icon name="link" class="w-3.5 h-3.5" />
       </span>
-      <span id="icon-check" class="absolute inset-0 w-full h-full opacity-0 scale-75 transition-all duration-300">
-        <Icon name="check" class="w-4.5 h-4.5" />
+      <span id="icon-check" class="absolute inset-0 w-full h-full opacity-0 scale-75 transition-all duration-200">
+        <Icon name="check" class="w-3.5 h-3.5" />
       </span>
     </div>
-    <span id="copy-text" class="text-[13px] md:text-sm text-(--accent) font-medium">
+    <span id="copy-text" class="text-xs font-medium">
       Salin URL
     </span>
   </div>
-  <span id="copy-tooltip" role="tooltip" class="absolute -top-9 left-1/2 -translate-x-1/2 px-2 py-1 text-[12px] border border-(--border) font-medium bg-(--bg-subtle) text-(--fg) rounded-(--radius-md) opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-xl">
+  
+  <!-- Tooltip - compact version -->
+  <span 
+    id="copy-tooltip" 
+    role="tooltip" 
+    class="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-0.5 text-[11px] font-medium border border-(--border) bg-(--bg) text-(--fg-muted) rounded-(--radius-md) opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-sm">
     Salin tautan
   </span>
 </button>
@@ -37,13 +42,21 @@ import Icon from "./Icon.astro";
     const btn = document.getElementById('copy-link-btn') as HTMLButtonElement;
     const copyIcon = document.getElementById('icon-copy');
     const checkIcon = document.getElementById('icon-check');
-    const tooltip = document.getElementById('copy-tooltip');
     const text = document.getElementById('copy-text');
+    const tooltip = document.getElementById('copy-tooltip');
 
-    if (!btn ||!copyIcon ||!checkIcon ||!tooltip ||!text) return;
+    if (!btn || !copyIcon || !checkIcon || !text || !tooltip) return;
 
     let timeoutId: number;
     let isCopying = false;
+
+    const showToastMessage = (success: boolean) => {
+      if (success) {
+        toast.show('Link copied to clipboard!', { type: 'success', duration: 2000 });
+      } else {
+        toast.show('Failed to copy link. Please try again.', { type: 'error', duration: 2000 });
+      }
+    };
 
     const setState = (success: boolean) => {
       clearTimeout(timeoutId);
@@ -52,13 +65,15 @@ import Icon from "./Icon.astro";
       if (success) {
         copyIcon.style.cssText = 'opacity:0;transform:scale(0.75)';
         checkIcon.style.cssText = 'opacity:1;transform:scale(1)';
-        text.textContent = 'Tersalin!';
+        text.textContent = 'Copied!';
         tooltip.textContent = 'Tersalin!';
-        btn.setAttribute('aria-label', 'Tautan berhasil disalin');
+        btn.setAttribute('aria-label', 'Link copied successfully');
+        showToastMessage(true);
       } else {
-        text.textContent = 'Gagal';
-        tooltip.textContent = 'Gagal menyalin';
-        btn.setAttribute('aria-label', 'Gagal menyalin tautan');
+        text.textContent = 'Failed';
+        tooltip.textContent = 'Gagal';
+        btn.setAttribute('aria-label', 'Failed to copy link');
+        showToastMessage(false);
       }
 
       timeoutId = window.setTimeout(() => {
@@ -66,10 +81,10 @@ import Icon from "./Icon.astro";
         checkIcon.style.cssText = 'opacity:0;transform:scale(0.75)';
         text.textContent = 'Salin URL';
         tooltip.textContent = 'Salin tautan';
-        btn.setAttribute('aria-label', 'Salin tautan artikel');
+        btn.setAttribute('aria-label', 'Copy article link');
         btn.disabled = false;
         isCopying = false;
-      }, 2000);
+      }, 1500);
     };
 
     const handleCopy = async () => {
@@ -88,8 +103,11 @@ import Icon from "./Icon.astro";
       btn.disabled = false;
       isCopying = false;
       btn.setAttribute('data-url', window.location.href);
-      setState(true);
-      setTimeout(() => setState(false), 0);
+      copyIcon.style.cssText = 'opacity:1;transform:scale(1)';
+      checkIcon.style.cssText = 'opacity:0;transform:scale(0.75)';
+      text.textContent = 'Salin URL';
+      tooltip.textContent = 'Salin tautan';
+      btn.setAttribute('aria-label', 'Copy article link');
     });
   })();
 </script>
