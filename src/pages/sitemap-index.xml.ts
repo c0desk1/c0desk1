@@ -18,6 +18,7 @@ export const GET: APIRoute = async () => {
     'sitemap-blog.xml',
     'sitemap-portfolio.xml',
     'sitemap-author.xml',
+    'sitemap-category.xml',
   ];
 
   const buildDate = new Date().toISOString();
