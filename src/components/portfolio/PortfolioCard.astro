@@ -12,12 +12,13 @@ const { id, data } = project;
 
 const {
   title,
-  pubDate,
+  pubDate,
+
   client,
   metrics,
 } = data;
 
-const excerpt = generateExcerpt(project.body, 140);
+const excerpt = generateExcerpt(project.body || '', 140);
 ---
 
 <a 
@@ -69,6 +70,7 @@ const excerpt = generateExcerpt(project.body, 140);
           </div>
         )}
       </div>
-    )}
+    )}
+
   </div>
 </a>
