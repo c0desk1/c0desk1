@@ -47,17 +47,17 @@ const tocHeadings = filterHeadingsForTOC(headings);
 
 <style is:global>
   :target {
-    scroll-margin-top: 4.5rem;
+    scroll-margin-top: 60px;
   }
 
   .prose-custom h2,
   .prose-custom h3 {
-    scroll-margin-top: 4.5rem;
+    scroll-margin-top: 60px;
   }
 
   .toc-container {
     position: sticky;
-    top: 4.5rem;
+    top: 60px;
     z-index: 50;
     width: 100%;
     margin-bottom: 0 !important;
@@ -204,7 +204,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
     };
 
     // ── Core detection
-    const getDetectionLine = () => HEADER_H + 40 //window.innerHeight * 0.35;
+    const getDetectionLine = () => HEADER_H + 60 //window.innerHeight * 0.35;
 
     const getActiveHeading = (): HTMLElement | null => {
       const line = getDetectionLine();
