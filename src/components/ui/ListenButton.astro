@@ -60,10 +60,23 @@ import Icon from "./Icon.astro";
 
 <style is:global>
 	.tts-highlight {
-		background: color-mix(in srgb, var(--fg) 12%, transparent);
-		border-radius: 2px;
-		padding: 2px;
-		transition: background 0.25s ease, box-shadow 0.25s ease;
+  	background: color-mix(in srgb, var(--fg) 6%, transparent);
+  	border-radius: 6px;
+  	padding: 2px 4px;
+  	margin: -2px -4px;
+  	box-shadow: 0 0 0 1px color-mix(in srgb, var(--fg) 12%, transparent);
+  	animation: tts-pulse 1.5s ease-in-out infinite;
+	}
+
+	@keyframes tts-pulse {
+  	0%, 100% {
+    	background: color-mix(in srgb, var(--fg) 6%, transparent);
+    	box-shadow: 0 0 0 1px color-mix(in srgb, var(--fg) 12%, transparent);
+  	}
+  	50% {
+    	background: color-mix(in srgb, var(--fg) 10%, transparent);
+    	box-shadow: 0 0 0 1px color-mix(in srgb, var(--fg) 20%, transparent);
+  	}
 	}
 
   .tts-bar {
@@ -219,30 +232,42 @@ import Icon from "./Icon.astro";
 		highlightedEl = null;
 	};
 
-    const highlightChunk = (chunk: string) => {
-		if (!articleEl) return;
-		
-		clearHighlight();
-		const needleRaw = chunk.slice(0, 40).replace(/\s+/g, ' ').trim();
-		
-		if (needleRaw.length < 4) return;
+    const HEADER_H = 56;
+	const TOC_TOP = 60;
+	const TTS_OFFSET = HEADER_H + TOC_TOP + 16;
 
-		const escaped = needleRaw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-		const re = new RegExp(escaped, 'i');
-		const candidates = articleEl.querySelectorAll<HTMLElement>(
-			'p, h1, h2, h3, h4, h5, h6, li, blockquote, td'
-		);
-		for (const el of candidates) {
-			if (el.closest('button, nav, aside, [role="navigation"], .toc-container')) continue;
-			
-			const elText = (el.innerText ?? el.textContent ?? '').replace(/\s+/g, ' ');
-			if (!re.test(elText)) continue;
-			el.classList.add('tts-highlight');
-			
-			highlightedEl = el;
-			el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-			break;
-		}
+	const highlightChunk = (chunk: string) => {
+  	if (!articleEl) return;
+  
+  	clearHighlight();
+  	const needleRaw = chunk.slice(0, 40).replace(/\s+/g, ' ').trim();
+  	if (needleRaw.length < 4) return;
+
+  	const escaped = needleRaw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  	const re = new RegExp(escaped, 'i');
+  	const candidates = articleEl.querySelectorAll<HTMLElement>(
+    	'p, h1, h2, h3, h4, h5, h6, li, blockquote, td'
+  	);
+  
+  	for (const el of candidates) {
+    	if (el.closest('button, nav, aside, [role="navigation"], .toc-container')) continue;
+    
+    	const elText = (el.innerText ?? el.textContent ?? '').replace(/\s+/g, ' ');
+    	if (!re.test(elText)) continue;
+    
+    	el.classList.add('tts-highlight');
+    	highlightedEl = el;
+    
+    	const rect = el.getBoundingClientRect();
+    	const absoluteTop = window.pageYOffset + rect.top;
+    	const targetY = absoluteTop - TTS_OFFSET;
+    
+    	window.scrollTo({
+      	top: targetY,
+      	behavior: 'smooth'
+    	});
+    	break;
+  	}
 	};
 
     // ── DOM helpers
