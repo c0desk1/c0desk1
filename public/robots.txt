@@ -1,6 +1,7 @@
 # robots.txt
 User-agent: *
 Allow: /
+
 Disallow: /404/
 Disallow: /api/
 
@@ -8,6 +9,6 @@ Disallow: /api/
 User-agent: FeedFetcher-Google
 Allow: /rss.xml
 
-# Peta Situs
+# SITEMAP
 Sitemap: https://c0desk1.my.id/sitemap-index.xml
 Sitemap: https://c0desk1.my.id/rss.xml
