@@ -26,7 +26,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
         aria-controls="toc-list"
       >
         <span class="toc-trigger-text text-sm md:text-[13px] font-semibold">Daftar Isi</span>
-        <Icon name="chevron-down" class="toc-chevron w-4 h-4" />
+        <Icon name="chevron-down" class="toc-chevron w-4.5 h-4.5" />
       </button>
 
       <div id="toc-list" class="toc-content" hidden>
@@ -58,7 +58,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
   .toc-container {
     position: sticky;
     top: 4.5rem;
-    z-index: 40;
+    z-index: 50;
     width: 100%;
     margin-bottom: 0 !important;
   }
@@ -151,7 +151,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
 </style>
 
 <script>
-  const HEADER_H = 56; // h-14 = 56px
+  const HEADER_H = 56;
 
   const initTOC = () => {
     const trigger     = document.querySelector<HTMLButtonElement>('.toc-trigger');
@@ -163,7 +163,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
 
     const DEFAULT_TEXT = 'Daftar Isi';
 
-    // ── Panel toggle ────────────────────────────────────────────────────────
+    // ── Panel toggle
     const closePanel = () => {
       trigger.setAttribute('aria-expanded', 'false');
       content.hidden = true;
@@ -181,7 +181,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
       });
     });
 
-    // ── Heading elements ────────────────────────────────────────────────────
+    // ── Heading elements
     const headingEls: HTMLElement[] = Array.from(links)
       .map(l => {
         const id = l.getAttribute('href')?.slice(1);
@@ -191,7 +191,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
 
     if (!headingEls.length) return;
 
-    // ── Active label fade ───────────────────────────────────────────────────
+    // ── Active label fade
     let fadeTimer: ReturnType<typeof setTimeout>;
     let currentActive: HTMLElement | null = null;
 
@@ -204,11 +204,8 @@ const tocHeadings = filterHeadingsForTOC(headings);
       }, 80);
     };
 
-    // ── Core detection ──────────────────────────────────────────────────────
-    //
-    // DETECTION_LINE: titik di mana heading dianggap "aktif".
-    
-    const getDetectionLine = () => HEADER_H + 42 //window.innerHeight * 0.35;
+    // ── Core detection
+    const getDetectionLine = () => HEADER_H + 40 //window.innerHeight * 0.35;
 
     const getActiveHeading = (): HTMLElement | null => {
       const line = getDetectionLine();
