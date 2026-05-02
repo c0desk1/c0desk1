@@ -7,6 +7,7 @@ import { siteConfig } from "@/config/site";
 import BaseHead from "@/components/layout/BaseHead.astro";
 import Header from "@/components/layout/Header.astro";
 import Newsletter from "@/components/layout/Newsletter.astro";
+import Cookie from "@/components/ui/Cookie.astro";
 import Footer from "@/components/layout/Footer.astro";
 import Search from "@/components/layout/Search.astro";
 import Container from "@/components/ui/Container.astro";
@@ -135,5 +136,6 @@ const siteData = settings?.data || siteConfig;
         </>
       );
     })()}
+   <Cookie />
   </body>
 </html>
