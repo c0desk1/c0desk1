@@ -47,12 +47,12 @@ const tocHeadings = filterHeadingsForTOC(headings);
 
 <style is:global>
   :target {
-    scroll-margin-top: 60px;
+    scroll-margin-top: 116px;
   }
 
   .prose-custom h2,
   .prose-custom h3 {
-    scroll-margin-top: 60px;
+    scroll-margin-top: 116px;
   }
 
   .toc-container {
@@ -150,19 +150,16 @@ const tocHeadings = filterHeadingsForTOC(headings);
 </style>
 
 <script>
-  const HEADER_H = 56;
-
   const initTOC = () => {
-    const trigger     = document.querySelector<HTMLButtonElement>('.toc-trigger');
+    const trigger = document.querySelector<HTMLButtonElement>('.toc-trigger');
     const triggerText = trigger?.querySelector<HTMLElement>('.toc-trigger-text');
-    const content     = document.getElementById('toc-list');
-    const links       = content?.querySelectorAll<HTMLAnchorElement>('.toc-link');
+    const content = document.getElementById('toc-list');
+    const links = content?.querySelectorAll<HTMLAnchorElement>('.toc-link');
 
-    if (!trigger || !content || !links?.length || !triggerText) return;
+    if (!trigger ||!content ||!links?.length ||!triggerText) return;
 
     const DEFAULT_TEXT = 'Daftar Isi';
 
-    // ── Panel toggle
     const closePanel = () => {
       trigger.setAttribute('aria-expanded', 'false');
       content.hidden = true;
@@ -180,20 +177,16 @@ const tocHeadings = filterHeadingsForTOC(headings);
       });
     });
 
-    // ── Heading elements
     const headingEls: HTMLElement[] = Array.from(links)
-      .map(l => {
+     .map(l => {
         const id = l.getAttribute('href')?.slice(1);
-        return id ? document.getElementById(id) : null;
+        return id? document.getElementById(id) : null;
       })
-      .filter((el): el is HTMLElement => el !== null);
+     .filter((el): el is HTMLElement => el!== null);
 
     if (!headingEls.length) return;
 
-    // ── Active label fade
     let fadeTimer: ReturnType<typeof setTimeout>;
-    let currentActive: HTMLElement | null = null;
-
     const setLabel = (text: string) => {
       clearTimeout(fadeTimer);
       triggerText.style.opacity = '0';
@@ -203,45 +196,66 @@ const tocHeadings = filterHeadingsForTOC(headings);
       }, 80);
     };
 
-    // ── Core detection
-    const getDetectionLine = () => HEADER_H + 60 //window.innerHeight * 0.35;
+    // ── FIX: Pake IntersectionObserver
+    const HEADER_H = 56;
+    const TOC_TOP = 60;
+    const OFFSET = HEADER_H + TOC_TOP;
 
-    const getActiveHeading = (): HTMLElement | null => {
-      const line = getDetectionLine();
-      let active: HTMLElement | null = null;
-      for (const h of headingEls) {
-        if (h.getBoundingClientRect().top <= line) {
-          active = h;
-        } else {
-          break;
+    const visibleHeadings = new Set<HTMLElement>();
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const heading = entry.target as HTMLElement;
+          if (entry.isIntersecting) {
+            visibleHeadings.add(heading);
+          } else {
+            visibleHeadings.delete(heading);
+          }
+        });
+
+        let active: HTMLElement | null = null;
+        let minTop = Infinity;
+
+        visibleHeadings.forEach((h) => {
+          const top = h.getBoundingClientRect().top;
+          if (top >= 0 && top < minTop) {
+            minTop = top;
+            active = h;
+          }
+        });
+
+        // Fallback: kalo ga ada yg visible, ambil heading terakhir yg udah kelewat
+        if (!active) {
+          for (let i = headingEls.length - 1; i >= 0; i--) {
+            if (headingEls[i].getBoundingClientRect().top < OFFSET) {
+              active = headingEls[i];
+              break;
+            }
+          }
         }
+
+        links.forEach(l => l.classList.remove('active-link'));
+
+        if (!active) {
+          setLabel(DEFAULT_TEXT);
+          return;
+        }
+
+        const id = active.getAttribute('id');
+        const link = id? content.querySelector<HTMLAnchorElement>(`[href="#${id}"]`) : null;
+        if (!link) return;
+
+        link.classList.add('active-link');
+        setLabel(link.innerText);
+      },
+      {
+        rootMargin: `-${OFFSET}px 0px -40% 0px`, // 116px atas, 40% bawah
+        threshold: 0
       }
-      return active;
-    };
+    );
 
-    const updateTOC = () => {
-      const active = getActiveHeading();
-
-      if (active === currentActive) return;
-      currentActive = active;
-
-      links.forEach(l => l.classList.remove('active-link'));
-
-      if (!active) {
-        setLabel(DEFAULT_TEXT);
-        return;
-      }
-
-      const id   = active.getAttribute('id');
-      const link = id ? content.querySelector<HTMLAnchorElement>(`[href="#${id}"]`) : null;
-      if (!link) return;
-
-      link.classList.add('active-link');
-      setLabel(link.innerText);
-    };
-
-    updateTOC();
-    window.addEventListener('scroll', updateTOC, { passive: true });
+    headingEls.forEach((h) => observer.observe(h));
   };
 
   initTOC();
