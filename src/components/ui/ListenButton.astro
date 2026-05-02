@@ -211,30 +211,27 @@ import Icon from "./Icon.astro";
       'script', 'style', 'noscript',
     ].join(', ');
 
-    const extractArticleText = (el: HTMLElement): string => {
-      const clone = el.cloneNode(true) as HTMLElement;
+    const getChunksFromArticle = (el: HTMLElement): string[] => {
+  	const clone = el.cloneNode(true) as HTMLElement;
+  	clone.querySelectorAll(SKIP_SELECTORS).forEach(n => n.remove());
 
-      clone.querySelectorAll(SKIP_SELECTORS).forEach(n => n.remove());
+  	const contentSelectors = 'h1, h2, h3, h4, h5, h6, p, li, blockquote, td, th, figcaption';
+  	const nodes = clone.querySelectorAll<HTMLElement>(contentSelectors);
 
-      const contentSelectors = 'h1, h2, h3, h4, h5, h6, p, li, blockquote, td, th, figcaption';
-      const nodes = clone.querySelectorAll<HTMLElement>(contentSelectors);
-
-      if (nodes.length === 0) {
-        // Fallback
-        return clone.innerText.replace(/\s+/g, ' ').trim();
-      }
-
-      return Array.from(nodes)
-        .map(n => n.innerText.trim())
-        .filter(t => t.length > 2)
-        .join(' ');
-    };
-
-    const chunkText = (text: string): string[] =>
-      text
-        .split(/(?<=[.!?])\s+|(?<=[:;])\s+|\n{2,}/)
-        .map(s => s.trim())
-        .filter(s => s.length > 3);
+  	const chunks: string[] = [];
+  	nodes.forEach(n => {
+    	const text = n.innerText.trim().replace(/\s+/g, ' ');
+    	if (text.length < 3) return;
+    
+    	if (n.tagName.startsWith('H') || text.length < 150) {
+      	chunks.push(text);
+    	} else {
+      	const sentences = text.split(/(?<=[.!?])\s+/).filter(s => s.length > 3);
+      	chunks.push(...sentences);
+    	}
+  	});
+  	return chunks;
+	};
         
 
     // ── Highlight
@@ -253,34 +250,48 @@ import Icon from "./Icon.astro";
   	if (!articleEl) return;
   
   	clearHighlight();
-  	const needleRaw = chunk.slice(0, 40).replace(/\s+/g, ' ').trim();
-  	if (needleRaw.length < 4) return;
+  	const needle = chunk.trim();
+  	if (needle.length < 3) return;
 
-  	const escaped = needleRaw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  	const re = new RegExp(escaped, 'i');
   	const candidates = articleEl.querySelectorAll<HTMLElement>(
     	'p, h1, h2, h3, h4, h5, h6, li, blockquote, td'
   	);
   
+  	let found: HTMLElement | null = null;
+
   	for (const el of candidates) {
-    	if (el.closest('button, nav, aside, [role="navigation"], .toc-container')) continue;
-    
-    	const elText = (el.innerText ?? el.textContent ?? '').replace(/\s+/g, ' ');
-    	if (!re.test(elText)) continue;
-    
-    	el.classList.add('tts-highlight');
-    	highlightedEl = el;
-    
-    	const rect = el.getBoundingClientRect();
-    	const absoluteTop = window.pageYOffset + rect.top;
-    	const targetY = absoluteTop - TTS_OFFSET;
-    
-    	window.scrollTo({
-      	top: targetY,
-      	behavior: 'smooth'
-    	});
-    	break;
+    	const elText = (el.innerText ?? el.textContent ?? '').trim();
+    	if (elText === needle) {
+      	found = el;
+      	break;
+    	}
   	}
+
+  	if (!found) {
+    	const needleRaw = needle.slice(0, 40).replace(/\s+/g, ' ').trim();
+    	const escaped = needleRaw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    	const re = new RegExp(escaped, 'i');
+    
+    	for (const el of candidates) {
+      	if (el.closest('button, nav, aside, [role="navigation"], .toc-container')) continue;
+      	const elText = (el.innerText ?? el.textContent ?? '').replace(/\s+/g, ' ');
+      	if (re.test(elText)) {
+        	found = el;
+        	break;
+      	}
+    	}
+  	}
+
+  	if (!found) return;
+
+  	found.classList.add('tts-highlight');
+  	highlightedEl = found;
+  
+  	const rect = found.getBoundingClientRect();
+  	const absoluteTop = window.pageYOffset + rect.top;
+  	const targetY = absoluteTop - TTS_OFFSET;
+  
+  	window.scrollTo({ top: targetY, behavior: 'smooth' });
 	};
 
     // ── DOM helpers
@@ -382,8 +393,7 @@ import Icon from "./Icon.astro";
 
         if (!articleEl) return;
 
-        const text = extractArticleText(articleEl);
-        chunks     = chunkText(text);
+        chunks = getChunksFromArticle(articleEl);
         currentIdx = 0;
 
         if (!chunks.length) return;
