@@ -59,12 +59,12 @@ import Icon from "./Icon.astro";
 </div>
 
 <style is:global>
-.tts-highlight {
-  background: color-mix(in srgb, var(--fg) 12%, transparent);
-  border-radius: 3px;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--fg) 8%, transparent);
-  transition: background 0.25s ease, box-shadow 0.25s ease;
-}
+	.tts-highlight {
+		background: color-mix(in srgb, var(--fg) 12%, transparent);
+		border-radius: 2px;
+		padding: 2px;
+		transition: background 0.25s ease, box-shadow 0.25s ease;
+	}
 
   .tts-bar {
     position: fixed;
@@ -170,25 +170,16 @@ import Icon from "./Icon.astro";
       ? loadVoice()
       : synth.addEventListener('voiceschanged', loadVoice, { once: true });
 
-    // ── MDX-safe text extraction ────────────────────────────────────────────
-    //
-    // MDX merender komponen React/custom ke DOM. Masalahnya:
-    //   1. innerText mengambil teks dari elemen UI (tombol, label, nav, dll)
-    //   2. Komponen custom punya struktur DOM kompleks yang tidak linear
-    //
-    // Strategi: clone artikel, hapus semua elemen non-konten, baru ambil teks.
-    //
     const SKIP_SELECTORS = [
       // Elemen UI / interaktif
       'button', 'nav', 'aside', 'form', 'input', 'select', 'textarea',
-      // Figure caption opsional — hapus comment jika tidak ingin dibaca
       // 'figcaption',
       // Elemen dengan role non-artikel
       '[role="navigation"]', '[role="complementary"]', '[role="banner"]',
       '[role="contentinfo"]', '[role="search"]', '[role="toolbar"]',
       // Class umum komponen custom di MDX
       '.toc-container', '.tts-bar', '.listen-btn',
-      // Code blocks — opsional, bisa dibiarkan jika ingin dibaca
+      // Code blocks
       'pre', 'code',
       // Script & style
       'script', 'style', 'noscript',
@@ -247,6 +238,7 @@ import Icon from "./Icon.astro";
 			const elText = (el.innerText ?? el.textContent ?? '').replace(/\s+/g, ' ');
 			if (!re.test(elText)) continue;
 			el.classList.add('tts-highlight');
+			
 			highlightedEl = el;
 			el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 			break;
