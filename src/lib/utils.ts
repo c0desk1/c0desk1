@@ -1,5 +1,3 @@
-// src/lib/utils.ts
-
 // ==================== DATE UTILITIES ====================
 
 function ensureDate(date: Date | string | number): Date {
@@ -41,27 +39,13 @@ export function formatRelativeTime(date: Date | string | number): string {
   const months = Math.floor(days / 30);
   const years = Math.floor(days / 365);
 
-  if (seconds < 60) return 'just now';
-  if (minutes < 60) return `${minutes} minute${minutes > 1 ? 's' : ''} lalu`;
-  if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} lalu`;
-  if (days < 7) return `${days} day${days > 1 ? 's' : ''} lalu`;
-  if (weeks < 4) return `${weeks} week${weeks > 1 ? 's' : ''} lalu`;
-  if (months < 12) return `${months} month${months > 1 ? 's' : ''} lalu`;
-  return `${years} year${years > 1 ? 's' : ''} lalu`;
-}
-
-
-export function isToday(date: Date | string | number): boolean {
-  const d = ensureDate(date);
-  const today = new Date();
-  return d.toDateString() === today.toDateString();
-}
-
-export function isYesterday(date: Date | string | number): boolean {
-  const d = ensureDate(date);
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-  return d.toDateString() === yesterday.toDateString();
+  if (seconds < 60) return 'Baru saja';
+  if (minutes < 60) return `${minutes} menit lalu`;
+  if (hours < 24) return `${hours} jam lalu`;
+  if (days < 7) return `${days} hari lalu`;
+  if (weeks < 4) return `${weeks} minggu lalu`;
+  if (months < 12) return `${months} bulan lalu`;
+  return `${years} tahun lalu`;
 }
 
 // ==================== CDN IMAGE UTILITIES ====================
@@ -90,17 +74,7 @@ export function cdnImage(
   return url.toString();
 }
 
-
 // ==================== STRING UTILITIES ====================
-
-export function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[^\w\s]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .trim();
-}
 
 export function truncate(text: string, length: number = 100): string {
   if (!text) return '';
@@ -115,20 +89,18 @@ export function capitalizeWords(text: string): string {
     .join(' ');
 }
 
-export function generateExcerpt(content: string, maxLength: number = 200): string {
+export function generateExcerpt(content: string, maxLength: number = 160): string {
   if (!content?.trim()) return '';
 
   let text = content;
-  
+
   text = text.replace(/^\s*---[\s\S]*?---\s*/, '');
   
   const lines = text.split('\n');
-  
   const filteredLines = lines.filter(line => {
     const trimmed = line.trim();
     return !trimmed.startsWith('import ') && !trimmed.startsWith('// ') && !trimmed.startsWith('/*');
   });
-  
   text = filteredLines.join('\n');
   text = text.replace(/\{\/\*[\s\S]*?\*\/\}/g, '');
   text = text.replace(/<[^>]*>/g, ' ');
@@ -143,10 +115,11 @@ export function generateExcerpt(content: string, maxLength: number = 200): strin
   text = text.replace(/`([^`]+)`/g, '$1');
   text = text.replace(/[#*`>_\-+]/g, ' ');
   text = text.replace(/\s+/g, ' ').trim();
+
   return truncate(text, maxLength);
 }
 
-// ==================== READING TIME UTILITIES ====================
+// ==================== READING TIME ====================
 
 export function calculateReadingTime(
   content: string,
@@ -180,7 +153,7 @@ export function getReadingTime(
     : `${minutes} ${suffix}`;
 }
 
-// ==================== TAG & TECH STACK UTILITIES ====================
+// ==================== TAG & TECH STACK ====================
 
 export function hasCommonTags(tags1: string[] = [], tags2: string[] = []): boolean {
   return tags1.some(tag => tags2.includes(tag));
@@ -219,25 +192,7 @@ export function groupByTag<T extends { data: { tags?: string[] } }>(
   return grouped;
 }
 
-// ==================== BREADCRUMB UTILITIES ====================
-
-export function getBreadcrumbFromPath(path: string): Array<{ name: string; href: string }> {
-  const segments = path.split('/').filter(Boolean);
-  const breadcrumbs = [{ name: 'home', href: '/' }];
-  
-  let currentPath = '';
-  for (const segment of segments) {
-    currentPath += `/${segment}`;
-    breadcrumbs.push({
-      name: segment,
-      href: currentPath,
-    });
-  }
-  
-  return breadcrumbs;
-}
-
-// ==================== TABLE OF CONTENT UTILITIES ====================
+// ==================== TABLE OF CONTENT ====================
 
 export interface Heading {
   depth: number;
@@ -258,7 +213,7 @@ export function generateHeadingId(text: string): string {
     .replace(/-+/g, '-');
 }
 
-// ==================== RELATED CONTENT UTILITIES ====================
+// ==================== RELATED CONTENT ====================
 
 export function getRelatedPosts<T extends { id: string; data: { tags?: string[] } }>(
   currentPost: T,
@@ -296,50 +251,7 @@ export function getRelatedProjects<T extends { data: { techStack?: string[] } }>
     .slice(0, limit);
 }
 
-// ==================== SORT & FILTER UTILITIES ====================
-
-export function sortByDate<T extends { data: { pubDate?: Date | string | number; date?: Date | string | number } }>(
-  items: T[],
-  dateField: 'pubDate' | 'date' = 'pubDate'
-): T[] {
-  return [...items].sort((a, b) => {
-    const dateA = a.data[dateField];
-    const dateB = b.data[dateField];
-    if (!dateA || !dateB) return 0;
-    
-    const dA = ensureDate(dateA);
-    const dB = ensureDate(dateB);
-    return dB.getTime() - dA.getTime();
-  });
-}
-
-export function filterByYear<T extends { data: { pubDate?: Date | string | number; date?: Date | string | number } }>(
-  items: T[],
-  year: number,
-  dateField: 'pubDate' | 'date' = 'pubDate'
-): T[] {
-  return items.filter(item => {
-    const date = item.data[dateField];
-    if (!date) return false;
-    const d = ensureDate(date);
-    return d.getFullYear() === year;
-  });
-}
-
-export function groupByYear<T extends { data: { pubDate?: Date; date?: Date } }>(
-  items: T[],
-  dateField: 'pubDate' | 'date' = 'pubDate'
-): Record<number, T[]> {
-  return items.reduce((acc, item) => {
-    const date = item.data[dateField];
-    if (date) {
-      const year = date.getFullYear();
-      if (!acc[year]) acc[year] = [];
-      acc[year].push(item);
-    }
-    return acc;
-  }, {} as Record<number, T[]>);
-}
+// ==================== FILTER UTILITIES ====================
 
 export function filterByDraft<T extends { data: { draft?: boolean } }>(
   items: T[],
@@ -353,42 +265,7 @@ export function filterByFeatured<T extends { data: { featured?: boolean } }>(ite
   return items.filter(item => item.data.featured);
 }
 
-export function getArchiveCounts<T extends { data: { pubDate?: Date; date?: Date } }>(
-  items: T[],
-  dateField: 'pubDate' | 'date' = 'pubDate'
-): Record<number, number> {
-  const grouped = groupByYear(items, dateField);
-  const counts: Record<number, number> = {};
-  
-  for (const [year, posts] of Object.entries(grouped)) {
-    counts[Number(year)] = posts.length;
-  }
-  
-  return counts;
-}
-
-// ==================== SEARCH UTILITIES ====================
-
-export function searchItems<T extends Record<string, any>>(
-  items: T[],
-  query: string,
-  fields: (keyof T)[]
-): T[] {
-  if (!query.trim()) return items;
-  
-  const lowerQuery = query.toLowerCase();
-  return items.filter(item =>
-    fields.some(field => {
-      const value = item[field];
-      if (Array.isArray(value)) {
-        return value.some((v: string) => v.toLowerCase().includes(lowerQuery));
-      }
-      return String(value).toLowerCase().includes(lowerQuery);
-    })
-  );
-}
-
-// ==================== URL & SHARE UTILITIES ====================
+// ==================== SHARE ====================
 
 export function getShareUrls(url: string, title: string) {
   const encodedUrl = encodeURIComponent(url);
@@ -402,6 +279,8 @@ export function getShareUrls(url: string, title: string) {
   };
 }
 
+// ==================== CLIPBOARD ====================
+
 export async function copyToClipboard(text: string): Promise<boolean> {
   try {
     await navigator.clipboard.writeText(text);
@@ -411,27 +290,7 @@ export async function copyToClipboard(text: string): Promise<boolean> {
   }
 }
 
-// ==================== NUMBER UTILITIES ====================
-
-export function formatNumberCompact(num: number): string {
-  if (num < 1000) return num.toString();
-  if (num < 1000000) return (num / 1000).toFixed(1) + 'K';
-  if (num < 1000000000) return (num / 1000000).toFixed(1) + 'M';
-  return (num / 1000000000).toFixed(1) + 'B';
-}
-
-// ==================== COLOR UTILITIES ====================
-
-export function getContrastColor(hexColor: string): string {
-  const hex = hexColor.replace('#', '');
-  const r = parseInt(hex.substr(0, 2), 16);
-  const g = parseInt(hex.substr(2, 2), 16);
-  const b = parseInt(hex.substr(4, 2), 16);
-  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  return luminance > 0.5 ? '#000000' : '#ffffff';
-}
-
-// ==================== VALIDATION UTILITIES ====================
+// ==================== UTILITIES ====================
 
 export function isValidEmail(email: string): boolean {
   const emailRegex = /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/;
@@ -445,20 +304,6 @@ export function isValidUrl(url: string): boolean {
   } catch {
     return false;
   }
-}
-
-// ==================== ARRAY UTILITIES ====================
-
-export function chunkArray<T>(array: T[], size: number): T[][] {
-  const chunks: T[][] = [];
-  for (let i = 0; i < array.length; i += size) {
-    chunks.push(array.slice(i, i + size));
-  }
-  return chunks;
-}
-
-export function uniqueArray<T>(array: T[]): T[] {
-  return [...new Set(array)];
 }
 
 // ==================== BROWSER UTILITIES ====================
