@@ -33,7 +33,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
         <ul class="toc-ul">
           {tocHeadings.map(h => (
             <li class:list={["toc-li", h.depth === 3 ? "pl-4" : ""]}>
-              <a href={`#${h.slug}`} class="toc-link">
+              <a href={`#${h.slug}`} class="toc-link items-center justify-center">
                 <span class="toc-dot"></span>
                 {h.text}
               </a>
