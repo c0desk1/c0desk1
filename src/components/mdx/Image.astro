@@ -6,23 +6,15 @@ interface Props {
   src: string;
   alt?: string;
   title?: string;
-  loading?: boolean;
 }
 
-const { src, alt = '', title, loading = false } = Astro.props;
-const optimizedSrc = !loading && src && isCdnUrl(src)
+const { src, alt = '', title } = Astro.props;
+const optimizedSrc = src && isCdnUrl(src)
 	? cdnImage(src, { w: 1280, h: 720, q: 85 })
   : src ?? '';
 const caption = title || alt;
 ---
 
-{loading ? (
-  <figure class="prose-custom mx-auto max-w-3xl my-4 md:my-8 overflow-hidden" aria-hidden="true">
-    <div class="flex items-center border-2 border-(--border) rounded-(--radius-md) overflow-hidden">
-      <div class="sk-img w-full" style="aspect-ratio:16/9;"></div>
-    </div>
-  </figure>
-) : (
 <figure class="prose-custom mx-auto max-w-3xl overflow-hidden">
   <img
     src={optimizedSrc}
@@ -33,4 +25,3 @@ const caption = title || alt;
   />
   {caption && ( <figcaption>{caption}</figcaption> )}
 </figure>
-)}
