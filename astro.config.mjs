@@ -13,7 +13,7 @@ export default defineConfig({
     plugins: [tailwindcss()]
   },
   build: {
-    inlineStylesheets: 'always'
+    inlineStylesheets: 'auto'
   },
   integrations: [
     mdx(),
