@@ -8,318 +8,250 @@ interface Props {
 }
 
 const {
-  heading     = 'Tetap terhubung',
-  subheading  = 'Artikel terbaru langsung ke kotak masukmu. Tanpa spam.',
-  placeholder = 'nama@email.com',
-  btnLabel    = 'Langganan',
+  heading     = 'Stay in the loop',
+  subheading  = 'Artikel & catatan terbaru. Langsung ke inbox.',
+  placeholder = 'you@email.com',
+  btnLabel    = 'Subscribe',
 } = Astro.props;
 ---
 
-<section class="nls-wrap">
-  <div class="nls-card">
-
-    <!-- Header: icon + copy -->
-    <div class="nls-header">
-      <div class="nls-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-          <rect width="20" height="16" x="2" y="4" rx="2"/>
-          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-        </svg>
-      </div>
-      <div>
-        <p class="nls-title">{heading}</p>
-        <p class="nls-sub">{subheading}</p>
-      </div>
-    </div>
-
-    <!-- Form state -->
-    <div id="nls-form-state">
-      <form id="nls-form" class="nls-form" novalidate>
-        <div class="nls-field" id="nls-field">
-          <input
-            id="nls-email"
-            type="email"
-            required
-            placeholder={placeholder}
-            autocomplete="email"
-            class="nls-input"
-            aria-label="Alamat email"
-          />
-          <button id="nls-submit" type="submit" class="nls-btn">
-            <span class="nls-btn-label">{btnLabel}</span>
-            <svg class="nls-btn-arrow" viewBox="0 0 20 20" fill="none"
-              stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M4 10h12M11 5l5 5-5 5"/>
-            </svg>
-            <svg class="nls-spinner" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-              <circle cx="12" cy="12" r="9" stroke-opacity="0.2"/>
-              <path d="M12 3a9 9 0 0 1 9 9" stroke-linecap="round"/>
-            </svg>
-          </button>
-        </div>
-      </form>
-    </div>
-
-    <!-- Success state -->
-    <div id="nls-success" class="nls-success" hidden aria-live="polite">
-      <div class="nls-success-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 6 9 17l-5-5"/>
-        </svg>
-      </div>
-      <div>
-        <p class="nls-success-title">Berhasil terdaftar!</p>
-        <p class="nls-success-sub">Cek kotak masukmu untuk konfirmasi.</p>
-      </div>
-    </div>
-
-    <!-- Note -->
-    <p class="nls-note">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor"
-        stroke-width="1.5" aria-hidden="true">
-        <path d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13z"
-          stroke-linecap="round"/>
-        <path d="M8 7v4M8 5.5v.01" stroke-linecap="round"/>
-      </svg>
-      Tidak ada spam. Berhenti kapan saja.
-    </p>
-
+<div class="nls-root">
+  <div class="nls-eyebrow">
+    <span class="nls-dot" aria-hidden="true"></span>
+    Newsletter
   </div>
-</section>
+
+  <div class="nls-body">
+    <h3 class="nls-heading">{heading}</h3>
+    <p class="nls-sub">{subheading}</p>
+  </div>
+
+  <div id="nls-form-state">
+    <form id="nls-form" class="nls-form" novalidate>
+      <div class="nls-row" id="nls-field">
+        <input
+          id="nls-email"
+          type="email"
+          required
+          placeholder={placeholder}
+          autocomplete="email"
+          class="nls-input"
+          aria-label="Alamat email"
+        />
+        <button id="nls-submit" type="submit" class="nls-btn">
+          <span class="nls-btn-label">{btnLabel}</span>
+          <svg class="nls-spinner" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" stroke-opacity="0.2"/>
+            <path d="M12 3a9 9 0 0 1 9 9" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </form>
+  </div>
+
+
+  <div id="nls-success" class="nls-success" hidden aria-live="polite">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      aria-hidden="true">
+      <path d="M20 6 9 17l-5-5"/>
+    </svg>
+    <span>Cek inbox kamu untuk konfirmasi.</span>
+  </div>
+
+  <p class="nls-note">No spam — unsubscribe anytime.</p>
+
+</div>
 
 <style>
-  /* ── Wrap ───────────────────────────────────────────────────────────────── */
-  .nls-wrap {
-    padding: 2.5rem 1rem;
-    display: flex;
-    justify-content: center;
-    border-top: 1px solid var(--border);
-  }
-
-  /* ── Card — sama persis dengan Cookie card ──────────────────────────────── */
-  .nls-card {
-    width: min(22rem, 100%);
-    background: var(--bg);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-xl, 1rem);
-    box-shadow:
-      0 4px 6px -1px rgba(0,0,0,.05),
-      0 10px 24px -4px rgba(0,0,0,.08);
-    padding: 1.25rem;
+  .nls-root {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    gap: 0.875rem;
+    width: 100%;
+    max-width: 22rem;
   }
 
-  /* ── Header ─────────────────────────────────────────────────────────────── */
-  .nls-header {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-  }
-
-  .nls-icon {
-    width: 2rem;
-    height: 2rem;
-    flex-shrink: 0;
-    display: flex;
+  .nls-eyebrow {
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    background: var(--bg-muted);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg, 0.75rem);
+    gap: 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     color: var(--fg-muted);
+    font-family: ui-monospace, 'Cascadia Code', monospace;
   }
 
-  .nls-icon svg { width: 1rem; height: 1rem; }
+  .nls-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--fg);
+    opacity: 0.4;
+    flex-shrink: 0;
+  }
 
-  .nls-title {
-    font-size: 0.875rem;
+  .nls-body { display: flex; flex-direction: column; gap: 0.2rem; }
+
+  .nls-heading {
+    font-size: 0.9375rem;
     font-weight: 600;
     color: var(--fg);
-    margin: 0 0 0.2rem;
-    letter-spacing: -0.01em;
+    margin: 0;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
   }
 
   .nls-sub {
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     color: var(--fg-muted);
     margin: 0;
-    line-height: 1.45;
+    line-height: 1.5;
   }
 
-  /* ── Field ──────────────────────────────────────────────────────────────── */
-  .nls-form { display: flex; flex-direction: column; gap: 0; }
+  .nls-form { margin: 0; }
 
-  .nls-field {
+  .nls-row {
     display: flex;
-    gap: 0;
-    background: var(--bg-muted);
+    height: 2.25rem;
     border: 1px solid var(--border);
-    border-radius: var(--radius-lg, 0.75rem);
-    padding: 0.25rem 0.25rem 0.25rem 0.75rem;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    border-radius: var(--radius-md, 0.5rem);
+    overflow: hidden;
+    background: var(--bg);
+    transition: border-color 0.15s, box-shadow 0.15s;
   }
 
-  .nls-field:focus-within {
+  .nls-row:focus-within {
     border-color: var(--fg);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--fg) 8%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--fg) 7%, transparent);
   }
 
-  .nls-field.nls-shake {
-    animation: nls-shake 0.35s ease;
-    border-color: #ef4444;
-    box-shadow: 0 0 0 3px color-mix(in srgb, #ef4444 10%, transparent);
+  .nls-row.nls-shake {
+    animation: nls-shake 0.3s ease;
+    border-color: #f87171;
+    box-shadow: 0 0 0 3px color-mix(in srgb, #f87171 10%, transparent);
   }
 
   @keyframes nls-shake {
     0%,100% { transform: translateX(0); }
-    20%     { transform: translateX(-4px); }
-    40%     { transform: translateX(4px); }
-    60%     { transform: translateX(-3px); }
-    80%     { transform: translateX(3px); }
+    25%     { transform: translateX(-4px); }
+    75%     { transform: translateX(4px); }
   }
 
   .nls-input {
     flex: 1;
     min-width: 0;
-    padding: 0.45rem 0;
+    padding: 0 0.75rem;
     font-size: 0.8125rem;
     background: transparent;
     border: none;
     outline: none;
     color: var(--fg);
     caret-color: var(--fg);
+    /* Vercel: subtle separator kanan */
+    border-right: 1px solid var(--border);
   }
 
-  .nls-input::placeholder { color: var(--fg-muted); }
+  .nls-input::placeholder {
+    color: var(--fg-muted);
+    opacity: 0.6;
+  }
 
-  /* ── Button — sama vibe dengan Cookie buttons ───────────────────────────── */
   .nls-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.3rem;
-    padding: 0.45rem 0.875rem;
+    gap: 0;
+    padding: 0 0.875rem;
     font-size: 0.8125rem;
     font-weight: 500;
-    background: var(--fg);
-    color: var(--bg);
+    background: var(--bg-muted);
+    color: var(--fg);
     border: none;
-    border-radius: calc(var(--radius-lg, 0.75rem) - 3px);
     cursor: pointer;
     white-space: nowrap;
     flex-shrink: 0;
-    transition: opacity 0.15s, transform 0.1s;
+    transition: background 0.15s, color 0.15s;
+    letter-spacing: -0.01em;
   }
 
-  .nls-btn:hover   { opacity: 0.82; }
-  .nls-btn:active  { transform: scale(0.96); }
-  .nls-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
-  .nls-btn-arrow {
-    width: 0.875rem;
-    height: 0.875rem;
-    flex-shrink: 0;
-    transition: transform 0.18s;
+  .nls-btn:hover {
+    background: var(--fg);
+    color: var(--bg);
   }
-  .nls-btn:not(:disabled):hover .nls-btn-arrow { transform: translateX(2px); }
+
+  .nls-btn:active  { opacity: 0.8; }
+  .nls-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .nls-btn:disabled:hover {
+    background: var(--bg-muted);
+    color: var(--fg);
+  }
 
   .nls-spinner {
     width: 0.875rem;
     height: 0.875rem;
-    flex-shrink: 0;
     display: none;
     animation: nls-spin 0.7s linear infinite;
   }
 
   @keyframes nls-spin { to { transform: rotate(360deg); } }
 
-  .nls-btn.is-loading .nls-btn-label,
-  .nls-btn.is-loading .nls-btn-arrow { display: none; }
+  .nls-btn.is-loading .nls-btn-label { display: none; }
   .nls-btn.is-loading .nls-spinner   { display: block; }
 
-  /* ── Success state ───────────────────────────────────────────────────────── */
   .nls-success {
     display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-    animation: nls-fade-up 0.35s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    color: var(--fg-muted);
+    animation: nls-fade 0.3s ease both;
   }
 
-  @keyframes nls-fade-up {
-    from { opacity: 0; transform: translateY(6px); }
+  .nls-success svg {
+    width: 0.875rem;
+    height: 0.875rem;
+    flex-shrink: 0;
+    color: var(--fg);
+  }
+
+  @keyframes nls-fade {
+    from { opacity: 0; transform: translateY(4px); }
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  .nls-success-icon {
-    width: 2rem;
-    height: 2rem;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--bg-muted);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    color: var(--fg);
-  }
-
-  .nls-success-icon svg { width: 0.875rem; height: 0.875rem; }
-
-  .nls-success-title {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--fg);
-    margin: 0 0 0.2rem;
-    letter-spacing: -0.01em;
-  }
-
-  .nls-success-sub {
-    font-size: 0.75rem;
-    color: var(--fg-muted);
-    margin: 0;
-  }
-
-  /* ── Note ───────────────────────────────────────────────────────────────── */
   .nls-note {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
     font-size: 0.6875rem;
     color: var(--fg-muted);
+    opacity: 0.55;
     margin: 0;
-    opacity: 0.7;
+    font-family: ui-monospace, 'Cascadia Code', monospace;
   }
 
-  .nls-note svg {
-    width: 0.75rem;
-    height: 0.75rem;
-    flex-shrink: 0;
-  }
-
-  /* ── Mobile ─────────────────────────────────────────────────────────────── */
   @media (max-width: 400px) {
-    .nls-field {
+    .nls-root { max-width: 100%; }
+
+    .nls-row {
+      height: auto;
       flex-direction: column;
-      padding: 0.625rem;
-      gap: 0.5rem;
+      overflow: visible;
+      border-radius: var(--radius-md, 0.5rem);
     }
 
     .nls-input {
-      padding: 0;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      padding: 0.6rem 0.75rem;
       font-size: 1rem; /* hindari iOS zoom */
     }
 
     .nls-btn {
+      height: 2.5rem;
       width: 100%;
-      border-radius: calc(var(--radius-lg, 0.75rem) - 4px);
+      border-radius: 0;
     }
   }
 </style>
@@ -343,15 +275,13 @@ const {
     const shakeField = () => {
       if (!field) return;
       field.classList.remove('nls-shake');
-      void field.offsetWidth; // reflow
+      void field.offsetWidth;
       field.classList.add('nls-shake');
       field.addEventListener('animationend', () =>
         field.classList.remove('nls-shake'), { once: true });
     };
 
-    emailEl.addEventListener('input', () => {
-      field?.classList.remove('nls-shake');
-    });
+    emailEl.addEventListener('input', () => field?.classList.remove('nls-shake'));
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
