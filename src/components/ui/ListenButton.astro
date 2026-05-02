@@ -62,7 +62,7 @@ import Icon from "./Icon.astro";
 	.tts-highlight {
   	background: color-mix(in srgb, var(--fg) 6%, transparent);
   	border-radius: 6px;
-  	padding: 3px 4px;
+  	padding: 2px 4px;
   	margin: -2px -4px;
   	box-shadow: 0 0 0 1px color-mix(in srgb, var(--fg) 12%, transparent);
   	animation: tts-pulse 1.5s ease-in-out infinite;
@@ -183,6 +183,7 @@ import Icon from "./Icon.astro";
     let currentIdx        = 0;
     let isPlaying         = false;
     let isPaused          = false;
+    let wasStoppedByBrowser = false;
     let voice: SpeechSynthesisVoice | null = null;
     let highlightMark: HTMLElement | null  = null;
     let articleEl: HTMLElement | null      = null;
@@ -347,39 +348,79 @@ import Icon from "./Icon.astro";
       utt.lang = 'id-ID';
       if (voice) utt.voice = voice;
 
-      utt.onstart = () => highlightChunk(chunks[idx]);
-      utt.onend   = () => { if (isPlaying) speakAt(currentIdx + 1); };
-      utt.onerror = (e) => { if (e.error !== 'interrupted') stopAll(); };
+      utt.onstart = () => {
+    	highlightChunk(chunks[idx]);
+    	isPlaying = true;
+    	isPaused = false;
+    	wasStoppedByBrowser = false;
+    	setListenBtnState(true);
+    	setPlayPauseIcon(false);
+  	};
+      utt.onend = () => {
+    	if (isPlaying) speakAt(currentIdx + 1);
+  	};
+      utt.onerror = (e) => {
+    	if (e.error === 'interrupted' || e.error === 'canceled') {
+      	wasStoppedByBrowser = true;
+      	isPlaying = false;
+      	isPaused = true;
+      	setListenBtnState(false);
+      	setPlayPauseIcon(true);
+    	} else {
+      	stopAll();
+    	}
+  	};
 
       synth.speak(utt);
-      isPlaying = true;
-      isPaused  = false;
-      setListenBtnState(true);
-      setPlayPauseIcon(false);
     };
 
     const pauseResume = () => {
-      if (!isPlaying && !isPaused) return;
-      if (synth.paused || isPaused) {
-        synth.resume();
-        isPaused = false; isPlaying = true;
-        setPlayPauseIcon(false);
-      } else {
-        synth.pause();
-        isPaused = true; isPlaying = false;
-        setPlayPauseIcon(true);
-      }
-    };
+  	if (wasStoppedByBrowser) {
+    	wasStoppedByBrowser = false;
+    	speakAt(currentIdx);
+    	return;
+  	}
 
-    const stopAll = () => {
-      synth.cancel();
-      isPlaying = false; isPaused = false;
-      clearHighlight();
-      setListenBtnState(false);
-      setPlayPauseIcon(false);
-      hideBar();
-      updateBar();
-    };
+  	if (!isPlaying &&!isPaused) return;
+  	if (synth.paused || isPaused) {
+    	synth.resume();
+    	isPaused = false;
+    	isPlaying = true;
+    	setListenBtnState(true);
+    	setPlayPauseIcon(false);
+  	} else {
+    	synth.pause();
+    	isPaused = true;
+    	isPlaying = false;
+    	setListenBtnState(false);
+    	setPlayPauseIcon(true);
+  	}
+	};
+
+
+    // ── Handle
+	document.addEventListener('visibilitychange', () => {
+  	if (document.hidden && isPlaying) {
+    	synth.cancel();
+    	wasStoppedByBrowser = true;
+    	isPlaying = false;
+    	isPaused = true;
+    	setListenBtnState(false);
+    	setPlayPauseIcon(true);
+  	}
+	});
+	
+	const stopAll = () => {
+  	synth.cancel();
+  	isPlaying = false;
+  	isPaused = false;
+  	wasStoppedByBrowser = false;
+  	clearHighlight();
+  	setListenBtnState(false);
+  	setPlayPauseIcon(false);
+  	hideBar();
+  	updateBar();
+	};
 
     // ── Init
     const init = () => {
@@ -409,33 +450,6 @@ import Icon from "./Icon.astro";
 
     init();
     
-    // ── Handle
-	let wasPlayingBeforeHidden = false;
-
-	document.addEventListener('visibilitychange', () => {
-  	if (document.hidden) {
-
-    	if (isPlaying && !isPaused) {
-      	wasPlayingBeforeHidden = true;
-      	synth.pause();
-      	isPaused = true;
-      	setPlayPauseIcon(true);
-    	}
-  	} else {
-    	if (wasPlayingBeforeHidden) {
-      	wasPlayingBeforeHidden = false;
-
-      	setTimeout(() => {
-        	if (chunks.length && currentIdx < chunks.length) {
-          	synth.resume();
-          	isPlaying = true;
-          	isPaused = false;
-          	setPlayPauseIcon(false);
-        	}
-      	}, 200);
-    	}
-  	}
-	});
 
     document.addEventListener('astro:after-swap', () => {
       synth.cancel();
