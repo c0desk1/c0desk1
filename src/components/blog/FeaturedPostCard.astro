@@ -13,9 +13,9 @@ interface Props {
 const { post } = Astro.props;
 const { data, id } = post;
 
-const { title, description, pubDate, author } = data;
+const { title, pubDate, author } = data;
 
-const excerpt = generateExcerpt(post.body, 300);
+const excerpt = generateExcerpt(post.body || '', 300);
 
 const authorEntry = await getEntry(author);
 
