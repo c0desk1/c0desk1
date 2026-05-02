@@ -1,0 +1,44 @@
+---
+// src/components/ui/Cookie.astro
+---
+
+<script is:inline>
+(function() {
+  if (localStorage.getItem('cookie-consent') === 'accepted') {
+    return;
+  }
+  
+  if (localStorage.getItem('cookie-consent') === 'rejected') {
+    window['ga-disable-G-2TKFP229HJ'] = true;
+    return;
+  }
+  
+  const banner = document.createElement('div');
+  banner.id = 'cookie-banner';
+  banner.innerHTML = `
+    <div class="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-md z-[200]
+                bg-(--bg) border border-(--border) rounded-(--radius-lg) shadow-lg p-4">
+      <p class="text-sm text-(--fg-muted) mb-3">
+        Kami menggunakan cookie untuk analytics. Lanjutkan berarti setuju.
+      </p>
+      <div class="flex gap-2">
+        <button id="accept-cookies" class="px-3 py-1.5 text-sm bg-(--accent) text-white rounded-md">Setuju</button>
+        <button id="reject-cookies" class="px-3 py-1.5 text-sm border border-(--border) rounded-md">Tolak</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(banner);
+  
+  document.getElementById('accept-cookies')?.addEventListener('click', () => {
+    localStorage.setItem('cookie-consent', 'accepted');
+    banner.remove();
+    location.reload();
+  });
+  
+  document.getElementById('reject-cookies')?.addEventListener('click', () => {
+    localStorage.setItem('cookie-consent', 'rejected');
+    window['ga-disable-G-2TKFP229HJ'] = true;
+    banner.remove();
+  });
+})();
+</script>
