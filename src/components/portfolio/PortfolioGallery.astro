@@ -41,12 +41,12 @@ const getAlt = (img: string | ImageItem, index: number) => {
       return (
         <figure
           class:list={[
-            "group relative overflow-hidden border border-zinc-200/70 dark:border-zinc-800/70 bg-zinc-50 dark:bg-zinc-950 transition-all duration-300",
+            "group relative overflow-hidden border border-(--border) bg-(--bg-subtle) transition-all duration-300",
             isPrimary && "md:col-span-2"
           ]}
         >
           <div class="relative aspect-video overflow-hidden">
-            <div class="absolute inset-0 bg-zinc-100 dark:bg-zinc-900 animate-pulse" />
+            <div class="absolute inset-0 bg-(--bg) animate-pulse" />
 
             <Image
               src={optimizedSrc}
