@@ -78,6 +78,19 @@ import Icon from "./Icon.astro";
     	box-shadow: 0 0 0 1px color-mix(in srgb, var(--fg) 20%, transparent);
   	}
 	}
+	
+	@media (prefers-reduced-motion: reduce) {
+  	.tts-highlight,
+  	.tts-highlight::before {
+    	animation: none;
+    	transition: none;
+  	}
+	}
+
+	.prose-custom p,
+	.prose-custom li {
+  	transition: background 0.2s ease;
+	}
 
   .tts-bar {
     position: fixed;
