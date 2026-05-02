@@ -137,6 +137,17 @@ const siteData = settings?.data || siteConfig;
         </>
       );
     })()}
+	<script is:inline>
+		if ('serviceWorker' in navigator) {
+		window.addEventListener('load', () => {
+			navigator.serviceWorker.register('/pwa.js').then((registration) => {
+        	console.log('PWA registered:', registration);
+      	}).catch((error) => {
+        	console.log('PWA registration failed:', error);
+      	});
+    	});
+  	}
+	</script>
    <Cookie />
   </body>
 </html>
