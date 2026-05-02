@@ -8,6 +8,7 @@ import BaseHead from "@/components/layout/BaseHead.astro";
 import Header from "@/components/layout/Header.astro";
 import Newsletter from "@/components/layout/Newsletter.astro";
 import Cookie from "@/components/ui/Cookie.astro";
+import Toast from "@/components/ui/Toast.astro";
 import Footer from "@/components/layout/Footer.astro";
 import Search from "@/components/layout/Search.astro";
 import Container from "@/components/ui/Container.astro";
@@ -120,7 +121,7 @@ const siteData = settings?.data || siteConfig;
     </div>
 
     <div id="modal-root"></div>
-    <div id="toast-root" class="fixed bottom-4 right-4 z-100"></div>
+    <Toast />
 
     {import.meta.env.PROD && (siteData.googleAnalyticsId || siteConfig.googleAnalyticsId) && (() => {
       const analyticsId = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
