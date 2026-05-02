@@ -39,7 +39,7 @@ const searchData = await Promise.all(
       class="w-full max-w-xl scale-95 opacity-0 transition-all duration-200
              bg-(--bg) border border-(--border) rounded-(--radius-xl) shadow-2xl overflow-hidden"
     >
-      <div class="flex items-center justify-center gap-2 px-3.5 border-b border-(--border)">
+      <div class="flex items-center gap-2 px-3.5 border-b border-(--border)">
         <span class="w-5 h-5 shrink-0 text-(--fg-muted)">
           <Icon name="search" class="w-4.5 h-4.5" />
         </span>
@@ -69,9 +69,8 @@ const searchData = await Promise.all(
         
         <button
           id="search-close-mobile"
-          class="sm:hidden flex items-center justify-center p-1.5
-                 rounded-(--radius-full) border border-(--border) focus:outline-none focus:ring-2 focus:ring-(--border-strong) text-(--fg-muted) hover:text-(--fg) hover:bg-(--bg-muted)
-                 transition shrink-0"
+          class="sm:hidden p-1.5 rounded-(--radius-full) items-center justify-center text-(--fg-muted) hover:text-(--fg)
+                 hover:bg-(--bg-muted) border border-(--border) focus:outline-none focus:ring-2 focus:ring-(--border-strong) transition shrink-0"
           aria-label="Tutup pencarian"
         >
           <span class="w-5 h-5">
@@ -176,8 +175,8 @@ const searchData = await Promise.all(
             stroke-width="2" viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
           </svg>
-          <p class="text-sm text-(--fg)">${msg}</p>
-          <p class="text-[12px] text-(--fg-muted)">${sub}</p>
+          <p class="text-sm md:text-lg text-(--fg)">${msg}</p>
+          <p class="text-[13px] md:text-sm text-(--fg-muted)">${sub}</p>
         </div>`;
       if (countEl) countEl.textContent = '';
     };
