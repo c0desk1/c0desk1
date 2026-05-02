@@ -67,7 +67,7 @@
   color: var(--prose-black);
   margin-top: 0;
   margin-bottom: 0;
-  scroll-margin-top: 116px;
+  scroll-margin-top: 56px;
 }
 
 .dark .prose-custom h1,
@@ -1045,5 +1045,16 @@
   }
   .prose-custom img {
     max-width: 100% !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .prose-custom h1,
+  .prose-custom h2,
+  .prose-custom h3,
+  .prose-custom h4,
+  .prose-custom h5,
+  .prose-custom h6 {
+    scroll-margin-top: 116px;
   }
 }
