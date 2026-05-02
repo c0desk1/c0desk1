@@ -121,6 +121,25 @@ const searchData = await Promise.all(
 
 <script define:vars={{ searchData }}>
   (() => {
+    if (!searchData || !Array.isArray(searchData) || searchData.length === 0) {
+      console.warn('[Search] No data available. Search will not work.');
+      
+      const results = document.getElementById('search-results');
+      if (results) {
+        results.innerHTML = `
+          <div class="py-12 flex flex-col items-center gap-2 text-center">
+            <svg class="w-7 h-7 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <p class="text-sm md:text-base text-(--fg)">Data pencarian belum siap</p>
+            <p class="text-[13px] md:text-sm text-(--fg-muted)">Silakan refresh halaman</p>
+          </div>
+        `;
+      }
+      return;
+    }
     const modal       = document.getElementById('search-modal');
     const backdrop    = document.getElementById('search-backdrop');
     const panel       = document.getElementById('search-panel');
