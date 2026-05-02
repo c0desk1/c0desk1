@@ -1,6 +1,7 @@
 ---
 // src/components/search/SearchModal.astro
 import { getCollection, getEntry } from "astro:content";
+import Icon from "@/components/ui/Icon.astro";
 
 const posts = await getCollection("blog", ({ data }) => !data.draft);
 
@@ -27,7 +28,6 @@ const searchData = await Promise.all(
   aria-label="Cari artikel"
   inert
 >
-  <!-- Backdrop -->
   <div
     id="search-backdrop"
     class="absolute inset-0 bg-(--bg)/50 backdrop-blur-sm opacity-0 transition-opacity duration-200"
@@ -39,13 +39,10 @@ const searchData = await Promise.all(
       class="w-full max-w-xl scale-95 opacity-0 transition-all duration-200
              bg-(--bg) border border-(--border) rounded-(--radius-xl) shadow-2xl overflow-hidden"
     >
-      <!-- Input row -->
       <div class="flex items-center gap-2 px-3.5 border-b border-(--border)">
-        <!-- Search icon -->
-        <svg class="w-4.5 h-4.5 shrink-0 text-(--fg-muted)" fill="none" stroke="currentColor"
-          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-        </svg>
+        <span class="w-5 h-5 shrink-0 text-(--fg-muted)">
+          <Icon name="search" class="w-4.5 h-4.5" />
+        </span>
 
         <input
           id="search-input"
@@ -58,7 +55,6 @@ const searchData = await Promise.all(
           spellcheck="false"
         />
 
-        <!-- Clear input -->
         <button
           id="search-clear"
           class="hidden p-1 rounded text-(--fg-muted) hover:text-(--fg)
@@ -66,15 +62,11 @@ const searchData = await Promise.all(
           aria-label="Hapus teks pencarian"
           tabindex="-1"
         >
-          <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/>
-          </svg>
+          <span class="w-5 h-5">
+            <Icon name="trash" class="w-4.5 h-4.5" />
+          </span>
         </button>
-
-        <!-- 
-          Tombol CLOSE MODAL — mobile only.
-        -->
+        
         <button
           id="search-close-mobile"
           class="sm:hidden flex items-center justify-center p-1.5 -mr-1
@@ -82,13 +74,11 @@ const searchData = await Promise.all(
                  transition shrink-0"
           aria-label="Tutup pencarian"
         >
-          <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="2.5"
-            stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <path d="M18 6 6 18M6 6l12 12"/>
-          </svg>
+          <span class="w-5 h-5">
+            <Icon name="close" class="w-4.5 h-4.5" />
+          </span>
         </button>
 
-        <!-- ESC badge — desktop only -->
         <kbd class="hidden sm:inline-flex shrink-0 items-center px-1.5 py-0.5 text-[12px]
                     text-(--fg-muted) bg-(--bg-muted) border border-(--border) rounded-md
                     pointer-events-none">
@@ -96,12 +86,8 @@ const searchData = await Promise.all(
         </kbd>
       </div>
 
-      <!-- Results -->
-      <div id="search-results" class="search-scroll max-h-[55vh] overflow-y-auto">
-        <!-- diisi JS -->
-      </div>
+      <div id="search-results" class="search-scroll max-h-[55vh] overflow-y-auto"></div>
 
-      <!-- Footer — desktop only -->
       <div class="hidden sm:flex items-center justify-between px-3.5 py-2
                   border-t border-(--border) bg-(--bg-muted)">
         <div class="flex items-center gap-3 text-[12px] text-(--fg-muted)">
@@ -151,7 +137,6 @@ const searchData = await Promise.all(
     let filtered  = [];
     let prevFocus = null;
 
-    // ── Helpers
     const escHtml = (s) =>
       String(s)
         .replace(/&/g, '&amp;').replace(/</g, '&lt;')
@@ -167,7 +152,6 @@ const searchData = await Promise.all(
       );
     };
     
-    // ——— fuzzy
     const scoreMatch = (post, q) => {
       const tl = post.title.toLowerCase();
       const dl = post.desc.toLowerCase();
@@ -185,12 +169,11 @@ const searchData = await Promise.all(
       return qi === q.length ? 10 : 0;
     };
 
-    // ── Render
     const renderEmpty = (msg, sub) => {
       results.innerHTML = `
         <div class="py-12 flex flex-col items-center gap-2 text-center">
           <svg class="w-7 h-7 text-(--fg-muted)" fill="none" stroke="currentColor"
-            stroke-width="1.5" viewBox="0 0 24 24">
+            stroke-width="2" viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
           </svg>
           <p class="text-sm text-(--fg)">${msg}</p>
@@ -220,8 +203,8 @@ const searchData = await Promise.all(
                  hover:bg-(--bg-muted) transition-colors
                  ${i === activeIdx ? 'bg-(--bg-muted)' : ''}"
         >
-          <svg class="mt-0.5 w-4 h-4 shrink-0 text-(--fg-muted)" fill="none"
-            stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+          <svg class="mt-0.5 w-4.5 h-4.5 shrink-0 text-(--fg-muted)" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round"
             stroke-linejoin="round" viewBox="0 0 24 24">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
             <polyline points="14 2 14 8 20 8"/>
@@ -247,7 +230,6 @@ const searchData = await Promise.all(
       renderEmpty('Cari artikel', 'Ketik untuk mulai mencari');
     };
 
-    // ── Open / Close
     const openModal = () => {
       prevFocus = document.activeElement;
       modal.classList.remove('hidden');
@@ -270,14 +252,12 @@ const searchData = await Promise.all(
         modal.setAttribute('inert', '');
         input.value = '';
         
-		// Reset clear
         if (clearBtn) clearBtn.classList.add('hidden');
         resetView();
         prevFocus?.focus();
       }, 200);
     };
 
-    // ── Event listeners
     document.addEventListener('open-search', openModal);
     backdrop.addEventListener('click', closeModal);
 
@@ -302,7 +282,6 @@ const searchData = await Promise.all(
       }
     });
 
-    // Input — debounce 80ms
     let debounceTimer;
     input.addEventListener('input', () => {
       const q = input.value.trim();
@@ -329,7 +308,6 @@ const searchData = await Promise.all(
       }, 80);
     });
 
-    // Keyboard navigation
     input.addEventListener('keydown', (e) => {
       const items = results.querySelectorAll('.sritem');
       if (!items.length) return;
@@ -352,7 +330,6 @@ const searchData = await Promise.all(
       items[activeIdx]?.scrollIntoView({ block: 'nearest' });
     });
 
-    // URL param ?q=
     document.addEventListener('DOMContentLoaded', () => {
       const q = new URLSearchParams(window.location.search).get('q');
       if (q) {
