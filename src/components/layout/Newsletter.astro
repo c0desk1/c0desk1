@@ -233,15 +233,15 @@ const {
 <script>
   (() => {
     const form      = document.getElementById('nls-form');
-    const emailEl   = document.getElementById('nls-email');
-    const submitBtn = document.getElementById('nls-submit');
+    const emailEl = document.getElementById('nls-email') as HTMLInputElement;
+    const submitBtn = document.getElementById('nls-submit') as HTMLButtonElement;
     const field     = document.getElementById('nls-field');
     const formState = document.getElementById('nls-form-state');
     const successEl = document.getElementById('nls-success');
 
     if (!form || !emailEl || !submitBtn) return;
 
-    const setLoading = (on) => {
+    const setLoading = (on: boolean) => {
       submitBtn.disabled = on;
       submitBtn.classList.toggle('is-loading', on);
     };
