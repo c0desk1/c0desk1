@@ -5,10 +5,12 @@ interface Props {
   subheading? : string;
   placeholder?: string;
   btnLabel?   : string;
+  message?	: string;
+  note?	   : string;	
 }
 
 const {
-  heading     = 'Stay in the loop',
+  heading     = 'Tetap terhubung',
   subheading  = 'Dapatkan postingan terbaru yang dikirimkan ke kotak masuk Anda.',
   placeholder = 'nama@email.com',
   btnLabel    = 'Berlangganan',
@@ -189,7 +191,7 @@ const {
   }
 
   .nls-note {
-    font-size: 13px;
+    font-size: 15px;
     color: var(--fg-subtle);
     margin: 0;
   }
@@ -231,7 +233,7 @@ const {
     }
     
     .nls-note {
-      font-size: 0.75rem;
+      font-size: 13px;
     }
   }
 </style>
@@ -272,7 +274,7 @@ const {
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         shakeField();
         emailEl.focus();
-        toast?.show?.('Please enter a valid email address.', { type: 'error' });
+        toast?.show?.('Silakan masukkan alamat email yang valid.', { type: 'error' });
         return;
       }
 
@@ -290,9 +292,9 @@ const {
         if (!res.ok) {
           shakeField();
           if (res.status === 409) {
-            toast?.show?.('Email already subscribed.', { type: 'error' });
+            toast?.show?.('Email sudah terdaftar.', { type: 'error' });
           } else {
-            toast?.show?.('Something went wrong. Please try again.', { type: 'error' });
+            toast?.show?.('Terjadi kesalahan. Silakan coba lagi.', { type: 'error' });
           }
           return;
         }
@@ -306,11 +308,11 @@ const {
           if (formState) formState.hidden = false;
         }, 3000);
 
-        toast?.show?.('Subscribed! Check your inbox.', { type: 'success' });
+        toast?.show?.('Sudah berlangganan! Periksa kotak masuk Anda.', { type: 'success' });
 
       } catch {
         shakeField();
-        toast?.show?.('Failed to connect. Please try again later.', { type: 'error' });
+        toast?.show?.('Gagal terhubung. Silakan coba lagi nanti.', { type: 'error' });
       } finally {
         setLoading(false);
       }
