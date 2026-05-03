@@ -75,17 +75,17 @@ const GA_ID    = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
 
         <div class="ck-toggles">
 
-          <label class="ck-toggle-row ck-toggle-row--disabled">
+          <div class="ck-toggle-row ck-toggle-row--disabled">
             <div class="ck-toggle-info">
               <span class="ck-toggle-name">Fungsional</span>
               <span class="ck-toggle-desc">Diperlukan agar situs berjalan. Tidak dapat dinonaktifkan.</span>
             </div>
-            <div class="ck-pill ck-pill--on" aria-label="Selalu aktif">
+            <div class="ck-pill ck-pill--on" aria-hidden="true">
               <span class="ck-pill-thumb"></span>
             </div>
-          </label>
+          </div>
 
-          <label class="ck-toggle-row" id="ck-analytics-row">
+          <div class="ck-toggle-row" id="ck-analytics-row">
             <div class="ck-toggle-info">
               <span class="ck-toggle-name">Analitik</span>
               <span class="ck-toggle-desc">Membantu kami memahami cara pengunjung berinteraksi dengan konten.</span>
@@ -99,7 +99,7 @@ const GA_ID    = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
             >
               <span class="ck-pill-thumb"></span>
             </button>
-          </label>
+          </div>
 
         </div>
 
@@ -203,6 +203,7 @@ const GA_ID    = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
         display: flex;
         flex-direction: column;
         gap: 1rem;
+        overflow: hidden;
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
       }
@@ -300,9 +301,9 @@ const GA_ID    = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
         cursor: pointer;
         transition: background 0.2s ease;
         padding: 0;
-        /* Vertical center thumb */
         display: flex;
         align-items: center;
+        position: relative;
       }
 
       .ck-pill--on  { background: var(--fg); }
@@ -325,20 +326,26 @@ const GA_ID    = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
 
       .ck-actions {
         display: flex;
-        gap: 0.5rem;
         justify-content: flex-end;
         flex-wrap: wrap;
+        width: 100%;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 0.5rem;
       }
 
       .ck-btn {
-        padding: 0.45rem 0.875rem;
+        flex: 0 0 auto;
+        width: auto;
+        padding: 0.5rem 1rem;
         font-size: 0.8125rem;
         font-weight: 500;
-        border-radius: var(--radius-lg, 0.75rem);
-        border: none;
+        border-radius: 0.5rem;
+        text-align: center;
+        white-space: nowrap;
         cursor: pointer;
         transition: opacity 0.15s, background 0.15s, transform 0.1s;
-        white-space: nowrap;
+        border: none;
       }
 
       .ck-btn:active { transform: scale(0.96); }
@@ -347,6 +354,7 @@ const GA_ID    = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
         background: var(--fg);
         color: var(--bg);
       }
+      
       .ck-btn--primary:hover { opacity: 0.82; }
 
       .ck-btn--outline {
@@ -354,13 +362,20 @@ const GA_ID    = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
         color: var(--fg);
         border: 1.5px solid var(--border);
       }
+      
       .ck-btn--outline:hover { background: var(--bg-muted); }
 
       .ck-btn--ghost {
         background: transparent;
         color: var(--fg-muted);
       }
+
       .ck-btn--ghost:hover { color: var(--fg); background: var(--bg-muted); }
+
+      .ck-btn:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
 
       #ck-pref-btn {
         position: fixed;
@@ -410,14 +425,19 @@ const GA_ID    = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
         }
 
         .ck-actions {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
+          flex-direction: column;
           gap: 0.5rem;
         }
 
-        .ck-btn--primary {
-          grid-column: 1 / -1;
+        .ck-btn {
+          width: 100%;
+          justify-content: center;
+          white-space: normal;
         }
+
+        .ck-btn--ghost   { order: 1; }
+        .ck-btn--outline { order: 2; }
+        .ck-btn--primary { order: 3; }
       }
     `;
   }
