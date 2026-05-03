@@ -63,20 +63,11 @@ try {
   console.warn('Settings not found, using siteConfig fallback');
 }
 const siteData = settings?.data || siteConfig;
-
-const currentLocale = Astro.currentLocale || 'id';
-
-const labels = {
-  id: { skipToContent: "Loncat ke konten utama" },
-  en: { skipToContent: "Skip to main content" }
-};
-const t = labels[currentLocale as keyof typeof labels] || labels.id;
-
 ---
 
 <!DOCTYPE html>
 <html 
-  lang={currentLocale}
+  lang= "Id-ID"
   dir="ltr"
   class="scroll-smooth antialiased"
   prefix={seoProps.type === "article" ? "og: https://ogp.me/ns# article: https://ogp.me/ns/article#" : "og: https://ogp.me/ns#"}
@@ -103,7 +94,7 @@ const t = labels[currentLocale as keyof typeof labels] || labels.id;
 
   <body>
     <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:bg-white focus:text-black focus:px-4 focus:py-2 focus:border focus:border-black dark:focus:bg-black dark:focus:text-white">
-      {t.skipToContent}
+      loncat ke konten utama
     </a>
 
     <div aria-hidden="true" class="pointer-events-none fixed inset-0 z-0 flex justify-center">
