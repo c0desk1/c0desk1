@@ -1,0 +1,218 @@
+---
+
+// src/pages/[lang]/blog/[slug].astro
+import '@/styles/prose.css';
+
+import { getCollection, render, getEntry } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+
+import { siteConfig } from "@/config/site";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+
+import Breadcrumb from "@/components/ui/Breadcrumb.astro";
+import BlogHeader from "@/components/blog/BlogHeader.astro";
+import BlogFeaturedImage from "@/components/blog/BlogFeaturedImage.astro";
+import TOC from "@/components/ui/TOC.astro";
+import BlogRelatedPosts from "@/components/blog/BlogRelatedPosts.astro";
+import BackToTop from "@/components/ui/BackToTop.astro";
+
+import Image from "@/components/mdx/Image.astro";
+import HR from "@/components/mdx/HR.astro";
+
+import { filterHeadingsForTOC, getReadingTime } from "@/lib/utils";
+import { getSmartRelatedPosts } from "@/lib/botEngine";
+import ReadingProgress from "@/components/ui/ReadingProgress.astro";
+
+// ==========================================
+// STATIC PATHS
+// ==========================================
+export async function getStaticPaths() {
+const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+return posts.map((post: CollectionEntry<"blog">) => {
+const slug = post.id.split("/").pop();
+
+return {
+  params: {
+    lang: post.data.lang,
+    slug
+  },
+  props: { post }
+};
+
+});
+}
+
+// ==========================================
+// TYPES
+// ==========================================
+interface Props {
+post: CollectionEntry<"blog">;
+}
+
+// ==========================================
+// INIT
+// ==========================================
+const { post } = Astro.props;
+const { lang, slug } = Astro.params;
+
+// 🔒 guard: prevent wrong lang/slug access
+const realSlug = post.id.split("/").pop();
+if (lang !== post.data.lang || slug !== realSlug) {
+return Astro.redirect("/${post.data.lang}/blog/${realSlug}/");
+}
+
+// ==========================================
+// DATA FETCHING
+// ==========================================
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+
+let settings;
+try {
+settings = await getEntry('settings', 'site');
+} catch {
+console.warn('Settings not found, using fallback');
+}
+const siteData = settings?.data || siteConfig;
+
+const authorEntry = await getEntry(post.data.author);
+const categoryEntry = await getEntry(post.data.category);
+
+const { Content, headings } = await render(post);
+
+// 🔥 filter related by same lang
+const relatedPosts = getSmartRelatedPosts(
+post,
+allPosts.filter(p => p.data.lang === post.data.lang),
+3
+);
+
+// ==========================================
+// SEO DATA
+// ==========================================
+const {
+title,
+description,
+pubDate,
+updatedDate,
+tags,
+image,
+seo
+} = post.data;
+
+const seoImage = {
+src:
+seo?.ogImage ||
+image?.src ||
+siteData.defaultSeo?.ogImage ||
+siteConfig.defaultSeo?.ogImage ||
+siteConfig.ogImage,
+alt: image?.alt || title
+};
+
+const seoCategory = {
+name: categoryEntry?.data.name || "Blog",
+description: categoryEntry?.data.description || "",
+slug: categoryEntry?.id || "blog"
+};
+
+const seoTitle = seo?.title || title;
+const seoDescription = seo?.description || description;
+
+const tocHeadings = filterHeadingsForTOC(headings);
+const readingTime = getReadingTime(post.body || "");
+
+// ==========================================
+// URL
+// ==========================================
+const siteURL = Astro.site?.toString() ?? siteData.siteUrl;
+const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
+
+// ==========================================
+// BREADCRUMB
+// ==========================================
+const SeoBreadcrumbItems = [
+{ name: "Home", href: siteURL },
+{ name: "Blog", href: new URL("${lang}/blog/", siteURL).toString() },
+{ name: seoCategory.name, href: new URL("${lang}/category/${seoCategory.slug}/", siteURL).toString() },
+{ name: title, href: canonicalURL }
+];
+
+const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
+item.name === "Blog" || item.name === seoCategory.name
+);
+
+<BaseLayout
+title={seoTitle}
+description={seoDescription}
+image={seoImage}
+type="article"
+publishedTime={pubDate}
+modifiedTime={updatedDate}
+tags={tags}
+category={seoCategory}
+author={{
+name: authorEntry?.data.name,
+role: authorEntry?.data.role,
+avatar: authorEntry?.data.avatar,
+bio: authorEntry?.data.bio,
+slug: authorEntry?.id
+}}
+canonicalURL={canonicalURL}
+
+«»
+
+  <article class="relative my-4 md:my-8">
+    <h1 class="sr-only">{title}</h1><Section size="sm">
+  <Container size="md">
+    <Breadcrumb items={Breadcrumbs} />
+
+    <BlogHeader
+      title={title}
+      pubDate={pubDate}
+      readingTime={readingTime}
+      authorName={authorEntry?.data.name}
+      authorAvatar={authorEntry?.data.avatar}
+      authorTitle={authorEntry?.data.role}
+      authorSlug={authorEntry?.id}
+    />
+
+    {image && (
+      <BlogFeaturedImage
+        image={image.src}
+        alt={image.alt || title}
+        caption={(image as any).caption}
+      />
+    )}
+  </Container>
+</Section>
+
+<Section size="sm" class="section-divider pt-0! lg:pt-8!">
+  <Container size="md">
+    <div class="flex flex-col lg:grid lg:grid-cols-12 gap-2 lg:gap-12 items-start relative">
+
+      <aside class="w-full sticky top-15 z-40 lg:col-span-4 mb-4 md:mb-8 self-start">
+        {tocHeadings.length > 0 && (
+          <TOC headings={tocHeadings} />
+        )}
+      </aside>
+
+      <div id="article-content" class="prose-custom w-full lg:col-span-8">
+        <Content components={{ img: Image, hr: HR }} />
+      </div>
+
+    </div>
+  </Container>
+</Section>
+
+<Section size="md" class="section-divider">
+  <Container size="md">
+    <BackToTop align="center" />
+    <BlogRelatedPosts posts={relatedPosts} />
+  </Container>
+</Section>
+
+  </article>  <ReadingProgress />
+</BaseLayout>
