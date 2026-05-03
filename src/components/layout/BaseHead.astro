@@ -71,8 +71,6 @@ const orgData = org?.data;
 
 const siteURL = Astro.site?.toString() ?? siteData.siteUrl ?? siteConfig.siteUrl;
 
-const currentLocale = Astro.currentLocale || 'id';
-
 
 // ================= DYNAMIC DATA RESOLVER =================
 const activeAuthor = {
@@ -164,7 +162,7 @@ schemaGraph.push({
   "description": seoData.description,
   "isPartOf": { "@id": `${siteURL}#website` },
   ...(!isHomepage && { "breadcrumb": { "@id": `${seoData.canonical}#breadcrumb` } }),
-  "inLanguage": currentLocale === 'id' ? 'id-ID' : 'en-US',
+  "inLanguage": "id-ID",
   "potentialAction": [{ "@type": "ReadAction", "target": [seoData.canonical.toString()] }]
 });
 
@@ -263,10 +261,6 @@ const twitterUsername = siteData.social?.twitter?.split('/').pop() || siteConfig
 
 <link rel="canonical" href={seoData.canonical.toString()} />
 
-<link rel="alternate" hreflang="id" href={new URL(pathname.replace(/^\/en/, ''), siteURL)} />
-<link rel="alternate" hreflang="en" href={new URL(`/en${pathname === '/' ? '' : pathname}`, siteURL)} />
-<link rel="alternate" hreflang="x-default" href={new URL(pathname.replace(/^\/en/, ''), siteURL)} />
-
 <meta name="robots" content={seoData.noIndex ? "noindex,nofollow" : "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"} />
 <meta name="googlebot" content={seoData.noIndex ? "noindex,nofollow" : "index,follow"} />
 
@@ -280,7 +274,7 @@ const twitterUsername = siteData.social?.twitter?.split('/').pop() || siteConfig
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 
-<meta property="og:locale" content={currentLocale === 'id' ? 'id_ID' : 'en_US'} />
+<meta property="og:locale" content="id-ID" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={formattedTitle} />
