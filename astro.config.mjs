@@ -9,13 +9,6 @@ export default defineConfig({
   site: siteConfig.siteUrl,
   trailingSlash: "always",
   output: 'static',
-  i18n: {
-	defaultLocale: "id",
-	locales: ["id", "en"],
-	routing: {
-		prefixDefaultLocale: false
-	}
-  },
   vite: {
     plugins: [tailwindcss()]
   },
