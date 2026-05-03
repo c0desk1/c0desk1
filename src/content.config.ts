@@ -20,6 +20,11 @@ const metadataSchema = z.object({
   featured: z.boolean().default(false),
 });
 
+const i18nSchema = z.object({
+  lang: z.enum(["id", "en"]),
+  translationKey: z.string().min(1),
+});
+
 const socialSchema = z.object({
   github: z.string().optional(),
   facebook: z.string().optional(),
@@ -107,6 +112,7 @@ const blog = defineCollection({
   schema: z.object({
     title: z.string().min(10).max(100),
     description: z.string().min(50).max(200),
+    ...i18nSchema.shape,
     image: z.object({
       src: z.string(),
       alt: z.string(),
@@ -125,6 +131,7 @@ const portfolio = defineCollection({
   schema: z.object({
     title: z.string().min(5).max(100),
     description: z.string().min(50).max(200),
+    ...i18nSchema.shape,
     image: z.object({
       src: z.string(),
       alt: z.string(),
@@ -155,6 +162,7 @@ const legal = defineCollection({
     title: z.string(),
     description: z.string().optional(),
     lastUpdated: z.coerce.date(),
+    ...i18nSchema.shape,
     seo: seoSchema.optional(),
   }),
 });
