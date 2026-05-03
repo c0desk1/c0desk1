@@ -1,32 +1,40 @@
 ---
-// src/components/layout/DesktopNav.astro
 import NavLink from "../ui/NavLink.astro";
 import { siteConfig } from "@/config/site";
 import { getEntry } from 'astro:content';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+
+const currentLocale = Astro.currentLocale || 'id';
 
 let settings;
 try {
-  settings = await getEntry('settings', 'site');
+  const settingsId = currentLocale === 'id' ? 'site' : 'site-en';
+  settings = await getEntry('settings', settingsId as any);
 } catch (error) {
   console.warn('Settings not found, using siteConfig fallback');
 }
-const siteData = settings?.data || siteConfig;
 
+const siteData = settings?.data || siteConfig;
 const currentPath = Astro.url.pathname;
-const navItems = siteData.navItems || siteConfig.navItems
+const rawNavItems = siteData.navItems || siteConfig.navItems;
+
+const navItems = rawNavItems.map((item: { href: string; label: string }) => {
+  return {
+    ...item,
+    localizedHref: getRelativeLocaleUrl(currentLocale, item.href)
+  };
+});
 ---
 
-<nav
-  class="hidden md:flex items-center gap-2 ml-2"
-  aria-label="Main navigation"
->
-  {navItems.map((item: { href: string; label: string }) => {
+<nav class="hidden md:flex items-center gap-2 ml-2" aria-label="Main navigation">
+  {navItems.map((item) => {
     const isActive =
-      currentPath === item.href ||
-      (item.href !== "/" && currentPath.startsWith(item.href));
+      currentPath === item.localizedHref ||
+      (item.localizedHref !== "/" && currentPath.startsWith(item.localizedHref));
+      
     return (
       <NavLink
-        href={item.href}
+        href={item.localizedHref}
         current={isActive}
       >
         {item.label}
