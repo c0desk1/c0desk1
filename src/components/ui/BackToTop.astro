@@ -19,14 +19,14 @@ const alignClasses = {
 ---
 
 <div class:list={[
-  showBorder ? 'pt-4 md:pt-8' : '',
+  showBorder ? 'py-3 md:py-6 text-(--fg-muted) hover:text-(--fg)' : '',
   alignClasses[align]
 ]}>
   <Button href="#top" variant='secondary'>
     <span class="group-hover:-translate-y-0.5">
       <Icon name="arrow-up" class="w-5 h-5" />
     </span>
-    <span class="text-(--fg)">
+    <span>
       Kembali ke atas
     </span>
   </Button>
