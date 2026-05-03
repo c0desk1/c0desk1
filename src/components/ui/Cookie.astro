@@ -9,21 +9,35 @@ try {
 } catch (error) {}
 
 const siteData = settings?.data || siteConfig;
-const GA_ID    = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
+const GA_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
 ---
 
-<script is:inline define:vars={{ GA_ID }}>
-(function () {
-  const KEY     = 'cookie-consent-v2';
-  const stored  = (() => { try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } })();
+<div id="ck-data" data-ga-id={GA_ID} style="display:none"></div>
 
-  if (stored) {
-    applyConsent(stored);
-    injectPreferenceToggle();
-    return;
+<script is:inline>
+(function () {
+  const KEY = 'cookie-consent-v2';
+  const GA_ID = document.getElementById('ck-data')?.dataset.gaId || '';
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
   }
 
-  setTimeout(buildBanner, 1200);
+  function run() {
+    if (window.__cookieConsentLoaded) return;
+    window.__cookieConsentLoaded = true;
+
+    const stored = (() => { try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } })();
+
+    if (stored) {
+      applyConsent(stored);
+      injectPreferenceToggle(); // Ini yang nggak kepanggil tadi
+    } else {
+      setTimeout(buildBanner, 1200);
+    }
+  }
 
   function applyConsent(prefs) {
     const analyticsOn = prefs?.analytics === true;
@@ -43,6 +57,8 @@ const GA_ID    = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
   }
 
   function buildBanner() {
+    if (document.getElementById('ck-host')) return;
+    
     if (!document.getElementById('ck-style')) {
       const s = document.createElement('style');
       s.id = 'ck-style';
@@ -51,14 +67,12 @@ const GA_ID    = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
     }
 
     const host = document.createElement('div');
-    host.id    = 'ck-host';
+    host.id = 'ck-host';
     host.setAttribute('role', 'dialog');
     host.setAttribute('aria-modal', 'false');
     host.setAttribute('aria-label', 'Preferensi cookie');
     host.innerHTML = `
       <div id="ck-card" class="ck-card">
-
-        <!-- Header -->
         <div class="ck-header">
           <div class="ck-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -74,7 +88,6 @@ const GA_ID    = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
         </div>
 
         <div class="ck-toggles">
-
           <div class="ck-toggle-row ck-toggle-row--disabled">
             <div class="ck-toggle-info">
               <span class="ck-toggle-name">Fungsional</span>
@@ -100,7 +113,6 @@ const GA_ID    = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
               <span class="ck-pill-thumb"></span>
             </button>
           </div>
-
         </div>
 
         <div class="ck-actions">
@@ -108,7 +120,6 @@ const GA_ID    = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
           <button id="ck-save"       class="ck-btn ck-btn--outline">Simpan pilihan</button>
           <button id="ck-accept-all" class="ck-btn ck-btn--primary">Terima semua</button>
         </div>
-
       </div>
     `;
 
@@ -151,7 +162,7 @@ const GA_ID    = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
     if (document.getElementById('ck-pref-btn')) return;
 
     const btn = document.createElement('button');
-    btn.id    = 'ck-pref-btn';
+    btn.id = 'ck-pref-btn';
     btn.setAttribute('aria-label', 'Ubah preferensi cookie');
     btn.title = 'Preferensi Cookie';
     btn.innerHTML = `
@@ -179,26 +190,22 @@ const GA_ID    = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
         right: 1.25rem;
         z-index: 10000;
         width: min(22rem, calc(100vw - 2rem));
-
         opacity: 0;
         transform: translateY(1rem);
         transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
         pointer-events: none;
       }
-
       #ck-host.ck-visible {
         opacity: 1;
         transform: translateY(0);
         pointer-events: all;
       }
-
       .ck-card {
-        background: var(--bg);
-        border: 1.5px solid var(--border);
+        background: var(--bg, #fff);
+        border: 1.5px solid var(--border, #e5e7eb);
+        color: var(--fg, #111);
         border-radius: var(--radius-xl, 1rem);
-        box-shadow:
-          0 4px 6px -1px rgba(0,0,0,.06),
-          0 20px 40px -8px rgba(0,0,0,.12);
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,.06), 0 20px 40px -8px rgba(0,0,0,.12);
         padding: 1.25rem;
         display: flex;
         flex-direction: column;
@@ -207,234 +214,53 @@ const GA_ID    = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
       }
-
-      .ck-header {
-        display: flex;
-        align-items: flex-start;
-        gap: 0.75rem;
-      }
-
+      .ck-header { display: flex; align-items: flex-start; gap: 0.75rem; }
       .ck-icon {
-        width: 2rem;
-        height: 2rem;
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: var(--bg-muted);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-lg, 0.75rem);
-        color: var(--fg-muted);
+        width: 2rem; height: 2rem; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+        background: var(--bg-muted, #f9fafb); border: 1px solid var(--border, #e5e7eb); border-radius: var(--radius-lg, 0.75rem); color: var(--fg-muted, #6b7280);
       }
-
       .ck-icon svg { width: 1rem; height: 1rem; }
-
-      .ck-title {
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: var(--fg);
-        margin: 0 0 0.2rem;
-        letter-spacing: -0.01em;
-      }
-
-      .ck-sub {
-        font-size: 0.75rem;
-        color: var(--fg-muted);
-        margin: 0;
-      }
-
-      .ck-toggles {
-        display: flex;
-        flex-direction: column;
-        gap: 0;
-        border: 1px solid var(--border);
-        border-radius: var(--radius-lg, 0.75rem);
-        overflow: hidden;
-      }
-
-      .ck-toggle-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.75rem;
-        padding: 0.75rem 0.875rem;
-        cursor: pointer;
-        transition: background 0.15s;
-      }
-
-      .ck-toggle-row:not(.ck-toggle-row--disabled):hover {
-        background: var(--bg-muted);
-      }
-
+      .ck-title { font-size: 0.875rem; font-weight: 600; color: var(--fg, #111); margin: 0 0 0.2rem; letter-spacing: -0.01em; }
+      .ck-sub { font-size: 0.75rem; color: var(--fg-muted, #6b7280); margin: 0; }
+      .ck-toggles { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border, #e5e7eb); border-radius: var(--radius-lg, 0.75rem); overflow: hidden; }
+      .ck-toggle-row { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.75rem 0.875rem; cursor: pointer; transition: background 0.15s; }
+      .ck-toggle-row:not(.ck-toggle-row--disabled):hover { background: var(--bg-muted, #f9fafb); }
       .ck-toggle-row--disabled { cursor: default; opacity: 0.65; }
-
-      .ck-toggle-row + .ck-toggle-row {
-        border-top: 1px solid var(--border);
-      }
-
-      .ck-toggle-info {
-        display: flex;
-        flex-direction: column;
-        gap: 0.15rem;
-        min-width: 0;
-      }
-
-      .ck-toggle-name {
-        font-size: 0.8125rem;
-        font-weight: 500;
-        color: var(--fg);
-      }
-
-      .ck-toggle-desc {
-        font-size: 0.6875rem;
-        color: var(--fg-muted);
-        line-height: 1.4;
-      }
-
-      .ck-pill {
-        position: relative;
-        width: 2.25rem;
-        height: 1.25rem;
-        border-radius: 999px;
-        border: none;
-        flex-shrink: 0;
-        cursor: pointer;
-        transition: background 0.2s ease;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        position: relative;
-      }
-
-      .ck-pill--on  { background: var(--fg); }
-      .ck-pill--off { background: var(--border); }
-
-      .ck-pill-thumb {
-        position: absolute;
-        left: 0.2rem;
-        width: 0.85rem;
-        height: 0.85rem;
-        border-radius: 50%;
-        background: var(--bg);
-        box-shadow: 0 1px 3px rgba(0,0,0,.2);
-        transition: transform 0.2s cubic-bezier(0.34, 1.4, 0.64, 1);
-        pointer-events: none;
-      }
-
+      .ck-toggle-row + .ck-toggle-row { border-top: 1px solid var(--border, #e5e7eb); }
+      .ck-toggle-info { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
+      .ck-toggle-name { font-size: 0.8125rem; font-weight: 500; color: var(--fg, #111); }
+      .ck-toggle-desc { font-size: 0.6875rem; color: var(--fg-muted, #6b7280); line-height: 1.4; }
+      .ck-pill { position: relative; width: 2.25rem; height: 1.25rem; border-radius: 999px; border: none; flex-shrink: 0; cursor: pointer; transition: background 0.2s ease; padding: 0; display: flex; align-items: center; }
+      .ck-pill--on  { background: var(--fg, #111); }
+      .ck-pill--off { background: var(--border, #e5e7eb); }
+      .ck-pill-thumb { position: absolute; left: 0.2rem; width: 0.85rem; height: 0.85rem; border-radius: 50%; background: var(--bg, #fff); box-shadow: 0 1px 3px rgba(0,0,0,.2); transition: transform 0.2s cubic-bezier(0.34, 1.4, 0.64, 1); pointer-events: none; }
       .ck-pill--on  .ck-pill-thumb { transform: translateX(1rem); }
       .ck-pill--off .ck-pill-thumb { transform: translateX(0); }
-
-      .ck-actions {
-        display: flex;
-        justify-content: flex-end;
-        flex-wrap: wrap;
-        width: 100%;
-        align-items: center;
-        gap: 0.75rem;
-        margin-top: 0.5rem;
-      }
-
-      .ck-btn {
-        flex: 0 0 auto;
-        width: auto;
-        padding: 0.5rem 1rem;
-        font-size: 0.8125rem;
-        font-weight: 500;
-        border-radius: 0.5rem;
-        text-align: center;
-        white-space: nowrap;
-        cursor: pointer;
-        transition: opacity 0.15s, background 0.15s, transform 0.1s;
-        border: none;
-      }
-
+      .ck-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; width: 100%; align-items: center; gap: 0.75rem; margin-top: 0.5rem; }
+      .ck-btn { flex: 0 0 auto; width: auto; padding: 0.5rem 1rem; font-size: 0.8125rem; font-weight: 500; border-radius: 0.5rem; text-align: center; white-space: nowrap; cursor: pointer; transition: opacity 0.15s, background 0.15s, transform 0.1s; border: none; }
       .ck-btn:active { transform: scale(0.96); }
-
-      .ck-btn--primary {
-        background: var(--fg);
-        color: var(--bg);
-      }
-      
+      .ck-btn--primary { background: var(--fg, #111); color: var(--bg, #fff); }
       .ck-btn--primary:hover { opacity: 0.82; }
-
-      .ck-btn--outline {
-        background: transparent;
-        color: var(--fg);
-        border: 1.5px solid var(--border);
-      }
-      
-      .ck-btn--outline:hover { background: var(--bg-muted); }
-
-      .ck-btn--ghost {
-        background: transparent;
-        color: var(--fg-muted);
-      }
-
-      .ck-btn--ghost:hover { color: var(--fg); background: var(--bg-muted); }
-
-      .ck-btn:focus-visible {
-        outline: 2px solid var(--accent);
-        outline-offset: 2px;
-      }
-
+      .ck-btn--outline { background: transparent; color: var(--fg, #111); border: 1.5px solid var(--border, #e5e7eb); }
+      .ck-btn--outline:hover { background: var(--bg-muted, #f9fafb); }
+      .ck-btn--ghost { background: transparent; color: var(--fg-muted, #6b7280); }
+      .ck-btn--ghost:hover { color: var(--fg, #111); background: var(--bg-muted, #f9fafb); }
+      .ck-btn:focus-visible { outline: 2px solid var(--accent, #3b82f6); outline-offset: 2px; }
       #ck-pref-btn {
-        position: fixed;
-        bottom: 1.25rem;
-        left: 1.25rem;
-        z-index: 9990;
-        width: 2rem;
-        height: 2rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: var(--bg);
-        border: 1.5px solid var(--border);
-        border-radius: 999px;
-        color: var(--fg-muted);
-        cursor: pointer;
-        box-shadow: 0 2px 8px rgba(0,0,0,.08);
-        transition: color 0.15s, background 0.15s, transform 0.15s, opacity 0.15s;
-        opacity: 0.6;
-        padding: 0;
+        position: fixed; bottom: 1.25rem; left: 1.25rem; z-index: 9990; width: 2rem; height: 2rem;
+        display: flex; align-items: center; justify-content: center; background: var(--bg, #fff);
+        border: 1.5px solid var(--border, #e5e7eb); border-radius: 999px; color: var(--fg-muted, #6b7280);
+        cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.08);
+        transition: color 0.15s, background 0.15s, transform 0.15s, opacity 0.15s; opacity: 0.6; padding: 0;
       }
-
-      #ck-pref-btn:hover {
-        opacity: 1;
-        color: var(--fg);
-        background: var(--bg-muted);
-        transform: scale(1.08);
-      }
-
+      #ck-pref-btn:hover { opacity: 1; color: var(--fg, #111); background: var(--bg-muted, #f9fafb); transform: scale(1.08); }
       #ck-pref-btn svg { width: 0.9rem; height: 0.9rem; }
-
-      .tts-bar--visible ~ #ck-pref-btn,
-      body:has(.tts-bar--visible) #ck-pref-btn {
-        bottom: 4rem;
-        transition: bottom 0.25s ease, opacity 0.15s, transform 0.15s;
-      }
-
+      .tts-bar--visible ~ #ck-pref-btn, body:has(.tts-bar--visible) #ck-pref-btn { bottom: 4rem; transition: bottom 0.25s ease, opacity 0.15s, transform 0.15s; }
       @media (max-width: 640px) {
-        #ck-host {
-          bottom: 1rem;
-          right: 1rem;
-          width: calc(100vw - 2rem);
-        }
-
-        body:has(.tts-bar--visible) #ck-host {
-          bottom: 4.5rem;
-        }
-
-        .ck-actions {
-          flex-direction: column;
-          gap: 0.5rem;
-        }
-
-        .ck-btn {
-          width: 100%;
-          justify-content: center;
-          white-space: normal;
-        }
-
+        #ck-host { bottom: 1rem; right: 1rem; width: calc(100vw - 2rem); }
+        body:has(.tts-bar--visible) #ck-host { bottom: 4.5rem; }
+        .ck-actions { flex-direction: column; gap: 0.5rem; }
+        .ck-btn { width: 100%; justify-content: center; white-space: normal; }
         .ck-btn--ghost   { order: 1; }
         .ck-btn--outline { order: 2; }
         .ck-btn--primary { order: 3; }
