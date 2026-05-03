@@ -10,15 +10,15 @@ import Icon from "./Icon.astro";
   class="relative p-1.5 rounded-(--radius-md) text-(--accent) hover:bg-(--bg-muted) group active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-200"
   data-url={Astro.url.href}>
   <div class="flex items-center justify-center gap-1.5">
-    <div class="relative w-3.5 h-3.5 items-center">
+    <div class="relative w-5 h-5 items-center">
       <span id="icon-copy" class="absolute inset-0 w-full h-full transition-all duration-200">
-        <Icon name="link" class="w-3.5 h-3.5" />
+        <Icon name="link" class="w-4.5 h-4.5" />
       </span>
       <span id="icon-check" class="absolute inset-0 w-full h-full opacity-0 scale-75 transition-all duration-200">
-        <Icon name="check" class="w-3.5 h-3.5" />
+        <Icon name="check" class="w-4.5 h-4.5" />
       </span>
     </div>
-    <span id="copy-text" class="text-xs font-medium">
+    <span id="copy-text" class="text-[13px] md:text-sm font-medium">
       Salin URL
     </span>
   </div>
