@@ -1,0 +1,47 @@
+{
+  "lang": "en",
+  "siteName": "c0desk1",
+  "siteDescription": "Discussing technology, games, anime, and anything unique. Creating audio, visuals, and automation.",
+  "siteUrl": "https://c0desk1.my.id",
+  "siteLogo": "/org/c0desk1-logo.svg",
+  "siteMail": "hallo@c0desk1.my.id",
+  "social": {
+    "github": "https://github.com/c0desk1",
+    "twitter": "https://twitter.com/c0desk1"
+  },
+  "navItems": [
+    { "href": "/blog/", "label": "Blog" },
+    { "href": "/portfolio/", "label": "Portfolio" },
+    { "href": "/about/", "label": "About" }
+  ],
+  "footerSections": [
+    {
+      "title": "Navigation",
+      "items": [
+        { "href": "/blog/", "label": "Blog", "isExternal": false },
+        { "href": "/portfolio/", "label": "Portfolio", "isExternal": false },
+        { "href": "/contact/", "label": "Contact", "isExternal": false },
+        { "href": "/about/", "label": "About", "isExternal": false }
+      ]
+    },
+    {
+      "title": "Legal",
+      "items": [
+        { "href": "/disclaimer/", "label": "Disclaimer", "isExternal": false },
+        { "href": "/privacy-policy/", "label": "Privacy Policy", "isExternal": false },
+        { "href": "/terms-of-service/", "label": "Terms of Service", "isExternal": false },
+        { "href": "/cookie-policy/", "label": "Cookie Policy", "isExternal": false },
+        { "href": "/dmca/", "label": "DMCA & Copyright", "isExternal": false }
+      ]
+    }
+  ],
+  "defaultSeo": {
+    "title": "c0desk1",
+    "description": "Discussing technology, games, anime, and anything unique. Creating audio, visuals, and automation.",
+    "ogImage": "/org/c0desk1-og.webp"
+  },
+  "googleAnalyticsId": "G-2TKFP229HJ",
+  "googleSiteVerification": "ZxoHYWipAMoGhvwVi5nxolWsZOntrYkNkVcG9HTfFZQ",
+  "googleAdsenseId": "ca-pub-4943136052113535",
+  "yandexVerification": "1878480c0d7b5510"
+}
