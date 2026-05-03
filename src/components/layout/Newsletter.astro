@@ -9,9 +9,11 @@ interface Props {
 
 const {
   heading     = 'Stay in the loop',
-  subheading  = 'Get the latest posts delivered to your inbox.',
-  placeholder = 'you@email.com',
-  btnLabel    = 'Subscribe',
+  subheading  = 'Dapatkan postingan terbaru yang dikirimkan ke kotak masuk Anda.',
+  placeholder = 'nama@email.com',
+  btnLabel    = 'Berlangganan',
+  message	 = 'Terima kasih telah berlangganan!',
+  note		= 'Tidak ada spam. Anda dapat berhenti berlangganan kapan saja.'
 } = Astro.props;
 ---
 
@@ -44,10 +46,10 @@ const {
   </div>
 
   <div id="nls-success" class="nls-success" hidden aria-live="polite">
-    <span>Thanks for subscribing!</span>
+    <span>{message}</span>
   </div>
 
-  <p class="nls-note">No spam. Unsubscribe anytime.</p>
+  <p class="nls-note">{note}</p>
 </div>
 
 <style>
@@ -187,7 +189,7 @@ const {
   }
 
   .nls-note {
-    font-size: 0.75rem;
+    font-size: 13px;
     color: var(--fg-subtle);
     margin: 0;
   }
@@ -226,6 +228,10 @@ const {
       width: 100%;
       padding: 0.75rem 1rem;
       border-radius: 0.5rem;
+    }
+    
+    .nls-note {
+      font-size: 0.75rem;
     }
   }
 </style>
