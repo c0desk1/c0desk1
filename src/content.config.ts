@@ -21,8 +21,7 @@ const metadataSchema = z.object({
 });
 
 const i18nSchema = z.object({
-  lang: z.enum(["id", "en"]),
-  translationKey: z.string().min(1),
+  lang: z.enum(["id", "en"]).optional(),
 });
 
 const socialSchema = z.object({
