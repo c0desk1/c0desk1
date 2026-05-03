@@ -117,10 +117,9 @@ const siteData = settings?.data || siteConfig;
       </main>
       {footer && <Footer />}
     </div>
-
     <div id="modal-root"></div>
     <Toast />
-
+    <Cookie />
     {import.meta.env.PROD && (siteData.googleAnalyticsId || siteConfig.googleAnalyticsId) && (() => {
       const analyticsId = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
       return (
@@ -135,19 +134,18 @@ const siteData = settings?.data || siteConfig;
         </>
       );
     })()}
-	<script is:inline>
-    if ('serviceWorker' in navigator && window.location.hostname !== 'localhost') {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/pwa.js')
-          .then(registration => {
-            console.log('PWA registered:', registration);
-          })
-          .catch(error => {
-            console.error('PWA registration failed:', error);
-          });
-      });
-    }
-  </script>
-   <Cookie />
+    <script is:inline>
+      if ('serviceWorker' in navigator && window.location.hostname !== 'localhost') {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/pwa.js')
+            .then(registration => {
+              console.log('PWA registered:', registration);
+            })
+            .catch(error => {
+              console.error('PWA registration failed:', error);
+            });
+        });
+      }
+    </script>
   </body>
 </html>
