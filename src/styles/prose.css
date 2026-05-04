@@ -233,7 +233,8 @@
 
 /* ==================== INLINE CODE ==================== */
 
-.prose-custom code:not(pre code) {
+.prose-custom :not(pre) > code,
+.prose-custom :where(:not(pre)) code {
   font-family: var(--prose-font-mono);
   font-size: 0.9125em;
   font-weight: 500;
@@ -242,7 +243,9 @@
   padding: 0.15em 0.4em;
   border-radius: var(--prose-radius-sm);
   border: 1px solid var(--prose-border);
-  white-space: nowrap;
+  white-space: break-spaces;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 /* ==================== CODE BLOCK ==================== */
