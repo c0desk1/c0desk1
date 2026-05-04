@@ -9,10 +9,9 @@ interface Props {
 
 export default function Details({ variant, defaultOpen = false, children }: Props) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
-  const [height, setHeight] = useState(0);
+  const [height, setHeight] = useState<number | 'auto'>(0);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // Pisahin <summary> sama konten
   let summaryContent: ReactNode = null;
   const bodyContent: ReactNode[] = [];
 
@@ -24,11 +23,17 @@ export default function Details({ variant, defaultOpen = false, children }: Prop
     }
   });
 
-  // Update height pas buka-tutup
   useEffect(() => {
     if (!contentRef.current) return;
-    setHeight(isOpen? contentRef.current.scrollHeight : 0);
-  }, [isOpen, children]); // children masuk biar update kalo konten dinamis
+    if (isOpen) {
+      setHeight(contentRef.current.scrollHeight);
+      const timer = setTimeout(() => setHeight('auto'), 200);
+      return () => clearTimeout(timer);
+    } else {
+      setHeight(contentRef.current.scrollHeight);
+      requestAnimationFrame(() => setHeight(0));
+    }
+  }, [isOpen]);
 
   const toggle = () => setIsOpen(!isOpen);
 
@@ -44,10 +49,10 @@ export default function Details({ variant, defaultOpen = false, children }: Prop
       </summary>
 
       <div
-        style={{ height: `${height}px` }}
+        style={{ height: height === 'auto'? 'auto' : `${height}px` }}
         className="overflow-hidden transition-[height] duration-200 ease-out"
       >
-        <div ref={contentRef}>
+        <div ref={contentRef} className="details-content">
           {bodyContent}
         </div>
       </div>
