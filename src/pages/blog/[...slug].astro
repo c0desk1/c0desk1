@@ -118,7 +118,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
   <article class="relative">
     <h1 class="sr-only">{title}</h1>
     <Section size="sm">
-      <Container size="md">
+      <Container size="sm">
         <h2 class="sr-only">Article Header</h2>
         <Breadcrumb items={Breadcrumbs} />
         <BlogHeader
@@ -142,7 +142,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
     </Section>
 
     <Section size="sm" class="pt-0! lg;pt-8!">
-		<Container size="md"> 
+		<Container size="sm"> 
     	<div class="flex flex-col lg:grid lg:grid-cols-12 gap-2 lg:gap-12 items-start relative">
 				<aside class="w-full sticky top-15 z-40 lg:col-span-4 mb-3 md:mb-6 self-start">
         	{tocHeadings.length > 0 && (
@@ -156,7 +156,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
 		</Container>
 	</Section>
     <Section size="md" class="section-divider">
-      <Container size="md">
+      <Container size="sm">
         <h2 class="sr-only">Related Posts</h2>
         <BackToTop align="center" />
         <BlogRelatedPosts posts={relatedPosts} />
