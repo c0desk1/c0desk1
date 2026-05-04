@@ -346,6 +346,10 @@
   list-style: none;
 }
 
+.prose-custom ul > li {
+  padding-left: 0.5rem;
+}
+
 .prose-custom ul > li::marker {
   content: '—';
   color: var(--prose-fg-subtle);
