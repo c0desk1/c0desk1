@@ -6,10 +6,10 @@ const text = raw.replace(/<[^>]+>/g, '').trim();
 let quote = text;
 let cite = '';
 
-if (text.includes('-')) {
-  const parts = text.split('-');
+if (text.includes('—')) {
+  const parts = text.split('—');
   quote = parts[0].trim();
-  cite = parts.slice(1).join('-').trim();
+  cite = parts.slice(1).join('—').trim();
 }
 ---
 
