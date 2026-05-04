@@ -163,18 +163,24 @@
 .prose-custom a {
   color: var(--prose-accent);
   text-decoration: none;
-  text-decoration-color: transparent;
-  text-underline-offset: 3px;
-  text-decoration-thickness: 1px;
-  transition:
-    color var(--prose-transition),
-    text-decoration-color var(--prose-transition);
   outline-offset: 2px;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity var(--prose-transition), color var(--prose-transition);
 }
 
-.prose-custom a:hover {
+@media (hover: hover) {
+  .prose-custom a:hover {
+    color: var(--prose-accent-dim);
+  }
+}
+
+.prose-custom a:active {
   color: var(--prose-accent-dim);
-  text-decoration-color: var(--prose-accent-dim);
+  opacity: 0.6;
+}
+
+.prose-custom a:visited {
+  color: var(--prose-accent-visited, var(--prose-accent));
 }
 
 .prose-custom a:focus-visible {
@@ -182,8 +188,7 @@
   border-radius: var(--prose-radius-sm);
 }
 
-/* External link indicator */
-.prose-custom a[target="_blank"]::after {
+.prose-custom a[target="_blank"]:not([href^="#"])::after {
   content: '↗';
   display: inline-block;
   font-size: 0.7em;
