@@ -10,37 +10,97 @@ interface Props {
 const { titles = ["Code"] } = Astro.props;
 ---
 
-<div class="code-group not-prose mx-auto max-w-3xl my-8 overflow-hidden rounded-(--prose-radius-md) border border-(--prose-border) bg-(--prose-surface)">
-  <div class="flex items-center justify-between border-b border-(--prose-border) px-2">
-    <div class="flex overflow-x-auto no-scrollbar">
-      {titles.map((title, index) => (
-        <button
-          data-code-tab={index}
-          class="
-            relative px-4 py-2.5
-            text-xs font-semibold tracking-wide
-            text-(--prose-fg-subtle) hover:text-(--prose-fg)
-            data-[active=true]:text-(--prose-fg)
-            transition-colors duration-150
-          "
-        >
-          {title}
-          <span class="absolute bottom-0 left-0 h-0.5 w-full rounded-full scale-x-0 bg-(--prose-accent) transition-transform duration-200 [button[data-active=true]>&]:scale-x-100" />
-        </button>
-      ))}
+<div class="code-group not-prose mx-auto max-w-3xl my-8 overflow-hidden border-2 border-[#e5e5e5] dark:border-[#3a3a3a] bg-[#fafafa] dark:bg-[#1a1a1a] shadow-[0_10px_20px_-5px_rgba(0,0,0,0.1)] dark:shadow-[inset_0_0_10px_rgba(0,0,0,0.5),0_10px_20px_-5px_rgba(0,0,0,0.4)]">
+  <div class="relative border-b-2 border-[#e5e5e5] dark:border-[#3a3a3a] bg-[#f0f0f0] dark:bg-[#2d2d2d] px-2">
+    <div class="absolute left-0 top-0 h-full w-full bg-[repeating-linear-gradient(45deg,transparent,transparent_8px,rgba(0,0,0,0.05)_8px,rgba(0,0,0,0.05)_16px)] dark:bg-[repeating-linear-gradient(45deg,transparent,transparent_8px,rgba(0,0,0,0.15)_8px,rgba(0,0,0,0.15)_16px)] pointer-events-none"></div>
+    
+    <div class="flex items-center justify-between">
+      <div class="flex overflow-x-auto no-scrollbar snap-x snap-mandatory">
+        {titles.map((title, index) => (
+          <button
+            data-code-tab={index}
+            class="
+              snap-start shrink-0
+              px-4 py-3 sm:px-5 sm:py-3
+              text-xs font-bold tracking-wider font-mono
+              text-[#666666] dark:text-[#8a8a8a] 
+              hover:bg-[#e5e5e5] dark:hover:bg-[#3a3a3a]
+              data-[active=true]:text-[#d94a1a] dark:data-[active=true]:text-[#ff6b35] 
+              data-[active=true]:bg-[#e8e8e8] dark:data-[active=true]:bg-[#252525]
+              transition-all duration-100
+              border-r-2 border-[#e5e5e5] dark:border-[#3a3a3a] last:border-r-0
+              active:bg-[#d4d4d4] dark:active:bg-[#404040]
+              cursor-pointer
+            "
+          >
+            <span class="relative z-10 text-nowrap">[ {title} ]</span>
+            <span class="absolute inset-x-0 bottom-0 h-0.5 bg-[#d94a1a] dark:bg-[#ff6b35] scale-x-0 transition-transform duration-150 [button[data-active=true]>&]:scale-x-100"></span>
+          </button>
+        ))}
+      </div>
+      
+      <button
+        class="copy-button group relative shrink-0 px-2 py-2 sm:px-3 sm:py-2 ml-2 text-[#666666] dark:text-[#8a8a8a] active:text-[#d94a1a] dark:active:text-[#ff6b35] cursor-pointer transition-colors duration-100 border-2 border-[#e5e5e5] dark:border-[#3a3a3a] bg-[#f0f0f0] dark:bg-[#252525] active:border-[#d94a1a] dark:active:border-[#ff6b35]"
+        aria-label="Copy code"
+      >
+        <Icon name="copy" class="copy-icon w-4 h-4" />
+        <Icon name="check" class="check-icon w-4 h-4 hidden" />
+        <span class="copy-tooltip absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-[#1a1a1a] dark:bg-[#000] border border-[#d94a1a] dark:border-[#ff6b35] text-[10px] font-mono text-[#d94a1a] dark:text-[#ff6b35] opacity-0 invisible transition-opacity duration-150 whitespace-nowrap pointer-events-none z-30">
+          copy
+        </span>
+      </button>
     </div>
-    <button
-      class="copy-button p-2 text-(--prose-fg-subtle) hover:text-(--prose-accent) cursor-pointer transition-colors duration-150"
-      aria-label="Copy code"
-    >
-      <Icon name="copy" class="copy-icon w-4 h-4" />
-      <Icon name="check" class="check-icon w-4 h-4 hidden text-(--prose-accent)" />
-    </button>
   </div>
-  <div class="code-group-content [&_pre]:m-0! [&_pre]:rounded-none! [&_pre]:border-none! [&_pre]:bg-transparent!">
-    <slot />
+  
+  <div class="code-group-content relative">
+    {/* Industrial scanline effect - reduced opacity for light mode */}
+    <div class="absolute inset-0 pointer-events-none bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(0,0,0,0.03)_2px,rgba(0,0,0,0.03)_4px)] dark:bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(0,0,0,0.1)_2px,rgba(0,0,0,0.1)_4px)] z-10"></div>
+    
+    {/* Corner accents */}
+    <div class="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-[#d94a1a] dark:border-[#ff6b35] z-20 pointer-events-none"></div>
+    <div class="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-[#d94a1a] dark:border-[#ff6b35] z-20 pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-[#d94a1a] dark:border-[#ff6b35] z-20 pointer-events-none"></div>
+    <div class="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-[#d94a1a] dark:border-[#ff6b35] z-20 pointer-events-none"></div>
+    
+    {/* Code wrapper with proper theme handling for Shiki */}
+    <div class="[&_pre]:m-0! [&_pre]:rounded-none! [&_pre]:border-0! [&_pre]:bg-[#f8f8f8]! dark:[&_pre]:bg-[#0d0d0d]! [&_pre]:p-4! sm:[&_pre]:p-5! [&_pre]:overflow-x-auto [&_code]:font-mono [&_code]:text-sm [&_code]:leading-relaxed">
+      <slot />
+    </div>
   </div>
 </div>
+
+<style is:global>
+  .code-group-content pre,
+  .code-group-content code {
+    background-color: transparent !important;
+  }
+  
+  .code-group-content .line,
+  .code-group-content span {
+    color: #1e1e1e !important;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    .code-group-content .line,
+    .code-group-content span {
+      color: #d4d4d4 !important;
+    }
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    .code-group-content .token.keyword { color: #569cd6 !important; }
+    .code-group-content .token.string { color: #ce9178 !important; }
+    .code-group-content .token.function { color: #dcdcaa !important; }
+    .code-group-content .token.comment { color: #6a9955 !important; }
+  }
+  
+  @media (prefers-color-scheme: light) {
+    .code-group-content .token.keyword { color: #0000ff !important; }
+    .code-group-content .token.string { color: #a31515 !important; }
+    .code-group-content .token.function { color: #795e26 !important; }
+    .code-group-content .token.comment { color: #008000 !important; }
+  }
+</style>
 
 <style>
   .no-scrollbar::-webkit-scrollbar { 
@@ -55,6 +115,71 @@ const { titles = ["Code"] } = Astro.props;
   .code-group-content > :global(*:not(:first-child)) { 
     display: none; 
   }
+  
+  [data-code-tab][data-active="true"]::before {
+    content: "▶";
+    position: absolute;
+    left: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 7px;
+    color: #d94a1a;
+    opacity: 0.7;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    [data-code-tab][data-active="true"]::before {
+      color: #ff6b35;
+    }
+  }
+  
+  .copy-button,
+  [data-code-tab] {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  
+  @media (max-width: 640px) {
+    .code-group .overflow-x-auto {
+      scrollbar-width: thin;
+      scrollbar-color: #c0c0c0 transparent;
+    }
+    
+    .code-group .overflow-x-auto::-webkit-scrollbar {
+      display: block;
+      height: 3px;
+    }
+    
+    .code-group .overflow-x-auto::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    .code-group .overflow-x-auto::-webkit-scrollbar-thumb {
+      background: #c0c0c0;
+      border-radius: 10px;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      .code-group .overflow-x-auto::-webkit-scrollbar-thumb {
+        background: #5a5a5a;
+      }
+    }
+  }
+  
+  @media (hover: hover) and (pointer: fine) {
+    .copy-button:hover .copy-tooltip {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+  
+  .copy-button:active {
+    transform: scale(0.95);
+  }
+  
+  [data-code-tab]:active {
+    transform: translateY(1px);
+  }
 </style>
 
 <script>
@@ -66,39 +191,83 @@ const { titles = ["Code"] } = Astro.props;
 
       if (!tabs.length || !contents) return;
 
+      let activeIndex = 0;
+
       const activate = (index: number) => {
+        activeIndex = index;
         tabs.forEach((tab, i) => {
-          tab.setAttribute('data-active', String(i === index));
+          if (i === index) {
+            tab.setAttribute('data-active', 'true');
+          } else {
+            tab.setAttribute('data-active', 'false');
+          }
+          
           if (contents[i]) {
             (contents[i] as HTMLElement).style.display = i === index ? 'block' : 'none';
           }
         });
       };
 
-      tabs.forEach((tab, i) => tab.addEventListener('click', () => activate(i)));
-
-      copyBtn?.addEventListener('click', async () => {
-        const active = Array.from(contents).find(c => (c as HTMLElement).style.display !== 'none');
-        const code = active?.querySelector('code')?.innerText;
-        if (!code) return;
-
-        await navigator.clipboard.writeText(code);
-
-        const copyIcon  = copyBtn.querySelector('.copy-icon');
-        const checkIcon = copyBtn.querySelector('.check-icon');
-        copyIcon?.classList.add('hidden');
-        checkIcon?.classList.remove('hidden');
-
-        setTimeout(() => {
-          copyIcon?.classList.remove('hidden');
-          checkIcon?.classList.add('hidden');
-        }, 2000);
+      tabs.forEach((tab, i) => {
+        tab.addEventListener('click', (e) => {
+          e.preventDefault();
+          activate(i);
+        });
+        
+        tab.addEventListener('touchend', (e) => {
+          e.preventDefault();
+          activate(i);
+        });
       });
+
+      if (copyBtn) {
+        const handleCopy = async () => {
+          const activeContent = contents[activeIndex];
+          const codeElement = activeContent?.querySelector('code');
+          const preElement = activeContent?.querySelector('pre');
+          
+          let code = codeElement?.innerText || preElement?.innerText;
+          
+          if (!code) return;
+
+          try {
+            await navigator.clipboard.writeText(code);
+
+            const copyIcon = copyBtn.querySelector('.copy-icon');
+            const checkIcon = copyBtn.querySelector('.check-icon');
+            
+            if (copyIcon && checkIcon) {
+              copyIcon.classList.add('hidden');
+              checkIcon.classList.remove('hidden');
+            }
+
+            setTimeout(() => {
+              if (copyIcon && checkIcon) {
+                copyIcon.classList.remove('hidden');
+                checkIcon.classList.add('hidden');
+              }
+            }, 2000);
+          } catch (err) {
+            console.warn('Copy failed:', err);
+          }
+        };
+
+        copyBtn.addEventListener('click', handleCopy);
+        copyBtn.addEventListener('touchend', (e) => {
+          e.preventDefault();
+          handleCopy();
+        });
+      }
 
       activate(0);
     });
   };
 
-  initCodeGroup();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCodeGroup);
+  } else {
+    initCodeGroup();
+  }
+  
   document.addEventListener('astro:after-swap', initCodeGroup);
 </script>
