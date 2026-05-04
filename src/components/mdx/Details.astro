@@ -1,0 +1,24 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+
+const { summary: propSummary } = Astro.props;
+const raw = await Astro.slots.render('default');
+
+const text = raw.replace(/<[^>]+>/g, '').trim();
+const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+
+const summary = propSummary ?? (lines[0] ?? '');
+const content = propSummary ? text : lines.slice(1).join('\n');
+---
+
+<details class="details">
+  <summary class="details-summary">
+    <Icon name='chevron-right' class="details-icon" / ></Icon>
+    {summary}
+  </summary>
+  {content && (
+    <div class="details-content">
+      <slot />
+    </div>
+  )}
+</details>

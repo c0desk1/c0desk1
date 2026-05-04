@@ -17,14 +17,21 @@ import TOC from "@/components/ui/TOC.astro";
 import BlogRelatedPosts from "@/components/blog/BlogRelatedPosts.astro";
 import BackToTop from "@/components/ui/BackToTop.astro";
 
-import Image from "@/components/mdx/Image.astro";
-import HR from "@/components/mdx/HR.astro";
-import Quote from '@/components/mdx/Quote.astro';
-import Table from '@/components/mdx/Table.astro';
-
 import { filterHeadingsForTOC, getReadingTime } from "@/lib/utils";
 import { getSmartRelatedPosts } from "@/lib/botEngine";
 import ReadingProgress from "@/components/ui/ReadingProgress.astro";
+
+
+import Image from "@/components/mdx/Image.astro";
+import HR from "@/components/mdx/HR.astro";
+import Table from '@/components/mdx/Table.astro';
+import Details from '@/components/mdx/Details.astro';
+import Callout from '@/components/mdx/Callout.astro';
+import Steps from '@/components/mdx/Steps.astro';
+import CodeGroup from '@/components/mdx/CodeGroup.astro';
+import Heading from '@/components/mdx/Heading.astro';
+import InlineLink from '@/components/mdx/InlineLink.astro';
+import CallQuote from '@/components/mdx/CallQuote.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -97,6 +104,21 @@ const SeoBreadcrumbItems = [
 const Breadcrumbs = SeoBreadcrumbItems.filter(item => 
   item.name === "Blog" || item.name === seoCategory.name
 );
+
+const components = {
+  h2: Heading,
+  h3: Heading,
+  a: InlineLink,
+  img: Image, 
+  hr: HR,
+  blockquote: CallQuote,
+  table: Table,
+  Details: Details,
+  Callout,
+  Steps,
+  CodeGroup,
+
+};
 ---
 
 <BaseLayout
@@ -157,12 +179,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
                 )}
               </div>
               <div id="article-content" class="prose-custom w-full">
-                <Content components={{ 
-                  img: Image, 
-                  hr: HR,
-                  blockquote: Quote,
-                  table: Table, 
-                }} />
+                <Content components={components} />
               </div>
             </div>
 	      </Section>

@@ -1,0 +1,20 @@
+---
+// src/components/mdx/InlineLink.astro
+import Icon from "../ui/Icon.astro";
+const { href, ...props } = Astro.props;
+
+const isExternal = href?.startsWith('http');
+---
+
+<a 
+  href={href} 
+  target={isExternal ? "_blank" : undefined}
+  rel={isExternal ? "noopener noreferrer" : undefined}
+  class:list={["inline-link", props.class]}
+  {...props}
+>
+  <slot />
+  {isExternal && (
+    <Icon name="external" class="external-icon w-3.5 h-3.5" />
+  )}
+</a>

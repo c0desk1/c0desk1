@@ -50,19 +50,17 @@ const HeroDescription = "Catatan dari balik layar tentang sistem, kreativitas, d
       </Container>
     </div>
   </Section>
-
-  {featuredPosts.length > 0 && (
-    <Section id="featured-posts" size="lg" aria-label="Featured articles" class="section-divider">
-      <Container size="xl">
-        <h2 class="sr-only">Featured Posts</h2>
-        <BlogList posts={featuredPosts} variant="featured" />
-      </Container>
-    </Section>
-  )}
-
-  <Section id="all-posts" size="lg" aria-label="All articles">
+  <Section id="featured-posts" size="lg" aria-label="Featured articles" class="section-divider">
+    <h2 class="sr-only">Featured Posts</h2>
     <Container size="xl">
-      <h2 class="sr-only">All Posts</h2>
+      {featuredPosts.length > 0 && (
+        <BlogList posts={featuredPosts} variant="featured" />
+      )}
+    </Container>
+  </Section>
+  <Section id="all-posts" size="lg" aria-label="All articles">
+    <h2 class="sr-only">All Posts</h2>
+    <Container size="xl">
       <BlogList posts={regularPosts} variant="default" />
     </Container>
   </Section>

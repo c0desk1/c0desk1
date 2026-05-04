@@ -38,7 +38,7 @@ const {
   />
   <div class="pointer-events-none absolute inset-0 flex items-center justify-center bg-white mask-[radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
 
-  <header class="relative z-20 w-full text-start justify-start md:justify-center md:text-center">
+  <header class="relative z-20 w-full text-start md:text-center justify-start md:justify-center">
     <div class="prose-custom mb-4 md:mb-8">
       <h1>{title}</h1>
     </div>
@@ -47,16 +47,14 @@ const {
       <PostMeta pubDate={pubDate} readingTime={readingTime} />
     </div>
 
-    <div class="flex flex-wrap items-center">
+    <div class="flex flex-wrap gap-2 items-center justify-start md:justify-center">
       {authorName && (
-        <div class="flex justify-start">
-          <PostAuthor
-            name={authorName}
-            avatar={authorAvatar}
-            title={authorTitle}
-            slug={authorSlug}
-          />
-        </div>
+        <PostAuthor
+          name={authorName}
+          avatar={authorAvatar}
+          title={authorTitle}
+          slug={authorSlug}
+        />
       )}
       <PostAction />
     </div>

@@ -1,0 +1,44 @@
+---
+// src/components/mdx/Heading.astro
+import Icon from "../ui/Icon.astro";
+const { as: Tag = 'h2', id: propId, ...props } = Astro.props;
+
+const raw = await Astro.slots.render('default');
+const text = raw.replace(/<[^>]+>/g, '').trim();
+
+const id = propId ?? text
+  .toLowerCase()
+  .replace(/\s+/g, '-')
+  .replace(/[^\w-]+/g, '');
+---
+
+<Tag id={id} {...props} class:list={["group flex items-center gap-2 cursor-pointer", props.class]}>
+  <slot />
+  <a href={`#${id}`} class="anchor-link opacity-0 group-hover:opacity-100 transition-opacity">
+    <Icon name="link" />
+  </a>
+</Tag>
+
+<script>
+  const init = () => {
+    const anchors = document.querySelectorAll<HTMLAnchorElement>('.anchor-link');
+    
+    anchors.forEach(el => {
+      el.addEventListener('click', (e: MouseEvent) => {
+        const href = el.getAttribute('href');
+        
+        if (href && href.startsWith('#')) {
+          e.preventDefault();
+          const target = document.querySelector(href);
+          
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+            history.pushState(null, '', href);
+          }
+        }
+      });
+    });
+  }
+  init();
+  document.addEventListener('astro:page-load', init);
+</script>

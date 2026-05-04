@@ -1,13 +1,15 @@
 ---
 // src/components/mdx/FootnoteMarker.astro
-
-interface Props {
-  id: string;
-}
-
-const { id } = Astro.props;
 ---
+<sup class="footnote-marker">
+  <slot />
+</sup>
 
-<a href={`#fn-${id}`} class="footnote-marker items-center" id={`fnref-${id}`}>
-  {id}
-</a>
+<style is:global>
+  .prose-custom .footnote-marker a {
+    color: inherit !important;
+    text-decoration: none !important;
+    border: none !important;
+    background: transparent !important;
+  }
+</style>
