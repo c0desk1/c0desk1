@@ -5,37 +5,47 @@ interface Props extends DetailsHTMLAttributes<HTMLDetailsElement> {
   children: ReactNode;
 }
 
+function getDisplayName(type: any): string {
+  if (typeof type === 'string') return type;
+  return type?.displayName || type?.name || '';
+}
+
 export default function Details({ children,...props }: Props) {
-  let summaryContent: ReactNode = null;
-  const bodyContent: ReactNode[] = [];
+  let summaryNode: ReactNode = null;
+  const bodyNodes: ReactNode[] = [];
 
   Children.forEach(children, (child) => {
     if (!isValidElement(child)) {
-      bodyContent.push(child);
+      bodyNodes.push(child);
       return;
     }
 
-    const isSummary =
-      child.type === 'summary' ||
+    const typeName = getDisplayName(child.type);
+    const isSummary = 
+      typeName === 'summary' || 
       child.props?.originalType === 'summary' ||
       child.props?.mdxType === 'summary';
 
     if (isSummary) {
-      summaryContent = (
+      summaryNode = (
         <>
-          <Icon name="chevron-right" className="details-icon w-4 h-4" />
+          <Icon name="chevron-right" className="details-icon" />
           {child.props.children}
         </>
       );
     } else {
-      bodyContent.push(child);
+      bodyNodes.push(child);
     }
   });
 
+  if (!summaryNode) {
+    return <details {...props}>{children}</details>;
+  }
+
   return (
     <details {...props}>
-      <summary>{summaryContent}</summary>
-      {bodyContent}
+      <summary>{summaryNode}</summary>
+      {bodyNodes}
     </details>
   );
 }
