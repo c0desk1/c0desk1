@@ -3,6 +3,7 @@
 import BlogMeta from './BlogMeta.astro';
 import BlogAuthor from './BlogAuthor.astro';
 import Listen from "@/components/ui/ListenButton.astro";
+import CopyLink from "@/components/ui/CopyButton.astro";
 
 interface Props {
   title: string;
@@ -30,7 +31,7 @@ const {
     class="prose-custom
       text-3xl sm:text-4xl md:text-5xl
       font-semibold tracking-tight
-      text-(--prose-black) dark:text-(--prose-white)
+      text-(--prose-fg)
       leading-[1.15]
       text-balance
       mb-6 md:mb-8
@@ -38,8 +39,12 @@ const {
   >
     {title}
   </h1>
-  <BlogMeta pubDate={pubDate} readingTime={readingTime} />
-  <div class="flex items-center sm:justify-start justify-center gap-1 mb-4 md:mb-6">
+
+  <div class="mb-4 md:mb-6">
+    <BlogMeta pubDate={pubDate} readingTime={readingTime} />
+  </div>
+
+  <div class="flex flex-wrap items-center sm:justify-start justify-center gap-2 mb-6 md:mb-8">
     {authorName && (
       <BlogAuthor
         name={authorName}
@@ -50,4 +55,7 @@ const {
     )}
     <Listen />
   </div>
+  <div class="flex flex-wrap items-center sm:justify-start justify-center gap-2">
+    <CopyLink />
+    <Listen />
 </header>
