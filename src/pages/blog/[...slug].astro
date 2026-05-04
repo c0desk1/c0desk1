@@ -117,68 +117,70 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
   }}
   canonicalURL={canonicalURL}
 >
-  <Section size="sm">
-    <h2 class="sr-only">Navigasi Halaman</h2>
-    <Container size="md">
-      <Breadcrumb items={Breadcrumbs} />
-    </Container>
-  </Section>
-  
-  <article>
-    <h2 class="sr-only">{title}</h2>
-    
+  <Section size="md">
     <Section size="sm">
+      <h2 class="sr-only">Navigasi Halaman</h2>
       <Container size="md">
-        <h2 class="sr-only">Article Header</h2>
-        <PostHeader
-          title={title}
-          pubDate={pubDate}
-          readingTime={readingTime}
-          authorName={authorEntry?.data.name}
-          authorAvatar={authorEntry?.data.avatar}
-          authorTitle={authorEntry?.data.role}
-          authorSlug={authorEntry?.id}
-        />
+        <Breadcrumb items={Breadcrumbs} />
       </Container>
     </Section>
-
-    <Section size="sm" class="section-divider">
-      <Container size="md"> 
-        <div id="article">
-          <div id="article-cover" class="prose-custom w-full mb-8">
-            {image && (
-              <BlogFeaturedImage
-                image={image.src}
-                alt={image.alt || title}
-                caption={(image as any).caption}
-              />
-            )}
-          </div>
-          <div id="article-toc" class="hidden sticky top-15 z-50 my-6">
-            {tocHeadings.length > 0 && (
-              <TOC headings={tocHeadings} />
-            )}
-          </div>
-          <div id="article-content" class="prose-custom w-full">
-            <Content components={{ 
-              img: Image, 
-              hr: HR,
-              blockquote: Quote,
-              table: Table, 
-              }} 
+    <Section size="sm">
+      <Container size="md">
+        <h2 class="sr-only">{title}</h2>
+        <article>
+          <Section size="sm">
+            <h2 class="sr-only">Article Header</h2>
+            <PostHeader
+              title={title}
+              pubDate={pubDate}
+              readingTime={readingTime}
+              authorName={authorEntry?.data.name}
+              authorAvatar={authorEntry?.data.avatar}
+              authorTitle={authorEntry?.data.role}
+              authorSlug={authorEntry?.id}
             />
-          </div>
-        </div>
-      </Container>
+          </Section>
+          <Section size="sm" class="section-divider">
+            <div id="article">
+              <div id="article-cover" class="prose-custom w-full mb-8">
+                {image && (
+                  <BlogFeaturedImage
+                    image={image.src}
+                    alt={image.alt || title}
+                  caption={(image as any).caption}
+                  />
+                )}
+              </div>
+              <div id="article-toc" class="hidden sticky top-15 z-50 my-6">
+                {tocHeadings.length > 0 && (
+                  <TOC headings={tocHeadings} />
+                )}
+              </div>
+              <div id="article-content" class="prose-custom w-full">
+                <Content components={{ 
+                  img: Image, 
+                  hr: HR,
+                  blockquote: Quote,
+                  table: Table, 
+                }} />
+              </div>
+            </div>
+	      </Section>
+	    </article>
+	  </Container>
 	</Section>
-	
-    <Section size="md" class="section-divider">
-      <Container size="xl">
-        <h2 class="sr-only">Related Posts</h2>
-        <BackToTop align="center" />
+	<Section size="sm">
+	  <h2 class="sr-only">Navigasi Kembali ke atas halaman </h2>
+	  <Container size="lg">
+	    <BackToTop align="center" />
+	  </Container>
+	</Section>
+    <Section size="lg" class="section-divider">
+      <h2 class="sr-only">Related Posts</h2>
+      <Container size="lg">
         <BlogRelatedPosts posts={relatedPosts} />
       </Container>
     </Section>
-  </article>
+  </Section>
   <ReadingProgress />
 </BaseLayout>
