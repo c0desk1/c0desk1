@@ -2,7 +2,7 @@ import { Children, isValidElement, type ReactNode, type DetailsHTMLAttributes } 
 import Icon from '@/components/ui/Icon';
 
 const ChevronIcon = () => (
-  <Icon name="chevron-right">
+  <Icon name="chevron-right" />
 );
 
 interface Props extends DetailsHTMLAttributes<HTMLDetailsElement> {
