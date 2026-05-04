@@ -1,9 +1,7 @@
 ---
 // src/components/ui/CopyLink.astro
 import Icon from "./Icon.astro";
-import Tooltip from "./Tooltip.astro";
 ---
-<Tooltip text="Salin" position="top" delay={200}>
   <button
     id="copy-link-btn"
     aria-label="Salin tautan artikel"
@@ -24,7 +22,6 @@ import Tooltip from "./Tooltip.astro";
       </span>
     </div>
   </button>
-</Tooltip>
 
 <script>
   import { copyToClipboard } from '@/lib/utils';
