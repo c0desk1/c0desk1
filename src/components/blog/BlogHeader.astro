@@ -25,7 +25,7 @@ const {
 } = Astro.props;
 ---
 
-<header class="mx-auto max-w-3xl items-center sm:text-start text-center">
+<header class="mx-auto max-w-3xl sm:text-start text-center">
   <h1
     class="prose-custom
       text-3xl sm:text-4xl md:text-5xl
@@ -38,7 +38,7 @@ const {
   >
     {title}
   </h1>
-
+  <BlogMeta pubDate={pubDate} readingTime={readingTime} />
   <div class="flex items-center sm:justify-start justify-center gap-1 mb-4 md:mb-6">
     {authorName && (
       <BlogAuthor
@@ -50,6 +50,4 @@ const {
     )}
     <Listen />
   </div>
-  
-  <BlogMeta pubDate={pubDate} readingTime={readingTime} />
 </header>
