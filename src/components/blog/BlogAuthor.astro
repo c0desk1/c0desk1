@@ -22,11 +22,11 @@ const authorSlug = slug || siteConfig.author?.slug || "author";
 const optimizedAvatar = isCdnUrl(authorAvatar) ? cdnImage(authorAvatar, { w: 48, h: 48, q: 80 }) : authorAvatar;
 ---
 <Tooltip text='Penulis' delay={200}>
-  <a
-    href={`/author/${authorSlug}/`}
-    class="flex justify-start md:justify-center items-center gap-2 text-[13px] md:text-sm rounded-(--radius-full) hover:bg-(--bg-muted) p-2"
-    aria-label={`Author: ${authorName}`}
-  >
+<a
+  href={`/author/${authorSlug}/`}
+  class="flex justify-start md:justify-start items-center gap-2 text-[13px] md:text-sm rounded-(--radius-full) hover:bg-(--bg-muted) p-2"
+  aria-label={`Author: ${authorName}`}
+>
     {authorAvatar && (
       <Image
         src={optimizedAvatar}
