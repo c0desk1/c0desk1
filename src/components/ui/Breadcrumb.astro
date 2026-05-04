@@ -17,7 +17,7 @@ if (!items.length) return;
       <li class="bc-item">
         {i > 0 && (
           <span class="bc-sep" aria-hidden="true">
-            <Icon name="arrow-right" class="w-2 h-2" /> 
+            <Icon name="arrow-right" /> 
           </span>
         )}
         {i === items.length - 1 ? (
@@ -60,7 +60,7 @@ if (!items.length) return;
     margin: 0 0.1rem;
   }
 
-  .bc-sep svg {
+  .bc-sep Icon {
     width: 0.75rem;
     height: 0.75rem;
   }
