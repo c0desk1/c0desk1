@@ -278,7 +278,6 @@
 }
 
 /* ==================== IMAGES ==================== */
-
 .prose-custom img {
   max-width: 100%;
   height: auto;
@@ -294,41 +293,45 @@
 }
 
 /* ==================== BLOCKQUOTE ==================== */
-
 .prose-custom .quote {
-  margin: 2rem auto;
+  margin: 2.5rem auto;
 }
 
 .prose-custom .quote-body p {
   margin: 0;
-  font-size: 1.5rem;
-  line-height: 1.65;
+  font-size: 1.375rem;
+  font-style: italic;
+  line-height: 1.6;
   font-weight: 500;
   letter-spacing: -0.01em;
   color: var(--prose-fg);
   text-align: start;
 }
 
+.prose-custom .quote-body p + p {
+  margin-top: 1rem;
+}
+
 .prose-custom .quote-body p:first-of-type::before {
   content: '❝';
   margin-right: 0.25rem;
+  color: var(--prose-fg-subtle);
 }
 
 .prose-custom .quote-body p:last-of-type::after {
   content: '❞';
   margin-left: 0.25rem;
+  color: var(--prose-fg-subtle);
 }
 
 .prose-custom .quote-cite {
   display: block;
   margin-top: 1.5rem;
-
   width: fit-content;
   margin-left: auto;
-
   font-size: 0.875rem;
-  color: var(--prose-fg-muted);
-  opacity: 0.85;
+  color: var(--prose-fg-subtle);
+  font-style: normal;
 }
 
 .prose-custom .quote-cite::before {
