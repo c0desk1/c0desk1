@@ -4,12 +4,11 @@ import Icon from '../ui/Icon';
 interface Props extends HTMLAttributes<HTMLDivElement> {
   variant?: 'note' | 'info' | 'tip' | 'warning' | 'danger';
   defaultOpen?: boolean;
-  open?: boolean; // buat nangkap <details open>
+  open?: boolean;
   children: ReactNode;
 }
 
 export default function Details({ variant, defaultOpen, open, children,...props }: Props) {
-  // <details open> dari MDX bakal masuk ke prop `open`
   const [isOpen, setIsOpen] = useState(defaultOpen?? open?? false);
   const [height, setHeight] = useState<number | 'auto'>(isOpen? 'auto' : 0);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -18,7 +17,18 @@ export default function Details({ variant, defaultOpen, open, children,...props 
   const bodyContent: ReactNode[] = [];
 
   Children.forEach(children, (child) => {
-    if (isValidElement(child) && (child.type === 'summary' || child.props?.mdxType === 'summary')) {
+    if (!isValidElement(child)) {
+      bodyContent.push(child);
+      return;
+    }
+
+    // Cek 3 kemungkinan bentuk <summary> dari MDX
+    const isSummary =
+      child.type === 'summary' ||
+      child.props?.originalType === 'summary' ||
+      child.props?.mdxType === 'summary';
+
+    if (isSummary) {
       summaryContent = child.props.children;
     } else {
       bodyContent.push(child);
@@ -32,7 +42,8 @@ export default function Details({ variant, defaultOpen, open, children,...props 
       const timer = setTimeout(() => setHeight('auto'), 200);
       return () => clearTimeout(timer);
     } else {
-      setHeight(contentRef.current.scrollHeight);
+      const currentHeight = contentRef.current.scrollHeight;
+      setHeight(currentHeight);
       requestAnimationFrame(() => setHeight(0));
     }
   }, [isOpen]);
@@ -49,8 +60,8 @@ export default function Details({ variant, defaultOpen, open, children,...props 
         className="summary"
         aria-expanded={isOpen}
       >
-        <Icon name="chevron-right" className="details-icon w-5 h-5" />
-        {summaryContent}
+        <Icon name="chevron-right" className="details-icon" />
+        {summaryContent || 'Details'} {/* Fallback kalo summary kosong */}
       </button>
 
       <div
