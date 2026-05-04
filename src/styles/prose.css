@@ -679,21 +679,6 @@
   line-height: 1.65;
 }
 
-.prose-custom details[open] > *:not(summary) {
-  animation: detailsFadeSlide 0.18s ease-out;
-}
-
-@keyframes detailsFadeSlide {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .prose-custom details > *:not(summary) > :first-child {
   margin-top: 0;
 }
