@@ -117,14 +117,16 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
   }}
   canonicalURL={canonicalURL}
 >
+  <Section size="sm">
+    <h2 class="sr-only">Navigasi Halaman</h2>
+    <Container size="md">
+      <Breadcrumb items={Breadcrumbs} />
+    </Container>
+  </Section>
+  
   <article>
-    <h2 class="sr-only">{title}</h1>
-    <Section size="lg">
-      <h2 class="sr-only">Navigasi Halaman</h1>
-      <Container size="md">
-        <Breadcrumb items={Breadcrumbs} />
-      </Container>
-    </Section>
+    <h2 class="sr-only">{title}</h2>
+    
     <Section size="sm">
       <Container size="md">
         <h2 class="sr-only">Article Header</h2>
@@ -168,7 +170,8 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
           </div>
         </div>
       </Container>
-	  </Section>
+	</Section>
+	
     <Section size="md" class="section-divider">
       <Container size="xl">
         <h2 class="sr-only">Related Posts</h2>
