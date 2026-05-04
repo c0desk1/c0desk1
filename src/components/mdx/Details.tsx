@@ -1,5 +1,5 @@
 import { Children, isValidElement, type ReactNode, type DetailsHTMLAttributes } from 'react';
-import Icon from '../ui/Icon';
+import Icon from '@/components/ui/Icon';
 
 interface Props extends DetailsHTMLAttributes<HTMLDetailsElement> {
   children: ReactNode;
@@ -29,7 +29,7 @@ export default function Details({ children,...props }: Props) {
     if (isSummary) {
       summaryNode = (
         <>
-          <Icon name="chevron-right" className="details-icon" />
+          <Icon name="chevron-right" className="details-icon w-4 h-4" />
           {child.props.children}
         </>
       );
