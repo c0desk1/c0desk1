@@ -10,35 +10,54 @@ interface Props {
 const { titles = ["Code"] } = Astro.props;
 ---
 
-<div class="code-group not-prose mx-auto max-w-3xl my-8 overflow-hidden border border-(--prose-border) bg-(--prose-surface)">
-  <div class="flex items-center justify-between border-b border-(--prose-border) px-2">
-    <div class="flex overflow-x-auto no-scrollbar">
-      {titles.map((title, index) => (
-        <button
-          data-code-tab={index}
-          class="
-            relative px-4 py-2.5
-            text-xs font-semibold tracking-wide
-            text-(--prose-fg-subtle) hover:text-(--prose-fg)
-            data-[active=true]:text-(--prose-fg)
-            transition-colors duration-150
-          "
-        >
-          {title}
-          <span class="absolute bottom-0 left-0 h-0.5 w-full rounded-full scale-x-0 bg-(--prose-accent) transition-transform duration-200 [button[data-active=true]>&]:scale-x-100" />
-        </button>
-      ))}
+<div class="code-group not-prose mx-auto max-w-3xl my-8 overflow-hidden border-2 border-(--prose-border) bg-(--prose-surface) shadow-[inset_0_0_10px_rgba(0,0,0,0.3),0_10px_20px_-5px_rgba(0,0,0,0.2)]">
+  <!-- Industrial header with rivet pattern -->
+  <div class="relative border-b-2 border-(--prose-border) bg-(--prose-surface-hover) px-2">
+    <div class="absolute inset-0 pointer-events-none bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(0,0,0,0.05)_10px,rgba(0,0,0,0.05)_20px)]"></div>
+    
+    <div class="flex items-center justify-between">
+      <div class="flex overflow-x-auto no-scrollbar">
+        {titles.map((title, index) => (
+          <button
+            data-code-tab={index}
+            class="
+              relative px-5 py-2.5
+              text-xs font-bold tracking-wider font-mono
+              text-(--prose-fg-subtle) hover:text-(--prose-fg) hover:bg-(--prose-surface)
+              data-[active=true]:text-(--prose-accent) data-[active=true]:bg-(--prose-surface)
+              transition-all duration-100
+              border-r-2 border-(--prose-border) last:border-r-0
+            "
+          >
+            <span class="relative z-10">[{title}]</span>
+            <span class="absolute bottom-0 left-0 h-0.5 w-full bg-(--prose-accent) scale-x-0 transition-transform duration-150 [button[data-active=true]>&]:scale-x-100"></span>
+          </button>
+        ))}
+      </div>
+      
+      <button
+        class="copy-button relative p-2 ml-2 text-(--prose-fg-subtle) hover:text-(--prose-accent) active:scale-95 cursor-pointer transition-all duration-100 border-2 border-(--prose-border) hover:border-(--prose-accent) bg-(--prose-surface)"
+        aria-label="Copy code"
+      >
+        <Icon name="copy" class="copy-icon w-4 h-4" />
+        <Icon name="check" class="check-icon w-4 h-4 hidden text-(--prose-accent)" />
+      </button>
     </div>
-    <button
-      class="copy-button p-2 text-(--prose-fg-subtle) hover:text-(--prose-accent) cursor-pointer transition-colors duration-150"
-      aria-label="Copy code"
-    >
-      <Icon name="copy" class="copy-icon w-4 h-4" />
-      <Icon name="check" class="check-icon w-4 h-4 hidden text-(--prose-accent)" />
-    </button>
   </div>
-  <div class="code-group-content">
-    <slot />
+  
+  <div class="code-group-content relative">
+    <!-- Industrial scanline effect -->
+    <div class="absolute inset-0 pointer-events-none bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(0,0,0,0.03)_2px,rgba(0,0,0,0.03)_4px)]"></div>
+    
+    <!-- Corner accents -->
+    <div class="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-(--prose-accent) z-10 pointer-events-none opacity-60"></div>
+    <div class="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-(--prose-accent) z-10 pointer-events-none opacity-60"></div>
+    <div class="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-(--prose-accent) z-10 pointer-events-none opacity-60"></div>
+    <div class="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-(--prose-accent) z-10 pointer-events-none opacity-60"></div>
+    
+    <div class="[&_pre]:m-0! [&_pre]:rounded-none! [&_pre]:border-none! [&_pre]:bg-transparent! [&_pre]:relative! [&_pre]:z-0">
+      <slot />
+    </div>
   </div>
 </div>
 
@@ -52,22 +71,34 @@ const { titles = ["Code"] } = Astro.props;
     scrollbar-width: none; 
   }
   
-  /* Hanya tambahkan ini - tidak override yang sudah ada di prose-custom */
-  .code-group-content > :not(:first-child) { 
+  .code-group-content > :global(*:not(:first-child)) { 
     display: none; 
   }
   
-  /* Tambahan untuk mobile tap */
+  /* Industrial active tab indicator - arrow */
+  [data-code-tab][data-active="true"]::before {
+    content: "▶";
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 6px;
+    color: var(--prose-accent);
+    opacity: 0.8;
+  }
+  
+  /* Mobile tap feedback */
   .copy-button, [data-code-tab] {
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
   }
   
-  /* Tooltip hanya untuk device dengan hover */
+  [data-code-tab]:active {
+    transform: translateY(1px);
+  }
+  
+  /* Tooltip hanya untuk device dengan hover (desktop) */
   @media (hover: hover) and (pointer: fine) {
-    .copy-button {
-      position: relative;
-    }
     .copy-button:hover::after {
       content: "copy";
       position: absolute;
@@ -76,14 +107,14 @@ const { titles = ["Code"] } = Astro.props;
       transform: translateX(-50%);
       padding: 4px 8px;
       background: var(--prose-surface);
-      border: 1px solid var(--prose-border);
-      border-radius: var(--prose-radius-sm);
+      border: 1px solid var(--prose-accent);
+      border-radius: 4px;
       font-size: 10px;
-      font-family: var(--prose-font-mono);
-      color: var(--prose-fg-subtle);
+      font-family: monospace;
+      color: var(--prose-accent);
       white-space: nowrap;
       pointer-events: none;
-      z-index: 20;
+      z-index: 30;
     }
   }
 </style>
@@ -106,7 +137,13 @@ const { titles = ["Code"] } = Astro.props;
         });
       };
 
-      tabs.forEach((tab, i) => tab.addEventListener('click', () => activate(i)));
+      tabs.forEach((tab, i) => {
+        tab.addEventListener('click', () => activate(i));
+        tab.addEventListener('touchend', (e) => {
+          e.preventDefault();
+          activate(i);
+        });
+      });
 
       copyBtn?.addEventListener('click', async () => {
         const active = Array.from(contents).find(c => (c as HTMLElement).style.display !== 'none');
