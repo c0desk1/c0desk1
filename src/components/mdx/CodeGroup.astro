@@ -54,13 +54,38 @@ const { titles = ["Code"] } = Astro.props;
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   
-  /* Perbaikan utama: pastikan content tampil */
-  .code-group-content > * {
-    display: block !important;
+  /* Reset prose-custom yang mengganggu */
+  .code-group-content pre {
+    font-family: inherit !important;
+    background-color: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 1rem !important;
+    margin: 0 !important;
+    overflow-x: auto !important;
+    scrollbar-width: thin !important;
   }
   
-  .code-group-content > [data-hidden="true"] {
+  /* Sembunyikan copy button bawaan prose-custom */
+  .code-group-content pre .copy-btn {
     display: none !important;
+  }
+  
+  /* Style scrollbar untuk pre di dalam code-group */
+  .code-group-content pre::-webkit-scrollbar {
+    height: 6px;
+  }
+  .code-group-content pre::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .code-group-content pre::-webkit-scrollbar-thumb {
+    background: var(--prose-border, #cbd5e1);
+    border-radius: 3px;
+  }
+  
+  /* Kontrol visibility content */
+  .code-group-content > * {
+    display: block;
   }
   
   [data-code-tab][data-active="true"]::before {
@@ -95,30 +120,21 @@ const { titles = ["Code"] } = Astro.props;
       if (!tabs.length || !contents.length) return;
       
       function activate(index) {
-        // Update tabs
         tabs.forEach((tab, i) => {
           tab.setAttribute('data-active', i === index);
         });
         
-        // Update contents - langsung set style display
         contents.forEach((content, i) => {
-          if (i === index) {
-            (content as HTMLElement).style.display = 'block';
-          } else {
-            (content as HTMLElement).style.display = 'none';
-          }
+          (content as HTMLElement).style.display = i === index ? 'block' : 'none';
         });
       }
       
-      // Add click handlers
       tabs.forEach((tab, i) => {
         tab.addEventListener('click', () => activate(i));
       });
       
-      // Copy handler
       if (copyBtn) {
         copyBtn.addEventListener('click', async () => {
-          // Cari index yang aktif
           let activeIndex = 0;
           tabs.forEach((tab, i) => {
             if (tab.getAttribute('data-active') === 'true') {
@@ -143,7 +159,6 @@ const { titles = ["Code"] } = Astro.props;
         });
       }
       
-      // Aktifkan tab pertama
       activate(0);
     });
   }
