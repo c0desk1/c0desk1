@@ -2,26 +2,27 @@
 // src/components/ui/CopyLink.astro
 import Icon from "./Icon.astro";
 ---
-  <button
-    id="copy-link-btn"
-    aria-label="Salin tautan artikel"
-    aria-live="polite"
-    class="relative p-1.5 rounded-(--radius-full) text-(--accent-dim) hover:bg-(--bg-muted) group active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-200"
-    data-url={Astro.url.href}>
-    <div class="flex items-center justify-center gap-1.5">
-      <div class="relative w-4 h-4 items-center">
-        <span id="icon-copy" class="absolute inset-0 w-full h-full transition-all duration-200">
-          <Icon name="link" class="w-4 h-4" />
-        </span>
-        <span id="icon-check" class="absolute inset-0 w-full h-full opacity-0 scale-75 transition-all duration-200">
-          <Icon name="check" class="w-4 h-4" />
-        </span>
-      </div>
-      <span id="copy-text" class="text-[13px] md:text-sm font-medium">
-        Salin URL
+
+<button
+  id="copy-link-btn"
+  aria-label="Salin tautan artikel"
+  aria-live="polite"
+  class="relative p-1.5 rounded-(--radius-full) text-(--accent-dim) hover:bg-(--bg-muted) group active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-200"
+  data-url={Astro.url.href}>
+  <div class="flex items-center justify-center gap-1.5">
+    <div class="relative w-4 h-4 items-center">
+      <span id="icon-copy" class="absolute inset-0 w-full h-full transition-all duration-200">
+        <Icon name="link" class="w-4 h-4" />
+      </span>
+      <span id="icon-check" class="absolute inset-0 w-full h-full opacity-0 scale-75 transition-all duration-200">
+        <Icon name="check" class="w-4 h-4" />
       </span>
     </div>
-  </button>
+    <span id="copy-text" class="text-[13px] md:text-sm font-medium">
+      Salin URL
+    </span>
+  </div>
+</button>
 
 <script>
   import { copyToClipboard } from '@/lib/utils';
@@ -47,9 +48,9 @@ import Icon from "./Icon.astro";
       if (!toast) return;
 
       if (success) {
-        toast.show('Link copied to clipboard!', { type: 'success', duration: 2000 });
+        toast.show('URL disalin ke Clipboard!', { type: 'success', duration: 2000 });
       } else {
-        toast.show('Failed to copy link. Please try again.', { type: 'error', duration: 2000 });
+        toast.show('Gagal menyalin URL, silahkan coba lagi.', { type: 'error', duration: 2000 });
       }
     };
 
@@ -60,12 +61,12 @@ import Icon from "./Icon.astro";
       if (success) {
         copyIcon.style.cssText = 'opacity:0;transform:scale(0.75)';
         checkIcon.style.cssText = 'opacity:1;transform:scale(1)';
-        text.textContent = 'Copied!';
-        btn.setAttribute('aria-label', 'Link copied successfully');
+        text.textContent = 'Tersalin!';
+        btn.setAttribute('aria-label', 'Url berhasil disalin');
         showToastMessage(true);
       } else {
-        text.textContent = 'Failed';
-        btn.setAttribute('aria-label', 'Failed to copy link');
+        text.textContent = 'Gagal';
+        btn.setAttribute('aria-label', 'Gagal menyalin URL');
         showToastMessage(false);
       }
 
@@ -73,7 +74,7 @@ import Icon from "./Icon.astro";
         copyIcon.style.cssText = 'opacity:1;transform:scale(1)';
         checkIcon.style.cssText = 'opacity:0;transform:scale(0.75)';
         text.textContent = 'Salin URL';
-        btn.setAttribute('aria-label', 'Copy article link');
+        btn.setAttribute('aria-label', 'Salin URL artikel');
         btn.disabled = false;
         isCopying = false;
       }, 1500);
@@ -98,7 +99,7 @@ import Icon from "./Icon.astro";
       copyIcon.style.cssText = 'opacity:1;transform:scale(1)';
       checkIcon.style.cssText = 'opacity:0;transform:scale(0.75)';
       text.textContent = 'Salin URL';
-      btn.setAttribute('aria-label', 'Copy article link');
+      btn.setAttribute('aria-label', 'Salin Url artikel');
     });
   })();
 </script>
