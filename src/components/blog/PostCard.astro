@@ -41,13 +41,13 @@ excerpt = generateExcerpt(post.body || '', 140);
 
 <a
   href={postUrl}
-  aria-label={`Read article: ${title}`}
-  class="group flex flex-col h-full rounded-(--radius-xl) border border-(--border) p-4 md:p-6 hover:border-(--border-strong) focus:outline-none focus:ring-2 focus:ring-(--border-strong)">
-  <div class="flex items-center justify-between mb-6">
-    <span class="text-[13px] text-(--fg-subtle) tracking-tight group-hover:text-(--fg)">
+  aria-label={`Baca artikel: ${title}`}
+  class="group flex flex-col h-full rounded-(--radius-xl) border-none md:border border-(--border) p-4 md:p-6 hover:border-(--border-strong) focus:outline-none focus:ring-2 focus:ring-(--border-strong)">
+  <div class="flex items-center justify-between mb-6 text-[13px] text-(--fg-subtle) group-hover:text-(--fg)">
+    <span>
       {categoryName}
     </span>
-    <time datetime={pubDateISO} class="text-[13px] text-(--fg-subtle)">
+    <time datetime={pubDateISO}>
       {pubDateDisplay}
     </time>
   </div>
@@ -59,7 +59,7 @@ excerpt = generateExcerpt(post.body || '', 140);
       {excerpt}
     </p>
   </div>
-  <div class="mt-auto flex items-center gap-3 pt-6">
+  <div class="mt-auto flex items-center gap-2 pt-6">
     {authorAvatar && (
       <Image
         src={optimizedAvatar}
@@ -68,7 +68,7 @@ excerpt = generateExcerpt(post.body || '', 140);
         height={48}
         loading= eager
         decoding= auto
-        class="w-6 h-6 rounded-full border border-(--border) object-cover"
+        class="w-6 h-6 rounded-full border border-(--border-strong) object-cover"
       />
     )}
     <span class="text-[13px] text-(--fg-subtle)">{authorName}</span>
