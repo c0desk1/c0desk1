@@ -1,7 +1,7 @@
 ---
 // src/components/blog/BlogHeader.astro
 import BlogMeta from './PostMeta.astro';
-import BlogAuthor from '@/components/blog/BlogAuthor.astro';
+import BlogAuthor from './PostAuthor.astro';
 import Listen from "@/components/ui/ListenButton.astro";
 import CopyLink from "@/components/ui/CopyButton.astro";
 import { cn } from "@/lib/utils";
@@ -47,7 +47,7 @@ const {
       <BlogMeta pubDate={pubDate} readingTime={readingTime} />
     </div>
 
-    <div class="flex flex-col md:flex-row justify-start md:justify-between gap-2 items-center">
+    <div class="flex flex-wrap justify-between md:justify-center items-center">
       {authorName && (
         <div class="flex justify-start">
           <BlogAuthor
