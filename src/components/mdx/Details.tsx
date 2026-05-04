@@ -1,21 +1,12 @@
 import { Children, isValidElement, type ReactNode, type DetailsHTMLAttributes } from 'react';
+import Icon from '@/components/ui/Icon';
 
 const ChevronIcon = () => (
-  <svg
-    className="details-icon"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="m9 18 6-6-6-6" />
-  </svg>
+  <Icon name="chevron-right">
 );
 
 interface Props extends DetailsHTMLAttributes<HTMLDetailsElement> {
-  summary?: string; // prop opsional kayak Astro
+  summary?: string;
   children: ReactNode;
 }
 
@@ -31,31 +22,58 @@ function isSummaryElement(child: any): boolean {
 }
 
 export default function Details({ summary: propSummary, children,...props }: Props) {
-  let summaryText = propSummary;
-  const bodyNodes: ReactNode[] = [];
-  let foundSummary = false;
+  let summaryText = propSummary || 'Details';
+  let contentNodes: ReactNode[] = [];
+  let hasSummaryChild = false;
 
-  // 1. Cek kalo ada <summary> di children
-  Children.forEach(children, (child) => {
-    if (!foundSummary && isSummaryElement(child) && isValidElement(child)) {
-      // Ambil text dari <summary>Judul</summary>
+  const childArray = Children.toArray(children);
+
+  // 1. Cek ada <summary> ga di children
+  childArray.forEach((child) => {
+    if (!hasSummaryChild && isSummaryElement(child) && isValidElement(child)) {
       summaryText = child.props.children;
-      foundSummary = true;
+      hasSummaryChild = true;
     } else {
-      bodyNodes.push(child);
+      contentNodes.push(child);
     }
   });
 
-  // 2. Kalo ga ada prop & ga ada <summary>, ambil baris pertama kayak Astro
-  if (!summaryText &&!foundSummary) {
-    const childArray = Children.toArray(children);
-    if (childArray.length > 0 && typeof childArray[0] === 'string') {
-      const lines = childArray[0].trim().split('\n');
-      summaryText = lines[0];
-      bodyNodes.push(lines.slice(1).join('\n'));
-      bodyNodes.push(...childArray.slice(1));
+  // 2. Kalo ga ada prop & ga ada <summary>, ambil dari text pertama
+  if (!propSummary &&!hasSummaryChild) {
+    // Gabungin semua text node dulu, MDX suka mecah2
+    let fullText = '';
+    const tempNodes: ReactNode[] = [];
+
+    childArray.forEach((child) => {
+      if (typeof child === 'string') {
+        fullText += child;
+      } else {
+        tempNodes.push(child);
+      }
+    });
+
+    if (fullText.trim()) {
+      const lines = fullText.trim().split('\n');
+      summaryText = lines[0].trim();
+      const remainingText = lines.slice(1).join('\n').trim();
+
+      contentNodes = [];
+      if (remainingText) contentNodes.push(remainingText);
+      contentNodes.push(...tempNodes);
     } else {
-      bodyNodes.push(...childArray);
+      contentNodes = tempNodes;
+    }
+  }
+
+  // 3. Kalo pake prop, pastiin baris pertama di children ga sama kayak summary
+  if (propSummary && contentNodes.length > 0 && typeof contentNodes[0] === 'string') {
+    const firstLine = contentNodes[0].trim().split('\n')[0].trim();
+    if (firstLine === propSummary.trim()) {
+      // Buang baris pertama yg duplikat
+      const lines = contentNodes[0].trim().split('\n');
+      const rest = lines.slice(1).join('\n').trim();
+      contentNodes[0] = rest || null;
+      contentNodes = contentNodes.filter(Boolean);
     }
   }
 
@@ -63,9 +81,9 @@ export default function Details({ summary: propSummary, children,...props }: Pro
     <details className="details" {...props}>
       <summary>
         <ChevronIcon />
-        {summaryText || 'Details'}
+        {summaryText}
       </summary>
-      {bodyNodes.length > 0 && <>{bodyNodes}</>}
+      {contentNodes.length > 0 && <>{contentNodes}</>}
     </details>
   );
 }
