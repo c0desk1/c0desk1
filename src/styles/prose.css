@@ -54,12 +54,7 @@
 
 /* ==================== HEADINGS ==================== */
 
-.prose-custom h1,
-.prose-custom h2,
-.prose-custom h3,
-.prose-custom h4,
-.prose-custom h5,
-.prose-custom h6 {
+.prose-custom :where(h1, h2, h3, h4, h5, h6) {
   font-family: var(--prose-font-sans);
   font-weight: 600;
   letter-spacing: -0.03em;
@@ -69,26 +64,6 @@
   margin-bottom: 0;
   scroll-margin-top: 56px;
 }
-
-.prose-custom ul:first-child,
-.prose-custom ol:first-child,
-.prose-custom p:first-child,
-.prose-custom h1:first-child,
-.prose-custom h2:first-child,
-.prose-custom h3:first-child,
-.prose-custom h4:first-child,
-.prose-custom h5:first-child,
-.prose-custom h6:first-child { margin-top: 0 !important; }
-
-.prose-custom ul:last-child,
-.prose-custom ol:last-child,
-.prose-custom p:last-child,
-.prose-custom h1:last-child,
-.prose-custom h2:last-child,
-.prose-custom h3:last-child,
-.prose-custom h4:last-child,
-.prose-custom h5:last-child,
-.prose-custom h6:last-child { margin-bottom: 0 !important; }
 
 .prose-custom h1 {
   font-size: clamp(2rem, 5vw, 3rem);
@@ -104,14 +79,12 @@
   margin-top: 3rem;
   margin-bottom: 0.875rem;
   padding-bottom: 0.5rem;
-  position: relative;
 }
 
 .prose-custom h3 {
   font-size: clamp(1.0625rem, 2vw, 1.25rem);
   margin-top: 2rem;
   margin-bottom: 0.5rem;
-  position: relative;
 }
 
 .prose-custom h4 {
@@ -149,10 +122,10 @@
 
 .prose-custom h2::after,
 .prose-custom h3::after {
-  content: '';
+  content: '＃';
   display: inline-block;
   margin-left: 0.5rem;
-  color: var(--prose-border);
+  color: var(--prose-fg-subtle);
   font-weight: 400;
   font-size: 0.875em;
   vertical-align: middle;
@@ -162,8 +135,6 @@
 
 .prose-custom h2:hover::after,
 .prose-custom h3:hover::after {
-  content: '＃';
-  color: var(--prose-fg-subtle);
   opacity: 1;
 }
 
