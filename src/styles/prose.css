@@ -54,13 +54,16 @@
 
 /* ==================== HEADINGS ==================== */
 
+.prose-custom :where(h1, h2, h3, h4, h5, h6, p, ul, ol, blockquote, pre, hr, table) {
+  margin-top: 0;
+}
+
 .prose-custom :where(h1, h2, h3, h4, h5, h6) {
   font-family: var(--prose-font-sans);
   font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 1.2;
   color: var(--prose-fg);
-  margin-top: 0;
   margin-bottom: 0;
   scroll-margin-top: 56px;
 }
@@ -146,9 +149,9 @@
   font-size: 1rem;
   line-height: 1.7;
   color: var(--prose-fg-muted);
-  margin-top: 0;
   margin-bottom: 1.5rem;
   max-width: 72ch;
+  text-wrap: pretty;
 }
 
 .prose-custom .prose-wide p {
