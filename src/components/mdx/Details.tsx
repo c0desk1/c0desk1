@@ -1,51 +1,54 @@
-import { type ReactNode, type DetailsHTMLAttributes, Children, isValidElement, cloneElement } from 'react';
-import Icon from '@/components/ui/Icon';
+import { useState, useRef, useEffect, Children, isValidElement, type ReactNode } from 'react';
+import Icon from '../ui/Icon';
 
-interface Props extends DetailsHTMLAttributes<HTMLDetailsElement> {
-  variant?: 'default' | 'faq' | 'callout';
+interface Props {
+  variant?: 'note' | 'info' | 'tip' | 'warning' | 'danger';
+  defaultOpen?: boolean;
   children: ReactNode;
 }
 
-export default function Details({ variant = 'default', children,...props }: Props) {
-  const styles = {
-    default: 'border-(--prose-border) open:bg-(--prose-surface)/50',
-    faq: 'border-transparent border-b-(--prose-border) rounded-none',
-    callout: 'border-blue-500/30 bg-blue-500/5',
-  };
+export default function Details({ variant, defaultOpen = false, children }: Props) {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+  const [height, setHeight] = useState(0);
+  const contentRef = useRef<HTMLDivElement>(null);
 
-  let summaryNode: ReactNode = null;
-  const contentNodes: ReactNode[] = [];
+  // Pisahin <summary> sama konten
+  let summaryContent: ReactNode = null;
+  const bodyContent: ReactNode[] = [];
 
   Children.forEach(children, (child) => {
     if (isValidElement(child) && child.type === 'summary') {
-      summaryNode = cloneElement(child, {
-        className: `flex cursor-pointer select-none items-center gap-2 p-3 font-medium hover:bg-[var(--prose-surface)] [&::-webkit-details-marker]:hidden ${child.props.className?? ''}`,
-        children: (
-          <>
-            <Icon
-              name="chevron-right"
-              className="h-4 w-4 shrink-0 transition-transform duration-200 group-open:rotate-90"
-            />
-            {child.props.children}
-          </>
-        ),
-      });
+      summaryContent = child.props.children;
     } else {
-      contentNodes.push(child);
+      bodyContent.push(child);
     }
   });
 
+  // Update height pas buka-tutup
+  useEffect(() => {
+    if (!contentRef.current) return;
+    setHeight(isOpen? contentRef.current.scrollHeight : 0);
+  }, [isOpen, children]); // children masuk biar update kalo konten dinamis
+
+  const toggle = () => setIsOpen(!isOpen);
+
   return (
     <details
-      {...props}
-      className={`details group my-4 rounded-lg border ${styles[variant]} ${props.className?? ''}`}
+      open={isOpen}
+      data-callout={variant}
+      className={variant? 'callout' : ''}
     >
-      {summaryNode}
-      <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-200 ease-out group-open:grid-rows-[1fr]">
-        <div className="overflow-hidden">
-          <div className="border-t border-[var(--prose-border)] p-3 pt-2">
-            {contentNodes}
-          </div>
+      <summary onClick={(e) => { e.preventDefault(); toggle(); }}>
+        <Icon name="chevron-right" className="details-icon" />
+        {summaryContent}
+      </summary>
+
+      <div
+        style={{ height: `${height}px` }}
+        className="overflow-hidden transition-[height] duration-200 ease-out"
+      >
+        <div ref={contentRef}>
+          {bodyContent}
         </div>
       </div>
     </details>
