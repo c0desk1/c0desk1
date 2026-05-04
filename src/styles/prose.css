@@ -632,6 +632,20 @@
               box-shadow var(--prose-transition);
 }
 
+.prose-custom.details-content {
+  padding: 1rem;
+  color: var(--prose-fg-muted);
+  line-height: 1.65;
+}
+
+.prose-custom.details-content > :first-child {
+  margin-top: 0;
+}
+
+.prose-custom.details-content > :last-child {
+  margin-bottom: 0;
+}
+
 .prose-custom details:hover {
   border-color: var(--prose-border-hover, var(--prose-border));
   box-shadow: 0 1px 0 rgba(0,0,0,0.03);
