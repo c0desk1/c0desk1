@@ -23,7 +23,7 @@ const optimizedAvatar = isCdnUrl(authorAvatar) ? cdnImage(authorAvatar, { w: 48,
 ---
 
 <a href={`/author/${authorSlug}/`}
-  class="flex items-center gap-2 text-[13px] md:text-sm rounded-(--radius-full) hover:bg-(--bg-muted) p-2"
+  class="flex items-center gap-2 text-[13px] md:text-sm"
   aria-label={`Author: ${authorName}`}
   >
   {authorAvatar && (
