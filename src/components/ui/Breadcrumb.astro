@@ -36,6 +36,7 @@ if (!items.length) return;
     display: flex;
     justify-content: center;
     padding-bottom: 2rem;
+    padding-top: 2rem;
   }
 
   .bc-list {
@@ -92,4 +93,11 @@ if (!items.length) return;
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+@media (min-width: 768px) {
+  .bc-nav {
+    justify-content: start;
+  }
+}
+
 </style>
