@@ -10,159 +10,126 @@ interface Props {
 const { titles = ["Code"] } = Astro.props;
 ---
 
-<div class="code-group not-prose mx-auto max-w-3xl my-8 overflow-hidden border-2 border-[#e5e5e5] dark:border-[#3a3a3a] bg-[#fafafa] dark:bg-[#1a1a1a]">
-  <div class="relative border-b-2 border-[#e5e5e5] dark:border-[#3a3a3a] bg-[#f0f0f0] dark:bg-[#2d2d2d] px-2">
-    <div class="flex items-center justify-between">
-      <div class="flex overflow-x-auto no-scrollbar snap-x snap-mandatory">
-        {titles.map((title, index) => (
-          <button
-            data-code-tab={index}
-            class="
-              snap-start shrink-0
-              px-4 py-3 sm:px-5 sm:py-3
-              text-xs font-bold tracking-wider font-mono
-              text-[#666666] dark:text-[#8a8a8a] 
-              hover:bg-[#e5e5e5] dark:hover:bg-[#3a3a3a]
-              data-[active=true]:text-[#d94a1a] dark:data-[active=true]:text-[#ff6b35] 
-              data-[active=true]:bg-[#e8e8e8] dark:data-[active=true]:bg-[#252525]
-              border-r-2 border-[#e5e5e5] dark:border-[#3a3a3a] last:border-r-0
-              cursor-pointer
-            "
-          >
-            <span class="relative z-10 text-nowrap">[{title}]</span>
-            <span class="absolute inset-x-0 bottom-0 h-0.5 bg-[#d94a1a] dark:bg-[#ff6b35] scale-x-0 transition-transform duration-150 [button[data-active=true]>&]:scale-x-100"></span>
-          </button>
-        ))}
-      </div>
-      
-      <button
-        class="copy-button relative shrink-0 px-2 py-2 sm:px-3 sm:py-2 ml-2 text-[#666666] dark:text-[#8a8a8a] cursor-pointer border-2 border-[#e5e5e5] dark:border-[#3a3a3a] bg-[#f0f0f0] dark:bg-[#252525]"
-        aria-label="Copy code"
-      >
-        <Icon name="copy" class="copy-icon w-4 h-4" />
-        <Icon name="check" class="check-icon w-4 h-4 hidden" />
-      </button>
+<div class="code-group not-prose mx-auto max-w-3xl my-8 overflow-hidden border border-(--prose-border) bg-(--prose-surface)">
+  <div class="flex items-center justify-between border-b border-(--prose-border) px-2">
+    <div class="flex overflow-x-auto no-scrollbar">
+      {titles.map((title, index) => (
+        <button
+          data-code-tab={index}
+          class="
+            relative px-4 py-2.5
+            text-xs font-semibold tracking-wide
+            text-(--prose-fg-subtle) hover:text-(--prose-fg)
+            data-[active=true]:text-(--prose-fg)
+            transition-colors duration-150
+          "
+        >
+          {title}
+          <span class="absolute bottom-0 left-0 h-0.5 w-full rounded-full scale-x-0 bg-(--prose-accent) transition-transform duration-200 [button[data-active=true]>&]:scale-x-100" />
+        </button>
+      ))}
     </div>
+    <button
+      class="copy-button p-2 text-(--prose-fg-subtle) hover:text-(--prose-accent) cursor-pointer transition-colors duration-150"
+      aria-label="Copy code"
+    >
+      <Icon name="copy" class="copy-icon w-4 h-4" />
+      <Icon name="check" class="check-icon w-4 h-4 hidden text-(--prose-accent)" />
+    </button>
   </div>
-  
   <div class="code-group-content">
     <slot />
   </div>
 </div>
 
 <style>
-  .no-scrollbar::-webkit-scrollbar { display: none; }
-  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-  
-  /* Reset prose-custom yang mengganggu */
-  .code-group-content pre {
-    font-family: inherit !important;
-    background-color: transparent !important;
-    border: none !important;
-    border-radius: 0 !important;
-    padding: 1rem !important;
-    margin: 0 !important;
-    overflow-x: auto !important;
-    scrollbar-width: thin !important;
+  .no-scrollbar::-webkit-scrollbar { 
+    display: none; 
   }
   
-  /* Sembunyikan copy button bawaan prose-custom */
-  .code-group-content pre .copy-btn {
-    display: none !important;
+  .no-scrollbar { 
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
   }
   
-  /* Style scrollbar untuk pre di dalam code-group */
-  .code-group-content pre::-webkit-scrollbar {
-    height: 6px;
-  }
-  .code-group-content pre::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .code-group-content pre::-webkit-scrollbar-thumb {
-    background: var(--prose-border, #cbd5e1);
-    border-radius: 3px;
+  /* Hanya tambahkan ini - tidak override yang sudah ada di prose-custom */
+  .code-group-content > :not(:first-child) { 
+    display: none; 
   }
   
-  /* Kontrol visibility content */
-  .code-group-content > * {
-    display: block;
-  }
-  
-  [data-code-tab][data-active="true"]::before {
-    content: "▶";
-    position: absolute;
-    left: 6px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 7px;
-    color: #d94a1a;
-    opacity: 0.7;
-  }
-  
-  @media (prefers-color-scheme: dark) {
-    [data-code-tab][data-active="true"]::before { color: #ff6b35; }
-  }
-  
+  /* Tambahan untuk mobile tap */
   .copy-button, [data-code-tab] {
     -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  
+  /* Tooltip hanya untuk device dengan hover */
+  @media (hover: hover) and (pointer: fine) {
+    .copy-button {
+      position: relative;
+    }
+    .copy-button:hover::after {
+      content: "copy";
+      position: absolute;
+      bottom: -28px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 4px 8px;
+      background: var(--prose-surface);
+      border: 1px solid var(--prose-border);
+      border-radius: var(--prose-radius-sm);
+      font-size: 10px;
+      font-family: var(--prose-font-mono);
+      color: var(--prose-fg-subtle);
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 20;
+    }
   }
 </style>
 
 <script>
-  function initCodeGroup() {
-    const groups = document.querySelectorAll('.code-group');
-    
-    groups.forEach(group => {
-      const tabs = group.querySelectorAll('[data-code-tab]');
-      const contents = Array.from(group.querySelectorAll('.code-group-content > *'));
-      const copyBtn = group.querySelector('.copy-button');
-      
-      if (!tabs.length || !contents.length) return;
-      
-      function activate(index) {
+  const initCodeGroup = () => {
+    document.querySelectorAll<HTMLElement>('.code-group').forEach(group => {
+      const tabs = group.querySelectorAll<HTMLButtonElement>('[data-code-tab]');
+      const contents = group.querySelector('.code-group-content')?.children;
+      const copyBtn = group.querySelector<HTMLButtonElement>('.copy-button');
+
+      if (!tabs.length || !contents) return;
+
+      const activate = (index: number) => {
         tabs.forEach((tab, i) => {
-          tab.setAttribute('data-active', i === index);
-        });
-        
-        contents.forEach((content, i) => {
-          (content as HTMLElement).style.display = i === index ? 'block' : 'none';
-        });
-      }
-      
-      tabs.forEach((tab, i) => {
-        tab.addEventListener('click', () => activate(i));
-      });
-      
-      if (copyBtn) {
-        copyBtn.addEventListener('click', async () => {
-          let activeIndex = 0;
-          tabs.forEach((tab, i) => {
-            if (tab.getAttribute('data-active') === 'true') {
-              activeIndex = i;
-            }
-          });
-          
-          const activeContent = contents[activeIndex];
-          const code = activeContent?.querySelector('code')?.innerText;
-          
-          if (code) {
-            await navigator.clipboard.writeText(code);
-            const copyIcon = copyBtn.querySelector('.copy-icon');
-            const checkIcon = copyBtn.querySelector('.check-icon');
-            copyIcon?.classList.add('hidden');
-            checkIcon?.classList.remove('hidden');
-            setTimeout(() => {
-              copyIcon?.classList.remove('hidden');
-              checkIcon?.classList.add('hidden');
-            }, 2000);
+          tab.setAttribute('data-active', String(i === index));
+          if (contents[i]) {
+            (contents[i] as HTMLElement).style.display = i === index ? 'block' : 'none';
           }
         });
-      }
-      
+      };
+
+      tabs.forEach((tab, i) => tab.addEventListener('click', () => activate(i)));
+
+      copyBtn?.addEventListener('click', async () => {
+        const active = Array.from(contents).find(c => (c as HTMLElement).style.display !== 'none');
+        const code = active?.querySelector('code')?.innerText;
+        if (!code) return;
+
+        await navigator.clipboard.writeText(code);
+
+        const copyIcon  = copyBtn.querySelector('.copy-icon');
+        const checkIcon = copyBtn.querySelector('.check-icon');
+        copyIcon?.classList.add('hidden');
+        checkIcon?.classList.remove('hidden');
+
+        setTimeout(() => {
+          copyIcon?.classList.remove('hidden');
+          checkIcon?.classList.add('hidden');
+        }, 2000);
+      });
+
       activate(0);
     });
-  }
-  
+  };
+
   initCodeGroup();
   document.addEventListener('astro:after-swap', initCodeGroup);
 </script>
