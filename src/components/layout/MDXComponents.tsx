@@ -24,7 +24,7 @@ export const components: MDXComponents = {
   hr: HR,
   blockquote: CallQuote,
   table: Table,
-  Details: Details,
+  Details,
   details: Details,
   Callout,
   Steps,
