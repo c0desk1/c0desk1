@@ -5,7 +5,7 @@ import type { MDXComponents } from 'mdx/types';
 import Image from "@/components/mdx/Image.astro";
 import HR from "@/components/mdx/HR.astro";
 import Table from '@/components/mdx/Table.astro';
-import Details from '@/components/mdx/Details.astro';
+import Details from '@/components/mdx/Details';
 import Callout from '@/components/mdx/Callout.astro';
 import Steps from '@/components/mdx/Steps.astro';
 import CodeGroup from '@/components/mdx/CodeGroup';
@@ -25,6 +25,7 @@ export const components: MDXComponents = {
   blockquote: CallQuote,
   table: Table,
   Details: Details,
+  details: Details,
   Callout,
   Steps,
   CodeGroup
