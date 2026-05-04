@@ -49,7 +49,7 @@ export default function Details({ variant, defaultOpen, open, children,...props 
         className="summary"
         aria-expanded={isOpen}
       >
-        <Icon name="chevron-right" className="details-icon" />
+        <Icon name="chevron-right" className="details-icon w-5 h-5" />
         {summaryContent}
       </button>
 
