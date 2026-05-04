@@ -621,37 +621,22 @@
 }
 
 /* ==================== DETAILS / SUMMARY ==================== */
-.prose-custom details {
+.prose-custom.details {
   margin: 1.5rem 0;
   border: 1px solid var(--prose-border);
   border-radius: var(--prose-radius-md);
   background-color: var(--prose-surface);
   overflow: hidden;
-
   transition: border-color var(--prose-transition),
               box-shadow var(--prose-transition);
 }
 
-.prose-custom .details-content {
-  padding: 1rem;
-  color: var(--prose-fg-muted);
-  line-height: 1.65;
-}
-
-.prose-custom .details-content > :first-child {
-  margin-top: 0;
-}
-
-.prose-custom .details-content > :last-child {
-  margin-bottom: 0;
-}
-
-.prose-custom details:hover {
+.prose-custom.details:hover {
   border-color: var(--prose-border-hover, var(--prose-border));
   box-shadow: 0 1px 0 rgba(0,0,0,0.03);
 }
 
-.prose-custom summary {
+.prose-custom.summary {
   font-size: 0.9375rem;
   font-weight: 600;
   color: var(--prose-fg);
@@ -661,16 +646,15 @@
   display: flex;
   align-items: center;
   gap: 0.625rem;
-  list-style: none;
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
   transition: background-color var(--prose-transition),
               color var(--prose-transition);
 }
 
-.prose-custom summary::-webkit-details-marker {
-  display: none;
-}
-
-.prose-custom .details-icon {
+.prose-custom.details-icon {
   width: 1rem;
   height: 1rem;
   flex-shrink: 0;
@@ -678,32 +662,36 @@
   color: var(--prose-fg-subtle);
 }
 
-.prose-custom details[open] .details-icon {
-  transform: rotate(90deg);
-}
-
-.prose-custom details[open] summary {
+.prose-custom.details.open.summary {
   border-bottom: 1px solid var(--prose-border);
   background-color: var(--prose-surface-hover);
 }
 
-.prose-custom details > *:not(summary) {
+.prose-custom.details-content {
   padding: 1rem;
   color: var(--prose-fg-muted);
   line-height: 1.65;
 }
 
-.prose-custom details > *:not(summary) > :first-child {
+.prose-custom.details-content > :first-child {
   margin-top: 0;
 }
 
-.prose-custom details > *:not(summary) > :last-child {
+.prose-custom.details-content > :last-child {
   margin-bottom: 0;
 }
 
-.prose-custom summary:focus-visible {
+.prose-custom.summary:focus-visible {
   outline: 2px solid var(--prose-accent);
   outline-offset: 2px;
+}
+
+.prose-custom.details > *:not(summary) > :first-child {
+  margin-top: 0;
+}
+
+.prose-custom.details > *:not(summary) > :last-child {
+  margin-bottom: 0;
 }
 
 /* ==================== CALLOUTS ==================== */
