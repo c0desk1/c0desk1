@@ -6,9 +6,9 @@ import Icon from "./Icon.astro";
 <button
   id="listen-btn"
   aria-label="Dengarkan artikel"
-  class="relative p-2 rounded-(--radius-full) text-(--fg-muted) hover:text-(--fg) hover:bg-(--bg-muted) group active:scale-95"
+  class="relative flex items-center gap-2 px-2 py-2 rounded-(--radius-full) text-(--fg-muted) hover:text-(--fg) hover:bg-(--bg-muted) group active:scale-95"
 >
-  <div class="relative w-4.5 h-4.5 flex items-center justify-center">
+  <div class="relative w-5 h-5 flex items-center justify-center">
     <span id="icon-play" class="absolute inset-0 transition-all duration-300 opacity-100 scale-100">
       <Icon name="volume" class="w-4.5 h-4.5" />
     </span>
@@ -16,7 +16,8 @@ import Icon from "./Icon.astro";
       <Icon name="volume-mute" class="w-4.5 h-4.5" />
     </span>
   </div>
-  <span class="absolute -top-9 left-1/2 -translate-x-1/2 px-2 py-1 text-[12px] border border-(--border) font-medium bg-(--bg-subtle) text-(--fg) rounded-(--radius-md) opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-xl">
+
+  <span class="text-sm font-medium">
     Dengarkan
   </span>
 </button>
