@@ -28,7 +28,12 @@ const formattedDate = formatDate(pubDate);
     )}
   </div>
   <span>―</span>
-  <time datetime={pubDate.toISOString()} class="whitespace-nowrap">
-    {formattedDate}
-  </time>
+  <div class="flex items-center justify-center gap-2">
+    <div class="relative w-4 h-4 items-center">
+      <Icon name="calender" class="w-4 h-4" />
+    </div>
+    <time datetime={pubDate.toISOString()} class="whitespace-nowrap">
+      {formattedDate}
+    </time>
+  </div>
 </div>
