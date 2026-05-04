@@ -2,7 +2,7 @@
 // src/components/ui/Icon.astro
 interface Props {
   name: 
-    | 'logo' | 'sun' | 'moon' | 'search' | 'menu' | 'close' | 'plus' | 'minus' | 'check' | 'clock' | 'trash'
+    | 'logo' | 'sun' | 'moon' | 'search' | 'menu' | 'close' | 'plus' | 'minus' | 'check' | 'clock' | 'calender' | 'trash'
     | 'github' | 'twitter' | 'linkedin' | 'instagram' | 'youtube' | 'facebook' | 'tiktok' 
     | 'dribbble' | 'behance' | 'adobestock' | 'wirestock' | 'spotify' | 'soundcloud'
     | 'copy' | 'external' | 'link' | 'mail' | 'user' | 'rss' | 'globe' | 'share'
@@ -85,6 +85,16 @@ const { name, class: className = 'w-5 h-5' } = Astro.props;
       stroke-linecap="round" 
       stroke-linejoin="round" 
       d="M12 6V12L16 14M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
+	/>
+  </svg>
+)}
+
+{name === 'calender' && (
+  <svg class={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
+    <path 
+      stroke-linecap="round" 
+      stroke-linejoin="round" 
+      d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
 	/>
   </svg>
 )}
@@ -390,7 +400,7 @@ const { name, class: className = 'w-5 h-5' } = Astro.props;
 
 {/* --- FALLBACK --- */}
 {![
-  'logo','sun','moon','search','menu','close','plus','minus','check', 'trash', 'clock',
+  'logo','sun','moon','search','menu','close','plus','minus','check', 'trash', 'clock', 'calender',
   'github','twitter','linkedin','instagram','youtube','facebook','tiktok','dribbble','behance','adobestock','wirestock','spotify','soundcloud',
   'copy','external','link','mail','user','rss','globe','share',
   'arrow-up','arrow-down','arrow-right', 'arrow-path', 'chevron-down','chevron-right','volume', 'volume-mute','play','pause','next','prev','music','image'
