@@ -1,7 +1,6 @@
 ---
 // src/components/blog/BlogMeta.astro
-import { formatDate } from '@/lib/utils';
-import CopyLink from "@/components/ui/CopyButton.astro";
+import { formatDate } from '@/lib/utils';
 import Icon from '../ui/Icon.astro';
 
 interface Props {
@@ -25,8 +24,7 @@ const formattedDate = formatDate(pubDate);
           {readingTime}
         </span>
       </>
-    )}
-    <CopyLink />
+    )}
   </div>
   <time datetime={pubDate.toISOString()} class="whitespace-nowrap">
     {formattedDate}
