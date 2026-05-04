@@ -1,20 +1,28 @@
 ---
-// src/components/ui/Hero.astro
+interface Props {
+  title: string;
+  highlight?: string;
+  description: string;
+}
+
+const { title, highlight, description } = Astro.props;
 ---
 
-<div class="flex flex-col items-center text-center" aria-labelledby="hero-title">
-  <div class="max-w-2xl space-y-4">
+<div class="w-full h-full justify-center flex flex-col items-center text-center py-16" aria-labelledby="hero-title">
+  <div class="space-y-4">
     <h1 
       id="hero-title"
       class="text-4xl md:text-6xl font-semibold tracking-tight text-(--fg)"
     >
-      Creative.
-      <span class="text-(--accent-dim)">
-        engineer
-      </span>
+      {title}
+      {highlight && (
+        <span class="text-(--accent-dim)">
+          {highlight}
+        </span>
+      )}
     </h1>
     <p class="text-base md:text-lg leading-relaxed text-(--fg-muted)">
-      Eksplorasi workflow digital, AI tools, musik, anime, dan game dari perspektif kreator modern di era otomatisasi.
+      {description}
     </p>
   </div>
 </div>

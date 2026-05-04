@@ -20,7 +20,7 @@ const { posts } = Astro.props;
       </h2>
     </div>
     
-    <div class="grid grid-cols-1 md:grid-cols-3 sm:gap-x-0 sm:gap-y-4 md:gap-y-6 md:gap-y-4 divide-y md:divide-y-0 divide-(--border)">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
       {posts.map(post => (
         <RelatedPostCard post={post} />
       ))}

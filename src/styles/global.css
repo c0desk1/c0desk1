@@ -75,10 +75,10 @@
   --border-strong:#d4d4d4;
 
   /* Accent */
-  --accent:       #10b981;
-  --accent-dim:   #059669;
-  --accent-soft:  #ecfdf5;
-  --accent-ring:  rgb(16 185 129 / 0.35);
+  --accent:       #0062ff;
+  --accent-dim:   #2b7cff;
+  --accent-soft:  #a8dfff;
+  --accent-ring:  rgba(16, 95, 185, 0.35);
 
   /* Status */
   --color-success: #10b981;
@@ -323,7 +323,7 @@
     background: linear-gradient(
       90deg,
       transparent,
-      var(--border-strong),
+      var(--border),
       transparent
     );
   }

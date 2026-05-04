@@ -23,16 +23,18 @@ import PortfolioRelated from "@/components/portfolio/PortfolioRelated.astro";
 import PortfolioFeaturedImage from "@/components/portfolio/PortfolioFeaturedImage.astro";
 import PortfolioCaseStudy from "@/components/portfolio/PortfolioCaseStudy.astro";
 
+
+import Image from "@/components/mdx/Image.astro";
+import HR from "@/components/mdx/HR.astro";
+import Quote from '@/components/mdx/Quote.astro';
+import Table from '@/components/mdx/Table.astro';
+
 export async function getStaticPaths() {
   const projects = await getCollection("portfolio", ({ data }) => !data.draft);
   return projects.map((project: CollectionEntry<"portfolio">) => ({
     params: { slug: project.id },
     props: { project }
   }));
-}
-
-interface Props {
-  project: CollectionEntry<"portfolio">;
 }
 
 const { project } = Astro.props;
@@ -117,7 +119,7 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
   <article>
     <h1 class="sr-only">{title}</h1>
     <Section size="md">
-      <Container size="sm">
+      <Container size="md">
         <h2 class="sr-only">Portfolio Header</h2>
         <Breadcrumb items={Breadcrumbs} />
         <PortfolioHeader
@@ -136,7 +138,7 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
     </Section>
     {image && (
       <Section size="sm">
-        <Container size="sm">
+        <Container size="md">
           <h2 class="sr-only">Portfolio Image Content</h2>
           <PortfolioFeaturedImage
             src={image.src}
@@ -147,22 +149,22 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
       </Section>
     )}
     <Section size="sm">
-      <Container size="sm">
+      <Container size="md">
         <h2 class="sr-only">Portfolio Metrics & Case Study</h2>
         <PortfolioMetrics metrics={metrics} />
         <PortfolioCaseStudy
-  		challenge={challenge}
-  		solution={solution}
-  		result={result}
-  		allowMultiple={true}
-		/>
+          challenge={challenge}
+          solution={solution}
+          result={result}
+          allowMultiple={true}
+        />
       </Container>
     </Section>
     <Section size="sm">
-      <Container size="sm">
+      <Container size="md">
         <h2 class="sr-only">Portfolio Content</h2>
         {displayGallery.length > 0 && (
-          <div class="prose-custom mb-12">
+          <div class="prose-custom mb-6">
             <h2 class="mb-4">Gallery</h2>
             <PortfolioGallery
               images={displayGallery}
@@ -170,13 +172,19 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
             />
           </div>
         )}
-        <div class="prose-custom">
-          <Content />
+        <div id="article-content" class="prose-custom w-full">
+          <Content components={{ 
+            img: Image, 
+            hr: HR,
+            blockquote: Quote,
+            table: Table, 
+            }} 
+          />
         </div>
       </Container>
     </Section>
     <Section size="sm">
-      <Container size="sm">
+      <Container size="lg">
         <h2 class="sr-only">Portfolio related Content</h2>
         <PortfolioRelated projects={relatedProjects} />
         <BackToTop showBorder align="center" />

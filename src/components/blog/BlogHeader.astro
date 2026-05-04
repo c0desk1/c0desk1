@@ -4,6 +4,7 @@ import BlogMeta from './BlogMeta.astro';
 import BlogAuthor from './BlogAuthor.astro';
 import Listen from "@/components/ui/ListenButton.astro";
 import CopyLink from "@/components/ui/CopyButton.astro";
+import { cn } from "@/lib/utils";
 
 interface Props {
   title: string;
@@ -25,36 +26,38 @@ const {
   authorSlug
 } = Astro.props;
 ---
-
-<header class="mx-auto w-full text-start sm:text-start md:text-center">
-  <h1
-    class="prose-custom
-      text-3xl sm:text-4xl md:text-5xl
-      font-semibold tracking-tight
-      text-(--prose-fg)
-      leading-[1.15]
-      
-      mb-6 md:mb-8
-    "
-  >
-    {title}
-  </h1>
-
-  <div class="mb-4 md:mb-8">
-    <BlogMeta pubDate={pubDate} readingTime={readingTime} />
-  </div>
-
-  <div class="flex flex-wrap items-center justify-start sm:justify-start md:justify-center mb-6 md:mb-8">
-    {authorName && (
-      <BlogAuthor
-        name={authorName}
-        avatar={authorAvatar}
-        title={authorTitle}
-        slug={authorSlug}
-      />
-    )}
-  </div>
-  <div class="flex flex-wrap items-center justify-start sm:justify-start md:justify-center gap-4">
-  <Listen />
-    <CopyLink />
-</header>
+<div class="relative items-center w-full">
+  <div
+    class={cn(
+      "absolute inset-0",
+      "bg-size-[20px_20px]",
+      "bg-[radial-gradient(#d4d4d4_1px,transparent_1px)]",
+      "dark:bg-[radial-gradient(#404040_1px,transparent_1px)]",
+      )}
+    />
+  <div class="pointer-events-none absolute inset-0 flex items-center justify-center bg-white mask-[radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
+  <header class="relative items-center z-20 w-full text-start md:text-center">
+    <div class="prose-custom flex flex-wrap items-center mb-4 md:mb-8">
+      <h1>
+        {title}
+      </h1>
+    </div>
+    <div class="mb-4 md:mb-8">
+      <BlogMeta pubDate={pubDate} readingTime={readingTime} />
+    </div>
+    <div class="grid grid-col-1 md:grid-col-2 flex-wrap items-center justify-start md:justify-center gap-2">
+      {authorName && (
+        <BlogAuthor
+          name={authorName}
+          avatar={authorAvatar}
+          title={authorTitle}
+          slug={authorSlug}
+        />
+      )}
+      <div class="flex items-center justify-start md:justify-center gap-2">
+        <Listen />
+        <CopyLink />
+      </div>
+    </div>
+  </header>
+</div>

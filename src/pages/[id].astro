@@ -11,6 +11,10 @@ import { getEntry, getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 import { cdnImage, isCdnUrl, formatDate } from "@/lib/utils";
 
+import HR from "@/components/mdx/HR.astro";
+import Quote from '@/components/mdx/Quote.astro';
+import Table from '@/components/mdx/Table.astro';
+
 export async function getStaticPaths() {
   const legalPages = await getCollection('legal');
   
@@ -25,14 +29,12 @@ export async function getStaticPaths() {
 
 const { page, isAbout } = Astro.props;
 
-// Hanya render jika ada page dan bukan about
 let Content = null;
 if (!isAbout && page) {
   const rendered = await render(page);
   Content = rendered.Content;
 }
 
-// Ambil settings
 let settings;
 try {
   settings = await getEntry('settings', 'site');
@@ -44,7 +46,6 @@ const siteData = settings?.data || siteConfig;
 const siteURL = Astro.site?.toString() ?? siteData.siteUrl;
 const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
-// SEO Data
 const seoData = isAbout
   ? {
       title: "About",
@@ -123,7 +124,7 @@ const formattedLastUpdated = page?.data.lastUpdated
   )}
 
   <Section size="lg">
-    <Container size="sm">
+    <Container size="md">
       <div class="mx-auto max-w-3xl">
         {isAbout ? (
           <div class="prose-custom text-center">
@@ -133,17 +134,22 @@ const formattedLastUpdated = page?.data.lastUpdated
           </div>
         ) : (
           Content && (
-            <div class="prose-custom prose-h2:text-xl prose-h2:font-semibold prose-h2:mt-8 prose-h2:mb-4 prose-h2:text-zinc-900 dark:prose-h2:text-white">
-              <Content />
+            <div id="article-content" class="prose-custom w-full">
+              <Content components={{ 
+                img: Image, 
+                hr: HR,
+                blockquote: Quote,
+                table: Table, 
+                }} 
+              />
             </div>
           )
         )}
       </div>
-
       {isAbout && (
         <div class="mt-20 pt-10 border-t border-zinc-100 dark:border-zinc-800 text-center space-y-4">
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-(--accent)"></span>
             <span class="text-[11px] font-mono uppercase tracking-wider text-zinc-500">Kontak</span>
           </div>
           <p class="text-[14px] font-medium text-zinc-600 dark:text-zinc-400">

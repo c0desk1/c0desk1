@@ -19,6 +19,8 @@ import BackToTop from "@/components/ui/BackToTop.astro";
 
 import Image from "@/components/mdx/Image.astro";
 import HR from "@/components/mdx/HR.astro";
+import Quote from '@/components/mdx/Quote.astro';
+import Table from '@/components/mdx/Table.astro';
 
 import { filterHeadingsForTOC, getReadingTime } from "@/lib/utils";
 import { getSmartRelatedPosts } from "@/lib/botEngine";
@@ -115,12 +117,17 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
   }}
   canonicalURL={canonicalURL}
 >
-  <article class="relative">
-    <h1 class="sr-only">{title}</h1>
+  <article>
+    <h2 class="sr-only">{title}</h1>
+    <Section size="lg">
+      <h2 class="sr-only">Navigasi Halaman</h1>
+      <Container size="md">
+        <Breadcrumb items={Breadcrumbs} />
+      </Container>
+    </Section>
     <Section size="sm">
       <Container size="md">
         <h2 class="sr-only">Article Header</h2>
-        <Breadcrumb items={Breadcrumbs} />
         <BlogHeader
           title={title}
           pubDate={pubDate}
@@ -130,33 +137,40 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
           authorTitle={authorEntry?.data.role}
           authorSlug={authorEntry?.id}
         />
-        
-        {image && (
-          <BlogFeaturedImage
-            image={image.src}
-            alt={image.alt || title}
-            caption={(image as any).caption}
-          />
-        )}
       </Container>
     </Section>
 
-    <Section size="sm" class="pt-0! lg;pt-8!">
-		<Container size="md"> 
-    	<div class="flex flex-col lg:grid lg:grid-cols-12 gap-2 lg:gap-12 items-start relative">
-				<aside class="w-full sticky top-15 z-40 lg:col-span-4 mb-3 md:mb-6 self-start">
-        	{tocHeadings.length > 0 && (
-						<TOC headings={tocHeadings} />
-        	)}
-				</aside>
-				<div id="article-content" class="prose-custom w-full lg:col-span-8">
-					<Content components={{ img: Image, hr: HR }} />
-				</div>
-			</div>
-		</Container>
-	</Section>
+    <Section size="sm">
+      <Container size="md"> 
+        <div id="article">
+          <div id="article-cover" class="prose-custom w-full mb-8">
+            {image && (
+              <BlogFeaturedImage
+                image={image.src}
+                alt={image.alt || title}
+                caption={(image as any).caption}
+              />
+            )}
+          </div>
+          <div id="article-toc" class="hidden sticky top-15 z-50 my-6">
+            {tocHeadings.length > 0 && (
+              <TOC headings={tocHeadings} />
+            )}
+          </div>
+          <div id="article-content" class="prose-custom w-full">
+            <Content components={{ 
+              img: Image, 
+              hr: HR,
+              blockquote: Quote,
+              table: Table, 
+              }} 
+            />
+          </div>
+        </div>
+      </Container>
+	  </Section>
     <Section size="md" class="section-divider">
-      <Container size="lg">
+      <Container size="xl">
         <h2 class="sr-only">Related Posts</h2>
         <BackToTop align="center" />
         <BlogRelatedPosts posts={relatedPosts} />

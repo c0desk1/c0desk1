@@ -8,13 +8,14 @@ import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import Grid from "@/components/ui/Grid.astro";
 
-import PortfolioHero from "@/components/portfolio/PortfolioHero.astro";
+import Hero from "@/components/ui/Hero.astro";
 import PortfolioCard from "@/components/portfolio/PortfolioCard.astro";
 
 import {
   sortByDate,
   filterByFeatured,
-  filterByDraft
+  filterByDraft,
+cn
 } from "@/lib/utils";
 
 const allProjects = await getCollection("portfolio");
@@ -36,17 +37,35 @@ const seoData = {
   canonicalURL,
 };
 
+const Herotitle = "Crafting";
+const HeroHighlight = "& experiences";
+const HeroDescription = "Kumpulan projek pengembangan web dan beberapa eksperimen visual.";
 ---
 
 <BaseLayout {...seoData}>
-  <Section size="xl">
-    <Container size="md">
-      <PortfolioHero />
-    </Container>
+  <Section id="portfolio-hero" size="none" aria-label="portfolio introduction">
+    <div class="relative items-center">
+      <div
+        class={cn(
+          "absolute inset-0",
+          "bg-size-[20px_20px]",
+          "bg-[radial-gradient(#d4d4d4_1px,transparent_1px)]",
+          "dark:bg-[radial-gradient(#404040_1px,transparent_1px)]",
+        )}
+      />
+      <div class="pointer-events-none absolute inset-0 flex items-center justify-center bg-white mask-[radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
+      <Container size="full" class="relative items-center z-20"> 
+        <Hero 
+          title={Herotitle}
+          highlight={HeroHighlight}
+          description={HeroDescription}
+        />
+      </Container>
+    </div>
   </Section>
 
-  <Section size="lg">
-    <Container size="md">
+  <Section size="lg" class="section-divider">
+    <Container size="xl">
       <h2 class="sr-only">Featured Project</h2>
       {featuredProject && (
         <div class="mb-10">

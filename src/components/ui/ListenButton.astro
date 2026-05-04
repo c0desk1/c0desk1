@@ -1,28 +1,27 @@
 ---
 // src/components/ui/Listen.astro
 import Icon from "./Icon.astro";
+import Tooltip from "./Tooltip.astro";
 ---
-
-<button
-  id="listen-btn"
-  aria-label="Dengarkan artikel"
-  class="relative flex items-center gap-2 px-2 py-2 rounded-(--radius-full) text-(--fg-muted) hover:text-(--fg) hover:bg-(--bg-muted) group active:scale-95"
->
-  <div class="relative w-5 h-5 flex items-center justify-center">
-    <span id="icon-play" class="absolute inset-0 transition-all duration-300 opacity-100 scale-100">
-      <Icon name="volume" class="w-4.5 h-4.5" />
+<Tooltip text="Dengarkan" position="top" delay={200}>
+  <button id="listen-btn"
+    aria-label="Dengarkan artikel"
+    class="relative flex items-center gap-2 px-2 py-2 rounded-(--radius-full) text-(--fg-muted) hover:text-(--fg) hover:bg-(--bg-muted) group active:scale-95"
+  >
+    <div class="relative w-4 h-4 flex items-center justify-center">
+      <span id="icon-play" class="absolute inset-0 transition-all duration-300 opacity-100 scale-100">
+        <Icon name="volume" class="w-4 h-4" />
+      </span>
+      <span id="icon-stop" class="absolute inset-0 transition-all duration-300 opacity-0 scale-100">
+        <Icon name="volume-mute" class="w-4 h-4" />
+      </span>
+    </div>
+    <span class="text-sm font-medium">
+      Dengarkan
     </span>
-    <span id="icon-stop" class="absolute inset-0 transition-all duration-300 opacity-0 scale-100">
-      <Icon name="volume-mute" class="w-4.5 h-4.5" />
-    </span>
-  </div>
+  </button>
+</Tooltip>
 
-  <span class="text-sm font-medium">
-    Dengarkan
-  </span>
-</button>
-
-<!-- TTS Player sticky bottom bar -->
 <div id="tts-bar" class="tts-bar" aria-hidden="true">
   <div class="tts-bar-inner">
     <div class="tts-progress">

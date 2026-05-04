@@ -10,9 +10,9 @@ interface Props {
 const { projects } = Astro.props;
 ---
 
-<div class="section-divider py-4 md:py-8">
+<div class="py-4 md:py-8">
   <div class="mb-4 md:mb-8">
-    <h2 class="text-2xl md:text-3xl font-semibold text-(--fg)">
+    <h2 class="text-(--fg) text-3xl md:text-4xl font-semibold tracking-tighter">
       Proyek Terbaru.
     </h2>
   </div>
@@ -29,7 +29,7 @@ const { projects } = Astro.props;
       </p>
     </div>
   )}
-    <div class="flex justify-center mt-8">
+    <div class="flex justify-center my-16">
     <Button href="/portfolio/" variant="secondary" size="md">
       Lihat semua
     </Button>

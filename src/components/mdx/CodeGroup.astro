@@ -25,29 +25,23 @@ const { titles = ["Code"] } = Astro.props;
           "
         >
           {title}
-          <span class="absolute bottom-0 left-0 h-0.5 w-full rounded-full scale-x-0 bg-(--prose-emerald) transition-transform duration-200 [button[data-active=true]>&]:scale-x-100" />
+          <span class="absolute bottom-0 left-0 h-0.5 w-full rounded-full scale-x-0 bg-(--prose-accent) transition-transform duration-200 [button[data-active=true]>&]:scale-x-100" />
         </button>
       ))}
     </div>
-
-    <!-- Copy button -->
     <button
-      class="copy-button p-2 text-(--prose-fg-subtle) hover:text-(--prose-emerald) cursor-pointer transition-colors duration-150"
+      class="copy-button p-2 text-(--prose-fg-subtle) hover:text-(--prose-accent) cursor-pointer transition-colors duration-150"
       aria-label="Copy code"
     >
-      <!-- Copy icon -->
       <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
         <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
       </svg>
-      <!-- Check icon -->
-      <svg class="check-icon hidden text-(--prose-emerald)" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <svg class="check-icon hidden text-(--prose-accent)" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="20 6 9 17 4 12"/>
       </svg>
     </button>
   </div>
-
-  <!-- Code content -->
   <div class="code-group-content [&_pre]:m-0! [&_pre]:rounded-none! [&_pre]:border-none! [&_pre]:bg-transparent!">
     <slot />
   </div>

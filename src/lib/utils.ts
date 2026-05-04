@@ -1,3 +1,10 @@
+import {type  ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
 // ==================== DATE UTILITIES ====================
 
 function ensureDate(date: Date | string | number): Date {

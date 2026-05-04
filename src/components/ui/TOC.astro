@@ -18,14 +18,14 @@ const tocHeadings = filterHeadingsForTOC(headings);
 ---
 
 {tocHeadings.length > 0 && (
-  <aside class="toc-container max-w-3xl">
+  <aside class="toc-container">
     <nav class="toc-nav">
       <button
         class="toc-trigger lg:hidden"
         aria-expanded="false"
         aria-controls="toc-list"
       >
-        <span class="toc-trigger-text text-sm md:text-[13px] font-semibold">Daftar Isi</span>
+        <span class="toc-trigger-text text-sm md:text-[13px] font-semibold">Daftar isi dihalaman ini</span>
         <Icon name="chevron-down" class="toc-chevron w-4.5 h-4.5" />
       </button>
 
@@ -174,7 +174,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
 		trigger.setAttribute('aria-expanded', 'false');
 	}
 
-    const DEFAULT_TEXT = 'Daftar Isi';
+    const DEFAULT_TEXT = 'Daftar isi dihalaman ini';
 
     const closePanel = () => {
       trigger.setAttribute('aria-expanded', 'false');

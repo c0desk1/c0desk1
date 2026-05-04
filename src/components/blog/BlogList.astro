@@ -16,7 +16,7 @@ const { posts, variant = "default" } = Astro.props;
 const gridMode =
   variant === "featured"
     ? "featured"
-    : "cards";
+    : "default";
 ---
 
 <div class="relative overflow-hidden min-w-0">
@@ -28,7 +28,7 @@ const gridMode =
     </div>
   )}
   
-  <Grid cols={gridMode} gap="sm" class="min-w-0 items-start my-4 md:my-6">
+  <Grid cols={gridMode} gap="md" class="min-w-0 items-start my-4 md:my-6">
     {posts.map((post) => (
       variant === "featured"
         ? <FeaturedPostCard post={post} />

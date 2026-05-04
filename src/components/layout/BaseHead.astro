@@ -57,6 +57,7 @@ const siteData = siteDataFromProps || siteConfig;
 
 // ================= DATA ORGANIZATION =================
 let org;
+
 if (orgFromProps) {
   org = { data: orgFromProps };
 } else {
@@ -95,7 +96,9 @@ const formattedTitle = seoData.title === siteData.siteName
   : `${seoData.title} — ${siteData.siteName}`;
 
 let ogImageURL: string;
+
 const rawImage = seo?.ogImage || propsImage?.src || siteData.defaultSeo?.ogImage || siteConfig.ogImage;
+
 if (!rawImage) {
   ogImageURL = new URL(siteData.siteLogo, siteURL).toString();
 } else {
