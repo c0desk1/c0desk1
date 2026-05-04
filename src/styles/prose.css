@@ -198,7 +198,6 @@
 }
 
 /* ==================== STRONG & EM ==================== */
-
 .prose-custom strong {
   font-weight: 600;
   color: var(--prose-fg);
@@ -207,7 +206,11 @@
 
 .prose-custom em {
   font-style: italic;
-  color: var(--prose-fg);
+}
+
+.prose-custom strong em,
+.prose-custom em strong {
+  font-style: italic;
 }
 
 /* ==================== INLINE CODE ==================== */
