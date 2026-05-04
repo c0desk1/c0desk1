@@ -1,7 +1,7 @@
 ---
 // src/components/blog/BlogHeader.astro
-import BlogMeta from './PostMeta.astro';
-import BlogAuthor from './PostAuthor.astro';
+import PostMeta from './PostMeta.astro';
+import PostAuthor from './PostAuthor.astro';
 import Listen from "@/components/ui/ListenButton.astro";
 import CopyLink from "@/components/ui/CopyButton.astro";
 import { cn } from "@/lib/utils";
@@ -38,19 +38,19 @@ const {
   />
   <div class="pointer-events-none absolute inset-0 flex items-center justify-center bg-white mask-[radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
 
-  <header class="relative z-20 w-full text-start md:text-center">
+  <header class="relative z-20 w-full text-start justify-start md:justify-center md:text-center">
     <div class="prose-custom mb-4 md:mb-8">
       <h1>{title}</h1>
     </div>
 
     <div class="mb-4 md:mb-8">
-      <BlogMeta pubDate={pubDate} readingTime={readingTime} />
+      <PostMeta pubDate={pubDate} readingTime={readingTime} />
     </div>
 
-    <div class="flex flex-wrap justify-between md:justify-center items-center">
+    <div class="flex flex-wrap items-center">
       {authorName && (
         <div class="flex justify-start">
-          <BlogAuthor
+          <PostAuthor
             name={authorName}
             avatar={authorAvatar}
             title={authorTitle}
