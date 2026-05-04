@@ -11,7 +11,7 @@ import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 
 import Breadcrumb from "@/components/ui/Breadcrumb.astro";
-import BlogHeader from "@/components/blog/BlogHeader.astro";
+import PostHeader from "@/components/layout/PostHeader.astro";
 import BlogFeaturedImage from "@/components/blog/BlogFeaturedImage.astro";
 import TOC from "@/components/ui/TOC.astro";
 import BlogRelatedPosts from "@/components/blog/BlogRelatedPosts.astro";
@@ -128,7 +128,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
     <Section size="sm">
       <Container size="md">
         <h2 class="sr-only">Article Header</h2>
-        <BlogHeader
+        <PostHeader
           title={title}
           pubDate={pubDate}
           readingTime={readingTime}
@@ -140,7 +140,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
       </Container>
     </Section>
 
-    <Section size="sm">
+    <Section size="sm" class="section-divider">
       <Container size="md"> 
         <div id="article">
           <div id="article-cover" class="prose-custom w-full mb-8">
