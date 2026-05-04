@@ -6,7 +6,7 @@ interface Props {
     | 'github' | 'twitter' | 'linkedin' | 'instagram' | 'youtube' | 'facebook' | 'tiktok' 
     | 'dribbble' | 'behance' | 'adobestock' | 'wirestock' | 'spotify' | 'soundcloud'
     | 'copy' | 'external' | 'link' | 'mail' | 'user' | 'rss' | 'globe' | 'share'
-    | 'arrow-up' | 'arrow-down' | 'arrow-right' | 'arrow-path' | 'chevron-down' | 'volume' | 'volume-mute' | 'play' | 'pause' | 'next' | 'prev' | 'music' | 'image';
+    | 'arrow-up' | 'arrow-down' | 'arrow-right' | 'arrow-path' | 'chevron-down' | 'chevron-right' | 'volume' | 'volume-mute' | 'play' | 'pause' | 'next' | 'prev' | 'music' | 'image';
   class?: string;
 }
 
@@ -299,6 +299,16 @@ const { name, class: className = 'w-5 h-5' } = Astro.props;
   </svg>
 )}
 
+{name === 'chevron-right' && (
+  <svg class={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
+    <path 
+		stroke-linecap="round" 
+		stroke-linejoin="round" 
+		d="m8.25 4.5 7.5 7.5-7.5 7.5" 
+	/>
+  </svg>
+)}
+
 {name === 'volume' && (
   <svg class={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
     <path 
@@ -377,10 +387,10 @@ const { name, class: className = 'w-5 h-5' } = Astro.props;
   'logo','sun','moon','search','menu','close','plus','minus','check', 'trash', 'clock',
   'github','twitter','linkedin','instagram','youtube','facebook','tiktok','dribbble','behance','adobestock','wirestock','spotify','soundcloud',
   'copy','external','link','mail','user','rss','globe','share',
-  'arrow-up','arrow-down','arrow-right', 'arrow-path', 'chevron-down','volume', 'volume-mute','play','pause','next','prev','music','image'
+  'arrow-up','arrow-down','arrow-right', 'arrow-path', 'chevron-down','chevron-right','volume', 'volume-mute','play','pause','next','prev','music','image'
 ].includes(name) && (
   <svg class={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true">
     <circle cx="12" cy="12" r="10" />
     <path d="M12 8v8M8 12h8" />
   </svg>
-)}
+)}
