@@ -2,8 +2,8 @@
 // src/components/blog/BlogHeader.astro
 import PostMeta from './PostMeta.astro';
 import PostAuthor from './PostAuthor.astro';
-import Listen from "@/components/ui/ListenButton.astro";
-import CopyLink from "@/components/ui/CopyButton.astro";
+import PostAction from './PostAction.astro';
+
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -58,10 +58,7 @@ const {
           />
         </div>
       )}
-      <div class="flex items-center justify-start md:justify-center gap-2">
-        <Listen />
-        <CopyLink />
-      </div>
+      <PostAction />
     </div>
   </header>
 </div>
