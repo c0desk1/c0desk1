@@ -1,7 +1,7 @@
 ---
 // src/components/mdx/CodeGroup.astro
 
-import Icon from '@/components/ui/Icon.astro';
+import Icon from '@/components/ui/Icon';
 
 interface Props {
   titles?: string[];
@@ -33,8 +33,8 @@ const { titles = ["Code"] } = Astro.props;
       class="copy-button p-2 text-(--prose-fg-subtle) hover:text-(--prose-accent) cursor-pointer transition-colors duration-150"
       aria-label="Copy code"
     >
-      <Icon name="copy" class="copy-icon w-4 h-4" />
-      <Icon name="check" class="check-icon w-4 h-4 hidden text-(--prose-accent)" />
+      <Icon name="copy" className="copy-icon w-4 h-4" />
+      <Icon name="check" className="check-icon w-4 h-4 hidden text-(--prose-accent)" />
     </button>
   </div>
   <div class="code-group-content [&_pre]:m-0! [&_pre]:rounded-none! [&_pre]:border-none! [&_pre]:bg-transparent!">
