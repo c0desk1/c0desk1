@@ -1,22 +1,24 @@
-import { useState, useRef, useEffect, Children, isValidElement, type ReactNode } from 'react';
+import { useState, useRef, useEffect, Children, isValidElement, type ReactNode, type HTMLAttributes } from 'react';
 import Icon from '../ui/Icon';
 
-interface Props {
+interface Props extends HTMLAttributes<HTMLDivElement> {
   variant?: 'note' | 'info' | 'tip' | 'warning' | 'danger';
   defaultOpen?: boolean;
+  open?: boolean; // buat nangkap <details open>
   children: ReactNode;
 }
 
-export default function Details({ variant, defaultOpen = false, children }: Props) {
-  const [isOpen, setIsOpen] = useState(defaultOpen);
-  const [height, setHeight] = useState<number | 'auto'>(0);
+export default function Details({ variant, defaultOpen, open, children,...props }: Props) {
+  // <details open> dari MDX bakal masuk ke prop `open`
+  const [isOpen, setIsOpen] = useState(defaultOpen?? open?? false);
+  const [height, setHeight] = useState<number | 'auto'>(isOpen? 'auto' : 0);
   const contentRef = useRef<HTMLDivElement>(null);
 
   let summaryContent: ReactNode = null;
   const bodyContent: ReactNode[] = [];
 
   Children.forEach(children, (child) => {
-    if (isValidElement(child) && child.type === 'summary') {
+    if (isValidElement(child) && (child.type === 'summary' || child.props?.mdxType === 'summary')) {
       summaryContent = child.props.children;
     } else {
       bodyContent.push(child);
@@ -35,18 +37,21 @@ export default function Details({ variant, defaultOpen = false, children }: Prop
     }
   }, [isOpen]);
 
-  const toggle = () => setIsOpen(!isOpen);
-
   return (
-    <details
-      open={isOpen}
+    <div
+      {...props}
       data-callout={variant}
-      className={variant? 'callout' : ''}
+      className={`details ${variant? 'callout' : ''} ${isOpen? 'open' : ''} ${props.className?? ''}`}
     >
-      <summary onClick={(e) => { e.preventDefault(); toggle(); }}>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="summary"
+        aria-expanded={isOpen}
+      >
         <Icon name="chevron-right" className="details-icon" />
         {summaryContent}
-      </summary>
+      </button>
 
       <div
         style={{ height: height === 'auto'? 'auto' : `${height}px` }}
@@ -56,6 +61,6 @@ export default function Details({ variant, defaultOpen = false, children }: Prop
           {bodyContent}
         </div>
       </div>
-    </details>
+    </div>
   );
 }
