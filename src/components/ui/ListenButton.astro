@@ -1,26 +1,24 @@
 ---
 // src/components/ui/Listen.astro
 import Icon from "./Icon.astro";
-import Tooltip from "./Tooltip.astro";
 ---
-<Tooltip text="Dengarkan" position="top" delay={200}>
-  <button id="listen-btn"
-    aria-label="Dengarkan artikel"
-    class="relative flex items-center gap-2 px-2 py-2 rounded-(--radius-full) text-(--fg-muted) hover:text-(--fg) hover:bg-(--bg-muted) group active:scale-95"
-  >
-    <div class="relative w-4 h-4 flex items-center justify-center">
-      <span id="icon-play" class="absolute inset-0 transition-all duration-300 opacity-100 scale-100">
-        <Icon name="volume" class="w-4 h-4" />
-      </span>
-      <span id="icon-stop" class="absolute inset-0 transition-all duration-300 opacity-0 scale-100">
-        <Icon name="volume-mute" class="w-4 h-4" />
-      </span>
-    </div>
-    <span class="text-sm font-medium">
-      Dengarkan
+
+<button 
+  id="listen-btn"
+  aria-label="Dengarkan artikel"
+  class="relative flex items-center gap-2 px-2 py-2 rounded-(--radius-full) text-(--fg-muted) hover:text-(--fg) hover:bg-(--bg-muted) group active:scale-95">
+  <div class="relative w-4 h-4 flex items-center justify-center">
+    <span id="icon-play" class="absolute inset-0 transition-all duration-300 opacity-100 scale-100">
+      <Icon name="volume" class="w-4 h-4" />
     </span>
-  </button>
-</Tooltip>
+    <span id="icon-stop" class="absolute inset-0 transition-all duration-300 opacity-0 scale-100">
+      <Icon name="volume-mute" class="w-4 h-4" />
+    </span>
+  </div>
+  <span class="text-sm font-medium">
+    Dengarkan
+  </span>
+</button>
 
 <div id="tts-bar" class="tts-bar" aria-hidden="true">
   <div class="tts-bar-inner">
@@ -153,7 +151,6 @@ import Tooltip from "./Tooltip.astro";
     transition: color 0.15s, background 0.15s, transform 0.1s;
   }
 
-  {/*.tts-btn svg { width: 0.875rem; height: 0.875rem; }*/}
   .tts-btn:hover { color: var(--fg); background: var(--bg-muted); }
   .tts-btn:active { transform: scale(0.88); }
 
@@ -172,7 +169,6 @@ import Tooltip from "./Tooltip.astro";
 
     const synth = window.speechSynthesis;
 
-    // ── State
     let chunks: string[]  = [];
     let currentIdx        = 0;
     let isPlaying         = false;
@@ -182,7 +178,6 @@ import Tooltip from "./Tooltip.astro";
     let highlightMark: HTMLElement | null  = null;
     let articleEl: HTMLElement | null      = null;
 
-    // ── Voice
     const loadVoice = () => {
       const voices = synth.getVoices();
       voice = voices.find(v => v.lang.startsWith('id')) ?? voices[0] ?? null;
@@ -192,17 +187,12 @@ import Tooltip from "./Tooltip.astro";
       : synth.addEventListener('voiceschanged', loadVoice, { once: true });
 
     const SKIP_SELECTORS = [
-      // Elemen UI / interaktif
       'button', 'nav', 'aside', 'form', 'input', 'select', 'textarea',
       // 'figcaption',
-      // Elemen dengan role non-artikel
       '[role="navigation"]', '[role="complementary"]', '[role="banner"]',
       '[role="contentinfo"]', '[role="search"]', '[role="toolbar"]',
-      // Class umum komponen custom di MDX
       '.toc-container', '.tts-bar', '.listen-btn',
-      // Code blocks
       'pre', 'code',
-      // Script & style
       'script', 'style', 'noscript',
     ].join(', ');
 
@@ -227,9 +217,7 @@ import Tooltip from "./Tooltip.astro";
   	});
   	return chunks;
 	};
-        
-
-    // ── Highlight
+    
     let highlightedEl: HTMLElement | null = null;
     
     const clearHighlight = () => {
@@ -289,7 +277,6 @@ import Tooltip from "./Tooltip.astro";
   	window.scrollTo({ top: targetY, behavior: 'smooth' });
 	};
 
-    // ── DOM helpers
     const $ = <T extends HTMLElement>(id: string) =>
       document.getElementById(id) as T | null;
 
@@ -329,7 +316,6 @@ import Tooltip from "./Tooltip.astro";
       bar?.classList.remove('tts-bar--visible');
     };
 
-    // ── Core TTS
     const speakAt = (idx: number) => {
       if (idx >= chunks.length) { stopAll(); return; }
       if (idx < 0) idx = 0;
@@ -392,7 +378,6 @@ import Tooltip from "./Tooltip.astro";
 	};
 
 
-    // ── Handle
 	document.addEventListener('visibilitychange', () => {
   	if (document.hidden && isPlaying) {
     	synth.cancel();
@@ -416,7 +401,6 @@ import Tooltip from "./Tooltip.astro";
   	updateBar();
 	};
 
-    // ── Init
     const init = () => {
       $('listen-btn')?.addEventListener('click', () => {
         if (isPlaying || isPaused) { stopAll(); return; }
