@@ -485,17 +485,17 @@
   margin: 2rem 0;
 }
 
-.prose-custom figure > p,
-.prose-custom figure p > img {
+.prose-custom figure p {
   margin: 0;
 }
 
 .prose-custom figure img {
-  width: 100%;
+  max-width: 100%;
   height: auto;
   border-radius: var(--prose-radius-md);
   border: 1px solid var(--prose-border);
   margin-inline: auto;
+  display: block;
 }
 
 .prose-custom figcaption {
