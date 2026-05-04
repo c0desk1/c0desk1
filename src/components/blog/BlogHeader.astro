@@ -26,38 +26,48 @@ const {
   authorSlug
 } = Astro.props;
 ---
-<div class="relative items-center w-full">
+<div class="relative w-full items-center">
+  <!-- Background pattern -->
   <div
     class={cn(
       "absolute inset-0",
       "bg-size-[20px_20px]",
       "bg-[radial-gradient(#d4d4d4_1px,transparent_1px)]",
       "dark:bg-[radial-gradient(#404040_1px,transparent_1px)]",
-      )}
-    />
+    )}
+  />
+  <!-- Mask overlay -->
   <div class="pointer-events-none absolute inset-0 flex items-center justify-center bg-white mask-[radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
-  <header class="relative items-center z-20 w-full text-start md:text-center">
-    <div class="prose-custom flex flex-wrap items-center mb-4 md:mb-8">
-      <h1>
-        {title}
-      </h1>
+
+  <!-- Header content -->
+  <header class="relative z-20 w-full text-center">
+    <!-- Judul -->
+    <div class="prose-custom mb-4 md:mb-8">
+      <h1>{title}</h1>
     </div>
+
+    <!-- Meta -->
     <div class="mb-4 md:mb-8">
       <BlogMeta pubDate={pubDate} readingTime={readingTime} />
     </div>
-    <div class="grid grid-col-1 md:grid-col-2 flex-wrap items-center justify-start md:justify-center gap-2">
+
+    <!-- Author + Actions -->
+    <div class="flex flex-col md:flex-row justify-center md:justify-between gap-2 items-center">
       {authorName && (
-        <BlogAuthor
-          name={authorName}
-          avatar={authorAvatar}
-          title={authorTitle}
-          slug={authorSlug}
-        />
+        <div class="flex justify-start">
+          <BlogAuthor
+            name={authorName}
+            avatar={authorAvatar}
+            title={authorTitle}
+            slug={authorSlug}
+          />
+        </div>
       )}
       <div class="flex items-center justify-start md:justify-center gap-2">
         <Listen />
         <CopyLink />
       </div>
     </div>
+
   </header>
 </div>
