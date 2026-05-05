@@ -24,16 +24,7 @@ import PortfolioFeaturedImage from "@/components/portfolio/PortfolioFeaturedImag
 import PortfolioCaseStudy from "@/components/portfolio/PortfolioCaseStudy.astro";
 
 
-import Image from "@/components/mdx/Image.astro";
-import HR from "@/components/mdx/HR.astro";
-import Table from '@/components/mdx/Table.astro';
-import Details from '@/components/mdx/Details.astro';
-import Callout from '@/components/mdx/Callout.astro';
-import Steps from '@/components/mdx/Steps.astro';
-import CodeGroup from '@/components/mdx/CodeGroup.astro';
-import Heading from '@/components/mdx/Heading.astro';
-import InlineLink from '@/components/mdx/InlineLink.astro';
-import CallQuote from '@/components/mdx/CallQuote.astro';
+import { components } from '@/components/layout/MDXComponents';
 
 export async function getStaticPaths() {
   const projects = await getCollection("portfolio", ({ data }) => !data.draft);
@@ -111,21 +102,6 @@ const seoBreadcrumbItems = [
 const Breadcrumbs = seoBreadcrumbItems.filter(item => 
   item.name === "Home" || item.name === "Portfolio"
 );
-
-const components = {
-  h2: Heading,
-  h3: Heading,
-  a: InlineLink,
-  img: Image, 
-  hr: HR,
-  blockquote: CallQuote,
-  table: Table,
-  Details: Details,
-  Callout,
-  Steps,
-  CodeGroup,
-
-};
 ---
 
 <BaseLayout 
