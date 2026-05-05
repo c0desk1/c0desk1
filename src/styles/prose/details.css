@@ -1,0 +1,67 @@
+@reference '@/style/prose.css';
+
+@layer components {
+ .prose-custom details {
+    margin-block: --theme(spacing.6);
+    border: 1px solid var(--prose-border);
+    border-radius: var(--prose-radius-md);
+    background-color: var(--prose-surface);
+    overflow: hidden;
+    transition: border-color var(--prose-transition);
+  }
+
+ .prose-custom details:hover {
+    border-color: var(--prose-border-hover, var(--prose-border));
+  }
+
+ .prose-custom summary {
+    font-size: --theme(fontSize.sm);
+    font-weight: --theme(fontWeight.semibold);
+    padding: --theme(spacing.3.5) --theme(spacing.4);
+    display: flex;
+    align-items: center;
+    gap: --theme(spacing.2.5);
+    cursor: pointer;
+    list-style: none;
+  }
+
+ .prose-custom summary::-webkit-details-marker {
+    display: none;
+  }
+
+ .prose-custom.details-icon {
+    width: --theme(spacing.4);
+    height: --theme(spacing.4);
+    flex-shrink: 0;
+    transition: transform var(--prose-transition);
+    color: var(--prose-fg-subtle);
+  }
+
+ .prose-custom details[open].details-icon {
+    transform: rotate(90deg);
+  }
+
+ .prose-custom details[open] summary {
+    border-bottom: 1px solid var(--prose-border);
+  }
+
+ .prose-custom details > *:not(summary) {
+    padding: --theme(spacing.4);
+    color: var(--prose-fg-muted);
+    line-height: 1.65;
+  }
+
+ .prose-custom details > *:not(summary) ul,
+ .prose-custom details > *:not(summary) ol {
+    padding-inline-start: --theme(spacing.6);
+  }
+
+  @keyframes detailsFadeSlide {
+    from { opacity: 0; transform: translateY(-4px) }
+    to { opacity: 1; transform: translateY(0) }
+  }
+
+ .prose-custom details[open] > *:not(summary) {
+    animation: detailsFadeSlide 0.18s ease-out;
+  }
+}
