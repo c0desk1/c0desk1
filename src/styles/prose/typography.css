@@ -287,10 +287,84 @@
   .prose-custom h4,
   .prose-custom h5,
   .prose-custom h6 {
-    scroll-margin-top: 56px;
+    scroll-margin-top: 64px;
+  }
+
+  .prose-custom h1,
+  .prose-custom h1.group.flex {
+    font-size: clamp(1.75rem, 5vw, 2.5rem) !important;
+    font-weight: 700 !important;
+    line-height: 1.1 !important;
+    margin-top: 2.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .prose-custom h2,
+  .prose-custom :where(h2.group.flex) {
+    font-size: clamp(1.5rem, 4.5vw, 1.875rem) !important;
+    font-weight: 700 !important;
+    margin-top: 2rem !important;
+    margin-bottom: 1rem;
+    letter-spacing: -0.025em !important;
+  }
+
+  .prose-custom h3,
+  .prose-custom :where(h3.group.flex) {
+    font-size: clamp(1.25rem, 3.5vw, 1.5rem) !important;
+    font-weight: 600 !important;
+    margin-top: 1.75rem;
+    margin-bottom: 0.875rem;
+    letter-spacing: -0.015em !important;
+  }
+
+  .prose-custom h4,
+  .prose-custom h4.group.flex {
+    font-size: 1.125rem !important;
+    font-weight: 600 !important;
+    margin-top: 1.5rem;
+    margin-bottom: 0.625rem !important;
+  }
+
+  .prose-custom h5,
+  .prose-custom h5.group.flex {
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em !important;
+    text-transform: uppercase;
+    color: var(--prose-fg-muted);
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .prose-custom h6,
+  .prose-custom h6.group.flex {
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase;
+    color: var(--prose-fg-subtle);
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .prose-custom .anchor-link {
+    margin-left: 0.25rem;
+  }
+
+  .prose-custom .anchor-link svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .prose-custom .steps-container .group.flex {
+    font-size: 0.9375rem !important;
+    font-weight: 600 !important;
+    margin-top: 1.5rem !important;
+    letter-spacing: normal !important;
   }
 
   .prose-custom p {
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
+    line-height: 1.6;
   }
 }
