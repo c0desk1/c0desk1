@@ -1,6 +1,7 @@
 /* BASE */
 .prose-custom :where(h1, h2, h3, h4, h5, h6, p, ul, ol, blockquote, pre, hr, table) {
   margin-top: 0;
+  max-width: 100%;
 }
 
 .prose-custom :where(h1, h2, h3, h4, h5, h6) {
@@ -324,7 +325,7 @@
     line-height: 1.7;
     color: var(--prose-fg-muted);
     margin-bottom: 1.5rem;
-    max-width: 72ch;
+    max-width: 100%;
     text-wrap: pretty;
   }
   
