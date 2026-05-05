@@ -52,6 +52,143 @@
   transition: stroke 0.15s ease;
 }
 
+.prose-custom strong {
+  font-weight: 600;
+  color: var(--prose-fg);
+  letter-spacing: -0.01em;
+}
+
+.prose-custom em {
+  font-style: italic;
+}
+
+.prose-custom strong em,
+.prose-custom em strong {
+  font-style: italic;
+}
+
+.prose-custom sup,
+.prose-custom sub {
+  font-size: 0.6875rem;
+  line-height: 1;
+  font-weight: 500;
+  vertical-align: baseline;
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.prose-custom sup {
+  top: -0.2em;
+  margin-left: 0.05em;
+  margin-right: 0.05em;
+  color: var(--prose-fg-subtle);
+  text-decoration: none;
+}
+
+.prose-custom sub {
+  bottom: -0.2em;
+  color: var(--prose-fg-subtle);
+}
+
+.prose-custom sup a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s ease;
+}
+
+.prose-custom sup a:hover {
+  color: var(--prose-accent);
+  text-decoration: none;
+}
+
+.prose-custom sup:has(a[href^="#fn"]) {
+  cursor: pointer;
+}
+
+.prose-custom h1 sup,
+.prose-custom h2 sup,
+.prose-custom h3 sup {
+  font-size: 0.625rem;
+  top: -0.3em;
+}
+
+.prose-custom .callout-content p sup a {
+  font-size: 0.75rem;
+  font-weight: 450;
+  color: var(--prose-fg) !important;
+  text-decoration: none;
+}
+
+.prose-custom .callout-content p sup a:hover {
+  color: var(--prose-accent) !important;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--prose-accent-subtle);
+}
+
+.prose-custom .callout sup,
+.prose-custom .callout sub {
+  color: currentColor;
+  opacity: 0.8;
+}
+
+.prose-custom small {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--prose-fg-subtle);
+  font-weight: 400;
+  display: inline-block;
+  transition: color 0.2s ease;
+}
+
+.prose-custom figcaption small,
+.prose-custom aside small,
+.prose-custom footer small {
+  font-size: 0.75rem;
+  color: var(--prose-fg-dim);
+}
+
+.prose-custom small:hover {
+  color: var(--prose-fg);
+}
+
+.prose-custom mark {
+  background-color: var(--prose-accent);
+  color: var(--prose-fg);
+  padding: 0.125em 0.2em;
+  border-radius: 0.25rem;
+  font-weight: 450;
+  transition: background-color 0.2s ease;
+}
+
+.prose-custom mark:hover {
+  background-color: var(--prose-accent-dim);
+}
+
+.prose-custom mark.search-highlight {
+  background-color: rgba(245, 166, 35, 0.2);
+  border-bottom: 1px solid rgba(245, 166, 35, 0.5);
+}
+
+.prose-custom abbr[title] {
+  text-decoration: none;
+  border-bottom: 1px dashed var(--prose-border);
+  cursor: help;
+  font-feature-settings: "calt" 1;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.prose-custom abbr[title]:hover {
+  border-bottom-color: var(--prose-accent);
+  color: var(--prose-accent);
+}
+
+.prose-custom abbr[title]:active {
+  border-bottom-style: solid;
+  transition: none;
+}
+
 
 /* ==========================================================================
    MOBILE
