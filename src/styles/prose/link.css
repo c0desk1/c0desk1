@@ -1,4 +1,8 @@
-/* ==================== LINKS ==================== */
+/* src/styles/prose/components/link.css */
+
+/* LINKS */
+
+/* GLOBAL */
 .prose-custom a {
   color: var(--prose-accent);
   outline-offset: 2px;
@@ -45,4 +49,18 @@
 .prose-custom :hover .external-icon {
   opacity: 1;
   transform: translate(1px, -1px);
+}
+
+/* MOBILE */
+@media (max-width: 767px) {
+  .prose-custom .inline-link {
+    text-underline-offset: 3px;
+  }
+}
+
+/*TABLET/DESKTOP*/
+@media (min-width: 768px) {
+  .prose-custom .inline-link {
+    text-underline-offset: 4px;
+  }
 }
