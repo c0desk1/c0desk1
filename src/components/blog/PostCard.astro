@@ -40,26 +40,26 @@ if (post) {
 <a
   href={postUrl}
   aria-label={`Baca artikel: ${title}`}
-  class="group flex flex-col gap-4 rounded-xl border border-transparent p-4 transition-all hover:border-(--border-strong) hover:shadow-xs focus:outline-none focus:ring-2 focus:ring-(--accent)"
+  class="group flex flex-col gap-5 border-b border-(--border) py-8 first:pt-0 last:border-none hover:border-(--border-strong) transition-colors"
 >
-  <!-- Header: kategori & tanggal -->
-  <div class="flex items-center justify-between text-xs uppercase tracking-wide text-(--fg-subtle) transition-colors group-hover:text-(--fg)">
+  <!-- Header: kategori & tanggal (tanpa uppercase) -->
+  <div class="flex items-center justify-between text-sm text-(--fg-subtle) group-hover:text-(--fg)">
     <span>{categoryName}</span>
     <time datetime={pubDateISO}>{pubDateDisplay}</time>
   </div>
 
-  <!-- Konten utama -->
-  <div class="flex flex-col gap-2">
-    <h2 class="text-lg font-semibold tracking-tight text-(--fg) line-clamp-3 md:text-xl">
-      {title}
-    </h2>
-    <p class="text-sm leading-relaxed text-(--fg-muted) line-clamp-3 transition-colors group-hover:text-(--fg)">
-      {excerpt}
-    </p>
-  </div>
+  <!-- Judul -->
+  <h2 class="text-xl md:text-2xl font-semibold tracking-tight text-(--fg) group-hover:text-(--accent) transition-colors line-clamp-2">
+    {title}
+  </h2>
 
-  <!-- Footer: author -->
-  <div class="mt-2 flex items-center gap-2.5">
+  <!-- Deskripsi singkat -->
+  <p class="text-base text-(--fg-muted) leading-relaxed line-clamp-2 group-hover:text-(--fg)">
+    {excerpt}
+  </p>
+
+  <!-- Author info (avatar opsional) -->
+  <div class="flex items-center gap-2.5 pt-2">
     {authorAvatar && (
       <Image
         src={optimizedAvatar}
@@ -71,6 +71,6 @@ if (post) {
         class="h-6 w-6 rounded-full border border-(--border-strong) object-cover"
       />
     )}
-    <span class="text-xs text-(--fg-subtle)">{authorName}</span>
+    <span class="text-sm text-(--fg-subtle)">{authorName}</span>
   </div>
 </a>
