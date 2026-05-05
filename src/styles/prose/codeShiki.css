@@ -121,3 +121,15 @@
 .prose-custom pre code {
   background: transparent !important;
 }
+
+.astro-code,
+.astro-code span {
+  color: var(--shiki-light, inherit);
+  background-color: var(--shiki-light-bg, transparent);
+}
+
+html.dark .astro-code,
+html.dark .astro-code span {
+  color: var(--shiki-dark, inherit) !important;
+  background-color: var(--shiki-dark-bg, transparent) !important;
+}
