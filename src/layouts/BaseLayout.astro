@@ -11,6 +11,7 @@ import Toast from "@/components/ui/Toast.astro";
 import Footer from "@/components/layout/Footer.astro";
 import Search from "@/components/layout/Search.astro";
 import Container from "@/components/ui/Container.astro";
+import BG from "@/components/ui/BG.astro";
 
 
 interface Props {
@@ -92,8 +93,8 @@ const analyticsId = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
       repoUrl={repoUrl} 
     />
   </head>
-
   <body>
+    <BG />
     <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:bg-white focus:text-black focus:px-4 focus:py-2 focus:border focus:border-black dark:focus:bg-black dark:focus:text-white">
       loncat ke konten utama
     </a>
@@ -138,5 +139,6 @@ const analyticsId = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
         });
       }
     </script>
+    
   </body>
 </html>
