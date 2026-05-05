@@ -1,0 +1,103 @@
+/* ==================== STEPS / NUMBERED GUIDE ==================== */
+
+.prose-custom .steps-container {
+  counter-reset: step;
+  background-image: linear-gradient(var(--prose-border), var(--prose-border));
+  background-size: 1px calc(100% - 1rem);
+  background-position: left;
+  background-repeat: no-repeat;
+  margin: 2rem 0 2rem 1.25rem;
+  padding-left: 2rem;
+  position: relative;
+  display: flow-root;
+}
+
+.prose-custom .steps-container {
+  border-left: none; 
+}
+
+.prose-custom .steps-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -1px;
+  width: 1px;
+  height: 0.5rem;
+  background-color: var(--prose-bg);
+  z-index: 1;
+}
+
+.prose-custom .steps-container > *:last-child::after {
+  content: "";
+  position: absolute;
+  left: calc(-2rem - 1px);
+  top: 1.1rem;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--prose-bg);
+  z-index: 1;
+  height: 100%;
+}
+
+.prose-custom .steps-container .group.flex {
+  position: relative;
+  counter-increment: step;
+  margin-top: 2rem !important;
+  margin-bottom: 0.5rem !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  line-height: 1.5 !important;
+  overflow: visible;
+}
+
+.prose-custom .steps-container > .group.flex:first-child {
+  margin-top: 0 !important;
+}
+
+.prose-custom .steps-container .group.flex::before {
+  content: counter(step);
+  position: absolute;
+  left: calc(-2rem - 13px - 0.5px);
+  top: -1px; 
+  width: 26px;
+  height: 26px;
+  background: var(--prose-surface);
+  color: var(--prose-fg);
+  border: 1.5px solid var(--prose-border);
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--prose-font-mono, monospace);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: all var(--prose-transition);
+}
+
+.prose-custom .steps-container .group.flex:hover::before {
+  background: var(--prose-surface-hover);
+  transform: scale(1.05);
+}
+
+.prose-custom .steps-container p {
+  position: relative;
+  margin: 0.5rem 0 1.5rem 0;
+  color: var(--prose-fg-muted);
+  font-size: 0.9375rem;
+  z-index: 2;
+}
+
+.prose-custom .steps-container .group.flex,
+.prose-custom .steps-container .group.flex * {
+  border: none !important;
+  text-decoration: none !important;
+}
+
+.prose-custom .steps-container .anchor-link {
+  display: none !important;
+}
+
+.prose-custom .steps-container > *:last-child {
+  margin-bottom: 0 !important;
+}
