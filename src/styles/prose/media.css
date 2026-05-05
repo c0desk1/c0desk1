@@ -1,0 +1,44 @@
+/* ==================== IMAGES ==================== */
+.prose-custom img {
+  margin: 2.5rem 0;
+  max-width: 100%;
+  height: auto;
+  margin-inline: auto;
+  display: block;
+}
+
+/* ==================== FIGURE ==================== */
+.prose-custom figure {
+  margin: 2.5rem 0;
+}
+
+.prose-custom figure p {
+  margin: 0;
+}
+
+.prose-custom figure img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--prose-border);
+  margin-inline: auto;
+  display: block;
+}
+
+.prose-custom figcaption {
+  text-align: center;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--prose-fg-muted);
+  max-width: 60ch;
+  margin: 0.75rem auto 0;
+}
+
+/* ==================== VIDEO ==================== */
+
+.prose-custom video {
+  width: 100%;
+  margin: 2rem 0;
+  border-radius: var(--prose-radius-md);
+  border: 1px solid var(--prose-border);
+  display: block;
+}
