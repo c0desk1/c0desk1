@@ -1,0 +1,123 @@
+/* src/styles/prose/components/code.css */
+
+/* INLINE CODE */
+.prose-custom code:not(pre code) {
+  font-family: var(--prose-font-mono);
+  font-size: 0.8125em;
+  font-weight: 500;
+  background-color: var(--prose-surface);
+  color: var(--prose-fg);
+  padding: 0.15em 0.4em;
+  border-radius: var(--prose-radius-sm);
+  border: 1px solid var(--prose-border);
+  white-space: break-spaces;
+}
+
+.prose-custom h1 code,
+.prose-custom h2 code,
+.prose-custom h3 code,
+.prose-custom summary code {
+  font-size: 0.9em;
+  background-color: var(--prose-surface-dim);
+}
+
+/* CODE BLOCK */
+.prose-custom pre {
+  font-family: var(--prose-font-mono);
+  background-color: var(--prose-surface) !important;
+  border: 1px solid var(--prose-border);
+  border-radius: var(--prose-radius-md);
+  padding: 1.25rem 1.5rem;
+  overflow-x: auto;
+  margin: 1.75rem 0;
+  position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: var(--prose-border) transparent;
+}
+
+/* Custom scrollbar */
+.prose-custom pre::-webkit-scrollbar {
+  height: 6px;
+}
+.prose-custom pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+.prose-custom pre::-webkit-scrollbar-thumb {
+  background: var(--prose-border);
+  border-radius: 3px;
+}
+
+.prose-custom pre .copy-btn {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  font-family: var(--prose-font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--prose-radius-sm);
+  border: 1px solid var(--prose-border);
+  background: var(--prose-surface-hover);
+  color: var(--prose-fg-muted);
+  cursor: pointer;
+  transition: all var(--prose-transition);
+  opacity: 0;
+}
+.prose-custom pre:hover .copy-btn { opacity: 1; }
+.prose-custom pre .copy-btn:hover {
+  background: var(--prose-accent);
+  color: var(--prose-white);
+  border-color: var(--prose-accent);
+}
+
+/* MOBILE */
+@media (max-width: 767px) {
+  .prose-custom code:not(pre code) {
+    font-size: 0.75rem !important;
+    padding: 0.1em 0.3em;
+  }
+
+  .prose-custom pre {
+    padding: 1rem;
+    margin: 1.25rem 0;
+    border-radius: var(--prose-radius-sm, 6px);
+  }
+
+  .prose-custom pre code {
+    font-size: 0.75rem !important;
+  }
+
+  .prose-custom pre .copy-btn {
+    top: 0.5rem;
+    right: 0.5rem;
+    font-size: 0.625rem;
+    padding: 0.2rem 0.5rem;
+  }
+}
+
+/* TABLET/DESKTOP */
+@media (min-width: 768px) {
+  .prose-custom code:not(pre code) {
+    font-size: 0.8125rem !important;
+  }
+
+  .prose-custom pre {
+    padding: 1.25rem 1.5rem;
+    margin: 1.75rem 0;
+  }
+
+  .prose-custom pre code {
+    font-size: 0.8125rem;
+  }
+}
+
+/* DUKUNGAN THEME LIGHT/DARK (Shiki dual themes) */
+
+.prose-custom pre {
+  background-color: var(--prose-surface) !important;
+  transition: background-color var(--prose-transition, 0.2s);
+}
+
+.prose-custom pre code {
+  background: transparent !important;
+}
