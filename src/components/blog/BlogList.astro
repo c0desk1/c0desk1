@@ -9,7 +9,7 @@ interface Props {
 const { posts } = Astro.props;
 ---
 
-<div class="grid grid-cols-1 md:grid-cols-3 border-0 md:border border-(--border) divide-y md:divide-x md:divide-y-0 divide-(--border)">
+<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4">
   {posts.map((post) => (
     <div class="divide-x divie-(--border)">
       <PostCard post={post} />
