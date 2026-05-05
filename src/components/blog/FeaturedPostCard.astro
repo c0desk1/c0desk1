@@ -2,6 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import { getEntry } from 'astro:content';
 import { Image } from 'astro:assets'; 
+
 import { generateExcerpt, formatDateCompact, cdnImage, isCdnUrl } from '@/lib/utils';
 import { siteConfig } from '@/config/site';
 
@@ -18,7 +19,7 @@ if (post) {
   const { data, id } = post;
   const { title: t, pubDate, category, author } = data;
   title = t;
-  excerpt = generateExcerpt(post.body || '', 300);
+  excerpt = generateExcerpt(post.body || '', 250);
 
   const categoryEntry = await getEntry(category);
   const authorEntry   = author ? await getEntry(author) : null;
@@ -38,75 +39,71 @@ const icons = ["lines", "brackets", "grid"];
 const iconType = icons[Math.floor(Math.random() * icons.length)];
 ---
 
-<div class="featured-card rounded-xl border border-(--border) bg-(--bg) hover:bg-(--bg-muted) transition-colors">
-  <a href={postUrl} class="group flex flex-col h-full px-5 py-6 md:px-6 md:py-8">
-    <div class="mb-4 md:mb-6 shrink-0">
-      <div class="w-12 h-12 flex items-center justify-center border border-(--border) bg-(--bg-subtle)">
-        {iconType === "lines" && (
-          <svg viewBox="0 0 24 24" class="w-6 h-6 text-(--fg-subtle)">
-            <path d="M4 6h6M4 12h10M4 18h8" stroke="currentColor" stroke-width="1.5" fill="none"/>
-          </svg>
-        )}
-        {iconType === "brackets" && (
-          <svg viewBox="0 0 24 24" class="w-6 h-6 text-(--fg-subtle)">
-            <path d="M8 5L3 12L8 19M16 5L21 12L16 19" stroke="currentColor" stroke-width="1.5" fill="none"/>
-          </svg>
-        )}
-        {iconType === "grid" && (
-          <svg viewBox="0 0 24 24" class="w-6 h-6 text-(--fg-subtle)">
-            <rect x="4" y="4" width="6" height="6" stroke="currentColor" fill="none"/>
-            <rect x="14" y="4" width="6" height="6" stroke="currentColor" fill="none"/>
-            <rect x="4" y="14" width="6" height="6" stroke="currentColor" fill="none"/>
-            <rect x="14" y="14" width="6" height="6" stroke="currentColor" fill="none"/>
-          </svg>
-        )}
-      </div>
-    </div>
-
-    <div class="mb-3 md:mb-6 shrink-0">
-      <time datetime={pubDateISO} class="text-xs md:text-sm text-(--fg-subtle) font-medium">
-        {pubDateDisplay}
-      </time>
-    </div>
-
-    <div class="flex flex-col gap-3 md:gap-5 flex-1 min-w-0 min-h-0">
-      <h2 class="text-xl md:text-3xl font-semibold tracking-tight text-(--fg) leading-tight line-clamp-2 md:line-clamp-3">
-        {title}
-      </h2>
-
-      <p class="post-excerpt text-sm md:text-base font-medium text-(--fg-muted) leading-relaxed line-clamp-3 md:line-clamp-6 group-hover:text-(--fg)">
-        {excerpt}
-      </p>
-    </div>
-
-    <div class="mt-4 md:mt-auto flex items-center gap-2 shrink-0">
-      {authorAvatar && (
-        <Image
-          src={optimizedAvatar}
-          alt=""
-          width={40}
-          height={40}
-          loading="lazy"
-          decoding="async"
-          class="w-6 h-6 md:w-8 md:h-8 object-cover rounded-full shrink-0"
-        />
+<a href={postUrl} class="group flex flex-col h-full px-6 py-8 rounded-xl border border-(--border) bg-(--bg) hover:bg-(--bg-muted)">
+  <div class="mb-4 md:mb-6 shrink-0">
+    <div class="size-7 md:size-13 flex items-center justify-center rounded-full border border-(--border) bg-(--bg-subtle)">
+      {iconType === "lines" && (
+        <svg viewBox="0 0 24 24" class="w-6 h-6 text-(--accent)">
+          <path d="M4 6h6M4 12h10M4 18h8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
       )}
-      <span class="text-xs md:text-sm text-(--fg-subtle) font-medium truncate">
-        {authorName}
-      </span>
+      {iconType === "brackets" && (
+        <svg viewBox="0 0 24 24" class="w-6 h-6 text-(--accent)">
+          <path d="M8 5L3 12L8 19M16 5L21 12L16 19" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+      )}
+      {iconType === "grid" && (
+        <svg viewBox="0 0 24 24" class="w-6 h-6 text-(--accent)">
+          <rect x="4" y="4" width="6" height="6" stroke="currentColor" fill="none"/>
+          <rect x="14" y="4" width="6" height="6" stroke="currentColor" fill="none"/>
+          <rect x="4" y="14" width="6" height="6" stroke="currentColor" fill="none"/>
+          <rect x="14" y="14" width="6" height="6" stroke="currentColor" fill="none"/>
+        </svg>
+      )}
     </div>
-  </a>
-</div>
+  </div>
+  <div class="mb-4 shrink-0">
+    <time datetime={pubDateISO} class="text-[13px] md:text-sm text-(--fg-subtle) font-medium">
+      {pubDateDisplay}
+    </time>
+  </div>
+  <div class="flex flex-col gap-3 md:gap-6 flex-1 min-h-0">
+    <h2 class="text-xl md:text-2xl lg:text-3xl font-semibold tracking-tight text-(--fg) leading-tight line-clamp-3 md:line-clamp-4">
+      {title}
+    </h2>
+    <p class="post-excerpt mb-4 text-sm md:text-base font-medium text-(--fg-muted) leading-relaxed line-clamp-4 md:line-clamp-8 group-hover:text-(--fg)">
+      {excerpt}
+    </p>
+  </div>
+  <div class="mt-auto flex items-center gap-2 shrink-0">
+    {authorAvatar && (
+      <Image
+        src={optimizedAvatar}
+        alt={`Author ${authorName}`}
+        width={48}
+        height={48}
+        loading="lazy"
+        decoding="async"
+        class="w-5 h-5 object-cover rounded-full"
+      />
+    )}
+    <span class="text-[13px] md:text-sm text-(--fg-subtle) font-medium">
+      {authorName}
+    </span>
+  </div>
+</a>
 
-<style>
-  @media (min-width: 768px) {
-    .featured-card {
-      aspect-ratio: 2 / 3;
-    }
-  }
-
+<style is:global>
   .post-excerpt {
-    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      black 30%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      black 30%,
+      transparent 100%
+    );
   }
 </style>
