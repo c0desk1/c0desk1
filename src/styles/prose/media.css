@@ -1,4 +1,6 @@
-/* ==================== IMAGES ==================== */
+/* src/styles/prose/components/media.css */
+
+/* IMAGES */
 .prose-custom img {
   margin: 2.5rem 0;
   max-width: 100%;
@@ -7,7 +9,7 @@
   display: block;
 }
 
-/* ==================== FIGURE ==================== */
+/* FIGURE */
 .prose-custom figure {
   margin: 2.5rem 0;
 }
@@ -33,12 +35,50 @@
   margin: 0.75rem auto 0;
 }
 
-/* ==================== VIDEO ==================== */
-
+/* VIDEO */
 .prose-custom video {
   width: 100%;
-  margin: 2rem 0;
+  margin: 2.5rem 0;
   border-radius: var(--prose-radius-md);
   border: 1px solid var(--prose-border);
   display: block;
+}
+
+@media (max-width: 767px) {
+  .prose-custom img {
+    margin: 1.5rem 0;
+  }
+
+  .prose-custom figure {
+    margin: 1.5rem 0;
+  }
+
+  .prose-custom figcaption {
+    font-size: 0.75rem;
+    margin: 0.5rem auto 0;
+  }
+
+  .prose-custom video {
+    margin: 1.5rem 0;
+    border-radius: var(--prose-radius-sm);
+  }
+}
+
+@media (min-width: 768px) {
+  .prose-custom img {
+    margin: 2rem 0;
+  }
+
+  .prose-custom figure {
+    margin: 2rem 0;
+  }
+
+  .prose-custom figcaption {
+    font-size: 0.8125rem;
+    margin: 0.75rem auto 0;
+  }
+
+  .prose-custom video {
+    margin: 2rem 0;
+  }
 }
