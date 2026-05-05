@@ -13,11 +13,11 @@ const { posts } = Astro.props;
 <div class="py-4 md:py-8">
   <div class="mb-4 md:mb-8">
     <h2 class="text-(--fg) text-3xl md:text-4xl font-semibold tracking-tighter">
-      Postingan Terbaru.
+      Terbaru.
     </h2>
   </div>
   {posts.length > 0 ? (
-    <div class="grid grid-cols-1 md:grid-cols-3 border-0 md:border border-(--border) divide-y md:divide-x md:divide-y-0 divide-(--border)">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       {posts.map(post => (
         <div class="p-0">
           <PostCard post={post} />
@@ -26,7 +26,7 @@ const { posts } = Astro.props;
     </div>
   ) : (
     <div class="py-12 text-center border border-dashed border-(--border) rounded-lg">
-      <p class="text-(--fg-subtle) text-sm md:text-lg">
+      <p class="text-(--fg-subtle) text-base md:text-lg">
         Belum ada postingan blog.
       </p>
     </div>
