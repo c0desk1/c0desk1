@@ -300,7 +300,7 @@
   }
 
   * {
-    -webkit-tap-highlight-color: rgba(0, 98, 255, 0.15);
+    -webkit-tap-highlight-color: rgba(59, 130, 246, 0.2);
   }
 
   /* ==================== TYPOGRAPHY DEFAULTS ==================== */
@@ -375,7 +375,7 @@
     background-clip: text;
   }
 
-  .text-gradient-emerald {
+  .text-gradient-accent {
     background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dim) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
