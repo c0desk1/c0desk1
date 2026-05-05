@@ -1,4 +1,4 @@
-/* ==================== STEPS / NUMBERED GUIDE ==================== */
+/* STEPS / NUMBERED GUIDE */
 
 .prose-custom .steps-container {
   counter-reset: step;
@@ -100,4 +100,68 @@
 
 .prose-custom .steps-container > *:last-child {
   margin-bottom: 0 !important;
+}
+
+@media (max-width: 767px) {
+  /* MOBILE */
+  .prose-custom .steps-container {
+    margin: 1.5rem 0 1.5rem 0.75rem;
+    padding-left: 1.5rem;
+    background-size: 1px calc(100% - 0.75rem);
+  }
+
+  .prose-custom .steps-container .group.flex {
+    margin-top: 1.5rem !important;
+    font-size: 0.9375rem !important;
+  }
+
+  .prose-custom .steps-container .group.flex::before {
+    left: calc(-1.5rem - 11px - 0.5px);
+    width: 22px;
+    height: 22px;
+    font-size: 0.6875rem;
+    top: 0;
+  }
+
+  .prose-custom .steps-container p {
+    margin: 0.5rem 0 1.25rem 0;
+    font-size: 0.875rem;
+  }
+
+  .prose-custom .steps-container > *:last-child::after {
+    left: calc(-1.5rem - 1px);
+    top: 0.9rem;
+  }
+}
+
+@media (min-width: 768px) {
+  /* TABLET/DESKTOP */
+  .prose-custom .steps-container {
+    margin: 2rem 0 2rem 1.25rem;
+    padding-left: 2rem;
+    background-size: 1px calc(100% - 1rem);
+  }
+
+  .prose-custom .steps-container .group.flex {
+    margin-top: 2rem !important;
+    font-size: 1rem !important;
+  }
+
+  .prose-custom .steps-container .group.flex::before {
+    left: calc(-2rem - 13px - 0.5px);
+    width: 26px;
+    height: 26px;
+    font-size: 0.75rem;
+    top: -1px;
+  }
+
+  .prose-custom .steps-container p {
+    margin: 0.5rem 0 1.5rem 0;
+    font-size: 0.9375rem;
+  }
+
+  .prose-custom .steps-container > *:last-child::after {
+    left: calc(-2rem - 1px);
+    top: 1.1rem;
+  }
 }
