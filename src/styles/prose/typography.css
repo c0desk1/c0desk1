@@ -35,14 +35,15 @@
   flex-shrink: 0;
   width: 1.25rem;
   height: 1.25rem;
-  margin-left: 0.5rem;
+  margin-left: 0.25rem;
   color: var(--prose-fg-subtle);
   text-decoration: none;
   opacity: 0;
   pointer-events: none;
   transform: translateX(-4px);
   transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
-  vertical-align: middle;
+  vertical-align: baseline;
+  position: relative;
   
 }
 
