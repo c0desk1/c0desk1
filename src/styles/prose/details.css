@@ -1,6 +1,6 @@
 /* ==================== DETAILS / SUMMARY ==================== */
 
-/* GLOBAL (semua ukuran) */
+/* GLOBAL */
 .prose-custom details {
   margin: 1.5rem 0;
   border: 1px solid var(--prose-border);
@@ -57,7 +57,7 @@
   outline-offset: 2px;
 }
 
-/* ==================== UNTUK PARAGRAPH (not summary) ==================== */
+/* ==================== BAGIAN ATAS: NOT SUMMARY (Paragraf, Heading, dll) ==================== */
 .prose-custom details > *:not(summary) {
   padding: 1rem;
   color: var(--prose-fg-muted);
@@ -72,7 +72,6 @@
   margin-bottom: 0;
 }
 
-/* Heading dalam details */
 .prose-custom details > *:not(summary) h1,
 .prose-custom details > *:not(summary) h2,
 .prose-custom details > *:not(summary) h3,
@@ -92,7 +91,6 @@
   margin-top: 0;
 }
 
-/* Blockquote dalam details */
 .prose-custom details > *:not(summary) .quote {
   margin: 1rem 0;
 }
@@ -101,7 +99,7 @@
   font-size: 1rem;
 }
 
-/* ==================== UNTUK LIST (details-content) ==================== */
+/* ==================== BAGIAN BAWAH: DETAILS-CONTENT (Khusus List) ==================== */
 .prose-custom .details-content {
   padding: 1rem;
   color: var(--prose-fg-muted);
@@ -126,35 +124,6 @@
 .prose-custom .details-content ol ul {
   padding-left: 1.25rem;
   margin: 0.25rem 0;
-}
-
-/* Paragraph dalam details-content (kalau ada) */
-.prose-custom .details-content p {
-  margin: 0 0 1rem 0;
-}
-
-.prose-custom .details-content p:last-child {
-  margin-bottom: 0;
-}
-
-/* Heading dalam details-content */
-.prose-custom .details-content h1,
-.prose-custom .details-content h2,
-.prose-custom .details-content h3,
-.prose-custom .details-content h4,
-.prose-custom .details-content h5,
-.prose-custom .details-content h6 {
-  margin-top: 1.25rem;
-  margin-bottom: 0.5rem;
-}
-
-.prose-custom .details-content h1:first-child,
-.prose-custom .details-content h2:first-child,
-.prose-custom .details-content h3:first-child,
-.prose-custom .details-content h4:first-child,
-.prose-custom .details-content h5:first-child,
-.prose-custom .details-content h6:first-child {
-  margin-top: 0;
 }
 
 /* Animasi */
@@ -192,7 +161,7 @@
     height: 0.875rem;
   }
 
-  /* Paragraph mobile */
+  /* NOT SUMMARY - Mobile */
   .prose-custom details > *:not(summary) {
     padding: 0.75rem 0.875rem;
     line-height: 1.55;
@@ -203,7 +172,17 @@
     margin: 0 0 0.75rem 0;
   }
 
-  /* List mobile */
+  .prose-custom details > *:not(summary) h1,
+  .prose-custom details > *:not(summary) h2,
+  .prose-custom details > *:not(summary) h3,
+  .prose-custom details > *:not(summary) h4,
+  .prose-custom details > *:not(summary) h5,
+  .prose-custom details > *:not(summary) h6 {
+    margin-top: 1rem;
+    margin-bottom: 0.4rem;
+  }
+
+  /* DETAILS-CONTENT - Mobile */
   .prose-custom .details-content {
     padding: 0.75rem 0.875rem;
     line-height: 1.55;
@@ -228,26 +207,6 @@
   .prose-custom .details-content ol ul {
     padding-left: 1rem;
   }
-
-  .prose-custom .details-content p {
-    margin: 0 0 0.75rem 0;
-  }
-
-  .prose-custom details > *:not(summary) h1,
-  .prose-custom details > *:not(summary) h2,
-  .prose-custom details > *:not(summary) h3,
-  .prose-custom details > *:not(summary) h4,
-  .prose-custom details > *:not(summary) h5,
-  .prose-custom details > *:not(summary) h6,
-  .prose-custom .details-content h1,
-  .prose-custom .details-content h2,
-  .prose-custom .details-content h3,
-  .prose-custom .details-content h4,
-  .prose-custom .details-content h5,
-  .prose-custom .details-content h6 {
-    margin-top: 1rem;
-    margin-bottom: 0.4rem;
-  }
 }
 
 /* ==================== TABLET/DESKTOP (min-width: 768px) ==================== */
@@ -268,7 +227,7 @@
     height: 1rem;
   }
 
-  /* Paragraph tablet/desktop */
+  /* NOT SUMMARY - Tablet/Desktop */
   .prose-custom details > *:not(summary) {
     padding: 1rem;
     line-height: 1.65;
@@ -279,7 +238,7 @@
     margin: 0 0 1rem 0;
   }
 
-  /* List tablet/desktop */
+  /* DETAILS-CONTENT - Tablet/Desktop */
   .prose-custom .details-content {
     padding: 1rem;
     line-height: 1.65;
