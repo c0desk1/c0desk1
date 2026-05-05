@@ -1,0 +1,51 @@
+/* ==================== TABLE ==================== */
+.prose-custom .table-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: 2.5rem 0;
+  border: 1px solid var(--prose-border);
+  border-radius: var(--prose-radius-md);
+  background: var(--prose-surface);
+}
+
+.prose-custom .table-wrapper table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.prose-custom thead th {
+  padding: 0.75rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--prose-fg-subtle);
+  background: var(--prose-surface);
+  border-bottom: 1px solid var(--prose-border);
+}
+
+.prose-custom tbody td {
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: var(--prose-fg-muted);
+  border-bottom: 1px solid var(--prose-border);
+}
+
+.prose-custom tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.prose-custom tbody tr:hover {
+  background: var(--prose-surface-hover);
+}
+
+.prose-custom th,
+.prose-custom td {
+  white-space: nowrap;
+}
+
+.prose-custom th:not(:last-child),
+.prose-custom td:not(:last-child) {
+  border-right: 1px solid var(--prose-border);
+}
