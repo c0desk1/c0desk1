@@ -8,6 +8,7 @@ import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import Hero from "@/components/ui/Hero.astro";
 import BlogList from "@/components/blog/BlogList.astro";
+import FeaturedPostCard from "@/components/blog/FeaturedPostCard.astro";
 
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 const posts = sortByDate(allPosts);
@@ -54,14 +55,25 @@ const HeroDescription = "Catatan dari balik layar tentang sistem, kreativitas, d
     <h2 class="sr-only">Featured Posts</h2>
     <Container size="xl">
       {featuredPosts.length > 0 && (
-        <BlogList posts={featuredPosts} variant="featured" />
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {featuredPosts.map((post) => (
+            <div class="bg-(--bg)">
+              <FeaturedPostCard post={post} />
+            </div>
+          ))}
+        </div>
       )}
     </Container>
   </Section>
   <Section id="all-posts" size="lg" aria-label="All articles">
     <h2 class="sr-only">All Posts</h2>
     <Container size="xl">
-      <BlogList posts={regularPosts} variant="default" />
+      <div class="flex items-center mb-4 md:mb-6">
+        <h2 class="text-xl md:text-4xl font-semibold text-(--fg)">
+          Terbaru.
+        </h2>
+      </div>
+        <BlogList posts={regularPosts} />
     </Container>
   </Section>
 </BaseLayout>
