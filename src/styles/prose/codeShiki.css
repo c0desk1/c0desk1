@@ -110,19 +110,3 @@
     font-size: 0.8125rem;
   }
 }
-
-.astro-code {
-  background-color: var(--shiki-light-bg, var(--prose-surface)) !important;
-}
-
-.astro-code span {
-  background-color: transparent !important;
-}
-
-html.dark .astro-code {
-  background-color: var(--shiki-dark-bg, var(--prose-surface)) !important;
-}
-
-html.dark .astro-code span {
-  background-color: transparent !important;
-}
