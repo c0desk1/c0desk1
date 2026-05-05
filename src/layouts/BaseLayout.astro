@@ -130,6 +130,20 @@ const analyticsId = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
       </>
     )}
     <script is:inline>
+      document.addEventListener('click', (e) => {
+        const link = e.target.closest('.anchor-link');
+        if (!link) return;
+        const href = link.getAttribute('href');
+        if (href?.startsWith('#') && href.length > 1) {
+          const target = document.querySelector(href);
+          if (!target) return;
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          history.pushState(null, '', href);
+    }
+      });
+    </script>
+    <script is:inline>
       if ('serviceWorker' in navigator && window.location.hostname !== 'localhost') {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('/pwa.js')
@@ -142,18 +156,5 @@ const analyticsId = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
         });
       }
     </script>
-<script is:inline>
-  document.addEventListener('click', (e) => {
-    const link = e.target.closest('.anchor-link');
-    if (!link) return;
-    const href = link.getAttribute('href');
-    if (href?.startsWith('#')) {
-      e.preventDefault();
-      const target = document.querySelector(href);
-      target?.scrollIntoView({ behavior: 'smooth' });
-      history.pushState(null, '', href);
-    }
-  });
-</script>
   </body>
 </html>
