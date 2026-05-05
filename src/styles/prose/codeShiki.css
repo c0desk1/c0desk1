@@ -114,7 +114,7 @@
 .astro-code {
   background-color: var(--shiki-dark-bg, var(--prose-surface)) !important;
 }
-.astro-code span {
+.dark .astro-code span {
   background-color: transparent !important;
   color: var(--shiki-dark) !important;
 }
