@@ -278,3 +278,19 @@
   border-bottom-style: solid;
   transition: none;
 }
+
+
+@media (min-width: 768px) {
+  .prose-custom h1,
+  .prose-custom h2,
+  .prose-custom h3,
+  .prose-custom h4,
+  .prose-custom h5,
+  .prose-custom h6 {
+    scroll-margin-top: 56px;
+  }
+
+  .prose-custom p {
+    font-size: 0.9375rem;
+  }
+}
