@@ -44,7 +44,6 @@
   transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
   vertical-align: baseline;
   position: relative;
-  top: 0.125rem;
 }
 
 .prose-custom .anchor-link svg {
