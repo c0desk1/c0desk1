@@ -1,4 +1,6 @@
-/* ==================== INLINE CODE ==================== */
+/* src/styles/prose/components/code.css */
+
+/* INLINE CODE */
 .prose-custom code:not(pre code) {
   font-family: var(--prose-font-mono);
   font-size: 0.8125em;
@@ -11,7 +13,15 @@
   white-space: break-spaces;
 }
 
-/* ==================== CODE BLOCK ==================== */
+.prose-custom h1 code,
+.prose-custom h2 code,
+.prose-custom h3 code,
+.prose-custom summary code {
+  font-size: 0.9em;
+  background-color: var(--prose-surface-dim);
+}
+
+/* CODE BLOCK */
 .prose-custom pre {
   font-family: var(--prose-font-mono);
   background-color: var(--prose-surface) !important;
@@ -57,9 +67,38 @@
   border-color: var(--prose-accent);
 }
 
+@media (max-width: 767px) {
+  .prose-custom code:not(pre code) {
+    font-size: 0.75rem !important;
+    padding: 0.1em 0.3em;
+  }
+
+  .prose-custom pre {
+    padding: 1rem;
+    margin: 1.25rem 0;
+    border-radius: var(--prose-radius-sm, 6px);
+  }
+
+  .prose-custom pre code {
+    font-size: 0.75rem !important;
+  }
+
+  .prose-custom pre .copy-btn {
+    top: 0.5rem;
+    right: 0.5rem;
+    font-size: 0.625rem;
+    padding: 0.2rem 0.5rem;
+  }
+}
+
 @media (min-width: 768px) {
   .prose-custom code:not(pre code) {
-    font-size: 0.8125em;
+    font-size: 0.8125rem !important;
+  }
+
+  .prose-custom pre {
+    padding: 1.25rem 1.5rem;
+    margin: 1.75rem 0;
   }
 
   .prose-custom pre code {
