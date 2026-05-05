@@ -68,8 +68,10 @@ if (post) {
 </div>
 
 <style is:global>
+  @media (min-width: 768px) {
   .post-card {
     aspect-ratio: 3 / 2;
-    max-height: clamp(320px, 50vw, 420px);
+    height: clamp(260px, 30vw, 360px);
   }
+}
 </style>
