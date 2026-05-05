@@ -44,7 +44,7 @@
   counter-increment: step;
   margin-top: 2rem !important;
   margin-bottom: 0.5rem !important;
-  font-size: 1rem !important;
+  font-size: 1.3rem !important;
   font-weight: 600 !important;
   line-height: 1.5 !important;
   overflow: visible;
@@ -87,8 +87,7 @@
 }
 
 /* PARAGRAPH - DIRECT CHILD */
-.prose-custom .steps-container p,
-.prose-custom .steps-container > p {
+.prose-custom .steps-container p {
   position: relative;
   margin: 0.5rem 0 1.5rem 0;
   color: var(--prose-fg-muted);
@@ -98,8 +97,8 @@
 }
 
 /* LIST - DIRECT CHILD */
-.prose-custom .steps-container > ul,
-.prose-custom .steps-container > ol {
+.prose-custom .steps-container ul,
+.prose-custom .steps-container ol {
   position: relative;
   margin: 0.5rem 0 1.5rem 0;
   color: var(--prose-fg-muted);
@@ -109,21 +108,19 @@
 }
 
 .prose-custom .steps-container ul li,
-.prose-custom .steps-container ol li,
-.prose-custom .steps-container > ul > li,
-.prose-custom .steps-container > ol > li {
+.prose-custom .steps-container ol li {
   margin: 0.375rem 0;
-  font-size: inherit;
+  font-size: 0.9375rem;
   line-height: inherit;
 }
 
-.prose-custom .steps-container > ul > li::marker,
-.prose-custom .steps-container > ol > li::marker {
+.prose-custom .steps-container ul li::marker,
+.prose-custom .steps-container ol li::marker {
   color: var(--prose-fg-subtle);
 }
 
 /* BLOCKQUOTE - DIRECT CHILD */
-.prose-custom .steps-container > blockquote {
+.prose-custom .steps-container blockquote {
   position: relative;
   margin: 0.5rem 0 1.5rem 0;
   color: var(--prose-fg);
@@ -136,7 +133,7 @@
 }
 
 /* CODE - DIRECT CHILD */
-.prose-custom .steps-container > pre {
+.prose-custom .steps-container pre {
   position: relative;
   margin: 0.5rem 0 1.5rem 0;
   font-size: 0.875rem;
@@ -198,10 +195,7 @@
   .prose-custom .steps-container p,
   .prose-custom .steps-container ul,
   .prose-custom .steps-container ol,
-  .prose-custom .steps-container > p,
-  .prose-custom .steps-container > ul,
-  .prose-custom .steps-container > ol,
-  .prose-custom .steps-container > blockquote {
+  .prose-custom .steps-container blockquote {
     margin: 0.5rem 0 1.25rem 0;
     font-size: 0.875rem;
     line-height: 1.6;
