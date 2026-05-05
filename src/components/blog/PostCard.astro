@@ -39,7 +39,7 @@ if (post) {
 
 <div class="post-card w-full bg-(--bg) hover:bg-(--bg-subtle) px-4 py-6 transition-colors">
   <a href={postUrl} class="group flex flex-col h-full">
-    <div class="flex items-center justify-between mb-6 text- md:text-sm text-(--fg-subtle)">
+    <div class="flex items-center justify-between mb-6 text- md:text-sm text-(--fg-subtle) font-medium">
       <span class="tracking-tight">{categoryName}</span>
       <time datetime={pubDateISO}>{pubDateDisplay}</time>
     </div>
@@ -48,7 +48,7 @@ if (post) {
       <h2 class="text-lg md:text-xl font-semibold tracking-tight text-(--fg) leading-tight line-clamp-2">
         {title}
       </h2>
-      <p class="text- md:text-sm text-(--fg-muted) leading-relaxed line-clamp-3 md:line-clamp-4 group-hover:text-(--fg) mb-2">
+      <p class="text- md:text-sm text-(--fg-muted) font-medium leading-relaxed line-clamp-3 md:line-clamp-4 group-hover:text-(--fg) mb-2">
         {excerpt}
       </p>
     </div>
@@ -64,7 +64,7 @@ if (post) {
           class="w-5 h-5 object-cover rounded-full shrink-0"
         />
       )}
-      <span class="truncate">{authorName}</span>
+      <span class="truncate font-medium">{authorName}</span>
     </div>
   </a>
 </div>
