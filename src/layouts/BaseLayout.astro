@@ -1,6 +1,7 @@
 ---
 // src/layouts/BaseLayout.astro
 import "@/styles/global.css";
+
 import { getEntry } from 'astro:content';
 import { siteConfig } from "@/config/site";
 
@@ -12,6 +13,7 @@ import Footer from "@/components/layout/Footer.astro";
 import Search from "@/components/layout/Search.astro";
 import Container from "@/components/ui/Container.astro";
 import BG from "@/components/ui/BG.astro";
+import MobileMenu from "@/components/layout/MobileMenu.astro";
 
 
 interface Props {
@@ -139,6 +141,6 @@ const analyticsId = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
         });
       }
     </script>
-    
+    <MobileMenu />
   </body>
 </html>
