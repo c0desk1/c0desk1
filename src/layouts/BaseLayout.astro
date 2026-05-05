@@ -130,58 +130,54 @@ const analyticsId = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
       </>
     )}
     <script is:inline>
-  document.addEventListener('click', (e) => {
-    const link = e.target.closest('.anchor-link');
-    if (!link) return;
+      document.addEventListener('click', (e) => {
+        const link = e.target.closest('.anchor-link');
+        if (!link) return;
     
-    const href = link.getAttribute('href');
-    if (href?.startsWith('#') && href.length > 1) {
-      const target = document.querySelector(href);
-      if (!target) return;
+        const href = link.getAttribute('href');
+        if (href?.startsWith('#') && href.length > 1) {
+          const target = document.querySelector(href);
+          if (!target) return;
       
-      e.preventDefault();
-      target.scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'start' 
+          e.preventDefault();
+          target.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+          });
+          history.pushState(null, '', href);
+        }
       });
-      history.pushState(null, '', href);
-      
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(window.location.origin + href);
-      }
-    }
-  });
 
-  document.addEventListener('click', (e) => {
-    if (window.innerWidth >= 768) return;
+      document.addEventListener('click', (e) => {
+        if (window.innerWidth >= 768) return;
     
-    const heading = e.target.closest('.group.has-anchor');
-    if (!heading || e.target.closest('.anchor-link')) return;
+        const heading = e.target.closest('.group.has-anchor');
+        if (!heading || e.target.closest('.anchor-link')) return;
     
-    document.querySelectorAll('.anchor-link-active').forEach(el => {
-      el.classList.remove('anchor-link-active');
-    });
+        document.querySelectorAll('.anchor-link-active').forEach(el => {
+          el.classList.remove('anchor-link-active');
+        });
     
-    const link = heading.querySelector('.anchor-link');
-    if (link) {
-      link.classList.add('anchor-link-active');
-      setTimeout(() => {
-        link.classList.remove('anchor-link-active');
-      }, 2000);
-    }
-  });
+       const link = heading.querySelector('.anchor-link');
+        if (link) {
+          link.classList.add('anchor-link-active');
+          setTimeout(() => {
+            link.classList.remove('anchor-link-active');
+          }, 2000);
+        }
+      });
 
-  window.addEventListener('load', () => {
-    if (location.hash) {
-      const target = document.querySelector(location.hash);
-      if (target?.classList.contains('has-anchor')) {
-        setTimeout(() => {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 100);
-      }
-    }
-  });
-</script>
+      window.addEventListener('load', () => {
+        if (location.hash) {
+          const target = document.querySelector(location.hash);
+          if (target?.classList.contains('has-anchor')) {
+            setTimeout(() => {
+              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+          }
+        }
+      });
+    </script>
     <script is:inline>
       if ('serviceWorker' in navigator && window.location.hostname !== 'localhost') {
         window.addEventListener('load', () => {
