@@ -56,3 +56,13 @@
   color: var(--prose-white);
   border-color: var(--prose-accent);
 }
+
+@media (min-width: 768px) {
+  .prose-custom code:not(pre code) {
+    font-size: 0.8125em;
+  }
+
+  .prose-custom pre code {
+    font-size: 0.8125rem;
+  }
+}
