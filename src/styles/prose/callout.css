@@ -1,4 +1,7 @@
-/* ==================== CALLOUTS ==================== */
+/* src/styles/prose/callout.cas */
+
+/* CALLOUTS */
+
 .prose-custom .callout {
   margin: 1.5rem 0;
   display: flex;
@@ -81,7 +84,9 @@
   border-color: var(--callout-note-border);
   color: var(--callout-note-text);
 }
-.prose-custom [data-callout="note"] .callout-icon { color: var(--callout-note-icon); }
+.prose-custom [data-callout="note"] .callout-icon { 
+  color: var(--callout-note-icon); 
+}
 
 .prose-custom [data-callout="info"] {
   background-color: var(--callout-info-bg);
@@ -89,14 +94,19 @@
   color: var(--callout-info-text);
 }
 
-.prose-custom [data-callout="info"] .callout-icon { color: var(--callout-info-icon); }
+.prose-custom [data-callout="info"] .callout-icon { 
+  color: var(--callout-info-icon); 
+}
+
 .prose-custom [data-callout="tip"] {
   background-color: var(--callout-tip-bg);
   border-color: var(--callout-tip-border);
   color: var(--callout-tip-text);
 }
 
-.prose-custom [data-callout="tip"] .callout-icon { color: var(--callout-tip-icon); }
+.prose-custom [data-callout="tip"] .callout-icon { 
+  color: var(--callout-tip-icon); 
+}
 
 .prose-custom [data-callout="warning"] {
   background-color: var(--callout-warning-bg);
@@ -104,7 +114,9 @@
   color: var(--callout-warning-text);
 }
 
-.prose-custom [data-callout="warning"] .callout-icon { color: var(--callout-warning-icon); }
+.prose-custom [data-callout="warning"] .callout-icon { 
+  color: var(--callout-warning-icon); 
+}
 
 .prose-custom [data-callout="danger"] {
   background-color: var(--callout-danger-bg);
@@ -112,4 +124,62 @@
   color: var(--callout-danger-text);
 }
 
-.prose-custom [data-callout="danger"] .callout-icon { color: var(--callout-danger-icon); }
+.prose-custom [data-callout="danger"] .callout-icon { 
+  color: var(--callout-danger-icon); 
+}
+
+@media (max-width: 767px) {
+  /* MOBILE */
+  .prose-custom .callout {
+    margin: 1.25rem 0;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    font-size: 0.8125rem;
+  }
+
+  .prose-custom .callout-icon {
+    margin-top: 1px;
+  }
+
+  .prose-custom .callout-icon svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .prose-custom .callout-title {
+    margin: 0 0 0.2rem !important;
+    font-size: 0.875rem;
+  }
+
+  .prose-custom .callout-content {
+    line-height: 1.5;
+  }
+}
+
+@media (min-width: 768px) {
+  /* TABLET/DESKTOP */
+  .prose-custom .callout {
+    margin: 1.5rem 0;
+    gap: 0.875rem;
+    padding: 1rem 1.25rem;
+    font-size: 0.875rem;
+  }
+
+  .prose-custom .callout-icon {
+    margin-top: 2px;
+  }
+
+  .prose-custom .callout-icon svg {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  .prose-custom .callout-title {
+    margin: 0 0 0.25rem !important;
+    font-size: 0.9375rem;
+  }
+
+  .prose-custom .callout-content {
+    line-height: 1.6;
+  }
+}
