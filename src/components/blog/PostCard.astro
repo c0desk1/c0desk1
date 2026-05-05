@@ -48,17 +48,17 @@ if (post) {
     <time datetime={pubDateISO}>{pubDateDisplay}</time>
   </div>
 
-  <!-- Judul -->
-  <h2 class="text-xl md:text-2xl font-semibold tracking-tight text-(--fg) group-hover:text-(--accent) transition-colors line-clamp-2">
+  <!-- Judul: line-clamp-3 -->
+  <h2 class="text-xl md:text-2xl font-semibold tracking-tight text-(--fg) group-hover:text-(--accent) transition-colors line-clamp-3">
     {title}
   </h2>
 
-  <!-- Deskripsi singkat -->
-  <p class="text-base text-(--fg-muted) leading-relaxed line-clamp-2 group-hover:text-(--fg)">
+  <!-- Deskripsi: line-clamp-3 -->
+  <p class="text-base text-(--fg-muted) leading-relaxed line-clamp-3 group-hover:text-(--fg)">
     {excerpt}
   </p>
 
-  <!-- Author info (avatar opsional) -->
+  <!-- Author info -->
   <div class="flex items-center gap-2.5 pt-2">
     {authorAvatar && (
       <Image
