@@ -12,9 +12,9 @@ const id = propId ?? text
   .replace(/[^\w-]+/g, '');
 ---
 
-<Tag id={id} {...props} class:list={["group flex items-center gap-2 cursor-pointer", props.class]}>
-  <slot />
-  <a href={`#${id}`} class="anchor-link opacity-0 group-hover:opacity-100 transition-opacity">
+<Tag id={id} {...props} class:list={["heading-group has-anchor", props.class]}>
+  <span class="heading-text-content"><slot /></span>
+  <a href={`#${id}`} class="anchor-link" aria-label="Link ke heading ini">
     <Icon name="link" />
   </a>
-</Tag>
+</Tag>
