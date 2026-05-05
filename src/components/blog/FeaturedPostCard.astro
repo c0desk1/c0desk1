@@ -11,61 +11,108 @@ interface Props {
 }
 
 const { post } = Astro.props;
-const { data, id } = post;
 
-const { title, pubDate, author } = data;
+let title = '', excerpt = '', categoryName = '', pubDateISO = '', pubDateDisplay = '';
+let authorName = '', authorAvatar = '', optimizedAvatar = '', postUrl = '';
 
-const excerpt = generateExcerpt(post.body || '', 300);
+if (post) {
+  const { data, id } = post;
+  const { title: t, pubDate, category, author } = data;
+  title = t;
+  excerpt = generateExcerpt(post.body || '', 250);
 
-const authorEntry = await getEntry(author);
+  const categoryEntry = await getEntry(category);
+  const authorEntry   = author ? await getEntry(author) : null;
 
-const formattedDate = formatDateCompact(pubDate);
+  categoryName    = categoryEntry?.data.name || 'General';
+  pubDateISO      = pubDate.toISOString();
+  pubDateDisplay  = formatDateCompact(pubDate);
+  authorName      = authorEntry?.data.name   || siteConfig.author.name;
+  authorAvatar    = authorEntry?.data.avatar || siteConfig.author.avatar;
+  optimizedAvatar = isCdnUrl(authorAvatar)
+    ? cdnImage(authorAvatar, { w: 48, h: 48, q: 80 })
+    : authorAvatar;
+  postUrl = `/blog/${id}/`;
+}
 
-const authorName = authorEntry?.data.name || siteConfig.author.name;
-const authorAvatar = authorEntry?.data.avatar || siteConfig.author.avatar;
-const optimizedAvatar = isCdnUrl(authorAvatar) ? cdnImage(authorAvatar, { w: 48, h: 48, q: 80 }) : authorAvatar;
+const icons = ["lines", "brackets", "grid"];
+const iconType = icons[Math.floor(Math.random() * icons.length)];
 ---
 
-<a
-  href={`/blog/${id}/`}
-  class="group flex flex-col h-full rounded-(--radius-xl) border border-(--border) p-4 md:p-6 hover:bg-(--bg-muted) hover:border-(--border-strong) focus:outline-none focus:ring-2 focus:ring-(--border-strong)"
->
-  <div class="mb-6">
-    <div class="w-12 h-12 flex items-center justify-center rounded-full border border-(--border) bg-(--bg-subtle) group-hover:border-(--border-strong)">
-      <span class="text-sm md:text-lg font-semibold text-(--accent)">
-        {title.charAt(0)}
+
+<div class="aspect-2/3 rounded-xl border border-(--border) bg-(--bg) hover:bg-(--bg-muted) transition-colors">
+  <a href={postUrl} class="group flex flex-col h-full px-6 py-8">
+    <div class="mb-6 shrink-0">
+      <div class="w-12 h-12 flex items-center justify-center border border-(--border) bg-(--bg-subtle)">
+      
+        {iconType === "lines" && (
+          <svg viewBox="0 0 24 24" class="w-6 h-6 text-(--accent)">
+            <path d="M4 6h6M4 12h10M4 18h8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          </svg>
+        )}
+        {iconType === "brackets" && (
+          <svg viewBox="0 0 24 24" class="w-6 h-6 text-(--accent)">
+            <path d="M8 5L3 12L8 19M16 5L21 12L16 19" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          </svg>
+        )}
+        {iconType === "grid" && (
+          <svg viewBox="0 0 24 24" class="w-6 h-6 text-(--accent)">
+            <rect x="4" y="4" width="6" height="6" stroke="currentColor" fill="none"/>
+            <rect x="14" y="4" width="6" height="6" stroke="currentColor" fill="none"/>
+            <rect x="4" y="14" width="6" height="6" stroke="currentColor" fill="none"/>
+            <rect x="14" y="14" width="6" height="6" stroke="currentColor" fill="none"/>
+          </svg>
+        )}
+      </div>
+    </div>
+
+    <div class="mb-6 shrink-0">
+      <time datetime={pubDateISO} class="text-[13px] md:text-sm text-(--fg-subtle)">
+        {pubDateDisplay}
+      </time>
+    </div>
+
+    <div class="flex flex-col gap-5 flex-1 min-h-0">
+      <h2 class="text-2xl md:text-3xl font-semibold tracking-tight text-(--fg) leading-tight line-clamp-4">
+        {title}
+      </h2>
+
+      <p class="post-excerpt text-sm md:text-base text-(--fg-muted) leading-relaxed line-clamp-8 group-hover:text-(--fg)">
+        {excerpt}
+      </p>
+    </div>
+
+    <div class="mt-auto flex items-center gap-2 shrink-0">
+      {authorAvatar && (
+        <Image
+          src={optimizedAvatar}
+          alt={`Author ${authorName}`}
+          width={48}
+          height={48}
+          loading="lazy"
+          decoding="async"
+          class="w-7 h-7 object-cover rounded-full"
+        />
+      )}
+      <span class="text-[13px] md:text-sm text-(--fg-subtle)">
+        {authorName}
       </span>
     </div>
-  </div>
-  <div class="mb-6">
-    <time
-      datetime={pubDate.toISOString()}
-      class="text-[13px] text-(--fg-subtle) tracking-tight"
-    >
-      {formattedDate}
-    </time>
-  </div>
-  <div class="flex flex-col gap-5 mb-8">
-    <h2 class="text-lg md:text-2xl font-semibold tracking-tighter text-(--fg) leading-[1.1] line-clamp-4">
-      {title}
-    </h2>
-    <p class="text-sm text-(--fg-muted) leading-relaxed line-clamp-6 group-hover:text-(--fg)">
-      {excerpt}
-    </p>
-  </div>
-  <div class="mt-auto flex items-center gap-3 pt-4">
-    {authorAvatar && (
-      <Image
-        src={optimizedAvatar}
-        alt={`Author ${authorName}`}
-        width={48}
-        height={48}
-        class="w-6 h-6 rounded-full border border-(--border) object-cover"
-        loading="lazy"
-      />
-    )}
-    <span class="text-[13px] text-(--fg-subtle)">
-      {authorName}
-    </span>
-  </div>
-</a>
+
+  </a>
+</div>
+
+<style is:global>
+  .post-excerpt {
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      black 30%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      black 30%,
+      transparent 100%
+    );
+  }
+</style>
