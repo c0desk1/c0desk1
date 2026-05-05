@@ -707,6 +707,11 @@
   outline-offset: 2px;
 }
 
+.prose-custom details > *:not(summary) ul,
+.prose-custom details > *:not(summary) ol {
+  padding-left: 1.5rem;
+}
+
 /* ==================== CALLOUTS ==================== */
 .prose-custom .callout {
   margin: 1.5rem 0;
