@@ -1,0 +1,19 @@
+---
+// src/components/mdx/Heading.astro
+import Icon from "../ui/Icon.astro";
+
+const { as: Tag = 'h2', id: propId, ...props } = Astro.props;
+const raw = await Astro.slots.render('default');
+const text = raw.replace(/<[^>]+>/g, '').trim();
+const id = propId ?? text
+  .toLowerCase()
+  .replace(/\s+/g, '-')
+  .replace(/[^\w-]+/g, '');
+---
+
+<Tag id={id} {...props} class:list={["group flex items-center gap-2 cursor-pointer", props.class]}>
+  <slot />
+  <a href={`#${id}`} class="anchor-link opacity-0 group-hover:opacity-100 transition-opacity" aria-label={`Link to ${text}`}>
+    <Icon name="link" class="w-4 h-4" />
+  </a>
+</Tag>
