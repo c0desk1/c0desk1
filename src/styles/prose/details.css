@@ -1,67 +1,86 @@
-@reference '@/style/prose.css';
+/* ==================== DETAILS / SUMMARY ==================== */
+.prose-custom details {
+  margin: 1.5rem 0;
+  border: 1px solid var(--prose-border);
+  border-radius: var(--prose-radius-md);
+  background-color: var(--prose-surface);
+  overflow: hidden;
 
-@layer components {
- .prose-custom details {
-    margin-block: --theme(spacing.6);
-    border: 1px solid var(--prose-border);
-    border-radius: var(--prose-radius-md);
-    background-color: var(--prose-surface);
-    overflow: hidden;
-    transition: border-color var(--prose-transition);
-  }
+  transition: border-color var(--prose-transition),
+              box-shadow var(--prose-transition);
+}
 
- .prose-custom details:hover {
-    border-color: var(--prose-border-hover, var(--prose-border));
-  }
+.prose-custom details:hover {
+  border-color: var(--prose-border-hover, var(--prose-border));
+  box-shadow: 0 1px 0 rgba(0,0,0,0.03);
+}
 
- .prose-custom summary {
-    font-size: --theme(fontSize.sm);
-    font-weight: --theme(fontWeight.semibold);
-    padding: --theme(spacing.3.5) --theme(spacing.4);
-    display: flex;
-    align-items: center;
-    gap: --theme(spacing.2.5);
-    cursor: pointer;
-    list-style: none;
-  }
+.prose-custom summary {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--prose-fg);
+  cursor: pointer;
+  padding: 0.875rem 1rem;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  list-style: none;
+  transition: background-color var(--prose-transition),
+              color var(--prose-transition);
+}
 
- .prose-custom summary::-webkit-details-marker {
-    display: none;
-  }
+.prose-custom summary::-webkit-details-marker {
+  display: none;
+}
 
- .prose-custom.details-icon {
-    width: --theme(spacing.4);
-    height: --theme(spacing.4);
-    flex-shrink: 0;
-    transition: transform var(--prose-transition);
-    color: var(--prose-fg-subtle);
-  }
+.prose-custom .details-icon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  transition: transform var(--prose-transition);
+  color: var(--prose-fg-subtle);
+}
 
- .prose-custom details[open].details-icon {
-    transform: rotate(90deg);
-  }
+.prose-custom details[open] .details-icon {
+  transform: rotate(90deg);
+}
 
- .prose-custom details[open] summary {
-    border-bottom: 1px solid var(--prose-border);
-  }
+.prose-custom details[open] summary {
+  border-bottom: 1px solid var(--prose-border);
+  background-color: var(--prose-surface-hover);
+}
 
- .prose-custom details > *:not(summary) {
-    padding: --theme(spacing.4);
-    color: var(--prose-fg-muted);
-    line-height: 1.65;
-  }
+.prose-custom details > *:not(summary) {
+  padding: 1rem;
+  color: var(--prose-fg-muted);
+  line-height: 1.65;
+}
 
- .prose-custom details > *:not(summary) ul,
- .prose-custom details > *:not(summary) ol {
-    padding-inline-start: --theme(spacing.6);
-  }
+.prose-custom details[open] > *:not(summary) {
+  animation: detailsFadeSlide 0.18s ease-out;
+}
 
-  @keyframes detailsFadeSlide {
-    from { opacity: 0; transform: translateY(-4px) }
-    to { opacity: 1; transform: translateY(0) }
+@keyframes detailsFadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
- .prose-custom details[open] > *:not(summary) {
-    animation: detailsFadeSlide 0.18s ease-out;
-  }
+.prose-custom details > *:not(summary) > :first-child {
+  margin-top: 0;
+}
+
+.prose-custom details > *:not(summary) > :last-child {
+  margin-bottom: 0;
+}
+
+.prose-custom summary:focus-visible {
+  outline: 2px solid var(--prose-accent);
+  outline-offset: 2px;
 }
