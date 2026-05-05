@@ -1,0 +1,130 @@
+/* ==================== KBD ==================== */
+.prose-custom kbd {
+  font-family: var(--prose-font-mono);
+  font-size: 0.75em;
+  font-weight: 500;
+  background-color: var(--prose-surface);
+  color: var(--prose-fg);
+  padding: 0.15em 0.45em;
+  border-radius: var(--prose-radius-sm);
+  border: 1px solid var(--prose-border);
+  border-bottom-width: 2px;
+  box-shadow: 0 1px 0 var(--prose-border);
+  margin: 0 0.15rem;
+  vertical-align: middle;
+  white-space: nowrap;
+  display: inline-block;
+  line-height: 1;
+}
+
+/* ==================== BADGES / TAGS ==================== */
+
+.prose-custom .badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--prose-font-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.2em 0.55em;
+  border-radius: var(--prose-radius-sm);
+  border: 1px solid currentColor;
+  vertical-align: middle;
+  line-height: 1.5;
+}
+
+.prose-custom .badge-default {
+  color: var(--prose-fg-muted);
+  border-color: var(--prose-border);
+  background: var(--prose-surface);
+}
+
+.prose-custom .badge-accent {
+  color: var(--prose-accent-dim);
+  border-color: #a7f3d0;
+  background: #f0fdf4;
+}
+
+.prose-custom .badge-red {
+  color: #dc2626;
+  border-color: #fecaca;
+  background: #fff1f2;
+}
+
+/* ==================== DL / ADDRESS ==================== */
+
+.prose-custom dl {
+  margin: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.prose-custom dt {
+  font-weight: 600;
+  color: var(--prose-fg);
+  font-family: var(--prose-font-sans);
+  letter-spacing: -0.01em;
+  margin-bottom: 0.25rem;
+}
+
+.prose-custom dd {
+  margin-left: 0;
+  color: var(--prose-fg-subtle);
+  border-left: 2px solid var(--prose-border);
+  padding-left: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose-custom dt + dd {
+  margin-top: 0;
+}
+
+.prose-custom dd:hover {
+  border-left-color: var(--prose-accent);
+  transition: border-left-color 0.2s ease;
+}
+
+@media (min-width: 728px) {
+  .prose-custom dd {
+    padding-left: 0.75rem;
+  }
+}
+
+/* =========== ADDRESS =========== */
+.prose-custom address {
+  font-style: normal;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--prose-fg-subtle);
+  background-color: var(--prose-bg-muted);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--prose-border);
+  margin: 1.5rem 0;
+  transition: all 0.2s ease;
+}
+
+.prose-custom address:hover {
+  border-color: var(--prose-accent);
+  background-color: var(--prose-bg-muted);
+}
+
+.prose-custom address a {
+  color: var(--prose-accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.prose-custom address a:hover {
+  border-bottom-color: var(--prose-accent);
+}
+
+.prose-custom address .contact-label {
+  font-weight: 500;
+  color: var(--prose-fg);
+}
