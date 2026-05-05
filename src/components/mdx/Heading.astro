@@ -17,28 +17,4 @@ const id = propId ?? text
   <a href={`#${id}`} class="anchor-link opacity-0 group-hover:opacity-100 transition-opacity">
     <Icon name="link" />
   </a>
-</Tag>
-
-<script>
-  const init = () => {
-    const anchors = document.querySelectorAll<HTMLAnchorElement>('.anchor-link');
-    
-    anchors.forEach(el => {
-      el.addEventListener('click', (e: MouseEvent) => {
-        const href = el.getAttribute('href');
-        
-        if (href && href.startsWith('#')) {
-          e.preventDefault();
-          const target = document.querySelector(href);
-          
-          if (target) {
-            target.scrollIntoView({ behavior: 'smooth' });
-            history.pushState(null, '', href);
-          }
-        }
-      });
-    });
-  }
-  init();
-  document.addEventListener('astro:page-load', init);
-</script>
+</Tag>
