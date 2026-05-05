@@ -1,0 +1,148 @@
+---
+// src/components/layout/MobileMenu.astro
+
+import { siteConfig } from "@/config/site";
+import { getEntry } from 'astro:content';
+import Icon from "@/components/ui/Icon";
+
+let settings;
+try {
+  settings = await getEntry('settings', 'site');
+} catch (error) {}
+
+const siteData = settings?.data || siteConfig;
+const nav = siteData.navItems ?? [];
+const social = siteData.social ?? {};
+
+const socialEntries = Object.entries(social).filter(([_, url]) => url);
+---
+
+<div
+  id="mnav-backdrop"
+  class="fixed inset-0 z-100 bg-(--bg)/60 backdrop-blur-sm"
+  style="display: none; opacity: 0; transition: opacity 0.25s ease;"
+  aria-hidden="true"
+></div>
+
+<div
+  id="mnav-sheet"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Menu navigasi"
+  class="fixed bottom-0 left-0 right-0 z-200
+         bg-(--bg) border-t border-(--border)
+         rounded-t-(--radius-xl)
+         shadow-[0_-8px_40px_rgba(0,0,0,0.12)]
+         pb-[env(safe-area-inset-bottom)]"
+  style="display: none; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);"
+  inert
+>
+  <div class="flex justify-center pt-3 pb-1">
+    <div class="w-9 h-1 rounded-full bg-(--border)"></div>
+  </div>
+
+  <nav class="flex flex-col px-3 pt-2 pb-4 gap-0.5">
+    {nav.map(item => (
+      <a
+        href={item.href}
+        class="mnav-link flex items-center gap-3 px-3 py-3 rounded-(--radius-lg)
+               text-sm font-medium text-(--fg-muted)
+               hover:text-(--fg) hover:bg-(--bg-muted) transition-colors"
+      >
+        {item.label}
+      </a>
+    ))}
+    {nav.length > 0 && socialEntries.length > 0 && (
+      <div class="h-px bg-(--border) my-1.5 mx-1"></div>
+    )}
+    {socialEntries.map(([platform, url]) => (
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mnav-link flex items-center gap-3 px-3 py-3 rounded-(--radius-lg)
+               text-sm font-medium text-(--fg-muted)
+               hover:text-(--fg) hover:bg-(--bg-muted) transition-colors"
+      >
+        <Icon name={platform as any} className="w-4 h-4 shrink-0" />
+        <span class="capitalize">{platform}</span>
+      </a>
+    ))}
+  </nav>
+</div>
+
+<script>
+  (() => {
+    const sheet    = document.getElementById('mnav-sheet');
+    const backdrop = document.getElementById('mnav-backdrop');
+    if (!sheet || !backdrop) return;
+
+    let open = false;
+    let startY = 0, currentY = 0, dragging = false;
+
+    const openSheet = () => {
+      if (open) return;
+      open = true;
+      
+      sheet.style.display = 'block';
+      backdrop.style.display = 'block';
+      sheet.offsetHeight;
+      sheet.style.transform = 'translateY(0)';
+      backdrop.style.opacity = '1';
+      sheet.removeAttribute('inert');
+      document.body.style.overflow = 'hidden';
+      
+      const btn = document.getElementById('mnav-btn');
+      if (btn) btn.setAttribute('aria-expanded', 'true');
+    };
+
+    const closeSheet = () => {
+      if (!open) return;
+      open = false;
+      
+      sheet.style.transform = 'translateY(100%)';
+      backdrop.style.opacity = '0';
+      document.body.style.overflow = '';
+      
+      setTimeout(() => {
+        if (!open) {
+          sheet.style.display = 'none';
+          backdrop.style.display = 'none';
+          sheet.setAttribute('inert', '');
+        }
+      }, 300);
+      
+      const btn = document.getElementById('mnav-btn');
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+    };
+
+    window.addEventListener('mnav:open', openSheet);
+    backdrop.addEventListener('click', closeSheet);
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && open) closeSheet();
+    });
+
+    document.querySelectorAll('.mnav-link').forEach(link => {
+      link.addEventListener('click', closeSheet);
+    });
+
+    sheet.addEventListener('touchstart', e => {
+      startY = e.touches[0].clientY;
+      dragging = true;
+    }, { passive: true });
+
+    sheet.addEventListener('touchmove', e => {
+      if (!dragging || !open) return;
+      currentY = e.touches[0].clientY;
+      const delta = Math.max(0, currentY - startY);
+      sheet.style.transform = `translateY(calc(100% - ${delta}px))`;
+    }, { passive: true });
+
+    sheet.addEventListener('touchend', () => {
+      dragging = false;
+      const delta = currentY - startY;
+      sheet.style.transform = '';
+      if (delta > 80) closeSheet();
+    });
+  })();
+</script>
