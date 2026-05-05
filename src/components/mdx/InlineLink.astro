@@ -1,9 +1,9 @@
 ---
 // src/components/mdx/InlineLink.astro
-import Icon from "../ui/Icon.astro";
 const { href, ...props } = Astro.props;
+const site = Astro.site;
 
-const isExternal = href?.startsWith('http');
+const isExternal = href?.startsWith('http') && !href?.startsWith(site?.href || '');
 ---
 
 <a 
