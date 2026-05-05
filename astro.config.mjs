@@ -30,4 +30,12 @@ export default defineConfig({
       { protocol: 'https', hostname: 'cdn.c0desk1.my.id' }
     ],
   },
+  markdown: {
+    shikiConfig: {
+      themes: {
+        light: 'github-light',
+        dark: 'github-dark',
+      }
+    }
+  },
 });
