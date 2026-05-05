@@ -1,4 +1,5 @@
 // src/components/layout/MDXComponents.tsx
+
 import Heading from '@/components/mdx/Heading';
 import type { MDXComponents } from 'mdx/types';
 
@@ -20,7 +21,7 @@ export const components: MDXComponents = {
   h5: (props) => <Heading as="h5" {...props} />,
   h6: (props) => <Heading as="h6" {...props} />,
   a: InlineLink,
-  img: Image, 
+  img: Image,
   hr: HR,
   blockquote: CallQuote,
   table: Table,
