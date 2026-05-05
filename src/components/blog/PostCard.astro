@@ -37,36 +37,39 @@ if (post) {
 }
 ---
 
-<a
-  href={postUrl}
-  aria-label={`Baca artikel: ${title}`}
-  class="group relative flex flex-col gap-4 border-b border-(--border) py-8 pl-5 transition-all first:pt-0 last:border-none hover:border-(--border-strong) hover:pl-6"
->
-  <!-- Industrial left accent bar (garis vertikal kiri) -->
-  <div class="absolute left-0 top-0 h-full w-0.5 bg-(--accent) opacity-0 transition-all group-hover:opacity-100"></div>
+<div class="post-card w-full bg-(--bg) hover:bg-(--bg-subtle) px-4 py-6">
+  <a href={postUrl} class="group flex flex-col h-full">
+    <div class="flex items-center justify-between mb-6 text-[13px] md:text-sm text-(--fg-subtle)">
+      <span class="tracking-tight">{categoryName}</span>
+      <time datetime={pubDateISO}>{pubDateDisplay}</time>
+    </div>
+    <div class="flex flex-col gap-5 flex-1 min-h-0">
+      <h2 class="text-lg md:text-xl font-semibold tracking-tight text-(--fg) leading-tight line-clamp-2">
+        {title}
+      </h2>
+      <p class="text-[13px] md:text-sm text-(--fg-muted) leading-relaxed line-clamp-4 group-hover:text-(--fg)">
+        {excerpt}
+      </p>
+    </div>
+    <div class="mt-auto flex items-center gap-2 text-[13px] md:text-sm text-(--fg-subtle) pt-2">
+      {authorAvatar && (
+        <Image
+          src={optimizedAvatar}
+          alt={`Author ${authorName}`}
+          width={48}
+          height={48}
+          decoding="async"
+          class="w-5 h-5 object-cover rounded-full"
+        />
+      )}
+      <span>{authorName}</span>
+    </div>
+  </a>
+</div>
 
-  <!-- Header: kategori (industrial: badge mode kotak) & tanggal -->
-  <div class="flex items-center justify-between text-sm">
-    <span class="inline-block border border-(--border) px-2 py-0.5 text-xs font-medium text-(--fg-subtle) group-hover:border-(--accent) group-hover:text-(--accent) transition-colors">
-      {categoryName}
-    </span>
-    <time datetime={pubDateISO} class="text-(--fg-subtle) group-hover:text-(--fg)">
-      {pubDateDisplay}
-    </time>
-  </div>
-
-  <!-- Judul -->
-  <h2 class="text-xl font-semibold tracking-tight text-(--fg) line-clamp-3 md:text-2xl group-hover:text-(--accent) transition-colors">
-    {title}
-  </h2>
-
-  <!-- Excerpt -->
-  <p class="text-base text-(--fg-muted) leading-relaxed line-clamp-3 group-hover:text-(--fg)">
-    {excerpt}
-  </p>
-
-  <!-- Author (tanpa avatar kalau ingin lebih clean industrial) -->
-  <div class="flex items-center gap-2 text-sm text-(--fg-subtle) group-hover:text-(--fg)">
-    <span>{authorName}</span>
-  </div>
-</a>
+<style is:global>
+  .post-card {
+    aspect-ratio: 3 / 2;
+    max-height: clamp(320px, 50vw, 420px);
+  }
+</style>
