@@ -1,5 +1,13 @@
 /* src/styles/prose/components/misc.css */
 
+/* HR */
+.prose-custom hr {
+  margin: 2.5rem 0;
+  border: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--prose-border), transparent);
+}
+
 /* KBD */
 .prose-custom kbd {
   font-family: var(--prose-font-mono);
