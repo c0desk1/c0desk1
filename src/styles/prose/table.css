@@ -1,4 +1,6 @@
-/* ==================== TABLE ==================== */
+/* src/styles/prose/components/table.css */
+
+/* TABLE */
 .prose-custom .table-wrapper {
   overflow-x: auto;
   overflow-y: hidden;
@@ -21,7 +23,7 @@
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--prose-fg-subtle);
-  background: var(--prose-surface);
+  background: var(--prose-surface-hover);
   border-bottom: 1px solid var(--prose-border);
 }
 
@@ -29,6 +31,7 @@
   padding: 0.75rem 1rem;
   font-size: 0.875rem;
   color: var(--prose-fg-muted);
+  background: var(--prose-surface);
   border-bottom: 1px solid var(--prose-border);
 }
 
@@ -48,4 +51,36 @@
 .prose-custom th:not(:last-child),
 .prose-custom td:not(:last-child) {
   border-right: 1px solid var(--prose-border);
+}
+
+@media (max-width: 767px) {
+  .prose-custom .table-wrapper {
+    margin: 1.5rem 0;
+    border-radius: var(--prose-radius-sm);
+  }
+
+  .prose-custom thead th {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.6875rem;
+  }
+
+  .prose-custom tbody td {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .prose-custom .table-wrapper {
+    margin: 2rem 0;
+  }
+
+  .prose-custom thead th {
+    padding: 0.875rem 1.25rem;
+  }
+
+  .prose-custom tbody td {
+    padding: 0.875rem 1.25rem;
+    font-size: 0.875rem;
+  }
 }
