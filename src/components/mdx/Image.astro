@@ -1,5 +1,4 @@
 ---
-// src/components/mdx/Image.astro
 import { cdnImage, isCdnUrl } from '@/lib/utils';
 
 interface Props {
@@ -13,6 +12,10 @@ const optimizedSrc = src && isCdnUrl(src)
 	? cdnImage(src, { w: 1280, h: 720, q: 85 })
   : src ?? '';
 const caption = title || alt;
+
+const zoomSrc = src && isCdnUrl(src) 
+  ? cdnImage(src, { w: 1920, q: 90 }) 
+  : src ?? '';
 ---
 
 <figure class="prose-custom mx-auto max-w-3xl overflow-hidden">
@@ -21,7 +24,46 @@ const caption = title || alt;
     alt={alt}
     loading="lazy"
     decoding="async"
-    class="block w-full h-auto object-cover"
+    class="block w-full h-auto object-cover cursor-zoom-in"
+    data-zoom-src={zoomSrc}
+    data-zoom-alt={alt}
   />
   {caption && ( <figcaption>{caption}</figcaption> )}
 </figure>
+
+<dialog class="image-zoom-dialog">
+  <img class="image-zoom-content" alt="" />
+  <button class="image-zoom-close" aria-label="Close">×</button>
+</dialog>
+
+<script is:inline>
+  if (!window.imageZoomInit) {
+    window.imageZoomInit = true;
+    
+    const dialog = document.querySelector('.image-zoom-dialog');
+    const zoomImg = dialog.querySelector('.image-zoom-content');
+    const closeBtn = dialog.querySelector('.image-zoom-close');
+    
+    document.addEventListener('click', (e) => {
+      const img = e.target.closest('img[data-zoom-src]');
+      if (!img) return;
+      
+      zoomImg.src = img.dataset.zoomSrc;
+      zoomImg.alt = img.dataset.zoomAlt || '';
+      dialog.showModal();
+      document.body.style.overflow = 'hidden';
+    });
+    
+    const closeZoom = () => {
+      dialog.close();
+      document.body.style.overflow = '';
+      zoomImg.src = '';
+    };
+    
+    closeBtn.addEventListener('click', closeZoom);
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) closeZoom();
+    });
+    dialog.addEventListener('cancel', closeZoom);
+  }
+</script>
