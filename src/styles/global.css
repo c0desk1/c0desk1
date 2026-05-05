@@ -137,10 +137,10 @@
   --border:       #1f1f1f;
   --border-strong: #2e2e2e;
 
-  /* Accent Blue (dark mode) */
-  --accent:       #3b82f6;      /* blue-500 */
-  --accent-dim:   #60a5fa;      /* blue-400 (lebih terang di dark) */
-  --accent-soft:  #1e3a8a;      /* blue-900 */
+  /* Accent Blue */
+  --accent:       #3b82f6;
+  --accent-dim:   #60a5fa;
+  --accent-soft:  #1e3a8a;
   --accent-ring:  rgba(59, 130, 246, 0.25);
 
   /* Shadows (dark) */
@@ -148,16 +148,18 @@
   --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.4), 0 1px 2px rgb(0 0 0 / 0.3);
   --shadow:    0 4px 6px rgb(0 0 0 / 0.3), 0 2px 4px rgb(0 0 0 / 0.2);
   --shadow-md: 0 8px 16px rgb(0 0 0 / 0.4), 0 4px 8px rgb(0 0 0 / 0.3);
+  
   --shadow-lg: 0 16px 32px rgb(0 0 0 / 0.5), 0 8px 16px rgb(0 0 0 / 0.4);
+  
   .astro-code,
   .astro-code span {
     color: var(--shiki-dark) !important;
-    background-color: transparent !important;
+    background-color: var(--shiki-dark-bg) !important;
     font-style: var(--shiki-dark-font-style) !important;
     font-weight: var(--shiki-dark-font-weight) !important;
     text-decoration: var(--shiki-dark-text-decoration) !important;
   }
-}
+  
 }
 
 /* ==================== BASE ==================== */
