@@ -20,11 +20,9 @@ if (post) {
   const { data, id } = post;
   const { title: t, pubDate, category, author } = data;
   title = t;
-
-excerpt = generateExcerpt(post.body || '', 140);
+  excerpt = generateExcerpt(post.body || '', 140);
 
   const categoryEntry = await getEntry(category);
-
   const authorEntry   = author ? await getEntry(author) : null;
 
   categoryName    = categoryEntry?.data.name || 'General';
@@ -42,35 +40,37 @@ excerpt = generateExcerpt(post.body || '', 140);
 <a
   href={postUrl}
   aria-label={`Baca artikel: ${title}`}
-  class="group flex flex-col h-full rounded-(--radius-xl) gap-4 border-0 border-(--border) hover:border-(--border-strong) focus:outline-none focus:ring-2 focus:ring-(--border-strong)">
-  <div class="flex items-center justify-between mb-6 text-[13px] text-(--fg-subtle) group-hover:text-(--fg)">
-    <span>
-      {categoryName}
-    </span>
-    <time datetime={pubDateISO}>
-      {pubDateDisplay}
-    </time>
+  class="group flex flex-col gap-4 rounded-xl border border-transparent p-4 transition-all hover:border-(--border-strong) hover:shadow-xs focus:outline-none focus:ring-2 focus:ring-(--accent)"
+>
+  <!-- Header: kategori & tanggal -->
+  <div class="flex items-center justify-between text-xs uppercase tracking-wide text-(--fg-subtle) transition-colors group-hover:text-(--fg)">
+    <span>{categoryName}</span>
+    <time datetime={pubDateISO}>{pubDateDisplay}</time>
   </div>
-  <div class="flex flex-col gap-4">
-    <h2 class="text-lg md:text-xl font-semibold tracking-tighter text-(--fg) leading-[1.15] line-clamp-3">
+
+  <!-- Konten utama -->
+  <div class="flex flex-col gap-2">
+    <h2 class="text-lg font-semibold tracking-tight text-(--fg) line-clamp-3 md:text-xl">
       {title}
     </h2>
-    <p class="text-sm text-(--fg-muted) leading-relaxed line-clamp-3 group-hover:text-(--fg)">
+    <p class="text-sm leading-relaxed text-(--fg-muted) line-clamp-3 transition-colors group-hover:text-(--fg)">
       {excerpt}
     </p>
   </div>
-  <div class="mt-auto flex items-center gap-2 pt-6">
+
+  <!-- Footer: author -->
+  <div class="mt-2 flex items-center gap-2.5">
     {authorAvatar && (
       <Image
         src={optimizedAvatar}
         alt={authorName}
         width={48}
         height={48}
-        loading= eager
-        decoding= auto
-        class="w-6 h-6 rounded-full border border-(--border-strong) object-cover"
+        loading="eager"
+        decoding="auto"
+        class="h-6 w-6 rounded-full border border-(--border-strong) object-cover"
       />
     )}
-    <span class="text-[13px] text-(--fg-subtle)">{authorName}</span>
+    <span class="text-xs text-(--fg-subtle)">{authorName}</span>
   </div>
 </a>
