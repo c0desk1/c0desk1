@@ -40,23 +40,23 @@ const iconType = icons[Math.floor(Math.random() * icons.length)];
 ---
 
 
-<div class="aspect-2/3 rounded-xl border border-(--border) bg-(--bg) hover:bg-(--bg-muted) transition-colors">
-  <a href={postUrl} class="group flex flex-col h-full px-6 py-8">
-    <div class="mb-6 shrink-0">
+<div class="post-card rounded-xl border border-(--border) bg-(--bg) hover:bg-(--bg-muted) transition-colors">
+  <a href={postUrl} class="group flex flex-col h-full px-5 py-6 md:px-6 md:py-8">
+    <div class="mb-4 md:mb-6 shrink-0">
       <div class="w-12 h-12 flex items-center justify-center border border-(--border) bg-(--bg-subtle)">
       
         {iconType === "lines" && (
-          <svg viewBox="0 0 24 24" class="w-6 h-6 text-(--accent)">
+          <svg viewBox="0 0 24 24" class="w-6 h-6 text-(--fg-subtle)">
             <path d="M4 6h6M4 12h10M4 18h8" stroke="currentColor" stroke-width="1.5" fill="none"/>
           </svg>
         )}
         {iconType === "brackets" && (
-          <svg viewBox="0 0 24 24" class="w-6 h-6 text-(--accent)">
+          <svg viewBox="0 0 24 24" class="w-6 h-6 text-(--fg-subtle)">
             <path d="M8 5L3 12L8 19M16 5L21 12L16 19" stroke="currentColor" stroke-width="1.5" fill="none"/>
           </svg>
         )}
         {iconType === "grid" && (
-          <svg viewBox="0 0 24 24" class="w-6 h-6 text-(--accent)">
+          <svg viewBox="0 0 24 24" class="w-6 h-6 text-(--fg-subtle)">
             <rect x="4" y="4" width="6" height="6" stroke="currentColor" fill="none"/>
             <rect x="14" y="4" width="6" height="6" stroke="currentColor" fill="none"/>
             <rect x="4" y="14" width="6" height="6" stroke="currentColor" fill="none"/>
@@ -66,23 +66,23 @@ const iconType = icons[Math.floor(Math.random() * icons.length)];
       </div>
     </div>
 
-    <div class="mb-6 shrink-0">
-      <time datetime={pubDateISO} class="text-[13px] md:text-sm text-(--fg-subtle)">
+    <div class="mb-3 md:mb-6 shrink-0">
+      <time datetime={pubDateISO} class="text-[13px] md:text-sm text-(--fg-subtle) font-medium">
         {pubDateDisplay}
       </time>
     </div>
 
-    <div class="flex flex-col gap-5 flex-1 min-h-0">
-      <h2 class="text-2xl md:text-3xl font-semibold tracking-tight text-(--fg) leading-tight line-clamp-4">
+    <div class="flex flex-col gap-3 md:gap-6 flex-1 min-h-0">
+      <h2 class="text-xl md:text-3xl font-semibold tracking-tight text-(--fg) leading-tight line-clamp-3 md:line-clamp-4">
         {title}
       </h2>
 
-      <p class="post-excerpt text-sm md:text-base text-(--fg-muted) leading-relaxed line-clamp-8 group-hover:text-(--fg)">
+      <p class="post-excerpt text-sm md:text-base font-medium text-(--fg-muted) leading-relaxed line-clamp-3 md:line-clamp-8 group-hover:text-(--fg)">
         {excerpt}
       </p>
     </div>
 
-    <div class="mt-auto flex items-center gap-2 shrink-0">
+    <div class="mt-4 md:mt-auto flex items-center gap-2 shrink-0">
       {authorAvatar && (
         <Image
           src={optimizedAvatar}
@@ -94,7 +94,7 @@ const iconType = icons[Math.floor(Math.random() * icons.length)];
           class="w-7 h-7 object-cover rounded-full"
         />
       )}
-      <span class="text-[13px] md:text-sm text-(--fg-subtle)">
+      <span class="text-[13px] md:text-sm text-(--fg-subtle) font-medium">
         {authorName}
       </span>
     </div>
@@ -102,17 +102,15 @@ const iconType = icons[Math.floor(Math.random() * icons.length)];
   </a>
 </div>
 
-<style is:global>
+<style>
+  @media (min-width: 768px) {
+    .post-card {
+      aspect-ratio: 2 / 3;
+    }
+  }
+
   .post-excerpt {
-    -webkit-mask-image: linear-gradient(
-      to bottom,
-      black 30%,
-      transparent 100%
-    );
-    mask-image: linear-gradient(
-      to bottom,
-      black 30%,
-      transparent 100%
-    );
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
   }
 </style>
