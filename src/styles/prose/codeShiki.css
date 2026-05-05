@@ -111,25 +111,18 @@
   }
 }
 
-/* DUKUNGAN THEME LIGHT/DARK (Shiki dual themes) */
-
-.prose-custom pre {
-  background-color: var(--prose-surface) !important;
-  transition: background-color var(--prose-transition, 0.2s);
+.astro-code {
+  background-color: var(--shiki-light-bg, var(--prose-surface)) !important;
 }
 
-.prose-custom pre code {
-  background: transparent !important;
-}
-
-.astro-code,
 .astro-code span {
-  color: var(--shiki-light, inherit);
-  background-color: var(--shiki-light-bg, transparent);
+  background-color: transparent !important;
 }
 
-html.dark .astro-code,
+html.dark .astro-code {
+  background-color: var(--shiki-dark-bg, var(--prose-surface)) !important;
+}
+
 html.dark .astro-code span {
-  color: var(--shiki-dark, inherit) !important;
-  background-color: var(--shiki-dark-bg, transparent) !important;
+  background-color: transparent !important;
 }
