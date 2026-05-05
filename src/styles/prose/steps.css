@@ -87,6 +87,7 @@
 }
 
 /* PARAGRAPH - DIRECT CHILD */
+.prose-custom .steps-container p,
 .prose-custom .steps-container > p {
   position: relative;
   margin: 0.5rem 0 1.5rem 0;
@@ -107,6 +108,8 @@
   z-index: 2;
 }
 
+.prose-custom .steps-container ul li,
+.prose-custom .steps-container ol li,
 .prose-custom .steps-container > ul > li,
 .prose-custom .steps-container > ol > li {
   margin: 0.375rem 0;
@@ -192,6 +195,9 @@
     top: 0;
   }
 
+  .prose-custom .steps-container p,
+  .prose-custom .steps-container ul,
+  .prose-custom .steps-container ol,
   .prose-custom .steps-container > p,
   .prose-custom .steps-container > ul,
   .prose-custom .steps-container > ol,
