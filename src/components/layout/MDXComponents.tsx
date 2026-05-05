@@ -1,6 +1,6 @@
 // src/components/layout/MDXComponents.tsx
 
-import Heading from '@/components/mdx/Heading.astro';
+import Heading from '@/components/mdx/HeadingAnchor.astro';
 import type { MDXComponents } from 'mdx/types';
 
 import Image from "@/components/mdx/Image.astro";
