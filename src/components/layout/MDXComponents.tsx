@@ -14,8 +14,12 @@ import InlineLink from '@/components/mdx/InlineLink.astro';
 import CallQuote from '@/components/mdx/CallQuote.astro';
 
 export const components: MDXComponents = {
+  h1: Heading,
   h2: Heading,
   h3: Heading,
+  h4: Heading,
+  h5: Heading,
+  h6: Heading,
   a: InlineLink,
   img: Image,
   hr: HR,
