@@ -1,310 +1,88 @@
-/* ==================== HEADINGS ==================== */
+/* ==========================================================================
+   HEADINGS
+   ========================================================================== */
+
 .prose-custom :where(h1, h2, h3, h4, h5, h6, p, ul, ol, blockquote, pre, hr, table) {
   margin-top: 0;
 }
 
 .prose-custom :where(h1, h2, h3, h4, h5, h6) {
-  font-family: var(--prose-font-sans);
+  font-family: var(--prose-font-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif);
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.25;
   color: var(--prose-fg);
   margin-bottom: 0;
-  scroll-margin-top: 56px;
+  scroll-margin-top: 80px;
 }
 
-/* H1: Judul Utama */
-.prose-custom h1,
-.prose-custom h1.group.flex {
-  font-size: clamp(2.25rem, 6vw, 3.5rem) !important;
-  font-weight: 800 !important;
-  letter-spacing: -0.04em !important;
-  line-height: 1.1 !important;
-  margin-top: 4rem;
-  margin-bottom: 1.5rem;
-}
-
-/* H2: Sub-judul Besar */
-.prose-custom h2,
-.prose-custom :where(h2.group.flex) {
-  font-size: clamp(1.75rem, 5vw, 2.25rem) !important;
-  font-weight: 700 !important;
-  margin-top: 3rem !important;
-  margin-bottom: 1.25rem;
-  letter-spacing: -0.03em !important;
-}
-
-/* H3: Sub-judul Menengah */
-.prose-custom h3,
-.prose-custom :where(h3.group.flex) {
-  font-size: clamp(1.4rem, 4vw, 1.75rem) !important;
-  font-weight: 600 !important;
-  margin-top: 2.25rem;
-  margin-bottom: 1rem;
-  letter-spacing: -0.02em !important;
-}
-
-/* H4: Judul Kecil */
-.prose-custom h4,
-.prose-custom h4.group.flex {
-  font-size: clamp(1.125rem, 2vw, 1.25rem) !important;
-  font-weight: 600 !important;
-  margin-top: 1.75rem;
-  margin-bottom: 0.75rem !important;
-}
-
-/* H5: Label */
-.prose-custom h5,
-.prose-custom h5.group.flex {
-  font-size: 1rem !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.02em !important;
-  text-transform: uppercase;
-  color: var(--prose-fg-muted);
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
-}
-
-/* H6: Small Label */
-.prose-custom h6,
-.prose-custom h6.group.flex {
-  font-size: 0.875rem !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.05em !important;
-  text-transform: uppercase;
-  color: var(--prose-fg-subtle);
-  margin-top: 1.25rem;
-  margin-bottom: 0.5rem;
-}
-
-.prose-custom .group.flex {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.prose-custom h2,
-.prose-custom h3 {
+/* Base Flex Layout ala Vercel Docs */
+.prose-custom .group.has-anchor {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  max-width: 100% !important;
+  gap: 0.375rem !important;
   cursor: pointer;
+  overflow: visible !important;
+  text-decoration: none;
+}
+
+.prose-custom .heading-text-content {
+  word-break: break-word;
 }
 
 .prose-custom .anchor-link {
-  margin-left: 0.25rem;
   display: inline-flex;
   align-items: center;
-  color: var(--prose-fg-subtle);
-  transition: opacity var(--prose-transition, 0.2s ease);
-  text-decoration: none;
-  opacity: 0;
+  justify-content: center;
+  color: var(--prose-fg-subtle, #666);
+  text-decoration: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  flex-shrink: 0;
+  transition: opacity 0.15s ease, color 0.15s ease;
 }
 
 .prose-custom .anchor-link svg {
   width: 1.15rem;
   height: 1.15rem;
-  stroke: var(--prose-fg-muted);
+  stroke: var(--prose-fg-muted, #888);
   fill: none;
   stroke-width: 2;
+  transition: stroke 0.15s ease;
 }
 
-.prose-custom .group:hover .anchor-link {
-  opacity: 1;
-}
 
-.prose-custom .anchor-link:hover svg {
-  stroke: var(--prose-fg);
-}
-
-.prose-custom .steps-container .group.flex {
-  font-size: 1rem !important;
-  font-weight: 600 !important;
-  margin-top: 2rem !important;
-  letter-spacing: normal !important;
-}
-
-.prose-custom .steps-container .anchor-link {
-  display: none !important;
-}
-
-/* ==================== PARAGRAPH ==================== */
-.prose-custom p {
-  font-size: 1rem;
-  line-height: 1.7;
-  color: var(--prose-fg-muted);
-  margin-bottom: 1.5rem;
-  max-width: 72ch;
-  text-wrap: pretty;
-}
-
-.prose-custom .prose-wide p {
-  max-width: none;
-}
-
-/* ==================== STRONG & EM ==================== */
-.prose-custom strong {
-  font-weight: 600;
-  color: var(--prose-fg);
-  letter-spacing: -0.01em;
-}
-
-.prose-custom em {
-  font-style: italic;
-}
-
-.prose-custom strong em,
-.prose-custom em strong {
-  font-style: italic;
-}
-
-/* ==================== INLINE MISC ==================== */
-
-.prose-custom sup,
-.prose-custom sub {
-  font-size: 0.6875rem;
-  line-height: 1;
-  font-weight: 500;
-  vertical-align: baseline;
-  position: relative;
-  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
-}
-
-.prose-custom sup {
-  top: -0.2em;
-  margin-left: 0.05em;
-  margin-right: 0.05em;
-  color: var(--prose-fg-subtle);
-  text-decoration: none;
-}
-
-.prose-custom sub {
-  bottom: -0.2em;
-  color: var(--prose-fg-subtle);
-}
-
-.prose-custom sup a {
-  text-decoration: none;
-  color: inherit;
-  transition: color 0.2s ease;
-}
-
-.prose-custom sup a:hover {
-  color: var(--prose-accent);
-  text-decoration: none;
-}
-
-.prose-custom sup:has(a[href^="#fn"]) {
-  cursor: pointer;
-}
-
-.prose-custom h1 sup,
-.prose-custom h2 sup,
-.prose-custom h3 sup {
-  font-size: 0.625rem;
-  top: -0.3em;
-}
-
-.prose-custom .callout-content p sup a {
-  font-size: 0.75rem;
-  font-weight: 450;
-  color: var(--prose-fg) !important;
-  text-decoration: none;
-}
-
-.prose-custom .callout-content p sup a:hover {
-  color: var(--prose-accent) !important;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  text-decoration-thickness: 1px;
-  text-decoration-color: var(--prose-accent-subtle);
-}
-
-.prose-custom .callout sup,
-.prose-custom .callout sub {
-  color: currentColor;
-  opacity: 0.8;
-}
-
-.prose-custom small {
-  font-size: 0.8125rem;
-  line-height: 1.4;
-  color: var(--prose-fg-subtle);
-  font-weight: 400;
-  display: inline-block;
-  transition: color 0.2s ease;
-}
-
-.prose-custom figcaption small,
-.prose-custom aside small,
-.prose-custom footer small {
-  font-size: 0.75rem;
-  color: var(--prose-fg-dim);
-}
-
-.prose-custom small:hover {
-  color: var(--prose-fg);
-}
-
-.prose-custom mark {
-  background-color: var(--prose-accent);
-  color: var(--prose-fg);
-  padding: 0.125em 0.2em;
-  border-radius: 0.25rem;
-  font-weight: 450;
-  transition: background-color 0.2s ease;
-}
-
-.prose-custom mark:hover {
-  background-color: var(--prose-accent-dim);
-}
-
-.prose-custom mark.search-highlight {
-  background-color: rgba(245, 166, 35, 0.2);
-  border-bottom: 1px solid rgba(245, 166, 35, 0.5);
-}
-
-.prose-custom abbr[title] {
-  text-decoration: none;
-  border-bottom: 1px dashed var(--prose-border);
-  cursor: help;
-  font-feature-settings: "calt" 1;
-  transition: border-color 0.2s ease, color 0.2s ease;
-}
-
-.prose-custom abbr[title]:hover {
-  border-bottom-color: var(--prose-accent);
-  color: var(--prose-accent);
-}
-
-.prose-custom abbr[title]:active {
-  border-bottom-style: solid;
-  transition: none;
-}
-
+/* ==========================================================================
+   MOBILE
+   ========================================================================== */
 @media (max-width: 767px) {
   .prose-custom h1,
   .prose-custom h1.group.flex {
-    font-size: clamp(1.75rem, 7vw, 2.25rem) !important;
+    font-size: 2.25rem !important;
     font-weight: 800 !important;
-    letter-spacing: -0.04em !important;
-    line-height: 1.2 !important;
+    letter-spacing: -0.05em !important;
+    line-height: 1.1 !important;
     margin-top: 2.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
   }
 
   .prose-custom h2,
   .prose-custom :where(h2.group.flex) {
-    font-size: clamp(1.4rem, 6vw, 1.75rem) !important;
+    font-size: 1.4375rem !important;
     font-weight: 700 !important;
-    margin-top: 2rem !important;
-    margin-bottom: 0.875rem;
+    margin-top: 2.25rem !important;
+    margin-bottom: 0.75rem;
     letter-spacing: -0.03em !important;
   }
 
   .prose-custom h3,
   .prose-custom :where(h3.group.flex) {
-    font-size: clamp(1.2rem, 5vw, 1.4rem) !important;
+    font-size: 1.1875rem !important;
     font-weight: 600 !important;
     margin-top: 1.75rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.625rem;
     letter-spacing: -0.02em !important;
   }
 
@@ -316,51 +94,15 @@
     margin-bottom: 0.5rem !important;
   }
 
-  .prose-custom h5,
-  .prose-custom h5.group.flex {
-    font-size: 0.8125rem !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.02em !important;
-    text-transform: uppercase;
-    color: var(--prose-fg-muted);
-    margin-top: 1.25rem;
-    margin-bottom: 0.5rem;
+  .prose-custom .group .anchor-link.anchor-link-active,
+  .prose-custom .anchor-link.anchor-link-active {
+    opacity: 1 !important;
+    pointer-events: auto !important;
   }
 
-  .prose-custom h6,
-  .prose-custom h6.group.flex {
-    font-size: 0.6875rem !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.05em !important;
-    text-transform: uppercase;
-    color: var(--prose-fg-subtle);
-    margin-top: 1rem;
-    margin-bottom: 0.375rem;
-  }
-
-  .prose-custom h1,
-  .prose-custom h2,
-  .prose-custom h3,
-  .prose-custom h4,
-  .prose-custom h5,
-  .prose-custom h6 {
-    scroll-margin-top: 72px;
-  }
-
-  .prose-custom .anchor-link {
-    margin-left: 0.2rem;
-  }
-
-  .prose-custom .anchor-link svg {
-    width: 0.875rem;
-    height: 0.875rem;
-  }
-
-  .prose-custom .steps-container .group.flex {
-    font-size: 0.875rem !important;
-    font-weight: 600 !important;
-    margin-top: 1.5rem !important;
-    letter-spacing: normal !important;
+  .prose-custom .group .anchor-link.anchor-link-active svg,
+  .prose-custom .anchor-link.anchor-link-active svg {
+    stroke: var(--prose-fg) !important;
   }
 
   .prose-custom p {
@@ -369,99 +111,65 @@
     margin-bottom: 1.25rem;
     max-width: 100%;
   }
-
-  .prose-custom .group.flex {
-    gap: 0.375rem;
-  }
 }
 
 
+/* ==========================================================================
+   DESKTOP
+   ========================================================================== */
 @media (min-width: 768px) {
-  .prose-custom h1,
-  .prose-custom h2,
-  .prose-custom h3,
-  .prose-custom h4,
-  .prose-custom h5,
-  .prose-custom h6 {
-    scroll-margin-top: 56px;
+  .prose-custom :where(h1, h2, h3, h4, h5, h6) {
+    scroll-margin-top: 88px;
   }
 
   .prose-custom h1,
   .prose-custom h1.group.flex {
-    font-size: clamp(1.75rem, 5vw, 2.5rem) !important;
+    font-size: 3rem !important;
     font-weight: 800 !important;
-    line-height: 1.1 !important;
-    margin-top: 2.5rem;
-    margin-bottom: 1.25rem;
+    letter-spacing: -0.06em !important;
+    line-height: 1.05 !important;
+    margin-top: 4rem;
+    margin-bottom: 1.5rem;
   }
 
   .prose-custom h2,
   .prose-custom :where(h2.group.flex) {
-    font-size: clamp(1.5rem, 4.5vw, 1.875rem) !important;
+    font-size: 1.75rem !important;
     font-weight: 700 !important;
-    margin-top: 2rem !important;
+    margin-top: 2.75rem !important;
     margin-bottom: 1rem;
-    letter-spacing: -0.025em !important;
+    letter-spacing: -0.03em !important;
   }
 
   .prose-custom h3,
   .prose-custom :where(h3.group.flex) {
-    font-size: clamp(1.25rem, 3.5vw, 1.5rem) !important;
+    font-size: 1.375rem !important;
     font-weight: 600 !important;
-    margin-top: 1.75rem;
+    margin-top: 2.25rem;
     margin-bottom: 0.875rem;
-    letter-spacing: -0.015em !important;
+    letter-spacing: -0.02em !important;
   }
 
-  .prose-custom h4,
-  .prose-custom h4.group.flex {
-    font-size: 1.125rem !important;
-    font-weight: 600 !important;
-    margin-top: 1.5rem;
-    margin-bottom: 0.625rem !important;
+  .prose-custom .group:hover .anchor-link {
+    opacity: 1 !important;
+    pointer-events: auto !important;
   }
 
-  .prose-custom h5,
-  .prose-custom h5.group.flex {
-    font-size: 0.875rem !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.02em !important;
-    text-transform: uppercase;
-    color: var(--prose-fg-muted);
-    margin-top: 1.25rem;
-    margin-bottom: 0.5rem;
+  .prose-custom .anchor-link:hover svg {
+    stroke: var(--prose-accent) !important;
   }
 
-  .prose-custom h6,
-  .prose-custom h6.group.flex {
-    font-size: 0.75rem !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.05em !important;
-    text-transform: uppercase;
-    color: var(--prose-fg-subtle);
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .prose-custom .anchor-link {
-    margin-left: 0.25rem;
-  }
-
-  .prose-custom .anchor-link svg {
-    width: 1rem;
-    height: 1rem;
-  }
-
-  .prose-custom .steps-container .group.flex {
-    font-size: 0.9375rem !important;
-    font-weight: 600 !important;
-    margin-top: 1.5rem !important;
-    letter-spacing: normal !important;
+  .prose-custom .group .anchor-link.anchor-link-active {
+    opacity: 1 !important;
+    pointer-events: auto !important;
   }
 
   .prose-custom p {
-    font-size: 0.875rem;
-    line-height: 1.6;
-    max-width: 76ch;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--prose-fg-muted);
+    margin-bottom: 1.5rem;
+    max-width: 72ch;
+    text-wrap: pretty;
   }
 }
