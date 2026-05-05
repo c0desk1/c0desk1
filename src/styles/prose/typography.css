@@ -11,20 +11,21 @@
   line-height: 1.25;
   color: var(--prose-fg);
   margin-bottom: 0;
-  scroll-margin-top: 57px;
+  scroll-margin-top: 56px;
 }
 
-.prose-custom .group.has-anchor {
-  display: inline-flex;
+.prose-custom .heading-group.has-anchor {
+  display: flex;
   align-items: baseline;
-  gap: 0.5rem;
+  justify-content: space-between;
   max-width: 100%;
+  gap: 0.5rem;
   cursor: pointer;
   text-decoration: none;
-  position: relative;
 }
 
 .prose-custom .heading-text-content {
+  flex: 1;
   word-break: break-word;
   min-width: 0;
 }
@@ -36,7 +37,7 @@
   flex-shrink: 0;
   width: 1.25rem;
   height: 1.25rem;
-  margin-top: 0.125rem;
+  margin-left: auto;
   color: var(--prose-fg-subtle);
   text-decoration: none;
   opacity: 0;
@@ -274,7 +275,7 @@
 /* DESKTOP */
 @media (min-width: 768px) {
   .prose-custom :where(h1, h2, h3, h4, h5, h6) {
-    scroll-margin-top: 88px;
+    scroll-margin-top: 60px;
   }
 
   .prose-custom h1,
@@ -305,18 +306,14 @@
     letter-spacing: -0.02em !important;
   }
 
-  .prose-custom .group.has-anchor:hover .anchor-link {
+  .prose-custom .heading-group.has-anchor:hover .anchor-link {
     opacity: 1;
     pointer-events: auto;
     transform: translateX(0);
   }
 
   .prose-custom .anchor-link:hover {
-    color: var(--prose-accent);
-  }
-
-  .prose-custom .anchor-link:active {
-    transform: scale(0.9);
+    color: var(--prose-fg);
   }
 
   .prose-custom p {
