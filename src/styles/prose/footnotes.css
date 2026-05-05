@@ -1,4 +1,6 @@
-/* ==================== FOOTNOTES ==================== */
+/* src/styles/prose/components/footnotes.css */
+
+/* FOOTNOTES */
 .prose-custom .footnotes,
 .prose-custom section[data-footnotes] {
   margin: 3rem 0;
@@ -77,4 +79,69 @@
 .prose-custom section[data-footnotes] li:target {
   background-color: var(--prose-bg-subtle);
   border-radius: 4px;
+}
+
+.prose-custom a[href^="#fn"] {
+  scroll-margin-top: 80px;
+  text-decoration: none;
+  transition: color var(--prose-transition);
+}
+
+.prose-custom a[href^="#fn"]:hover {
+  color: var(--prose-accent);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+@media (max-width: 767px) {
+  .prose-custom .footnotes,
+  .prose-custom section[data-footnotes] {
+    margin: 2rem 0;
+    padding-top: 1.5rem;
+    font-size: 0.75rem;
+  }
+
+  .prose-custom section[data-footnotes] ol {
+    gap: 0.5rem;
+  }
+
+  .prose-custom section[data-footnotes] li {
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    line-height: 1.55;
+  }
+
+  .prose-custom section[data-footnotes] li::before {
+    font-size: 0.625rem;
+    min-width: 1.25rem;
+  }
+
+  .prose-custom section[data-footnotes] .data-footnote-backref {
+    margin-left: 0.15rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .prose-custom .footnotes,
+  .prose-custom section[data-footnotes] {
+    margin: 3rem 0;
+    padding-top: 2rem;
+    font-size: 0.8125rem;
+  }
+
+  .prose-custom section[data-footnotes] ol {
+    gap: 0.625rem;
+  }
+
+  .prose-custom section[data-footnotes] li {
+    gap: 0.75rem;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+  }
+
+  .prose-custom section[data-footnotes] li::before {
+    font-size: 0.6875rem;
+    min-width: 1.5rem;
+  }
 }
