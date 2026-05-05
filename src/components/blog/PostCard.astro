@@ -40,37 +40,33 @@ if (post) {
 <a
   href={postUrl}
   aria-label={`Baca artikel: ${title}`}
-  class="group flex flex-col gap-5 border-b border-(--border) py-8 first:pt-0 last:border-none hover:border-(--border-strong) transition-colors"
+  class="group relative flex flex-col gap-4 border-b border-(--border) py-8 pl-5 transition-all first:pt-0 last:border-none hover:border-(--border-strong) hover:pl-6"
 >
-  <!-- Header: kategori & tanggal (tanpa uppercase) -->
-  <div class="flex items-center justify-between text-sm text-(--fg-subtle) group-hover:text-(--fg)">
-    <span>{categoryName}</span>
-    <time datetime={pubDateISO}>{pubDateDisplay}</time>
+  <!-- Industrial left accent bar (garis vertikal kiri) -->
+  <div class="absolute left-0 top-0 h-full w-0.5 bg-(--accent) opacity-0 transition-all group-hover:opacity-100"></div>
+
+  <!-- Header: kategori (industrial: badge mode kotak) & tanggal -->
+  <div class="flex items-center justify-between text-sm">
+    <span class="inline-block border border-(--border) px-2 py-0.5 text-xs font-medium text-(--fg-subtle) group-hover:border-(--accent) group-hover:text-(--accent) transition-colors">
+      {categoryName}
+    </span>
+    <time datetime={pubDateISO} class="text-(--fg-subtle) group-hover:text-(--fg)">
+      {pubDateDisplay}
+    </time>
   </div>
 
-  <!-- Judul: line-clamp-3 -->
-  <h2 class="text-xl md:text-2xl font-semibold tracking-tight text-(--fg) group-hover:text-(--accent) transition-colors line-clamp-3">
+  <!-- Judul -->
+  <h2 class="text-xl font-semibold tracking-tight text-(--fg) line-clamp-3 md:text-2xl group-hover:text-(--accent) transition-colors">
     {title}
   </h2>
 
-  <!-- Deskripsi: line-clamp-3 -->
+  <!-- Excerpt -->
   <p class="text-base text-(--fg-muted) leading-relaxed line-clamp-3 group-hover:text-(--fg)">
     {excerpt}
   </p>
 
-  <!-- Author info -->
-  <div class="flex items-center gap-2.5 pt-2">
-    {authorAvatar && (
-      <Image
-        src={optimizedAvatar}
-        alt={authorName}
-        width={48}
-        height={48}
-        loading="eager"
-        decoding="auto"
-        class="h-6 w-6 rounded-full border border-(--border-strong) object-cover"
-      />
-    )}
-    <span class="text-sm text-(--fg-subtle)">{authorName}</span>
+  <!-- Author (tanpa avatar kalau ingin lebih clean industrial) -->
+  <div class="flex items-center gap-2 text-sm text-(--fg-subtle) group-hover:text-(--fg)">
+    <span>{authorName}</span>
   </div>
 </a>
