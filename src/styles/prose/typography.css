@@ -16,7 +16,6 @@
   scroll-margin-top: 80px;
 }
 
-/* Base Flex Layout ala Vercel Docs */
 .prose-custom .group.has-anchor {
   display: inline-flex !important;
   align-items: center !important;
