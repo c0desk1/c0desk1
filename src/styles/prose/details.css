@@ -44,7 +44,7 @@
 
 .prose-custom details > *:not(summary) ul,
 .prose-custom details > *:not(summary) ol {
-  padding-left: 1.5rem;
+  padding-left: 1.75rem !important;
   margin: 0.5rem 0;
 }
 
@@ -52,6 +52,13 @@
   margin: 0.375rem 0;
   font-size: 0.875rem;
   line-height: 1.65;
+}
+
+.prose-custom details > *:not(summary) ul ul,
+.prose-custom details > *:not(summary) ol ol,
+.prose-custom details > *:not(summary) ul ol,
+.prose-custom details > *:not(summary) ol ul {
+  padding-left: 1.5rem !important;
 }
 
 .prose-custom details > *:not(summary) > :first-child {
@@ -126,14 +133,14 @@
   
   .prose-custom details > *:not(summary) ul,
   .prose-custom details > *:not(summary) ol {
-    padding-left: 1.25rem !important;
-    margin: 0.5rem 0;
+    padding-left: 1.5rem !important; /* dari 1.25rem jadi 1.5rem */
   }
-
-  .prose-custom details > *:not(summary) li {
-    margin: 0.25rem 0;
-    font-size: 0.8125rem;
-    line-height: 1.55;
+  
+  .prose-custom details > *:not(summary) ul ul,
+  .prose-custom details > *:not(summary) ol ol,
+  .prose-custom details > *:not(summary) ul ol,
+  .prose-custom details > *:not(summary) ol ul {
+    padding-left: 1.25rem !important;
   }
 }
 
@@ -163,13 +170,13 @@
   
   .prose-custom details > *:not(summary) ul,
   .prose-custom details > *:not(summary) ol {
-    padding-left: 1.5rem !important;
-    margin: 0.5rem 0;
+    padding-left: 2rem !important;
   }
-
-  .prose-custom details > *:not(summary) li {
-    margin: 0.375rem 0;
-    font-size: 0.875rem;
-    line-height: 1.65;
+  
+  .prose-custom details > *:not(summary) ul ul,
+  .prose-custom details > *:not(summary) ol ol,
+  .prose-custom details > *:not(summary) ul ol,
+  .prose-custom details > *:not(summary) ol ul {
+    padding-left: 1.5rem !important;
   }
 }
