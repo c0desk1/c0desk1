@@ -1,6 +1,5 @@
-/* ==================== DETAILS / SUMMARY ==================== */
+/* DETAILS / SUMMARY  */
 
-/* GLOBAL (semua ukuran) */
 .prose-custom details {
   margin: 1.5rem 0;
   border: 1px solid var(--prose-border);
@@ -57,51 +56,62 @@
   outline-offset: 2px;
 }
 
-/* Content wrapper */
-.prose-custom .details-content {
+.prose-custom .details-content,
+.prose-custom details > *:not(summary) {
   padding: 1rem;
   color: var(--prose-fg-muted);
   line-height: 1.65;
 }
 
-/* Paragraph di dalam details */
-.prose-custom .details-content p {
+.prose-custom .details-content p,
+.prose-custom details > *:not(summary) p {
   margin: 0 0 1rem 0;
 }
 
-.prose-custom .details-content p:last-child {
+.prose-custom .details-content p:last-child,
+.prose-custom details > *:not(summary) p:last-child {
   margin-bottom: 0;
 }
 
-/* List di dalam details */
 .prose-custom .details-content ul,
-.prose-custom .details-content ol {
+.prose-custom .details-content ol,
+.prose-custom details > *:not(summary) ul,
+.prose-custom details > *:not(summary) ol {
   padding-left: 1.5rem;
   margin: 0.5rem 0;
 }
 
-.prose-custom .details-content li {
+.prose-custom .details-content li,
+.prose-custom details > *:not(summary) li {
   margin: 0.25rem 0;
   font-size: 0.875rem;
   line-height: 1.65;
 }
 
-/* Nested list */
 .prose-custom .details-content ul ul,
 .prose-custom .details-content ol ol,
 .prose-custom .details-content ul ol,
-.prose-custom .details-content ol ul {
+.prose-custom .details-content ol ul,
+.prose-custom details > *:not(summary) ul ul,
+.prose-custom details > *:not(summary) ol ol,
+.prose-custom details > *:not(summary) ul ol,
+.prose-custom details > *:not(summary) ol ul {
   padding-left: 1.25rem;
   margin: 0.25rem 0;
 }
 
-/* Heading di dalam details */
 .prose-custom .details-content h1,
 .prose-custom .details-content h2,
 .prose-custom .details-content h3,
 .prose-custom .details-content h4,
 .prose-custom .details-content h5,
-.prose-custom .details-content h6 {
+.prose-custom .details-content h6,
+.prose-custom details > *:not(summary) h1,
+.prose-custom details > *:not(summary) h2,
+.prose-custom details > *:not(summary) h3,
+.prose-custom details > *:not(summary) h4,
+.prose-custom details > *:not(summary) h5,
+.prose-custom details > *:not(summary) h6 {
   margin-top: 1.25rem;
   margin-bottom: 0.5rem;
 }
@@ -111,21 +121,28 @@
 .prose-custom .details-content h3:first-child,
 .prose-custom .details-content h4:first-child,
 .prose-custom .details-content h5:first-child,
-.prose-custom .details-content h6:first-child {
+.prose-custom .details-content h6:first-child,
+.prose-custom details > *:not(summary) h1:first-child,
+.prose-custom details > *:not(summary) h2:first-child,
+.prose-custom details > *:not(summary) h3:first-child,
+.prose-custom details > *:not(summary) h4:first-child,
+.prose-custom details > *:not(summary) h5:first-child,
+.prose-custom details > *:not(summary) h6:first-child {
   margin-top: 0;
 }
 
-/* Blockquote di dalam details */
-.prose-custom .details-content .quote {
+.prose-custom .details-content .quote,
+.prose-custom details > *:not(summary) .quote {
   margin: 1rem 0;
 }
 
-.prose-custom .details-content .quote-body p {
+.prose-custom .details-content .quote-body p,
+.prose-custom details > *:not(summary) .quote-body p {
   font-size: 1rem;
 }
 
-/* Animasi */
-.prose-custom details[open] .details-content {
+.prose-custom details[open] .details-content,
+.prose-custom details[open] > *:not(summary) {
   animation: detailsFadeSlide 0.18s ease-out;
 }
 
@@ -140,7 +157,7 @@
   }
 }
 
-/* ==================== MOBILE (max-width: 767px) ==================== */
+/* MOBILE */
 @media (max-width: 767px) {
   .prose-custom details {
     margin: 1.25rem 0;
@@ -158,23 +175,28 @@
     height: 0.875rem;
   }
 
-  .prose-custom .details-content {
+  .prose-custom .details-content,
+  .prose-custom details > *:not(summary) {
     padding: 0.75rem 0.875rem;
     line-height: 1.55;
     font-size: 0.8125rem;
   }
 
-  .prose-custom .details-content p {
+  .prose-custom .details-content p,
+  .prose-custom details > *:not(summary) p {
     margin: 0 0 0.75rem 0;
   }
 
   .prose-custom .details-content ul,
-  .prose-custom .details-content ol {
+  .prose-custom .details-content ol,
+  .prose-custom details > *:not(summary) ul,
+  .prose-custom details > *:not(summary) ol {
     padding-left: 1.25rem;
     margin: 0.35rem 0;
   }
 
-  .prose-custom .details-content li {
+  .prose-custom .details-content li,
+  .prose-custom details > *:not(summary) li {
     margin: 0.2rem 0;
     font-size: 0.8125rem;
     line-height: 1.55;
@@ -183,7 +205,11 @@
   .prose-custom .details-content ul ul,
   .prose-custom .details-content ol ol,
   .prose-custom .details-content ul ol,
-  .prose-custom .details-content ol ul {
+  .prose-custom .details-content ol ul,
+  .prose-custom details > *:not(summary) ul ul,
+  .prose-custom details > *:not(summary) ol ol,
+  .prose-custom details > *:not(summary) ul ol,
+  .prose-custom details > *:not(summary) ol ul {
     padding-left: 1rem;
   }
 
@@ -192,13 +218,19 @@
   .prose-custom .details-content h3,
   .prose-custom .details-content h4,
   .prose-custom .details-content h5,
-  .prose-custom .details-content h6 {
+  .prose-custom .details-content h6,
+  .prose-custom details > *:not(summary) h1,
+  .prose-custom details > *:not(summary) h2,
+  .prose-custom details > *:not(summary) h3,
+  .prose-custom details > *:not(summary) h4,
+  .prose-custom details > *:not(summary) h5,
+  .prose-custom details > *:not(summary) h6 {
     margin-top: 1rem;
     margin-bottom: 0.4rem;
   }
 }
 
-/* ==================== TABLET/DESKTOP (min-width: 768px) ==================== */
+/* TABLET/DESKTOP */
 @media (min-width: 768px) {
   .prose-custom details {
     margin: 1.5rem 0;
@@ -216,23 +248,28 @@
     height: 1rem;
   }
 
-  .prose-custom .details-content {
+  .prose-custom .details-content,
+  .prose-custom details > *:not(summary) {
     padding: 1rem;
     line-height: 1.65;
     font-size: 0.875rem;
   }
 
-  .prose-custom .details-content p {
+  .prose-custom .details-content p,
+  .prose-custom details > *:not(summary) p {
     margin: 0 0 1rem 0;
   }
 
   .prose-custom .details-content ul,
-  .prose-custom .details-content ol {
+  .prose-custom .details-content ol,
+  .prose-custom details > *:not(summary) ul,
+  .prose-custom details > *:not(summary) ol {
     padding-left: 1.75rem;
     margin: 0.5rem 0;
   }
 
-  .prose-custom .details-content li {
+  .prose-custom .details-content li,
+  .prose-custom details > *:not(summary) li {
     margin: 0.25rem 0;
     font-size: 0.875rem;
     line-height: 1.65;
@@ -241,7 +278,11 @@
   .prose-custom .details-content ul ul,
   .prose-custom .details-content ol ol,
   .prose-custom .details-content ul ol,
-  .prose-custom .details-content ol ul {
+  .prose-custom .details-content ol ul,
+  .prose-custom details > *:not(summary) ul ul,
+  .prose-custom details > *:not(summary) ol ol,
+  .prose-custom details > *:not(summary) ul ol,
+  .prose-custom details > *:not(summary) ol ul {
     padding-left: 1.5rem;
   }
 }
