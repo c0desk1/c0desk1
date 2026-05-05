@@ -39,7 +39,9 @@
   height: 100%;
 }
 
-.prose-custom .steps-container .group.flex {
+.prose-custom .steps-container > h2,
+.prose-custom .steps-container > h3,
+.prose-custom .steps-container > h4 {
   position: relative;
   counter-increment: step;
   margin-top: 2rem !important;
@@ -50,11 +52,15 @@
   overflow: visible;
 }
 
-.prose-custom .steps-container > .group.flex:first-child {
+.prose-custom .steps-container > h2:first-child,
+.prose-custom .steps-container > h3:first-child,
+.prose-custom .steps-container > h4:first-child {
   margin-top: 0 !important;
 }
 
-.prose-custom .steps-container .group.flex::before {
+.prose-custom .steps-container > h2::before,
+.prose-custom .steps-container > h3::before,
+.prose-custom .steps-container > h4::before {
   content: counter(step);
   position: absolute;
   left: calc(-2rem - 13px - 0.5px);
@@ -75,7 +81,9 @@
   transition: all var(--prose-transition);
 }
 
-.prose-custom .steps-container .group.flex:hover::before {
+.prose-custom .steps-container > h2:hover::before,
+.prose-custom .steps-container > h3:hover::before,
+.prose-custom .steps-container > h4:hover::before {
   background: var(--prose-surface-hover);
   transform: scale(1.05);
 }
@@ -88,8 +96,12 @@
   z-index: 2;
 }
 
-.prose-custom .steps-container .group.flex,
-.prose-custom .steps-container .group.flex * {
+.prose-custom .steps-container > h2,
+.prose-custom .steps-container > h3,
+.prose-custom .steps-container > h4,
+.prose-custom .steps-container > h2 *,
+.prose-custom .steps-container > h3 *,
+.prose-custom .steps-container > h4 * {
   border: none !important;
   text-decoration: none !important;
 }
@@ -110,12 +122,16 @@
     background-size: 1px calc(100% - 0.75rem);
   }
 
-  .prose-custom .steps-container .group.flex {
+  .prose-custom .steps-container > h2,
+  .prose-custom .steps-container > h3,
+  .prose-custom .steps-container > h4 {
     margin-top: 1.5rem !important;
     font-size: 0.9375rem !important;
   }
 
-  .prose-custom .steps-container .group.flex::before {
+  .prose-custom .steps-container > h2::before,
+  .prose-custom .steps-container > h3::before,
+  .prose-custom .steps-container > h4::before {
     left: calc(-1.5rem - 11px - 0.5px);
     width: 22px;
     height: 22px;
@@ -142,12 +158,16 @@
     background-size: 1px calc(100% - 1rem);
   }
 
-  .prose-custom .steps-container .group.flex {
+  .prose-custom .steps-container > h2,
+  .prose-custom .steps-container > h3,
+  .prose-custom .steps-container > h4 {
     margin-top: 2rem !important;
     font-size: 1rem !important;
   }
 
-  .prose-custom .steps-container .group.flex::before {
+  .prose-custom .steps-container > h2::before,
+  .prose-custom .steps-container > h3::before,
+  .prose-custom .steps-container > h4::before {
     left: calc(-2rem - 13px - 0.5px);
     width: 26px;
     height: 26px;
