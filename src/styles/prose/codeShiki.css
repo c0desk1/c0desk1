@@ -111,15 +111,6 @@
   }
 }
 
-.astro-code {
-  background-color: var(--shiki-light-bg, var(--prose-surface)) !important;
-}
-
-.astro-code span {
-  background-color: transparent !important;
-  color: var(--shiki-light) !important;
-}
-
 .dark .astro-code {
   background-color: var(--shiki-dark-bg, var(--prose-surface)) !important;
 }
