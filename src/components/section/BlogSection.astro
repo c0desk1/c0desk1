@@ -16,11 +16,12 @@ const { posts } = Astro.props;
       Postingan Terbaru.
     </h2>
   </div>
-
   {posts.length > 0 ? (
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-px">
+    <div class="grid grid-cols-1 md:grid-cols-3 border-0 md:border border-(--border) divide-y md:divide-x md:divide-y-0 divide-(--border)">
       {posts.map(post => (
-        <PostCard post={post} />
+        <div class="p-0">
+          <PostCard post={post} />
+        </div>
       ))}
     </div>
   ) : (
