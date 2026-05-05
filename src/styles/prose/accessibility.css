@@ -1,10 +1,13 @@
-/* ==================== ACCESSIBILITY ==================== */
+/* src/styles/prose/components/accessibility.css */
+
+/* ACCESSIBILITY */
 @media (prefers-reduced-motion: reduce) {
   .prose-custom *,
   .prose-custom *::before,
   .prose-custom *::after {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
@@ -15,8 +18,16 @@
 }
 
 @media (forced-colors: active) {
-  .prose-custom a { color: LinkText; }
+  .prose-custom a { 
+    color: LinkText; 
+  }
+
   .prose-custom code:not(pre code),
-  .prose-custom kbd { border: 1px solid ButtonText; }
-  .prose-custom blockquote { border-left-color: ButtonText; }
+  .prose-custom kbd { 
+    border: 1px solid ButtonText; 
+  }
+  
+  .prose-custom blockquote { 
+    border-left-color: ButtonText; 
+  }
 }
