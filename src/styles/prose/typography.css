@@ -15,10 +15,9 @@
 }
 
 .prose-custom .heading-group.has-anchor {
-  display: flex;
+  display: inline-flex;
   align-items: baseline;
-  justify-content: space-between;
-  width: 100%;
+  width: auto;
   max-width: 100%;
   gap: 0.5rem;
   cursor: pointer;
@@ -26,7 +25,7 @@
 }
 
 .prose-custom .heading-text-content {
-  flex: 1;
+  flex: 0 1 auto;
   word-break: break-word;
   min-width: 0;
 }
@@ -38,7 +37,7 @@
   flex-shrink: 0;
   width: 1.25rem;
   height: 1.25rem;
-  margin-left: auto;
+  margin-left: 0;
   color: var(--prose-fg-subtle);
   text-decoration: none;
   opacity: 0;
