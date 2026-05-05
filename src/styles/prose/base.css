@@ -1,0 +1,100 @@
+:root {
+  --prose-accent:       #0062ff;
+  --prose-accent-dim:   #2b7cff;
+  --prose-accent-soft:  #a8dfff;
+  --prose-black:         #000000;
+  --prose-white:         #ffffff;
+  --prose-fg:            #111111;
+  --prose-fg-muted:      #555555;
+  --prose-fg-subtle:     #888888;
+  --prose-border:        #e7e7e7;
+  --prose-surface:       #f9f9f9;
+  --prose-surface-hover: #f2f2f2;
+
+  --prose-font-sans: 'Geist', 'Geist Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --prose-font-mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --prose-radius-sm: 4px;
+  --prose-radius:    6px;
+  --prose-radius-md: 8px;
+  --prose-radius-lg: 12px;
+
+  --callout-note-bg: #f0f0f2;
+  --callout-note-border: #c0c0c5;
+  --callout-note-text: #2d2d30;
+  --callout-note-icon: #6e6e7a;
+
+  --callout-info-bg: #e6f4ff;
+  --callout-info-border: #0077cc;
+  --callout-info-text: #005fa3;
+  --callout-info-icon: #0077cc;
+
+  --callout-tip-bg: #e6ffe8;
+  --callout-tip-border: #00a854;
+  --callout-tip-text: #007a3b;
+  --callout-tip-icon: #00a854;
+
+  --callout-warning-bg: #fff5e6;
+  --callout-warning-border: #e68a00;
+  --callout-warning-text: #b35f00;
+  --callout-warning-icon: #e68a00;
+
+  --callout-danger-bg: #ffe6e6;
+  --callout-danger-border: #cc2222;
+  --callout-danger-text: #a11;
+  --callout-danger-icon: #cc2222;
+
+  --prose-transition: 0.2s ease;
+}
+
+.dark {
+  --prose-fg:            #ededed;
+  --prose-fg-muted:      #a1a1a1;
+  --prose-fg-subtle:     #666666;
+  --prose-border:        #262626;
+  --prose-surface:       #000000;
+  --prose-surface-hover: #1a1a1a;
+  --prose-accent-soft:  #579bc2;
+
+  --callout-note-bg: #0b0b0e;
+  --callout-note-border: #2a2a2f;
+  --callout-note-text: #c5c5d0;
+  --callout-note-icon: #6e6e7a;
+
+  --callout-info-bg: rgba(0, 160, 255, 0.06);
+  --callout-info-border: #00a0ff;
+  --callout-info-text: #4ac5ff;
+  --callout-info-icon: #00a0ff;
+
+  --callout-tip-bg: rgba(0, 255, 100, 0.05);
+  --callout-tip-border: #00e070;
+  --callout-tip-text: #00e070;
+  --callout-tip-icon: #00e070;
+
+  --callout-warning-bg: rgba(255, 160, 0, 0.08);
+  --callout-warning-border: #ffaa00;
+  --callout-warning-text: #ffbc3c;
+  --callout-warning-icon: #ffaa00;
+
+  --callout-danger-bg: rgba(255, 40, 40, 0.06);
+  --callout-danger-border: #ff3333;
+  --callout-danger-text: #ff6666;
+  --callout-danger-icon: #ff3333;
+}
+
+/* ==================== BASE ==================== */
+
+.prose-custom {
+  max-width: none;
+  font-family: var(--prose-font-sans);
+  color: var(--prose-fg);
+
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+.prose-custom > :first-child { margin-top: 0 !important; }
+.prose-custom > :last-child  { margin-bottom: 0 !important; }
