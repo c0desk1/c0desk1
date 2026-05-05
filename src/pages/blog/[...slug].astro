@@ -113,7 +113,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
   <Section size="md">
     <Section size="sm">
       <h2 class="sr-only">Navigasi Halaman</h2>
-      <Container size="md">
+      <Container size="lg">
         <Breadcrumb items={Breadcrumbs} />
       </Container>
     </Section>
@@ -140,7 +140,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
                   <BlogFeaturedImage
                     image={image.src}
                     alt={image.alt || title}
-                  caption={(image as any).caption}
+                    caption={(image as any).caption}
                   />
                 )}
               </div>
@@ -149,7 +149,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
                   <TOC headings={tocHeadings} />
                 )}
               </div>
-              <div id="article-content" class="prose-custom w-full">
+              <div id="article-content" class="prose-custom">
                 <Content components={components} />
               </div>
             </div>
