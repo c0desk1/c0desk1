@@ -1,6 +1,6 @@
 @reference "@/styles/global.css";
 
-@import "./tokens.css";
+@import "./token.css";
 @import "./base.css";
 @import "./typography.css";
 @import "./links.css";
