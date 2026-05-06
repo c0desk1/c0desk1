@@ -1,14 +1,11 @@
-# robots.txt
 User-agent: *
 Allow: /
 
 Disallow: /404/
 Disallow: /api/
 
-# RSS
 User-agent: FeedFetcher-Google
 Allow: /rss.xml
 
-# SITEMAP
 Sitemap: https://c0desk1.my.id/sitemap-index.xml
 Sitemap: https://c0desk1.my.id/rss.xml
