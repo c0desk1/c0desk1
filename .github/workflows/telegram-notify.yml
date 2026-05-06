@@ -2,7 +2,7 @@ name: Telegram Notification
 
 on:
   push:
-    branches: [main]
+    branches: 
     paths:
       - 'src/content/blog/**/*.md'
       - 'src/content/blog/**/*.mdx'
@@ -16,6 +16,8 @@ concurrency:
 jobs:
   notify:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout code
@@ -24,11 +26,13 @@ jobs:
           fetch-depth: 0
 
       - name: Install yq
-        run: sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 && sudo chmod +x /usr/local/bin/yq
+        run: |
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
 
       - name: Get changed files
         id: changed
-        uses: tj-actions/changed-files@v47
+        uses: tj-actions/changed-files@v47.0.6
         with:
           files: |
             src/content/blog/**/*.md
@@ -62,10 +66,16 @@ jobs:
             FRONTMATTER=$(sed -n '/^---$/,/^---$/p' "$FILE" | sed '1d;$d')
 
             TITLE=$(echo "$FRONTMATTER" | yq -r '.title // "Untitled"')
-            DESC=$(echo "$FRONTMATTER" | yq -r '.description //.synopsis // ""')
+            DESC=$(echo "$FRONTMATTER" | yq -r '.description // .synopsis // "No description provided"')
             RAW_IMAGE=$(echo "$FRONTMATTER" | yq -r '.image // ""')
             SLUG=$(basename "$FILE" | sed -E 's/\.(md|mdx)$//')
             URL="https://c0desk1.my.id/$BASE_PATH/$SLUG"
+
+            # Skip kalo frontmatter gagal parse
+            if [[ "$TITLE" == "Untitled" ]] || [[ -z "$SLUG" ]]; then
+              echo "Skip: Invalid frontmatter or slug for $FILE"
+              continue
+            fi
 
             IMAGE_URL=""
             FILE_ID=""
@@ -77,22 +87,38 @@ jobs:
             FILE_ID=$(echo "$RAW_IMAGE" | grep -oE '[A-Za-z0-9_-]{25,}' | head -1 || true)
             [[ "$FILE_ID" == "image:" ]] && FILE_ID=""
 
-            echo "TYPE=$TYPE | TITLE=$TITLE | URL=$URL"
+            echo "TYPE=$TYPE"
+            echo "TITLE=$TITLE"
+            echo "DESC=$DESC"
+            echo "URL=$URL"
+            echo "FILE_ID=$FILE_ID"
 
+            # API lu wajib: title, description, url. fileId opsional
             JSON_PAYLOAD=$(jq -n \
               --arg title "[$TYPE] $TITLE" \
-              --arg desc "$DESC" \
+              --arg description "$DESC" \
               --arg url "$URL" \
-              --arg imageUrl "$IMAGE_URL" \
               --arg fileId "$FILE_ID" \
-              '{title: $title, description: $desc, url: $url, imageUrl: $imageUrl, fileId: $fileId}')
+              '{title: $title, description: $description, url: $url} + 
+              (if $fileId != "" then {fileId: $fileId} else {} end)')
 
+            echo "JSON_PAYLOAD: $JSON_PAYLOAD"
             echo "🚀 Sending..."
-            curl -sS -X POST "$TG_ENGINE_URL/api/v1/broadcast" \
+
+            HTTP_RESPONSE=$(curl -sS -w "\n%{http_code}" -X POST "$TG_ENGINE_URL/api/v1/broadcast" \
               -H "Authorization: Bearer $TG_ENGINE_ADMIN_TOKEN" \
               -H "Content-Type: application/json" \
-              -d "$JSON_PAYLOAD"
+              -d "$JSON_PAYLOAD")
+            
+            HTTP_BODY=$(echo "$HTTP_RESPONSE" | head -n -1)
+            HTTP_CODE=$(echo "$HTTP_RESPONSE" | tail -n1)
+            
+            echo "Response: $HTTP_BODY"
+            echo "HTTP_CODE: $HTTP_CODE"
+            
+            if [[ "$HTTP_CODE" != "200" ]]; then
+              echo "Error: Request failed with code $HTTP_CODE"
+            fi
 
-            echo "Status: $?"
             sleep 1
           done
