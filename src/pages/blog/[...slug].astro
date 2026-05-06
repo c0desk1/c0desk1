@@ -1,174 +1,105 @@
 ---
-// src/pages/blog/[...slug].astro
-import '@/styles/prose/index.css';
+// src/components/ui/CopyLink.astro
 
-import { getCollection, render, getEntry } from "astro:content";
-import type { CollectionEntry } from "astro:content";
-
-import { siteConfig } from "@/config/site";
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import Container from "@/components/ui/Container.astro";
-import Section from "@/components/ui/Section.astro";
-
-import Breadcrumb from "@/components/ui/Breadcrumb.astro";
-import PostHeader from "@/components/layout/PostHeader.astro";
-import BlogFeaturedImage from "@/components/blog/BlogFeaturedImage.astro";
-import TOC from "@/components/ui/TOC.astro";
-import BlogRelatedPosts from "@/components/blog/BlogRelatedPosts.astro";
-import BackToTop from "@/components/ui/BackToTop.astro";
-
-import { filterHeadingsForTOC, getReadingTime } from "@/lib/utils";
-import { getSmartRelatedPosts } from "@/lib/botEngine";
-import ReadingProgress from "@/components/ui/ReadingProgress.astro";
-
-import { components } from '@/components/layout/MDXComponents';
-
-export async function getStaticPaths() {
-  const posts = await getCollection("blog", ({ data }) => !data.draft);
-  return posts.map((post: CollectionEntry<"blog">) => ({
-    params: { slug: post.id },
-    props: { post }
-  }));
-}
-
-const { post } = Astro.props;
-
-const allPosts = await getCollection("blog", ({ data }) => !data.draft);
-
-let settings;
-try {
-  settings = await getEntry('settings', 'site');
-} catch (error) {
-  console.warn('Settings not found, using siteConfig fallback');
-}
-const siteData = settings?.data || siteConfig;
-
-const authorEntry = await getEntry(post.data.author);
-const categoryEntry = await getEntry(post.data.category);
-
-const { Content, headings } = await render(post);
-const relatedPosts = getSmartRelatedPosts(post, allPosts, 3);
-
-const {
-  title,
-  description,
-  pubDate,
-  updatedDate,
-  tags,
-  image,
-  seo
-} = post.data;
-
-const seoImage = {
-  src: seo?.ogImage || image?.src || siteData.defaultSeo?.ogImage || siteConfig.defaultSeo?.ogImage || siteConfig.ogImage,
-  alt: image?.alt || title
-};
-
-const seoCategory = {
-  name: categoryEntry?.data.name || "Blog",
-  description: categoryEntry?.data.description || "",
-  slug: categoryEntry?.id || "blog"
-};
-
-const seoTitle = seo?.title || title;
-const seoDescription = seo?.description || description;
-
-const tocHeadings = filterHeadingsForTOC(headings);
-
-const readingTime = getReadingTime(post.body || "");
-
-const siteURL = Astro.site?.toString() ?? siteData.siteUrl;
-const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
-
-const SeoBreadcrumbItems = [
-  { name: "Home", href: siteURL },
-  { name: "Blog", href: new URL("blog/", siteURL).toString() },
-  { name: seoCategory.name, href: new URL(`category/${seoCategory.slug}/`, siteURL).toString() },
-  { name: title, href: canonicalURL }
-];
-
-const Breadcrumbs = SeoBreadcrumbItems.filter(item => 
-  item.name === "Blog" || item.name === seoCategory.name
-);
+import Icon from "./Icon";
 ---
 
-<BaseLayout
-  title={seoTitle}
-  description={seoDescription}
-  image={seoImage}
-  type="article"
-  publishedTime={pubDate}
-  modifiedTime={updatedDate}
-  tags={tags}
-  category={seoCategory}
-  author={{
-    name: authorEntry?.data.name,
-    role: authorEntry?.data.role,
-    avatar: authorEntry?.data.avatar,
-    bio: authorEntry?.data.bio,
-    slug: authorEntry?.id
-  }}
-  canonicalURL={canonicalURL}
->
-  <Section size="md">
-    <Section size="sm">
-      <h2 class="sr-only">Navigasi Halaman</h2>
-      <Container size="lg">
-        <Breadcrumb items={Breadcrumbs} />
-      </Container>
-    </Section>
-    <Section size="sm">
-      <Container size="md">
-        <h2 class="sr-only">{title}</h2>
-        <article>
-          <Section size="sm">
-            <h2 class="sr-only">Article Header</h2>
-            <PostHeader
-              title={title}
-              pubDate={pubDate}
-              readingTime={readingTime}
-              authorName={authorEntry?.data.name}
-              authorAvatar={authorEntry?.data.avatar}
-              authorTitle={authorEntry?.data.role}
-              authorSlug={authorEntry?.id}
-            />
-          </Section>
-          <Section size="sm" class="section-divider">
-            <div id="article">
-              <div id="article-cover" class="prose-custom w-full mb-8">
-                {image && (
-                  <BlogFeaturedImage
-                    image={image.src}
-                    alt={image.alt || title}
-                    caption={(image as any).caption}
-                  />
-                )}
-              </div>
-              <div id="article-toc" class="hidden sticky top-15 z-50 my-6">
-                {tocHeadings.length > 0 && (
-                  <TOC headings={tocHeadings} />
-                )}
-              </div>
-              <div id="article-content" class="prose-custom">
-                <Content components={components} />
-              </div>
-            </div>
-	      </Section>
-	    </article>
-	  </Container>
-	</Section>
-	<Section size="sm">
-	  <h2 class="sr-only">Navigasi Kembali ke atas halaman </h2>
-	  <Container size="lg">
-	    <BackToTop align="center" />
-	  </Container>
-	</Section>
-    <Section size="lg" class="section-divider">
-      <h2 class="sr-only">Related Posts</h2>
-      <Container size="lg">
-        <BlogRelatedPosts posts={relatedPosts} />
-      </Container>
-    </Section>
-  </Section>
-  <ReadingProgress />
-</BaseLayout>
+<button
+  id="copy-link-btn"
+  aria-label="Salin tautan artikel"
+  aria-live="polite"
+  data-url={Astro.url.href}
+  class="relative flex items-center gap-1.5 text-(--fg-muted) hover:text-(--fg) group active:scale-95">
+  
+  <div class="relative w-4 h-4 flex flex-shrink-0 items-center justify-center">
+    <span id="icon-copy" class="absolute inset-0 w-full h-full transition-all duration-200">
+      <Icon name="link" class="w-4 h-4" />
+    </span>
+    <span id="icon-check" class="absolute inset-0 w-full h-full opacity-0 scale-75 transition-all duration-200">
+      <Icon name="check" class="w-4 h-4" />
+    </span>
+  </div>
+  <span id="copy-text" class="text-sm font-medium leading-none">
+      Salin URL
+  </span>
+</button>
+
+<script>
+  import { copyToClipboard } from '@/lib/utils';
+
+  (() => {
+    if ((window as any).__copyLinkReady) return;
+    (window as any).__copyLinkReady = true;
+
+    const btn = document.getElementById('copy-link-btn') as HTMLButtonElement;
+    const copyIcon = document.getElementById('icon-copy');
+    const checkIcon = document.getElementById('icon-check');
+    const text = document.getElementById('copy-text');
+
+    if (!btn || !copyIcon || !checkIcon || !text) return;
+
+
+    let timeoutId: number;
+    let isCopying = false;
+
+    const showToastMessage = (success: boolean) => {
+      const toast = (window as any).toast;
+
+      if (!toast) return;
+
+      if (success) {
+        toast.show('URL disalin ke Clipboard!', { type: 'success', duration: 2000 });
+      } else {
+        toast.show('Gagal menyalin URL, silahkan coba lagi.', { type: 'error', duration: 2000 });
+      }
+    };
+
+    const setState = (success: boolean) => {
+      clearTimeout(timeoutId);
+      btn.disabled = true;
+
+      if (success) {
+        copyIcon.style.cssText = 'opacity:0;transform:scale(0.75)';
+        checkIcon.style.cssText = 'opacity:1;transform:scale(1)';
+        text.textContent = 'Tersalin!';
+        btn.setAttribute('aria-label', 'Url berhasil disalin');
+        showToastMessage(true);
+      } else {
+        text.textContent = 'Gagal';
+        btn.setAttribute('aria-label', 'Gagal menyalin URL');
+        showToastMessage(false);
+      }
+
+      timeoutId = window.setTimeout(() => {
+        copyIcon.style.cssText = 'opacity:1;transform:scale(1)';
+        checkIcon.style.cssText = 'opacity:0;transform:scale(0.75)';
+        text.textContent = 'Salin URL';
+        btn.setAttribute('aria-label', 'Salin URL artikel');
+        btn.disabled = false;
+        isCopying = false;
+      }, 1500);
+    };
+
+    const handleCopy = async () => {
+      if (isCopying) return;
+      isCopying = true;
+
+      const url = btn.getAttribute('data-url') || window.location.href;
+      const success = await copyToClipboard(url);
+      setState(success);
+    };
+
+    btn.addEventListener('click', handleCopy);
+
+    document.addEventListener('astro:after-swap', () => {
+      clearTimeout(timeoutId);
+      btn.disabled = false;
+      isCopying = false;
+      btn.setAttribute('data-url', window.location.href);
+      copyIcon.style.cssText = 'opacity:1;transform:scale(1)';
+      checkIcon.style.cssText = 'opacity:0;transform:scale(0.75)';
+      text.textContent = 'Salin URL';
+      btn.setAttribute('aria-label', 'Salin Url artikel');
+    });
+  })();
+</script>
