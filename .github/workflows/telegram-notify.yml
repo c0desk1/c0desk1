@@ -46,7 +46,9 @@ jobs:
           TG_ENGINE_URL: ${{ secrets.TG_ENGINE_URL }}
           TG_ENGINE_ADMIN_TOKEN: ${{ secrets.TG_ENGINE_ADMIN_TOKEN }}
           FILES: ${{ steps.changed.outputs.all_changed_files }}
+        shell: bash
         run: |
+          set -e
           echo "📄 Changed files:"
           echo "$FILES"
 
@@ -66,8 +68,7 @@ jobs:
               BASE_PATH="portfolio"
             fi
 
-            # Ambil frontmatter pake awk, lebih aman buat .mdx
-            FRONTMATTER=$(awk '/^---$/{if(f) exit; f=1; next} f' "$FILE")
+            FRONTMATTER=$(awk '/^---$/{if(f)exit;f=1;next}f' "$FILE")
 
             if [ -z "$FRONTMATTER" ]; then
               echo "Skip: No frontmatter found in $FILE"
@@ -80,7 +81,6 @@ jobs:
             SLUG=$(basename "$FILE" | sed -E 's/\.(md|mdx)$//')
             URL="https://c0desk1.my.id/$BASE_PATH/$SLUG"
 
-            # Skip kalo title atau desc kosong karena API lu wajib
             if [ -z "$TITLE" ]; then
               echo "Skip: TITLE empty in $FILE"
               continue
@@ -94,11 +94,7 @@ jobs:
             FILE_ID=$(echo "$RAW_IMAGE" | grep -oE '[A-Za-z0-9_-]{25,}' | head -1 || true)
             [[ "$FILE_ID" == "image:" ]] && FILE_ID=""
 
-            echo "TYPE=$TYPE"
-            echo "TITLE=$TITLE"
-            echo "DESC=$DESC"
-            echo "URL=$URL"
-            echo "FILE_ID=$FILE_ID"
+            echo "TYPE=$TYPE | TITLE=$TITLE | URL=$URL"
 
             JSON_PAYLOAD=$(jq -n \
               --arg title "[$TYPE] $TITLE" \
@@ -109,7 +105,6 @@ jobs:
               (if $fileId != "" then {fileId: $fileId} else {} end)')
 
             echo "JSON_PAYLOAD: $JSON_PAYLOAD"
-            echo "🚀 Sending..."
 
             HTTP_RESPONSE=$(curl -sS -w "\n%{http_code}" -X POST "$TG_ENGINE_URL/api/v1/broadcast" \
               -H "Authorization: Bearer $TG_ENGINE_ADMIN_TOKEN" \
@@ -124,8 +119,6 @@ jobs:
             
             if [[ "$HTTP_CODE" != "200" ]]; then
               echo "::error::Request failed for $FILE with code $HTTP_CODE"
-            else
-              echo "Success: $FILE sent to Telegram"
             fi
 
             sleep 1
