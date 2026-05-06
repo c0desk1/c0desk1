@@ -53,7 +53,10 @@ jobs:
           for FILE in $FILES; do
             echo "--- Processing: $FILE ---"
 
-            [! -f "$FILE" ] && echo "Skip: file deleted" && continue
+            if [ ! -f "$FILE" ]; then
+              echo "Skip: file deleted or not found"
+              continue
+            fi
 
             if [[ "$FILE" == *"/blog/"* ]]; then
               TYPE="Blog Post"
@@ -63,25 +66,29 @@ jobs:
               BASE_PATH="portfolio"
             fi
 
-            FRONTMATTER=$(sed -n '/^---$/,/^---$/p' "$FILE" | sed '1d;$d')
+            # Ambil frontmatter pake awk, lebih aman buat .mdx
+            FRONTMATTER=$(awk '/^---$/{if(f) exit; f=1; next} f' "$FILE")
 
-            TITLE=$(echo "$FRONTMATTER" | yq -r '.title // "Untitled"')
-            DESC=$(echo "$FRONTMATTER" | yq -r '.description // .synopsis // "No description provided"')
+            if [ -z "$FRONTMATTER" ]; then
+              echo "Skip: No frontmatter found in $FILE"
+              continue
+            fi
+
+            TITLE=$(echo "$FRONTMATTER" | yq -r '.title // empty')
+            DESC=$(echo "$FRONTMATTER" | yq -r '.description // .synopsis // empty')
             RAW_IMAGE=$(echo "$FRONTMATTER" | yq -r '.image // ""')
             SLUG=$(basename "$FILE" | sed -E 's/\.(md|mdx)$//')
             URL="https://c0desk1.my.id/$BASE_PATH/$SLUG"
 
-            # Skip kalo frontmatter gagal parse
-            if [[ "$TITLE" == "Untitled" ]] || [[ -z "$SLUG" ]]; then
-              echo "Skip: Invalid frontmatter or slug for $FILE"
+            # Skip kalo title atau desc kosong karena API lu wajib
+            if [ -z "$TITLE" ]; then
+              echo "Skip: TITLE empty in $FILE"
               continue
             fi
-
-            IMAGE_URL=""
-            FILE_ID=""
-
-            if [[ "$RAW_IMAGE" =~ ^https?:// ]]; then
-              IMAGE_URL="$RAW_IMAGE"
+            
+            if [ -z "$DESC" ]; then
+              echo "Skip: DESCRIPTION empty in $FILE"
+              continue
             fi
 
             FILE_ID=$(echo "$RAW_IMAGE" | grep -oE '[A-Za-z0-9_-]{25,}' | head -1 || true)
@@ -93,7 +100,6 @@ jobs:
             echo "URL=$URL"
             echo "FILE_ID=$FILE_ID"
 
-            # API lu wajib: title, description, url. fileId opsional
             JSON_PAYLOAD=$(jq -n \
               --arg title "[$TYPE] $TITLE" \
               --arg description "$DESC" \
@@ -117,7 +123,9 @@ jobs:
             echo "HTTP_CODE: $HTTP_CODE"
             
             if [[ "$HTTP_CODE" != "200" ]]; then
-              echo "Error: Request failed with code $HTTP_CODE"
+              echo "::error::Request failed for $FILE with code $HTTP_CODE"
+            else
+              echo "Success: $FILE sent to Telegram"
             fi
 
             sleep 1
