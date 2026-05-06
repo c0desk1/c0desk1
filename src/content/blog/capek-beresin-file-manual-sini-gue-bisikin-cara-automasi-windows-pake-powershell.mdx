@@ -23,9 +23,9 @@ seo:
   ogImage: "/images/blog/og/og-powershell-tips-auto-rename-delete-file.webp"
 ---
 
-Lu pernah nggak sih ngerasa kayak robot pas lagi ngerapiin folder? Misal, lu abis download ratusan aset desain atau foto, terus namanya berantakan semua kayak `IMG_999_final_banget_v2.jpg`. Atau yang lebih parah, folder "Downloads" lu udah penuh sampah file dari zaman Majapahit yang bikin SSD lu jerit-jerit?
+Kalian pernah nggak sih ngerasa kayak robot pas lagi ngerapiin folder? Misal, lu abis download ratusan aset desain atau foto, terus namanya berantakan semua kayak `IMG_999_final_banget_v2.jpg`. Atau yang lebih parah, folder "Downloads" lu udah penuh sampah file dari zaman Majapahit yang bikin SSD lu jerit-jerit?
 
-Kalo lu masih *rename* atau *delete* satu-satu pake klik kanan... asli, lu buang-buang waktu berharga lu.
+Kalo lu masih *Rename* atau *Delete* satu-satu pake klik kanan... asli, lu buang-buang waktu berharga lu.
 
 ---
 
@@ -33,9 +33,9 @@ Di artikel ini, gue mau kasih tau cara bikin script PowerShell sederhana biar Wi
 
 ## PowerShell: Bukan Cuma Layar Biru Biasa
 
-Banyak yang nanya, *"Kenapa nggak pake CMD aja, Bang?"*. Gini ya, PowerShell itu jauh lebih "pinter" dibanding CMD. Dia bisa baca objek. Jadi kalau lu mau nyari file yang ukurannya di atas 1GB atau file yang nggak pernah dibuka selama setahun, PowerShell bisa nemuin itu dengan gampang banget.
+Banyak yang nanya, <mark>"Kenapa nggak pake CMD aja, Bang?"</mark>. Gini ya, PowerShell itu jauh lebih "pinter" dibanding <mark>CMD.</mark> Dia bisa baca objek. Jadi kalau lu mau nyari file yang ukurannya di atas 1GB atau file yang nggak pernah dibuka selama setahun, **PowerShell** bisa nemuin itu dengan gampang banget.
 
-### Jurus Auto-Rename: Biar Folder Lu Estetik
+### Auto-Rename: Biar Folder Lu Estetik
 
 Katakanlah lu punya folder isi foto-foto dari kamera yang namanya `DSC001`, `DSC002`, dsb. Terus lu pengen ubah jadi `Projek_Keren_001`.
 
@@ -62,7 +62,7 @@ Kenapa Gini?:
 
 2. `-replace`: Ini perintah paling sakti buat nuker kata-kata sampah jadi kata-kata yang lu mau.
 
-### Jurus Auto-Delete: Buang Mantan... Eh, File Sampah!
+### Auto-Delete: Buang Mantan... Eh, File Sampah!
 
 Gue yakin folder Temp atau Downloads lu itu sarang hantu. Nah, kita bisa bikin script yang otomatis hapus file yang udah lebih dari 30 hari nggak lu sentuh.
 
