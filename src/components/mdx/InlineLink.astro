@@ -18,6 +18,6 @@ const isExternal = href?.startsWith('http') && !href?.startsWith(site?.href || '
 >
   <slot />
   {isExternal && (
-    <Icon name="external" class="external-icon w-3.5 h-3.5" />
+    <Icon name="external" className="external-icon w-3.5 h-3.5" />
   )}
 </a>
