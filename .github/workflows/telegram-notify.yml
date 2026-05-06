@@ -19,16 +19,16 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4 # v6 belum ada
+        uses: actions/checkout@v6.0.2
         with:
-          fetch-depth: 0 # Ambil semua history biar changed-files akurat
+          fetch-depth: 0
 
       - name: Install yq
         run: sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 && sudo chmod +x /usr/local/bin/yq
 
       - name: Get changed files
         id: changed
-        uses: tj-actions/changed-files@v45 # v47 belum stable
+        uses: tj-actions/changed-files@v47
         with:
           files: |
             src/content/blog/**/*.md
