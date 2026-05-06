@@ -10,10 +10,6 @@ on:
       - 'src/content/portfolio/**/*.md'
       - 'src/content/portfolio/**/*.mdx'
 
-concurrency:
-  group: telegram-notify-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   notify:
     runs-on: ubuntu-latest
@@ -22,10 +18,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install yq
+      - name: Install yq & jq
         run: |
           sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
           sudo chmod +x /usr/local/bin/yq
+          sudo apt-get update -y
+          sudo apt-get install -y jq
 
       - name: Get changed files
         id: changed
@@ -43,19 +41,26 @@ jobs:
           TG_ENGINE_URL: ${{ secrets.TG_ENGINE_URL }}
           TG_ENGINE_ADMIN_TOKEN: ${{ secrets.TG_ENGINE_ADMIN_TOKEN }}
           FILES: ${{ steps.changed.outputs.all_changed_files }}
+        shell: bash
         run: |
           set -eo pipefail
 
+          echo "📄 Changed files:"
           echo "$FILES"
 
           for FILE in $FILES; do
-            echo "--- Processing: $FILE ---"
+            echo ""
+            echo "=============================="
+            echo "📦 Processing: $FILE"
+            echo "=============================="
 
+            # Skip jika file tidak ada
             if [ ! -f "$FILE" ]; then
-              echo "Skip: file not found"
+              echo "⚠️ Skip: file not found"
               continue
             fi
 
+            # Tentukan tipe
             if [[ "$FILE" == *"/blog/"* ]]; then
               TYPE="Blog Post"
               BASE_PATH="blog"
@@ -64,29 +69,104 @@ jobs:
               BASE_PATH="portfolio"
             fi
 
-            FRONTMATTER=$(sed -n '/^---$/,/^---$/p' "$FILE" | sed '1d;$d' | tr -d '\r')
+            # =========================
+            # Extract FRONTMATTER (AMAN)
+            # =========================
+            FRONTMATTER=$(awk '
+              BEGIN { found=0 }
+              /^---$/ {
+                if (found == 0) { found=1; next }
+                else { exit }
+              }
+              found == 1 { print }
+            ' "$FILE")
 
-            TITLE=$(echo "$FRONTMATTER" | yq -r '.title // empty')
-            DESC=$(echo "$FRONTMATTER" | yq -r '.description // .synopsis // empty')
+            if [ -z "$FRONTMATTER" ]; then
+              echo "⚠️ Skip: No frontmatter"
+              continue
+            fi
+
+            echo "----- FRONTMATTER -----"
+            echo "$FRONTMATTER"
+            echo "------------------------"
+
+            # =========================
+            # Parse YAML via yq
+            # =========================
+            TITLE=$(printf "%s" "$FRONTMATTER" | yq -r '.title // empty')
+            DESC=$(printf "%s" "$FRONTMATTER" | yq -r '.description // .synopsis // .desc // empty')
+            RAW_IMAGE=$(printf "%s" "$FRONTMATTER" | yq -r '.image // ""')
 
             SLUG=$(basename "$FILE" | sed -E 's/\.(md|mdx)$//')
             URL="https://c0desk1.my.id/$BASE_PATH/$SLUG"
 
-            if [ -z "$TITLE" ] || [ -z "$DESC" ]; then
-              echo "Skip: missing fields"
+            echo "TITLE=$TITLE"
+            echo "DESC=$DESC"
+            echo "URL=$URL"
+
+            # =========================
+            # Validasi WAJIB
+            # =========================
+            if [ -z "$TITLE" ] || [ "$TITLE" = "null" ]; then
+              echo "❌ Skip: TITLE invalid"
               continue
             fi
 
+            if [ -z "$DESC" ] || [ "$DESC" = "null" ]; then
+              echo "❌ Skip: DESCRIPTION invalid"
+              continue
+            fi
+
+            # =========================
+            # Extract fileId (optional)
+            # =========================
+            FILE_ID=$(echo "$RAW_IMAGE" | grep -oE '[A-Za-z0-9_-]{25,}' | head -1 || true)
+
+            if [[ "$FILE_ID" == "image:" ]]; then
+              FILE_ID=""
+            fi
+
+            echo "FILE_ID=$FILE_ID"
+
+            # =========================
+            # Build JSON
+            # =========================
             JSON=$(jq -n \
               --arg title "[$TYPE] $TITLE" \
               --arg description "$DESC" \
               --arg url "$URL" \
-              '{title:$title, description:$description, url:$url}')
+              --arg fileId "$FILE_ID" \
+              '
+              {
+                title: $title,
+                description: $description,
+                url: $url
+              } + (if $fileId != "" then {fileId: $fileId} else {} end)
+              ')
 
-            curl -X POST "$TG_ENGINE_URL/api/v1/broadcast" \
+            echo "📦 JSON PAYLOAD:"
+            echo "$JSON"
+
+            # =========================
+            # SEND
+            # =========================
+            HTTP_RESPONSE=$(curl -sS -w "\n%{http_code}" \
+              -X POST "$TG_ENGINE_URL/api/v1/broadcast" \
               -H "Authorization: Bearer $TG_ENGINE_ADMIN_TOKEN" \
               -H "Content-Type: application/json" \
-              -d "$JSON"
+              -d "$JSON")
+
+            HTTP_BODY=$(echo "$HTTP_RESPONSE" | head -n -1)
+            HTTP_CODE=$(echo "$HTTP_RESPONSE" | tail -n1)
+
+            echo "📨 RESPONSE:"
+            echo "$HTTP_BODY"
+            echo "HTTP_CODE=$HTTP_CODE"
+
+            if [[ "$HTTP_CODE" != "200" ]]; then
+              echo "::error::Failed request"
+              exit 1
+            fi
 
             sleep 1
           done
