@@ -100,11 +100,11 @@ const ADSENSE_ID = siteData.googleAdsenseId || siteConfig.googleAdsenseId || "ca
       <>
         <!-- GTAG -->
         <script async src={`https://www.googletagmanager.com/gtag/js?id=${GTAG_ID}`} />
-        <script is:inline define:vars={{ analyticsId }}>
+        <script is:inline define:vars={{ GTAG_ID }}>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', analyticsId, { anonymize_ip: true });
+          gtag('config', GTAG_ID, { anonymize_ip: true });
         </script>
       </>
     )}
