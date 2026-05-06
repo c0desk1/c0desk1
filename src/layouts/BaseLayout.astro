@@ -67,7 +67,8 @@ try {
   console.warn('Settings not found, using siteConfig fallback');
 }
 const siteData = settings?.data || siteConfig;
-const analyticsId = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
+const GTAG_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
+const ADSENSE_ID = siteData.googleAdsenseId || siteConfig.googleAdsenseId || "ca-pub-4943136052113535";
 ---
 
 <!DOCTYPE html>
@@ -97,18 +98,26 @@ const analyticsId = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
     />
     {import.meta.env.PROD && (siteData.googleAnalyticsId || siteConfig.googleAnalyticsId) && (
       <>
-        <script async src={`https://www.googletagmanager.com/gtag/js?id=${analyticsId}`} />
+        <!-- GTAG -->
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${GTAG_ID}`} />
         <script is:inline define:vars={{ analyticsId }}>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', analyticsId);
+          gtag('config', analyticsId, { anonymize_ip: true });
         </script>
       </>
     )}
-    <Ads />
-    <script>window.yaContextCb=window.yaContextCb||[]</script>
-    <script src="https://yandex.ru/ads/system/context.js" async></script>
+    
+    <!-- AdSense -->
+    <script async 
+      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}`} 
+      crossorigin="anonymous">
+    </script>
+
+    <!-- Yandex -->
+    <script>window.yaContextCb = window.yaContextCb || [];</script>
+   <script src="https://yandex.ru/ads/system/context.js" async></script>
   </head>
   <body>
     <BG />
@@ -125,7 +134,7 @@ const analyticsId = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
         ) : (
           <slot />
         )}
-        <Search />
+        <Search client:idle />
       </main>
       {footer && <Footer />}
     </div>
@@ -134,90 +143,104 @@ const analyticsId = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
     <Cookie />
     <MobileMenu />
     <script is:inline>
-      document.addEventListener('click', (e) => {
+      const root = document.getElementById('main-content');
+
+      root?.addEventListener('click', (e) => {
         const link = e.target.closest('.anchor-link');
-        
-        if (!link) return;
-        
-        const href = link.getAttribute('href');
-        
-        if (href?.startsWith('#') && href.length > 1) {
-          const target = document.querySelector(href);
-          
-          if (!target) return;
-      
-          e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          history.pushState(null, '', href);
+
+        if (link) {
+          const href = link.getAttribute('href');
+
+          if (href?.startsWith('#') && href.length > 1) {
+            const target = document.querySelector(href);
+            if (!target) return;
+
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            history.pushState(null, '', href);
+          }
         }
-      });
-      
-      document.addEventListener('click', (e) => {
+
         if (window.innerWidth >= 768) return;
-      
+
         const heading = e.target.closest('.heading-group.has-anchor');
-     
         if (!heading || e.target.closest('.anchor-link')) return;
-        
+
         document.querySelectorAll('.anchor-link-active').forEach(el => {
           el.classList.remove('anchor-link-active');
         });
-    
-        const link = heading.querySelector('.anchor-link');
-      
-        if (link) {
-          link.classList.add('anchor-link-active');
-          setTimeout(() => link.classList.remove('anchor-link-active'), 2000);
+
+        const anchor = heading.querySelector('.anchor-link');
+        if (anchor) {
+          anchor.classList.add('anchor-link-active');
+          setTimeout(() => anchor.classList.remove('anchor-link-active'), 2000);
         }
       });
       
-      if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
+      if ('serviceWorker' in navigator && location.hostname !== 'localhost' && location.protocol === 'https:') {
         addEventListener('load', () => {
           navigator.serviceWorker.register('/pwa.js').catch(console.error);
         });
       }
     </script>
     <script is:inline>
-    window.yaContextCb.push(() => {
-        Ya.Context.AdvManager.render({
-            "blockId": "R-A-19179231-1",
-            "type": "floorAd",
-            "platform": "touch"
-        })
-    })
+      if (!window.__YANDEX_FLOOR_LOADED__) {
+        window.__YANDEX_FLOOR_LOADED__ = true;
+
+        window.addEventListener("load", () => {
+          window.yaContextCb.push(() => {
+            Ya.Context.AdvManager.render({
+              blockId: "R-A-19179231-1",
+              type: "floorAd",
+              platform: "touch"
+           });
+         });
+       });
+      }
   </script>
   <script is:inline>
-    window.addEventListener("load", () => {
-      const render = (imageId) => {
-        window.yaContextCb.push(() => {
-          Ya.Context.AdvManager.render({
-            "renderTo": imageId,
-            "blockId": "R-A-19179231-2",
-            "type": "inImage"
-          })
-        })
-      }
-      const renderInImage = (images) => {
-        if (!images.length) {
-          return
-        }
-        const image = images.shift()
-        const {width, height} = image.getBoundingClientRect()
-        if (width < 1200 || height < 630) {
-            return renderInImage(images)
-        }
-        image.id = `yandex_rtb_R-A-19179231-2-${Math.random().toString(16).slice(2)}`
-        if (image.tagName === "IMG" && !image.complete) {
-            image.addEventListener("load", () => {
-                render(image.id)
-            }, { once: true })
-        } else {
-            render(image.id)
-        }
-        renderInImage(images)
-      }
-      renderInImage(Array.from(document.querySelectorAll("img")))
-      }, { once: true })
+    if (!window.__YANDEX_IMAGE_LOADED__) {
+      window.__YANDEX_IMAGE_LOADED__ = true;
+
+      window.addEventListener("load", () => {
+        const render = (imageId) => {
+          window.yaContextCb.push(() => {
+            Ya.Context.AdvManager.render({
+              renderTo: imageId,
+              blockId: "R-A-19179231-2",
+             type: "inImage"
+           });
+         });
+       };
+
+       let count = 0;
+       const MAX_ADS = 2;
+
+       const renderInImage = (images) => {
+         if (!images.length || count >= MAX_ADS) return;
+
+         const image = images.shift();
+         const { width, height } = image.getBoundingClientRect();
+
+         if (width < 600 || height < 300) {
+           return renderInImage(images);
+         }
+
+         image.id = `yandex_${Math.random().toString(16).slice(2)}`;
+         count++;
+
+         if (!image.complete) {
+           image.addEventListener("load", () => render(image.id), { once: true });
+         } else {
+           render(image.id);
+         }
+
+         renderInImage(images);
+       };
+
+       renderInImage(Array.from(document.querySelectorAll("img")));
+      }, { once: true });
+    }
     </script>
   </body>
 </html>
