@@ -186,5 +186,39 @@ const analyticsId = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
         })
     })
   </script>
+  <!-- Yandex.RTB R-A-19179231-2 -->
+<script>
+window.addEventListener("load", () => {
+    const render = (imageId) => {
+        window.yaContextCb.push(() => {
+            Ya.Context.AdvManager.render({
+                "renderTo": imageId,
+                "blockId": "R-A-19179231-2",
+                "type": "inImage"
+            })
+        })
+    }
+    const renderInImage = (images) => {
+        if (!images.length) {
+            return
+        }
+        const image = images.shift()
+        const {width, height} = image.getBoundingClientRect()
+        if (width < 1200 || height < 630) {
+            return renderInImage(images)
+        }
+        image.id = `yandex_rtb_R-A-19179231-2-${Math.random().toString(16).slice(2)}`
+        if (image.tagName === "IMG" && !image.complete) {
+            image.addEventListener("load", () => {
+                render(image.id)
+            }, { once: true })
+        } else {
+            render(image.id)
+        }
+        renderInImage(images)
+    }
+    renderInImage(Array.from(document.querySelectorAll("img")))
+}, { once: true })
+</script>
   </body>
 </html>
