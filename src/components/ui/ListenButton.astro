@@ -7,7 +7,7 @@ import Icon from "./Icon";
   id="listen-btn"
   aria-label="Dengarkan artikel"
   class="relative flex items-center gap-1.5 text-(--fg-muted) hover:text-(--fg) group active:scale-95">
-  <div class="relative w-4 h-4 flex items-center justify-center">
+  <div class="relative w-4 h-4 flex flex-shrink-0 items-center justify-center">
     <span id="icon-play" class="absolute inset-0 transition-all duration-300 opacity-100 scale-100">
       <Icon name="volume" class="w-4 h-4" />
     </span>
@@ -15,7 +15,7 @@ import Icon from "./Icon";
       <Icon name="volume-mute" class="w-4 h-4" />
     </span>
   </div>
-  <span class="text-[13px] md:text-sm font-medium">
+  <span class="text-sm font-medium leading-none">
     Dengarkan
   </span>
 </button>
