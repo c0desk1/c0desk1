@@ -5,6 +5,7 @@ import PostAuthor from './PostAuthor.astro';
 import PostAction from './PostAction.astro';
 
 import { cn } from "@/lib/utils";
+import BlogFeaturedImage from '../blog/BlogFeaturedImage.astro';
 
 interface Props {
   title: string;
@@ -14,6 +15,7 @@ interface Props {
   authorAvatar?: string;
   authorTitle?: string;
   authorSlug: string;
+  image?: any;
 }
 
 const {
@@ -23,7 +25,8 @@ const {
   authorName,
   authorAvatar,
   authorTitle,
-  authorSlug
+  authorSlug,
+  image
 } = Astro.props;
 ---
 
@@ -47,7 +50,17 @@ const {
       <PostMeta pubDate={pubDate} readingTime={readingTime} />
     </div>
 
-    <div class="flex flex-wrap gap-2 items-center justify-start md:justify-center">
+    <div class="prose-custom w-full mb-8">
+      {image && (
+        <BlogFeaturedImage
+          image={image.src}
+          alt={image.alt || title}
+          caption={(image as any).caption}
+        />
+      )}
+    </div>
+
+    <div class="flex flex-wrap gap-4 items-center justify-start md:justify-center">
       {authorName && (
         <PostAuthor
           name={authorName}
