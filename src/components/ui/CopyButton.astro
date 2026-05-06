@@ -1,6 +1,5 @@
 ---
 // src/components/ui/CopyLink.astro
-
 import Icon from "./Icon";
 ---
 
@@ -8,20 +7,21 @@ import Icon from "./Icon";
   id="copy-link-btn"
   aria-label="Salin tautan artikel"
   aria-live="polite"
-  data-url={Astro.url.href}
-  class="relative flex items-center gap-1.5 text-(--fg-muted) hover:text-(--fg) group active:scale-95">
-  
-  <div class="relative w-4 h-4 flex flex-shrink-0 items-center justify-center">
-    <span id="icon-copy" class="absolute inset-0 w-full h-full transition-all duration-200">
-      <Icon name="link" class="w-4 h-4" />
-    </span>
-    <span id="icon-check" class="absolute inset-0 w-full h-full opacity-0 scale-75 transition-all duration-200">
-      <Icon name="check" class="w-4 h-4" />
+  class="relative text-(--accent-dim) hover:text-(--accent) group active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-200"
+  data-url={Astro.url.href}>
+  <div class="flex shrink-0 items-center justify-center gap-1.5">
+    <div class="relative w-4 h-4 items-center">
+      <span id="icon-copy" class="absolute inset-0 w-full h-full transition-all duration-200">
+        <Icon name="link" className="w-4 h-4" />
+      </span>
+      <span id="icon-check" class="absolute inset-0 w-full h-full opacity-0 scale-75 transition-all duration-200">
+        <Icon name="check" className="w-4 h-4" />
+      </span>
+    </div>
+    <span id="copy-text" class="text-[13px] md:text-sm font-medium leading-none">
+      Salin URL
     </span>
   </div>
-  <span id="copy-text" class="text-sm font-medium leading-none">
-      Salin URL
-  </span>
 </button>
 
 <script>
@@ -37,7 +37,6 @@ import Icon from "./Icon";
     const text = document.getElementById('copy-text');
 
     if (!btn || !copyIcon || !checkIcon || !text) return;
-
 
     let timeoutId: number;
     let isCopying = false;
