@@ -7,15 +7,17 @@ import Icon from "./Icon";
   id="listen-btn"
   aria-label="Dengarkan artikel"
   class="relative flex items-center gap-1.5 text-(--fg-muted) hover:text-(--fg) group active:scale-95">
-  <div class="relative w-4 h-4 flex flex-shrink-0 items-center justify-center">
+  <div class="flex shrink-0 items-center justify-center gap-1.5">
+    <div class="relative w-4 h-4 items-center">
     <span id="icon-play" class="absolute inset-0 transition-all duration-300 opacity-100 scale-100">
-      <Icon name="volume" class="w-4 h-4" />
+      <Icon name="volume" className="w-4 h-4" />
     </span>
     <span id="icon-stop" class="absolute inset-0 transition-all duration-300 opacity-0 scale-100">
-      <Icon name="volume-mute" class="w-4 h-4" />
+      <Icon name="volume-mute" className="w-4 h-4" />
     </span>
   </div>
-  <span class="text-sm font-medium leading-none">
+  </div>
+  <span class="text-[13px] md:text-sm font-medium leading-none">
     Dengarkan
   </span>
 </button>
@@ -29,21 +31,21 @@ import Icon from "./Icon";
       <span id="tts-label" class="tts-chunk-label"></span>
       <div class="tts-controls">
         <button id="tts-prev" class="tts-btn" aria-label="Sebelumnya">
-          <Icon name="prev" class="w-4.5 h-4.5" />
+          <Icon name="prev" className="w-4.5 h-4.5" />
         </button>
-        <button id="tts-playpause" class="tts-btn tts-btn--primary" aria-label="Jeda / Lanjut">
+        <button id="tts-playpause" class="tts-btn tts-btn--primary relative" aria-label="Jeda / Lanjut">
           <span id="ic-pause">
-            <Icon name="pause" class="w-4.5 h-4.5" />
+            <Icon name="pause" className="w-4.5 h-4.5" />
           </span>
           <span id="ic-play">
-            <Icon name="play" class="w-4.5 h-4.5" />
+            <Icon name="play" className="w-4.5 h-4.5" />
           </span>
         </button>
         <button id="tts-next" class="tts-btn" aria-label="Berikutnya">
-          <Icon name="next" class="w-4.5 h-4.5" />
+          <Icon name="next" className="w-4.5 h-4.5" />
         </button>
         <button id="tts-close" class="tts-btn tts-btn--close" aria-label="Tutup">
-          <Icon name="close" class="w-4.5 h-4.5" />
+          <Icon name="close" className="w-4.5 h-4.5" />
         </button>
       </div>
     </div>
