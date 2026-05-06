@@ -4,8 +4,10 @@ on:
   push:
     branches: [main]
     paths:
-      - 'src/content/blog/**/*.{md,mdx}'
-      - 'src/content/portfolio/**/*.{md,mdx}'
+      - 'src/content/blog/**/*.md'
+      - 'src/content/blog/**/*.mdx'
+      - 'src/content/portfolio/**/*.md'
+      - 'src/content/portfolio/**/*.mdx'
 
 concurrency:
   group: telegram-notify-${{ github.ref }}
@@ -17,17 +19,22 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v4 # v6 belum ada
         with:
-          fetch-depth: 2
+          fetch-depth: 0 # Ambil semua history biar changed-files akurat
+
+      - name: Install yq
+        run: sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 && sudo chmod +x /usr/local/bin/yq
 
       - name: Get changed files
         id: changed
-        uses: tj-actions/changed-files@v47.0.6
+        uses: tj-actions/changed-files@v45 # v47 belum stable
         with:
           files: |
-            src/content/blog/**/*.{md,mdx}
-            src/content/portfolio/**/*.{md,mdx}
+            src/content/blog/**/*.md
+            src/content/blog/**/*.mdx
+            src/content/portfolio/**/*.md
+            src/content/portfolio/**/*.mdx
 
       - name: Parse & Send to Telegram
         if: steps.changed.outputs.any_changed == 'true'
@@ -42,6 +49,8 @@ jobs:
           for FILE in $FILES; do
             echo "--- Processing: $FILE ---"
 
+            [! -f "$FILE" ] && echo "Skip: file deleted" && continue
+
             if [[ "$FILE" == *"/blog/"* ]]; then
               TYPE="Blog Post"
               BASE_PATH="blog"
@@ -53,14 +62,10 @@ jobs:
             FRONTMATTER=$(sed -n '/^---$/,/^---$/p' "$FILE" | sed '1d;$d')
 
             TITLE=$(echo "$FRONTMATTER" | yq -r '.title // "Untitled"')
-            DESC=$(echo "$FRONTMATTER" | yq -r '.description // .synopsis // ""')
+            DESC=$(echo "$FRONTMATTER" | yq -r '.description //.synopsis // ""')
             RAW_IMAGE=$(echo "$FRONTMATTER" | yq -r '.image // ""')
             SLUG=$(basename "$FILE" | sed -E 's/\.(md|mdx)$//')
             URL="https://c0desk1.my.id/$BASE_PATH/$SLUG"
-
-            # =========================
-            # IMAGE LOGIC (IMPORTANT FIX)
-            # =========================
 
             IMAGE_URL=""
             FILE_ID=""
@@ -70,17 +75,9 @@ jobs:
             fi
 
             FILE_ID=$(echo "$RAW_IMAGE" | grep -oE '[A-Za-z0-9_-]{25,}' | head -1 || true)
+            [[ "$FILE_ID" == "image:" ]] && FILE_ID=""
 
-            if [[ "$FILE_ID" == "image:" ]]; then
-              FILE_ID=""
-            fi
-
-            echo "TYPE=$TYPE"
-            echo "TITLE=$TITLE"
-            echo "DESC=$DESC"
-            echo "URL=$URL"
-            echo "IMAGE_URL=$IMAGE_URL"
-            echo "FILE_ID=$FILE_ID"
+            echo "TYPE=$TYPE | TITLE=$TITLE | URL=$URL"
 
             JSON_PAYLOAD=$(jq -n \
               --arg title "[$TYPE] $TITLE" \
@@ -96,5 +93,6 @@ jobs:
               -H "Content-Type: application/json" \
               -d "$JSON_PAYLOAD"
 
+            echo "Status: $?"
             sleep 1
           done
