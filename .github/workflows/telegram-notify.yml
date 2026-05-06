@@ -45,6 +45,7 @@ jobs:
         run: |
           set -eo pipefail
 
+          echo "🔥 NEW VERSION WORKFLOW ACTIVE"
           echo "📄 Changed files:"
           echo "$FILES"
 
@@ -54,13 +55,17 @@ jobs:
             echo "📦 Processing: $FILE"
             echo "=============================="
 
-            # Skip jika file tidak ada
+            # =========================
+            # 1. Validasi file
+            # =========================
             if [ ! -f "$FILE" ]; then
               echo "⚠️ Skip: file not found"
               continue
             fi
 
-            # Tentukan tipe
+            # =========================
+            # 2. Tentukan tipe
+            # =========================
             if [[ "$FILE" == *"/blog/"* ]]; then
               TYPE="Blog Post"
               BASE_PATH="blog"
@@ -70,7 +75,7 @@ jobs:
             fi
 
             # =========================
-            # Extract FRONTMATTER (AMAN)
+            # 3. Extract FRONTMATTER (AMAN)
             # =========================
             FRONTMATTER=$(awk '
               BEGIN { found=0 }
@@ -91,11 +96,11 @@ jobs:
             echo "------------------------"
 
             # =========================
-            # Parse YAML via yq
+            # 4. Parse YAML (FIX yq)
             # =========================
-            TITLE=$(printf "%s" "$FRONTMATTER" | yq -r '.title // empty')
-            DESC=$(printf "%s" "$FRONTMATTER" | yq -r '.description // .synopsis // .desc // empty')
-            RAW_IMAGE=$(printf "%s" "$FRONTMATTER" | yq -r '.image // ""')
+            TITLE=$(printf "%s" "$FRONTMATTER" | yq -r '.title // ""')
+            DESC=$(printf "%s" "$FRONTMATTER" | yq -r '.description // .synopsis // .desc // .seo.description // ""')
+            RAW_IMAGE=$(printf "%s" "$FRONTMATTER" | yq -r '.image.src // ""')
 
             SLUG=$(basename "$FILE" | sed -E 's/\.(md|mdx)$//')
             URL="https://c0desk1.my.id/$BASE_PATH/$SLUG"
@@ -103,22 +108,23 @@ jobs:
             echo "TITLE=$TITLE"
             echo "DESC=$DESC"
             echo "URL=$URL"
+            echo "IMAGE=$RAW_IMAGE"
 
             # =========================
-            # Validasi WAJIB
+            # 5. Validasi WAJIB
             # =========================
-            if [ -z "$TITLE" ] || [ "$TITLE" = "null" ]; then
-              echo "❌ Skip: TITLE invalid"
+            if [ -z "$TITLE" ]; then
+              echo "❌ Skip: TITLE kosong"
               continue
             fi
 
-            if [ -z "$DESC" ] || [ "$DESC" = "null" ]; then
-              echo "❌ Skip: DESCRIPTION invalid"
+            if [ -z "$DESC" ]; then
+              echo "❌ Skip: DESCRIPTION kosong"
               continue
             fi
 
             # =========================
-            # Extract fileId (optional)
+            # 6. Extract fileId (optional)
             # =========================
             FILE_ID=$(echo "$RAW_IMAGE" | grep -oE '[A-Za-z0-9_-]{25,}' | head -1 || true)
 
@@ -129,7 +135,7 @@ jobs:
             echo "FILE_ID=$FILE_ID"
 
             # =========================
-            # Build JSON
+            # 7. Build JSON payload
             # =========================
             JSON=$(jq -n \
               --arg title "[$TYPE] $TITLE" \
@@ -148,7 +154,7 @@ jobs:
             echo "$JSON"
 
             # =========================
-            # SEND
+            # 8. Send ke API
             # =========================
             HTTP_RESPONSE=$(curl -sS -w "\n%{http_code}" \
               -X POST "$TG_ENGINE_URL/api/v1/broadcast" \
@@ -163,8 +169,11 @@ jobs:
             echo "$HTTP_BODY"
             echo "HTTP_CODE=$HTTP_CODE"
 
+            # =========================
+            # 9. Error handling
+            # =========================
             if [[ "$HTTP_CODE" != "200" ]]; then
-              echo "::error::Failed request"
+              echo "::error::Request failed"
               exit 1
             fi
 
