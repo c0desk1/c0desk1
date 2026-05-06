@@ -134,7 +134,7 @@ const ADSENSE_ID = siteData.googleAdsenseId || siteConfig.googleAdsenseId || "ca
         ) : (
           <slot />
         )}
-        <Search client:idle />
+        <Search />
       </main>
       {footer && <Footer />}
     </div>
