@@ -15,6 +15,7 @@ import Container from "@/components/ui/Container.astro";
 import BG from "@/components/ui/BG.astro";
 import MobileMenu from "@/components/layout/MobileMenu.astro";
 
+import Ads from "@/components/layout/Ads.astro";
 
 interface Props {
   title?: string;
@@ -105,6 +106,9 @@ const analyticsId = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
         </script>
       </>
     )}
+    <Ads />
+ <script>window.yaContextCb=window.yaContextCb||[]</script>
+  <script src="https://yandex.ru/ads/system/context.js" async></script>
   </head>
   <body>
     <BG />
@@ -173,5 +177,14 @@ const analyticsId = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
         });
       }
     </script>
+    <script is:inline>
+    window.yaContextCb.push(() => {
+        Ya.Context.AdvManager.render({
+            "blockId": "R-A-19179231-1",
+            "type": "floorAd",
+            "platform": "touch"
+        })
+    })
+  </script>
   </body>
 </html>
