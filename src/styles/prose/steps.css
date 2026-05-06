@@ -110,6 +110,7 @@
 .prose-custom .steps-container > ul li,
 .prose-custom .steps-container > ol li {
   font-size: 0.9375rem !important;
+   line-height: 1.65;
 }
 
 .prose-custom .steps-container > ul li::marker,
@@ -197,7 +198,13 @@
   .prose-custom .steps-container > blockquote {
     margin: 0.5rem 0 1.25rem 0;
     font-size: 0.875rem !important;
-    line-height: 1.6;
+    line-height: 1.5;
+  }
+
+  .prose-custom .steps-container > ul li,
+  .prose-custom .steps-container > ol li {
+    font-size: 0.875rem !important;
+    line-height: 1.5;
   }
 
   .prose-custom .steps-container > pre {
