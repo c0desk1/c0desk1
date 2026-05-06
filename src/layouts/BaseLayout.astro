@@ -94,6 +94,17 @@ const analyticsId = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
       demoUrl={demoUrl} 
       repoUrl={repoUrl} 
     />
+    {import.meta.env.PROD && (siteData.googleAnalyticsId || siteConfig.googleAnalyticsId) && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${analyticsId}`} />
+        <script is:inline define:vars={{ analyticsId }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', analyticsId);
+        </script>
+      </>
+    )}
   </head>
   <body>
     <BG />
@@ -118,55 +129,47 @@ const analyticsId = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
     <Toast />
     <Cookie />
     <MobileMenu />
-    {import.meta.env.PROD && (siteData.googleAnalyticsId || siteConfig.googleAnalyticsId) && (
-      <>
-        <script async src={`https://www.googletagmanager.com/gtag/js?id=${analyticsId}`} />
-        <script is:inline define:vars={{ analyticsId }}>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', analyticsId);
-        </script>
-      </>
-    )}
     <script is:inline>
-  document.addEventListener('click', (e) => {
-    const link = e.target.closest('.anchor-link');
-    if (!link) return;
-    const href = link.getAttribute('href');
-    if (href?.startsWith('#') && href.length > 1) {
-      const target = document.querySelector(href);
-      if (!target) return;
-      e.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      history.pushState(null, '', href);
-    }
-  });
-
-  document.addEventListener('click', (e) => {
-    if (window.innerWidth >= 768) return;
-    const heading = e.target.closest('.heading-group.has-anchor');
-    if (!heading || e.target.closest('.anchor-link')) return;
-    document.querySelectorAll('.anchor-link-active').forEach(el => {
-      el.classList.remove('anchor-link-active');
-    });
-    const link = heading.querySelector('.anchor-link');
-    if (link) {
-      link.classList.add('anchor-link-active');
-      setTimeout(() => link.classList.remove('anchor-link-active'), 2000);
-    }
-  });
-</script>
-    <script is:inline>
-      if ('serviceWorker' in navigator && window.location.hostname !== 'localhost') {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/pwa.js')
-            .then(registration => {
-              console.log('PWA registered:', registration);
-            })
-            .catch(error => {
-              console.error('PWA registration failed:', error);
-            });
+      document.addEventListener('click', (e) => {
+        const link = e.target.closest('.anchor-link');
+        
+        if (!link) return;
+        
+        const href = link.getAttribute('href');
+        
+        if (href?.startsWith('#') && href.length > 1) {
+          const target = document.querySelector(href);
+          
+          if (!target) return;
+      
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          history.pushState(null, '', href);
+        }
+      });
+      
+      document.addEventListener('click', (e) => {
+        if (window.innerWidth >= 768) return;
+      
+        const heading = e.target.closest('.heading-group.has-anchor');
+     
+        if (!heading || e.target.closest('.anchor-link')) return;
+        
+        document.querySelectorAll('.anchor-link-active').forEach(el => {
+          el.classList.remove('anchor-link-active');
+        });
+    
+        const link = heading.querySelector('.anchor-link');
+      
+        if (link) {
+          link.classList.add('anchor-link-active');
+          setTimeout(() => link.classList.remove('anchor-link-active'), 2000);
+        }
+      });
+      
+      if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
+        addEventListener('load', () => {
+          navigator.serviceWorker.register('/pwa.js').catch(console.error);
         });
       }
     </script>
