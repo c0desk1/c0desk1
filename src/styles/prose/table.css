@@ -19,22 +19,27 @@
 /* HEAD */
 .prose-custom thead th {
   padding: 0.75rem 1rem;
+  font-family: var(--prose-font-sans);
   font-size: 1.125rem;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--prose-fg-subtle);
+  line-height: 1.75rem;
+  letter-spacing: -0.01em;
+  color: var(--prose-fg);
   background: var(--prose-surface-hover);
   border-bottom: 1px solid var(--prose-border);
+  text-align: left;
+  text-transform: none;
 }
 
 /* BODY */
 .prose-custom tbody td {
   padding: 0.75rem 1rem;
   font-size: 1rem;
+  line-height: 1.75rem;
   color: var(--prose-fg-muted);
   background: var(--prose-surface);
   border-bottom: 1px solid var(--prose-border);
+  letter-spacing: -0.01em;
 }
 
 .prose-custom tbody td strong {
@@ -44,16 +49,17 @@
 }
 
 .prose-custom tbody td small {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 400;
   color: var(--prose-fg-subtle);
+  line-height: 1.25rem;
 }
 
 .prose-custom tbody tr:last-child td {
   border-bottom: none;
 }
 
-.prose-custom tbody tr:hover {
+.prose-custom tbody tr:hover td {
   background: var(--prose-surface-hover);
 }
 
@@ -67,6 +73,30 @@
   border-right: 1px solid var(--prose-border);
 }
 
+/* DESKTOP */
+@media (min-width: 768px) {
+  .prose-custom .table-wrapper {
+    margin: 2.5rem 0;
+  }
+
+  .prose-custom thead th {
+    padding: 0.875rem 1.25rem;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    letter-spacing: -0.01em;
+  }
+
+  .prose-custom tbody td {
+    padding: 0.875rem 1.25rem;
+    font-size: 1rem; /* p */
+    line-height: 1.75rem;
+  }
+  
+  .prose-custom tbody td small {
+    font-size: 0.8125rem;
+  }
+}
+
 /* MOBILE */
 @media (max-width: 767px) {
   .prose-custom .table-wrapper {
@@ -75,41 +105,19 @@
   }
 
   .prose-custom thead th {
-    padding: 0.5rem 0.75rem;
+    padding: 0.625rem 0.75rem;
     font-size: 1rem;
-    line-height: 1.5;
+    line-height: 1.5rem;
+    letter-spacing: -0.01em;
   }
 
   .prose-custom tbody td {
-    padding: 0.5rem 0.75rem;
+    padding: 0.625rem 0.75rem;
     font-size: 0.9575rem;
-    line-height: 1.65;
+    line-height: 1.65rem;
   }
   
   .prose-custom tbody td small {
     font-size: 0.75rem;
-  }
-}
-
-/* DESKTOP */
-@media (min-width: 768px) {
-  .prose-custom .table-wrapper {
-    margin: 2rem 0;
-  }
-
-  .prose-custom thead th {
-    padding: 0.875rem 1.25rem;
-    font-size: 1.125rem;
-    line-height: 1.5;
-  }
-
-  .prose-custom tbody td {
-    padding: 0.875rem 1.25rem;
-    font-size: 1rem;
-    line-height: 1.7
-  }
-  
-  .prose-custom tbody td small {
-    font-size: 0.8125rem;
   }
 }
