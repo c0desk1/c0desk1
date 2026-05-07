@@ -66,7 +66,7 @@ if (!items.length) return;
   }
 
   .bc-link {
-    font-size: 13px;
+    font-size: 1rem;
     color: var(--fg-subtle);
     text-decoration: none;
     padding: 0.2rem 0.35rem;
@@ -81,7 +81,7 @@ if (!items.length) return;
   }
 
   .bc-current {
-    font-size: 13px;
+    font-size: 1rem;
     color: var(--fg-muted);
     font-weight: 500;
     padding: 0.2rem 0.35rem;
@@ -94,6 +94,24 @@ if (!items.length) return;
 @media (max-width: 768px) {
   .bc-nav {
     justify-content: start;
+  }
+
+  .bc-link {
+    font-size: 0.875rem;
+  }
+
+  .bc-current {
+    font-size: 0.875rem;
+  }
+}
+
+@media (min-width: 767px) {
+  .bc-link {
+    font-size: 0.9375rem;
+  }
+
+  .bc-current {
+    font-size: 0.9375rem;
   }
 }
 </style>
