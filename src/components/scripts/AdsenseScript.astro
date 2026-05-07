@@ -1,0 +1,17 @@
+---
+interface Props {
+  id?: string;
+}
+
+const { id } = Astro.props;
+---
+
+{
+  import.meta.env.PROD && id && (
+    <script
+      async
+      crossorigin="anonymous"
+      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${id}`}
+    />
+  )
+}
