@@ -2,32 +2,19 @@
 import NavLink from "../ui/NavLink.astro";
 import { siteConfig } from "@/config/site";
 import { getCollection } from 'astro:content';
-import { getRelativeLocaleUrl } from 'astro:i18n';
-
-const currentLocale = Astro.currentLocale || 'id';
 
 const allSettings = await getCollection('settings');
-
-const activeSetting = allSettings.find(s => s.data.lang === currentLocale);
-
+const activeSetting = allSettings[0];
 const siteData = activeSetting?.data || siteConfig;
 const currentPath = Astro.url.pathname;
-const rawNavItems = siteData.navItems || siteConfig.navItems;
-
-const navItems = rawNavItems.map((item: { href: string; label: string }) => {
-  const isExternal = item.href.startsWith('http');
-  return {
-    ...item,
-    localizedHref: isExternal ? item.href : getRelativeLocaleUrl(currentLocale, item.href)
-  };
-});
+const navItems = siteData.navItems || siteConfig.navItems;
 ---
 
-<nav class="hidden md:flex items-center gap-2 ml-2" aria-label="Main navigation">
-  {navItems.map((item) => {
+<nav class="hidden md:flex items-center justify-center gap-2 ml-2" aria-label="Main navigation">
+  {navItems.map((item: { href: string; label: string }) => {
     const normalize = (path: string) => path.replace(/\/$/, "") || "/";
     const activePath = normalize(currentPath);
-    const targetPath = normalize(item.localizedHref);
+    const targetPath = normalize(item.href);
 
     const isActive =
       activePath === targetPath ||
@@ -35,7 +22,7 @@ const navItems = rawNavItems.map((item: { href: string; label: string }) => {
       
     return (
       <NavLink
-        href={item.localizedHref}
+        href={item.href}
         current={isActive}
       >
         {item.label}
