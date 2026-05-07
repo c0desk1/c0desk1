@@ -104,7 +104,9 @@
 
 /* LIST */
 .prose-custom .steps-container > ul,
-.prose-custom .steps-container > ol {
+.prose-custom .steps-container > ol,
+.prose-custom .steps-container > ul li,
+.prose-custom .steps-container > ol li {
   position: relative;
   margin: 0.5rem 0 1.5rem 0;
   color: var(--prose-fg-muted);
@@ -127,8 +129,6 @@
   font-size: 0.875rem;
   line-height: 1.5rem;
   font-style: italic;
-  border-left: 2px solid var(--prose-border);
-  padding-left: 1rem;
   z-index: 2;
 }
 
@@ -205,6 +205,8 @@
   .prose-custom .steps-container > p,
   .prose-custom .steps-container > ul,
   .prose-custom .steps-container > ol,
+  .prose-custom .steps-container > ul li,
+  .prose-custom .steps-container > ol li,
   .prose-custom .steps-container > blockquote {
     margin: 0.5rem 0 1.25rem 0;
     font-size: 0.8125rem;
