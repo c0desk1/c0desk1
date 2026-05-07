@@ -157,8 +157,8 @@
 }
 
 .prose-custom mark {
-  background-color: var(--prose-accent);
-  color: var(--prose-fg);
+  background-color: var(--prose-accent-yellow);
+  color: var(--prose-accent-yellow-soft);
   padding: 0.125em 0.2em;
   border-radius: 0.25rem;
   font-weight: 500;
@@ -166,12 +166,12 @@
 }
 
 .prose-custom mark:hover {
-  background-color: var(--prose-accent-dim);
+  background-color: var(--prose-accent-yellow-dim);
 }
 
 .prose-custom mark.search-highlight {
   background-color: rgba(245, 166, 35, 0.2);
-  border-bottom: 1px solid rgba(245, 166, 35, 0.5);
+  border-bottom: none;
 }
 
 .prose-custom abbr[title] {
