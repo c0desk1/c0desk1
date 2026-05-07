@@ -43,10 +43,10 @@
 
 .prose-custom .callout-title {
   font-family: var(--prose-font-sans);
-  font-size: 1rem;
+  font-size: 1.25rem;
   font-weight: 600;
   letter-spacing: -0.02em;
-  line-height: 1.25;
+  line-height: 1.75rem;
   margin: 0 !important;
   color: inherit;
 }
@@ -58,12 +58,13 @@
 
 .prose-custom .callout-content p {
   font-size: 1rem;
-  line-height: 1.7;
+  line-height: 1.7rem;
   color: inherit !important;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   font-weight: 500;
   max-width: 100%;
   text-wrap: pretty;
+  letter-spacing: -0.01em;
 }
 
 .prose-custom .callout-content p:last-child {
@@ -89,8 +90,8 @@
 }
 
 .prose-custom .callout-content small {
-  font-size: 0.8125rem;
-  line-height: 1.4;
+  font-size: 0.75rem;
+  line-height: 1.25rem;
   color: inherit;
   opacity: 0.8;
   font-weight: 400;
@@ -110,7 +111,7 @@
 
 .prose-custom .callout-content sup,
 .prose-custom .callout-content sub {
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
   line-height: 1;
   font-weight: 500;
   vertical-align: baseline;
@@ -158,18 +159,29 @@
   display: none !important;
 }
 
-/* UL/OL di callout */
+/* UL/OL */
 .prose-custom .callout-content ul,
 .prose-custom .callout-content ol {
   padding-left: 1.25rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   color: inherit;
+  font-size: 1rem;
+  line-height: 1.7;
 }
 
 .prose-custom .callout-content li {
-  line-height: 1.7;
-  margin-bottom: 0.5rem;
+  line-height: 1.5rem;
+  margin-bottom: 0.25rem;
   color: inherit;
+  font-size: inherit !important;
+}
+
+.prose-custom .callout-content li:last-child {
+  margin-bottom: 0;
+}
+
+.prose-custom .callout-content li::marker {
+  color: var(--prose-fg-subtle);
 }
 
 /* VARIANTS */
@@ -236,19 +248,25 @@
   }
 
  .prose-custom .callout-title {
-    font-size: 1rem;
-    font-weight: 600;
-    line-height: 1.25;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    letter-spacing: -0.01em;
   }
 
  .prose-custom .callout-content {
     padding-left: calc(1rem + 0.4rem);
   }
 
- .prose-custom .callout-content p {
-    font-size: 0.9575rem;
-    line-height: 1.65;
-    margin-bottom: 0.75rem;
+ .prose-custom .callout-content p,
+ .prose-custom .callout-content ul,
+ .prose-custom .callout-content ol {
+    font-size: 1rem;
+    line-height: 1.65rem;
+    margin-bottom: 0.625rem;
+  }
+
+ .prose-custom .callout-content li {
+    margin-bottom: 0.25rem;
   }
 
  .prose-custom .callout-content strong {
@@ -260,7 +278,7 @@
   }
 
  .prose-custom .callout-content small {
-    font-size: 0.75rem;
+    font-size: 0.6875rem;
   }
 
  .prose-custom .callout-content sup,
@@ -270,11 +288,7 @@
 
  .prose-custom .callout-content mark {
     padding: 0.1em 0.15em;
-    font-size: 0.875rem;
-  }
-
- .prose-custom .callout-content li {
-    line-height: 1.65;
+    font-size: 0.8125rem;
   }
 }
 
@@ -296,19 +310,26 @@
   }
 
  .prose-custom .callout-title {
-    font-size: 1rem;
-    font-weight: 600;
-    line-height: 1.25;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    letter-spacing: -0.02em;
   }
 
  .prose-custom .callout-content {
     padding-left: calc(1.125rem + 0.5rem);
   }
 
- .prose-custom .callout-content p {
+ .prose-custom .callout-content p,
+ .prose-custom .callout-content ul,
+ .prose-custom .callout-content ol {
     font-size: 1rem;
     line-height: 1.7;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+ .prose-custom .callout-content li {
+   font-size: inherit;
+   margin-bottom: 0.25rem;
   }
 
  .prose-custom .callout-content strong {
@@ -316,19 +337,15 @@
   }
 
  .prose-custom .callout-content small {
-    font-size: 0.8125rem;
+    font-size: 0.75rem;
   }
 
  .prose-custom .callout-content sup,
  .prose-custom .callout-content sub {
-    font-size: 0.6875rem;
+    font-size: 0.625rem;
   }
 
  .prose-custom .callout-content mark {
     padding: 0.125em 0.2em;
-  }
-
- .prose-custom .callout-content li {
-    line-height: 1.7;
   }
 }
