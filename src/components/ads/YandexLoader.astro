@@ -1,26 +1,6 @@
 ---
 // src/components/ads/YandexLoader.astro
 ---
-<script is:inline>
-  (() => {
-    if (window.__YANDEX_LOADED__) return;
-    window.__YANDEX_LOADED__ = true;
-
-    window.yaContextCb = window.yaContextCb || [];
-
-    const loadYandex = () => {
-      if (document.getElementById("yandex-context")) return;
-      const script = document.createElement("script");
-      script.id = "yandex-context";
-      script.src = "https://yandex.ru/ads/system/context.js";
-      script.async = true;
-      document.head.appendChild(script);
-    };
-
-    if ("requestIdleCallback" in window) {
-      requestIdleCallback(loadYandex, { timeout: 5000 });
-    } else {
-      setTimeout(loadYandex, 5000);
-    }
-  })();
-</script>
+<!-- Yandex.RTB -->
+<script>window.yaContextCb=window.yaContextCb||[]</script>
+<script src="https://yandex.ru/ads/system/context.js" async></script>
