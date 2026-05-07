@@ -1,99 +1,139 @@
+---
+// src/components/ads/YandexAds.astro
+// Controller gabungan semua format Yandex RTB
+---
 <script is:inline>
   (() => {
+    if (!import.meta.env.PROD) return;
+
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    const DEBUG = false; // true buat liat log di console
+
     window.yaContextCb ||= [];
+    window.__adPageCount ??= 0;
+    window.__adPageCount++;
 
-    const isMobile =
-      window.matchMedia("(max-width: 768px)").matches;
+    const page = window.__adPageCount;
+    if (DEBUG) console.log(`[Yandex] Page: ${page}, Mobile: ${isMobile}`);
 
-    const randomBetween = (min, max) =>
-      Math.floor(Math.random() * (max - min + 1)) + min;
+    // =========================
+    // HELPER
+    // =========================
+    const randomGap = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-    const canRender = (key, min = 2, max = 5) => {
+    const canShow = (key, min, max) => {
       const storageKey = `__${key}LastPage`;
-
       window[storageKey] ??= 0;
-      window.__adPageCount ??= 0;
-
-      const current = window.__adPageCount;
       const last = window[storageKey];
-
-      const gap = randomBetween(min, max);
-
-      return current - last >= gap;
+      const gap = randomGap(min, max);
+      const allowed = page - last >= gap;
+      if (DEBUG) console.log(`[Yandex] ${key}: last=${last}, gap=${gap}, allowed=${allowed}`);
+      return allowed;
     };
 
-    const markRendered = (key) => {
-      const storageKey = `__${key}LastPage`;
-      window[storageKey] = window.__adPageCount;
+    const markShown = (key) => {
+      window[`__${key}LastPage`] = page;
     };
 
     const render = (key, config) => {
-      if (!window.Ya?.Context?.AdvManager) return;
-
-      markRendered(key);
-
-      window.yaContextCb.push(() => {
-        Ya.Context.AdvManager.render(config);
-      });
+      const tryRender = () => {
+        if (!window.Ya?.Context?.AdvManager) return setTimeout(tryRender, 200);
+        markShown(key);
+        window.yaContextCb.push(() => {
+          Ya.Context.AdvManager.render(config);
+          if (DEBUG) console.log(`[Yandex] Rendered ${key}:`, config);
+        });
+      };
+      tryRender();
     };
 
-    window.addEventListener(
-      "load",
-      () => {
-        window.__adPageCount ??= 0;
-        window.__adPageCount++;
-
-        // =========================
-        // PRIMARY PAGE AD
-        // =========================
-
-        if (isMobile) {
-          const showFullscreen = Math.random() > 0.5;
-
-          // MOBILE FULLSCREEN (tetap aktif)
-          if (
-            showFullscreen &&
-            canRender("fullscreen", 3, 6)
-          ) {
-            render("fullscreen", {
-              blockId: "R-A-19179231-3",
-              type: "fullscreen",
-              platform: "touch",
-            });
-          }
-
-          // ❌ MOBILE FLOOR DIMATIKAN
-        } else {
-          const showTopAd = Math.random() > 0.5;
-
-          // DESKTOP TOP
-          if (
-            showTopAd &&
-            canRender("topAd", 2, 4)
-          ) {
-            render("topAd", {
-              blockId: "R-A-19179231-4",
-              type: "topAd",
-            });
-          }
-
-          // DESKTOP FLOOR (tetap aktif)
-          else if (
-            canRender("desktopFloor", 3, 6)
-          ) {
-            render("desktopFloor", {
-              blockId: "R-A-19179231-5",
-              type: "floorAd",
-              platform: "desktop",
-            });
-          }
+    // =========================
+    // RENDER LOGIC
+    // =========================
+    const init = () => {
+      if (isMobile) {
+        // ========== MOBILE ==========
+        
+        // FULLSCREEN
+        if (canShow('fullscreen', 4, 6)) {
+          render('fullscreen', {
+            blockId: "R-A-19179231-3",
+            type: "fullscreen",
+            platform: "touch",
+          });
         }
 
-        // =========================
-        // IN-IMAGE DIMATIKAN TOTAL
-        // =========================
-      },
-      { once: true }
-    );
+        // 2. FLOOR AD MOBILE - GA DIPAKE, TABRAKAN SAMA FULLSCREEN
+        // if (canShow('mobileFloor', 2, 4)) {
+        //   render('mobileFloor', {
+        //     blockId: "R-A-19179231-1",
+        //     type: "floorAd",
+        //     platform: "touch",
+        //   });
+        // }
+
+      } else {
+        // ========== DESKTOP ==========
+        
+        // TOP AD
+        if (canShow('topAd', 1, 2)) {
+          render('topAd', {
+            blockId: "R-A-19179231-4",
+            type: "topAd",
+          });
+        }
+        
+        // FLOOR AD DESKTOP
+        if (canShow('desktopFloor', 3, 5)) {
+          render('desktopFloor', {
+            blockId: "R-A-19179231-5",
+            type: "floorAd",
+            platform: "desktop",
+          });
+        }
+      }
+
+      // ========== ALL DEVICE ==========
+      
+      // 3. IN-IMAGE - GA DIPAKE, REVENUE KECIL + CLS
+      // if (canShow('inImage', 2, 4)) {
+      //   let count = 0;
+      //   const MAX_ADS = 2;
+      //   const images = Array.from(document.querySelectorAll("article img, .prose img"));
+      //   
+      //   for (const image of images) {
+      //     if (count >= MAX_ADS) break;
+      //     if (!(image instanceof HTMLImageElement)) continue;
+      //     
+      //     const { width, height } = image.getBoundingClientRect();
+      //     if (width < 600 || height < 300) continue;
+      //     
+      //     const src = image.currentSrc || image.src;
+      //     if (/avatar|logo|icon|emoji|badge/i.test(src)) continue;
+      //     
+      //     image.id = image.id || `yandex_${Math.random().toString(16).slice(2)}`;
+      //     count++;
+      //     
+      //     const doRender = () => render(`inImage_${count}`, {
+      //       renderTo: image.id,
+      //       blockId: "R-A-19179231-2",
+      //       type: "inImage",
+      //     });
+      //     
+      //     if (!image.complete) {
+      //       image.addEventListener("load", doRender, { once: true });
+      //     } else {
+      //       doRender();
+      //     }
+      //   }
+      //   if (count > 0) markShown('inImage');
+      // }
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
   })();
 </script>
