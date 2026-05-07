@@ -6,7 +6,7 @@ export type IconName =
   | 'github' | 'twitter' | 'linkedin' | 'instagram' | 'youtube' | 'facebook' | 'tiktok'
   | 'dribbble' | 'behance' | 'adobestock' | 'wirestock' | 'spotify' | 'soundcloud'
   | 'copy' | 'external' | 'link' | 'mail' | 'user' | 'rss' | 'globe' | 'share'
-  | 'arrow-up' | 'arrow-down' | 'arrow-right' | 'arrow-path'
+  | 'arrow-up' | 'arrow-down' | 'arrow-right' | 'arrow-left' | 'arrow-path'
   | 'chevron-down' | 'chevron-right'
   | 'volume' | 'volume-mute' | 'play' | 'pause' | 'next' | 'prev' | 'music' | 'image';
 
@@ -20,7 +20,9 @@ export default function Icon({ name, className = 'w-5 h-5' }: IconProps) {
 
   switch (name) {
     case 'logo':
-      return <svg {...s} viewBox="0 0 24 24" fill="currentColor"><path d="M2 4h20L12 21Z" /></svg>;
+      return <svg {...s} viewBox="0 0 24 24" fill="currentColor">
+               <path d="M2 4h20L12 21Z" />
+             </svg>;
 
     case 'sun':
       return (
@@ -285,15 +287,22 @@ export default function Icon({ name, className = 'w-5 h-5' }: IconProps) {
 
     case 'arrow-down':
       return (
-        <svg {...s} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1">
+        <svg {...s} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 5v14M19 12l-7 7-7-7" />
         </svg>
       );
 
     case 'arrow-right':
       return (
-        <svg {...s} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M12 5l7 7-7 7" />
+        <svg {...s} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+        </svg>
+      );
+
+    case 'arrow-left':
+      return (
+        <svg {...s} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
         </svg>
       );
 
