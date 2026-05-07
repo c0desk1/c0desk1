@@ -46,9 +46,9 @@
   margin-top: 0 !important;
   margin-bottom: 0.5rem !important;
   font-family: var(--prose-font-sans);
-  font-size: 1rem !important;
+  font-size: 1.25rem !important;
   font-weight: 600 !important;
-  line-height: 1.25 !important;
+  line-height: 1.75rem !important;
   letter-spacing: -0.02em !important;
   color: var(--prose-fg);
   overflow: visible;
@@ -91,69 +91,6 @@
   transform: translateY(-50%) scale(1.05);
 }
 
-/* PARAGRAPH */
-.prose-custom .steps-container > p {
-  position: relative;
-  margin: 0.5rem 0 1.5rem 0;
-  color: var(--prose-fg-muted);
-  font-size: 0.875rem !important;
-  line-height: 1.5rem !important;
-  letter-spacing: -0.01em;
-  z-index: 2;
-}
-
-/* LIST */
-.prose-custom .steps-container > ul,
-.prose-custom .steps-container > ol {
-  position: relative;
-  margin: 0.5rem 0 1.5rem 0;
-  padding-left: 1.25rem;
-  color: var(--prose-fg-muted);
-  font-size: 0.875rem !important;
-  line-height: 1.5rem !important;
-  letter-spacing: -0.01em;
-  z-index: 2;
-}
-
-.prose-custom .steps-container > ul li,
-.prose-custom .steps-container > ol li {
-  margin: 0.25rem 0;
-  font-size: inherit !important;
-  line-height: inherit !important;
-}
-
-.prose-custom .steps-container > ul li::marker,
-.prose-custom .steps-container > ol li::marker {
-  color: var(--prose-fg-subtle);
-}
-
-/* BLOCKQUOTE */
-.prose-custom .steps-container > blockquote {
-  position: relative;
-  margin: 0.5rem 0 1.5rem 0;
-  color: var(--prose-fg);
-  font-size: 0.875rem !important;
-  line-height: 1.5rem;
-  font-style: italic;
-  z-index: 2;
-}
-
-/* CODE */
-.prose-custom .steps-container > pre {
-  position: relative;
-  margin: 0.5rem 0 1.5rem 0;
-  font-size: 0.8125rem !important;
-  line-height: 1.25rem;
-  z-index: 2;
-}
-
-.prose-custom .steps-container code:not(pre code) {
-  font-size: 0.875em;
-  background: var(--prose-surface);
-  padding: 0.125em 0.375em;
-  border-radius: 0.25rem;
-}
-
 /* CLEANUP */
 .prose-custom .steps-container > h2,
 .prose-custom .steps-container > h3,
@@ -186,9 +123,10 @@
   .prose-custom .steps-container > h3,
   .prose-custom .steps-container > h4 {
     margin-top: 0 !important;
-    font-size: 1rem !important;
-    line-height: 1.25;
-    letter-spacing: -0.01em !important;
+    font-size: 1.125rem !important;
+    line-height: 1.75rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
   }
 
   .prose-custom .steps-container > h2::before,
@@ -206,33 +144,6 @@
   .prose-custom .steps-container > h3:hover::before,
   .prose-custom .steps-container > h4:hover::before {
     transform: translateY(-50%) scale(1.05);
-  }
-
-  .prose-custom .steps-container > p,
-  .prose-custom .steps-container > blockquote {
-    margin: 0.5rem 0 1.25rem 0;
-    font-size: 0.8125rem !important;
-    line-height: 1.25rem;
-  }
-  
-  .prose-custom .steps-container > ul,
-  .prose-custom .steps-container > ol {
-    margin: 0.5rem 0 1.25rem 0;
-    padding-left: 1rem;
-    font-size: 0.8125rem !important;
-    line-height: 1.25rem;
-  }
-
-  .prose-custom .steps-container > ul li,
-  .prose-custom .steps-container > ol li {
-    margin: 0.25rem 0;
-    font-size: 0.8125rem !important;
-  }
-
-  .prose-custom .steps-container > pre {
-    margin: 0.5rem 0 1.25rem 0;
-    font-size: 0.75rem !important;
-    line-height: 1.125rem;
   }
 
   .prose-custom .steps-container > *:last-child::after {
