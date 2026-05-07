@@ -5,7 +5,7 @@ const { summary: propSummary } = Astro.props;
 const rawHtml = await Astro.slots.render('default');
 
 const normalized = rawHtml
- .replace(/<\/p>\s*<p>/g, '\n\n') // </p><p> = double enter
+ .replace(/<\/p>\s*<p>/g, '\n\n')
  .replace(/<br\s*\/?>/g, '\n')
  .replace(/<[^>]+>/g, '')
  .trim();
@@ -18,7 +18,7 @@ let contentHtml = rawHtml;
 if (!propSummary && paragraphs.length > 1) {
   contentHtml = rawHtml.replace(/<p[^>]*>[\s\S]*?<\/p>/, '').trim();
 } else if (!propSummary && paragraphs.length === 1) {
-  contentHtml = ''; // cuma ada summary doang
+  contentHtml = '';
 }
 ---
 
