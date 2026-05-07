@@ -2,26 +2,42 @@
   (() => {
     const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
-    if (!isMobile) return;
+    const CONFIG = isMobile
+      ? {
+          blockId: "R-A-19179231-1",
+          platform: "touch",
+          storageKey: "__lastMobileFloorPage",
+          minGap: 2,
+          maxGap: 4,
+        }
+      : {
+          blockId: "R-A-19179231-5",
+          platform: "desktop",
+          storageKey: "__lastDesktopFloorPage",
+          minGap: 3,
+          maxGap: 6,
+        };
 
-    const shouldShowAd = (() => {
-      window.__adPageCount ??= 0;
-      window.__lastFloorPage ??= 0;
+    window.__adPageCount ??= 0;
+    window[CONFIG.storageKey] ??= 0;
 
-      window.__adPageCount++;
+    window.__adPageCount++;
 
-      const current = window.__adPageCount;
-      const gap = Math.floor(Math.random() * 3) + 2;
+    const current = window.__adPageCount;
 
-      if (current - window.__lastFloorPage < gap) {
-        return false;
-      }
+    const gap =
+      Math.floor(
+        Math.random() *
+        (CONFIG.maxGap - CONFIG.minGap + 1)
+      ) + CONFIG.minGap;
 
-      window.__lastFloorPage = current;
-      return true;
-    })();
+    if (
+      current - window[CONFIG.storageKey] < gap
+    ) {
+      return;
+    }
 
-    if (!shouldShowAd) return;
+    window[CONFIG.storageKey] = current;
 
     window.yaContextCb ||= [];
 
@@ -30,9 +46,9 @@
       () => {
         window.yaContextCb.push(() => {
           Ya.Context.AdvManager.render({
-            blockId: "R-A-19179231-1",
+            blockId: CONFIG.blockId,
             type: "floorAd",
-            platform: "touch",
+            platform: CONFIG.platform,
           });
         });
       },
