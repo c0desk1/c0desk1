@@ -1,0 +1,24 @@
+<script is:inline>
+  (() => {
+    if (
+      !import.meta.env.PROD ||
+      window.__YANDEX_FLOOR_LOADED__
+    ) {
+      return;
+    }
+
+    window.__YANDEX_FLOOR_LOADED__ = true;
+
+    window.addEventListener("load", () => {
+      if (!window.yaContextCb || !window.Ya) return;
+
+      window.yaContextCb.push(() => {
+        Ya.Context.AdvManager.render({
+          blockId: "R-A-19179231-1",
+          type: "floorAd",
+          platform: "touch",
+        });
+      });
+    });
+  })();
+</script>
