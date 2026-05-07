@@ -43,7 +43,7 @@
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-.prose-custom .details[open].details-icon {
+.prose-custom .details[open] .details-icon {
   transform: rotate(90deg);
 }
 
