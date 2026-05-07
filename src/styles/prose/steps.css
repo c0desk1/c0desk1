@@ -1,3 +1,5 @@
+/* src/styles/prose/steps.css */
+
 /* STEPS / NUMBERED GUIDE */
 
 .prose-custom .steps-container {
@@ -36,7 +38,7 @@
   height: 100%;
 }
 
-/* HEADING - DIRECT CHILD */
+/* HEADING */
 .prose-custom .steps-container > h2,
 .prose-custom .steps-container > h3,
 .prose-custom .steps-container > h4 {
@@ -86,18 +88,18 @@
   transform: scale(1.05);
 }
 
-/* PARAGRAPH - DIRECT CHILD */
-.prose-custom .steps-container > p {
+/* PARAGRAPH */
+/* .prose-custom .steps-container > p {
   position: relative;
   margin: 0.5rem 0 1.5rem 0;
   color: var(--prose-fg-muted);
   font-size: 0.9375rem !important;
   line-height: 1.65;
   z-index: 2;
-}
+} */
 
-/* LIST - DIRECT CHILD */
-.prose-custom .steps-container > ul,
+/* LIST */
+/* .prose-custom .steps-container > ul,
 .prose-custom .steps-container > ol {
   position: relative;
   margin: 0.5rem 0 1.5rem 0;
@@ -105,21 +107,21 @@
   font-size: 0.9375rem !important;
   line-height: 1.65;
   z-index: 2;
-}
+} */
 
-.prose-custom .steps-container > ul li,
+/* .prose-custom .steps-container > ul li,
 .prose-custom .steps-container > ol li {
   font-size: 0.9375rem !important;
-   line-height: 1.65;
-}
+  line-height: 1.65;
+} */
 
-.prose-custom .steps-container > ul li::marker,
+/* .prose-custom .steps-container > ul li::marker,
 .prose-custom .steps-container > ol li::marker {
   color: var(--prose-fg-subtle);
-}
+} */
 
-/* BLOCKQUOTE - DIRECT CHILD */
-.prose-custom .steps-container > blockquote {
+/* BLOCKQUOTE */
+/* .prose-custom .steps-container > blockquote {
   position: relative;
   margin: 0.5rem 0 1.5rem 0;
   color: var(--prose-fg);
@@ -129,23 +131,23 @@
   border-left: 2px solid var(--prose-border);
   padding-left: 1rem;
   z-index: 2;
-}
+} */
 
-/* CODE - DIRECT CHILD */
-.prose-custom .steps-container > pre {
+/* CODE */
+/* .prose-custom .steps-container > pre {
   position: relative;
   margin: 0.5rem 0 1.5rem 0;
   font-size: 0.875rem !important;
   line-height: 1.6;
   z-index: 2;
-}
+} */
 
-.prose-custom .steps-container code:not(pre code) {
+/* .prose-custom .steps-container code:not(pre code) {
   font-size: 0.875em !important;
   background: var(--prose-surface);
   padding: 0.125em 0.375em;
   border-radius: 0.25rem;
-}
+} */
 
 /* CLEANUP */
 .prose-custom .steps-container > h2,
@@ -192,26 +194,26 @@
     top: 0;
   }
 
-  .prose-custom .steps-container > p,
+  /* .prose-custom .steps-container > p,
   .prose-custom .steps-container > ul,
   .prose-custom .steps-container > ol,
   .prose-custom .steps-container > blockquote {
     margin: 0.5rem 0 1.25rem 0;
     font-size: 0.875rem !important;
     line-height: 1.5;
-  }
+  } */
 
-  .prose-custom .steps-container > ul li,
+  /* .prose-custom .steps-container > ul li,
   .prose-custom .steps-container > ol li {
     font-size: 0.875rem !important;
     line-height: 1.5;
-  }
+  } */
 
-  .prose-custom .steps-container > pre {
+  /* .prose-custom .steps-container > pre {
     margin: 0.5rem 0 1.25rem 0;
     font-size: 0.8125rem !important;
     line-height: 1.5;
-  }
+  } */
 
   .prose-custom .steps-container > *:last-child::after {
     left: calc(-1.5rem - 1px);
