@@ -1,17 +1,18 @@
 <script is:inline>
   (() => {
-    window.yaContextCb = window.yaContextCb || [];
+    window.yaContextCb ||= [];
 
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
-    const isDesktop = !isMobile;
+    const isMobile =
+      window.matchMedia("(max-width: 768px)").matches;
 
     const randomBetween = (min, max) =>
       Math.floor(Math.random() * (max - min + 1)) + min;
 
-    const shouldRender = (key, min = 2, max = 5) => {
-      window.__adPageCount ??= 0;
-      window.__adPageCount++;
-
+    const canRender = (
+      key,
+      min = 2,
+      max = 5
+    ) => {
       const storageKey = `__${key}LastPage`;
 
       window[storageKey] ??= 0;
@@ -21,134 +22,158 @@
 
       const gap = randomBetween(min, max);
 
-      if (current - last < gap) {
-        return false;
-      }
-
-      window[storageKey] = current;
-
-      return true;
+      return current - last >= gap;
     };
 
-    const render = (config) => {
+    const markRendered = (key) => {
+      const storageKey = `__${key}LastPage`;
+      window[storageKey] = window.__adPageCount;
+    };
+
+    const render = (key, config) => {
+      if (!window.Ya?.Context?.AdvManager) {
+        return;
+      }
+
+      markRendered(key);
+
       window.yaContextCb.push(() => {
         Ya.Context.AdvManager.render(config);
       });
     };
 
-    window.addEventListener("load", () => {
+    window.addEventListener(
+      "load",
+      () => {
+        window.__adPageCount ??= 0;
+        window.__adPageCount++;
 
-      // MOBILE FLOOR
-      if (
-        isMobile &&
-        shouldRender("mobileFloor", 2, 4)
-      ) {
-        render({
-          blockId: "R-A-19179231-1",
-          type: "floorAd",
-          platform: "touch",
-        });
-      }
+        // =========================
+        // PRIMARY PAGE AD
+        // =========================
 
-      // MOBILE FULLSCREEN
-      if (
-        isMobile &&
-        shouldRender("fullscreen", 3, 6)
-      ) {
-        render({
-          blockId: "R-A-19179231-3",
-          type: "fullscreen",
-          platform: "touch",
-        });
-      }
+        if (isMobile) {
+          const showFullscreen =
+            Math.random() > 0.5;
 
-      // DESKTOP FLOOR
-      if (
-        isDesktop &&
-        shouldRender("desktopFloor", 3, 6)
-      ) {
-        render({
-          blockId: "R-A-19179231-5",
-          type: "floorAd",
-          platform: "desktop",
-        });
-      }
-
-      // TOP AD
-      if (
-        shouldRender("topAd", 2, 4)
-      ) {
-        render({
-          blockId: "R-A-19179231-4",
-          type: "topAd",
-        });
-      }
-
-      // IN-IMAGE
-      if (
-        shouldRender("inImage", 2, 5)
-      ) {
-        let count = 0;
-
-        const MAX_ADS = 2;
-
-        const images = Array.from(
-          document.querySelectorAll(
-            "article img, .prose img"
-          )
-        );
-
-        const renderInImage = (imageId) => {
-          render({
-            renderTo: imageId,
-            blockId: "R-A-19179231-2",
-            type: "inImage",
-          });
-        };
-
-        for (const image of images) {
-          if (count >= MAX_ADS) {
-            break;
-          }
-
-          if (!(image instanceof HTMLImageElement)) {
-            continue;
-          }
-
-          const { width, height } =
-            image.getBoundingClientRect();
-
-          if (width < 600 || height < 300) {
-            continue;
-          }
-
-          const src =
-            image.currentSrc || image.src;
-
+          // MOBILE FULLSCREEN
           if (
-            /logo|avatar|icon|emoji|badge/i.test(src)
+            showFullscreen &&
+            canRender("fullscreen", 3, 6)
           ) {
-            continue;
+            render("fullscreen", {
+              blockId: "R-A-19179231-3",
+              type: "fullscreen",
+              platform: "touch",
+            });
           }
 
-          image.id ||= `yandex_${Math.random()
-            .toString(16)
-            .slice(2)}`;
+          // MOBILE FLOOR
+          else if (
+            canRender("mobileFloor", 2, 4)
+          ) {
+            render("mobileFloor", {
+              blockId: "R-A-19179231-1",
+              type: "floorAd",
+              platform: "touch",
+            });
+          }
+        } else {
+          const showTopAd =
+            Math.random() > 0.5;
 
-          count++;
+          // DESKTOP TOP
+          if (
+            showTopAd &&
+            canRender("topAd", 2, 4)
+          ) {
+            render("topAd", {
+              blockId: "R-A-19179231-4",
+              type: "topAd",
+            });
+          }
 
-          if (!image.complete) {
-            image.addEventListener(
-              "load",
-              () => renderInImage(image.id),
-              { once: true }
-            );
-          } else {
-            renderInImage(image.id);
+          // DESKTOP FLOOR
+          else if (
+            canRender("desktopFloor", 3, 6)
+          ) {
+            render("desktopFloor", {
+              blockId: "R-A-19179231-5",
+              type: "floorAd",
+              platform: "desktop",
+            });
           }
         }
-      }
 
-    }, { once: true });
+        // =========================
+        // IN-IMAGE
+        // =========================
+
+        if (
+          canRender("inImage", 2, 5)
+        ) {
+          let count = 0;
+
+          const MAX_ADS = 2;
+
+          const images = Array.from(
+            document.querySelectorAll(
+              "article img, .prose img"
+            )
+          );
+
+          const renderInImage = (imageId) => {
+            render("inImage", {
+              renderTo: imageId,
+              blockId: "R-A-19179231-2",
+              type: "inImage",
+            });
+          };
+
+          for (const image of images) {
+            if (count >= MAX_ADS) {
+              break;
+            }
+
+            if (!(image instanceof HTMLImageElement)) {
+              continue;
+            }
+
+            const { width, height } =
+              image.getBoundingClientRect();
+
+            if (width < 600 || height < 300) {
+              continue;
+            }
+
+            const src =
+              image.currentSrc || image.src;
+
+            if (
+              /logo|avatar|icon|emoji|badge/i.test(src)
+            ) {
+              continue;
+            }
+
+            image.id ||= `yandex_${Math.random()
+              .toString(16)
+              .slice(2)}`;
+
+            count++;
+
+            if (!image.complete) {
+              image.addEventListener(
+                "load",
+                () => renderInImage(image.id),
+                { once: true }
+              );
+            } else {
+              renderInImage(image.id);
+            }
+          }
+        }
+      },
+      { once: true }
+    );
   })();
 </script>
