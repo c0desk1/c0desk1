@@ -13,8 +13,6 @@ const { id, data } = project;
 const {
   title,
   pubDate,
-
-  client,
   metrics,
 } = data;
 
@@ -26,24 +24,8 @@ const excerpt = generateExcerpt(project.body || '', 140);
   class="group block relative"
 >
   <div class="space-y-3">
-    <div class="flex items-center justify-between text-[13px] text-(--fg-subtle)">
-      <span class="tracking-wide">
-        {client}
-      </span>
-      <time datetime={pubDate.toISOString()}>
-        {formatDateCompact(pubDate)}
-      </time>
-    </div>
-
-    <h3 class="text-lg md:text-xl font-semibold tracking-tight text-(--fg) leading-tight">
-      {title}
-    </h3>
-
-    <p class="text-sm md:text-[13px] leading-relaxed line-clamp-3">
-      {excerpt}
-    </p>
-
-    {metrics && (
+    <div class="flex items-center justify-between text-[13px] text-(--fg-muted)">
+      {metrics && (
       <div class="flex gap-3 pt-2">
         {metrics.performance && (
           <div class="flex items-center gap-1">
@@ -71,6 +53,15 @@ const excerpt = generateExcerpt(project.body || '', 140);
         )}
       </div>
     )}
-
+      <time datetime={pubDate.toISOString()}>
+        {formatDateCompact(pubDate)}
+      </time>
+    </div>
+    <h3 class="text-lg md:text-xl font-semibold tracking-tight text-(--fg) leading-tight">
+      {title}
+    </h3>
+    <p class="text-sm md:text-[13px] leading-relaxed line-clamp-3">
+      {excerpt}
+    </p>
   </div>
 </a>
