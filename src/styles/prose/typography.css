@@ -1,3 +1,5 @@
+/* src/styles/prose/typography.css */
+
 /* BASE */
 .prose-custom :where(h1, h2, h3, h4, h5, h6, p, ul, ol, blockquote, pre, hr, table) {
   margin-top: 0;
@@ -62,6 +64,7 @@
 }
 
 .prose-custom em {
+  font-weight: 500;
   font-style: italic;
 }
 
@@ -117,7 +120,7 @@
 
 .prose-custom .callout-content p sup a {
   font-size: 0.75rem;
-  font-weight: 450;
+  font-weight: 500;
   color: var(--prose-fg) !important;
   text-decoration: none;
 }
@@ -160,9 +163,12 @@
   background-color: var(--prose-accent-yellow);
   color: var(--prose-accent-yellow-soft);
   padding: 0.125em 0.2em;
-  border-radius: 0.25rem;
+  margin: 0 -0.5em;
+  border-radius: var(--prose-radius-sm);
   font-weight: 500;
-  transition: background-color 0.2s ease;
+  box-shadow: inset 0 0 0 1px var(--prose-accent-yellow-dim);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }
 
 .prose-custom mark:hover {
@@ -170,7 +176,8 @@
 }
 
 .prose-custom mark.search-highlight {
-  background-color: rgba(245, 166, 35, 0.2);
+  background-color: var(--prose-accent-yellow);
+  color: var(--prose-accent-yellow-dim);
   border-bottom: none;
 }
 
@@ -237,12 +244,13 @@
   .prose-custom p {
     font-size: 0.9575rem;
     line-height: 1.65;
+    color: var(--prose-fg-muted);
     margin-bottom: 1.25rem;
     max-width: 100%;
   }
   
   .prose-custom strong {
-    font-weight: 700;
+    font-weight: 600;
   }
 
   .prose-custom em {
