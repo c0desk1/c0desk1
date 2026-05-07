@@ -17,7 +17,12 @@
 
 .prose-custom .callout-icon {
   flex-shrink: 0;
-  margin-top: 2px;
+  margin-top: 0;
+  line-height: 1.5;
+}
+
+.prose-custom .callout-icon svg {
+  display: block;
 }
 
 .prose-custom .callout-body {
@@ -40,12 +45,13 @@
 .prose-custom .callout-content p {
   color: inherit !important;
   margin-bottom: 0;
+  font-weight: 500;
 }
 
 .prose-custom .callout-content a {
   color: var(--prose-accent);
-  text-decoration: underline;
-  font-weight: 500;
+  text-decoration: none;
+  font-weight: 600;
 }
 
 .prose-custom .callout-content .external-icon { 
@@ -137,10 +143,6 @@
     font-size: 0.8125rem;
   }
 
-  .prose-custom .callout-icon {
-    margin-top: 1px;
-  }
-
   .prose-custom .callout-icon svg {
     width: 1rem;
     height: 1rem;
@@ -163,10 +165,6 @@
     gap: 0.875rem;
     padding: 1rem 1.25rem;
     font-size: 0.875rem;
-  }
-
-  .prose-custom .callout-icon {
-    margin-top: 2px;
   }
 
   .prose-custom .callout-icon svg {
