@@ -96,8 +96,8 @@
   position: relative;
   margin: 0.5rem 0 1.5rem 0;
   color: var(--prose-fg-muted);
-  font-size: 0.875rem;
-  line-height: 1.5rem;
+  font-size: 0.875rem !important;
+  line-height: 1.5rem !important;
   letter-spacing: -0.01em;
   z-index: 2;
 }
@@ -109,8 +109,8 @@
   margin: 0.5rem 0 1.5rem 0;
   padding-left: 1.25rem;
   color: var(--prose-fg-muted);
-  font-size: 0.875rem;
-  line-height: 1.5rem;
+  font-size: 0.875rem !important;
+  line-height: 1.5rem !important;
   letter-spacing: -0.01em;
   z-index: 2;
 }
@@ -118,8 +118,8 @@
 .prose-custom .steps-container > ul li,
 .prose-custom .steps-container > ol li {
   margin: 0.25rem 0;
-  font-size: inherit;
-  line-height: inherit;
+  font-size: inherit !important;
+  line-height: inherit !important;
 }
 
 .prose-custom .steps-container > ul li::marker,
@@ -132,7 +132,7 @@
   position: relative;
   margin: 0.5rem 0 1.5rem 0;
   color: var(--prose-fg);
-  font-size: 0.875rem;
+  font-size: 0.875rem !important;
   line-height: 1.5rem;
   font-style: italic;
   z-index: 2;
@@ -142,7 +142,7 @@
 .prose-custom .steps-container > pre {
   position: relative;
   margin: 0.5rem 0 1.5rem 0;
-  font-size: 0.8125rem;
+  font-size: 0.8125rem !important;
   line-height: 1.25rem;
   z-index: 2;
 }
@@ -211,7 +211,7 @@
   .prose-custom .steps-container > p,
   .prose-custom .steps-container > blockquote {
     margin: 0.5rem 0 1.25rem 0;
-    font-size: 0.8125rem;
+    font-size: 0.8125rem !important;
     line-height: 1.25rem;
   }
   
@@ -219,18 +219,19 @@
   .prose-custom .steps-container > ol {
     margin: 0.5rem 0 1.25rem 0;
     padding-left: 1rem;
-    font-size: 0.8125rem;
+    font-size: 0.8125rem !important;
     line-height: 1.25rem;
   }
 
   .prose-custom .steps-container > ul li,
   .prose-custom .steps-container > ol li {
     margin: 0.25rem 0;
+    font-size: 0.8125rem !important;
   }
 
   .prose-custom .steps-container > pre {
     margin: 0.5rem 0 1.25rem 0;
-    font-size: 0.75rem;
+    font-size: 0.75rem !important;
     line-height: 1.125rem;
   }
 
