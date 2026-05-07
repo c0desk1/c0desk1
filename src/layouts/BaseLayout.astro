@@ -154,9 +154,7 @@ const ADSENSE_ID =
     </a>
     <div class="relative z-10 flex min-h-screen flex-col">
       {header && <Header />}
-      <Container size="md">
-        <div id="yandex_rtb_R-A-19179231-4"></div>
-        </Container>
+      <div id="yandex_rtb_R-A-19179231-4" class="yandex-top-ad"></div>
       <main id="main-content">
         {withContainer ? (
             <Container size={size}>
@@ -169,6 +167,7 @@ const ADSENSE_ID =
       </main>
       <Search />
       {footer && <Footer />}
+      <div id="yandex_rtb_R-A-19179231-6" class="yandex-mobile-banner"></div>
     </div>
     <div id="modal-root"></div>
     <Toast />
@@ -178,4 +177,22 @@ const ADSENSE_ID =
     <ServiceWorkerScript />
     <YandexAds />
   </body>
+  <style>
+    .yandex-top-ad {
+  max-width: 65ch;
+  margin: 1rem auto 2rem auto;
+  min-height: 90px;
+}
+
+.yandex-mobile-banner {
+  margin: 2rem auto;
+  text-align: center;
+  min-height: 250px;
+}
+
+.yandex-top-ad:empty,
+.yandex-mobile-banner:empty {
+  display: none;
+}
+  </style>
 </html>
