@@ -1,0 +1,20 @@
+<script is:inline>
+  (() => {
+    try {
+      const stored = localStorage.getItem("theme");
+
+      const theme =
+        stored ||
+        (
+          window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light"
+        );
+
+      const root = document.documentElement;
+
+      root.classList.toggle("dark", theme === "dark");
+      root.setAttribute("data-theme", theme);
+    } catch {}
+  })();
+</script>
