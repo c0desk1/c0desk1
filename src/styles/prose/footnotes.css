@@ -42,7 +42,7 @@
   content: counter(list-item);
   counter-increment: list-item;
   flex-shrink: 0;
-  font-size: 0.6875rem;
+  font-size: 1rem;
   font-weight: 500;
   font-family: var(--prose-font-mono);
   color: var(--prose-fg-subtle);
