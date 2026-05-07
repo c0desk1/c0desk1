@@ -1,29 +1,15 @@
 ---
-import Icon from '@/components/ui/Icon';
+import Icon from '@/components/ui/Icon.astro';
 
-const { summary: propSummary } = Astro.props;
-const raw = await Astro.slots.render('default');
-
-// Ambil text mentah tanpa buang tag dulu, biar markdown ke-render
-const lines = raw.trim().split('\n');
-
-// Cari baris pertama yg ada isinya buat summary
-const firstNonEmptyIndex = lines.findIndex(l => l.trim().length > 0);
-const summary = propSummary?? (firstNonEmptyIndex >= 0? lines[firstNonEmptyIndex].trim() : 'Details');
-
-// Content = semua setelah baris summary, preserve baris kosong
-const contentLines = firstNonEmptyIndex >= 0? lines.slice(firstNonEmptyIndex + 1) : [];
-const content = propSummary? raw : contentLines.join('\n').trim();
+const { summary = 'Details' } = Astro.props;
 ---
 
-<details class="details">
+<details class="details" data-summary={summary}>
   <summary class="details-summary">
-    <Icon name="chevron-right" className="details-icon" />
+    <Icon name="chevron-right" class="details-icon" />
     {summary}
   </summary>
-  {content && (
-    <div class="details-content">
-      <slot /> <!-- pake slot aja biar markdown tetep jalan -->
-    </div>
-  )}
+  <div class="details-content">
+    <slot />
+  </div>
 </details>
