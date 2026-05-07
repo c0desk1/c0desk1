@@ -9,11 +9,7 @@ const { id } = Astro.props;
 {
   import.meta.env.PROD && id && (
     <>
-      <script
-        async
-        src={`https://www.googletagmanager.com/gtag/js?id=${id}`}
-      />
-
+      <script async src={`https://www.googletagmanager.com/gtag/js?id=${id}`} />
       <script is:inline define:vars={{ id }}>
         window.dataLayer = window.dataLayer || [];
 
@@ -22,7 +18,6 @@ const { id } = Astro.props;
         }
 
         gtag("js", new Date());
-
         gtag("config", id, {
           anonymize_ip: true,
         });
