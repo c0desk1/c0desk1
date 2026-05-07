@@ -1,7 +1,8 @@
 ---
-import Icon from "../ui/Icon.astro";
-
 // src/components/layout/StatusPanel.astro
+
+import Icon from "../ui/Icon";
+
 const services = ['api', 'web', 'cdn', 'bot'];
 ---
 
@@ -23,7 +24,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
         </div>
       </div>
       <button id="close-panel" class="close-btn" aria-label="Tutup panel status">
-        <Icon name="close" class="w-5 h-5" />
+        <Icon name="close" className="w-5 h-5" />
       </button>
     </div>
 
@@ -69,7 +70,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
     <div class="panel-footer">
       <span class="footer-note">Memperbarui otomatis setiap 5 menit</span>
       <button id="refresh-btn" class="refresh-btn">
-        <Icon name="arrow-path" class="w-4 h-4" />
+        <Icon name="arrow-path" className="w-4 h-4" />
         Refresh
       </button>
     </div>
@@ -658,7 +659,9 @@ const services = ['api', 'web', 'cdn', 'bot'];
   refreshBtn?.addEventListener("click", () => { if (hasFetched) fetchStatus(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeStatus(); });
  
-  fetchStatus();
-  setInterval(fetchStatus, 300000);
+  requestIdleCallback(() => {
+    fetchFooterStatus();
+    intervals.push(setInterval(fetchFooterStatus, 300000));
+  });
 })();
 </script>
