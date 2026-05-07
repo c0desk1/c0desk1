@@ -26,7 +26,6 @@ export const components: MDXComponents = {
   blockquote: CallQuote,
   table: Table,
   Details,
-  details: Details,
   Callout,
   Steps,
   CodeGroup
