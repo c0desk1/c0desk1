@@ -30,12 +30,8 @@
   padding: 12px 14px;
 }
 
-.prose-custom .details-summary::-webkit-details-marker {
+.prose-custom .details-summary ::-webkit-details-marker {
   display: none;
-}
-
-.prose-custom .details[open].details-icon {
-  transform: rotate(90deg);
 }
 
 .prose-custom .details-icon {
@@ -45,6 +41,10 @@
   height: 1rem;
   flex-shrink: 0;
   transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.prose-custom .details[open] .details-icon {
+  transform: rotate(90deg);
 }
 
 .prose-custom .details-icon svg {
@@ -80,76 +80,76 @@
   line-height: 1.65;
 }
 
-/* MOBILE - samain p mobile */
+/* MOBILE */
 @media (max-width: 767px) {
- .prose-custom .details {
+.prose-custom .details {
     margin: 1.25rem 0;
   }
 
- .prose-custom .details-summary {
-    font-size: 0.9575rem; /* sama p mobile */
+.prose-custom .details-summary {
+    font-size: 0.9575rem;
     line-height: 1.65;
     padding: 10px 12px;
   }
 
- .prose-custom .details-content {
+.prose-custom .details-content {
     padding: 0 12px 10px;
   }
 
- .prose-custom .details-content > *:first-child {
+.prose-custom .details-content > *:first-child {
     margin-top: 10px!important;
   }
 
- .prose-custom .details-content p {
-    font-size: 0.9575rem; /* sama p mobile */
+.prose-custom .details-content p {
+    font-size: 0.9575rem;
     line-height: 1.65;
   }
 
- .prose-custom .details-content ul,
- .prose-custom .details-content ol,
- .prose-custom .details-content blockquote,
- .prose-custom .details-content pre {
+.prose-custom .details-content ul,
+.prose-custom .details-content ol,
+.prose-custom .details-content blockquote,
+.prose-custom .details-content pre {
     margin: 0.75rem 0;
   }
 
- .prose-custom .details-content pre {
+.prose-custom .details-content pre {
     padding: 10px;
   }
 }
 
-/* DESKTOP - samain p desktop */
+/* DESKTOP */
 @media (min-width: 768px) {
- .prose-custom .details {
+.prose-custom .details {
     margin: 1.5rem 0;
   }
 
- .prose-custom .details-summary {
-    font-size: 1rem; /* sama p desktop */
+.prose-custom .details-summary {
+    font-size: 1rem;
     line-height: 1.7;
     padding: 12px 14px;
   }
 
- .prose-custom .details-content {
+.prose-custom .details-content {
     padding: 0 14px 12px;
   }
 
- .prose-custom .details-content > *:first-child {
+.prose-custom .details-content > *:first-child {
     margin-top: 12px!important;
   }
 
- .prose-custom .details-content p {
-    font-size: 1rem; /* sama p desktop */
+.prose-custom .details-content p {
+    font-size: 1rem;
     line-height: 1.7;
   }
 
- .prose-custom .details-content ul,
- .prose-custom .details-content ol,
- .prose-custom .details-content blockquote,
- .prose-custom .details-content pre {
+.prose-custom .details-content ul,
+.prose-custom .details-content ol,
+.prose-custom .details-content blockquote,
+.prose-custom .details-content pre {
     margin: 1.25rem 0;
   }
 
- .prose-custom .details-content pre {
+.prose-custom .details-content pre {
     padding: 12px;
   }
 }
