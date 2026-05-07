@@ -18,7 +18,7 @@
 
 .prose-custom thead th {
   padding: 0.75rem 1rem;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -29,10 +29,23 @@
 
 .prose-custom tbody td {
   padding: 0.75rem 1rem;
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: var(--prose-fg-muted);
   background: var(--prose-surface);
   border-bottom: 1px solid var(--prose-border);
+}
+
+.prose-custom tbody td strong {
+  font-weight: 600;
+  color: var(--prose-fg);
+  letter-spacing: -0.01em;
+}
+
+.prose-custom tbody td small {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  font-weight: 400;
+  color: var(--prose-fg-subtle);
 }
 
 .prose-custom tbody tr:last-child td {
@@ -61,12 +74,18 @@
 
   .prose-custom thead th {
     padding: 0.5rem 0.75rem;
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
+    line-height: 1.5;
   }
 
   .prose-custom tbody td {
     padding: 0.5rem 0.75rem;
-    font-size: 0.8125rem;
+    font-size: 0.9575rem;
+    line-height: 1.65;
+  }
+  
+  .prose-custom tbody td small {
+    font-size: 0.75rem;
   }
 }
 
@@ -77,10 +96,17 @@
 
   .prose-custom thead th {
     padding: 0.875rem 1.25rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
   }
 
   .prose-custom tbody td {
     padding: 0.875rem 1.25rem;
-    font-size: 0.875rem;
+    font-size: 1rem;
+    line-height: 1.7
+  }
+  
+  .prose-custom tbody td small {
+    font-size: 0.8125rem;
   }
 }
