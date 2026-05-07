@@ -201,36 +201,38 @@
 
 /* MOBILE */
 @media (max-width: 767px) {
+  .prose-custom :where(h1, h2, h3, h4, h5, h6) {
+    scroll-margin-top: 56px;
+  }
+  
   .prose-custom h1 {
-    font-size: 2rem !important;
-    font-weight: 700 !important;
-    letter-spacing: -0.05em !important;
-    line-height: 1.1 !important;
+    font-size: 1.875rem;
+    letter-spacing: -0.03em;
+    line-height: 2.25rem;
     margin-top: 2.5rem;
     margin-bottom: 1.25rem;
   }
 
   .prose-custom h2 {
-    font-size: 1.4375rem !important;
-    font-weight: 600 !important;
-    margin-top: 2.25rem !important;
+    font-size: 1.4375rem;
+    font-weight: 600;
+    margin-top: 2.25rem;
     margin-bottom: 0.75rem;
-    letter-spacing: -0.03em !important;
+    letter-spacing: -0.03em;
   }
 
   .prose-custom h3 {
-    font-size: 1.1875rem !important;
-    font-weight: 600 !important;
+    font-size: 1.1875rem;
+    font-weight: 600;
     margin-top: 1.75rem;
     margin-bottom: 0.625rem;
-    letter-spacing: -0.02em !important;
+    letter-spacing: -0.02em;
   }
 
   .prose-custom h4 {
-    font-size: 1rem !important;
-    font-weight: 600 !important;
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem !important;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    letter-spacing: -0.01em;
   }
 
   .prose-custom .anchor-link.anchor-link-active {
@@ -241,11 +243,9 @@
   }
 
   .prose-custom p {
-    font-size: 0.9575rem;
-    line-height: 1.65;
-    color: var(--prose-fg-muted);
+    font-size: 1rem;
+    line-height: 1.75rem;
     margin-bottom: 1.25rem;
-    max-width: 100%;
   }
   
   .prose-custom strong {
@@ -283,10 +283,10 @@
   }
 
   .prose-custom h1 {
-    font-size: 3rem !important;
-    font-weight: 700 !important;
-    letter-spacing: -0.06em !important;
-    line-height: 1.05 !important;
+    font-size: 2.25rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 2.5rem;
     margin-top: 4rem;
     margin-bottom: 1.25rem;
   }
