@@ -16,7 +16,7 @@
   scroll-margin-top: 56px;
 }
 
-.prose-custom .heading-group.has-anchor {
+.prose-custom .heading-group .has-anchor {
   display: block;
   width: 100%;
   max-width: 100%;
@@ -46,7 +46,6 @@
   transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
   vertical-align: baseline;
   position: relative;
-  
 }
 
 .prose-custom .anchor-link svg {
@@ -121,12 +120,12 @@
 .prose-custom .callout-content p sup a {
   font-size: 0.75rem;
   font-weight: 500;
-  color: var(--prose-fg) !important;
+  color: var(--prose-fg)!important;
   text-decoration: none;
 }
 
 .prose-custom .callout-content p sup a:hover {
-  color: var(--prose-accent) !important;
+  color: var(--prose-accent)!important;
   text-decoration: underline;
   text-underline-offset: 4px;
   text-decoration-thickness: 1px;
@@ -174,7 +173,7 @@
   background-color: var(--prose-accent-yellow-dim);
 }
 
-.prose-custom mark.search-highlight {
+.prose-custom mark .search-highlight {
   background-color: var(--prose-accent-yellow);
   color: var(--prose-accent-yellow-dim);
   border-bottom: none;
@@ -198,91 +197,114 @@
   transition: none;
 }
 
-
 /* MOBILE */
 @media (max-width: 767px) {
-  .prose-custom :where(h1, h2, h3, h4, h5, h6) {
+ .prose-custom :where(h1, h2, h3, h4, h5, h6) {
     scroll-margin-top: 56px;
   }
-  
-  .prose-custom h1 {
+
+ .prose-custom h1 {
     font-size: 1.875rem;
+    font-weight: 800;
     letter-spacing: -0.03em;
     line-height: 2.25rem;
     margin-top: 2.5rem;
     margin-bottom: 1.25rem;
   }
 
-  .prose-custom h2 {
-    font-size: 1.4375rem;
-    font-weight: 600;
+ .prose-custom h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
     margin-top: 2.25rem;
     margin-bottom: 0.75rem;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.025em;
+    line-height: 2rem;
   }
 
-  .prose-custom h3 {
-    font-size: 1.1875rem;
+ .prose-custom h3 {
+    font-size: 1.25rem;
     font-weight: 600;
     margin-top: 1.75rem;
     margin-bottom: 0.625rem;
     letter-spacing: -0.02em;
+    line-height: 1.75rem;
   }
 
-  .prose-custom h4 {
+ .prose-custom h4 {
     font-size: 1.125rem;
+    font-weight: 600;
     line-height: 1.75rem;
     letter-spacing: -0.01em;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
   }
 
-  .prose-custom .anchor-link.anchor-link-active {
+ .prose-custom h5 {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.5rem;
+    letter-spacing: -0.01em;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+ .prose-custom h6 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    letter-spacing: 0;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+ .prose-custom .anchor-link .anchor-link-active {
     opacity: 1;
     pointer-events: auto;
     transform: translateX(0);
     color: var(--prose-fg);
   }
 
-  .prose-custom p {
+ .prose-custom p {
     font-size: 1rem;
     line-height: 1.75rem;
     margin-bottom: 1.25rem;
+    letter-spacing: -0.01em;
   }
-  
-  .prose-custom strong {
+
+ .prose-custom strong {
     font-weight: 600;
   }
 
-  .prose-custom em {
+ .prose-custom em {
     font-style: italic;
   }
 
-  .prose-custom sup,
-  .prose-custom sub {
+ .prose-custom sup,
+ .prose-custom sub {
     font-size: 0.625rem;
   }
 
-  .prose-custom mark {
+ .prose-custom mark {
     padding: 0.1em 0.15em;
     font-size: 0.875rem;
   }
 
-  .prose-custom small {
+ .prose-custom small {
     font-size: 0.75rem;
   }
 
-  .prose-custom abbr[title] {
+ .prose-custom abbr[title] {
     font-size: 0.875rem;
   }
 }
 
-
 /* DESKTOP */
 @media (min-width: 768px) {
-  .prose-custom :where(h1, h2, h3, h4, h5, h6) {
+ .prose-custom :where(h1, h2, h3, h4, h5, h6) {
     scroll-margin-top: 60px;
   }
 
-  .prose-custom h1 {
+ .prose-custom h1 {
     font-size: 2.25rem;
     font-weight: 800;
     letter-spacing: -0.04em;
@@ -291,61 +313,85 @@
     margin-bottom: 1.25rem;
   }
 
-  .prose-custom h2 {
-    font-size: 1.75rem !important;
-    font-weight: 600 !important;
+ .prose-custom h2 {
+    font-size: 1.875rem !important;
+    font-weight: 700 !important;
     margin-top: 2.75rem !important;
     margin-bottom: 1rem;
     letter-spacing: -0.03em !important;
+    line-height: 2.25rem !important;
   }
 
-  .prose-custom h3 {
-    font-size: 1.375rem !important;
+ .prose-custom h3 {
+    font-size: 1.5rem !important;
     font-weight: 600 !important;
     margin-top: 2.25rem;
-    margin-bottom: 0.875rem;
-    letter-spacing: -0.02em !important;
+    margin-bottom: 0.875rem;   
+    line-height: 2rem !important;
+    letter-spacing: -0.025em !important;
   }
-  
-  .prose-custom h4
+
+ .prose-custom h4 {
     font-size: 1.25rem !important;
+    font-weight: 600 !important;
+    line-height: 1.75rem !important;
+    letter-spacing: -0.02em !important;
     margin-top: 2rem;
     margin-bottom: 0.75rem;
   }
 
-  .prose-custom .heading-group.has-anchor:hover .anchor-link {
+ .prose-custom h5 {
+    font-size: 1.125rem !important;
+    font-weight: 600 !important;
+    line-height: 1.75rem !important;
+    letter-spacing: -0.01em !important;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+ .prose-custom h6 {
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    line-height: 1.5rem !important;
+    letter-spacing: -0.01em !important;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+ .prose-custom.heading-group.has-anchor:hover.anchor-link {
     opacity: 1;
     pointer-events: auto;
     transform: translateX(0);
   }
 
-  .prose-custom .anchor-link:hover {
+ .prose-custom.anchor-link:hover {
     color: var(--prose-fg);
   }
 
-  .prose-custom p {
+ .prose-custom p {
     font-size: 1rem;
-    line-height: 1.7;
+    line-height: 1.75rem;
     color: var(--prose-fg-muted);
     margin-bottom: 1.5rem;
     max-width: 100%;
     text-wrap: pretty;
+    letter-spacing: -0.01em;
   }
-  
-  .prose-custom strong {
+
+ .prose-custom strong {
     font-weight: 600;
   }
 
-  .prose-custom sup,
-  .prose-custom sub {
+ .prose-custom sup,
+ .prose-custom sub {
     font-size: 0.6875rem;
   }
 
-  .prose-custom mark {
+ .prose-custom mark {
     padding: 0.125em 0.2em;
   }
 
-  .prose-custom small {
+ .prose-custom small {
     font-size: 0.8125rem;
   }
 }
