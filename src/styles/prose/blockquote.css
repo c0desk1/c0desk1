@@ -1,4 +1,6 @@
-/* ==================== BLOCKQUOTE ==================== */
+/* src/styles/prose/blockquote.css */
+
+/* BASE */
 .prose-custom .quote {
   margin: 2.5rem 0;
   border: none;
@@ -8,11 +10,11 @@
 
 .prose-custom .quote-body p {
   margin: 0;
-  font-size: 1.375rem;
+  font-size: 1.25rem;
   font-style: italic;
-  line-height: 1.5;
-  font-weight: 500;
-  letter-spacing: -0.01em;
+  line-height: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
   color: var(--prose-fg);
   text-align: start;
 }
@@ -49,7 +51,9 @@
   margin-top: 1.5rem;
   width: fit-content;
   margin-left: auto;
-  font-size: 0.875rem;
+  font-size: 1rem;
+  line-height: 1.75rem;
+  letter-spacing: -0.01em;
   color: var(--prose-fg-subtle);
   font-style: normal;
 }
@@ -66,9 +70,9 @@
 
   .prose-custom .quote-body p {
     font-size: 1.125rem;
-    line-height: 1.45;
-    font-weight: 500;
-    letter-spacing: -0.005em;
+    line-height: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
   }
 
   .prose-custom .quote-body p + p {
@@ -87,21 +91,23 @@
 
   .prose-custom .quote-cite {
     margin-top: 1rem;
-    font-size: 0.75rem;
+    font-size: 1rem;
+    line-height: 1.75rem;
+    letter-spacing: -0.01em;
   }
 }
 
 @media (min-width: 768px) {
-  /* TABLET/DESKTOP */
+  /* DESKTOP */
   .prose-custom .quote {
     margin: 2rem 0;
   }
 
   .prose-custom .quote-body p {
     font-size: 1.25rem;
-    line-height: 1.5;
-    font-weight: 500;
-    letter-spacing: -0.01em;
+    line-height: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
   }
 
   .prose-custom .quote-body p + p {
@@ -118,6 +124,8 @@
 
   .prose-custom .quote-cite {
     margin-top: 1.25rem;
-    font-size: 0.8125rem;
+    font-size: 1rem;
+    line-height: 1.75rem;
+    letter-spacing: -0.01em;
   }
 }
