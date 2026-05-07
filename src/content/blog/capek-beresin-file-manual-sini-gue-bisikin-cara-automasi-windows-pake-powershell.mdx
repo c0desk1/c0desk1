@@ -41,7 +41,7 @@ Katakanlah lu punya folder isi foto-foto dari kamera yang namanya `DSC001`, `DSC
 
 Sikat Pake Kode Ini:
 
-<CodeGroup titles={["Powershell"]}>
+<Code titles={["Powershell"]}>
 
 ```powershell
 # Ganti path-nya ke folder tujuan lu ya!
@@ -53,7 +53,7 @@ Get-ChildItem -Path $folderPath | ForEach-Object {
     Rename-Item -Path $_.FullName -NewName $namaBaru
 }
 ```
-</CodeGroup>
+</Code>
 
 
 Kenapa Gini?:
@@ -68,7 +68,7 @@ Gue yakin folder Temp atau Downloads lu itu sarang hantu. Nah, kita bisa bikin s
 
 Copy-Paste Kode Ini:
 
-<CodeGroup titles={["Powershell"]}>
+<Code titles={["Powershell"]}>
 
 ```powershell
 # Target folder sampah lu
@@ -80,7 +80,7 @@ Get-ChildItem -Path $pathSampah -Recurse | Where-Object {
     $_.LastWriteTime -lt (Get-Date).AddDays(-$batasHari)
 } | Remove-Item -Force
 ```
-</CodeGroup>
+</Code>
 
 Kalau lu takut salah hapus, tambahin `-WhatIf` di akhir baris `Remove-Item`. Nanti PowerShell cuma bakal pamer, "Nih file yang BAKAL gue hapus," tanpa beneran ngehapus. Jadi lu bisa cek dulu.
 
