@@ -1,6 +1,4 @@
 ---
-// src/components/mdx/CodeGroup.astro
-
 import Icon from '@/components/ui/Icon';
 
 interface Props {
@@ -10,52 +8,33 @@ interface Props {
 const { titles = ["Code"] } = Astro.props;
 ---
 
-<div class="code-group not-prose mx-auto max-w-3xl my-8 overflow-hidden rounded-(--prose-radius-md) border border-(--prose-border) bg-(--prose-surface)">
-  <div class="flex items-center justify-between border-b border-(--prose-border) px-2">
-    <div class="flex overflow-x-auto no-scrollbar">
+<div class="code-group">
+  <div class="code-group-wrapper">
+    <div class="code-group-header" role="tablist">
       {titles.map((title, index) => (
         <button
           data-code-tab={index}
-          class="
-            relative px-4 py-2.5
-            text-xs font-semibold tracking-wide
-            text-(--prose-fg-subtle) hover:text-(--prose-fg)
-            data-[active=true]:text-(--prose-fg)
-            transition-colors duration-150
-          "
+          role="tab"
+          aria-selected={index === 0 ? "true" : "false"}
+          class="code-group-title"
         >
           {title}
-          <span class="absolute bottom-0 left-0 h-0.5 w-full rounded-full scale-x-0 bg-(--prose-accent) transition-transform duration-200 [button[data-active=true]>&]:scale-x-100" />
+          <span class="underline-indicator" />
         </button>
       ))}
     </div>
     <button
-      class="copy-button p-2 text-(--prose-fg-subtle) hover:text-(--prose-accent) cursor-pointer transition-colors duration-150"
+      class="copy-button"
       aria-label="Copy code"
     >
       <Icon name="copy" className="copy-icon w-4 h-4" />
       <Icon name="check" className="check-icon w-4 h-4 hidden text-(--prose-accent)" />
     </button>
   </div>
-  <div class="code-group-content [&_pre]:m-0! [&_pre]:rounded-none! [&_pre]:border-none! [&_pre]:bg-transparent!">
+  <div class="code-group-content" role="tabpanel">
     <slot />
   </div>
 </div>
-
-<style>
-  .no-scrollbar::-webkit-scrollbar { 
-    display: none; 
-  }
-  
-  .no-scrollbar { 
-    -ms-overflow-style: none; 
-    scrollbar-width: none; 
-  }
-  
-  .code-group-content > :global(*:not(:first-child)) { 
-    display: none; 
-  }
-</style>
 
 <script>
   const initCodeGroup = () => {
@@ -68,9 +47,11 @@ const { titles = ["Code"] } = Astro.props;
 
       const activate = (index: number) => {
         tabs.forEach((tab, i) => {
-          tab.setAttribute('data-active', String(i === index));
+          const isActive = i === index;
+          tab.setAttribute('data-active', String(isActive));
+          tab.setAttribute('aria-selected', String(isActive));
           if (contents[i]) {
-            (contents[i] as HTMLElement).style.display = i === index ? 'block' : 'none';
+            (contents[i] as HTMLElement).style.display = isActive ? 'block' : 'none';
           }
         });
       };
@@ -79,20 +60,41 @@ const { titles = ["Code"] } = Astro.props;
 
       copyBtn?.addEventListener('click', async () => {
         const active = Array.from(contents).find(c => (c as HTMLElement).style.display !== 'none');
-        const code = active?.querySelector('code')?.innerText;
-        if (!code) return;
+        const code = active?.querySelector('code')?.textContent;
 
-        await navigator.clipboard.writeText(code);
+        if (!code) {
+          alert('Tidak ada kode untuk disalin');
+          return;
+        }
 
-        const copyIcon  = copyBtn.querySelector('.copy-icon');
-        const checkIcon = copyBtn.querySelector('.check-icon');
-        copyIcon?.classList.add('hidden');
-        checkIcon?.classList.remove('hidden');
+        try {
+          await navigator.clipboard.writeText(code);
 
-        setTimeout(() => {
-          copyIcon?.classList.remove('hidden');
-          checkIcon?.classList.add('hidden');
-        }, 2000);
+          const toast = (window as any).toast;
+          if (toast && typeof toast.show === 'function') {
+            toast.show('Berhasil disalin!', { type: 'success', duration: 2000 });
+          } else {
+            alert('Berhasil disalin!');
+          }
+
+          const copyIcon = copyBtn.querySelector('.copy-icon');
+          const checkIcon = copyBtn.querySelector('.check-icon');
+          copyIcon?.classList.add('hidden');
+          checkIcon?.classList.remove('hidden');
+
+          setTimeout(() => {
+            copyIcon?.classList.remove('hidden');
+            checkIcon?.classList.add('hidden');
+          }, 2000);
+        } catch (err) {
+          console.error('Gagal copy:', err);
+          const toast = (window as any).toast;
+          if (toast && typeof toast.show === 'function') {
+            toast.show('Gagal menyalin kode', { type: 'error', duration: 2500 });
+          } else {
+            alert('Gagal menyalin kode. Silakan coba manual.');
+          }
+        }
       });
 
       activate(0);
