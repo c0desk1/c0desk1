@@ -28,7 +28,7 @@ export const onRequestGet = async (context: { request: Request, env: Env, next: 
       status: 200,
       headers: {
         "Content-Type": "application/json",
-        "Cache-Control": "no-store"
+        "Cache-Control": "public, max-age=60, stale-while-revalidate=300"
       }
     });
   } catch (e) {
