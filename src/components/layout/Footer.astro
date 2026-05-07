@@ -1,10 +1,14 @@
 ---
 // src/components/layout/Footer.astro
+
 import { siteConfig } from "@/config/site";
 import { getEntry } from "astro:content";
 
 import Container from "../ui/Container.astro";
 import Section from "../ui/Section.astro";
+
+import Icon from "@/components/ui/Icon";
+
 import StatusPanel from "../layout/StatusPanel.astro";
 import Newsletter from "../layout/Newsletter.astro";
 
@@ -28,10 +32,10 @@ const footerSections = siteData.footerSections || siteConfig.footerSections;
           <Newsletter />
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8 py-4 md:py-0 border-t border-(--border)/50 lg:border-none">
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-8 py-4 md:py-0 border-t border-(--border)/50 lg:border-none">
           {footerSections.map((section) => (
             <div class="flex flex-col gap-3">
-              <span class="text-[13px] md:text-sm font-semibold text-(--fg) uppercase tracking-wide">
+              <span class="text-sm md:text-base font-semibold text-(--fg) uppercase tracking-wide">
                 {section.title}
               </span>
               <ul class="flex flex-col gap-1.5">
@@ -41,15 +45,11 @@ const footerSections = siteData.footerSections || siteConfig.footerSections;
                       href={item.href}
                       target={item.isExternal ? "_blank" : undefined}
                       rel={item.isExternal ? "noopener noreferrer" : undefined}
-                      class="text-[13px] text-(--fg-muted) hover:text-(--fg) transition-colors inline-flex items-center gap-1 group"
+                      class="text-[13px] md:text-sm text-(--fg-muted) hover:text-(--fg) transition-colors inline-flex items-center gap-1 group leading-none"
                     >
                       {item.label}
                       {item.isExternal && (
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" stroke-width="2.5"
-                          class="opacity-0 group-hover:opacity-100 transition-opacity">
-                          <path d="M7 7h10v10M7 17L17 7"/>
-                        </svg>
+                        <Icon name="external" className="w-5 h-5" />
                       )}
                     </a>
                   </li>
