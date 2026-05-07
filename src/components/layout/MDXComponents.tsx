@@ -6,7 +6,7 @@ import Heading from '@/components/mdx/HeadingAnchor.astro';
 import Image from "@/components/mdx/Image.astro";
 import HR from "@/components/mdx/HR.astro";
 import Table from '@/components/mdx/Table.astro';
-import Details from '@/components/mdx/Details';
+import Details from '@/components/mdx/Details.astro';
 import Callout from '@/components/mdx/Callout.astro';
 import Steps from '@/components/mdx/Steps.astro';
 import CodeGroup from '@/components/mdx/Code.astro';
