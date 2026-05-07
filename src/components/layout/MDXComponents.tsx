@@ -9,7 +9,7 @@ import Table from '@/components/mdx/Table.astro';
 import Details from '@/components/mdx/Details.astro';
 import Callout from '@/components/mdx/Callout.astro';
 import Steps from '@/components/mdx/Steps.astro';
-import CodeGroup from '@/components/mdx/Code.astro';
+import Code from '@/components/mdx/Code.astro';
 import InlineLink from '@/components/mdx/InlineLink.astro';
 import CallQuote from '@/components/mdx/CallQuote.astro';
 import Footnotes from '@/components/mdx/Footnotes.astro';
@@ -29,6 +29,6 @@ export const components: MDXComponents = {
   Details,
   Callout,
   Steps,
-  CodeGroup,
+  Code,
   Footnotes,
 };
