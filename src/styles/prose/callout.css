@@ -17,8 +17,8 @@
 }
 
 /* Header: Icon + Title */
-.prose-custom .callout-header,
-.prose-custom .callout-body > .flex {
+.prose-custom .callout-header {
+  display: flex;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
   align-items: center;
@@ -142,8 +142,7 @@
     padding: 0.875rem 1rem;
   }
   
-  .prose-custom .callout-header,
-  .prose-custom .callout-body > .flex {
+  .prose-custom .callout-header {
     gap: 0.4rem;
     margin-bottom: 0.4rem;
   }
@@ -172,8 +171,7 @@
     padding: 1rem 1.25rem;
   }
 
-  .prose-custom .callout-header,
-  .prose-custom .callout-body > .flex {
+  .prose-custom .callout-header {
     gap: 0.5rem;
     margin-bottom: 0.5rem;
   }
