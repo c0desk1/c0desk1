@@ -1,139 +1,139 @@
 ---
 // src/components/ads/YandexAds.astro
-// Controller gabungan semua format Yandex RTB
+// Controller gabungan semua format Yandex RTB lu
 ---
 <script is:inline>
   (() => {
-    if (!import.meta.env.PROD) return;
-
     const isMobile = window.matchMedia("(max-width: 768px)").matches;
-    const DEBUG = false; // true buat liat log di console
-
-    window.yaContextCb ||= [];
+    
+    window.yaContextCb = window.yaContextCb || [];
     window.__adPageCount ??= 0;
     window.__adPageCount++;
 
     const page = window.__adPageCount;
-    if (DEBUG) console.log(`[Yandex] Page: ${page}, Mobile: ${isMobile}`);
-
-    // =========================
-    // HELPER
-    // =========================
-    const randomGap = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
     const canShow = (key, min, max) => {
       const storageKey = `__${key}LastPage`;
       window[storageKey] ??= 0;
-      const last = window[storageKey];
-      const gap = randomGap(min, max);
-      const allowed = page - last >= gap;
-      if (DEBUG) console.log(`[Yandex] ${key}: last=${last}, gap=${gap}, allowed=${allowed}`);
-      return allowed;
+      const gap = Math.floor(Math.random() * (max - min + 1)) + min;
+      return page - window[storageKey] >= gap;
     };
 
     const markShown = (key) => {
       window[`__${key}LastPage`] = page;
     };
 
-    const render = (key, config) => {
-      const tryRender = () => {
-        if (!window.Ya?.Context?.AdvManager) return setTimeout(tryRender, 200);
-        markShown(key);
+    // =========================
+    // DESKTOP - AKTIF
+    // =========================
+    if (!isMobile) {
+      // 1. TOP AD - R-A-19179231-4 - AKTIF
+      if (page === 1 || canShow('topAd', 2, 3)) {
+        markShown('topAd');
         window.yaContextCb.push(() => {
-          Ya.Context.AdvManager.render(config);
-          if (DEBUG) console.log(`[Yandex] Rendered ${key}:`, config);
-        });
-      };
-      tryRender();
-    };
-
-    // =========================
-    // RENDER LOGIC
-    // =========================
-    const init = () => {
-      if (isMobile) {
-        // ========== MOBILE ==========
-        
-        // FULLSCREEN
-        if (canShow('fullscreen', 4, 6)) {
-          render('fullscreen', {
-            blockId: "R-A-19179231-3",
-            type: "fullscreen",
-            platform: "touch",
-          });
-        }
-
-        // 2. FLOOR AD MOBILE - GA DIPAKE, TABRAKAN SAMA FULLSCREEN
-        // if (canShow('mobileFloor', 2, 4)) {
-        //   render('mobileFloor', {
-        //     blockId: "R-A-19179231-1",
-        //     type: "floorAd",
-        //     platform: "touch",
-        //   });
-        // }
-
-      } else {
-        // ========== DESKTOP ==========
-        
-        // TOP AD
-        if (canShow('topAd', 1, 2)) {
-          render('topAd', {
+          Ya.Context.AdvManager.render({
             blockId: "R-A-19179231-4",
-            type: "topAd",
+            type: "topAd"
           });
-        }
-        
-        // FLOOR AD DESKTOP
-        if (canShow('desktopFloor', 3, 5)) {
-          render('desktopFloor', {
-            blockId: "R-A-19179231-5",
-            type: "floorAd",
-            platform: "desktop",
-          });
-        }
+        });
       }
 
-      // ========== ALL DEVICE ==========
-      
-      // 3. IN-IMAGE - GA DIPAKE, REVENUE KECIL + CLS
-      // if (canShow('inImage', 2, 4)) {
-      //   let count = 0;
-      //   const MAX_ADS = 2;
-      //   const images = Array.from(document.querySelectorAll("article img, .prose img"));
-      //   
-      //   for (const image of images) {
-      //     if (count >= MAX_ADS) break;
-      //     if (!(image instanceof HTMLImageElement)) continue;
-      //     
-      //     const { width, height } = image.getBoundingClientRect();
-      //     if (width < 600 || height < 300) continue;
-      //     
-      //     const src = image.currentSrc || image.src;
-      //     if (/avatar|logo|icon|emoji|badge/i.test(src)) continue;
-      //     
-      //     image.id = image.id || `yandex_${Math.random().toString(16).slice(2)}`;
-      //     count++;
-      //     
-      //     const doRender = () => render(`inImage_${count}`, {
-      //       renderTo: image.id,
-      //       blockId: "R-A-19179231-2",
-      //       type: "inImage",
-      //     });
-      //     
-      //     if (!image.complete) {
-      //       image.addEventListener("load", doRender, { once: true });
-      //     } else {
-      //       doRender();
-      //     }
-      //   }
-      //   if (count > 0) markShown('inImage');
-      // }
-    };
+      // 2. FLOOR AD DESKTOP - R-A-19179231-5 - AKTIF
+      if (canShow('desktopFloor', 3, 5)) {
+        markShown('desktopFloor');
+        window.yaContextCb.push(() => {
+          Ya.Context.AdvManager.render({
+            blockId: "R-A-19179231-5",
+            type: "floorAd",
+            platform: "desktop"
+          });
+        });
+      }
+    } 
+    
+    // =========================
+    // MOBILE - AKTIF
+    // =========================
+    else {
+      // 3. BANNER MOBILE - R-A-19179231-6 - AKTIF
+      if (canShow('mobileBanner', 1, 2)) {
+        markShown('mobileBanner');
+        window.yaContextCb.push(() => {
+          Ya.Context.AdvManager.render({
+            blockId: "R-A-19179231-6",
+            renderTo: "yandex_rtb_R-A-19179231-6"
+          });
+        });
+      }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', init);
-    } else {
-      init();
+      // 4. FULLSCREEN - R-A-19179231-3 - NONAKTIF
+      // Alasan: Ganggu UX, bounce rate naik. Pake banner lebih aman.
+      // if (canShow('fullscreen', 4, 6)) {
+      //   markShown('fullscreen');
+      //   window.yaContextCb.push(() => {
+      //     Ya.Context.AdvManager.render({
+      //       blockId: "R-A-19179231-3",
+      //       type: "fullscreen",
+      //       platform: "touch"
+      //     });
+      //   });
+      // }
+
+      // 5. FLOOR AD MOBILE - R-A-19179231-1 - NONAKTIF
+      // Alasan: Tabrakan sama Banner. Pilih salah satu aja biar ga spam.
+      // if (canShow('mobileFloor', 2, 4)) {
+      //   markShown('mobileFloor');
+      //   window.yaContextCb.push(() => {
+      //     Ya.Context.AdvManager.render({
+      //       blockId: "R-A-19179231-1",
+      //       type: "floorAd",
+      //       platform: "touch"
+      //     });
+      //   });
+      // }
     }
+
+    // =========================
+    // ALL DEVICE - NONAKTIF
+    // =========================
+    // 6. IN-IMAGE - R-A-19179231-2 - NONAKTIF
+    // Alasan: Revenue kecil + bikin CLS kalo gambar telat load.
+    // Nyalain kalo artikel lu banyak gambar 600x300+
+    // if (canShow('inImage', 2, 4)) {
+    //   let count = 0;
+    //   const MAX_ADS = 2;
+    //   const images = Array.from(document.querySelectorAll("article img, .prose img"));
+    //   
+    //   for (const image of images) {
+    //     if (count >= MAX_ADS) break;
+    //     if (!(image instanceof HTMLImageElement)) continue;
+    //     
+    //     const { width, height } = image.getBoundingClientRect();
+    //     if (width < 600 || height < 300) continue;
+    //     
+    //     const src = image.currentSrc || image.src;
+    //     if (/avatar|logo|icon|emoji|badge/i.test(src)) continue;
+    //     
+    //     image.id = image.id || `yandex_${Math.random().toString(16).slice(2)}`;
+    //     count++;
+    //     
+    //     const doRender = () => {
+    //       window.yaContextCb.push(() => {
+    //         Ya.Context.AdvManager.render({
+    //           renderTo: image.id,
+    //           blockId: "R-A-19179231-2",
+    //           type: "inImage"
+    //         });
+    //       });
+    //     };
+    //     
+    //     if (!image.complete) {
+    //       image.addEventListener("load", doRender, { once: true });
+    //     } else {
+    //       doRender();
+    //     }
+    //   }
+    //   if (count > 0) markShown('inImage');
+    // }
   })();
 </script>
