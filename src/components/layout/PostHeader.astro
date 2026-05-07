@@ -45,12 +45,9 @@ const {
     <div class="prose-custom mb-4 md:mb-8">
       <h1>{title}</h1>
     </div>
+    <PostMeta pubDate={pubDate} readingTime={readingTime} />
 
-    <div class="mb-4 md:mb-8">
-      <PostMeta pubDate={pubDate} readingTime={readingTime} />
-    </div>
-
-    <div class="prose-custom w-full mb-8">
+    <div class="prose-custom mb-4 md:mb-8">
       {image && (
         <BlogFeaturedImage
           image={image.src}
