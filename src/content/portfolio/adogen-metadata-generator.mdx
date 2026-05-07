@@ -67,7 +67,7 @@ Untuk menangani *Rate Limit* dari provider AI gratisan, saya membangun sistem an
 
 Data dari AI seringkali mengandung karakter ilegal atau format yang berantakan. Saya membangun utilitas khusus menggunakan **TypeScript** untuk membersihkan baris baru (`\n`), menghapus simbol terlarang (`©`, `™`), dan memastikan limitasi 50 keyword terpenuhi.
 
-<CodeGroup titles={["Typescript"]}>
+<Code titles={["Typescript"]}>
 
 ```typescript
 // Contoh logika sanitasi yang saya gunakan
@@ -80,4 +80,4 @@ const clean = (str: string) => {
 };
 ```
 
-</ CodeGroup>
+</ Code>
