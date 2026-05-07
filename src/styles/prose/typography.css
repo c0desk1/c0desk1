@@ -358,13 +358,13 @@
     margin-bottom: 0.5rem;
   }
 
- .prose-custom.heading-group.has-anchor:hover.anchor-link {
+ .prose-custom .heading-group .has-anchor:hover .anchor-link {
     opacity: 1;
     pointer-events: auto;
     transform: translateX(0);
   }
 
- .prose-custom.anchor-link:hover {
+ .prose-custom .anchor-link:hover {
     color: var(--prose-fg);
   }
 
