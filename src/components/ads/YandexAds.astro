@@ -1,4 +1,4 @@
-//src/components/ads/YandexAds.astro
+// src/components/ads/YandexAds.astro
 
 <script is:inline>
   (() => {
@@ -10,14 +10,11 @@
     const randomBetween = (min, max) =>
       Math.floor(Math.random() * (max - min + 1)) + min;
 
-    const canRender = (
-      key,
-      min = 2,
-      max = 5
-    ) => {
+    const canRender = (key, min = 2, max = 5) => {
       const storageKey = `__${key}LastPage`;
 
       window[storageKey] ??= 0;
+      window.__adPageCount ??= 0;
 
       const current = window.__adPageCount;
       const last = window[storageKey];
@@ -33,9 +30,7 @@
     };
 
     const render = (key, config) => {
-      if (!window.Ya?.Context?.AdvManager) {
-        return;
-      }
+      if (!window.Ya?.Context?.AdvManager) return;
 
       markRendered(key);
 
@@ -55,10 +50,9 @@
         // =========================
 
         if (isMobile) {
-          const showFullscreen =
-            Math.random() > 0.5;
+          const showFullscreen = Math.random() > 0.5;
 
-          // MOBILE FULLSCREEN
+          // MOBILE FULLSCREEN (tetap aktif)
           if (
             showFullscreen &&
             canRender("fullscreen", 3, 6)
@@ -70,19 +64,9 @@
             });
           }
 
-          // MOBILE FLOOR
-          else if (
-            canRender("mobileFloor", 2, 4)
-          ) {
-            render("mobileFloor", {
-              blockId: "R-A-19179231-1",
-              type: "floorAd",
-              platform: "touch",
-            });
-          }
+          // ❌ MOBILE FLOOR DIMATIKAN
         } else {
-          const showTopAd =
-            Math.random() > 0.5;
+          const showTopAd = Math.random() > 0.5;
 
           // DESKTOP TOP
           if (
@@ -95,7 +79,7 @@
             });
           }
 
-          // DESKTOP FLOOR
+          // DESKTOP FLOOR (tetap aktif)
           else if (
             canRender("desktopFloor", 3, 6)
           ) {
@@ -108,72 +92,8 @@
         }
 
         // =========================
-        // IN-IMAGE
+        // IN-IMAGE DIMATIKAN TOTAL
         // =========================
-
-        if (
-          canRender("inImage", 2, 5)
-        ) {
-          let count = 0;
-
-          const MAX_ADS = 2;
-
-          const images = Array.from(
-            document.querySelectorAll(
-              "article img, .prose img"
-            )
-          );
-
-          const renderInImage = (imageId) => {
-            render("inImage", {
-              renderTo: imageId,
-              blockId: "R-A-19179231-2",
-              type: "inImage",
-            });
-          };
-
-          for (const image of images) {
-            if (count >= MAX_ADS) {
-              break;
-            }
-
-            if (!(image instanceof HTMLImageElement)) {
-              continue;
-            }
-
-            if (
-              image.naturalWidth < 600 ||
-              image.naturalHeight < 300
-            ) {
-              continue;
-            }
-
-            const src =
-              image.currentSrc || image.src;
-
-            if (
-              /logo|avatar|icon|emoji|badge/i.test(src)
-            ) {
-              continue;
-            }
-
-            image.id ||= `yandex_${Math.random()
-              .toString(16)
-              .slice(2)}`;
-
-            count++;
-
-            if (!image.complete) {
-              image.addEventListener(
-                "load",
-                () => renderInImage(image.id),
-                { once: true }
-              );
-            } else {
-              renderInImage(image.id);
-            }
-          }
-        }
       },
       { once: true }
     );
