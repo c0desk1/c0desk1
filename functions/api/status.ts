@@ -1,37 +1,69 @@
 // functions/api/status.ts
 
 interface Env {
-  API_WORKER: { fetch: typeof fetch };
+  API_WORKER: {
+    fetch: typeof fetch;
+  };
 }
 
-export const onRequestGet = async (context: { request: Request, env: Env, next: Function }) => {
-  const url = new URL(context.request.url);
+export const onRequestGet = async ({
+  request,
+  env,
+  next,
+}: {
+  request: Request;
+  env: Env;
+  next: Function;
+}) => {
+  const url = new URL(request.url);
 
-  if (!url.pathname.startsWith('/api/status')) {
-    return context.next(); 
+  if (!url.pathname.startsWith("/api/status")) {
+    return next();
   }
 
-  const apiWorker = context.env.API_WORKER;
+  const apiWorker = env.API_WORKER;
 
   if (!apiWorker) {
-    return new Response(JSON.stringify({ error: "Binding API_WORKER tidak ditemukan" }), { 
-      status: 500, 
-      headers: { "Content-Type": "application/json" } 
-    });
+    return Response.json(
+      {
+        error: "Binding API_WORKER tidak ditemukan",
+      },
+      {
+        status: 500,
+      }
+    );
   }
 
   try {
-    const res = await apiWorker.fetch("https://api.c0desk1.my.id/status/all");
-    const data = await res.json();
+    const res = await apiWorker.fetch(
+      "https://api.c0desk1.my.id/status/all",
+      {
+        cf: {
+          cacheTtl: 60,
+          cacheEverything: true,
+        },
+      } as RequestInit
+    );
 
-    return new Response(JSON.stringify(data), {
-      status: 200,
+    return new Response(res.body, {
+      status: res.status,
       headers: {
         "Content-Type": "application/json",
-        "Cache-Control": "public, max-age=60, stale-while-revalidate=300"
-      }
+
+        "Cache-Control":
+          "public, max-age=60, stale-while-revalidate=300",
+
+        "X-Status-Cache": "edge",
+      },
     });
-  } catch (e) {
-    return new Response(JSON.stringify({ error: "Gagal fetch Worker API" }), { status: 500 });
+  } catch {
+    return Response.json(
+      {
+        error: "Gagal fetch Worker API",
+      },
+      {
+        status: 500,
+      }
+    );
   }
 };
