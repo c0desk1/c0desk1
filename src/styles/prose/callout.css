@@ -1,12 +1,12 @@
 /* src/styles/prose/callout.cas */
 
-/* CALLOUTS */
+/* BASE */
 
 .prose-custom .callout {
   margin: 1.5rem 0;
   display: flex;
   gap: 0.875rem;
-  align-items: flex-start;
+  align-items: baseline;
   padding: 1rem 1.25rem;
   border-radius: 8px;
   border: 1px solid;
@@ -19,6 +19,7 @@
   flex-shrink: 0;
   margin-top: 0;
   line-height: 1.5;
+  transform: translateY(0.125em);
 }
 
 .prose-custom .callout-icon svg {
