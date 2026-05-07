@@ -76,7 +76,7 @@
 
 /* MOBILE */
 @media (max-width: 767px) {
-.prose-custom<.details {
+.prose-custom .details {
     margin: 1.25rem 0;
   }
 
