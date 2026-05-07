@@ -18,7 +18,7 @@
 .prose-custom .callout-header {
   display: flex
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
 .prose-custom .callout-icon {
@@ -37,14 +37,14 @@
 }
 
 .prose-custom .callout-body > .flex {
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
 .prose-custom .callout-title {
   font-weight: 600;
   /* margin: 0 0 0.25rem !important; */
   margin: 0 !important;
-  line-height: 1.5;
+  line-height: 1.6;
   color: inherit;
 }
 
