@@ -7,12 +7,14 @@ import { getEntry } from "astro:content";
 import Container from "../ui/Container.astro";
 import Section from "../ui/Section.astro";
 
-import Icon from "@/components/ui/Icon";
+import Icon from "@/components/ui/Icon.astro";
 
 import StatusPanel from "../layout/StatusPanel.astro";
 import Newsletter from "../layout/Newsletter.astro";
+import StatusButton from "../ui/StatusButton.astro";
 
 let settings;
+
 try {
   settings = await getEntry("settings", "site");
 } catch {
@@ -20,92 +22,75 @@ try {
 }
 
 const siteData = settings?.data || siteConfig;
-const footerSections = siteData.footerSections || siteConfig.footerSections;
+
+const footerSections =
+  siteData.footerSections || siteConfig.footerSections;
+
+const social = siteData.social ?? {};
+
+const year = new Date().getFullYear();
+
+const socialEntries = Object.entries(social).filter(([_, url]) => url);
 ---
 
-<footer class="border-t border-(--border)/50 bg-(--bg) relative overflow-hidden">
-  <Section size="md">
-    <Container size="full">
-      <div class="w-full justify-between grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-10 lg:gap-16 mb-8">
-        <div class="flex items-start justify-center lg:justify-start lg:border-r lg:border-(--border)/50 lg:pr-16">
-          <Newsletter />
-        </div>
-      </div>
-	</Container>
-	<div class="flex items-center border-t border-(--border)/50 lg:border-none">
-	<Container size="full">
-      <div class="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8 py-4 md:py-0">
-        {footerSections.map((section) => (
-          <div class="flex flex-col gap-3">
-            <span class="text-sm md:text-base font-semibold text-(--fg) uppercase tracking-wide">
-              {section.title}
-            </span>
-            <ul class="flex flex-col gap-1.5">
-              {section.items.map((item) => (
-                <li>
-                  <a
-                    href={item.href}
-                    target={item.isExternal ? "_blank" : undefined}
-                    rel={item.isExternal ? "noopener noreferrer" : undefined}
-                    class="text-[13px] md:text-sm text-(--fg-muted) hover:text-(--fg) transition-colors inline-flex items-center gap-1 group leading-none"
-                  >
-                    {item.label}
-                    {item.isExternal && (
-                      <Icon name="external" className="w-5 h-5" />
-                    )}
-                  </a>
-                </li>
-              ))}
-            </ul>
+<footer class="relative border-t border-(--border)/60 bg-(--bg)">
+  <div aria-hidden="true" class="pointer-events-none absolute inset-0 opacity-[0.025]">
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] bg-size-[28px_28px]" />
+  </div>
+  <Section size="none">
+    <div class="flex items-center border-b border-dashed border-(--border)/60 py-6">
+      <Container size="xl">
+        <div class="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+          <div class="flex w-full flex-col gap-5 lg:max-w-sm">
+            <Newsletter />
           </div>
-        ))}
-      </div>
-    </Container>
-    </div>
-    <div class="border-t border-dashed border-(--border)/50">
-    <Container size="full">
-      <div class="flex flex-col md:flex-row items-center justify-between gap-4 pt-6">
-        <div class="flex items-center gap-4">
-          <a
-            href="#top"
-            class="w-8 h-8 flex items-center justify-center rounded-md border border-(--border) text-(--fg-muted) hover:text-(--fg) hover:border-(--border-strong) transition-all active:scale-90"
-            aria-label="Kembali ke atas"
-          >
-            <Icon name="arrow-up" className="w-4 h-4" />
-          </a>
-          <p class="text-[13px] text-(--fg-muted) tracking-tight">
-            © {new Date().getFullYear()} {siteData.siteName}. All rights reserved.
-          </p>
+          <div class="grid w-full gap-x-10 gap-y-8 sm:grid-cols-2 lg:max-w-3xl lg:grid-cols-4">
+            {footerSections.map((section) => (
+              <div class="min-w-0">
+                <div class="mb-3 flex items-center gap-2 text-[13px] md:text-sm font-semibold uppercase tracking-[0.18em] text-(--fg)">
+                  <span class="truncate">
+                    {section.title}
+                  </span>
+                </div>
+                <ul class="space-y-1">
+                  {section.items.map((link) => (
+                    <li>
+                      <a href={link.href} target={link.isExternal ? "_blank" : undefined} rel={link.isExternal ? "noopener noreferrer" : undefined} class="group flex items-center justify-between gap-3 py-1.5 text-sm text-(--fg-muted) transition-colors hover:text-(--fg)">
+                        <span class="truncate">
+                          {link.label}
+                        </span>
+                        {link.isExternal && (
+                          <Icon name="external" class="size-3 shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
+                        )}
+                      </a>
+                    </li>
+                  ))}
+                 </ul>
+              </div>
+            ))}
+          </div>
         </div>
-        <button
-          id="status-toggle"
-          class="group flex items-center gap-2.5 px-3 py-1.5 rounded-md border border-(--border) bg-(--bg-muted) hover:border-(--border-strong) transition-all active:scale-95"
-        >
-          <span class="relative flex h-2 w-2">
-            <span id="status-pulse" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
-            <span id="status-dot" class="relative inline-flex rounded-full h-2 w-2 bg-zinc-400"></span>
-          </span>
-          <span id="status-label" class="text-[13px] font-medium text-(--fg-muted) group-hover:text-(--fg) transition-colors">
-            Memuat Sistem...
-          </span>
-        </button>
+      </Container>
+    </div>
+    <Container size="xl">
+      <div class="flex flex-col gap-3 py-4 md:flex-row md:items-center md:justify-between">
+        <div class="flex flex-wrap items-center gap-1.5">
+          {socialEntries.map(([platform, url]) => (
+            <a href={url} target="_blank" rel="noopener noreferrer" aria-label={platform} class="flex size-6 items-center justify-center rounded-(--radius-full) text-(--fg-muted) transition-all hover:bg-(--bg-muted) hover:text-(--fg)">
+              <Icon name={platform as any} class="size-4" />
+            </a>
+          ))}
+        </div>
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div class="flex items-center gap-3 text-sm text-(--fg-muted)">
+            <span>
+              © {year} {siteData.siteName}
+            </span>
+          </div>
+          <StatusButton />
+        </div>
       </div>
     </Container>
-    </div>
   </Section>
   <StatusPanel />
 </footer>
-
-<style is:global>
-  #status-label { text-transform: capitalize; }
-
-  @media (max-width: 1023px) {
-    .nls-wrap {
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 2.5rem;
-      width: 100%;
-    }
-  }
-
-  .nls-wrap { border-top: none; }
-</style>
