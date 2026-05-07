@@ -1,5 +1,5 @@
 ---
-import Icon from '@/components/ui/Icon.astro';
+import Icon from '@/components/ui/Icon';
 
 const { summary: propSummary } = Astro.props;
 const raw = await Astro.slots.render('default');
@@ -13,7 +13,7 @@ const content = propSummary ? text : lines.slice(1).join('\n');
 
 <details class="details">
   <summary class="details-summary">
-    <Icon name='chevron-right' class="details-icon" / ></Icon>
+    <Icon name='chevron-right' className="details-icon" / ></Icon>
     {summary}
   </summary>
   {content && (
