@@ -2,6 +2,11 @@
   --prose-accent:       #0062ff;
   --prose-accent-dim:   #2b7cff;
   --prose-accent-soft:  #a8dfff;
+
+  --prose-accent-yellow: #FEF3C7;
+  --prose-accent-yellow-dim: #FDE68A;
+  --prose-accent-yellow-soft: #78350F;
+  
   --prose-black:         #000000;
   --prose-white:         #ffffff;
   --prose-fg:            #111111;
@@ -48,6 +53,10 @@
 }
 
 .dark {
+  --prose-accent-yellow: #78350F;
+  --prose-accent-yellow-dim: #92400E;
+  --prose-accent-yellow-soft: #FEF3C7;
+
   --prose-fg:            #ededed;
   --prose-fg-muted:      #a1a1a1;
   --prose-fg-subtle:     #666666;
