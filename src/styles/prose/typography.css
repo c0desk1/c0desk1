@@ -257,7 +257,7 @@
     margin-bottom: 0.5rem;
   }
 
- .prose-custom .anchor-link .anchor-link-active {
+ .prose-custom .anchor-link.anchor-link-active {
     opacity: 1;
     pointer-events: auto;
     transform: translateX(0);
@@ -301,7 +301,7 @@
 /* DESKTOP */
 @media (min-width: 768px) {
  .prose-custom :where(h1, h2, h3, h4, h5, h6) {
-    scroll-margin-top: 60px;
+    scroll-margin-top: 56px;
   }
 
  .prose-custom h1 {
@@ -358,7 +358,7 @@
     margin-bottom: 0.5rem;
   }
 
- .prose-custom .heading-group .has-anchor:hover .anchor-link {
+ .prose-custom .heading-group.has-anchor:hover .anchor-link {
     opacity: 1;
     pointer-events: auto;
     transform: translateX(0);
