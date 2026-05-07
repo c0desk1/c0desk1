@@ -1,0 +1,16 @@
+{
+  import.meta.env.PROD && (
+    <>
+      <script is:inline>
+        window.yaContextCb =
+          window.yaContextCb || [];
+      </script>
+
+      <script
+        async
+        defer
+        src="https://yandex.ru/ads/system/context.js"
+      />
+    </>
+  )
+}
