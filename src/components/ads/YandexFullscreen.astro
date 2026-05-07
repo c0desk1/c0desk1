@@ -1,0 +1,42 @@
+<script is:inline>
+  (() => {
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+    if (!isMobile) return;
+
+    const shouldShowAd = (() => {
+      window.__adPageCount ??= 0;
+      window.__lastInterstitialPage ??= 0;
+
+      window.__adPageCount++;
+
+      const current = window.__adPageCount;
+      const gap = Math.floor(Math.random() * 4) + 2;
+
+      if (current - window.__lastInterstitialPage < gap) {
+        return false;
+      }
+
+      window.__lastInterstitialPage = current;
+      return true;
+    })();
+
+    if (!shouldShowAd) return;
+
+    window.yaContextCb ||= [];
+
+    window.addEventListener(
+      "load",
+      () => {
+        window.yaContextCb.push(() => {
+          Ya.Context.AdvManager.render({
+            blockId: "R-A-19179231-3",
+            type: "fullscreen",
+            platform: "touch",
+          });
+        });
+      },
+      { once: true }
+    );
+  })();
+</script>
