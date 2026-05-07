@@ -104,16 +104,22 @@
 
 /* LIST */
 .prose-custom .steps-container > ul,
-.prose-custom .steps-container > ol,
-.prose-custom .steps-container > ul li,
-.prose-custom .steps-container > ol li {
+.prose-custom .steps-container > ol {
   position: relative;
   margin: 0.5rem 0 1.5rem 0;
+  padding-left: 1.25rem;
   color: var(--prose-fg-muted);
   font-size: 0.875rem;
   line-height: 1.5rem;
   letter-spacing: -0.01em;
   z-index: 2;
+}
+
+.prose-custom .steps-container > ul li,
+.prose-custom .steps-container > ol li {
+  margin: 0.25rem 0;
+  font-size: inherit;
+  line-height: inherit;
 }
 
 .prose-custom .steps-container > ul li::marker,
@@ -203,14 +209,23 @@
   }
 
   .prose-custom .steps-container > p,
-  .prose-custom .steps-container > ul,
-  .prose-custom .steps-container > ol,
-  .prose-custom .steps-container > ul li,
-  .prose-custom .steps-container > ol li,
   .prose-custom .steps-container > blockquote {
     margin: 0.5rem 0 1.25rem 0;
     font-size: 0.8125rem;
     line-height: 1.25rem;
+  }
+  
+  .prose-custom .steps-container > ul,
+  .prose-custom .steps-container > ol {
+    margin: 0.5rem 0 1.25rem 0;
+    padding-left: 1rem;
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+  }
+
+  .prose-custom .steps-container > ul li,
+  .prose-custom .steps-container > ol li {
+    margin: 0.25rem 0;
   }
 
   .prose-custom .steps-container > pre {
