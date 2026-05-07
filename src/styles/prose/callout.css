@@ -1,31 +1,33 @@
-/* src/styles/prose/callout.cas */
+/* src/styles/prose/callout.css */
 
 /* CALLOUTS */
-
 .prose-custom .callout {
-  margin: 1.5rem 0;
   display: flex;
-  gap: 0.875rem;
   align-items: flex-start;
+  margin: 1.5rem 0;
   padding: 1rem 1.25rem;
   border-radius: 8px;
   border: 1px solid;
-  font-size: 0.9rem;
   color: inherit;
   transition: background-color var(--prose-transition), border-color var(--prose-transition);
 }
 
-.prose-custom .callout-header {
-  display: flex
-  align-items: center;
+.prose-custom .callout-body {
+  min-width: 0;
+}
+
+/* Header: Icon + Title */
+.prose-custom .callout-header,
+.prose-custom .callout-body > .flex {
   gap: 0.5rem;
   margin-bottom: 0.5rem;
+  align-items: center;
 }
 
 .prose-custom .callout-icon {
   flex-shrink: 0;
+  line-height: 0;
   align-items: center;
-  margin-top: 0;
 }
 
 .prose-custom .callout-icon svg {
@@ -34,34 +36,28 @@
   height: 1.125rem;
 }
 
-.prose-custom .callout-body {
-  /* flex: 1; */
-  min-width: 0;
-}
-
-.prose-custom .callout-body > .flex {
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
 .prose-custom .callout-title {
+  font-family: var(--prose-font-sans);
   font-weight: 600;
-  /* margin: 0 0 0.25rem !important; */
+  letter-spacing: -0.02em;
   margin: 0 !important;
-  line-height: 1.5;
   color: inherit;
-  font-size: 0.9375rem;
 }
 
+/* Content = P */
 .prose-custom .callout-content {
-  line-height: 1.6;
-  opacity: 0.9;
+  font-weight: 500;
+  color: inherit;
 }
 
 .prose-custom .callout-content p {
   color: inherit !important;
   margin-bottom: 0;
   font-weight: 500;
+}
+
+.prose-custom .callout-content p:last-child {
+  margin-bottom: 0 !important;
 }
 
 .prose-custom .callout-content a {
@@ -78,29 +74,22 @@
 
 .prose-custom .callout-content strong {
   font-weight: 600;
-  color: var(--prose-fg);
+  color: inherit;
   letter-spacing: -0.01em;
 }
 
-.prose-custom .callout-content strong em {
-  font-style: italic;
-  color: var(--prose-fg);
-}
-
+.prose-custom .callout-content strong em,
 .prose-custom .callout-content em strong {
   font-style: italic;
-  color: var(--prose-fg);
+  color: inherit;
 }
 
 .prose-custom .callout-content em {
   font-style: italic;
-  color: var(--prose-fg);
+  color: inherit;
 }
 
-.prose-custom .callout-content p:last-child {
-  margin-bottom: 0 !important;
-}
-
+/* VARIANTS */
 .prose-custom [data-callout="note"] {
   background-color: var(--callout-note-bg);
   border-color: var(--callout-note-border);
@@ -115,7 +104,6 @@
   border-color: var(--callout-info-border);
   color: var(--callout-info-text);
 }
-
 .prose-custom [data-callout="info"] .callout-icon { 
   color: var(--callout-info-icon); 
 }
@@ -125,7 +113,6 @@
   border-color: var(--callout-tip-border);
   color: var(--callout-tip-text);
 }
-
 .prose-custom [data-callout="tip"] .callout-icon { 
   color: var(--callout-tip-icon); 
 }
@@ -135,7 +122,6 @@
   border-color: var(--callout-warning-border);
   color: var(--callout-warning-text);
 }
-
 .prose-custom [data-callout="warning"] .callout-icon { 
   color: var(--callout-warning-icon); 
 }
@@ -145,18 +131,21 @@
   border-color: var(--callout-danger-border);
   color: var(--callout-danger-text);
 }
-
 .prose-custom [data-callout="danger"] .callout-icon { 
   color: var(--callout-danger-icon); 
 }
 
+/* MOBILE */
 @media (max-width: 767px) {
-  /* MOBILE */
   .prose-custom .callout {
     margin: 1.25rem 0;
-    gap: 0.75rem;
     padding: 0.875rem 1rem;
-    font-size: 0.8125rem;
+  }
+  
+  .prose-custom .callout-header,
+  .prose-custom .callout-body > .flex {
+    gap: 0.4rem;
+    margin-bottom: 0.4rem;
   }
 
   .prose-custom .callout-icon svg {
@@ -165,37 +154,43 @@
   }
 
   .prose-custom .callout-title {
-    /* margin: 0 0 0.2rem !important; */
-    margin: 0;
-    font-size: 0.9375rem;
+    font-size: 0.9575rem;
+    line-height: 1.65;
   }
 
   .prose-custom .callout-content {
-    line-height: 1.5;
+    font-size: 0.9575rem;
+    line-height: 1.65;
+    padding-left: calc(1rem + 0.4rem);
   }
 }
 
+/* DESKTOP - ngikut p desktop */
 @media (min-width: 768px) {
-  /* TABLET/DESKTOP */
   .prose-custom .callout {
     margin: 1.5rem 0;
-    gap: 0.875rem;
     padding: 1rem 1.25rem;
-    font-size: 0.875rem;
   }
-  
+
+  .prose-custom .callout-header,
+  .prose-custom .callout-body > .flex {
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
   .prose-custom .callout-icon svg {
     width: 1.125rem;
     height: 1.125rem;
   }
 
   .prose-custom .callout-title {
-    /* margin: 0 0 0.25rem !important; */
-    margin: 0;
-    font-size: 0.9375rem;
+    font-size: 1rem;
+    line-height: 1.7;
   }
 
   .prose-custom .callout-content {
-    line-height: 1.6;
+    font-size: 1rem;
+    line-height: 1.7;
+    padding-left: calc(1.125rem + 0.5rem);
   }
 }
