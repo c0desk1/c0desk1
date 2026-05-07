@@ -15,11 +15,16 @@
   transition: background-color var(--prose-transition), border-color var(--prose-transition);
 }
 
+.prose-custom .callout-header {
+  display: flex
+  align-items: center;
+  gap: 1rem;
+}
+
 .prose-custom .callout-icon {
   flex-shrink: 0;
   align-items: center;
   margin-top: 0;
-  line-height: 1.5;
 }
 
 .prose-custom .callout-icon svg {
@@ -27,13 +32,18 @@
 }
 
 .prose-custom .callout-body {
-  flex: 1;
+  /* flex: 1; */
   min-width: 0;
+}
+
+.prose-custom .callout-body > .flex {
+  gap: 1rem;
 }
 
 .prose-custom .callout-title {
   font-weight: 600;
-  margin: 0 0 0.25rem !important;
+  /* margin: 0 0 0.25rem !important; */
+  margin: 0 !important;
   line-height: 1.5;
   color: inherit;
 }
