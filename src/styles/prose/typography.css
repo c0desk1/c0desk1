@@ -16,7 +16,7 @@
   scroll-margin-top: 56px;
 }
 
-.prose-custom .heading-group .has-anchor {
+.prose-custom .heading-group.has-anchor {
   display: block;
   width: 100%;
   max-width: 100%;
@@ -49,8 +49,8 @@
 }
 
 .prose-custom .anchor-link svg {
-  width: 1rem;
-  height: 1rem;
+  width: 1.125rem;
+  height: 1.125rem;
   stroke: currentColor;
   stroke-width: 2;
   fill: none;
@@ -257,11 +257,20 @@
     margin-bottom: 0.5rem;
   }
 
- .prose-custom .anchor-link.anchor-link-active {
+ .prose-custom .anchor-link .anchor-link-active {
     opacity: 1;
     pointer-events: auto;
     transform: translateX(0);
     color: var(--prose-fg);
+  }
+
+  .prose-custom .heading-group.has-anchor {
+    transition: background-color 0.1s ease;
+    border-radius: 0.5rem;
+  }
+
+  .prose-custom .heading-group.has-anchor:active {
+    background-color: var(--prose-surface-hover);
   }
 
  .prose-custom p {
@@ -301,7 +310,7 @@
 /* DESKTOP */
 @media (min-width: 768px) {
  .prose-custom :where(h1, h2, h3, h4, h5, h6) {
-    scroll-margin-top: 56px;
+    scroll-margin-top: 57px;
   }
 
  .prose-custom h1 {
