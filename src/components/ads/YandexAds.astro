@@ -1,10 +1,9 @@
 ---
 // src/components/ads/YandexAds.astro
-// Controller for all Yandex RTB ad units + Yandex Metrica
-// Respects cookie consent, lazy/deferred loading for performance
 
 import { siteConfig } from "@/config/site";
 import { getEntry } from "astro:content";
+
 import Section from "@/components/ui/Section.astro";
 import Container from "@/components/ui/Container.astro";
 
@@ -14,7 +13,8 @@ try {
 } catch (error) {}
 
 const siteData  = settings?.data || siteConfig;
-const YA_PUB_ID = siteData.yandexPubId || siteConfig.yandexPubId || "R-A-19179231";
+
+const YA_PUB_ID = siteData.yandexPubId || siteConfig.yandexPubId || "";
 const YA_METRICA_ID = siteData.yandexMetricaId || siteConfig.yandexMetricaId || "";
 
 const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? true;
@@ -32,20 +32,20 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
 (function () {
   // ─── Config ───────────────────────────────────────────────────────────────
   const el         = document.getElementById('ya-data');
-  const PUB_ID     = el?.dataset.pubId     || 'R-A-19179231';
+  const PUB_ID     = el?.dataset.pubId     || '';
   const METRICA_ID = el?.dataset.metricaId || '';
   const ADS_ON     = el?.dataset.adsEnabled !== 'false';
 
   const CONSENT_KEY = 'cookie-consent-v2';
 
-  // ─── Timing limits (ms after page load) ───────────────────────────────────
+  // ─── Batasan waktu (ms setelah halaman dimuat) ───────────────────────────────────
   const DELAY = {
-    floorAd:    2000,   // floor (touch) — least intrusive, still give 2s
-    inImage:    3500,   // in-image — needs DOM images to be painted
-    fullscreen: 8000,   // fullscreen — most intrusive, wait longest
-    topAd:      1500,   // top banner — show relatively early but after LCP
+    floorAd:    2000,   // floor (mobile) — paling tidak mengganggu, tetap beri waktu 2 detik
+    inImage:    3500,   // in-image — membutuhkan gambar DOM untuk dilukis.
+    fullscreen: 8000,   // fullscreen — paling mengganggu, tunggu paling lama
+    topAd:      1500,   // top banner — menunjukkan relatif awal tetapi setelah LCP
     banner:     2500,   // block-6 standard banner
-    metrica:    1000,   // metrica — analytics, earlier is better
+    metrica:    1000,   // metrica — analytics, Lebih awal lebih baik.
   };
 
   // ─── Helpers ──────────────────────────────────────────────────────────────
@@ -60,8 +60,8 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
   }
 
   function adsAllowed() {
-    // Ads follow the analytics consent bucket (same as GA)
-    // Adjust to c?.ads if you add a separate ads toggle in Cookie.astro
+    // Iklan mengikuti tahapan persetujuan analitik (sama seperti GA)
+    // Sesuaikan dengan c?.ads jika menambahkan tombol pengalih iklan terpisah di Cookie.astro
     return analyticsAllowed();
   }
 
@@ -80,11 +80,24 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
       window.addEventListener('load', () => setTimeout(fn, ms), { once: true });
     }
   }
+  
+  function isDesktop() {
+    const ua = navigator.userAgent;
+    const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet|Kindle|Silk/i;
+    const isIPad = /Macintosh/i.test(ua) && navigator.maxTouchPoints && navigator.maxTouchPoints > 1;
+    return !mobileRegex.test(ua) && !isIPad;
+  }
+  
+  function isTouchDevice() {
+    return !isDesktop();
+  }
 
   // ─── Ad renderers ─────────────────────────────────────────────────────────
 
   // Block-1
   function renderFloorTouch() {
+    if (!isTouchDevice()) return;
+    
     afterDelay(DELAY.floorAd, () => {
       waitForYa(() => {
         window.yaContextCb.push(() => {
@@ -116,7 +129,7 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
           if (!images.length) return;
           const image = images.shift();
           const { width, height } = image.getBoundingClientRect();
-          if (width < 600 || height < 315) return tryImages(images);
+          if (width < 320 || height < 190) return tryImages(images);
 
           image.id = `yandex_rtb_${PUB_ID}-2-${Math.random().toString(16).slice(2)}`;
           if (image.tagName === 'IMG' && !image.complete) {
@@ -134,6 +147,8 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
 
   // Block-3
   function renderFullscreen() {
+    if (!isTouchDevice()) return;
+    
     afterDelay(DELAY.fullscreen, () => {
       waitForYa(() => {
         window.yaContextCb.push(() => {
@@ -149,6 +164,8 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
 
   // Block-4
   function renderTopAd() {
+    if (!isTouchDevice()) return;
+    
     afterDelay(DELAY.topAd, () => {
       waitForYa(() => {
         window.yaContextCb.push(() => {
@@ -163,6 +180,8 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
 
   // Block-5
   function renderFloorDesktop() {
+    if (!isDesktop()) return;
+    
     afterDelay(DELAY.floorAd, () => {
       waitForYa(() => {
         window.yaContextCb.push(() => {
@@ -228,25 +247,12 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
     });
   }
 
-  function watchFloorAd() {
-    const observer = new MutationObserver(() => {
-      document.querySelectorAll('div[style*="position: fixed"][style*="top: 0"]').forEach((el) => {
-        const rect = el.getBoundingClientRect();
-        if (rect.height < 120 && rect.top < 10) {
-          el.style.setProperty('top', 'auto', 'important');
-          el.style.setProperty('bottom', '0', 'important');
-        }
-      });
-    });
-    observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] });
-  }
-
   // ─── Consent-aware init ───────────────────────────────────────────────────
   function initAll() {
     if (!ADS_ON) return;
 
     if (adsAllowed()) {
-      renderFloorTouch();
+     // renderFloorTouch(); //
       renderInImage();
       renderFullscreen();
       renderTopAd();
@@ -277,7 +283,6 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
     const consent = getConsent();
     if (consent !== null) {
       initAll();
-      watchFloorAd();
     } else {
       waitForConsent();
     }
