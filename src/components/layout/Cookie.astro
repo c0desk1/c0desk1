@@ -4,6 +4,7 @@ import { siteConfig } from "@/config/site";
 import { getEntry } from "astro:content";
 
 let settings;
+
 try {
   settings = await getEntry('settings', 'site');
 } catch (error) {}
@@ -28,6 +29,7 @@ const YA_AD = siteData.yandexPubId || siteConfig.yandexPubId;
   (function () {
     const KEY = 'cookie-consent-v2';
     const configEl = document.getElementById('ck-config');
+
     const GA_ID = configEl?.dataset.gaId || '';
     const YA_ID = configEl?.dataset.yaId || '';
     const GA_AD = configEl?.dataset.gaAd || '';
@@ -118,7 +120,9 @@ const YA_AD = siteData.yandexPubId || siteConfig.yandexPubId;
       }
 
       const host = document.createElement('div');
+
       host.id = 'ck-host';
+
       host.setAttribute('role', 'dialog');
       host.setAttribute('aria-modal', 'false');
       host.setAttribute('aria-label', 'Preferensi cookie');
@@ -137,7 +141,6 @@ const YA_AD = siteData.yandexPubId || siteConfig.yandexPubId;
               <p class="ck-sub">Pilih cookie mana yang kamu izinkan</p>
             </div>
           </div>
-
           <div class="ck-toggles">
             <div class="ck-toggle-row ck-toggle-row--disabled">
               <div class="ck-toggle-info">
@@ -148,7 +151,6 @@ const YA_AD = siteData.yandexPubId || siteConfig.yandexPubId;
                 <span class="ck-pill-thumb"></span>
               </div>
             </div>
-
             <div class="ck-toggle-row" id="ck-analytics-row">
               <div class="ck-toggle-info">
                 <span class="ck-toggle-name">Analitik</span>
@@ -235,32 +237,38 @@ const YA_AD = siteData.yandexPubId || siteConfig.yandexPubId;
       document.getElementById('ck-accept-all')?.addEventListener('click', () => {
         analyticsChecked = true;
         adsChecked = true;
+
         if (analyticsToggle) {
           analyticsToggle.setAttribute('aria-checked', 'true');
           analyticsToggle.classList.add('ck-pill--on');
           analyticsToggle.classList.remove('ck-pill--off');
         }
+
         if (adsToggle) {
           adsToggle.setAttribute('aria-checked', 'true');
           adsToggle.classList.add('ck-pill--on');
           adsToggle.classList.remove('ck-pill--off');
         }
+
         dismiss();
       });
 
       document.getElementById('ck-reject-all')?.addEventListener('click', () => {
         analyticsChecked = false;
         adsChecked = false;
+
         if (analyticsToggle) {
           analyticsToggle.setAttribute('aria-checked', 'false');
           analyticsToggle.classList.remove('ck-pill--on');
           analyticsToggle.classList.add('ck-pill--off');
         }
+
         if (adsToggle) {
           adsToggle.setAttribute('aria-checked', 'false');
           adsToggle.classList.remove('ck-pill--on');
           adsToggle.classList.add('ck-pill--off');
         }
+
         dismiss();
       });
 
@@ -604,5 +612,5 @@ const YA_AD = siteData.yandexPubId || siteConfig.yandexPubId;
         }
       `;
     }
-  });
+  })();
 </script>
