@@ -2,7 +2,7 @@
 // src/components/layout/PostMeta.astro
 
 import { formatDate } from '@/lib/utils';
-import Icon from '@/components/ui/Icon.astro';
+import Icon from '@/components/ui/Icon';
 
 interface Props {
   pubDate: Date;
@@ -17,7 +17,7 @@ const formattedDate = formatDate(pubDate);
 <div class="flex flex-wrap items-center justify-start md:justify-center gap-x-2 gap-y-1 text-[13px] md:text-sm text-(--fg-muted)">
   <div class="flex items-center justify-center gap-2">
     <div class="relative w-4 h-4 items-center">
-      <Icon name="clock" class="w-4 h-4" />
+      <Icon name="clock" className="w-4 h-4" />
     </div>
     {readingTime && (
       <>
@@ -30,7 +30,7 @@ const formattedDate = formatDate(pubDate);
   <span>―</span>
   <div class="flex items-center justify-center gap-2">
     <div class="relative w-4 h-4 items-center">
-      <Icon name="calender" class="w-4 h-4" />
+      <Icon name="calender" className="w-4 h-4" />
     </div>
     <time datetime={pubDate.toISOString()} class="whitespace-nowrap">
       {formattedDate}
