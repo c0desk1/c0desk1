@@ -13,7 +13,7 @@ const { prevPost, nextPost } = Astro.props;
   <div class="flex flex-col sm:flex-row gap-4 w-full">
     <div class="flex-1">
       {prevPost && (
-        <a href={`/blog/${prevPost.id}/`} class="group flex w-full flex-col transition-all duration-200">
+        <a href={`/blog/${prevPost.id}/`} class="group flex w-full flex-col py-4 transition-all duration-200">
           <div class="flex items-center gap-2 text-[13px] md:text-sm text-(--fg-muted) mb-2">
             <Icon name="arrow-left" className="w-4 h-4" />
             <span>Sebelumnya</span>
@@ -26,7 +26,7 @@ const { prevPost, nextPost } = Astro.props;
     </div>
     <div class="flex-1">
       {nextPost && (
-        <a href={`/blog/${nextPost.id}/`} class="group flex w-full flex-col transition-all duration-200">
+        <a href={`/blog/${nextPost.id}/`} class="group flex w-full flex-col py-4 transition-all duration-200">
           <div class="flex items-center justify-end gap-2 text-[13px] md:text-sm text-(--fg-muted) mb-2">
             <span>Selanjutnya</span>
             <Icon name="arrow-right" className="w-4 h-4" />
