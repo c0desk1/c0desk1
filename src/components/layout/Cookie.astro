@@ -1,6 +1,5 @@
 ---
-// src/components/layout/Cookie.astro
-
+// src/components/ui/Cookie.astro
 import { siteConfig } from "@/config/site";
 import { getEntry } from "astro:content";
 
@@ -234,7 +233,7 @@ const GA_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
         background: var(--bg-muted); 
         border: 1px solid var(--border);
         border-radius: var(--radius-lg); 
-        color: var(--fg-muted);
+        color: var(--fg);
       }
       
       .ck-icon svg { 
@@ -297,14 +296,13 @@ const GA_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
       
       .ck-toggle-name { 
         font-size: 1rem; 
-        font-weight: 500; 
         color: var(--fg); 
       }
       
       .ck-toggle-desc { 
         font-size: 0.9375rem; 
         color: var(--fg-muted); 
-        line-height: 1.4; 
+        line-height: 1.65; 
       }
       
       .ck-pill { 
