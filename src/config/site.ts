@@ -56,6 +56,7 @@ export const siteConfig = {
     twitter: "https://twitter.com/c0desk1",
     linkedin: "https://linkedin.com/in/c0desk1",
     sitemap: "https://c0desk1.my.id/sitemap-index.xml",
+rss: "https://c0desk1.my.id/rss.xml",
   },
   
   googleSiteVerification: "ZxoHYWipAMoGhvwVi5nxolWsZOntrYkNkVcG9HTfFZQ",
