@@ -1,7 +1,7 @@
 ---
 // src/components/search/SearchModal.astro
 import { getCollection, getEntry } from "astro:content";
-import Icon from "@/components/ui/Icon.astro";
+import Icon from "@/components/ui/Icon";
 
 const posts = await getCollection("blog", ({ data }) => !data.draft);
 
@@ -41,7 +41,7 @@ const searchData = await Promise.all(
     >
       <div class="flex items-center gap-2 px-3.5 border-b border-(--border)">
         <span class="w-5 h-5 shrink-0 text-(--fg-muted)">
-          <Icon name="search" class="w-4.5 h-4.5" />
+          <Icon name="search" className="w-4.5 h-4.5" />
         </span>
 
         <input
@@ -63,7 +63,7 @@ const searchData = await Promise.all(
           tabindex="-1"
         >
           <span class="w-5 h-5">
-            <Icon name="trash" class="w-4.5 h-4.5" />
+            <Icon name="trash" className="w-4.5 h-4.5" />
           </span>
         </button>
         
@@ -74,7 +74,7 @@ const searchData = await Promise.all(
           aria-label="Tutup pencarian"
         >
           <span class="w-5 h-5">
-            <Icon name="close" class="w-4.5 h-4.5" />
+            <Icon name="close" className="w-4.5 h-4.5" />
           </span>
         </button>
 
