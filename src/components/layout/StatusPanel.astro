@@ -97,6 +97,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
     overflow-y: auto;
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
+    overscroll-behavior: contain;
   }
 
   .status-panel.open {
@@ -381,6 +382,12 @@ const services = ['api', 'web', 'cdn', 'bot'];
   .header-dot.pulse {
     animation: pulse-dot 1.5s ease-in-out infinite;
   }
+  
+  @media (hover: hover) {
+    .bar:hover {
+      transform: scaleY(1.15);
+    }
+  }
 </style>
 
 <script is:inline>
@@ -577,7 +584,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
  
   document.getElementById("status-toggle")?.addEventListener("click", openStatus);
   closeBtn?.addEventListener("click", closeStatus);
-  overlay?..("click", closeStatus);
+  overlay?.addEventListener("click", closeStatus);
   refreshBtn?.addEventListener("click", () => { if (hasFetched) fetchStatus(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeStatus(); });
  
