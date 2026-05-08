@@ -8,7 +8,7 @@ import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import Hero from "@/components/ui/Hero.astro";
 import FeaturedPostCard from "@/components/blog/FeaturedPostCard.astro";
-import CategoryTabs from "@/components/blog/CategoryTabs.astro";
+import CategoryTabs from "@/components/section/CategoryTabs.astro";
 
 const allPosts      = await getCollection("blog", ({ data }) => !data.draft);
 const posts         = sortByDate(allPosts);
