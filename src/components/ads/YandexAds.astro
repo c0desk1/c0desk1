@@ -5,6 +5,8 @@
 
 import { siteConfig } from "@/config/site";
 import { getEntry } from "astro:content";
+import Section from "@/components/ui/Section.astro";
+import Container from "@/components/ui/Container.astro";
 
 let settings;
 try {
@@ -26,8 +28,12 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
 <!-- Yandex Ads + Metrica config carrier -->
 <div id="ya-data" style="display:none" data-pub-id={YA_PUB_ID} data-metrica-id={YA_METRICA_ID} data-ads-enabled={String(ADS_ENABLED)}></div>
 
-<!-- Inline div required by block-6 (renderTo target) -->
-<div id="yandex_rtb_R-A-19179231-6" style="min-height:0"></div>
+<Section size="sm">
+  <Container size="lg">
+    <!-- Inline div required by block-6 -->
+    <div id="yandex_rtb_R-A-19179231-6" style="min-height:0"></div>
+  </Container>
+</Section>
 
 <script is:inline>
 (function () {
