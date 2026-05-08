@@ -56,7 +56,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
       ))}
     </div>
     <div class="panel-footer">
-      <span class="footer-note">Memperbarui otomatis setiap 5 menit</span>
+      <span class="footer-note">Diperbarui otomatis setiap 5 menit</span>
       <button id="refresh-btn" class="refresh-btn">
         <Icon name="arrow-path" className="w-4 h-4" />
         Refresh
@@ -411,7 +411,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
   function getRelativeTime(ts) {
     const d = Math.floor((Date.now() - ts) / 1000);
     if (d < 30)   return "Baru saja";
-    if (d < 60)   return `${d}d yang lalu`;
+    if (d < 60)   return `${d}s yang lalu`;
     if (d < 3600) return `${Math.floor(d / 60)}m yang lalu`;
     return "Beberapa waktu yang lalu";
   }
@@ -420,6 +420,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
     const el = document.getElementById(`details-${id}`);
     if (el) el.classList.toggle("hidden");
   }
+  
   window.toggleDetails = toggleDetails;
  
   function openStatus() {
@@ -582,7 +583,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
  
   requestIdleCallback(() => {
     fetchFooterStatus();
-    intervals.push(setInterval(fetchFooterStatus, 1000000));
+    intervals.push(setInterval(fetchFooterStatus, 300000));
   });
 })();
 </script>
