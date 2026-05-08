@@ -1,0 +1,18 @@
+name = "dev-c0desk1"
+compatibility_date = "2026-05-08"
+compatibility_flags = ["global_fetch_strictly_public"]
+main = "@astrojs/cloudflare/entrypoints/server"
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+
+[observability]
+enabled = true
+
+# --- TAMBAHAN UNTUK SERVICE BINDING LOKAL ---
+# Buka komentar (hapus tanda #) di bawah ini agar API_WORKER jalan di localhost
+
+# [[services]]
+# binding = "API_WORKER"
+# service = "nama-worker-api-kamu-yang-sebenarnya"
