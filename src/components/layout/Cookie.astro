@@ -18,33 +18,29 @@ const GA_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
 (function () {
   const KEY = 'cookie-consent-v2';
   const GA_ID = document.getElementById('ck-data')?.dataset.gaId || '';
-  
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', run);
-  } else {
-    run();
+
+  function getStored() {
+    try {
+      return JSON.parse(localStorage.getItem(KEY));
+    } catch {
+      return null;
+    }
   }
 
   function run() {
-    if (
-      window.__cookieConsentLoaded &&
-      document.getElementById('ck-pref-btn') &&
-      document.getElementById('ck-host')
-    ) return;
+    const isBannerPresent = !!document.getElementById('ck-host');
+    const isBtnPresent    = !!document.getElementById('ck-pref-btn');
 
-    window.__cookieConsentLoaded = true;
+    if (isBannerPresent) {
+      applyConsent(getStored() || {});
+      return;
+    }
 
-    const stored = (() => {
-      try {
-        return JSON.parse(localStorage.getItem(KEY));
-      } catch {
-        return null;
-      }
-    })();
+    const stored = getStored();
 
     if (stored) {
       applyConsent(stored);
-      injectPreferenceToggle();
+      if (!isBtnPresent) injectPreferenceToggle();
     } else {
       setTimeout(buildBanner, 1200);
     }
@@ -55,8 +51,7 @@ const GA_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
   } else {
     run();
   }
-
-  document.addEventListener("astro:page-load", run);
+  document.addEventListener('astro:page-load', run);
 
   function applyConsent(prefs) {
     const analyticsOn = prefs?.analytics === true;
@@ -77,7 +72,7 @@ const GA_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
 
   function buildBanner() {
     if (document.getElementById('ck-host')) return;
-    
+
     if (!document.getElementById('ck-style')) {
       const s = document.createElement('style');
       s.id = 'ck-style';
@@ -180,6 +175,13 @@ const GA_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
   function injectPreferenceToggle() {
     if (document.getElementById('ck-pref-btn')) return;
 
+    if (!document.getElementById('ck-style')) {
+      const s = document.createElement('style');
+      s.id = 'ck-style';
+      s.textContent = getCss();
+      document.head.appendChild(s);
+    }
+
     const btn = document.createElement('button');
     btn.id = 'ck-pref-btn';
     btn.setAttribute('aria-label', 'Ubah preferensi cookie');
@@ -237,10 +239,10 @@ const GA_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
       }
       
       .ck-header { 
-	    display: flex; 
+        display: flex; 
         align-items: flex-start; 
         gap: 0.75rem; 
-       }
+      }
        
       .ck-icon {
         width: 2rem; 
@@ -468,11 +470,12 @@ const GA_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
         transition: bottom 0.25s ease, opacity 0.15s, transform 0.15s; 
       }
       
-      @media (max-width: 767) {
+      @media (max-width: 767px) {
         #ck-host { 
           bottom: 1rem; 
           right: 1rem; 
-          width: calc(100vw - 2rem); 
+          left: 1rem;
+          width: auto;
         }
         
         body:has(.tts-bar--visible) #ck-host { 
