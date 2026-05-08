@@ -27,7 +27,7 @@ const optimizedAvatar = isCdnUrl(authorAvatar) ? cdnImage(authorAvatar, { w: 48,
     aria-label={`Author: ${authorName}`}
     >
     {authorAvatar && (
-      <Image
+      <img
         src={optimizedAvatar}
         alt={`Avatar of ${authorName}`}
         width={48}
