@@ -26,10 +26,21 @@ const GA_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
   }
 
   function run() {
-    if (window.__cookieConsentLoaded) return;
+    if (
+      window.__cookieConsentLoaded &&
+      document.getElementById('ck-pref-btn') &&
+      document.getElementById('ck-host')
+    ) return;
+
     window.__cookieConsentLoaded = true;
 
-    const stored = (() => { try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } })();
+    const stored = (() => {
+      try {
+        return JSON.parse(localStorage.getItem(KEY));
+      } catch {
+        return null;
+      }
+    })();
 
     if (stored) {
       applyConsent(stored);
@@ -38,6 +49,14 @@ const GA_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
       setTimeout(buildBanner, 1200);
     }
   }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+
+  document.addEventListener("astro:page-load", run);
 
   function applyConsent(prefs) {
     const analyticsOn = prefs?.analytics === true;
@@ -282,7 +301,7 @@ const GA_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
         cursor: default;
         color: var(--fg-subtle);
         background: var(--bg-muted);
-        poniter-events: none;
+        pointer-events: none;
       }
       
       .ck-toggle-row + .ck-toggle-row { 
