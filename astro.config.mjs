@@ -5,14 +5,14 @@ import { siteConfig } from './src/config/site.ts';
 import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
-import cloudflare from '@astrojs/cloudflare';
+// import cloudflare from '@astrojs/cloudflare';
 
 // https://astro.build/config
 export default defineConfig({
   site: siteConfig.siteUrl,
   trailingSlash: "always",
   output: 'static',
-  adapter: cloudflare(),
+  // adapter: cloudflare(),
   i18n: {
     defaultLocale: "id",
     locales: ["id", "en"],
