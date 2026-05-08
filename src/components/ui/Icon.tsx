@@ -3,7 +3,7 @@
 export type IconName =
   | 'logo' | 'sun' | 'moon' | 'search' | 'menu' | 'close' | 'plus' | 'minus'
   | 'check' | 'clock' | 'calender' | 'trash' | 'note' | 'tip' | 'info' | 'danger' | 'warning'
-  | 'github' | 'x' | 'linkedin' | 'instagram' | 'youtube' | 'facebook' | 'tiktok' | 'telegram' | 'threads' | 'whatsapp' | 'reddit'
+  | 'github' | 'x' | 'twitter' | 'linkedin' | 'instagram' | 'youtube' | 'facebook' | 'tiktok' | 'telegram' | 'threads' | 'whatsapp' | 'reddit'
   | 'dribbble' | 'behance' | 'adobestock' | 'wirestock' | 'spotify' | 'soundcloud'
   | 'copy' | 'external' | 'link' | 'email' | 'user' | 'rss' | 'globe' | 'share'
   | 'arrow-up' | 'arrow-down' | 'arrow-right' | 'arrow-left' | 'arrow-path'
@@ -139,6 +139,13 @@ export default function Icon({ name, className = 'w-5 h-5' }: IconProps) {
       );
 
     case 'x':
+      return (
+        <svg {...s} fill="currentColor" viewBox="0 0 24 24">
+         <path d="M17.6874 3.0625L12.6907 8.77425L8.37045 3.0625H2.11328L9.58961 12.8387L2.50378 20.9375H5.53795L11.0068 14.6886L15.7863 20.9375H21.8885L14.095 10.6342L20.7198 3.0625H17.6874ZM16.6232 19.1225L5.65436 4.78217H7.45745L18.3034 19.1225H16.6232Z" />
+        </svg>
+      );
+    
+    case 'twitter':
       return (
         <svg {...s} fill="currentColor" viewBox="0 0 24 24">
          <path d="M17.6874 3.0625L12.6907 8.77425L8.37045 3.0625H2.11328L9.58961 12.8387L2.50378 20.9375H5.53795L11.0068 14.6886L15.7863 20.9375H21.8885L14.095 10.6342L20.7198 3.0625H17.6874ZM16.6232 19.1225L5.65436 4.78217H7.45745L18.3034 19.1225H16.6232Z" />
