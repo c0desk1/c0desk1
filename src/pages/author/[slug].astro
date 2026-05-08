@@ -3,7 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import Button from "@/components/ui/Button.astro";
-import Icon from "@/components/ui/Icon.astro";
+import Icon from "@/components/ui/Icon";
 import PostCard from "@/components/blog/PostCard.astro";
 
 import Breadcrumb from "@/components/ui/Breadcrumb.astro";
@@ -76,7 +76,7 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
       <div class="max-w-2xl mx-auto flex flex-col items-center text-center">
         <h2 class="sr-only">Author Information</h2>
         <Breadcrumb items={Breadcrumbs} />
-        <div class="mb-8">
+        <div class="my-8">
           <Image 
             src={optimizedAvatar} 
             alt={author.data.name}
@@ -101,7 +101,7 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
         <div class="flex flex-wrap justify-center gap-3">
           {Object.entries(social).map(([platform, url]) => (
             <Button href={url} variant="secondary" size="sm" target="_blank">
-              <Icon name={platform.toLowerCase() as any} class="w-4 h-4" />
+              <Icon name={platform.toLowerCase() as any} className="w-4 h-4" />
               <span class="capitalize">{platform}</span>
             </Button>
           ))}
