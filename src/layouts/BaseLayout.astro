@@ -153,6 +153,7 @@ const GTAG_ID =
         {withContainer ? (
             <Container size={size}>
               <slot />
+              <div id="yandex_rtb_R-A-19179231-6" class="yandex-mobile-banner"></div>
             </Container>
           ) : (
             <slot />
@@ -169,6 +170,5 @@ const GTAG_ID =
     <ServiceWorkerScript />
     <YandexAds />
     <Toast />
-    <div id="yandex_rtb_R-A-19179231-6" class="yandex-mobile-banner"></div>
   </body>
 </html>
