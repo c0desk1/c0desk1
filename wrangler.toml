@@ -1,6 +1,6 @@
 name = "dev-c0desk1"
 compatibility_date = "2026-05-08"
-compatibility_flags = ["pages_build_output_dir"]
+compatibility_flags = ["global_fetch_strictly_public"]
 main = "@astrojs/cloudflare/entrypoints/server"
 
 [assets]
