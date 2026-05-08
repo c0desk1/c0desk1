@@ -1,5 +1,7 @@
 ---
 // src/pages/portfolio/[...slug].astro
+export const prerender = true;
+
 import "@/styles/prose/index.css";
 
 import { getCollection, render } from "astro:content";
