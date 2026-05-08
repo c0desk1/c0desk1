@@ -1,130 +1,67 @@
 ---
-
-import Icon from '@/components/ui/Icon.astro';
-
-
+import Icon from '@/components/ui/Icon';
 
 const raw = await Astro.slots.render('default');
 
-
-
 const cleanRaw = raw.replace(/^<p>/, '').replace(/<\/p>$/, '').trim();
 
-
-
 const alertTypes = {
-
   '[!NOTE]': { type: 'note', icon: 'note' },
-
   '[!INFO]': { type: 'info', icon: 'info' },
-
   '[!TIP]': { type: 'tip', icon: 'tip' },
-
   '[!WARNING]': { type: 'warning', icon: 'warning' },
-
   '[!DANGER]': { type: 'danger', icon: 'danger' },
-
 } as const;
 
-
-
 const plainText = cleanRaw.replace(/<[^>]+>/g, '').trim();
-
 const activeToken = Object.keys(alertTypes).find(token => plainText.startsWith(token));
 
-
-
 let isAlert = false;
-
 let alertConfig = null;
-
 let calloutTitle = '';
-
 let finalQuote = '';
-
 let finalCite = '';
 
-
-
 if (activeToken) {
-
   isAlert = true;
-
   alertConfig = alertTypes[activeToken as keyof typeof alertTypes];
 
   const rawTitle = activeToken.replace(/[\[\]!]/g, '');
-
   calloutTitle = rawTitle.charAt(0).toUpperCase() + rawTitle.slice(1).toLowerCase();
-
   finalQuote = cleanRaw.replace(activeToken, '').trim();
-
 } else {
-
-
-
   const slashRegex = /\/(?![^<]*>)/; 
-
   const hasSlash = slashRegex.test(cleanRaw);
 
-
-
   if (hasSlash) {
-
     const parts = cleanRaw.split(slashRegex);
-
     finalQuote = parts[0].trim();
-
     finalCite = parts.slice(1).join('/').replace(/<\/?[^>]+(>|$)/g, "").trim();
-
   } else {
-
     finalQuote = cleanRaw;
-
   }
-
 }
-
 ---
 
-
-
 {isAlert ? (
-
   <aside class="callout" data-callout={alertConfig?.type}>
     <div class="callout-body">
-
       <div class="callout-header">
         <div class="callout-icon">
-
-          <Icon name={alertConfig?.icon as any} size={18} />
-
+          <Icon name={alertConfig?.icon as any} />
         </div>
-
         {calloutTitle && <p class="callout-title">{calloutTitle}</p>}
-
       </div>
       <div class="callout-content" set:html={finalQuote} />
-
     </div>
-
   </aside>
-
 ) : (
-
   <blockquote class="quote">
-
     <div class="quote-body">
-
       <div set:html={finalQuote} />
-
     </div>
-
     {finalCite && (
-
       <span class="quote-cite">{finalCite}</span>
-
     )}
-
   </blockquote>
-
 )}
