@@ -1,6 +1,6 @@
 ---
 // src/components/mdx/Heading.astro
-import Icon from "../ui/Icon.astro";
+import Icon from "../ui/Icon";
 const { as: Tag = 'h2', id: propId, ...props } = Astro.props;
 
 const raw = await Astro.slots.render('default');
