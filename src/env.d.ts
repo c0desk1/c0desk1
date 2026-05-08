@@ -17,3 +17,13 @@ declare namespace JSX {
     [elemName: string]: any;
   }
 }
+
+declare namespace App {
+  interface Locals {
+    user?: {
+      id: string;
+      name: string;
+      role: string;
+    };
+  }
+}
