@@ -1,76 +1,53 @@
 ---
 // src/pages/404.astro
-export const prerender = true;
 
-import BaseLayout from '@/layouts/BaseLayout.astro';
+import ErrorLayout from '@/layouts/ErrorLayout.astro';
 import Container from '@/components/ui/Container.astro';
 import { siteConfig } from '@/config/site';
 
 const siteURL = Astro.site?.toString() ?? siteConfig.siteUrl;
 
 const seoData = {
-  title: "404: Page Not Found",
-  description: "Maaf, halaman yang Anda cari tidak dapat ditemukan.",
+  title: "404: Not Found",
+  description: "Halaman yang Anda cari tidak dapat ditemukan.",
   noIndex: true,
   type: "website" as const,
   canonicalURL: new URL('404', siteURL).toString(),
 };
-
 ---
 
-<BaseLayout {...seoData}>
+<ErrorLayout {...seoData}>
   <Container size="md">
-    <div class="flex flex-col items-center justify-center min-h-[70vh] py-20 text-center">
+    <div class="flex flex-col items-center justify-center min-h-[80vh] text-center px-4">
       
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 mb-8 font-mono text-[10px] uppercase tracking-[0.3em] text-zinc-500">
-        <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
-        Status: 404
+      <div class="inline-flex items-center gap-2 px-2.5 py-1 mb-8 rounded-md bg-(--bg-subtle) border border-(--border) font-mono text-xs md:text-[13px] uppercase tracking-widest text-(--fg-muted) backdrop-blur-sm">
+        <span class="w-1.5 h-1.5 rounded-sm bg-(--fg)"></span>
+        404 Error
       </div>
 
-      <h1 class="text-5xl md:text-7xl font-bold tracking-tighter text-zinc-900 dark:text-white mb-6">
-        Lost in space<span class="text-zinc-300 dark:text-zinc-700">.</span>
+      <h1 class="text-4xl md:text-5xl font-semibold tracking-tighter text-(--fg) mb-4">
+        Page not found.
       </h1>
       
-      <p class="text-base md:text-lg text-zinc-500 dark:text-zinc-400 max-w-md leading-relaxed mb-12 tracking-tight">
-        Halaman yang Anda cari tidak ada atau telah dipindahkan. Mungkin ada kesalahan pada URL atau link yang sudah kadaluarsa.
+      <p class="text-sm md:text-base text-(--fg-muted) max-w-[400px] mb-10 leading-relaxed">
+        Halaman yang Anda tuju tidak tersedia atau telah dipindahkan. Periksa kembali URL atau kembali ke sistem utama.
       </p>
 
-      <div class="flex flex-col sm:flex-row items-center gap-4">
+      <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
         <a 
           href={siteURL} 
-          class="px-8 py-2.5 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-black text-sm font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all duration-300 shadow-lg shadow-zinc-200 dark:shadow-none"
+          class="w-full sm:w-auto inline-flex justify-center items-center h-10 px-6 rounded-md bg-(--bg-subtle) text-(--fg) text-sm font-medium hover:bg-(--bg-muted) transition-colors"
         >
-          Kembali ke Beranda
+          Return to Home
         </a>
         <a 
           href={new URL('blog/', siteURL).toString()} 
-          class="px-8 py-2.5 rounded-full bg-transparent text-zinc-600 dark:text-zinc-400 text-sm font-medium border border-zinc-200 dark:border-zinc-800 hover:border-zinc-900 dark:hover:border-white hover:text-zinc-900 dark:hover:text-white transition-all duration-300"
+          class="w-full sm:w-auto inline-flex justify-center items-center h-10 px-6 rounded-md bg-transparent text-(--fg) text-sm font-medium border border-(--border) hover:border-(--border-strong) transition-colors"
         >
-          Cari Artikel
+          Search Articles
         </a>
-      </div>
-
-      <div class="mt-24 opacity-20 dark:opacity-10 group cursor-default">
-        <svg 
-          class="w-10 h-10 transition-transform duration-700 group-hover:rotate-180" 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          stroke="currentColor" 
-          stroke-width="1.5"
-        >
-          <path d="M12 2L2 22h20L12 2z" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
       </div>
 
     </div>
   </Container>
 </BaseLayout>
-
-<style>
-  :global(body) {
-    background-image: radial-gradient(circle at 50% 50%, rgba(24, 24, 27, 0.02) 0%, transparent 100%);
-  }
-  :global(.dark body) {
-    background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
-  }
-</style>
