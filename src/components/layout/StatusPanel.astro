@@ -143,15 +143,15 @@ const services = ['api', 'web', 'cdn', 'bot'];
   }
 
   .header-title {
-    font-size: 14px;
+    font-size: 1rem;
     font-weight: 600;
     letter-spacing: -0.01em;
     color: var(--fg);
-    line-height: 1.3;
+    line-height: 1.65;
   }
 
   .header-sub {
-    font-size: 13px;
+    font-size: 0.9375rem;
     color: var(--fg-subtle);
     line-height: 1.3;
     margin-top: 1px;
@@ -206,7 +206,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
   }
 
   .service-name {
-    font-size: 13px;
+    font-size: 0.9375rem;
     font-weight: 600;
     letter-spacing: 0.06em;
     color: var(--fg-muted);
@@ -219,14 +219,14 @@ const services = ['api', 'web', 'cdn', 'bot'];
   }
 
   .service-latency {
-    font-size: 13px;
+    font-size: 0.9375rem;
     font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace;
     font-weight: 500;
     opacity: 0.9;
   }
 
   .service-metrics {
-    font-size: 13px;
+    font-size: 0.9375rem;
     color: var(--fg-muted);
     font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace;
   }
@@ -288,7 +288,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
     color: var(--fg);
     padding: 5px 8px;
     border-radius: 5px;
-    font-size: 11px;
+    font-size: 13px;
     font-family: 'Geist Mono';
     white-space: nowrap;
     border: 1px solid var(--border-strong);
@@ -315,7 +315,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
   }
 
   .detail-label {
-    font-size: 13px;
+    font-size: 0.9375rem;
     font-weight: 600;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -324,7 +324,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
   }
 
   .detail-val {
-    font-size: 13px;
+    font-size: 0.8375rem;
     font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace;
     color: var(--fg-muted);
   }
@@ -341,7 +341,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
   }
 
   .footer-note {
-    font-size: 13px;
+    font-size: 0.9375rem;
     color: var(--fg-subtle);
   }
 
@@ -353,7 +353,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
     border-radius: 6px;
     border: 1px solid var(--border);
     background: transparent;
-    font-size: 12px;
+    font-size: 0.9375rem;
     font-weight: 500;
     color: var(--fg-muted);
     cursor: pointer;
@@ -577,7 +577,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
  
   document.getElementById("status-toggle")?.addEventListener("click", openStatus);
   closeBtn?.addEventListener("click", closeStatus);
-  overlay?.addEventListener("click", closeStatus);
+  overlay?..("click", closeStatus);
   refreshBtn?.addEventListener("click", () => { if (hasFetched) fetchStatus(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeStatus(); });
  
