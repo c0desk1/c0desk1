@@ -1,7 +1,8 @@
 ---
-// src/components/ui/AdsManager.astro
-// Master ad orchestrator — controls Yandex RTB + Google AdSense
-// Prevents collision, respects cookie consent, single source of truth
+// src/components/ads/YandexAds.astro
+// Controller for all Yandex RTB ad units + Yandex Metrica
+// Respects cookie consent, lazy/deferred loading for performance
+
 import { siteConfig } from "@/config/site";
 import { getEntry } from "astro:content";
 
@@ -10,69 +11,42 @@ try {
   settings = await getEntry('settings', 'site');
 } catch (error) {}
 
-const siteData = settings?.data || siteConfig;
+const siteData  = settings?.data || siteConfig;
 
-// ── Provider toggles ────────────────────────────────────────────────────────
-const YANDEX_ENABLED  = siteData.yandexAdsEnabled  ?? siteConfig.yandexAdsEnabled  ?? true;
-const ADSENSE_ENABLED = siteData.adsenseEnabled     ?? siteConfig.adsenseEnabled     ?? false;
+// Yandex RTB Publisher ID prefix
+const YA_PUB_ID = siteData.yandexPubId || siteConfig.yandexPubId || "R-A-19179231";
 
-// ── IDs ─────────────────────────────────────────────────────────────────────
-const ADSENSE_PUB_ID  = siteData.googleAdsenseId       || siteConfig.googleAdsenseId       || "";
-const GA_ID           = siteData.googleAnalyticsId  || siteConfig.googleAnalyticsId  || "";
-const YA_PUB_ID       = siteData.yandexPubId        || siteConfig.yandexPubId        || "R-A-19179231";
-const YA_METRICA_ID   = siteData.yandexMetrikaId    || siteConfig.yandexMetricaId    || "";
+// Yandex Metrica counter ID
+const YA_METRICA_ID = siteData.yandexMetricaId || siteConfig.yandexMetricaId || "";
 
-// ── Priority: which provider wins when both are enabled ─────────────────────
-// "yandex" | "adsense" | "both"
-// "both" = Yandex gets non-overlapping slots, AdSense fills the rest
-const AD_PRIORITY     = siteData.adPriority         || siteConfig.adPriority         || "yandex";
+// Master toggle — set false in siteConfig to kill all Yandex ads
+const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? true;
 ---
 
-<!-- AdsManager config carrier -->
-<div
-  id="am-data"
-  style="display:none"
-  data-yandex-enabled={String(YANDEX_ENABLED)}
-  data-adsense-enabled={String(ADSENSE_ENABLED)}
-  data-adsense-pub={ADSENSE_PUB_ID}
-  data-ga-id={GA_ID}
-  data-ya-pub={YA_PUB_ID}
-  data-ya-metrica={YA_METRICA_ID}
-  data-priority={AD_PRIORITY}
-></div>
+<!-- Yandex Ads + Metrica config carrier -->
+<div id="ya-data" style="display:none" data-pub-id={YA_PUB_ID} data-metrica-id={YA_METRICA_ID} data-ads-enabled={String(ADS_ENABLED)}></div>
 
-<!-- Block-6 renderTo target (Yandex standard banner) -->
+<!-- Inline div required by block-6 (renderTo target) -->
 <div id="yandex_rtb_R-A-19179231-6" style="min-height:0"></div>
 
 <script is:inline>
 (function () {
-  // ─── Read config ──────────────────────────────────────────────────────────
-  const cfg = document.getElementById('am-data')?.dataset || {};
-
-  const YANDEX_ON   = cfg.yandexEnabled  !== 'false';
-  const ADSENSE_ON  = cfg.adsenseEnabled === 'true';
-  const PUB_YA      = cfg.yaPub          || 'R-A-19179231';
-  const PUB_AS      = cfg.adsensePub     || '';          // ca-pub-XXXXXXXXXXXXXXXX
-  const METRICA_ID  = cfg.yaMetrica      || '';
-  const GA_ID       = cfg.gaId           || '';
-  const PRIORITY    = cfg.priority       || 'yandex';    // 'yandex' | 'adsense' | 'both'
+  // ─── Config ───────────────────────────────────────────────────────────────
+  const el         = document.getElementById('ya-data');
+  const PUB_ID     = el?.dataset.pubId     || 'R-A-19179231';
+  const METRICA_ID = el?.dataset.metricaId || '';
+  const ADS_ON     = el?.dataset.adsEnabled !== 'false';
 
   const CONSENT_KEY = 'cookie-consent-v2';
 
-  // ─── State flags — prevent double-init across navigations ─────────────────
-  let _yandexBooted  = false;
-  let _adsenseBooted = false;
-  let _metricaBooted = false;
-
-  // ─── Delays (ms after page load) ─────────────────────────────────────────
+  // ─── Timing limits (ms after page load) ───────────────────────────────────
   const DELAY = {
-    topAd:      1500,
-    floorAd:    2000,
-    banner:     2500,
-    inImage:    3500,
-    adsense:    3000,
-    fullscreen: 8000,
-    metrica:    1000,
+    floorAd:    2000,   // floor (touch) — least intrusive, still give 2s
+    inImage:    3500,   // in-image — needs DOM images to be painted
+    fullscreen: 8000,   // fullscreen — most intrusive, wait longest
+    topAd:      1500,   // top banner — show relatively early but after LCP
+    banner:     2500,   // block-6 standard banner
+    metrica:    1000,   // metrica — analytics, earlier is better
   };
 
   // ─── Helpers ──────────────────────────────────────────────────────────────
@@ -81,15 +55,15 @@ const AD_PRIORITY     = siteData.adPriority         || siteConfig.adPriority    
     catch { return null; }
   }
 
-  function analyticsAllowed() { return getConsent()?.analytics === true; }
-  function adsAllowed()        { return analyticsAllowed(); }
+  function analyticsAllowed() {
+    const c = getConsent();
+    return c?.analytics === true;
+  }
 
-  function afterDelay(ms, fn) {
-    if (document.readyState === 'complete') {
-      setTimeout(fn, ms);
-    } else {
-      window.addEventListener('load', () => setTimeout(fn, ms), { once: true });
-    }
+  function adsAllowed() {
+    // Ads follow the analytics consent bucket (same as GA)
+    // Adjust to c?.ads if you add a separate ads toggle in Cookie.astro
+    return analyticsAllowed();
   }
 
   function waitForYa(cb, retries = 20) {
@@ -100,204 +74,216 @@ const AD_PRIORITY     = siteData.adPriority         || siteConfig.adPriority    
     }
   }
 
-  // ─── Collision guard ──────────────────────────────────────────────────────
-  // Tracks which DOM slots are already claimed so providers don't fight
-  const _claimed = new Set();
-
-  function claim(slotId) {
-    if (_claimed.has(slotId)) return false;
-    _claimed.add(slotId);
-    return true;
-  }
-
-  // ─── Yandex RTB units ─────────────────────────────────────────────────────
-  function yaRender(cfg) {
-    window.yaContextCb.push(() => Ya.Context.AdvManager.render(cfg));
-  }
-
-  function bootYandex() {
-    if (_yandexBooted) return;
-    _yandexBooted = true;
-
-    // Block-1: Floor touch
-    if (claim('ya-floor-touch')) {
-      afterDelay(DELAY.floorAd, () => waitForYa(() => yaRender({
-        blockId: `${PUB_YA}-1`, type: 'floorAd', platform: 'touch',
-      })));
+  function afterDelay(ms, fn) {
+    if (document.readyState === 'complete') {
+      setTimeout(fn, ms);
+    } else {
+      window.addEventListener('load', () => setTimeout(fn, ms), { once: true });
     }
+  }
 
-    // Block-2: In-image
-    if (claim('ya-inimage')) {
-      afterDelay(DELAY.inImage, () => waitForYa(() => {
-        const render = (id) => yaRender({ renderTo: id, blockId: `${PUB_YA}-2`, type: 'inImage' });
-        const tryImages = (imgs) => {
-          if (!imgs.length) return;
-          const img = imgs.shift();
-          const { width, height } = img.getBoundingClientRect();
-          if (width < 1200 || height < 630) return tryImages(imgs);
-          img.id = `yandex_rtb_${PUB_YA}-2-${Math.random().toString(16).slice(2)}`;
-          if (img.tagName === 'IMG' && !img.complete) {
-            img.addEventListener('load', () => render(img.id), { once: true });
-          } else {
-            render(img.id);
-          }
-          tryImages(imgs);
+  // ─── Ad renderers ─────────────────────────────────────────────────────────
+
+  // Block-1
+  function renderFloorTouch() {
+    afterDelay(DELAY.floorAd, () => {
+      waitForYa(() => {
+        window.yaContextCb.push(() => {
+          Ya.Context.AdvManager.render({
+            blockId:  `${PUB_ID}-1`,
+            type:     'floorAd',
+            platform: 'touch',
+          });
+        });
+      });
+    });
+  }
+
+  // Block-2
+  function renderInImage() {
+    afterDelay(DELAY.inImage, () => {
+      waitForYa(() => {
+        const isMobile = window.matchMedia("(max-width: 768px)").matches;
+      
+        const MIN_WIDTH = isMobile ? 300 : 600;
+        const MIN_HEIGHT = isMobile ? 250 : 300;
+      
+        const render = (imageId) => {
+          window.yaContextCb.push(() => {
+            Ya.Context.AdvManager.render({
+              renderTo: imageId,
+              blockId:  `${PUB_ID}-2`,
+              type:     'inImage',
+            });
+          });
         };
-        tryImages(Array.from(document.querySelectorAll('img')));
-      }));
-    }
 
-    // Block-3: Fullscreen touch
-    if (claim('ya-fullscreen')) {
-      afterDelay(DELAY.fullscreen, () => waitForYa(() => yaRender({
-        blockId: `${PUB_YA}-3`, type: 'fullscreen', platform: 'touch',
-      })));
-    }
+        const tryImages = (images) => {
+          if (!images.length) return;
+          const image = images.shift();
+          const { width, height } = image.getBoundingClientRect();
+        
+          if (width < MIN_WIDTH || height < MIN_HEIGHT) return tryImages(images);
+        
+          // Skip logo/avatar/icon
+          const src = image.currentSrc || image.src || '';
+          if (/avatar|logo|icon|emoji|badge|thumb/i.test(src)) return tryImages(images);
 
-    // Block-4: Top ad
-    if (claim('ya-top')) {
-      afterDelay(DELAY.topAd, () => waitForYa(() => yaRender({
-        blockId: `${PUB_YA}-4`, type: 'topAd',
-      })));
-    }
+          image.id = image.id || `yandex_rtb_${PUB_ID}-2-${Math.random().toString(16).slice(2)}`;
+        
+          if (image.tagName === 'IMG' && !image.complete) {
+            image.addEventListener('load', () => render(image.id), { once: true });
+          } else {
+            render(image.id);
+          }
+        
+          if (document.querySelectorAll('[id^="yandex_rtb_"]').length < 2) {
+            tryImages(images);
+          }
+        };
 
-    // Block-5: Floor desktop
-    if (claim('ya-floor-desktop')) {
-      afterDelay(DELAY.floorAd, () => waitForYa(() => yaRender({
-        blockId: `${PUB_YA}-5`, type: 'floorAd', platform: 'desktop',
-      })));
-    }
-
-    // Block-6: Standard banner (renderTo)
-    if (claim('ya-banner-6')) {
-      afterDelay(DELAY.banner, () => waitForYa(() => yaRender({
-        blockId: `${PUB_YA}-6`, renderTo: `yandex_rtb_${PUB_YA}-6`,
-      })));
-    }
+        tryImages(Array.from(document.querySelectorAll('article img, .prose img, .content img')));
+      });
+    });
   }
 
-  // ─── Google AdSense ───────────────────────────────────────────────────────
-  function bootAdSense() {
-    if (_adsenseBooted || !PUB_AS) return;
-    _adsenseBooted = true;
+  // Block-3
+  function renderFullscreen() {
+    afterDelay(DELAY.fullscreen, () => {
+      waitForYa(() => {
+        window.yaContextCb.push(() => {
+          Ya.Context.AdvManager.render({
+            blockId:  `${PUB_ID}-3`,
+            type:     'fullscreen',
+            platform: 'touch',
+          });
+        });
+      });
+    });
+  }
 
-    afterDelay(DELAY.adsense, () => {
-      // Inject AdSense script only once
-      if (!document.getElementById('adsense-script')) {
-        const s   = document.createElement('script');
-        s.id      = 'adsense-script';
-        s.async   = true;
-        s.src     = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${PUB_AS}`;
-        s.setAttribute('crossorigin', 'anonymous');
-        document.head.appendChild(s);
-      }
+  // Block-4
+  function renderTopAd() {
+    afterDelay(DELAY.topAd, () => {
+      waitForYa(() => {
+        window.yaContextCb.push(() => {
+          Ya.Context.AdvManager.render({
+            blockId: `${PUB_ID}-4`,
+            type:    'topAd',
+          });
+        });
+      });
+    });
+  }
 
-      // Push all .adsbygoogle elements that haven't been initialized
-      // AdSense auto-ads handle placement automatically once script loads,
-      // but manual ins elements need a push per slot.
-      const slots = document.querySelectorAll('.adsbygoogle:not([data-adsbygoogle-status])');
-      slots.forEach(() => {
-        try { (window.adsbygoogle = window.adsbygoogle || []).push({}); }
-        catch (e) { console.warn('[AdsManager] AdSense push error:', e); }
+  // Block-5
+  function renderFloorDesktop() {
+    afterDelay(DELAY.floorAd, () => {
+      waitForYa(() => {
+        window.yaContextCb.push(() => {
+          Ya.Context.AdvManager.render({
+            blockId:  `${PUB_ID}-5`,
+            type:     'floorAd',
+            platform: 'desktop',
+          });
+        });
+      });
+    });
+  }
+
+  // Block-6
+  function renderBanner() {
+    afterDelay(DELAY.banner, () => {
+      waitForYa(() => {
+        window.yaContextCb.push(() => {
+          Ya.Context.AdvManager.render({
+            blockId:  `${PUB_ID}-6`,
+            renderTo: `yandex_rtb_${PUB_ID}-6`,
+          });
+        });
       });
     });
   }
 
   // ─── Yandex Metrica ───────────────────────────────────────────────────────
-  function bootMetrica() {
-    if (_metricaBooted || !METRICA_ID) return;
-    _metricaBooted = true;
+  function initMetrica() {
+    if (!METRICA_ID) return;
 
     afterDelay(DELAY.metrica, () => {
       (function(m, e, t, r, i, k, a) {
         m[i] = m[i] || function() { (m[i].a = m[i].a || []).push(arguments); };
         m[i].l = 1 * new Date();
         for (var j = 0; j < document.scripts.length; j++) {
-          if (document.scripts[j].src === r) return;
+          if (document.scripts[j].src === r) { return; }
         }
-        k = e.createElement(t); a = e.getElementsByTagName(t)[0];
-        k.async = 1; k.src = r;
+        k = e.createElement(t);
+        a = e.getElementsByTagName(t)[0];
+        k.async = 1;
+        k.src   = r;
         a.parentNode.insertBefore(k, a);
       })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
 
       ym(Number(METRICA_ID), 'init', {
-        clickmap:            true,
-        trackLinks:          true,
+        clickmap:    true,
+        trackLinks:  true,
         accurateTrackBounce: true,
-        webvisor:            false,
+        webvisor:    false,  // set true if you need session recording
       });
 
       if (!document.getElementById('ya-metrica-ns')) {
-        const ns  = document.createElement('noscript');
-        ns.id     = 'ya-metrica-ns';
+        const ns = document.createElement('noscript');
+        ns.id = 'ya-metrica-ns';
         const img = document.createElement('img');
-        img.src   = `https://mc.yandex.ru/watch/${METRICA_ID}`;
+        img.src    = `https://mc.yandex.ru/watch/${METRICA_ID}`;
         img.style.cssText = 'position:absolute;left:-9999px';
-        img.alt   = '';
+        img.alt    = '';
         ns.appendChild(img);
         document.body.appendChild(ns);
       }
     });
   }
 
-  // ─── Priority router ──────────────────────────────────────────────────────
-  function initAds() {
-    if (!adsAllowed()) return;
+  // ─── Consent-aware init ───────────────────────────────────────────────────
+  function initAll() {
+    if (!ADS_ON) return;
 
-    switch (PRIORITY) {
-      case 'adsense':
-        if (ADSENSE_ON) bootAdSense();
-        // Yandex only if explicitly both
-        break;
+    if (adsAllowed()) {
+      renderFloorTouch();
+      renderInImage();
+      renderFullscreen();
+      renderTopAd();
+      renderFloorDesktop();
+      renderBanner();
+    }
 
-      case 'both':
-        // Yandex claims its slots first (lower delays), AdSense fills around
-        if (YANDEX_ON)  bootYandex();
-        if (ADSENSE_ON) bootAdSense();
-        break;
-
-      case 'yandex':
-      default:
-        if (YANDEX_ON) bootYandex();
-        // AdSense disabled when Yandex takes priority — avoids overlapping
-        // floor/fullscreen units that both providers serve automatically
-        break;
+    if (analyticsAllowed()) {
+      initMetrica();
     }
   }
 
-  function initAnalytics() {
-    if (!analyticsAllowed()) return;
-    bootMetrica();
-    // GA is handled separately by your existing GA script / Cookie.astro
+  // ─── Listen for late consent (user accepts after load) ───────────────────
+  function waitForConsent() {
+    let attempts = 0;
+    const max    = 60;
+    const timer  = setInterval(() => {
+      attempts++;
+      if (getConsent() !== null || attempts >= max) {
+        clearInterval(timer);
+        initAll();
+      }
+    }, 1000);
   }
 
-  // ─── Consent-aware boot ───────────────────────────────────────────────────
+  // ─── Boot ─────────────────────────────────────────────────────────────────
   function boot() {
-    // Reset boot flags on each navigation so re-init works correctly
-    _yandexBooted  = false;
-    _adsenseBooted = false;
-    _metricaBooted = false;
-    _claimed.clear();
-
     const consent = getConsent();
     if (consent !== null) {
-      initAds();
-      initAnalytics();
+      initAll();
     } else {
-      // Poll until user makes a choice (cookie banner)
-      let attempts = 0;
-      const timer = setInterval(() => {
-        attempts++;
-        if (getConsent() !== null || attempts >= 60) {
-          clearInterval(timer);
-          initAds();
-          initAnalytics();
-        }
-      }, 1000);
+      waitForConsent();
     }
   }
 
-  // ─── Entry points ─────────────────────────────────────────────────────────
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);
   } else {
@@ -305,13 +291,5 @@ const AD_PRIORITY     = siteData.adPriority         || siteConfig.adPriority    
   }
 
   document.addEventListener('astro:page-load', boot);
-
-  // ─── Public API (optional, for manual control from other scripts) ─────────
-  window.__AdsManager = {
-    reboot:          boot,
-    isYandexActive:  () => _yandexBooted,
-    isAdSenseActive: () => _adsenseBooted,
-    claimedSlots:    () => Array.from(_claimed),
-  };
 })();
 </script>
