@@ -13,3 +13,9 @@ enabled = false
 [[services]]
 binding = "API_WORKER"
 service = "c0desk1-api"
+
+binding = "BOT_WORKER"
+service = "c0desk1-bot"
+
+binding = "CDN_WORKER"
+service = "c0desk1-cdn"
