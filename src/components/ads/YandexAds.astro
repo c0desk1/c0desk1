@@ -16,7 +16,6 @@ const siteData  = settings?.data || siteConfig;
 
 const YA_PUB_ID = siteData.yandexPubId || siteConfig.yandexPubId || "";
 const YA_METRICA_ID = siteData.yandexMetricaId || siteConfig.yandexMetricaId || "";
-
 const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? true;
 ---
 
@@ -30,7 +29,7 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
 
 <script is:inline>
 (function () {
-  // ─── Config ───────────────────────────────────────────────────────────────
+  // ─── Config
   const el         = document.getElementById('ya-data');
   const PUB_ID     = el?.dataset.pubId     || '';
   const METRICA_ID = el?.dataset.metricaId || '';
@@ -38,17 +37,18 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
 
   const CONSENT_KEY = 'cookie-consent-v2';
 
-  // ─── Batasan waktu (ms setelah halaman dimuat) ───────────────────────────────────
+  // ─── Batasan waktu
   const DELAY = {
-    floorAd:    2000,   // floor (mobile) — paling tidak mengganggu, tetap beri waktu 2 detik
-    inImage:    3500,   // in-image — membutuhkan gambar DOM untuk dilukis.
-    fullscreen: 8000,   // fullscreen — paling mengganggu, tunggu paling lama
-    topAd:      1500,   // top banner — menunjukkan relatif awal tetapi setelah LCP
-    banner:     2500,   // block-6 standard banner
-    metrica:    1000,   // metrica — analytics, Lebih awal lebih baik.
+    // 1000 = 1 detik
+    floorAd:    3000,
+    inImage:    3500,
+    fullscreen: 8000,
+    topAd:      1500,
+    banner:     2500,
+    metrica:    1000,
   };
 
-  // ─── Helpers ──────────────────────────────────────────────────────────────
+  // ─── Helpers
   function getConsent() {
     try { return JSON.parse(localStorage.getItem(CONSENT_KEY)); }
     catch { return null; }
@@ -60,9 +60,9 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
   }
 
   function adsAllowed() {
-    // Iklan mengikuti tahapan persetujuan analitik (sama seperti GA)
-    // Sesuaikan dengan c?.ads jika menambahkan tombol pengalih iklan terpisah di Cookie.astro
-    return analyticsAllowed();
+    const c = getConsent();
+    if (!c) return false;
+    return c.ads === true;
   }
 
   function waitForYa(cb, retries = 20) {
@@ -92,7 +92,7 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
     return !isDesktop();
   }
 
-  // ─── Ad renderers ─────────────────────────────────────────────────────────
+  // ─── Ad renderers
 
   // Block-1
   function renderFloorTouch() {
@@ -209,7 +209,7 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
     });
   }
 
-  // ─── Yandex Metrica ───────────────────────────────────────────────────────
+  // ─── Yandex Metrica
   function initMetrica() {
     if (!METRICA_ID) return;
 
@@ -231,7 +231,7 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
         clickmap:    true,
         trackLinks:  true,
         accurateTrackBounce: true,
-        webvisor:    false,  // set true if you need session recording
+        webvisor:    false,
       });
 
       if (!document.getElementById('ya-metrica-ns')) {
@@ -247,7 +247,7 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
     });
   }
 
-  // ─── Consent-aware init ───────────────────────────────────────────────────
+  // ─── Consent-aware init
   function initAll() {
     if (!ADS_ON) return;
 
@@ -265,7 +265,7 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
     }
   }
 
-  // ─── Listen for late consent (user accepts after load) ───────────────────
+  // ─── Listen for late consent
   function waitForConsent() {
     let attempts = 0;
     const max    = 60;
@@ -278,7 +278,7 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
     }, 1000);
   }
 
-  // ─── Boot ─────────────────────────────────────────────────────────────────
+  // ─── Boot
   function boot() {
     const consent = getConsent();
     if (consent !== null) {
