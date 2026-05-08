@@ -1,5 +1,5 @@
 ---
-import Icon from '@/components/ui/Icon.astro'
+import Icon from '@/components/ui/Icon'
 
 interface Props {
   challenge?: string;
@@ -34,7 +34,7 @@ if (result) items.push({ question: "Hasil", answer: result });
           id={`case-btn-${i}`}
         >
           <span class="accordion-question text-sm md:text-[13px] font-semibold uppercase text-(--fg)">{item.question}</span>
-          <Icon name="chevron-down" class="accordion-chevron w-4.5 h-4.5 flex-shrink-0 text-(--fg)" />
+          <Icon name="chevron-down" className="accordion-chevron w-4.5 h-4.5 shrink-0 text-(--fg)" />
 
         </button>
         <div
