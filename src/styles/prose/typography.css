@@ -257,7 +257,7 @@
     margin-bottom: 0.5rem;
   }
 
- .prose-custom .anchor-link .anchor-link-active {
+ .prose-custom .anchor-link.anchor-link-active {
     opacity: 1;
     pointer-events: auto;
     transform: translateX(0);
@@ -271,6 +271,13 @@
 
   .prose-custom .heading-group.has-anchor:active {
     background-color: var(--prose-surface-hover);
+  }
+
+  .prose-custom .heading-group.has-anchor:active .anchor-link {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0);
+    color: var(--prose-fg);
   }
 
  .prose-custom p {
