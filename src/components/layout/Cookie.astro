@@ -138,17 +138,24 @@ const YA_AD = siteData.yandexPubId || siteConfig.yandexPubId;
       host.innerHTML = `
         <div id="ck-card" class="ck-card">
           <div class="ck-header">
-            <div class="ck-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/>
-                <path d="M8.5 8.5v.01M16 15.5v.01M12 12v.01"/>
-              </svg>
-            </div>
-            <div>
-              <p class="ck-title">Kami menghargai privasi kamu</p>
-              <p class="ck-sub">Pilih cookie mana yang kamu izinkan</p>
-            </div>
+            <div class="ck-header-content">
+              <div class="ck-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/>
+                  <path d="M8.5 8.5v.01M16 15.5v.01M12 12v.01"/>
+                </svg>
+              </div>
+              <div>
+                <p class="ck-title">Kami menghargai privasi kamu</p>
+                <p class="ck-sub">Pilih cookie mana yang kamu izinkan</p>
+              </div>
+             </div>
+             <button id="ck-close-btn" class="ck-close-btn" aria-label="Tutup">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                 <line x1="18" y1="6" x2="6" y2="18"/>
+                 <line x1="6" y1="6" x2="18" y2="18"/>
+               </svg>
+             </button>
           </div>
           <div class="ck-toggles">
             <div class="ck-toggle-row ck-toggle-row--disabled">
@@ -233,6 +240,10 @@ const YA_AD = siteData.yandexPubId || siteConfig.yandexPubId;
          adsToggle.classList.toggle('ck-pill--off', !adsChecked);
        });
       }
+      
+      document.getElementById('ck-close-btn')?.addEventListener('click', () => {
+        dismiss();
+      });
 
       const dismiss = () => {
         host.classList.remove('ck-visible');
@@ -361,8 +372,39 @@ const YA_AD = siteData.yandexPubId || siteConfig.yandexPubId;
         .ck-header { 
           display: flex; 
           align-items: flex-start; 
+          justify-content: space-between; 
           gap: 0.75rem; 
         }
+
+        .ck-header-content {
+          display: flex;
+          align-items: flex-start;
+          gap: 0.75rem;
+          flex: 1;
+        }
+
+       .ck-close-btn {
+         background: none;
+         border: none;
+         cursor: pointer;
+         color: var(--fg-muted);
+         padding: 0.25rem;
+         border-radius: 0.25rem;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         transition: color 0.15s, background 0.15s;
+       }
+
+      .ck-close-btn:hover {
+        color: var(--fg);
+        background: var(--bg-muted);
+       }
+
+       .ck-close-btn svg {
+         width: 1.25rem;
+         height: 1.25rem;
+       }
             
         .ck-icon {
           width: 2rem; 
