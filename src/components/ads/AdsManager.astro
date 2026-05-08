@@ -1,10 +1,11 @@
 ---
 // src/components/ads/YandexAds.astro
-// Controller for all Yandex RTB ad units + Yandex Metrica
-// Respects cookie consent, lazy/deferred loading for performance
 
 import { siteConfig } from "@/config/site";
 import { getEntry } from "astro:content";
+
+import Section from "@/components/ui/Section.astro";
+import Container from "@/components/ui/Container.astro";
 
 let settings;
 try {
@@ -13,21 +14,18 @@ try {
 
 const siteData  = settings?.data || siteConfig;
 
-// Yandex RTB Publisher ID prefix
 const YA_PUB_ID = siteData.yandexPubId || siteConfig.yandexPubId || "R-A-19179231";
-
-// Yandex Metrica counter ID
 const YA_METRICA_ID = siteData.yandexMetricaId || siteConfig.yandexMetricaId || "";
-
-// Master toggle — set false in siteConfig to kill all Yandex ads
 const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? true;
 ---
 
-<!-- Yandex Ads + Metrica config carrier -->
 <div id="ya-data" style="display:none" data-pub-id={YA_PUB_ID} data-metrica-id={YA_METRICA_ID} data-ads-enabled={String(ADS_ENABLED)}></div>
 
-<!-- Inline div required by block-6 (renderTo target) -->
-<div id="yandex_rtb_R-A-19179231-6" style="min-height:0"></div>
+<Section size="sm">
+  <Container size="xl">
+    <div id="yandex_rtb_R-A-19179231-6" style="min-height:0"></div>
+  </Container>
+</Section>
 
 <script is:inline>
 (function () {
@@ -39,17 +37,16 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
 
   const CONSENT_KEY = 'cookie-consent-v2';
 
-  // ─── Timing limits (ms after page load) ───────────────────────────────────
   const DELAY = {
-    floorAd:    2000,   // floor (touch) — least intrusive, still give 2s
-    inImage:    3500,   // in-image — needs DOM images to be painted
-    fullscreen: 8000,   // fullscreen — most intrusive, wait longest
-    topAd:      1500,   // top banner — show relatively early but after LCP
-    banner:     2500,   // block-6 standard banner
-    metrica:    1000,   // metrica — analytics, earlier is better
+    floorAd:    2500,
+    inImage:    3500,
+    fullscreen: 8000,
+    topAd:      1500,
+    banner:     2500,
+    metrica:    1000,
   };
 
-  // ─── Helpers ──────────────────────────────────────────────────────────────
+  // ─── Helpers
   function getConsent() {
     try { return JSON.parse(localStorage.getItem(CONSENT_KEY)); }
     catch { return null; }
@@ -61,8 +58,9 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
   }
 
   function adsAllowed() {
-    // Ads follow the analytics consent bucket (same as GA)
     // Adjust to c?.ads if you add a separate ads toggle in Cookie.astro
+    // const c = getConsent();
+    // return c?.adsAllowed === true;
     return analyticsAllowed();
   }
 
@@ -81,11 +79,24 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
       window.addEventListener('load', () => setTimeout(fn, ms), { once: true });
     }
   }
+  
+  function isDesktop() {
+    const ua = navigator.userAgent;
+    const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet|Kindle|Silk/i;
+    const isIPad = /Macintosh/i.test(ua) && navigator.maxTouchPoints && navigator.maxTouchPoints > 1;
+    return !mobileRegex.test(ua) && !isIPad;
+  }
+  
+  function isTouchDevice() {
+    return !isDesktop();
+  }
 
-  // ─── Ad renderers ─────────────────────────────────────────────────────────
+  // ─── Ad renderers
 
   // Block-1
   function renderFloorTouch() {
+    if (!isTouchDevice()) return;
+    
     afterDelay(DELAY.floorAd, () => {
       waitForYa(() => {
         window.yaContextCb.push(() => {
@@ -103,11 +114,6 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
   function renderInImage() {
     afterDelay(DELAY.inImage, () => {
       waitForYa(() => {
-        const isMobile = window.matchMedia("(max-width: 768px)").matches;
-      
-        const MIN_WIDTH = isMobile ? 300 : 600;
-        const MIN_HEIGHT = isMobile ? 250 : 300;
-      
         const render = (imageId) => {
           window.yaContextCb.push(() => {
             Ya.Context.AdvManager.render({
@@ -122,33 +128,26 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
           if (!images.length) return;
           const image = images.shift();
           const { width, height } = image.getBoundingClientRect();
-        
-          if (width < MIN_WIDTH || height < MIN_HEIGHT) return tryImages(images);
-        
-          // Skip logo/avatar/icon
-          const src = image.currentSrc || image.src || '';
-          if (/avatar|logo|icon|emoji|badge|thumb/i.test(src)) return tryImages(images);
+          if (width < 320 || height < 190) return tryImages(images);
 
-          image.id = image.id || `yandex_rtb_${PUB_ID}-2-${Math.random().toString(16).slice(2)}`;
-        
+          image.id = `yandex_rtb_${PUB_ID}-2-${Math.random().toString(16).slice(2)}`;
           if (image.tagName === 'IMG' && !image.complete) {
             image.addEventListener('load', () => render(image.id), { once: true });
           } else {
             render(image.id);
           }
-        
-          if (document.querySelectorAll('[id^="yandex_rtb_"]').length < 2) {
-            tryImages(images);
-          }
+          tryImages(images);
         };
 
-        tryImages(Array.from(document.querySelectorAll('article img, .prose img, .content img')));
+        tryImages(Array.from(document.querySelectorAll('img')));
       });
     });
   }
 
   // Block-3
   function renderFullscreen() {
+    if (!isTouchDevice()) return;
+    
     afterDelay(DELAY.fullscreen, () => {
       waitForYa(() => {
         window.yaContextCb.push(() => {
@@ -164,6 +163,8 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
 
   // Block-4
   function renderTopAd() {
+    if (!isTouchDevice()) return;
+    
     afterDelay(DELAY.topAd, () => {
       waitForYa(() => {
         window.yaContextCb.push(() => {
@@ -178,6 +179,8 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
 
   // Block-5
   function renderFloorDesktop() {
+    if (!isDesktop()) return;
+    
     afterDelay(DELAY.floorAd, () => {
       waitForYa(() => {
         window.yaContextCb.push(() => {
@@ -205,7 +208,7 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
     });
   }
 
-  // ─── Yandex Metrica ───────────────────────────────────────────────────────
+  // ─── Yandex Metrica
   function initMetrica() {
     if (!METRICA_ID) return;
 
@@ -227,7 +230,7 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
         clickmap:    true,
         trackLinks:  true,
         accurateTrackBounce: true,
-        webvisor:    false,  // set true if you need session recording
+        webvisor:    false,
       });
 
       if (!document.getElementById('ya-metrica-ns')) {
@@ -243,7 +246,6 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
     });
   }
 
-  // ─── Consent-aware init ───────────────────────────────────────────────────
   function initAll() {
     if (!ADS_ON) return;
 
@@ -261,7 +263,6 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
     }
   }
 
-  // ─── Listen for late consent (user accepts after load) ───────────────────
   function waitForConsent() {
     let attempts = 0;
     const max    = 60;
@@ -274,7 +275,7 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
     }, 1000);
   }
 
-  // ─── Boot ─────────────────────────────────────────────────────────────────
+  // ─── Boot
   function boot() {
     const consent = getConsent();
     if (consent !== null) {
