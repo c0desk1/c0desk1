@@ -14,8 +14,10 @@ enabled = false
 binding = "API_WORKER"
 service = "c0desk1-api"
 
+[[services]]
 binding = "BOT_WORKER"
 service = "c0desk1-bot"
 
+[[services]]
 binding = "CDN_WORKER"
 service = "c0desk1-cdn"
