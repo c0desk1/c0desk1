@@ -271,7 +271,7 @@ const GA_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
       }
       
       .ck-sub { 
-        font-size: 0.9375rem; 
+        font-size: 0.8375rem;
         color: var(--fg-muted); 
         margin: 0; 
       }
@@ -296,7 +296,8 @@ const GA_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
       }
       
       .ck-toggle-row:not(.ck-toggle-row--disabled):hover { 
-        background: var(--bg-muted); 
+        background: var(--bg-muted);
+        opacity: 1;
       }
       
       .ck-toggle-row--disabled { 
@@ -304,6 +305,7 @@ const GA_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
         color: var(--fg-subtle);
         background: var(--bg-muted);
         pointer-events: none;
+        opacity: 0.8;
       }
       
       .ck-toggle-row + .ck-toggle-row { 
@@ -323,7 +325,7 @@ const GA_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
       }
       
       .ck-toggle-desc { 
-        font-size: 0.9375rem; 
+        font-size: 0.8375rem;
         color: var(--fg-muted); 
         line-height: 1.65; 
       }
@@ -481,6 +483,11 @@ const GA_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
         body:has(.tts-bar--visible) #ck-host { 
           bottom: 4.5rem; 
         }
+
+        .ck-title,
+        .ck-toggle-name { 
+          font-size: 0.9375rem; 
+        }
         
         .ck-actions { 
           flex-direction: column;
@@ -490,7 +497,8 @@ const GA_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
         .ck-btn { 
           width: 100%; 
           justify-content: center; 
-          white-space: normal; 
+          white-space: normal;
+          font-size: 0.8375rem;
         }
         
         .ck-btn--ghost   { order: 1; }
