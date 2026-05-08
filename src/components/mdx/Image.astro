@@ -1,6 +1,8 @@
 ---
 import { cdnImage, isCdnUrl } from '@/lib/utils';
 
+import { Image } from 'astro:assets';
+
 interface Props {
   src: string;
   alt?: string;
@@ -15,11 +17,13 @@ const caption = title || alt;
 ---
 
 <figure class="prose-custom mx-auto max-w-3xl overflow-hidden">
-  <img
+  <Image
     src={optimizedSrc}
     alt={alt}
     loading="lazy"
     decoding="async"
+    width={1280}
+    height={720}
     class="block w-full h-auto object-cover"
   />
   {caption && ( <figcaption>{caption}</figcaption> )}
