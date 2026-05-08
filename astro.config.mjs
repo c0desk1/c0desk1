@@ -11,7 +11,6 @@ import cloudflare from '@astrojs/cloudflare';
 export default defineConfig({
   site: siteConfig.siteUrl,
   trailingSlash: "always",
-  output: 'static',
   adapter: cloudflare(),
   i18n: {
     defaultLocale: "id",
