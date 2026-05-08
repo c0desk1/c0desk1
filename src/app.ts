@@ -20,41 +20,10 @@ export default {
     const url = new URL(request.url);
     const pathname = url.pathname;
 
-    // Health check endpoint
-    if (pathname === '/health/') {
-      let bindingOk = false;
-      let bindingLatency: number | null = null;
-      if (globalThis.API_WORKER) {
-        try {
-          const start = Date.now();
-          const pingRes = await globalThis.API_WORKER.fetch('https://api.c0desk1.my.id/health');
-          bindingOk = pingRes.ok;
-          bindingLatency = Date.now() - start;
-        } catch (err) {
-          console.error('Health check ping failed:', err);
-          bindingOk = false;
-        }
-      }
-
-      const healthData = {
-        ok: true,
-        service: 'web',
-        env: import.meta.env.PROD ? 'production' : 'development',
-        timestamp: Date.now(),
-        bindings: {
-          API_WORKER: {
-            available: !!globalThis.API_WORKER,
-            reachable: bindingOk,
-            latencyMs: bindingLatency,
-          },
-        },
-        // version dihapus karena tidak diperlukan atau bisa ditambahkan lain kali
-      };
-      return new Response(JSON.stringify(healthData, null, 2), {
-        headers: {
-          'Content-Type': 'application/json',
-          'Cache-Control': 'no-store',
-        },
+    // Health check point
+    if (pathname === '/health/' || pathname === '/health') {
+      return new Response(JSON.stringify({ ok: true, service: 'web', timestamp: Date.now() }), {
+        headers: { 'Content-Type': 'application/json' },
       });
     }
 
