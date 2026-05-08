@@ -3,7 +3,7 @@
 import type { MDXComponents } from 'mdx/types';
 
 import Heading from '@/components/mdx/HeadingAnchor.astro';
-import Image from "@/components/mdx/Image.astro";
+import Image from "@/components/mdx/imageMDX.astro";
 import HR from "@/components/mdx/HR.astro";
 import Table from '@/components/mdx/Table.astro';
 import Details from '@/components/mdx/Details.astro';
