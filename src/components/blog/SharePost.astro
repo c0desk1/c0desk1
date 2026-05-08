@@ -1,0 +1,461 @@
+---
+// src/components/blog/ShareArticle.astro
+// Article share component — Web Share API + individual platform links + copy URL
+// Usage:
+//   <ShareArticle url={canonicalURL} title={post.data.title} description={post.data.description} tags={post.data.tags} />
+
+import { buildShareLinks } from "@/lib/share";
+
+interface Props {
+  url: string;
+  title: string;
+  description?: string;
+  tags?: string[];
+  /** Twitter/X via handle without @ */
+  via?: string;
+  /** Compact inline row vs full card */
+  variant?: "row" | "card";
+}
+
+const {
+  url,
+  title,
+  description = "",
+  tags = [],
+  via = "",
+  variant = "row",
+} = Astro.props;
+
+const shareLinks = buildShareLinks({ url, title, description, hashtags: tags, via });
+
+// Only expose platforms we want in the primary row.
+// Email + Reddit are in the "more" overflow.
+const PRIMARY_IDS  = ["x", "whatsapp", "telegram", "facebook", "linkedin", "threads"];
+const primary      = shareLinks.filter((l) => PRIMARY_IDS.includes(l.id));
+const overflow     = shareLinks.filter((l) => !PRIMARY_IDS.includes(l.id));
+---
+
+<div
+  class:list={[
+    "sa-wrap not-prose",
+    variant === "card" ? "sa-wrap--card" : "sa-wrap--row",
+  ]}
+  data-url={url}
+  data-title={title}
+  data-description={description}
+>
+  <!-- ── Native share (mobile) ─────────────────────────────────── -->
+  <button
+    id="sa-native"
+    aria-label="Bagikan artikel ini"
+    title="Bagikan"
+    class="sa-native"
+    hidden
+  >
+    <!-- Share icon -->
+    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+      <path d="M5 7.5L7.5 5m0 0L10 7.5M7.5 5v7M2.5 10v1.5A1.5 1.5 0 0 0 4 13h7a1.5 1.5 0 0 0 1.5-1.5V10"
+        stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span>Bagikan</span>
+  </button>
+
+  <!-- ── Label (card variant) ──────────────────────────────────── -->
+  {variant === "card" && (
+    <p class="sa-label">Bagikan artikel ini</p>
+  )}
+
+  <!-- ── Platform links row ────────────────────────────────────── -->
+  <div class="sa-links" role="list" aria-label="Platform berbagi">
+
+    {primary.map((link) => (
+      <a
+        href={link.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        role="listitem"
+        aria-label={`Bagikan ke ${link.label}`}
+        title={link.label}
+        class="sa-link"
+        data-platform={link.id}
+      >
+        {/* ── Platform SVG icons ── */}
+        {link.id === "x" && (
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="currentColor" aria-hidden="true">
+            <path d="M8.69 6.39 13.4 1h-1.13L8.17 5.66 5.03 1H1.2l4.95 7.2L1.2 14h1.13l4.33-5.03L9.97 14h3.83L8.69 6.39Zm-1.53 1.78-.5-.72L2.74 1.83h1.72l3.22 4.61.5.72 4.2 6.01h-1.72L7.16 8.17Z"/>
+          </svg>
+        )}
+        {link.id === "whatsapp" && (
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="currentColor" aria-hidden="true">
+            <path d="M7.5 1a6.5 6.5 0 0 0-5.6 9.77L1 14l3.33-.87A6.5 6.5 0 1 0 7.5 1Zm0 11.9a5.4 5.4 0 0 1-2.76-.76l-.2-.12-2.05.54.55-1.99-.13-.2A5.4 5.4 0 1 1 7.5 12.9Zm2.97-3.97c-.16-.08-.96-.47-1.11-.53-.15-.05-.26-.08-.37.08s-.42.53-.52.64-.19.12-.35.04a4.43 4.43 0 0 1-2.21-1.93c-.17-.29.17-.27.47-.9.05-.1.03-.2-.02-.28L6.1 5.6c-.17-.4-.35-.35-.47-.35h-.32c-.11 0-.29.04-.44.2S4.4 5.9 4.4 6.6a2.93 2.93 0 0 0 .62 1.56c.08.1 1.1 1.68 2.66 2.35 1.57.67 1.57.45 1.85.42.28-.03.9-.37 1.03-.72.13-.35.13-.65.09-.71-.04-.08-.15-.12-.31-.2Z"/>
+          </svg>
+        )}
+        {link.id === "telegram" && (
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="currentColor" aria-hidden="true">
+            <path d="M13.9 2.3 1.45 7.06c-.85.34-.84.81-.16 1.02l3.2.99 1.24 3.77c.15.42.07.58.51.58.33 0 .48-.15.66-.33l1.59-1.54 3.3 2.43c.61.34 1.04.16 1.2-.56l2.16-10.18c.23-.9-.35-1.31-.95-1.04Z"/>
+          </svg>
+        )}
+        {link.id === "facebook" && (
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="currentColor" aria-hidden="true">
+            <path d="M8.5 5.5V4c0-.55.45-1 1-1H11V1h-2C7.35 1 6 2.35 6 4v1.5H4V8h2v7h2.5V8H11l.5-2.5H8.5Z"/>
+          </svg>
+        )}
+        {link.id === "linkedin" && (
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="currentColor" aria-hidden="true">
+            <path d="M2.5 1A1.5 1.5 0 1 0 2.5 4 1.5 1.5 0 0 0 2.5 1ZM1 5.5h3V14H1V5.5ZM10 5.25c-1.1 0-1.8.6-2 1.17V5.5H5.5V14H8V9.5c0-1.1.9-2 2-2s2 .9 2 2V14H14.5V9.25C14.5 6.93 12.43 5.25 10 5.25Z"/>
+          </svg>
+        )}
+        {link.id === "threads" && (
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="currentColor" aria-hidden="true">
+            <path d="M10.5 6.87c-.06-.03-.13-.06-.2-.09-.12-1.77-1.06-2.78-2.68-2.79h-.05c-.97 0-1.77.41-2.27 1.16l.92.63c.37-.56.95-.68 1.35-.68h.04c.52 0 .91.15 1.16.46.18.22.3.52.36.91a7.22 7.22 0 0 0-1.47-.07c-1.48.09-2.43.9-2.37 2.05.03.59.32 1.09.82 1.41.43.27.97.4 1.54.37.75-.04 1.34-.33 1.75-.86.31-.4.51-.91.6-1.56.36.22.62.5.77.84.25.58.27 1.52-.54 2.32-.71.7-1.56 1.01-2.84 1.02-1.43-.01-2.5-.47-3.2-1.36C3.2 9.65 2.87 8.4 2.86 7.5c.01-.9.34-2.15 1.04-3.03.7-.89 1.77-1.35 3.2-1.36 1.44.01 2.53.47 3.24 1.37.35.43.62.97.79 1.6l1.08-.29a5.88 5.88 0 0 0-.99-2.01C10.26 2.6 8.88 2.01 7.1 2 5.31 2.01 3.91 2.6 2.93 3.79 2.05 4.86 1.6 6.38 1.58 7.5c.02 1.12.47 2.64 1.35 3.71.98 1.19 2.38 1.78 4.17 1.79h.01c1.59-.01 2.73-.43 3.66-1.35 1.22-1.2 1.18-2.67.79-3.57-.27-.63-.76-1.13-1.56-1.21Z"/>
+          </svg>
+        )}
+      </a>
+    ))}
+
+    <!-- ── Overflow: Email + Reddit ── -->
+    <div class="sa-overflow-wrap">
+      <button class="sa-link sa-overflow-trigger" aria-label="Platform lainnya" title="Lainnya" aria-expanded="false">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="currentColor" aria-hidden="true">
+          <circle cx="3.5" cy="7.5" r="1.25"/>
+          <circle cx="7.5" cy="7.5" r="1.25"/>
+          <circle cx="11.5" cy="7.5" r="1.25"/>
+        </svg>
+      </button>
+
+      <div class="sa-overflow-menu" role="menu" hidden>
+        {overflow.map((link) => (
+          <a
+            href={link.href}
+            target={link.id !== "email" ? "_blank" : undefined}
+            rel={link.id !== "email" ? "noopener noreferrer" : undefined}
+            role="menuitem"
+            class="sa-overflow-item"
+            data-platform={link.id}
+          >
+            {link.id === "reddit" && (
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true">
+                <path d="M13 7a1.5 1.5 0 0 0-2.55-1.07 7.37 7.37 0 0 0-3.87-1.23l.66-3.1 2.14.46A1 1 0 1 0 10.5 1a1 1 0 0 0-.95.68l-2.4-.52a.25.25 0 0 0-.3.19l-.74 3.46a7.38 7.38 0 0 0-3.88 1.23A1.5 1.5 0 1 0 1 8.02a2.67 2.67 0 0 0 0 .35c0 1.8 2.1 3.26 4.69 3.26s4.69-1.46 4.69-3.26a2.67 2.67 0 0 0 0-.35A1.5 1.5 0 0 0 13 7ZM5 8.5a1 1 0 1 1 1 1 1 1 0 0 1-1-1Zm5.58 2.53a3.58 3.58 0 0 1-2.9.82 3.58 3.58 0 0 1-2.9-.82.25.25 0 0 1 .35-.35 3.1 3.1 0 0 0 2.55.67 3.1 3.1 0 0 0 2.55-.67.25.25 0 0 1 .35.35ZM9 9.5a1 1 0 1 1 1-1 1 1 0 0 1-1 1Z"/>
+              </svg>
+            )}
+            {link.id === "email" && (
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true">
+                <path d="M12 2H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1ZM7 7.5 2.5 4h9L7 7.5ZM2 10.5V5l5 3.35L12 5v5.5H2Z"/>
+              </svg>
+            )}
+            <span>{link.label}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <!-- ── Copy URL ── -->
+    <button
+      class="sa-link sa-copy"
+      aria-label="Salin tautan artikel"
+      title="Salin tautan"
+      data-url={url}
+    >
+      <!-- Copy icon (default) -->
+      <svg class="sa-copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+        <rect x="4.5" y="4.5" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.3"/>
+        <path d="M2.5 10.5V2.5h8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+      </svg>
+      <!-- Check icon (copied state) -->
+      <svg class="sa-check-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true" hidden>
+        <path d="M3 8l3 3 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+  </div>
+
+  <!-- ── Toast notification ─────────────────────────────────────── -->
+  <div id="sa-toast" class="sa-toast" role="status" aria-live="polite" aria-atomic="true" hidden>
+    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+      <path d="M2.5 7l3 3 5-5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span>Tautan disalin!</span>
+  </div>
+</div>
+
+<style>
+  /* ── Wrapper ──────────────────────────────────────────────────── */
+  .sa-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .sa-wrap--card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--bg-muted);
+    gap: 0.75rem;
+  }
+
+  /* ── Label (card only) ───────────────────────────────────────── */
+  .sa-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--fg-muted);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  /* ── Native share button ─────────────────────────────────────── */
+  .sa-native {
+    display: none; /* shown via JS only when Web Share API available */
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.875rem 0.4rem 0.625rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--fg);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .sa-native:not([hidden]) { display: inline-flex; }
+  .sa-native:hover { background: var(--bg-muted); border-color: var(--border-strong); }
+
+  /* ── Links row ───────────────────────────────────────────────── */
+  .sa-links {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    flex-wrap: wrap;
+  }
+
+  /* ── Individual link / icon button ──────────────────────────── */
+  .sa-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--fg-muted);
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.13s, background 0.13s, border-color 0.13s, transform 0.1s;
+    flex-shrink: 0;
+  }
+
+  .sa-link:hover {
+    color: var(--fg);
+    background: var(--bg-muted);
+    border-color: var(--border-strong);
+    transform: translateY(-1px);
+  }
+
+  .sa-link:active { transform: translateY(0) scale(0.95); }
+
+  /* ── Platform accent colors on hover ─────────────────────────── */
+  .sa-link[data-platform="x"]:hover         { color: #000; }
+  .sa-link[data-platform="whatsapp"]:hover  { color: #25d366; }
+  .sa-link[data-platform="telegram"]:hover  { color: #2aabee; }
+  .sa-link[data-platform="facebook"]:hover  { color: #1877f2; }
+  .sa-link[data-platform="linkedin"]:hover  { color: #0a66c2; }
+  .sa-link[data-platform="threads"]:hover   { color: var(--fg); }
+  .sa-link[data-platform="reddit"]:hover    { color: #ff4500; }
+
+  /* Dark mode X */
+  @media (prefers-color-scheme: dark) {
+    .sa-link[data-platform="x"]:hover { color: #fff; }
+  }
+
+  /* ── Copy button feedback ────────────────────────────────────── */
+  .sa-copy.copied {
+    color: #22c55e;
+    border-color: #22c55e40;
+    background: #22c55e10;
+  }
+
+  /* ── Overflow menu ───────────────────────────────────────────── */
+  .sa-overflow-wrap {
+    position: relative;
+  }
+
+  .sa-overflow-menu {
+    position: absolute;
+    bottom: calc(100% + 0.5rem);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,.1);
+    padding: 0.375rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 8rem;
+    z-index: 50;
+    animation: sa-menu-in 0.15s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .sa-overflow-menu[hidden] { display: none; }
+
+  @keyframes sa-menu-in {
+    from { opacity: 0; transform: translateX(-50%) translateY(4px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+
+  .sa-overflow-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.625rem;
+    border-radius: 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--fg-muted);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.1s, color 0.1s;
+    cursor: pointer;
+  }
+
+  .sa-overflow-item:hover {
+    background: var(--bg-muted);
+    color: var(--fg);
+  }
+
+  /* ── Toast ───────────────────────────────────────────────────── */
+  .sa-toast {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(0.5rem);
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--fg);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.12);
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    pointer-events: none;
+  }
+
+  .sa-toast:not([hidden]) {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .sa-toast svg { color: #22c55e; }
+</style>
+
+<script>
+  // ── Native Web Share API ────────────────────────────────────────────────
+  document.querySelectorAll<HTMLElement>(".sa-wrap").forEach((wrap) => {
+    const nativeBtn = wrap.querySelector<HTMLButtonElement>("#sa-native, .sa-native");
+    if (!nativeBtn) return;
+
+    if (navigator.share) {
+      nativeBtn.removeAttribute("hidden");
+      nativeBtn.addEventListener("click", async () => {
+        try {
+          await navigator.share({
+            title:  wrap.dataset.title || document.title,
+            text:   wrap.dataset.description || "",
+            url:    wrap.dataset.url || location.href,
+          });
+        } catch {
+          // user cancelled — no-op
+        }
+      });
+    }
+  });
+
+  // ── Copy URL ────────────────────────────────────────────────────────────
+  let toastTimer: ReturnType<typeof setTimeout>;
+
+  function showToast() {
+    const toast = document.getElementById("sa-toast");
+    if (!toast) return;
+    toast.removeAttribute("hidden");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.setAttribute("hidden", "");
+    }, 2200);
+  }
+
+  document.querySelectorAll<HTMLButtonElement>(".sa-copy").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const url = btn.dataset.url || location.href;
+      try {
+        await navigator.clipboard.writeText(url);
+      } catch {
+        // Clipboard API blocked — silent fail
+      }
+
+      const copyIcon  = btn.querySelector<SVGElement>(".sa-copy-icon");
+      const checkIcon = btn.querySelector<SVGElement>(".sa-check-icon");
+
+      btn.classList.add("copied");
+      copyIcon?.setAttribute("hidden", "");
+      checkIcon?.removeAttribute("hidden");
+      showToast();
+
+      setTimeout(() => {
+        btn.classList.remove("copied");
+        copyIcon?.removeAttribute("hidden");
+        checkIcon?.setAttribute("hidden", "");
+      }, 2200);
+    });
+  });
+
+  // ── Overflow menu toggle ────────────────────────────────────────────────
+  document.querySelectorAll<HTMLButtonElement>(".sa-overflow-trigger").forEach((trigger) => {
+    const menu = trigger.nextElementSibling as HTMLElement;
+    if (!menu) return;
+
+    trigger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = !menu.hasAttribute("hidden");
+      if (isOpen) {
+        menu.setAttribute("hidden", "");
+        trigger.setAttribute("aria-expanded", "false");
+      } else {
+        menu.removeAttribute("hidden");
+        trigger.setAttribute("aria-expanded", "true");
+      }
+    });
+  });
+
+  // Close overflow on outside click or Escape
+  document.addEventListener("click", () => {
+    document.querySelectorAll<HTMLElement>(".sa-overflow-menu").forEach((menu) => {
+      menu.setAttribute("hidden", "");
+    });
+    document.querySelectorAll<HTMLButtonElement>(".sa-overflow-trigger").forEach((btn) => {
+      btn.setAttribute("aria-expanded", "false");
+    });
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      document.querySelectorAll<HTMLElement>(".sa-overflow-menu").forEach((menu) => {
+        menu.setAttribute("hidden", "");
+      });
+    }
+  });
+</script>
