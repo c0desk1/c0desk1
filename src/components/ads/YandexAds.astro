@@ -1,7 +1,8 @@
 ---
-// src/components/ui/YandexAds.astro
+// src/components/ads/YandexAds.astro
 // Controller for all Yandex RTB ad units + Yandex Metrica
 // Respects cookie consent, lazy/deferred loading for performance
+
 import { siteConfig } from "@/config/site";
 import { getEntry } from "astro:content";
 
@@ -23,13 +24,7 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
 ---
 
 <!-- Yandex Ads + Metrica config carrier -->
-<div
-  id="ya-data"
-  style="display:none"
-  data-pub-id={YA_PUB_ID}
-  data-metrica-id={YA_METRICA_ID}
-  data-ads-enabled={String(ADS_ENABLED)}
-></div>
+<div id="ya-data" style="display:none" data-pub-id={YA_PUB_ID} data-metrica-id={YA_METRICA_ID} data-ads-enabled={String(ADS_ENABLED)}></div>
 
 <!-- Inline div required by block-6 (renderTo target) -->
 <div id="yandex_rtb_R-A-19179231-6" style="min-height:0"></div>
@@ -45,7 +40,6 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
   const CONSENT_KEY = 'cookie-consent-v2';
 
   // ─── Timing limits (ms after page load) ───────────────────────────────────
-  // Prevents ads from blocking critical rendering path
   const DELAY = {
     floorAd:    2000,   // floor (touch) — least intrusive, still give 2s
     inImage:    3500,   // in-image — needs DOM images to be painted
@@ -63,7 +57,6 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
 
   function analyticsAllowed() {
     const c = getConsent();
-    // If no consent stored yet → deny until user decides
     return c?.analytics === true;
   }
 
@@ -82,7 +75,6 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
   }
 
   function afterDelay(ms, fn) {
-    // Schedule after page load + extra delay for perf safety
     if (document.readyState === 'complete') {
       setTimeout(fn, ms);
     } else {
@@ -92,7 +84,7 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
 
   // ─── Ad renderers ─────────────────────────────────────────────────────────
 
-  // Block-1: Floor ad (touch/mobile)
+  // Block-1
   function renderFloorTouch() {
     afterDelay(DELAY.floorAd, () => {
       waitForYa(() => {
@@ -107,7 +99,7 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
     });
   }
 
-  // Block-2: In-image (finds first large image ≥1200×630)
+  // Block-2
   function renderInImage() {
     afterDelay(DELAY.inImage, () => {
       waitForYa(() => {
@@ -125,7 +117,7 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
           if (!images.length) return;
           const image = images.shift();
           const { width, height } = image.getBoundingClientRect();
-          if (width < 1200 || height < 630) return tryImages(images);
+          if (width < 600 || height < 315) return tryImages(images);
 
           image.id = `yandex_rtb_${PUB_ID}-2-${Math.random().toString(16).slice(2)}`;
           if (image.tagName === 'IMG' && !image.complete) {
@@ -141,7 +133,7 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
     });
   }
 
-  // Block-3: Fullscreen (most intrusive — longest delay)
+  // Block-3
   function renderFullscreen() {
     afterDelay(DELAY.fullscreen, () => {
       waitForYa(() => {
@@ -156,7 +148,7 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
     });
   }
 
-  // Block-4: Top ad banner
+  // Block-4
   function renderTopAd() {
     afterDelay(DELAY.topAd, () => {
       waitForYa(() => {
@@ -170,7 +162,7 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
     });
   }
 
-  // Block-5: Floor ad (desktop)
+  // Block-5
   function renderFloorDesktop() {
     afterDelay(DELAY.floorAd, () => {
       waitForYa(() => {
@@ -185,7 +177,7 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
     });
   }
 
-  // Block-6: Standard banner (renderTo div)
+  // Block-6
   function renderBanner() {
     afterDelay(DELAY.banner, () => {
       waitForYa(() => {
@@ -204,7 +196,6 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
     if (!METRICA_ID) return;
 
     afterDelay(DELAY.metrica, () => {
-      // Metrica script loader (official snippet, non-blocking)
       (function(m, e, t, r, i, k, a) {
         m[i] = m[i] || function() { (m[i].a = m[i].a || []).push(arguments); };
         m[i].l = 1 * new Date();
@@ -225,7 +216,6 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
         webvisor:    false,  // set true if you need session recording
       });
 
-      // Noscript fallback pixel
       if (!document.getElementById('ya-metrica-ns')) {
         const ns = document.createElement('noscript');
         ns.id = 'ya-metrica-ns';
@@ -258,12 +248,9 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
   }
 
   // ─── Listen for late consent (user accepts after load) ───────────────────
-  // Cookie.astro dispatches no custom event, so we poll localStorage once
-  // shortly after the banner would be dismissed. Adjust if you add a
-  // custom event (e.g. window.dispatchEvent(new Event('cookieConsent'))) in Cookie.astro
   function waitForConsent() {
     let attempts = 0;
-    const max    = 60; // poll up to 60s (1s interval)
+    const max    = 60;
     const timer  = setInterval(() => {
       attempts++;
       if (getConsent() !== null || attempts >= max) {
@@ -277,10 +264,8 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
   function boot() {
     const consent = getConsent();
     if (consent !== null) {
-      // User already decided — init immediately (with delays per unit)
       initAll();
     } else {
-      // No consent yet — wait for user to interact with banner
       waitForConsent();
     }
   }
@@ -291,7 +276,6 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
     boot();
   }
 
-  // Astro page-load compatibility (no-op without transitions)
   document.addEventListener('astro:page-load', boot);
 })();
 </script>
