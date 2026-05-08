@@ -264,7 +264,6 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
       renderTopAd();
       renderFloorDesktop();
       renderBanner();
-      watchFloorAd();
     }
 
     if (analyticsAllowed()) {
@@ -290,6 +289,7 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
     const consent = getConsent();
     if (consent !== null) {
       initAll();
+      watchFloorAd();
     } else {
       waitForConsent();
     }
