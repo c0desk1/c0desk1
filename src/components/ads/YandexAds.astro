@@ -1,84 +1,297 @@
 ---
-// src/components/ads/YandexAds.astro
+// src/components/ui/YandexAds.astro
+// Controller for all Yandex RTB ad units + Yandex Metrica
+// Respects cookie consent, lazy/deferred loading for performance
+import { siteConfig } from "@/config/site";
+import { getEntry } from "astro:content";
+
+let settings;
+try {
+  settings = await getEntry('settings', 'site');
+} catch (error) {}
+
+const siteData  = settings?.data || siteConfig;
+
+// Yandex RTB Publisher ID prefix
+const YA_PUB_ID = siteData.yandexPubId || siteConfig.yandexPubId || "R-A-19179231";
+
+// Yandex Metrica counter ID
+const YA_METRICA_ID = siteData.yandexMetricaId || siteConfig.yandexMetricaId || "";
+
+// Master toggle — set false in siteConfig to kill all Yandex ads
+const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? true;
 ---
+
+<!-- Yandex Ads + Metrica config carrier -->
+<div
+  id="ya-data"
+  style="display:none"
+  data-pub-id={YA_PUB_ID}
+  data-metrica-id={YA_METRICA_ID}
+  data-ads-enabled={String(ADS_ENABLED)}
+></div>
+
+<!-- Inline div required by block-6 (renderTo target) -->
+<div id="yandex_rtb_R-A-19179231-6" style="min-height:0"></div>
+
 <script is:inline>
-  (() => {
-    const isMobile = window.matchMedia("(max-width: 767px)").matches;
-    
-    window.yaContextCb = window.yaContextCb || [];
-    window.__adPageCount ??= 0;
-    window.__adPageCount++;
+(function () {
+  // ─── Config ───────────────────────────────────────────────────────────────
+  const el         = document.getElementById('ya-data');
+  const PUB_ID     = el?.dataset.pubId     || 'R-A-19179231';
+  const METRICA_ID = el?.dataset.metricaId || '';
+  const ADS_ON     = el?.dataset.adsEnabled !== 'false';
 
-    const page = window.__adPageCount;
+  const CONSENT_KEY = 'cookie-consent-v2';
 
-    const canShow = (key, min, max) => {
-      const storageKey = `__${key}LastPage`;
-      window[storageKey] ??= 0;
-      const last = window[storageKey];
-      
-      if (last === 0) return true;
-      
-      const gap = Math.floor(Math.random() * (max - min + 1)) + min;
-      return page - last >= gap;
-    };
+  // ─── Timing limits (ms after page load) ───────────────────────────────────
+  // Prevents ads from blocking critical rendering path
+  const DELAY = {
+    floorAd:    2000,   // floor (touch) — least intrusive, still give 2s
+    inImage:    3500,   // in-image — needs DOM images to be painted
+    fullscreen: 8000,   // fullscreen — most intrusive, wait longest
+    topAd:      1500,   // top banner — show relatively early but after LCP
+    banner:     2500,   // block-6 standard banner
+    metrica:    1000,   // metrica — analytics, earlier is better
+  };
 
-    const markShown = (key) => {
-      window[`__${key}LastPage`] = page;
-    };
+  // ─── Helpers ──────────────────────────────────────────────────────────────
+  function getConsent() {
+    try { return JSON.parse(localStorage.getItem(CONSENT_KEY)); }
+    catch { return null; }
+  }
 
-    // =========================
-    // DESKTOP - AKTIF
-    // =========================
-    if (!isMobile) {
-      // 1. TOP AD
-      if (canShow('topAd', 0, 0)) {
-        markShown('topAd');
-        window.yaContextCb.push(() => {
-          Ya.Context.AdvManager.render({
-            blockId: "R-A-19179231-4",
-            type: "topAd"
-          });
-        });
-      }
+  function analyticsAllowed() {
+    const c = getConsent();
+    // If no consent stored yet → deny until user decides
+    return c?.analytics === true;
+  }
 
-      // 2. FLOOR AD DESKTOP
-      if (canShow('desktopFloor', 2, 3)) {
-        markShown('desktopFloor');
-        window.yaContextCb.push(() => {
-          Ya.Context.AdvManager.render({
-            blockId: "R-A-19179231-5",
-            type: "floorAd",
-            platform: "desktop"
-          });
-        });
-      }
-    } 
-    
-    // =========================
-    // MOBILE - AKTIF
-    // =========================
-    else {
-      if (canShow('mobileBanner', 1, 1)) {
-        markShown('mobileBanner');
-        window.yaContextCb.push(() => {
-          Ya.Context.AdvManager.render({
-            blockId: "R-A-19179231-6",
-            renderTo: "yandex_rtb_R-A-19179231-6"
-          });
-        });
-      }
+  function adsAllowed() {
+    // Ads follow the analytics consent bucket (same as GA)
+    // Adjust to c?.ads if you add a separate ads toggle in Cookie.astro
+    return analyticsAllowed();
+  }
 
-      // 4. FULLSCREEN - NONAKTIF
-      // if (canShow('fullscreen', 2, 3)) {
-      //   markShown('fullscreen');
-      //   window.yaContextCb.push(() => {
-      //     Ya.Context.AdvManager.render({
-      //       blockId: "R-A-19179231-3",
-      //       type: "fullscreen",
-      //       platform: "touch"
-      //     });
-      //   });
-      // }
+  function waitForYa(cb, retries = 20) {
+    if (window.Ya?.Context?.AdvManager && window.yaContextCb) {
+      cb();
+    } else if (retries > 0) {
+      setTimeout(() => waitForYa(cb, retries - 1), 300);
     }
-  })();
+  }
+
+  function afterDelay(ms, fn) {
+    // Schedule after page load + extra delay for perf safety
+    if (document.readyState === 'complete') {
+      setTimeout(fn, ms);
+    } else {
+      window.addEventListener('load', () => setTimeout(fn, ms), { once: true });
+    }
+  }
+
+  // ─── Ad renderers ─────────────────────────────────────────────────────────
+
+  // Block-1: Floor ad (touch/mobile)
+  function renderFloorTouch() {
+    afterDelay(DELAY.floorAd, () => {
+      waitForYa(() => {
+        window.yaContextCb.push(() => {
+          Ya.Context.AdvManager.render({
+            blockId:  `${PUB_ID}-1`,
+            type:     'floorAd',
+            platform: 'touch',
+          });
+        });
+      });
+    });
+  }
+
+  // Block-2: In-image (finds first large image ≥1200×630)
+  function renderInImage() {
+    afterDelay(DELAY.inImage, () => {
+      waitForYa(() => {
+        const render = (imageId) => {
+          window.yaContextCb.push(() => {
+            Ya.Context.AdvManager.render({
+              renderTo: imageId,
+              blockId:  `${PUB_ID}-2`,
+              type:     'inImage',
+            });
+          });
+        };
+
+        const tryImages = (images) => {
+          if (!images.length) return;
+          const image = images.shift();
+          const { width, height } = image.getBoundingClientRect();
+          if (width < 1200 || height < 630) return tryImages(images);
+
+          image.id = `yandex_rtb_${PUB_ID}-2-${Math.random().toString(16).slice(2)}`;
+          if (image.tagName === 'IMG' && !image.complete) {
+            image.addEventListener('load', () => render(image.id), { once: true });
+          } else {
+            render(image.id);
+          }
+          tryImages(images);
+        };
+
+        tryImages(Array.from(document.querySelectorAll('img')));
+      });
+    });
+  }
+
+  // Block-3: Fullscreen (most intrusive — longest delay)
+  function renderFullscreen() {
+    afterDelay(DELAY.fullscreen, () => {
+      waitForYa(() => {
+        window.yaContextCb.push(() => {
+          Ya.Context.AdvManager.render({
+            blockId:  `${PUB_ID}-3`,
+            type:     'fullscreen',
+            platform: 'touch',
+          });
+        });
+      });
+    });
+  }
+
+  // Block-4: Top ad banner
+  function renderTopAd() {
+    afterDelay(DELAY.topAd, () => {
+      waitForYa(() => {
+        window.yaContextCb.push(() => {
+          Ya.Context.AdvManager.render({
+            blockId: `${PUB_ID}-4`,
+            type:    'topAd',
+          });
+        });
+      });
+    });
+  }
+
+  // Block-5: Floor ad (desktop)
+  function renderFloorDesktop() {
+    afterDelay(DELAY.floorAd, () => {
+      waitForYa(() => {
+        window.yaContextCb.push(() => {
+          Ya.Context.AdvManager.render({
+            blockId:  `${PUB_ID}-5`,
+            type:     'floorAd',
+            platform: 'desktop',
+          });
+        });
+      });
+    });
+  }
+
+  // Block-6: Standard banner (renderTo div)
+  function renderBanner() {
+    afterDelay(DELAY.banner, () => {
+      waitForYa(() => {
+        window.yaContextCb.push(() => {
+          Ya.Context.AdvManager.render({
+            blockId:  `${PUB_ID}-6`,
+            renderTo: `yandex_rtb_${PUB_ID}-6`,
+          });
+        });
+      });
+    });
+  }
+
+  // ─── Yandex Metrica ───────────────────────────────────────────────────────
+  function initMetrica() {
+    if (!METRICA_ID) return;
+
+    afterDelay(DELAY.metrica, () => {
+      // Metrica script loader (official snippet, non-blocking)
+      (function(m, e, t, r, i, k, a) {
+        m[i] = m[i] || function() { (m[i].a = m[i].a || []).push(arguments); };
+        m[i].l = 1 * new Date();
+        for (var j = 0; j < document.scripts.length; j++) {
+          if (document.scripts[j].src === r) { return; }
+        }
+        k = e.createElement(t);
+        a = e.getElementsByTagName(t)[0];
+        k.async = 1;
+        k.src   = r;
+        a.parentNode.insertBefore(k, a);
+      })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
+
+      ym(Number(METRICA_ID), 'init', {
+        clickmap:    true,
+        trackLinks:  true,
+        accurateTrackBounce: true,
+        webvisor:    false,  // set true if you need session recording
+      });
+
+      // Noscript fallback pixel
+      if (!document.getElementById('ya-metrica-ns')) {
+        const ns = document.createElement('noscript');
+        ns.id = 'ya-metrica-ns';
+        const img = document.createElement('img');
+        img.src    = `https://mc.yandex.ru/watch/${METRICA_ID}`;
+        img.style.cssText = 'position:absolute;left:-9999px';
+        img.alt    = '';
+        ns.appendChild(img);
+        document.body.appendChild(ns);
+      }
+    });
+  }
+
+  // ─── Consent-aware init ───────────────────────────────────────────────────
+  function initAll() {
+    if (!ADS_ON) return;
+
+    if (adsAllowed()) {
+      renderFloorTouch();
+      renderInImage();
+      renderFullscreen();
+      renderTopAd();
+      renderFloorDesktop();
+      renderBanner();
+    }
+
+    if (analyticsAllowed()) {
+      initMetrica();
+    }
+  }
+
+  // ─── Listen for late consent (user accepts after load) ───────────────────
+  // Cookie.astro dispatches no custom event, so we poll localStorage once
+  // shortly after the banner would be dismissed. Adjust if you add a
+  // custom event (e.g. window.dispatchEvent(new Event('cookieConsent'))) in Cookie.astro
+  function waitForConsent() {
+    let attempts = 0;
+    const max    = 60; // poll up to 60s (1s interval)
+    const timer  = setInterval(() => {
+      attempts++;
+      if (getConsent() !== null || attempts >= max) {
+        clearInterval(timer);
+        initAll();
+      }
+    }, 1000);
+  }
+
+  // ─── Boot ─────────────────────────────────────────────────────────────────
+  function boot() {
+    const consent = getConsent();
+    if (consent !== null) {
+      // User already decided — init immediately (with delays per unit)
+      initAll();
+    } else {
+      // No consent yet — wait for user to interact with banner
+      waitForConsent();
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+
+  // Astro page-load compatibility (no-op without transitions)
+  document.addEventListener('astro:page-load', boot);
+})();
 </script>
