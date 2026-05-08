@@ -111,6 +111,15 @@ const YA_AD = siteData.yandexPubId || siteConfig.yandexPubId;
 
     function buildBanner() {
       if (document.getElementById('ck-host')) return;
+      
+      let analyticsChecked = true;
+      let adsChecked = true;
+      
+      const stored = getStored();
+        if (stored) {
+          analyticsChecked = stored.analytics !== false;
+          adsChecked = stored.ads !== false;
+        }
 
       if (!document.getElementById('ck-style')) {
         const s = document.createElement('style');
@@ -159,8 +168,8 @@ const YA_AD = siteData.yandexPubId || siteConfig.yandexPubId;
               <button
                 id="ck-analytics-toggle"
                 role="switch"
-                aria-checked="true"
-                class="ck-pill ck-pill--on"
+                aria-checked="${analyticsChecked}"
+                class="ck-pill ${analyticsChecked ? 'ck-pill--on' : 'ck-pill--off'}"
                 aria-label="Toggle analitik"
               >
                 <span class="ck-pill-thumb"></span>
@@ -174,8 +183,8 @@ const YA_AD = siteData.yandexPubId || siteConfig.yandexPubId;
               <button
                 id="ck-ads-toggle"
                 role="switch"
-                aria-checked="true"
-                class="ck-pill ck-pill--on"
+                aria-checked="${adsChecked}"
+                class="ck-pill ${adsChecked ? 'ck-pill--on' : 'ck-pill--off'}"
                 aria-label="Toggle iklan">
                 <span class="ck-pill-thumb"></span>
               </button>
@@ -197,26 +206,33 @@ const YA_AD = siteData.yandexPubId || siteConfig.yandexPubId;
         });
       });
 
-      let analyticsChecked = true;
-      
-      let adsChecked = true;
-
       const analyticsToggle = document.getElementById('ck-analytics-toggle');
-      const adsToggle = document.getElementById('ck-ads-toggle');
-
-      analyticsToggle?.addEventListener('click', () => {
-        analyticsChecked = !analyticsChecked;
+      if (analyticsToggle) {
         analyticsToggle.setAttribute('aria-checked', String(analyticsChecked));
-        analyticsToggle.classList.toggle('ck-pill--on',  analyticsChecked);
+        analyticsToggle.classList.toggle('ck-pill--on', analyticsChecked);
         analyticsToggle.classList.toggle('ck-pill--off', !analyticsChecked);
-      });
-      
-      adsToggle?.addEventListener('click', () => {
-        adsChecked = !adsChecked;
-        adsToggle.setAttribute('aria-checked', String(adsChecked));
-        adsToggle.classList.toggle('ck-pill--on', adsChecked);
-        adsToggle.classList.toggle('ck-pill--off', !adsChecked);
-      });
+
+        analyticsToggle.addEventListener('click', () => {
+          analyticsChecked = !analyticsChecked;
+          analyticsToggle.setAttribute('aria-checked', String(analyticsChecked));
+          analyticsToggle.classList.toggle('ck-pill--on', analyticsChecked);
+          analyticsToggle.classList.toggle('ck-pill--off', !analyticsChecked);
+       });
+     }
+
+     const adsToggle = document.getElementById('ck-ads-toggle');
+     if (adsToggle) {
+       adsToggle.setAttribute('aria-checked', String(adsChecked));
+       adsToggle.classList.toggle('ck-pill--on', adsChecked);
+       adsToggle.classList.toggle('ck-pill--off', !adsChecked);
+
+       adsToggle.addEventListener('click', () => {
+         adsChecked = !adsChecked;
+         adsToggle.setAttribute('aria-checked', String(adsChecked));
+         adsToggle.classList.toggle('ck-pill--on', adsChecked);
+         adsToggle.classList.toggle('ck-pill--off', !adsChecked);
+       });
+      }
 
       const dismiss = () => {
         host.classList.remove('ck-visible');
@@ -300,7 +316,6 @@ const YA_AD = siteData.yandexPubId || siteConfig.yandexPubId;
       `;
 
       btn.addEventListener('click', () => {
-        localStorage.removeItem(KEY);
         btn.remove();
         buildBanner();
       });
