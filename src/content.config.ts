@@ -50,7 +50,12 @@ const settings = defineCollection({
     googleSiteVerification: z.string().optional(),
     googleAdsenseId: z.string().optional(),
     googleAnalyticsId: z.string().optional(),
+    googleAdsenseEnabled: z.boolean().default(false),
+
     yandexVerification: z.string().optional(),
+    yandexMetricaId: z.string().optional(),
+    yandexPubId: z.string().optional(),
+    yandexAdsEnabled: z.boolean().default(true),
     navItems: z.array(z.object({
       href: z.string(),
       label: z.string(),
