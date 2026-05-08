@@ -14,23 +14,16 @@ try {
 } catch (error) {}
 
 const siteData  = settings?.data || siteConfig;
-
-// Yandex RTB Publisher ID prefix
 const YA_PUB_ID = siteData.yandexPubId || siteConfig.yandexPubId || "R-A-19179231";
-
-// Yandex Metrica counter ID
 const YA_METRICA_ID = siteData.yandexMetricaId || siteConfig.yandexMetricaId || "";
 
-// Master toggle — set false in siteConfig to kill all Yandex ads
 const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? true;
 ---
 
-<!-- Yandex Ads + Metrica config carrier -->
 <div id="ya-data" style="display:none" data-pub-id={YA_PUB_ID} data-metrica-id={YA_METRICA_ID} data-ads-enabled={String(ADS_ENABLED)}></div>
 
 <Section size="sm">
-  <Container size="lg">
-    <!-- Inline div required by block-6 -->
+  <Container size="xl">
     <div id="yandex_rtb_R-A-19179231-6" style="min-height:0"></div>
   </Container>
 </Section>
@@ -109,6 +102,11 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
   function renderInImage() {
     afterDelay(DELAY.inImage, () => {
       waitForYa(() => {
+        const isMobile = window.matchMedia("(max-width: 768px)").matches;
+      
+        const MIN_WIDTH = isMobile ? 300 : 600;
+        const MIN_HEIGHT = isMobile ? 250 : 300;
+      
         const render = (imageId) => {
           window.yaContextCb.push(() => {
             Ya.Context.AdvManager.render({
@@ -123,18 +121,25 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
           if (!images.length) return;
           const image = images.shift();
           const { width, height } = image.getBoundingClientRect();
-          if (width < 600 || height < 315) return tryImages(images);
+        
+          if (width < MIN_WIDTH || height < MIN_HEIGHT) return tryImages(images);
+        
+          const src = image.currentSrc || image.src || '';
+          if (/avatar|logo|icon|emoji|badge|thumb/i.test(src)) return tryImages(images);
 
-          image.id = `yandex_rtb_${PUB_ID}-2-${Math.random().toString(16).slice(2)}`;
+          image.id = image.id || `yandex_rtb_${PUB_ID}-2-${Math.random().toString(16).slice(2)}`;
+        
           if (image.tagName === 'IMG' && !image.complete) {
             image.addEventListener('load', () => render(image.id), { once: true });
           } else {
             render(image.id);
           }
-          tryImages(images);
+        
+          if (document.querySelectorAll('[id^="yandex_rtb_"]').length < 2) {
+            tryImages(images);
+          }
         };
-
-        tryImages(Array.from(document.querySelectorAll('img')));
+        tryImages(Array.from(document.querySelectorAll('article img, .prose img, .content img')));
       });
     });
   }
@@ -235,18 +240,18 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
     });
   }
 
-function watchFloorAd() {
-  const observer = new MutationObserver(() => {
-    document.querySelectorAll('div[style*="position: fixed"][style*="top: 0"]').forEach((el) => {
-      const rect = el.getBoundingClientRect();
-      if (rect.height < 120 && rect.top < 10) {
-        el.style.setProperty('top', 'auto', 'important');
-        el.style.setProperty('bottom', '0', 'important');
-      }
+  function watchFloorAd() {
+    const observer = new MutationObserver(() => {
+      document.querySelectorAll('div[style*="position: fixed"][style*="top: 0"]').forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.height < 120 && rect.top < 10) {
+          el.style.setProperty('top', 'auto', 'important');
+          el.style.setProperty('bottom', '0', 'important');
+        }
+      });
     });
-  });
-  observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] });
-}
+    observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] });
+  }
 
   // ─── Consent-aware init ───────────────────────────────────────────────────
   function initAll() {
@@ -259,6 +264,7 @@ function watchFloorAd() {
       renderTopAd();
       renderFloorDesktop();
       renderBanner();
+      watchFloorAd();
     }
 
     if (analyticsAllowed()) {
