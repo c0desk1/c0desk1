@@ -18,11 +18,54 @@ export default {
   async fetch(request: Request): Promise<Response> {
     const state = new FetchState(request);
     const url = new URL(request.url);
+    const pathname = url.pathname;
 
-    if (url.pathname === '/api/status' || url.pathname.startsWith('/api/status/')) {
+    // Health check endpoint
+    if (pathname === '/health/') {
+      let bindingOk = false;
+      let bindingLatency: number | null = null;
+      if (globalThis.API_WORKER) {
+        try {
+          const start = Date.now();
+          const pingRes = await globalThis.API_WORKER.fetch('https://api.c0desk1.my.id/health');
+          bindingOk = pingRes.ok;
+          bindingLatency = Date.now() - start;
+        } catch (err) {
+          console.error('Health check ping failed:', err);
+          bindingOk = false;
+        }
+      }
+
+      const healthData = {
+        ok: true,
+        service: 'web',
+        env: import.meta.env.PROD ? 'production' : 'development',
+        timestamp: Date.now(),
+        bindings: {
+          API_WORKER: {
+            available: !!globalThis.API_WORKER,
+            reachable: bindingOk,
+            latencyMs: bindingLatency,
+          },
+        },
+        // version dihapus karena tidak diperlukan atau bisa ditambahkan lain kali
+      };
+      return new Response(JSON.stringify(healthData, null, 2), {
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-store',
+        },
+      });
+    }
+
+    // API status endpoint
+    if (pathname === '/api/status/') {
       const apiWorker = globalThis.API_WORKER;
       if (!apiWorker) {
-        return Response.json({ error: 'Binding API_WORKER tidak ditemukan' }, { status: 500 });
+        return Response.json(
+          { error: 'Binding API_WORKER tidak ditemukan' },
+          { status: 500 }
+        );
       }
       try {
         const res = await apiWorker.fetch('https://api.c0desk1.my.id/status/all', {
@@ -37,16 +80,17 @@ export default {
           },
         });
       } catch (err) {
-        console.error(err);
-        return Response.json({ error: 'Gagal fetch Worker API' }, { status: 500 });
+        console.error('Gagal fetch API_WORKER:', err);
+        return Response.json(
+          { error: 'Gagal fetch Worker API' },
+          { status: 500 }
+        );
       }
     }
 
+    // Default: Astro pipeline
     try {
       return await astro(state);
-    } catch (err) {
-      console.error('Astro pipeline error:', err);
-      return new Response('Internal Server Error', { status: 500 });
     } finally {
       await state.finalizeAll();
     }
