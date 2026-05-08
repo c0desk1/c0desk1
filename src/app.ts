@@ -23,7 +23,9 @@ export default {
     // Health check point
     if (pathname === '/health/' || pathname === '/health') {
       return new Response(JSON.stringify({ ok: true, service: 'web', timestamp: Date.now() }), {
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json; charset=utf-8' 
+        },
       });
     }
 
@@ -43,7 +45,7 @@ export default {
         return new Response(res.body, {
           status: res.status,
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json; charset=utf-8',
             'Cache-Control': 'public, max-age=60, stale-while-revalidate=5000',
             'X-Status-Cache': 'edge',
           },
@@ -57,7 +59,6 @@ export default {
       }
     }
 
-    // Default: Astro pipeline
     try {
       return await astro(state);
     } finally {
