@@ -5,29 +5,29 @@ declare global {
   var API_WORKER: { fetch: typeof fetch } | undefined;
 }
 
+if (import.meta.env.DEV && !globalThis.API_WORKER) {
+  globalThis.API_WORKER = {
+    fetch: async (input: RequestInfo | URL, init?: RequestInit) => {
+      console.log('[DEV] Mock fetch:', input);
+      return fetch(input, init);
+    },
+  };
+}
+
 export default {
-  async fetch(request: Request): Promise< Response > {
+  async fetch(request: Request): Promise<Response> {
     const state = new FetchState(request);
     const url = new URL(request.url);
 
-    if (url.pathname.startsWith('/api/status')) {
+    if (url.pathname === '/api/status' || url.pathname.startsWith('/api/status/')) {
       const apiWorker = globalThis.API_WORKER;
-
       if (!apiWorker) {
-        return Response.json(
-          { error: 'Binding API_WORKER tidak ditemukan' },
-          { status: 500 }
-        );
+        return Response.json({ error: 'Binding API_WORKER tidak ditemukan' }, { status: 500 });
       }
-
       try {
         const res = await apiWorker.fetch('https://api.c0desk1.my.id/status/all', {
-          cf: {
-            cacheTtl: 60,
-            cacheEverything: true,
-          },
+          cf: { cacheTtl: 60, cacheEverything: true },
         } as RequestInit);
-
         return new Response(res.body, {
           status: res.status,
           headers: {
@@ -36,17 +36,17 @@ export default {
             'X-Status-Cache': 'edge',
           },
         });
-      } catch (error) {
-        console.error('Failed to fetch API Worker:', error);
-        return Response.json(
-          { error: 'Gagal fetch Worker API' },
-          { status: 500 }
-        );
+      } catch (err) {
+        console.error(err);
+        return Response.json({ error: 'Gagal fetch Worker API' }, { status: 500 });
       }
     }
 
     try {
       return await astro(state);
+    } catch (err) {
+      console.error('Astro pipeline error:', err);
+      return new Response('Internal Server Error', { status: 500 });
     } finally {
       await state.finalizeAll();
     }
