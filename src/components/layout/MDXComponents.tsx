@@ -7,7 +7,6 @@ import Image from "@/components/mdx/Image.astro";
 import HR from "@/components/mdx/HR.astro";
 import Table from '@/components/mdx/Table.astro';
 import Details from '@/components/mdx/Details.astro';
-import Callout from '@/components/mdx/Callout.astro';
 import Steps from '@/components/mdx/Steps.astro';
 import Code from '@/components/mdx/Code.astro';
 import InlineLink from '@/components/mdx/InlineLink.astro';
@@ -27,7 +26,6 @@ export const components: MDXComponents = {
   blockquote: CallQuote,
   table: Table,
   Details,
-  Callout,
   Steps,
   Code,
   Footnotes,
