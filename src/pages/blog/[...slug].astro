@@ -22,6 +22,7 @@ import { getSmartRelatedPosts } from "@/lib/botEngine";
 import ReadingProgress from "@/components/ui/ReadingProgress.astro";
 
 import { components } from '@/components/layout/MDXComponents';
+import SharePost from '@/components/blog/SharePost.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -151,10 +152,14 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
                 <Content components={components} />
               </div>
             </div>
-	      </Section>
-	    </article>
-	  </Container>
+	        </Section>
+          <Section size="sm" class="section-divider">
+            <SharePost url={canonicalURL} title={post.data.title} description={post.data.description} tags={post.data.tags} variant='card' />
+          </Section>
+	      </article>
+	    </Container>
 	  </Section>
+    
 	  <Section size="sm">
 	    <h2 class="sr-only">Navigasi Kembali ke atas halaman </h2>
 	    <Container size="lg">
