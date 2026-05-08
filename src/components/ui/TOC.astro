@@ -1,7 +1,7 @@
 ---
 // src/components/ui/TOC.astro
 import { filterHeadingsForTOC } from '@/lib/utils';
-import Icon from '@/components/ui/Icon.astro';
+import Icon from '@/components/ui/Icon';
 
 interface Heading {
   depth: number;
@@ -26,7 +26,7 @@ const tocHeadings = filterHeadingsForTOC(headings);
         aria-controls="toc-list"
       >
         <span class="toc-trigger-text text-sm md:text-[13px] font-semibold">Daftar isi dihalaman ini</span>
-        <Icon name="chevron-down" class="toc-chevron w-4.5 h-4.5" />
+        <Icon name="chevron-down" className="toc-chevron w-4.5 h-4.5" />
       </button>
 
       <div id="toc-list" class="toc-content lg:block">
