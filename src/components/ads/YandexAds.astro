@@ -268,13 +268,27 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
     }
   }
 
+  function waitForConsent() {
+    let attempts = 0;
+    const max    = 60;
+    const timer  = setInterval(() => {
+      attempts++;
+      if (getConsent() !== null || attempts >= max) {
+        clearInterval(timer);
+        initAll();
+      }
+    }, 1000);
+  }
+
   // ─── Boot
   function boot() {
     const consent = getConsent();
     
     if (consent !== null) {
       initAll();
-    } 
+    } else {
+      waitForConsent();
+    }
   }
 
   document.addEventListener('cookie-consent-changed', (e) => {
