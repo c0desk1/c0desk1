@@ -152,6 +152,7 @@ const GTAG_ID =
         {withContainer ? (
             <Container size={size}>
               <slot />
+              <YandexAds />
             </Container>
           ) : (
             <slot />
@@ -166,7 +167,6 @@ const GTAG_ID =
     <MobileMenu />
     <AnchorScrollScript />
     <ServiceWorkerScript />
-    <YandexAds />
     <Toast />
   </body>
 </html>
