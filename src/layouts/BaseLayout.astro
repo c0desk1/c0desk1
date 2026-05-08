@@ -146,14 +146,14 @@ const GTAG_ID =
     <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:bg-(--bg) focus:text-(--fg) focus:px-4 focus:py-2 focus:border focus:border-(--border)">
       loncat ke konten utama
     </a>
-    <div id="yandex_rtb_R-A-19179231-4" class="yandex-top-ad"></div>
     <div class="relative z-10 flex min-h-screen flex-col">
       {header && <Header />}
+      <div id="yandex_rtb_R-A-19179231-4"></div>
       <main id="main-content">
         {withContainer ? (
             <Container size={size}>
               <slot />
-              <div id="yandex_rtb_R-A-19179231-6" class="yandex-mobile-banner"></div>
+              <div id="yandex_rtb_R-A-19179231-6"></div>
             </Container>
           ) : (
             <slot />
