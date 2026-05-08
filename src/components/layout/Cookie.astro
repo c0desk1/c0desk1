@@ -56,7 +56,7 @@ const YA_AD = siteData.yandexPubId || siteConfig.yandexPubId;
       applyConsent(stored);
       if (!isBtnPresent) injectPreferenceToggle();
     } else {
-      setTimeout(buildBanner, 1200);
+      setTimeout(buildBanner, 1000);
     }
   }
 
@@ -65,26 +65,39 @@ const YA_AD = siteData.yandexPubId || siteConfig.yandexPubId;
   } else {
     run();
   }
+  
   document.addEventListener('astro:page-load', run);
 
   function applyConsent(prefs) {
     const analyticsOn = prefs?.analytics === true;
     const adsOn = prefs?.ads === true;
 
-    // Google Analytics
+    // 1. Google Analytics
     if (typeof gtag === 'function') {
       gtag('consent', 'update', {
         analytics_storage: analyticsOn ? 'granted' : 'denied',
+        ad_storage: adsOn ? 'granted' : 'denied',
+        ad_user_data: adsOn ? 'granted' : 'denied',
+        ad_personalization: adsOn ? 'granted' : 'denied',
       });
     }
-    // Yandex Metrica
-    if (!analyticsOn && YA_ID) {
-      window['ya-disable-' + YA_ID] = true;
+
+    // 2. Google Analytics Legacy Disable
+    if (GA_ID) window['ga-disable-' + GA_ID] = !analyticsOn;
+
+    // 3. Yandex Metrica Disable
+    if (YA_ID) {
+      window['ya-disable-' + YA_ID] = !analyticsOn;
+      if (window['yaCounter' + YA_ID]) {
+         window['yaCounter' + YA_ID].setHitOptions({ disableClickMetrika: !analyticsOn });
+      }
     }
 
-    // YandexAds/Google Ads
+    // 4. Global Ads Allowed State
     window.__cookieConsent = window.__cookieConsent || {};
     window.__cookieConsent.adsAllowed = adsOn;
+    
+    document.dispatchEvent(new CustomEvent('cookie-consent-changed', { detail: prefs }));
   }
 
   function saveAndApply(prefs) {
