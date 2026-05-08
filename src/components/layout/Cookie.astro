@@ -301,308 +301,308 @@ const YA_AD = siteData.yandexPubId || siteConfig.yandexPubId;
     }
 
     function getCss() {
-        return `
-          #ck-host {
-            position: fixed;
-            bottom: 1.25rem;
-            right: 1.25rem;
-            z-index: 10000;
-            width: min(22rem, calc(100vw - 2rem));
-            opacity: 0;
-            transform: translateY(1rem);
-            transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
-            pointer-events: none;
-          }
+      return `
+        #ck-host {
+          position: fixed;
+          bottom: 1.25rem;
+          right: 1.25rem;
+          z-index: 10000;
+          width: min(22rem, calc(100vw - 2rem));
+          opacity: 0;
+          transform: translateY(1rem);
+          transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
+          pointer-events: none;
+        }
             
-          #ck-host.ck-visible {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: all;
-          }
+        #ck-host.ck-visible {
+          opacity: 1;
+          transform: translateY(0);
+          pointer-events: all;
+        }
             
-          .ck-card {
-            background: var(--bg);
-            border: 1.5px solid var(--border);
-            color: var(--fg);
-            border-radius: var(--radius-xl);
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,.06), 0 20px 40px -8px rgba(0,0,0,.12);
-            padding: 1.25rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            overflow: hidden;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-          }
+        .ck-card {
+          background: var(--bg);
+          border: 1.5px solid var(--border);
+          color: var(--fg);
+          border-radius: var(--radius-xl);
+          box-shadow: 0 4px 6px -1px rgba(0,0,0,.06), 0 20px 40px -8px rgba(0,0,0,.12);
+          padding: 1.25rem;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          overflow: hidden;
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+        }
             
-          .ck-header { 
-            display: flex; 
-            align-items: flex-start; 
-            gap: 0.75rem; 
-          }
+        .ck-header { 
+          display: flex; 
+          align-items: flex-start; 
+          gap: 0.75rem; 
+        }
             
-          .ck-icon {
-            width: 2rem; 
-            height: 2rem; 
-            flex-shrink: 0; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            background: var(--bg-muted); 
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg); 
-            color: var(--fg);
-          }
+        .ck-icon {
+          width: 2rem; 
+          height: 2rem; 
+          flex-shrink: 0; 
+          display: flex; 
+          align-items: center; 
+          justify-content: center;
+          background: var(--bg-muted); 
+          border: 1px solid var(--border);
+          border-radius: var(--radius-lg); 
+          color: var(--fg);
+        }
             
-          .ck-icon svg { 
-            width: 1rem; 
-            height: 1rem; 
-          }
+        .ck-icon svg { 
+          width: 1rem; 
+          height: 1rem; 
+        }
             
-          .ck-title { 
-            font-size: 1rem; 
-            font-weight: 600; 
-            color: var(--fg); 
-            margin: 0 0 0.2rem; 
-            letter-spacing: -0.01em; 
-          }
+        .ck-title { 
+          font-size: 1rem; 
+          font-weight: 600; 
+          color: var(--fg); 
+          margin: 0 0 0.2rem; 
+          letter-spacing: -0.01em; 
+        }
             
-          .ck-sub { 
-            font-size: 0.8375rem;
-            color: var(--fg-muted); 
-            margin: 0; 
-          }
+        .ck-sub { 
+          font-size: 0.8375rem;
+          color: var(--fg-muted); 
+          margin: 0; 
+        }
             
-          .ck-toggles { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 0; 
-            border: 1px solid var(--border); 
-            border-radius: var(--radius-lg); 
-            overflow: hidden; 
-          }
+        .ck-toggles { 
+          display: flex; 
+          flex-direction: column; 
+          gap: 0; 
+          border: 1px solid var(--border); 
+          border-radius: var(--radius-lg); 
+          overflow: hidden; 
+        }
             
-          .ck-toggle-row { 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            gap: 0.75rem; 
-            padding: 0.75rem 0.875rem; 
-            cursor: pointer; 
-            transition: background 0.15s; 
-          }
+        .ck-toggle-row { 
+          display: flex; 
+          align-items: center; 
+          justify-content: space-between; 
+          gap: 0.75rem; 
+          padding: 0.75rem 0.875rem; 
+          cursor: pointer; 
+          transition: background 0.15s; 
+        }
             
-          .ck-toggle-row:not(.ck-toggle-row--disabled):hover { 
-            background: var(--bg-muted);
-            opacity: 1;
-          }
+        .ck-toggle-row:not(.ck-toggle-row--disabled):hover { 
+          background: var(--bg-muted);
+          opacity: 1;
+        }
             
-          .ck-toggle-row--disabled { 
-            cursor: default;
-            color: var(--fg-subtle);
-            background: var(--bg-muted);
-            pointer-events: none;
-            opacity: 0.8;
-          }
+        .ck-toggle-row--disabled { 
+          cursor: default;
+          color: var(--fg-subtle);
+          background: var(--bg-muted);
+          pointer-events: none;
+          opacity: 0.8;
+        }
             
-          .ck-toggle-row + .ck-toggle-row { 
-            border-top: 1px solid var(--border); 
-          }
+        .ck-toggle-row + .ck-toggle-row { 
+          border-top: 1px solid var(--border); 
+        }
             
-          .ck-toggle-info { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 0.15rem; 
-            min-width: 0; 
-          }
+        .ck-toggle-info { 
+          display: flex; 
+          flex-direction: column; 
+          gap: 0.15rem; 
+          min-width: 0; 
+        }
             
-          .ck-toggle-name { 
-            font-size: 1rem; 
-            color: var(--fg); 
-          }
+        .ck-toggle-name { 
+          font-size: 1rem; 
+          color: var(--fg); 
+        }
             
-          .ck-toggle-desc { 
-            font-size: 0.8375rem;
-            color: var(--fg-muted); 
-            line-height: 1.65; 
-          }
+        .ck-toggle-desc { 
+          font-size: 0.8375rem;
+          color: var(--fg-muted); 
+          line-height: 1.65; 
+        }
             
-          .ck-pill { 
-            position: relative; 
-            width: 2.25rem; 
-            height: 1.25rem; 
-            border-radius: 999px; 
-            border: none; 
-            flex-shrink: 0; 
-            cursor: pointer; 
-            transition: background 0.2s ease; 
-            padding: 0; 
-            display: flex; 
-            align-items: center; 
-          }
+        .ck-pill { 
+          position: relative; 
+          width: 2.25rem; 
+          height: 1.25rem; 
+          border-radius: 999px; 
+          border: none; 
+          flex-shrink: 0; 
+          cursor: pointer; 
+          transition: background 0.2s ease; 
+          padding: 0; 
+          display: flex; 
+          align-items: center; 
+        }
             
-          .ck-pill--on  { 
-            background: var(--fg); 
-          }
+        .ck-pill--on  { 
+          background: var(--fg); 
+        }
             
-          .ck-pill--off { 
-            background: var(--border); 
-          }
+        .ck-pill--off { 
+          background: var(--border); 
+        }
             
-          .ck-pill-thumb { 
-            position: absolute; 
-            left: 0.2rem; 
-            width: 0.85rem; 
-            height: 0.85rem; 
-            border-radius: 50%; 
-            background: var(--bg); 
-            box-shadow: 0 1px 3px rgba(0,0,0,.2); 
-            transition: transform 0.2s cubic-bezier(0.34, 1.4, 0.64, 1); 
-            pointer-events: none; 
-          }
+        .ck-pill-thumb { 
+          position: absolute; 
+          left: 0.2rem; 
+          width: 0.85rem; 
+          height: 0.85rem; 
+          border-radius: 50%; 
+          background: var(--bg); 
+          box-shadow: 0 1px 3px rgba(0,0,0,.2); 
+          transition: transform 0.2s cubic-bezier(0.34, 1.4, 0.64, 1); 
+          pointer-events: none; 
+        }
             
-          .ck-pill--on  .ck-pill-thumb { 
-            transform: translateX(1rem); 
-          }
+        .ck-pill--on  .ck-pill-thumb { 
+          transform: translateX(1rem); 
+        }
             
-          .ck-pill--off .ck-pill-thumb { 
-            transform: translateX(0); 
-          }
+        .ck-pill--off .ck-pill-thumb { 
+          transform: translateX(0); 
+        }
             
-          .ck-actions { 
-            display: flex; 
-            justify-content: flex-end; 
-            flex-wrap: wrap; 
-            width: 100%; 
-            align-items: center; 
-            gap: 0.75rem; 
-            margin-top: 0.5rem; 
-          }
+        .ck-actions { 
+          display: flex; 
+          justify-content: flex-end; 
+          flex-wrap: wrap; 
+          width: 100%; 
+          align-items: center; 
+          gap: 0.75rem; 
+          margin-top: 0.5rem; 
+        }
             
-          .ck-btn { 
-            flex: 0 0 auto; 
-            width: auto; 
-            padding: 0.5rem 1rem; 
-            font-size: 0.9375rem; 
-            font-weight: 500; 
-            border-radius: 0.5rem; 
-            text-align: center; 
-            white-space: nowrap; 
-            cursor: pointer; 
-            transition: opacity 0.15s, background 0.15s, transform 0.1s; 
-            border: none; 
-          }
+        .ck-btn { 
+          flex: 0 0 auto; 
+          width: auto; 
+          padding: 0.5rem 1rem; 
+          font-size: 0.9375rem; 
+          font-weight: 500; 
+          border-radius: 0.5rem; 
+          text-align: center; 
+          white-space: nowrap; 
+          cursor: pointer; 
+          transition: opacity 0.15s, background 0.15s, transform 0.1s; 
+          border: none; 
+        }
             
-          .ck-btn:active { 
-            transform: scale(0.96); 
-          }
+        .ck-btn:active { 
+          transform: scale(0.96); 
+        }
             
-          .ck-btn--primary { 
-            background: var(--fg); 
-            color: var(--bg); 
-          }
+        .ck-btn--primary { 
+          background: var(--fg); 
+          color: var(--bg); 
+        }
             
-          .ck-btn--primary:hover { 
-            opacity: 0.82; 
-          }
+        .ck-btn--primary:hover { 
+          opacity: 0.82; 
+        }
             
-          .ck-btn--outline { 
-            background: transparent; 
-            color: var(--fg); 
-            border: 1.5px solid var(--border); 
-          }
+        .ck-btn--outline { 
+          background: transparent; 
+          color: var(--fg); 
+          border: 1.5px solid var(--border); 
+        }
             
-          .ck-btn--outline:hover {
-            background: var(--bg-muted); 
-          }
+        .ck-btn--outline:hover {
+          background: var(--bg-muted); 
+        }
             
-          .ck-btn--ghost { 
-            background: transparent; 
-            color: var(--fg-muted); 
-          }
+        .ck-btn--ghost { 
+          background: transparent; 
+          color: var(--fg-muted); 
+        }
             
-          .ck-btn--ghost:hover { 
-            color: var(--fg); 
-            background: var(--bg-muted); 
-          }
+        .ck-btn--ghost:hover { 
+          color: var(--fg); 
+          background: var(--bg-muted); 
+        }
             
-          .ck-btn:focus-visible { 
-            outline: 2px solid var(--accent); 
-            outline-offset: 2px; 
-          }
+        .ck-btn:focus-visible { 
+          outline: 2px solid var(--accent); 
+          outline-offset: 2px; 
+        }
             
-          #ck-pref-btn {
-            position: fixed; 
-            bottom: 1.25rem; 
-            left: 1.25rem; 
-            z-index: 50; 
-            width: 2rem; 
-            height: 2rem;
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            background: var(--bg);
-            border: 1.5px solid var(--border); 
-            border-radius: 999px; 
-            color: var(--fg-muted);
-            cursor: pointer; 
-            box-shadow: 0 2px 8px rgba(0,0,0,.08);
-            transition: color 0.15s, background 0.15s, transform 0.15s, opacity 0.15s; 
-            opacity: 0.6; 
-            padding: 0;
-          }
+        #ck-pref-btn {
+          position: fixed; 
+          bottom: 1.25rem; 
+          left: 1.25rem; 
+          z-index: 50; 
+          width: 2rem; 
+          height: 2rem;
+          display: flex; 
+          align-items: center; 
+          justify-content: center; 
+          background: var(--bg);
+          border: 1.5px solid var(--border); 
+          border-radius: 999px; 
+          color: var(--fg-muted);
+          cursor: pointer; 
+          box-shadow: 0 2px 8px rgba(0,0,0,.08);
+          transition: color 0.15s, background 0.15s, transform 0.15s, opacity 0.15s; 
+          opacity: 0.6; 
+          padding: 0;
+        }
             
-          #ck-pref-btn:hover { 
-            opacity: 1; 
-            color: var(--fg); 
-            background: var(--bg-muted); 
-            transform: scale(1.08); 
-          }
+        #ck-pref-btn:hover { 
+          opacity: 1; 
+          color: var(--fg); 
+          background: var(--bg-muted); 
+          transform: scale(1.08); 
+        }
             
-          #ck-pref-btn svg { 
-            width: 1rem; 
-            height: 1rem; 
-          }
+        #ck-pref-btn svg { 
+          width: 1rem; 
+          height: 1rem; 
+        }
             
-          .tts-bar--visible ~ #ck-pref-btn, body:has(.tts-bar--visible) #ck-pref-btn { 
-            bottom: 4rem; 
-            transition: bottom 0.25s ease, opacity 0.15s, transform 0.15s; 
-          }
+        .tts-bar--visible ~ #ck-pref-btn, body:has(.tts-bar--visible) #ck-pref-btn { 
+          bottom: 4rem; 
+          transition: bottom 0.25s ease, opacity 0.15s, transform 0.15s; 
+        }
             
-          @media (max-width: 767px) {
-            #ck-host { 
-              bottom: 1rem; 
-              right: 1rem; 
-              left: 1rem;
-              width: auto;
-            }
+        @media (max-width: 767px) {
+          #ck-host { 
+            bottom: 1rem; 
+            right: 1rem; 
+            left: 1rem;
+            width: auto;
+          }
               
-            body:has(.tts-bar--visible) #ck-host { 
-              bottom: 4.5rem; 
-            }
+          body:has(.tts-bar--visible) #ck-host { 
+            bottom: 4.5rem; 
+          }
 
-            .ck-title,
-            .ck-toggle-name { 
-              font-size: 0.9375rem; 
-            }
-              
-            .ck-actions { 
-              flex-direction: column;
-              gap: 0.5rem; 
-            }
-              
-            .ck-btn { 
-              width: 100%; 
-              justify-content: center; 
-              white-space: normal;
-              font-size: 0.8375rem;
-            }
-              
-            .ck-btn--ghost   { order: 1; }
-            .ck-btn--outline { order: 2; }
-            .ck-btn--primary { order: 3; }
+          .ck-title,
+          .ck-toggle-name { 
+            font-size: 0.9375rem; 
           }
-        `;
+              
+          .ck-actions { 
+            flex-direction: column;
+            gap: 0.5rem; 
+          }
+              
+          .ck-btn { 
+            width: 100%; 
+            justify-content: center; 
+            white-space: normal;
+            font-size: 0.8375rem;
+          }
+  
+          .ck-btn--ghost   { order: 1; }
+          .ck-btn--outline { order: 2; }
+          .ck-btn--primary { order: 3; }
+        }
+      `;
     }
   })();
 </script>
