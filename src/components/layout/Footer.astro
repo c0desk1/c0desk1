@@ -7,7 +7,7 @@ import { getEntry } from "astro:content";
 import Container from "../ui/Container.astro";
 import Section from "../ui/Section.astro";
 
-import Icon from "@/components/ui/Icon.astro";
+import Icon from "@/components/ui/Icon";
 
 import StatusPanel from "../layout/StatusPanel.astro";
 import Newsletter from "../layout/Newsletter.astro";
@@ -60,7 +60,7 @@ const socialEntries = Object.entries(social).filter(([_, url]) => url);
                           {link.label}
                         </span>
                         {link.isExternal && (
-                          <Icon name="external" class="size-3 shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
+                          <Icon name="external" className="size-3 shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
                         )}
                       </a>
                     </li>
@@ -77,7 +77,7 @@ const socialEntries = Object.entries(social).filter(([_, url]) => url);
         <div class="flex flex-wrap items-center gap-1.5">
           {socialEntries.map(([platform, url]) => (
             <a href={url} target="_blank" rel="noopener noreferrer" aria-label={platform} class="flex size-6 items-center justify-center rounded-(--radius-full) text-(--fg-muted) transition-all hover:bg-(--bg-muted) hover:text-(--fg)">
-              <Icon name={platform as any} class="size-4" />
+              <Icon name={platform as any} className="size-4" />
             </a>
           ))}
         </div>
