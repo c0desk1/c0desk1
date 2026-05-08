@@ -118,11 +118,6 @@ const siteData =
 const GTAG_ID =
   siteData.googleAnalyticsId ||
   siteConfig.googleAnalyticsId;
-
-const ADSENSE_ID =
-  siteData.googleAdsenseId ||
-  siteConfig.googleAdsenseId ||
-  "ca-pub-4943136052113535";
 ---
 
 <!DOCTYPE html>
@@ -144,7 +139,6 @@ const ADSENSE_ID =
       repoUrl={repoUrl}
     />
     <GtagScript id={GTAG_ID} />
-    <AdsenseScript id={ADSENSE_ID} />
     <YandexLoader />
   </head>
   <body>
@@ -152,9 +146,9 @@ const ADSENSE_ID =
     <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:bg-(--bg) focus:text-(--fg) focus:px-4 focus:py-2 focus:border focus:border-(--border)">
       loncat ke konten utama
     </a>
+    <div id="yandex_rtb_R-A-19179231-4" class="yandex-top-ad"></div>
     <div class="relative z-10 flex min-h-screen flex-col">
       {header && <Header />}
-      <div id="yandex_rtb_R-A-19179231-4" class="yandex-top-ad"></div>
       <main id="main-content">
         {withContainer ? (
             <Container size={size}>
@@ -167,32 +161,14 @@ const ADSENSE_ID =
       </main>
       <Search />
       {footer && <Footer />}
-      <div id="yandex_rtb_R-A-19179231-6" class="yandex-mobile-banner"></div>
     </div>
     <div id="modal-root"></div>
-    <Toast />
     <Cookie />
     <MobileMenu />
     <AnchorScrollScript />
     <ServiceWorkerScript />
     <YandexAds />
+    <Toast />
+    <div id="yandex_rtb_R-A-19179231-6" class="yandex-mobile-banner"></div>
   </body>
-  <style>
-    .yandex-top-ad {
-  max-width: 65ch;
-  margin: 1rem auto 2rem auto;
-  min-height: 90px;
-}
-
-.yandex-mobile-banner {
-  margin: 2rem auto;
-  text-align: center;
-  min-height: 250px;
-}
-
-.yandex-top-ad:empty,
-.yandex-mobile-banner:empty {
-  display: none;
-}
-  </style>
 </html>
