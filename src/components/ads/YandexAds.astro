@@ -235,6 +235,19 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
     });
   }
 
+function watchFloorAd() {
+  const observer = new MutationObserver(() => {
+    document.querySelectorAll('div[style*="position: fixed"][style*="top: 0"]').forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      if (rect.height < 120 && rect.top < 10) {
+        el.style.setProperty('top', 'auto', 'important');
+        el.style.setProperty('bottom', '0', 'important');
+      }
+    });
+  });
+  observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] });
+}
+
   // ─── Consent-aware init ───────────────────────────────────────────────────
   function initAll() {
     if (!ADS_ON) return;
