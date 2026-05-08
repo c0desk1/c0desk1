@@ -1,10 +1,9 @@
 ---
 // src/components/ads/YandexAds.astro
-// Controller gabungan semua format Yandex RTB lu
 ---
 <script is:inline>
   (() => {
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
     
     window.yaContextCb = window.yaContextCb || [];
     window.__adPageCount ??= 0;
@@ -15,8 +14,12 @@
     const canShow = (key, min, max) => {
       const storageKey = `__${key}LastPage`;
       window[storageKey] ??= 0;
+      const last = window[storageKey];
+      
+      if (last === 0) return true;
+      
       const gap = Math.floor(Math.random() * (max - min + 1)) + min;
-      return page - window[storageKey] >= gap;
+      return page - last >= gap;
     };
 
     const markShown = (key) => {
@@ -27,8 +30,8 @@
     // DESKTOP - AKTIF
     // =========================
     if (!isMobile) {
-      // 1. TOP AD - R-A-19179231-4 - AKTIF
-      if (page === 1 || canShow('topAd', 2, 3)) {
+      // 1. TOP AD
+      if (canShow('topAd', 0, 0)) {
         markShown('topAd');
         window.yaContextCb.push(() => {
           Ya.Context.AdvManager.render({
@@ -38,8 +41,8 @@
         });
       }
 
-      // 2. FLOOR AD DESKTOP - R-A-19179231-5 - AKTIF
-      if (canShow('desktopFloor', 3, 5)) {
+      // 2. FLOOR AD DESKTOP
+      if (canShow('desktopFloor', 2, 3)) {
         markShown('desktopFloor');
         window.yaContextCb.push(() => {
           Ya.Context.AdvManager.render({
@@ -55,8 +58,7 @@
     // MOBILE - AKTIF
     // =========================
     else {
-      // 3. BANNER MOBILE - R-A-19179231-6 - AKTIF
-      if (canShow('mobileBanner', 1, 2)) {
+      if (canShow('mobileBanner', 1, 1)) {
         markShown('mobileBanner');
         window.yaContextCb.push(() => {
           Ya.Context.AdvManager.render({
@@ -66,9 +68,8 @@
         });
       }
 
-      // 4. FULLSCREEN - R-A-19179231-3 - NONAKTIF
-      // Alasan: Ganggu UX, bounce rate naik. Pake banner lebih aman.
-      // if (canShow('fullscreen', 4, 6)) {
+      // 4. FULLSCREEN - NONAKTIF
+      // if (canShow('fullscreen', 2, 3)) {
       //   markShown('fullscreen');
       //   window.yaContextCb.push(() => {
       //     Ya.Context.AdvManager.render({
@@ -78,62 +79,6 @@
       //     });
       //   });
       // }
-
-      // 5. FLOOR AD MOBILE - R-A-19179231-1 - NONAKTIF
-      // Alasan: Tabrakan sama Banner. Pilih salah satu aja biar ga spam.
-      // if (canShow('mobileFloor', 2, 4)) {
-      //   markShown('mobileFloor');
-      //   window.yaContextCb.push(() => {
-      //     Ya.Context.AdvManager.render({
-      //       blockId: "R-A-19179231-1",
-      //       type: "floorAd",
-      //       platform: "touch"
-      //     });
-      //   });
-      // }
     }
-
-    // =========================
-    // ALL DEVICE - NONAKTIF
-    // =========================
-    // 6. IN-IMAGE - R-A-19179231-2 - NONAKTIF
-    // Alasan: Revenue kecil + bikin CLS kalo gambar telat load.
-    // Nyalain kalo artikel lu banyak gambar 600x300+
-    // if (canShow('inImage', 2, 4)) {
-    //   let count = 0;
-    //   const MAX_ADS = 2;
-    //   const images = Array.from(document.querySelectorAll("article img, .prose img"));
-    //   
-    //   for (const image of images) {
-    //     if (count >= MAX_ADS) break;
-    //     if (!(image instanceof HTMLImageElement)) continue;
-    //     
-    //     const { width, height } = image.getBoundingClientRect();
-    //     if (width < 600 || height < 300) continue;
-    //     
-    //     const src = image.currentSrc || image.src;
-    //     if (/avatar|logo|icon|emoji|badge/i.test(src)) continue;
-    //     
-    //     image.id = image.id || `yandex_${Math.random().toString(16).slice(2)}`;
-    //     count++;
-    //     
-    //     const doRender = () => {
-    //       window.yaContextCb.push(() => {
-    //         Ya.Context.AdvManager.render({
-    //           renderTo: image.id,
-    //           blockId: "R-A-19179231-2",
-    //           type: "inImage"
-    //         });
-    //       });
-    //     };
-    //     
-    //     if (!image.complete) {
-    //       image.addEventListener("load", doRender, { once: true });
-    //     } else {
-    //       doRender();
-    //     }
-    //   }
-    //   if (count > 0) markShown('inImage');
-    // }
   })();
 </script>
