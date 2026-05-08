@@ -9,15 +9,29 @@ try {
 } catch (error) {}
 
 const siteData = settings?.data || siteConfig;
+
 const GA_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
+const YA_ID = siteData.yandexMetricaId || siteConfig.yandexMetricaId;
+
+const GA_AD = siteData.googleAdsenseId || siteConfig.googleAdsenseId;
+const YA_AD = siteData.yandexPubId || siteConfig.yandexPubId;
 ---
 
-<div id="ck-data" data-ga-id={GA_ID} style="display:none"></div>
+<div id="ck-config" style="display:none"
+  data-ga-id={GA_ID}
+  data-ya-id={YA_ID}
+  data-ga-ad={GA_AD}
+  data-ya-ad={YA_AD}>
+</div>
 
 <script is:inline>
 (function () {
   const KEY = 'cookie-consent-v2';
-  const GA_ID = document.getElementById('ck-data')?.dataset.gaId || '';
+  const configEl = document.getElementById('ck-config');
+  const GA_ID = configEl?.dataset.gaId || '';
+  const YA_ID = configEl?.dataset.yaId || '';
+  const GA_AD = configEl?.dataset.gaAd || '';
+  const YA_AD = configEl?.dataset.yaAd || '';
 
   function getStored() {
     try {
@@ -55,14 +69,22 @@ const GA_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
 
   function applyConsent(prefs) {
     const analyticsOn = prefs?.analytics === true;
+    const adsOn = prefs?.ads === true;
+
+    // Google Analytics
     if (typeof gtag === 'function') {
       gtag('consent', 'update', {
         analytics_storage: analyticsOn ? 'granted' : 'denied',
       });
     }
-    if (!analyticsOn && GA_ID) {
-      window['ga-disable-' + GA_ID] = true;
+    // Yandex Metrica
+    if (!analyticsOn && YA_ID) {
+      window['ya-disable-' + YA_ID] = true;
     }
+
+    // YandexAds/Google Ads
+    window.__cookieConsent = window.__cookieConsent || {};
+    window.__cookieConsent.adsAllowed = adsOn;
   }
 
   function saveAndApply(prefs) {
@@ -127,8 +149,21 @@ const GA_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
               <span class="ck-pill-thumb"></span>
             </button>
           </div>
+          <div class="ck-toggle-row" id="ck-ads-row">
+            <div class="ck-toggle-info">
+              <span class="ck-toggle-name">Iklan & Personalisasi</span>
+              <span class="ck-toggle-desc">Menampilkan iklan yang relevan untuk Anda. Nonaktifkan jika tidak ingin iklan.</span>
+            </div>
+            <button
+              id="ck-ads-toggle"
+              role="switch"
+              aria-checked="true"
+              class="ck-pill ck-pill--on"
+              aria-label="Toggle iklan">
+              <span class="ck-pill-thumb"></span>
+            </button>
+          </div>
         </div>
-
         <div class="ck-actions">
           <button id="ck-reject-all" class="ck-btn ck-btn--ghost">Tolak semua</button>
           <button id="ck-save"       class="ck-btn ck-btn--outline">Simpan pilihan</button>
@@ -146,31 +181,76 @@ const GA_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
     });
 
     let analyticsChecked = true;
+    
+    let adsChecked = true;
 
-    const toggle = document.getElementById('ck-analytics-toggle');
-    toggle?.addEventListener('click', () => {
+    const analyticsToggle = document.getElementById('ck-analytics-toggle');
+    analyticsToggle?.addEventListener('click', () => {
       analyticsChecked = !analyticsChecked;
-      toggle.setAttribute('aria-checked', String(analyticsChecked));
-      toggle.classList.toggle('ck-pill--on',  analyticsChecked);
-      toggle.classList.toggle('ck-pill--off', !analyticsChecked);
+      analyticsToggle.setAttribute('aria-checked', String(analyticsChecked));
+      analyticsToggle.classList.toggle('ck-pill--on',  analyticsChecked);
+      analyticsToggle.classList.toggle('ck-pill--off', !analyticsChecked);
+    });
+    
+    const adsToggle = document.getElementById('ck-ads-toggle');
+    adsToggle?.addEventListener('click', () => {
+      adsChecked = !adsChecked;
+      adsToggle.setAttribute('aria-checked', String(adsChecked));
+      adsToggle.classList.toggle('ck-pill--on', adsChecked);
+      adsToggle.classList.toggle('ck-pill--off', !adsChecked);
     });
 
-    const dismiss = (prefs) => {
-      host.classList.remove('ck-visible');
-      setTimeout(() => { host.remove(); injectPreferenceToggle(); }, 350);
-      saveAndApply(prefs);
+    const dismiss = () => {
+    host.classList.remove('ck-visible');
+    setTimeout(() => { 
+      host.remove(); 
+      injectPreferenceToggle(); 
+    }, 350);
+  
+    const prefs = { 
+      functional: true, 
+      analytics: analyticsChecked, 
+      ads: adsChecked 
     };
+  
+    saveAndApply(prefs);
+  };
 
-    document.getElementById('ck-accept-all')?.addEventListener('click', () =>
-      dismiss({ functional: true, analytics: true })
-    );
-    document.getElementById('ck-reject-all')?.addEventListener('click', () =>
-      dismiss({ functional: true, analytics: false })
-    );
-    document.getElementById('ck-save')?.addEventListener('click', () =>
-      dismiss({ functional: true, analytics: analyticsChecked })
-    );
-  }
+  document.getElementById('ck-accept-all')?.addEventListener('click', () => {
+    analyticsChecked = true;
+    adsChecked = true;
+    if (analyticsToggle) {
+      analyticsToggle.setAttribute('aria-checked', 'true');
+      analyticsToggle.classList.add('ck-pill--on');
+      analyticsToggle.classList.remove('ck-pill--off');
+    }
+    if (adsToggle) {
+      adsToggle.setAttribute('aria-checked', 'true');
+      adsToggle.classList.add('ck-pill--on');
+      adsToggle.classList.remove('ck-pill--off');
+    }
+    dismiss();
+  });
+
+  document.getElementById('ck-reject-all')?.addEventListener('click', () => {
+    analyticsChecked = false;
+    adsChecked = false;
+    if (analyticsToggle) {
+      analyticsToggle.setAttribute('aria-checked', 'false');
+      analyticsToggle.classList.remove('ck-pill--on');
+      analyticsToggle.classList.add('ck-pill--off');
+    }
+    if (adsToggle) {
+      adsToggle.setAttribute('aria-checked', 'false');
+      adsToggle.classList.remove('ck-pill--on');
+      adsToggle.classList.add('ck-pill--off');
+    }
+    dismiss();
+  });
+
+  document.getElementById('ck-save')?.addEventListener('click', () => {
+    dismiss();
+  });
 
   function injectPreferenceToggle() {
     if (document.getElementById('ck-pref-btn')) return;
