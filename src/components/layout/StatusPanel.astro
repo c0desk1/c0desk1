@@ -55,13 +55,6 @@ const services = ['api', 'web', 'cdn', 'bot'];
         </div>
       ))}
     </div>
-    <div class="panel-footer">
-      <span class="footer-note">Diperbarui otomatis setiap 5 menit</span>
-      <button id="refresh-btn" class="refresh-btn">
-        <Icon name="arrow-path" className="w-4 h-4" />
-        Refresh
-      </button>
-    </div>
   </div>
 </div>
 
@@ -330,50 +323,6 @@ const services = ['api', 'web', 'cdn', 'bot'];
     color: var(--fg-muted);
   }
 
-  .panel-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 16px;
-    padding-top: 14px;
-    border-top: 1px solid var(--border);
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-
-  .footer-note {
-    font-size: 0.9375rem;
-    color: var(--fg-subtle);
-  }
-
-  .refresh-btn {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    background: transparent;
-    font-size: 0.9375rem;
-    font-weight: 500;
-    color: var(--fg-muted);
-    cursor: pointer;
-    transition: all 0.15s ease;
-  }
-
-  .refresh-btn:hover {
-    background: var(--bg-muted);
-    color: var(--fg);
-  }
-
-  .refresh-btn.spinning svg {
-    animation: spin 0.7s linear infinite;
-  }
-
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-
   @keyframes pulse-dot {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.4; }
@@ -397,7 +346,6 @@ const services = ['api', 'web', 'cdn', 'bot'];
   const panel     = document.getElementById("status-panel");
   const overlay   = document.getElementById("status-overlay");
   const closeBtn  = document.getElementById("close-panel");
-  const refreshBtn = document.getElementById("refresh-btn");
   const panelDot  = document.getElementById("panel-dot");
   const lastUpdatedEl = document.getElementById("last-updated-text");
   const footerLabel   = document.getElementById("status-label");
@@ -444,7 +392,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
       intervals.push(setInterval(() => {
         if (latestUpdateTs && lastUpdatedEl)
           lastUpdatedEl.textContent = `Periksa otomatis: ${getRelativeTime(latestUpdateTs)}`;
-      }, 10000));
+      }, 60000));
     }
   }
  
@@ -555,7 +503,6 @@ const services = ['api', 'web', 'cdn', 'bot'];
   }
  
   async function fetchStatus() {
-    if (refreshBtn) refreshBtn.classList.add("spinning");
     if (lastUpdatedEl) lastUpdatedEl.textContent = "Memperbarui...";
     try {
       const res  = await fetch(API_URL);
@@ -566,7 +513,6 @@ const services = ['api', 'web', 'cdn', 'bot'];
       if (lastUpdatedEl) lastUpdatedEl.textContent = "Offline";
       updateFooter("Outage");
     } finally {
-      if (refreshBtn) refreshBtn.classList.remove("spinning");
     }
   }
  
@@ -585,7 +531,6 @@ const services = ['api', 'web', 'cdn', 'bot'];
   document.getElementById("status-toggle")?.addEventListener("click", openStatus);
   closeBtn?.addEventListener("click", closeStatus);
   overlay?.addEventListener("click", closeStatus);
-  refreshBtn?.addEventListener("click", () => { if (hasFetched) fetchStatus(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeStatus(); });
  
   requestIdleCallback(() => {
