@@ -1,14 +1,20 @@
 ---
-// src/components/blog/SharePost.astro
-import Icon from '@/components/ui/Icon';
-import { buildShareLinks } from "@/lib/share";
+// src/components/blog/ShareArticle.astro
+//
+// Usage:
+//   <ShareArticle url={canonicalURL} title={post.data.title} description={post.data.description} tags={post.data.tags} />
+
+import Icon from "@/components/ui/Icon";
+import { getShareUrls } from "@/lib/utils";
 
 interface Props {
   url: string;
   title: string;
   description?: string;
   tags?: string[];
+  /** Twitter/X via handle without @ */
   via?: string;
+  /** "row" = compact inline | "card" = full block at end of article */
   variant?: "row" | "card";
 }
 
@@ -21,33 +27,52 @@ const {
   variant = "row",
 } = Astro.props;
 
-const shareLinks = buildShareLinks({ url, title, description, hashtags: tags, via });
+const baseUrls = getShareUrls(url, title);
 
-const PRIMARY_IDS  = ["x", "whatsapp", "telegram", "facebook", "linkedin", "threads"];
-const primary      = shareLinks.filter((l) => PRIMARY_IDS.includes(l.id));
-const overflow     = shareLinks.filter((l) => !PRIMARY_IDS.includes(l.id));
+const enc = encodeURIComponent;
+
+const allUrls = {
+  ...baseUrls,
+  x:        `https://x.com/intent/tweet?text=${enc(title)}&url=${enc(url)}${tags.length ? `&hashtags=${enc(tags.join(','))}` : ''}${via ? `&via=${enc(via)}` : ''}`,
+  whatsapp: `https://wa.me/?text=${enc(`${title} ${url}`)}`,
+  telegram: `https://t.me/share/url?url=${enc(url)}&text=${enc(title)}`,
+  threads:  `https://www.threads.net/intent/post?text=${enc(`${title} ${url}`)}`,
+  reddit:   `https://www.reddit.com/submit?url=${enc(url)}&title=${enc(title)}`,
+};
+
+const primary = [
+  { id: "x",        label: "X / Twitter", href: allUrls.x },
+  { id: "whatsapp", label: "WhatsApp",    href: allUrls.whatsapp },
+  { id: "telegram", label: "Telegram",    href: allUrls.telegram },
+  { id: "facebook", label: "Facebook",    href: allUrls.facebook },
+  { id: "linkedin", label: "LinkedIn",    href: allUrls.linkedin },
+  { id: "threads",  label: "Threads",     href: allUrls.threads },
+];
+
+const overflow = [
+  { id: "reddit", label: "Reddit", href: allUrls.reddit },
+  { id: "email",  label: "Email",  href: allUrls.email },
+];
 ---
 
-<div class:list={["sa-wrap not-prose", variant === "card" ? "sa-wrap--card" : "sa-wrap--row",]}
+<div
+  class:list={["sa-wrap not-prose", variant === "card" ? "sa-wrap--card" : "sa-wrap--row"]}
   data-url={url}
   data-title={title}
   data-description={description}
 >
-  <button
-    id="sa-native"
-    aria-label="Bagikan artikel ini"
-    title="Bagikan"
-    class="sa-native"
-    hidden
-  >
-    <Icon name='share' className='w-5 h-5' />
+  <!-- Native share -->
+  <button class="sa-native" aria-label="Bagikan artikel ini" title="Bagikan" hidden>
+    <Icon name="share" className="w-3.5 h-3.5" />
     <span>Bagikan</span>
   </button>
 
   {variant === "card" && (
     <p class="sa-label">Bagikan artikel ini</p>
   )}
+
   <div class="sa-links" role="list" aria-label="Platform berbagi">
+
     {primary.map((link) => (
       <a
         href={link.href}
@@ -59,13 +84,27 @@ const overflow     = shareLinks.filter((l) => !PRIMARY_IDS.includes(l.id));
         class="sa-link"
         data-platform={link.id}
       >
-        <Icon name={link.id as any} className="w-5 h-5" />
+        {link.id === "x"        && <Icon name="twitter"  className="w-3.5 h-3.5" />}
+        {link.id === "facebook" && <Icon name="facebook" className="w-3.5 h-3.5" />}
+        {link.id === "linkedin" && <Icon name="linkedin" className="w-3.5 h-3.5" />}
+        {link.id === "whatsapp" && <Icon name="whatsapp" className="w-3.5 h-3.5" />}
+        {link.id === "telegram" && <Icon name="telegram" className="w-3.5 h-3.5" />}
+        {link.id === "threads" && <Icon name="threads" className="w-3.5 h-3.5" />}
       </a>
     ))}
+
+    <!-- Overflow -->
     <div class="sa-overflow-wrap">
-      <button class="sa-link sa-overflow-trigger" aria-label="Platform lainnya" title="Lainnya" aria-expanded="false">
-        <Icon name='more' className="w-5 h-5">
+      <button
+        class="sa-link sa-overflow-trigger"
+        aria-label="Platform lainnya"
+        title="Lainnya"
+        aria-expanded="false"
+        aria-haspopup="menu"
+      >
+        <Icon name="more" className="w-3.5 h-3.5" />
       </button>
+
       <div class="sa-overflow-menu" role="menu" hidden>
         {overflow.map((link) => (
           <a
@@ -76,7 +115,8 @@ const overflow     = shareLinks.filter((l) => !PRIMARY_IDS.includes(l.id));
             class="sa-overflow-item"
             data-platform={link.id}
           >
-            <Icon name={link.id as any} className="w-4 h-4" />
+            {link.id === "email" && <Icon name="email" className="w-3.5 h-3.5 shrink-0" />}
+            {link.id === "reddit" && <Icon name="reddit" className="w-3.5 h-3.5" />}
             <span>{link.label}</span>
           </a>
         ))}
@@ -100,8 +140,7 @@ const overflow     = shareLinks.filter((l) => !PRIMARY_IDS.includes(l.id));
     padding: 1rem 1.25rem;
     border: 1px solid var(--border);
     border-radius: var(--radius-xl);
-    background: var(--bg);
-    gap: 0.75rem;
+    background: var(--bg-muted);
   }
 
   .sa-label {
@@ -109,6 +148,7 @@ const overflow     = shareLinks.filter((l) => !PRIMARY_IDS.includes(l.id));
     font-weight: 600;
     color: var(--fg-muted);
     letter-spacing: 0.03em;
+    text-transform: uppercase;
     margin: 0;
   }
 
@@ -126,15 +166,9 @@ const overflow     = shareLinks.filter((l) => !PRIMARY_IDS.includes(l.id));
     cursor: pointer;
     transition: background 0.15s, border-color 0.15s;
   }
+  .sa-native:not([hidden]) { display: inline-flex; }
+  .sa-native:hover { background: var(--bg-muted); border-color: var(--border-strong); }
 
-  .sa-native:not([hidden]) { 
-    display: inline-flex; 
-  }
-
-  .sa-native:hover { 
-    background: var(--bg-muted); 
-    border-color: var(--border-strong); 
-  }
   .sa-links {
     display: flex;
     align-items: center;
@@ -157,27 +191,25 @@ const overflow     = shareLinks.filter((l) => !PRIMARY_IDS.includes(l.id));
     transition: color 0.13s, background 0.13s, border-color 0.13s, transform 0.1s;
     flex-shrink: 0;
   }
-
   .sa-link:hover {
     color: var(--fg);
     background: var(--bg-muted);
     border-color: var(--border-strong);
     transform: translateY(-1px);
   }
-
   .sa-link:active { transform: translateY(0) scale(0.95); }
 
-  .sa-link[data-platform="x"]:hover         { color: var(--fg); }
-  .sa-link[data-platform="whatsapp"]:hover  { color: #25d366; }
-  .sa-link[data-platform="telegram"]:hover  { color: #2aabee; }
-  .sa-link[data-platform="facebook"]:hover  { color: #1877f2; }
-  .sa-link[data-platform="linkedin"]:hover  { color: #0a66c2; }
-  .sa-link[data-platform="threads"]:hover   { color: var(--fg); }
-  .sa-link[data-platform="reddit"]:hover    { color: #ff4500; }
-
-  .sa-overflow-wrap {
-    position: relative;
+  .sa-link[data-platform="x"]:hover        { color: #000; }
+  .sa-link[data-platform="whatsapp"]:hover { color: #25d366; }
+  .sa-link[data-platform="telegram"]:hover { color: #2aabee; }
+  .sa-link[data-platform="facebook"]:hover { color: #1877f2; }
+  .sa-link[data-platform="linkedin"]:hover { color: #0a66c2; }
+  .sa-link[data-platform="reddit"]:hover   { color: #ff4500; }
+  @media (prefers-color-scheme: dark) {
+    .sa-link[data-platform="x"]:hover { color: #fff; }
   }
+
+  .sa-overflow-wrap { position: relative; }
 
   .sa-overflow-menu {
     position: absolute;
@@ -196,10 +228,7 @@ const overflow     = shareLinks.filter((l) => !PRIMARY_IDS.includes(l.id));
     z-index: 50;
     animation: sa-menu-in 0.15s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
-
-  .sa-overflow-menu[hidden] { 
-    display: none; 
-  }
+  .sa-overflow-menu[hidden] { display: none; }
 
   @keyframes sa-menu-in {
     from { opacity: 0; transform: translateX(-50%) translateY(4px); }
@@ -220,64 +249,53 @@ const overflow     = shareLinks.filter((l) => !PRIMARY_IDS.includes(l.id));
     transition: background 0.1s, color 0.1s;
     cursor: pointer;
   }
+  .sa-overflow-item:hover { background: var(--bg-muted); color: var(--fg); }
 
-  .sa-overflow-item:hover {
-    background: var(--bg-muted);
-    color: var(--fg);
-  }
 </style>
 
 <script>
-  document.querySelectorAll<HTMLElement>(".sa-wrap").forEach((wrap) => {
-    const nativeBtn = wrap.querySelector<HTMLButtonElement>("#sa-native, .sa-native");
-    if (!nativeBtn) return;
 
-    if (navigator.share) {
-      nativeBtn.removeAttribute("hidden");
-      nativeBtn.addEventListener("click", async () => {
-        try {
-          await navigator.share({
-            title:  wrap.dataset.title || document.title,
-            text:   wrap.dataset.description || "",
-            url:    wrap.dataset.url || location.href,
-          });
-        } catch {
-        }
-      });
-    }
+  // Native Web Share API
+  document.querySelectorAll<HTMLElement>(".sa-wrap").forEach((wrap) => {
+    const btn = wrap.querySelector<HTMLButtonElement>(".sa-native");
+    if (!btn || !navigator.share) return;
+    btn.removeAttribute("hidden");
+    btn.addEventListener("click", async () => {
+      try {
+        await navigator.share({
+          title: wrap.dataset.title || document.title,
+          text:  wrap.dataset.description || "",
+          url:   wrap.dataset.url || location.href,
+        });
+      } catch { /* user cancelled */ }
+    });
   });
 
+  // Overflow menu
   document.querySelectorAll<HTMLButtonElement>(".sa-overflow-trigger").forEach((trigger) => {
     const menu = trigger.nextElementSibling as HTMLElement;
     if (!menu) return;
-
     trigger.addEventListener("click", (e) => {
       e.stopPropagation();
       const isOpen = !menu.hasAttribute("hidden");
-      if (isOpen) {
-        menu.setAttribute("hidden", "");
-        trigger.setAttribute("aria-expanded", "false");
-      } else {
-        menu.removeAttribute("hidden");
-        trigger.setAttribute("aria-expanded", "true");
-      }
+      menu.toggleAttribute("hidden", isOpen);
+      trigger.setAttribute("aria-expanded", String(!isOpen));
     });
   });
 
   document.addEventListener("click", () => {
-    document.querySelectorAll<HTMLElement>(".sa-overflow-menu").forEach((menu) => {
-      menu.setAttribute("hidden", "");
-    });
-    document.querySelectorAll<HTMLButtonElement>(".sa-overflow-trigger").forEach((btn) => {
-      btn.setAttribute("aria-expanded", "false");
-    });
+    document.querySelectorAll<HTMLElement>(".sa-overflow-menu").forEach((m) =>
+      m.setAttribute("hidden", "")
+    );
+    document.querySelectorAll<HTMLButtonElement>(".sa-overflow-trigger").forEach((b) =>
+      b.setAttribute("aria-expanded", "false")
+    );
   });
 
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-      document.querySelectorAll<HTMLElement>(".sa-overflow-menu").forEach((menu) => {
-        menu.setAttribute("hidden", "");
-      });
-    }
+    if (e.key !== "Escape") return;
+    document.querySelectorAll<HTMLElement>(".sa-overflow-menu").forEach((m) =>
+      m.setAttribute("hidden", "")
+    );
   });
 </script>
