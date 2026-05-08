@@ -356,6 +356,15 @@
   }
 }
 
+[id^="ya-floor"], 
+[class*="ya-floor"],
+[id*="R-A-"][id*="-1"],
+[id*="R-A-"][id*="-5"],
+.AdvManager-body > div[style*="position: fixed"][style*="top: 0"] {
+  top: auto !important;
+  bottom: 0 !important;
+}
+
 /* ==================== UTILITIES ==================== */
 
 @layer utilities {
