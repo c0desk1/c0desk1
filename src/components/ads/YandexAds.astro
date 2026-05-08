@@ -102,11 +102,6 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
   function renderInImage() {
     afterDelay(DELAY.inImage, () => {
       waitForYa(() => {
-        const isMobile = window.matchMedia("(max-width: 768px)").matches;
-      
-        const MIN_WIDTH = isMobile ? 300 : 600;
-        const MIN_HEIGHT = isMobile ? 250 : 300;
-      
         const render = (imageId) => {
           window.yaContextCb.push(() => {
             Ya.Context.AdvManager.render({
@@ -121,25 +116,18 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
           if (!images.length) return;
           const image = images.shift();
           const { width, height } = image.getBoundingClientRect();
-        
-          if (width < MIN_WIDTH || height < MIN_HEIGHT) return tryImages(images);
-        
-          const src = image.currentSrc || image.src || '';
-          if (/avatar|logo|icon|emoji|badge|thumb/i.test(src)) return tryImages(images);
+          if (width < 600 || height < 315) return tryImages(images);
 
-          image.id = image.id || `yandex_rtb_${PUB_ID}-2-${Math.random().toString(16).slice(2)}`;
-        
+          image.id = `yandex_rtb_${PUB_ID}-2-${Math.random().toString(16).slice(2)}`;
           if (image.tagName === 'IMG' && !image.complete) {
             image.addEventListener('load', () => render(image.id), { once: true });
           } else {
             render(image.id);
           }
-        
-          if (document.querySelectorAll('[id^="yandex_rtb_"]').length < 2) {
-            tryImages(images);
-          }
+          tryImages(images);
         };
-        tryImages(Array.from(document.querySelectorAll('article img, .prose img, .content img')));
+
+        tryImages(Array.from(document.querySelectorAll('img')));
       });
     });
   }
