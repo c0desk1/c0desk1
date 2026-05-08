@@ -31,6 +31,7 @@ const socialSchema = z.object({
   whatsapp: z.string().optional(),
   tiktok: z.string().optional(),
   linkedIn: z.string().optional(),
+  sitemap: z.string().optional(),
 }).optional();
 
 // ==========================================
