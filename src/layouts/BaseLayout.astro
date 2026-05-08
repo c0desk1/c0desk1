@@ -152,7 +152,6 @@ const GTAG_ID =
         {withContainer ? (
             <Container size={size}>
               <slot />
-              <YandexAds />
             </Container>
           ) : (
             <slot />
@@ -160,6 +159,7 @@ const GTAG_ID =
         }
       </main>
       <Search />
+      <YandexAds />
       {footer && <Footer />}
     </div>
     <div id="modal-root"></div>
