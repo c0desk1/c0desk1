@@ -79,22 +79,23 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
           "dark:bg-[radial-gradient(#404040_1px,transparent_1px)]",
         )}
       />
+      
       <div class="pointer-events-none absolute inset-0 z-1 flex items-center justify-center bg-(--bg) mask-[radial-gradient(ellipse_at_center,transparent_20%,black)]" />
       
       <Container size="lg" class="py-16">
-        <section class="flex flex-col-reverse md:flex-row items-center justify-start md:justify-between gap-4" aria-labelledby="author-heading">
-          <div class="flex flex-col justify-start items-start z-3">
+        <section class="flex flex-col-reverse md:flex-row items-center justify-center md:justify-between gap-4" aria-labelledby="author-heading">
+          <div class="flex flex-col justify-center md:justify-start items-center md:items-start z-3">
             <Breadcrumb items={Breadcrumbs} />
             <div class="mt-5 space-y-5">
               <div class="space-y-3">
-                <h1 id="author-heading" class="text-4xl md:text-5xl font-bold tracking-[-0.04em] text-(--fg)">
+                <h1 id="author-heading" class="text-4xl md:text-5xl font-semibold tracking-[-0.04em] text-(--fg)">
                   {author.data.name}
                 </h1>
-                <p class="text-base md:text-lg text-(--fg-subtle) tracking-tight">
+                <p class="text-[13px] md:text-sm text-(--fg-subtle) tracking-tight">
                   {author.data.role}
                 </p>
               </div>
-              <p class="max-w-2xl text-[15px] leading-7 text-(--fg-muted)">
+              <p class="max-w-2xl text-[13px] md:text-sm leading-7 text-(--fg-muted)">
                 {author.data.bio}
               </p>
               <div class="flex items-center gap-2 pt-2">
@@ -104,18 +105,20 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={item.label}
-                    class="group flex size-9 items-center justify-center rounded-full border border-transparent text-(--fg-muted) transition-all duration-200 hover:border-(--border) hover:bg-(--bg-muted) hover:text-(--fg)"
+                    class="group flex items-center justify-center rounded-full border border-transparent text-(--fg-muted) transition-all duration-200 hover:border-(--border) hover:bg-(--bg-muted) hover:text-(--fg) gap-2"
                   >
                     <Icon
                       name={item.label as any}
                       className="size-4 transition-transform duration-200 group-hover:scale-110"
                     />
+                    <span class="text-[13px]">
+                      {item.label}
+                    </span>
                   </a>
                 ))}
               </div>
             </div>
           </div>
-
           <div class="flex items-center z-3">
             <div
               class="relative overflow-hidden rounded-[28px] border border-(--border) bg-(--bg-subtle) p-2 shadow-sm">
