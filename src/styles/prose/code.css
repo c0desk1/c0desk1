@@ -1,10 +1,6 @@
 /* src/styles/prose/code.css */
 
-/* ============================================
-   CODE BLOCK & INLINE CODE (Default / Standalone)
-   ============================================ */
-
-/* INLINE CODE */
+/* ─── INLINE CODE ────────────────────────────────────────────────── */
 .prose-custom code:not(pre code) {
   font-family: var(--prose-font-mono);
   font-size: 0.8125em;
@@ -15,17 +11,18 @@
   border-radius: var(--prose-radius-sm);
   border: 1px solid var(--prose-border);
   white-space: break-spaces;
+  letter-spacing: -0.01em;
 }
 
 .prose-custom h1 code,
 .prose-custom h2 code,
 .prose-custom h3 code,
 .prose-custom summary code {
-  font-size: 0.9em;
-  background-color: var(--prose-surface-dim);
+  font-size: 0.875em;
+  background-color: var(--prose-surface-hover);
 }
 
-/* STANDALONE CODE BLOCK (pre) */
+/* ─── CODE BLOCK ─────────────────────────────────────────────────── */
 .prose-custom pre {
   font-family: var(--prose-font-mono);
   background-color: var(--prose-surface) !important;
@@ -33,56 +30,50 @@
   border-radius: var(--prose-radius-md);
   padding: 1.25rem 1.5rem;
   overflow-x: auto;
-  margin: 2.5rem 0;
+  margin: 2rem 0;
   position: relative;
   scrollbar-width: thin;
   scrollbar-color: var(--prose-border) transparent;
 }
 
-.prose-custom pre::-webkit-scrollbar {
-  height: 6px;
-}
-.prose-custom pre::-webkit-scrollbar-track {
-  background: transparent;
-}
+.prose-custom pre::-webkit-scrollbar { height: 4px; }
+.prose-custom pre::-webkit-scrollbar-track { background: transparent; }
 .prose-custom pre::-webkit-scrollbar-thumb {
   background: var(--prose-border);
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
+/* ─── COPY BUTTON ────────────────────────────────────────────────── */
 .prose-custom pre .copy-btn {
   position: absolute;
   top: 0.75rem;
   right: 0.75rem;
   font-family: var(--prose-font-sans);
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
   padding: 0.25rem 0.625rem;
   border-radius: var(--prose-radius-sm);
   border: 1px solid var(--prose-border);
   background: var(--prose-surface-hover);
-  color: var(--prose-fg-muted);
+  color: var(--prose-fg-subtle);
   cursor: pointer;
   transition: all var(--prose-transition);
   opacity: 0;
 }
 
-.prose-custom pre:hover .copy-btn {
-  opacity: 1;
-}
+.prose-custom pre:hover .copy-btn { opacity: 1; }
+
 .prose-custom pre .copy-btn:hover {
   background: var(--prose-accent);
-  color: var(--prose-fg);
+  color: #fff;
   border-color: var(--prose-accent);
 }
 
-
-/* ============================================
-   CODE GROUP
-   ============================================ */
-
+/* ─── CODE GROUP ─────────────────────────────────────────────────── */
 .prose-custom .code-group {
-  margin: 2.5rem 0;
+  margin: 2rem 0;
   overflow-x: auto;
   border-radius: var(--prose-radius-md);
   border: 1px solid var(--prose-border);
@@ -105,35 +96,33 @@
 
 .prose-custom .code-group-title {
   position: relative;
-  padding-inline: calc(var(--spacing, 0.25rem) * 4);
-  padding-block: calc(var(--spacing, 0.25rem) * 2.5);
+  padding-inline: 1rem;
+  padding-block: 0.625rem;
   color: var(--prose-fg-subtle);
-  font-weight: 600;
-  font-size: 1rem;
-  transition: var(--prose-transition);
+  font-weight: 500;
+  font-size: 0.8125rem;
+  letter-spacing: -0.005em;
+  transition: color var(--prose-transition);
   cursor: pointer;
 }
 
-.prose-custom .code-group-title:hover {
-  color: var(--prose-fg);
-}
+.prose-custom .code-group-title:hover { color: var(--prose-fg); }
 
-.prose-custom .code-group-title[data-active="true"] {
-  color: var(--prose-fg);
-}
+.prose-custom .code-group-title[data-active="true"] { color: var(--prose-fg); }
 
 .prose-custom .underline-indicator {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 0.125rem;
+  height: 1.5px;
   border-radius: 9999px;
   background: var(--prose-accent);
   transform: scaleX(0);
   transition: transform var(--prose-transition);
 }
-.prose-custom  .code-group-title[data-active="true"] .underline-indicator {
+
+.prose-custom .code-group-title[data-active="true"] .underline-indicator {
   transform: scaleX(1);
 }
 
@@ -141,17 +130,15 @@
   padding: 0.25rem;
   color: var(--prose-fg-subtle);
   cursor: pointer;
-  transition: var(--prose-transition);
+  transition: color var(--prose-transition);
 }
 
-.prose-custom .copy-button:hover {
-  color: var(--prose-fg);
-}
+.prose-custom .copy-button:hover { color: var(--prose-fg); }
 
 .prose-custom .copy-button .copy-icon,
 .prose-custom .copy-button .check-icon {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1.125rem;
+  height: 1.125rem;
 }
 
 .prose-custom .code-group pre {
@@ -169,15 +156,11 @@
   white-space: pre !important;
 }
 
-.prose-custom .code-group pre::-webkit-scrollbar {
-  height: 6px;
-}
-.prose-custom .code-group pre::-webkit-scrollbar-track {
-  background: transparent;
-}
+.prose-custom .code-group pre::-webkit-scrollbar { height: 4px; }
+.prose-custom .code-group pre::-webkit-scrollbar-track { background: transparent; }
 .prose-custom .code-group pre::-webkit-scrollbar-thumb {
   background: var(--prose-border);
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 .prose-custom .code-group-content {
@@ -185,14 +168,11 @@
   border-radius: 0;
   border-style: none;
   background-color: transparent;
-  font-size: 1rem;
 }
 
-
-/* ============================================
-   RESPONSIVE
-   ============================================ */
-/* DESKTOP */
+/* ══════════════════════════════════════════════════════════════════
+   MOBILE  ≤767px
+══════════════════════════════════════════════════════════════════ */
 @media (max-width: 767px) {
   .prose-custom code:not(pre code) {
     font-size: 0.75rem !important;
@@ -201,19 +181,20 @@
 
   .prose-custom pre {
     padding: 1rem;
-    margin: 1.25rem 0;
-    border-radius: var(--prose-radius-sm, 6px);
+    margin: 1.5rem 0;
+    border-radius: var(--prose-radius-sm);
   }
 
   .prose-custom pre code {
-    font-size: 0.9375rem !important;
+    font-size: 0.8125rem !important;
+    line-height: 1.7;
   }
 
   .prose-custom pre .copy-btn {
     top: 0.5rem;
     right: 0.5rem;
-    font-size: 0.625rem;
-    padding: 0.2rem 0.5rem;
+    font-size: 0.5625rem;
+    padding: 0.2rem 0.45rem;
   }
 
   .prose-custom .copy-button .copy-icon,
@@ -223,19 +204,21 @@
   }
 
   .prose-custom .code-group-title {
-    font-size: 1rem !important;
+    font-size: 0.75rem !important;
   }
 }
 
-/* MOBILE */
-@media (min-width: 767px) {
+/* ══════════════════════════════════════════════════════════════════
+   DESKTOP  ≥768px
+══════════════════════════════════════════════════════════════════ */
+@media (min-width: 768px) {
   .prose-custom code:not(pre code) {
     font-size: 0.8125rem !important;
   }
 
   .prose-custom pre {
     padding: 1.25rem 1.5rem;
-    margin: 1.75rem 0;
+    margin: 2rem 0;
   }
 
   .prose-custom pre code {
@@ -245,15 +228,11 @@
   }
 
   .prose-custom .code-group-title {
-    font-size: 0.875rem !important;
+    font-size: 0.8125rem !important;
   }
 }
 
-
-/* ============================================
-   DARK MODE
-   ============================================ */
-
+/* ─── DARK MODE (Shiki) ──────────────────────────────────────────── */
 .dark .astro-code {
   background-color: var(--shiki-dark-bg, var(--prose-surface)) !important;
 }
