@@ -2,30 +2,49 @@
 import NavLink from "../ui/NavLink.astro";
 import { siteConfig } from "@/config/site";
 import { getCollection } from 'astro:content';
+import Icon from "../ui/Icon";
 
 const allSettings = await getCollection('settings');
 const activeSetting = allSettings[0];
+
 const siteData = activeSetting?.data || siteConfig;
+
 const currentPath = Astro.url.pathname;
+
 const navItems = siteData.navItems || siteConfig.navItems;
+
+const normalize = (path: string) =>
+  path.replace(/\/$/, "") || "/";
 ---
 
-<nav class="hidden md:flex items-center justify-center gap-2 ml-2" aria-label="Main navigation">
-  {navItems.map((item: { href: string; label: string }) => {
-    const normalize = (path: string) => path.replace(/\/$/, "") || "/";
+<nav
+  class="hidden md:flex items-center justify-center gap-2 ml-2"
+  aria-label="Main navigation"
+>
+  {navItems.map((item) => {
     const activePath = normalize(currentPath);
     const targetPath = normalize(item.href);
 
     const isActive =
       activePath === targetPath ||
-      (targetPath !== "/" && activePath.startsWith(targetPath));
-      
+      (targetPath !== "/" &&
+        activePath.startsWith(targetPath));
+
     return (
       <NavLink
         href={item.href}
         current={isActive}
+        target={item.isExternal ? "_blank" : undefined}
+        rel={item.isExternal ? "noopener noreferrer" : undefined}
       >
         {item.label}
+
+        {item.isExternal && (
+          <Icon
+            name="external"
+            className="size-3 shrink-0 opacity-0 transition-opacity group-hover:opacity-100"
+          />
+        )}
       </NavLink>
     );
   })}
