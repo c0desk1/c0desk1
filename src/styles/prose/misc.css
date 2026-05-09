@@ -1,14 +1,15 @@
 /* src/styles/prose/components/misc.css */
 
-/* HR */
+/* ─── HR ─────────────────────────────────────────────────────────── */
 .prose-custom hr {
   margin: 2.5rem 0;
   border: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--prose-border), transparent);
+  background: var(--prose-border);
+  opacity: 0.6;
 }
 
-/* KBD */
+/* ─── KBD ────────────────────────────────────────────────────────── */
 .prose-custom kbd {
   font-family: var(--prose-font-mono);
   font-size: 0.75rem;
@@ -20,21 +21,22 @@
   border: 1px solid var(--prose-border);
   border-bottom-width: 2px;
   box-shadow: 0 1px 0 var(--prose-border);
-  margin: 0 0.15rem;
+  margin: 0 0.125rem;
   vertical-align: middle;
   white-space: nowrap;
   display: inline-block;
   line-height: 1;
+  letter-spacing: 0;
 }
 
-/* BADGES / TAGS */
+/* ─── BADGES ─────────────────────────────────────────────────────── */
 .prose-custom .badge {
   display: inline-flex;
   align-items: center;
   font-family: var(--prose-font-sans);
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   padding: 0.2em 0.55em;
   border-radius: var(--prose-radius-sm);
@@ -44,13 +46,13 @@
 }
 
 .prose-custom .badge-default {
-  color: var(--prose-fg-muted);
+  color: var(--prose-fg-subtle);
   border-color: var(--prose-border);
   background: var(--prose-surface);
 }
 
 .prose-custom .badge-accent {
-  color: var(--prose-accent-dim);
+  color: #047857;
   border-color: #a7f3d0;
   background: #f0fdf4;
 }
@@ -61,7 +63,7 @@
   background: #fff1f2;
 }
 
-/* DL / ADDRESS */
+/* ─── DL ─────────────────────────────────────────────────────────── */
 .prose-custom dl {
   margin: 1.5rem 0;
   display: flex;
@@ -75,16 +77,17 @@
   font-weight: 600;
   color: var(--prose-fg);
   font-family: var(--prose-font-sans);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
   margin-bottom: 0.25rem;
 }
 
 .prose-custom dd {
   margin-left: 0;
   color: var(--prose-fg-subtle);
-  border-left: 2px solid var(--prose-border);
+  border-left: 1.5px solid var(--prose-border);
   padding-left: 1rem;
   margin-bottom: 0.5rem;
+  transition: border-left-color 0.15s ease;
 }
 
 .prose-custom dt + dd {
@@ -93,33 +96,31 @@
 
 .prose-custom dd:hover {
   border-left-color: var(--prose-accent);
-  transition: border-left-color 0.2s ease;
 }
 
-/* ADDRESS */
+/* ─── ADDRESS ────────────────────────────────────────────────────── */
 .prose-custom address {
   font-style: normal;
   font-size: 0.875rem;
   line-height: 1.6;
   color: var(--prose-fg-subtle);
-  background-color: var(--prose-bg-muted);
+  background-color: var(--prose-surface);
   padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
+  border-radius: var(--prose-radius-md);
   border: 1px solid var(--prose-border);
   margin: 1.5rem 0;
-  transition: all 0.2s ease;
+  transition: border-color 0.15s ease;
 }
 
 .prose-custom address:hover {
-  border-color: var(--prose-accent);
-  background-color: var(--prose-bg-muted);
+  border-color: var(--prose-fg-subtle);
 }
 
 .prose-custom address a {
   color: var(--prose-accent);
   text-decoration: none;
   border-bottom: 1px solid transparent;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.15s ease;
 }
 
 .prose-custom address a:hover {
@@ -127,41 +128,39 @@
 }
 
 .prose-custom address .contact-label {
-  font-weight: 500;
+  font-weight: 600;
   color: var(--prose-fg);
+  letter-spacing: -0.01em;
 }
 
-/* MOBILE */
+/* ══════════════════════════════════════════════════════════════════
+   MOBILE  ≤767px
+══════════════════════════════════════════════════════════════════ */
 @media (max-width: 767px) {
-  /* KBD */
+  .prose-custom hr {
+    margin: 2rem 0;
+  }
+
   .prose-custom kbd {
     font-size: 0.6875rem;
     padding: 0.1em 0.35em;
     margin: 0 0.1rem;
   }
 
-  /* Badges */
   .prose-custom .badge {
-    font-size: 0.625rem;
+    font-size: 0.5625rem;
     padding: 0.15em 0.45em;
   }
 
-  /* DL */
   .prose-custom dl {
     margin: 1.25rem 0;
     gap: 0.5rem;
     font-size: 0.875rem;
   }
 
-  .prose-custom dt {
-    margin-bottom: 0.15rem;
-  }
+  .prose-custom dt { margin-bottom: 0.15rem; }
+  .prose-custom dd { padding-left: 0.75rem; }
 
-  .prose-custom dd {
-    padding-left: 0.75rem;
-  }
-
-  /* Address */
   .prose-custom address {
     font-size: 0.8125rem;
     padding: 0.625rem 0.875rem;
@@ -169,32 +168,28 @@
   }
 }
 
-/* TABLET/DESKTOP */
+/* ══════════════════════════════════════════════════════════════════
+   DESKTOP  ≥768px
+══════════════════════════════════════════════════════════════════ */
 @media (min-width: 768px) {
-  /* KBD */
   .prose-custom kbd {
     font-size: 0.75rem;
     padding: 0.15em 0.45em;
   }
 
-  /* Badges */
   .prose-custom .badge {
-    font-size: 0.6875rem;
+    font-size: 0.625rem;
     padding: 0.2em 0.55em;
   }
 
-  /* DL */
   .prose-custom dl {
     margin: 1.5rem 0;
     gap: 0.75rem;
     font-size: 0.9375rem;
   }
 
-  .prose-custom dd {
-    padding-left: 0.75rem;
-  }
+  .prose-custom dd { padding-left: 1rem; }
 
-  /* Address */
   .prose-custom address {
     font-size: 0.875rem;
     padding: 0.75rem 1rem;
