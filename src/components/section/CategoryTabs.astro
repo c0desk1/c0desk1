@@ -13,12 +13,13 @@ const { posts, categories } = Astro.props;
 
 const POSTS_PER_PAGE = 6;
 const POSTS_MAX      = 12;
-const visibleCategories = categories.slice(0, 6);
+const visibleCategories = categories.slice(0, 8);
 
 const ALL_KEY = "__all__";
 
 const postsByCategory: Record<string, CollectionEntry<"blog">[]> = {};
 postsByCategory[ALL_KEY] = posts;
+
 for (const cat of visibleCategories) {
   postsByCategory[cat.id] = posts.filter(
     (p) => p.data.category.id === cat.id
@@ -30,7 +31,7 @@ const tabs = [
   ...visibleCategories.map((cat) => ({
     id:    cat.id,
     label: cat.data.name,
-    slug:  cat.id,   // assumes category id === slug, adjust if different
+    slug:  cat.id,
     count: postsByCategory[cat.id].length,
   })),
 ];
@@ -45,7 +46,7 @@ const tabs = [
 >
 
   <!-- ── Tab bar ──────────────────────────────────────────────────── -->
-  <div class="mb-8 sticky top-14 z-40 bg-(--bg)">
+  <div class="mb-8 sticky top-16 z-40 bg-(--bg)">
 
     <!-- ┌─ Mobile ─────────────────── -->
     <div class="md:hidden top-1" id="ct-mobile-dropdown">
@@ -54,11 +55,11 @@ const tabs = [
         aria-haspopup="listbox"
         aria-expanded="false"
         aria-controls="ct-listbox"
-        class="ct-trigger group flex w-full items-center justify-between gap-3
-               px-4 py-3 rounded-xl border border-(--border) bg-(--bg)
-               text-[13px] font-medium text-(--fg) cursor-pointer
+        class="ct-trigger group flex w-full items-center justify-between gap-4
+               px-4 py-3 rounded-xl border border-(--border) bg-(--fg)
+               text-[13px] font-medium text-(--bg) cursor-pointer
                transition-all duration-200
-               hover:border-(--border-strong) hover:bg-(--bg-subtle)
+               hover:border-(--border-strong) hover:bg-(--fg-muted)
                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)"
       >
         <span class="flex items-center gap-2.5">
@@ -202,7 +203,6 @@ const tabs = [
             {hasMore && (
               <div class="flex flex-col items-center gap-3 pt-8" data-loadmore-wrap>
 
-                {/* Load more button — hidden once clicked */}
                 {middle.length > 0 && (
                   <button
                     data-loadmore
@@ -217,7 +217,6 @@ const tabs = [
                   </button>
                 )}
 
-                {/* "Lihat semua" — only shown when total exceeds POSTS_MAX */}
                 {needsSeeAll && categoryHref && (
                   <a
                     data-seeall
@@ -239,7 +238,6 @@ const tabs = [
                   </a>
                 )}
 
-                {/* "Lihat semua" for "Semua" tab — points to first category or a /blog/all page */}
                 {needsSeeAll && !categoryHref && (
                   <a
                     data-seeall
