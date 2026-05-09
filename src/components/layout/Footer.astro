@@ -1,98 +1,245 @@
 ---
 // src/components/layout/Footer.astro
-
 import { siteConfig } from "@/config/site";
 import { getEntry } from "astro:content";
 
-import Container from "../ui/Container.astro";
-import Section from "../ui/Section.astro";
-
-import Icon from "@/components/ui/Icon";
-
-import Newsletter from "../layout/Newsletter.astro";
+import Container   from "../ui/Container.astro";
+import Section     from "../ui/Section.astro";
+import Icon        from "@/components/ui/Icon";
+import Newsletter  from "../layout/Newsletter.astro";
 import StatusButton from "../ui/StatusButton.astro";
 import ThemeToggle from "../ui/ThemeToggle.astro";
 
 let settings;
-
 try {
   settings = await getEntry("settings", "site");
 } catch {
   console.warn("Settings not found, menggunakan siteConfig fallback");
 }
 
-const siteData = settings?.data || siteConfig;
+const siteData      = settings?.data || siteConfig;
 const footerSections = siteData.footerSections || siteConfig.footerSections;
-const social = siteData.social || siteConfig.social;
-const year = new Date().getFullYear();
+const social        = siteData.social || siteConfig.social;
+const year          = new Date().getFullYear();
 ---
 
-<footer class="relative border-t border-(--border)/60 bg-(--bg)">
+<footer class="ft-root">
   <Section size="none">
-    <div class="flex items-center border-b border-dashed border-(--border)/60 py-6">
+
+    <!-- ── Top: nav + newsletter ── -->
+    <div class="ft-top">
       <Container size="xl">
-        <div class="flex flex-col-reverse md:flex-row items-start md:items-center justify-self-start md:justify-between w-full gap-6">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="ft-top-inner">
+
+          <!-- Nav columns -->
+          <nav class="ft-nav" aria-label="Footer navigation">
             {footerSections.map((section) => (
-              <div class="min-w-0">
-                <div class="mb-3 flex items-center text-xs font-mono uppercase tracking-[0.18em] text-(--fg)">
-                  <span class="truncate">
-                    {section.title}
-                  </span>
-                </div>
-                <ul class="space-y-1 items-baseline justify-center">
+              <div class="ft-col">
+                <p class="ft-col-title">{section.title}</p>
+                <ul class="ft-col-list">
                   {section.items.map((link) => (
                     <li>
-                      <a href={link.href} target={link.isExternal ? "_blank" : undefined} rel={link.isExternal ? "noopener noreferrer" : undefined} class="group flex items-center text-sm text-(--fg-muted) transition-colors hover:text-(--fg) gap-1 py-1">
+                      <a
+                        href={link.href}
+                        target={link.isExternal ? "_blank" : undefined}
+                        rel={link.isExternal ? "noopener noreferrer" : undefined}
+                        class="ft-link"
+                      >
                         {link.label}
                         {link.isExternal && (
-                          <Icon name="external" className="size-3 shrink-0 opacity-80 transition-opacity group-hover:opacity-100" />
+                          <Icon name="external" className="ft-external-icon" />
                         )}
                       </a>
                     </li>
                   ))}
-                 </ul>
+                </ul>
               </div>
             ))}
-          </div>
-          <div class="flex items-center">
+          </nav>
+
+          <!-- Newsletter -->
+          <div class="ft-newsletter">
             <Newsletter />
           </div>
+
         </div>
       </Container>
     </div>
+
+    <!-- ── Bottom: social + copyright + status + theme ── -->
     <Container size="xl">
-      <div class="flex flex-col w-full items-center py-4 gap-4 md:gap-8">
-        <div class="w-full flex justify-between items-center gap-4">
-          <div class="flex items-center text-(--fg-muted) gap-2">
+      <div class="ft-bottom">
+
+        <!-- Row 1: social + copyright -->
+        <div class="ft-bottom-row">
+          <div class="ft-social">
             {social.map((item: { href: string; label: string }) => (
               <a
                 href={item.href}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={item.label}
-                class="flex items-center rounded-(--radius-full) transition-all hover:bg-(--bg-muted) hover:text-(--fg) gap-2"
+                class="ft-social-link"
               >
-                <Icon name={item.label as any} className="size-4" />
-                <span class="hidden">{item.label}</span>
+                <Icon name={item.label as any} className="ft-social-icon" />
               </a>
             ))}
           </div>
-          <div class="flex items-center text-sm text-(--fg-muted)">
-            <span>
-              © {year} {siteData.siteName}
-            </span>
-          </div>
+          <span class="ft-copy">
+            © {year} {siteData.siteName}
+          </span>
         </div>
-        <div class="w-full flex items-center justify-between gap-4">
-          <div class="flex items-center">
-           <StatusButton />
-          </div>
-          <div class="flex items-center">
-            <ThemeToggle />
-          </div>
+
+        <!-- Row 2: status + theme -->
+        <div class="ft-bottom-row">
+          <StatusButton />
+          <ThemeToggle />
         </div>
+
       </div>
     </Container>
+
   </Section>
 </footer>
+
+<style>
+  /* ─── FOOTER ROOT ────────────────────────────────────────────────── */
+  .ft-root {
+    position: relative;
+    border-top: 1px solid var(--border);
+    background-color: var(--bg);
+  }
+
+  /* ─── TOP BAND ───────────────────────────────────────────────────── */
+  .ft-top {
+    border-bottom: 1px dashed var(--border);
+    padding-block: 2.5rem;
+  }
+
+  .ft-top-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    align-items: flex-start;
+  }
+
+  @media (min-width: 768px) {
+    .ft-top-inner {
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+  }
+
+  /* ─── NAV COLUMNS ────────────────────────────────────────────────── */
+  .ft-nav {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem 2rem;
+    flex: 1;
+  }
+
+  @media (max-width: 480px) {
+    .ft-nav {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .ft-col-title {
+    margin: 0 0 0.75rem;
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fg);
+    font-family: var(--font-mono);
+  }
+
+  .ft-col-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .ft-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--fg-muted);
+    padding-block: 0.25rem;
+    letter-spacing: -0.005em;
+    transition: color 0.15s ease;
+  }
+
+  .ft-link:hover { color: var(--fg); }
+
+  :global(.ft-external-icon) {
+    width: 0.6875rem;
+    height: 0.6875rem;
+    flex-shrink: 0;
+    opacity: 0.5;
+    transition: opacity 0.15s ease;
+  }
+
+  .ft-link:hover :global(.ft-external-icon) { opacity: 1; }
+
+  /* ─── NEWSLETTER ─────────────────────────────────────────────────── */
+  .ft-newsletter {
+    flex-shrink: 0;
+  }
+
+  /* ─── BOTTOM BAND ────────────────────────────────────────────────── */
+  .ft-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    padding-block: 1rem;
+  }
+
+  .ft-bottom-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  /* ─── SOCIAL ─────────────────────────────────────────────────────── */
+  .ft-social {
+    display: flex;
+    align-items: center;
+    gap: 0.125rem;
+  }
+
+  .ft-social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-full);
+    color: var(--fg-muted);
+    transition: color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .ft-social-link:hover {
+    color: var(--fg);
+    background-color: var(--bg-muted);
+  }
+
+  :global(.ft-social-icon) {
+    width: 1rem;
+    height: 1rem;
+    display: block;
+  }
+
+  /* ─── COPYRIGHT ──────────────────────────────────────────────────── */
+  .ft-copy {
+    font-size: 0.8125rem;
+    color: var(--fg-subtle);
+    letter-spacing: -0.005em;
+  }
+</style>
