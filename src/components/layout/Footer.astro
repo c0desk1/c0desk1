@@ -23,31 +23,22 @@ try {
 
 const siteData = settings?.data || siteConfig;
 
-const footerSections =
-  siteData.footerSections || siteConfig.footerSections;
+const footerSections = siteData.footerSections || siteConfig.footerSections;
 
-const social = siteData.social ?? {};
+const social = siteData.social || siteConfig.social;
 
 const year = new Date().getFullYear();
-
-const socialEntries = Object.entries(social).filter(([_, url]) => url);
 ---
 
 <footer class="relative border-t border-(--border)/60 bg-(--bg)">
-  <div aria-hidden="true" class="pointer-events-none absolute inset-0 opacity-[0.025]">
-    <div class="absolute inset-0 bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] bg-size-[28px_28px]" />
-  </div>
   <Section size="none">
     <div class="flex items-center border-b border-dashed border-(--border)/60 py-6">
       <Container size="xl">
-        <div class="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
-          <div class="flex w-full flex-col gap-5 lg:max-w-sm">
-            <Newsletter />
-          </div>
-          <div class="grid w-full gap-x-10 gap-y-8 sm:grid-cols-2 lg:max-w-3xl lg:grid-cols-4">
+        <div class="flex flex-col-reverse md:flex-row items-start md:items-center justify-self-start md:justify-between w-full gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             {footerSections.map((section) => (
               <div class="min-w-0">
-                <div class="mb-3 flex items-center gap-2 text-[13px] md:text-sm font-semibold uppercase tracking-[0.18em] text-(--fg)">
+                <div class="mb-3 flex items-center text-[13px] font-semibold uppercase tracking-[0.18em] text-(--fg)">
                   <span class="truncate">
                     {section.title}
                   </span>
@@ -55,10 +46,8 @@ const socialEntries = Object.entries(social).filter(([_, url]) => url);
                 <ul class="space-y-1">
                   {section.items.map((link) => (
                     <li>
-                      <a href={link.href} target={link.isExternal ? "_blank" : undefined} rel={link.isExternal ? "noopener noreferrer" : undefined} class="group flex items-center justify-between gap-3 py-1.5 text-sm text-(--fg-muted) transition-colors hover:text-(--fg)">
-                        <span class="truncate">
-                          {link.label}
-                        </span>
+                      <a href={link.href} target={link.isExternal ? "_blank" : undefined} rel={link.isExternal ? "noopener noreferrer" : undefined} class="group flex items-center py-1 text-[13px] md:text-sm text-(--fg-muted) transition-colors hover:text-(--fg) gap-2">
+                        {link.label}
                         {link.isExternal && (
                           <Icon name="external" className="size-3 shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
                         )}
@@ -69,15 +58,24 @@ const socialEntries = Object.entries(social).filter(([_, url]) => url);
               </div>
             ))}
           </div>
+          <div class="flex items-center">
+            <Newsletter />
+          </div>
         </div>
       </Container>
     </div>
     <Container size="xl">
       <div class="flex flex-col gap-3 py-4 md:flex-row md:items-center md:justify-between">
-        <div class="flex flex-wrap items-center gap-1.5">
-          {socialEntries.map(([platform, url]) => (
-            <a href={url} target="_blank" rel="noopener noreferrer" aria-label={platform} class="flex size-6 items-center justify-center rounded-(--radius-full) text-(--fg-muted) transition-all hover:bg-(--bg-muted) hover:text-(--fg)">
-              <Icon name={platform as any} className="size-4" />
+        <div class="flex flex-wrap items-center gap-2">
+           {social.map((item: { href: string; label: string }) => (
+            <a
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={item.label}
+              class="flex size-6 items-center justify-center rounded-(--radius-full) text-(--fg-muted) transition-all hover:bg-(--bg-muted) hover:text-(--fg)"
+            >
+              <Icon name={item.label as any} className="size-4" />
             </a>
           ))}
         </div>
