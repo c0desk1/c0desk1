@@ -1,5 +1,7 @@
 ---
 
+export const prerender = true;
+
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
@@ -33,10 +35,7 @@ const authorPosts = allPosts
 const siteURL = Astro.site?.toString() ?? siteConfig.siteUrl;
 const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
-const social = {
-  ...siteConfig.social,
-  ...(author.data.social || {})
-};
+const social = author.data.social || siteConfig.author.social;
 
 const seoData = {
   title: author.data.name,
@@ -100,12 +99,19 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
         </p>
 
         <div class="flex flex-wrap justify-center gap-3">
-          {Object.entries(social).map(([platform, url]) => (
-            <Button href={url} variant="secondary" size="sm" target="_blank">
-              <Icon name={platform.toLowerCase() as any} className="w-4 h-4" />
-              <span class="capitalize">{platform}</span>
-            </Button>
-          ))}
+          {social.map((item: { href: string; label: string }) => {
+            return (
+              <a
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={item.label}
+                class="flex size-6 items-center justify-center rounded-(--radius-full) text-(--fg-muted) transition-all hover:bg-(--bg-muted) hover:text-(--fg)"
+              >
+                <Icon name={item.label as any} className="size-4" />
+              </a>
+            );
+          })}
         </div>
       </div>
     </Container>
