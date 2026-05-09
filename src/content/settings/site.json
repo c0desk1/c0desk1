@@ -5,15 +5,43 @@
   "siteUrl": "https://c0desk1.my.id",
   "siteLogo": "/org/c0desk1-logo.svg",
   "siteMail": "hallo@c0desk1.my.id",
-  "social": {
-    "github": "https://github.com/c0desk1",
-    "twitter": "https://twitter.com/c0desk1",
-    "sitemap": "https://c0desk1.my.id/sitemap-index.xml"
-  },
+  "social": [
+    { "label": "github", "href": "https://github.com/c0desk1"},
+    { "label": "sitemap", "href": "https://c0desk1.my.id/sitemap-index.xml"},
+    { "label": "rss", "href": "https://c0desk1.my.id/rss.xml"}
+  ],
   "navItems": [
-    { "href": "/blog/", "label": "Blog" },
-    { "href": "/portfolio/", "label": "Portfolio" },
-    { "href": "/about/", "label": "Tentang" }
+    { "href": "/blog/", "label": "Blog", "isExternal": false },
+    { "href": "/portfolio/", "label": "Portfolio", "isExternal": false },
+    { "href": "/about/", "label": "Tentang", "isExternal": false },
+    { "href": "https://dev-adogen.bimasaktiakbarr.workers.dev", "label": "Adogen", "isExternal": true }
+  ],
+  "mobileNavItems": [
+    {
+      "title": "Navigasi",
+      "items": [
+        { "href": "/blog/", "label": "Blog", "isExternal": false },
+        { "href": "/portfolio/", "label": "Portfolio", "isExternal": false },
+        { "href": "/contact/", "label": "Kontak", "isExternal": false },
+        { "href": "/about/", "label": "Tentang", "isExternal": false }
+      ]
+    },
+    {
+      "title": "Alat",
+      "items": [
+        { "href": "https://dev-adogen.bimasaktiakbarr.workers.dev", "label": "Adogen", "isExternal": true }
+      ]
+    },
+    {
+      "title": "Legal",
+      "items": [
+        { "href": "/disclaimer/", "label": "Disclaimer", "isExternal": false },
+        { "href": "/privacy-policy/", "label": "Kebijakan Privasi", "isExternal": false },
+        { "href": "/terms-of-service/", "label": "Ketentuan Layanan", "isExternal": false },
+        { "href": "/cookie-policy/", "label": "Kebijakan Cookie", "isExternal": false },
+        { "href": "/dmca/", "label": "DMCA & Hak Cipta", "isExternal": false }
+      ]
+    }
   ],
   "footerSections": [
     {
@@ -23,6 +51,12 @@
         { "href": "/portfolio/", "label": "Portfolio", "isExternal": false },
         { "href": "/contact/", "label": "Kontak", "isExternal": false },
         { "href": "/about/", "label": "Tentang", "isExternal": false }
+      ]
+    },
+    {
+      "title": "Alat",
+      "items": [
+        { "href": "https://dev-adogen.bimasaktiakbarr.workers.dev", "label": "Adogen", "isExternal": true }
       ]
     },
     {
