@@ -1,66 +1,47 @@
 /* src/styles/prose/components/link.css */
 
-/* LINKS */
-
-/* GLOBAL */
+/* ─── GLOBAL ─────────────────────────────────────────────────────── */
 .prose-custom a {
-  color: var(--prose-accent);
+  color: var(--prose-accent-dim);
   outline-offset: 2px;
   -webkit-tap-highlight-color: transparent;
-  transition: opacity var(--prose-transition), color var(--prose-transition);
+  transition: color var(--prose-transition);
 }
 
 .prose-custom a:visited {
-  color: var(--prose-accent-visited, var(--prose-accent));
+  color: var(--prose-accent-dim);
 }
 
 .prose-custom a:focus-visible {
-  outline: 2px solid var(--prose-accent);
+  outline: 2px solid var(--prose-accent-dim);
   border-radius: var(--prose-radius-sm);
 }
 
 @media (hover: hover) {
   .prose-custom a:hover {
-    color: var(--prose-accent-dim);
+    color: var(--prose-accent);
   }
 }
 
+/* ─── INLINE LINK ────────────────────────────────────────────────── */
 .prose-custom .inline-link {
   display: inline-flex;
   align-items: center;
   gap: 2px;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  text-decoration-thickness: 1px;
-  text-decoration-color: var(--prose-accent-subtle, rgba(0,0,0,0.1));
-  transition: all var(--prose-transition);
+  text-decoration: none;
 }
 
 .prose-custom .inline-link:hover {
-  text-decoration-color: var(--prose-accent);
-  text-underline-offset: 2px;
+  color: var(--prose-accent);
 }
 
+/* ─── EXTERNAL ICON ──────────────────────────────────────────────── */
 .prose-custom .external-icon {
-  opacity: 0.5;
+  opacity: 0.4;
   transition: transform var(--prose-transition), opacity var(--prose-transition);
 }
 
-.prose-custom :hover .external-icon {
+.prose-custom :hover > .external-icon {
   opacity: 1;
   transform: translate(1px, -1px);
-}
-
-/* MOBILE */
-@media (max-width: 767px) {
-  .prose-custom .inline-link {
-    text-underline-offset: 3px;
-  }
-}
-
-/*TABLET/DESKTOP*/
-@media (min-width: 768px) {
-  .prose-custom .inline-link {
-    text-underline-offset: 4px;
-  }
 }
