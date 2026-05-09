@@ -30,14 +30,18 @@ const {
     noIndex = true,
     header = false,
     footer = false,
-    withContainer = true,
+    withContainer = false,
     size = "full",
     ...seoProps
 } = Astro.props;
 ---
 
 <!DOCTYPE html>
-<html lang="id-ID" dir="ltr" class="scroll-smooth antialiased">
+
+<html
+  lang="id-ID"
+  dir="ltr"
+  class="scroll-smooth antialiased">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
