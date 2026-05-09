@@ -1,5 +1,7 @@
 ---
 
+export const prerender = true;
+
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
@@ -52,7 +54,7 @@ const seoData = {
 const authorCategory = {
   name: "Author",
   slug: "author",
-  description: "Daftar penulis"
+  description: "Daftar artikel dari penulis."
 };
 
 const optimizedAvatar = isCdnUrl(author.data.avatar) ? cdnImage(author.data.avatar, { w: 112, h: 112, q: 85 }) : author.data.avatar;
@@ -79,26 +81,24 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
           "dark:bg-[radial-gradient(#404040_1px,transparent_1px)]",
         )}
       />
-      
       <div class="pointer-events-none absolute inset-0 z-1 flex items-center justify-center bg-(--bg) mask-[radial-gradient(ellipse_at_center,transparent_20%,black)]" />
-      
       <Container size="lg" class="py-16">
         <section class="flex flex-col-reverse md:flex-row items-center justify-center md:justify-between gap-4" aria-labelledby="author-heading">
           <div class="flex flex-col justify-center md:justify-start items-center md:items-start z-3">
             <Breadcrumb items={Breadcrumbs} />
             <div class="mt-5 space-y-5">
               <div class="space-y-3">
-                <h1 id="author-heading" class="text-4xl md:text-5xl font-semibold tracking-[-0.04em] text-(--fg)">
+                <h1 id="author-heading" class="text-4xl md:text-5xl font-semibold tracking-[-0.04em] text-(--fg) text-center md:text-start">
                   {author.data.name}
                 </h1>
-                <p class="text-[13px] md:text-sm text-(--fg-subtle) tracking-tight">
+                <p class="text-[13px] md:text-sm text-(--fg-subtle) tracking-tight text-center md:text-start">
                   {author.data.role}
                 </p>
               </div>
-              <p class="max-w-2xl text-[13px] md:text-sm leading-7 text-(--fg-muted)">
+              <p class="max-w-2xl text-[13px] md:text-sm leading-7 text-(--fg-muted) text-center md:text-start">
                 {author.data.bio}
               </p>
-              <div class="flex items-center gap-2 pt-2">
+              <div class="flex items-center text-center md:text-start gap-2 pt-2 flex-wrap">
                 {social.map((item: { href: string; label: string }) => (
                   <a
                     href={item.href}
@@ -109,9 +109,9 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
                   >
                     <Icon
                       name={item.label as any}
-                      className="size-4 transition-transform duration-200 group-hover:scale-110"
+                      className="w-4 h-4 transition-transform duration-200 group-hover:scale-110"
                     />
-                    <span class="text-[13px]">
+                    <span class="text-[13px] capitalize">
                       {item.label}
                     </span>
                   </a>
