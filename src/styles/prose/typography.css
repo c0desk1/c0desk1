@@ -56,9 +56,6 @@
 .prose-custom .anchor-link svg {
   width: 1rem;
   height: 1rem;
-  stroke: currentColor;
-  stroke-width: 1.75;
-  fill: none;
 }
 
 /* ─── INLINE TYPOGRAPHY ──────────────────────────────────────────── */
@@ -322,7 +319,7 @@
 ══════════════════════════════════════════════════════════════════ */
 @media (min-width: 768px) {
   .prose-custom :where(h1, h2, h3, h4, h5, h6) {
-    scroll-margin-top: 57px;
+    scroll-margin-top: 60px;
   }
 
   /* h1 — display/hero: large, tight, heavy */
