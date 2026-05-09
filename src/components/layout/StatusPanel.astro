@@ -6,49 +6,56 @@ import Icon from "../ui/Icon";
 const services = ['api', 'web', 'cdn', 'bot'];
 ---
 
-<div id="status-overlay" class="status-overlay"></div>
-<div id="status-panel" class="status-panel">
-  <div class="panel-inner">
-    <div class="panel-header">
-      <div class="header-left">
-        <span id="panel-dot" class="header-dot"></span>
-        <div>
-          <p class="header-title">Status Sistem</p>
-          <p id="last-updated-text" class="header-sub">Menunggu sinkronisasi...</p>
+<div id="status-overlay" class="status-overlay fixed inset-0 z-90 bg-(--bg)/60 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300"></div>
+
+<div 
+  id="status-panel" 
+  class="fixed bottom-0 left-0 right-0 z-100 bg-(--bg) border-t border-(--border) shadow-lg rounded-t-(--radius-xl) max-h-[85vh] overflow-y-auto overscroll-contain transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+  style="transform: translateY(100%);"
+  data-open="false"
+>
+  <div class="max-w-2xl mx-auto p-5 sm:p-7">
+    <div class="flex items-center justify-between pb-5 border-b border-(--border) mb-1">
+      <div class="flex flex-col gap-2">
+        <div class="flex items-center gap-2">
+          <span id="panel-dot" class="w-2.5 h-2.5 bg-(--bg-subtle) shrink-0 transition-colors"></span>
+          <p class="text-sm md:text-base font-semibold tracking-tight text-(--fg) leading-relaxed">Status Sistem</p>
         </div>
+        <p id="last-updated-text" class="text-[13px] md:text-sm text(--fg-muted) leading-tight mt-0.5">Menunggu sinkronisasi...</p>
       </div>
-      <button id="close-panel" class="close-btn" aria-label="Tutup panel status">
+      <button id="close-panel" class="w-8 h-8 flex items-center justify-center rounded-full border border-(--border) bg-transparent text-(--fg) hover:bg-(--bg-muted) transition-all" aria-label="Tutup panel status">
         <Icon name="close" className="w-5 h-5" />
       </button>
     </div>
-    <div class="services-list">
+
+    <div class="services-list flex flex-col divide-y divide-(--border)">
       {services.map((id) => (
-        <div class="service-row" onclick={`toggleDetails('${id}')`}>
-          <div class="service-top">
-            <div class="service-left">
-              <span class="service-name">{id.toUpperCase()}</span>
-              <span id={`s-${id}-status-text`} class="service-latency"></span>
+        <div class="service-row py-4 cursor-pointer transition-colors hover:bg-(--bg-muted)/50" data-service={id}>
+          <div class="flex justify-between items-center mb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="text-[13px] md:text-sm font-mono font-semibold tracking-wide text-(--fg)">{id.toUpperCase()}</span>
+              <span id={`s-${id}-status-text`} class="text-[13px] md:text-sm font-mono opacity-90"></span>
             </div>
-            <span id={`s-${id}-metrics`} class="service-metrics">—</span>
+            <span id={`s-${id}-metrics`} class="text-[13px] md:text-sm text-(--fg-subtle) font-mono">—</span>
           </div>
-          <div class="bars-wrap">
+          <div class="flex items-end gap-[2px] h-7 bg-transparent min-h-[28px]">
             {Array.from({ length: 40 }).map((_, i) => (
-              <div data-bar={`${id}-${i}`} class="bar"></div>
+              <div data-bar={`${id}-${i}`} class="bar flex-1 h-full min-w-[2px] bg-(--bg-muted) rounded-sm transition-all duration-200 cursor-default relative hover:scale-y-110 origin-bottom"></div>
             ))}
           </div>
-          <div id={`details-${id}`} class="service-detail hidden">
-            <div class="detail-grid">
+          <div id={`details-${id}`} class="hidden mt-3 p-3.5 bg-(--bg-subtle)/50 border border-(--border) rounded-(--radius-lg)">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
               <div>
-                <p class="detail-label">Riwayat Waktu Aktif</p>
-                <p id={`s-${id}-uptime-val`} class="detail-val">Menghitung...</p>
+                <p class="text-xs font-semibold uppercase tracking-wider text-(--fg) mb-1">Waktu Aktif</p>
+                <p id={`s-${id}-uptime-val`} class="text-xs font-mono text-(--fg-muted)">Menghitung...</p>
               </div>
               <div>
-                <p class="detail-label">Identitas Node</p>
-                <p id={`s-${id}-node-val`} class="detail-val">Mengidentifikasi...</p>
+                <p class="text-xs font-semibold uppercase tracking-wider text-(--fg) mb-1">Node</p>
+                <p id={`s-${id}-node-val`} class="text-xs font-mono text-(--fg-muted)">Mengidentifikasi...</p>
               </div>
               <div>
-                <p class="detail-label">Pemeriksaan Terakhir</p>
-                <p id={`s-${id}-details-summary`} class="detail-val">—</p>
+                <p class="text-xs font-semibold uppercase tracking-wider text-(--fg) mb-1">Pemeriksaan Terakhir</p>
+                <p id={`s-${id}-details-summary`} class="text-xs font-mono text-(--fg-muted)">—</p>
               </div>
             </div>
           </div>
@@ -59,268 +66,13 @@ const services = ['api', 'web', 'cdn', 'bot'];
 </div>
 
 <style is:global>
-  .status-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    z-index: 90;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.35s ease;
+  #status-panel[data-open="true"] {
+    transform: translateY(0) !important;
   }
+
   .status-overlay.visible {
     opacity: 1;
     pointer-events: auto;
-  }
-
-  .status-panel {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    transform: translateY(100%);
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    background: var(--bg);
-    border-top: 1px solid var(--border);
-    box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.06);
-    max-height: 85vh;
-    overflow-y: auto;
-    border-top-left-radius: 16px;
-    border-top-right-radius: 16px;
-    overscroll-behavior: contain;
-  }
-
-  .status-panel.open {
-    transform: translateY(0);
-  }
-
-  .dark .status-panel {
-    box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.8);
-  }
-
-  .panel-inner {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 20px 20px 16px;
-  }
-
-  @media (min-width: 640px) {
-    .panel-inner {
-      padding: 28px 32px 20px;
-    }
-  }
-
-  .panel-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: 20px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 4px;
-  }
-
-  .header-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .header-dot {
-    width: 8px;
-    height: 8px;
-    background: var(--bg-muted);
-    flex-shrink: 0;
-    transition: background 0.3s;
-  }
-
-  .header-title {
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    color: var(--fg);
-    line-height: 1.65;
-  }
-
-  .header-sub {
-    font-size: 0.9375rem;
-    color: var(--fg-muted);
-    line-height: 1.3;
-    margin-top: 1px;
-  }
-
-  .close-btn {
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 9999px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--fg-muted);
-    cursor: pointer;
-    transition: all 0.15s ease;
-  }
-
-  .close-btn:hover {
-    background: var(--bg-subtle);
-    color: var(--fg);
-  }
-
-  .services-list {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .service-row {
-    padding: 16px 0;
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-    transition: background 0.1s;
-  }
-
-  .service-row:last-child {
-    border-bottom: none;
-  }
-
-  .service-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
-
-  .service-left {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .service-name {
-    font-size: 0.9375rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    color: var(--fg);
-    font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace;
-    transition: color 0.15s;
-  }
-
-  .service-row:hover .service-name {
-    color: var(--fg-subtle);
-  }
-
-  .service-latency {
-    font-size: 0.9375rem;
-    font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace;
-    font-weight: 500;
-    opacity: 0.9;
-  }
-
-  .service-metrics {
-    font-size: 0.9375rem;
-    color: var(--fg-muted);
-    font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace;
-  }
-
-  .bars-wrap {
-    display: flex;
-    align-items: flex-end;
-    gap: 2px;
-    height: 28px;
-    position: relative;
-    background: transparent;
-    min-height: 28px;
-  }
-
-  .bar {
-    flex: 1;
-    height: 100%;
-    min-width: 2px;
-    background: var(--border);
-    border-radius: 2px;
-    transition: background 0.2s, opacity 0.2s, transform 0.1s;
-    position: relative;
-    cursor: default;
-  }
-
-  .bar:empty {
-    background: repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 2px,
-      rgba(0,0,0,0.05) 2px,
-      rgba(0,0,0,0.05) 4px
-    );
-  }
-
-  .dark .bar:empty {
-    background: repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 2px,
-      rgba(255,255,255,0.05) 2px,
-      rgba(255,255,255,0.05) 4px
-    );
-  }
-
-  .bar:hover {
-    transform: scaleY(1.15);
-    transform-origin: bottom;
-    z-index: 1;
-  }
-
-  .bar[data-info]:hover::after {
-    content: attr(data-info);
-    position: absolute;
-    bottom: calc(100% + 6px);
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--bg);
-    color: var(--fg);
-    padding: 5px 8px;
-    border-radius: 5px;
-    font-size: 13px;
-    font-family: 'Geist Mono';
-    white-space: nowrap;
-    border: 1px solid var(--border-strong);
-    z-index: 50;
-    pointer-events: none;
-  }
-
-  .service-detail {
-    margin-top: 12px;
-    padding: 14px 16px;
-    background: var(--bg-subtle);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-  }
-
-  .service-detail.hidden { 
-    display: none; 
-  }
-
-  .detail-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 14px;
-  }
-
-  .detail-label {
-    font-size: 0.8375rem;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--fg);
-    margin-bottom: 3px;
-  }
-
-  .detail-val {
-    font-size: 0.8375rem;
-    font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace;
-    color: var(--fg-muted);
   }
 
   @keyframes pulse-dot {
@@ -331,17 +83,36 @@ const services = ['api', 'web', 'cdn', 'bot'];
   .header-dot.pulse {
     animation: pulse-dot 1.5s ease-in-out infinite;
   }
-  
-  @media (hover: hover) {
-    .bar:hover {
-      transform: scaleY(1.15);
-    }
+
+  .bar[data-info]:hover::after {
+    content: attr(data-info);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-subtle) !important;
+    color: var(--fg) !important;
+    padding: 5px 8px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace;
+    white-space: nowrap;
+    border: 1px solid var(--border) !important;
+    z-index: 50;
+    pointer-events: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+
+  .dark .bar[data-info]:hover::after {
+    background: var(--bg-muted) !important;
+    color: var(--fg) !important;
+    border-color: var(--border) !important;
   }
 </style>
 
 <script is:inline>
 (function() {
-  const API_URL = "/api/status";
+  const API_URL = "/api/status/";
  
   const panel     = document.getElementById("status-panel");
   const overlay   = document.getElementById("status-overlay");
@@ -371,19 +142,23 @@ const services = ['api', 'web', 'cdn', 'bot'];
     return "Beberapa waktu yang lalu";
   }
  
-  function toggleDetails(id) {
-    const el = document.getElementById(`details-${id}`);
-    if (el) el.classList.toggle("hidden");
+  const servicesContainer = document.querySelector('.services-list');
+  if (servicesContainer) {
+    servicesContainer.addEventListener('click', (e) => {
+      const serviceRow = e.target.closest('.service-row');
+      if (!serviceRow) return;
+      const id = serviceRow.dataset.service;
+      if (id) {
+        const detailsEl = document.getElementById(`details-${id}`);
+        if (detailsEl) detailsEl.classList.toggle('hidden');
+      }
+    });
   }
-  
-  window.toggleDetails = toggleDetails;
  
   function openStatus() {
-    panel?.classList.add("open");
-    overlay?.classList.add("visible");
+    if (panel) panel.setAttribute('data-open', 'true');
+    if (overlay) overlay.classList.add("visible");
     document.body.style.overflow = "hidden";
-
-    
 
     if (!hasFetched) {
       fetchStatus();
@@ -397,8 +172,8 @@ const services = ['api', 'web', 'cdn', 'bot'];
   }
  
   function closeStatus() {
-    panel?.classList.remove("open");
-    overlay?.classList.remove("visible");
+    if (panel) panel.setAttribute('data-open', 'false');
+    if (overlay) overlay.classList.remove("visible");
     document.body.style.overflow = "";
   }
  
@@ -512,7 +287,6 @@ const services = ['api', 'web', 'cdn', 'bot'];
     } catch {
       if (lastUpdatedEl) lastUpdatedEl.textContent = "Offline";
       updateFooter("Outage");
-    } finally {
     }
   }
  
@@ -528,12 +302,14 @@ const services = ['api', 'web', 'cdn', 'bot'];
     intervals.forEach(clearInterval);
   });
  
-  document.getElementById("status-toggle")?.addEventListener("click", openStatus);
-  closeBtn?.addEventListener("click", closeStatus);
-  overlay?.addEventListener("click", closeStatus);
+  const toggleBtn = document.getElementById("status-toggle");
+  if (toggleBtn) toggleBtn.addEventListener("click", openStatus);
+  if (closeBtn) closeBtn.addEventListener("click", closeStatus);
+  if (overlay) overlay.addEventListener("click", closeStatus);
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeStatus(); });
  
-  requestIdleCallback(() => {
+  const idleCallback = window.requestIdleCallback || function(cb) { setTimeout(cb, 1); };
+  idleCallback(() => {
     fetchFooterStatus();
     intervals.push(setInterval(fetchFooterStatus, 300000));
   });
