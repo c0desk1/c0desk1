@@ -1,94 +1,130 @@
+/* src/styles/prose/tokens.css */
+
+/* ══════════════════════════════════════════════════════════════════
+   LIGHT MODE
+══════════════════════════════════════════════════════════════════ */
 :root {
+  /* ─── Accent ─────────────────────────────────────────────────── */
   --prose-accent:       #0062ff;
   --prose-accent-dim:   #2b7cff;
   --prose-accent-soft:  #a8dfff;
+  --prose-accent-hover: #0051d4;
 
-  --prose-accent-yellow: #FEF3C7;
-  --prose-accent-yellow-dim: #FDE68A;
+  /* ─── Highlight ──────────────────────────────────────────────── */
+  --prose-accent-yellow:      #FEF3C7;
+  --prose-accent-yellow-dim:  #FDE68A;
   --prose-accent-yellow-soft: #78350F;
-  
-  --prose-black:         #000000;
-  --prose-white:         #ffffff;
-  --prose-fg:            #111111;
-  --prose-fg-muted:      #555555;
-  --prose-fg-subtle:     #888888;
-  --prose-border:        #e7e7e7;
-  --prose-surface:       #f9f9f9;
+
+  /* ─── Foreground ─────────────────────────────────────────────── */
+  --prose-black:      #000000;
+  --prose-white:      #ffffff;
+  --prose-fg:         #111111;
+  --prose-fg-muted:   #444444;
+  --prose-fg-subtle:  #777777;
+  --prose-fg-dim:     #aaaaaa;
+
+  /* ─── Surface ────────────────────────────────────────────────── */
+  --prose-border:        #e5e5e5;
+  --prose-surface:       #fafafa;
   --prose-surface-hover: #f2f2f2;
+  --prose-surface-dim:   #f5f5f5;
+  --prose-bg-subtle:     #f7f7f7;
+  --prose-bg-muted:      #f4f4f4;
 
-  --prose-font-sans: 'Geist', 'Geist Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --prose-font-mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  /* ─── Typography ─────────────────────────────────────────────── */
+  --prose-font-sans: 'Geist', 'Geist Sans', ui-sans-serif, system-ui,
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --prose-font-mono: 'Geist Mono', 'JetBrains Mono', ui-monospace,
+    SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
+  /* ─── Radius ─────────────────────────────────────────────────── */
   --prose-radius-sm: 4px;
   --prose-radius:    6px;
   --prose-radius-md: 8px;
   --prose-radius-lg: 12px;
 
-  --callout-note-bg: #f0f0f2;
-  --callout-note-border: #c0c0c5;
-  --callout-note-text: #2d2d30;
-  --callout-note-icon: #6e6e7a;
+  /* ─── Motion ─────────────────────────────────────────────────── */
+  --prose-transition: 0.15s ease;
 
-  --callout-info-bg: #e6f4ff;
-  --callout-info-border: #0077cc;
-  --callout-info-text: #005fa3;
-  --callout-info-icon: #0077cc;
+  /* ─── Callouts ───────────────────────────────────────────────── */
+  --callout-note-bg:     #f4f4f5;
+  --callout-note-border: #d4d4d8;
+  --callout-note-text:   #27272a;
+  --callout-note-icon:   #71717a;
 
-  --callout-tip-bg: #e6ffe8;
-  --callout-tip-border: #00a854;
-  --callout-tip-text: #007a3b;
-  --callout-tip-icon: #00a854;
+  --callout-info-bg:     #eff6ff;
+  --callout-info-border: #93c5fd;
+  --callout-info-text:   #1d4ed8;
+  --callout-info-icon:   #3b82f6;
 
-  --callout-warning-bg: #fff5e6;
-  --callout-warning-border: #e68a00;
-  --callout-warning-text: #b35f00;
-  --callout-warning-icon: #e68a00;
+  --callout-tip-bg:      #f0fdf4;
+  --callout-tip-border:  #86efac;
+  --callout-tip-text:    #15803d;
+  --callout-tip-icon:    #22c55e;
 
-  --callout-danger-bg: #ffe6e6;
-  --callout-danger-border: #cc2222;
-  --callout-danger-text: #a11;
-  --callout-danger-icon: #cc2222;
+  --callout-warning-bg:     #fffbeb;
+  --callout-warning-border: #fcd34d;
+  --callout-warning-text:   #b45309;
+  --callout-warning-icon:   #f59e0b;
 
-  --prose-transition: 0.2s ease;
+  --callout-danger-bg:     #fff1f2;
+  --callout-danger-border: #fca5a5;
+  --callout-danger-text:   #b91c1c;
+  --callout-danger-icon:   #ef4444;
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   DARK MODE
+══════════════════════════════════════════════════════════════════ */
 .dark {
-  --prose-accent-soft:  #579bc2;
+  /* ─── Accent ─────────────────────────────────────────────────── */
+  --prose-accent:       #3b8bff;
+  --prose-accent-dim:   #5b9fff;
+  --prose-accent-soft:  #2a5ca8;
+  --prose-accent-hover: #60a5fa;
 
-  --prose-accent-yellow: #78350F;
-  --prose-accent-yellow-dim: #92400E;
+  /* ─── Highlight ──────────────────────────────────────────────── */
+  --prose-accent-yellow:      #78350F;
+  --prose-accent-yellow-dim:  #92400E;
   --prose-accent-yellow-soft: #FEF3C7;
 
-  --prose-fg:            #ededed;
-  --prose-fg-muted:      #c9c9c9;
-  --prose-fg-subtle:     #868686;
+  /* ─── Foreground ─────────────────────────────────────────────── */
+  --prose-fg:        #ededed;
+  --prose-fg-muted:  #b4b4b4;
+  --prose-fg-subtle: #737373;
+  --prose-fg-dim:    #525252;
 
+  /* ─── Surface ────────────────────────────────────────────────── */
   --prose-border:        #262626;
-  --prose-surface:       #000000;
-  --prose-surface-hover: #1a1a1a;
+  --prose-surface:       #0a0a0a;
+  --prose-surface-hover: #171717;
+  --prose-surface-dim:   #111111;
+  --prose-bg-subtle:     #111111;
+  --prose-bg-muted:      #141414;
 
-  --callout-note-bg: #0b0b0e;
-  --callout-note-border: #2a2a2f;
-  --callout-note-text: #c5c5d0;
-  --callout-note-icon: #6e6e7a;
+  /* ─── Callouts ───────────────────────────────────────────────── */
+  --callout-note-bg:     #111111;
+  --callout-note-border: #2a2a2a;
+  --callout-note-text:   #d4d4d8;
+  --callout-note-icon:   #71717a;
 
-  --callout-info-bg: rgba(0, 160, 255, 0.06);
-  --callout-info-border: #00a0ff;
-  --callout-info-text: #4ac5ff;
-  --callout-info-icon: #00a0ff;
+  --callout-info-bg:     rgba(59, 130, 246, 0.08);
+  --callout-info-border: rgba(59, 130, 246, 0.3);
+  --callout-info-text:   #93c5fd;
+  --callout-info-icon:   #3b82f6;
 
-  --callout-tip-bg: rgba(0, 255, 100, 0.05);
-  --callout-tip-border: #00e070;
-  --callout-tip-text: #00e070;
-  --callout-tip-icon: #00e070;
+  --callout-tip-bg:      rgba(34, 197, 94, 0.07);
+  --callout-tip-border:  rgba(34, 197, 94, 0.3);
+  --callout-tip-text:    #86efac;
+  --callout-tip-icon:    #22c55e;
 
-  --callout-warning-bg: rgba(255, 160, 0, 0.08);
-  --callout-warning-border: #ffaa00;
-  --callout-warning-text: #ffbc3c;
-  --callout-warning-icon: #ffaa00;
+  --callout-warning-bg:     rgba(245, 158, 11, 0.08);
+  --callout-warning-border: rgba(245, 158, 11, 0.3);
+  --callout-warning-text:   #fcd34d;
+  --callout-warning-icon:   #f59e0b;
 
-  --callout-danger-bg: rgba(255, 40, 40, 0.06);
-  --callout-danger-border: #ff3333;
-  --callout-danger-text: #ff6666;
-  --callout-danger-icon: #ff3333;
+  --callout-danger-bg:     rgba(239, 68, 68, 0.07);
+  --callout-danger-border: rgba(239, 68, 68, 0.3);
+  --callout-danger-text:   #fca5a5;
+  --callout-danger-icon:   #ef4444;
 }
