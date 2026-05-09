@@ -7,7 +7,7 @@ export type IconName =
   | 'dribbble' | 'behance' | 'adobestock' | 'wirestock' | 'spotify' | 'soundcloud'
   | 'copy' | 'external' | 'link' | 'email' | 'user' | 'rss' | 'globe' | 'share' | 'sitemap'
   | 'arrow-up' | 'arrow-down' | 'arrow-right' | 'arrow-left' | 'arrow-path'
-  | 'chevron-down' | 'chevron-right' | 'more'
+  | 'chevron-down' | 'chevron-right' | 'more' | 'system'
   | 'volume' | 'volume-mute' | 'play' | 'pause' | 'next' | 'prev' | 'music' | 'image';
 
 interface IconProps {
@@ -373,6 +373,13 @@ export default function Icon({ name, className = 'w-5 h-5' }: IconProps) {
         <svg {...s} fill="currentColor" viewBox="0 0 24 24">
           <path d="M5 10C3.9 10 3 10.9 3 12C3 13.1 3.9 14 5 14C6.1 14 7 13.1 7 12C7 10.9 6.1 10 5 10ZM19 10C17.9 10 17 10.9 17 12C17 13.1 17.9 14 19 14C20.1 14 21 13.1 21 12C21 10.9 20.1 10 19 10ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10Z" />
         </svg>
+      );
+      
+    case 'system':
+      return (
+        <svg {...s} fill="currentColor" viewBox="0 0 24 24">
+          <path d="M7 4V20H17V4H7ZM6 2H18C18.5523 2 19 2.44772 19 3V21C19 21.5523 18.5523 22 18 22H6C5.44772 22 5 21.5523 5 21V3C5 2.44772 5.44772 2 6 2ZM12 17C12.5523 17 13 17.4477 13 18C13 18.5523 12.5523 19 12 19C11.4477 19 11 18.5523 11 18C11 17.4477 11.4477 17 12 17Z" />
+		</svg>
       );
 
     case 'volume':
