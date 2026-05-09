@@ -1,10 +1,10 @@
 /* src/styles/prose/components/table.css */
 
-/* TABLE */
+/* ─── WRAPPER ────────────────────────────────────────────────────── */
 .prose-custom .table-wrapper {
   overflow-x: auto;
   overflow-y: hidden;
-  margin: 2.5rem 0;
+  margin: 2rem 0;
   border: 1px solid var(--prose-border);
   border-radius: var(--prose-radius-md);
   background: var(--prose-surface);
@@ -16,30 +16,31 @@
   border-spacing: 0;
 }
 
-/* HEAD */
+/* ─── HEAD ───────────────────────────────────────────────────────── */
 .prose-custom thead th {
   padding: 0.75rem 1rem;
   font-family: var(--prose-font-sans);
-  font-size: 1.125rem;
+  font-size: 0.6875rem;
   font-weight: 600;
-  line-height: 1.75rem;
-  letter-spacing: -0.01em;
-  color: var(--prose-fg);
+  line-height: 1.25rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--prose-fg-subtle);
   background: var(--prose-surface-hover);
   border-bottom: 1px solid var(--prose-border);
   text-align: left;
-  text-transform: none;
+  white-space: nowrap;
 }
 
-/* BODY */
+/* ─── BODY ───────────────────────────────────────────────────────── */
 .prose-custom tbody td {
   padding: 0.75rem 1rem;
-  font-size: 1rem;
-  line-height: 1.75rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
   color: var(--prose-fg-muted);
   background: var(--prose-surface);
   border-bottom: 1px solid var(--prose-border);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.008em;
 }
 
 .prose-custom tbody td strong {
@@ -49,10 +50,11 @@
 }
 
 .prose-custom tbody td small {
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 400;
   color: var(--prose-fg-subtle);
   line-height: 1.25rem;
+  letter-spacing: 0;
 }
 
 .prose-custom tbody tr:last-child td {
@@ -63,6 +65,7 @@
   background: var(--prose-surface-hover);
 }
 
+/* ─── BORDERS ────────────────────────────────────────────────────── */
 .prose-custom th,
 .prose-custom td {
   white-space: nowrap;
@@ -73,31 +76,9 @@
   border-right: 1px solid var(--prose-border);
 }
 
-/* DESKTOP */
-@media (min-width: 768px) {
-  .prose-custom .table-wrapper {
-    margin: 2.5rem 0;
-  }
-
-  .prose-custom thead th {
-    padding: 0.875rem 1.25rem;
-    font-size: 1.125rem;
-    line-height: 1.75rem;
-    letter-spacing: -0.01em;
-  }
-
-  .prose-custom tbody td {
-    padding: 0.875rem 1.25rem;
-    font-size: 1rem; /* p */
-    line-height: 1.75rem;
-  }
-  
-  .prose-custom tbody td small {
-    font-size: 0.8125rem;
-  }
-}
-
-/* MOBILE */
+/* ══════════════════════════════════════════════════════════════════
+   MOBILE  ≤767px
+══════════════════════════════════════════════════════════════════ */
 @media (max-width: 767px) {
   .prose-custom .table-wrapper {
     margin: 1.5rem 0;
@@ -105,18 +86,42 @@
   }
 
   .prose-custom thead th {
-    padding: 0.625rem 0.75rem;
-    font-size: 1rem;
-    line-height: 1.5rem;
-    letter-spacing: -0.01em;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.625rem;
+    letter-spacing: 0.07em;
   }
 
   .prose-custom tbody td {
-    padding: 0.625rem 0.75rem;
-    font-size: 0.9575rem;
-    line-height: 1.65rem;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.8125rem;
+    line-height: 1.55;
   }
-  
+
+  .prose-custom tbody td small {
+    font-size: 0.6875rem;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   DESKTOP  ≥768px
+══════════════════════════════════════════════════════════════════ */
+@media (min-width: 768px) {
+  .prose-custom .table-wrapper {
+    margin: 2.5rem 0;
+  }
+
+  .prose-custom thead th {
+    padding: 0.875rem 1.25rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+  }
+
+  .prose-custom tbody td {
+    padding: 0.875rem 1.25rem;
+    font-size: 0.875rem;
+    line-height: 1.65;
+  }
+
   .prose-custom tbody td small {
     font-size: 0.75rem;
   }
