@@ -11,10 +11,8 @@ try {
 } catch (error) {}
 
 const siteData = settings?.data || siteConfig;
-const nav = siteData.navItems ?? [];
-const social = siteData.social ?? {};
-
-const socialEntries = Object.entries(social).filter(([_, url]) => url);
+const nav = siteData.mobileNavItems || siteConfig.mobileNavItems;
+const social = siteData.social || siteConfig.social;
 ---
 
 <div
@@ -42,32 +40,48 @@ const socialEntries = Object.entries(social).filter(([_, url]) => url);
   </div>
 
   <nav class="flex flex-col px-3 pt-2 pb-4 gap-0.5">
-    {nav.map(item => (
-      <a
-        href={item.href}
-        class="mnav-link flex items-center gap-3 px-3 py-3 rounded-(--radius-lg)
-               text-sm font-medium text-(--fg-muted)
-               hover:text-(--fg) hover:bg-(--bg-muted) transition-colors"
-      >
-        {item.label}
-      </a>
-    ))}
-    {nav.length > 0 && socialEntries.length > 0 && (
-      <div class="h-px bg-(--border) my-1.5 mx-1"></div>
-    )}
-    {socialEntries.map(([platform, url]) => (
-      <a
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="mnav-link flex items-center gap-3 px-3 py-3 rounded-(--radius-lg)
-               text-sm font-medium text-(--fg-muted)
-               hover:text-(--fg) hover:bg-(--bg-muted) transition-colors"
-      >
-        <Icon name={platform as any} className="w-4 h-4 shrink-0" />
-        <span class="capitalize">{platform}</span>
-      </a>
-    ))}
+    <nav class="flex flex-col px-3 pt-2 pb-4 gap-3">
+      {nav.map((section) => (
+        <div class="flex flex-col gap-0.5">
+          <div class="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-(--fg-soft)">
+            {section.title}
+          </div>
+
+          {section.items.map((item) => (
+            <a
+              href={item.href}
+              target={item.isExternal ? "_blank" : undefined}
+              rel={item.isExternal ? "noopener noreferrer" : undefined}
+              class="mnav-link flex items-center gap-3 px-3 py-3 rounded-(--radius-lg)
+                    text-sm font-medium text-(--fg-muted)
+                    hover:text-(--fg) hover:bg-(--bg-muted) transition-colors"
+            >
+              {item.label}
+              {item.isExternal && (
+                <Icon name="external" className="size-3 shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
+              )}
+            </a>
+          ))}
+        </div>
+      ))}
+      {nav.length > 0 && social.length > 0 && (
+        <div class="h-px bg-(--border) my-1.5 mx-1"></div>
+      )}
+
+      {social.map((item) => (
+        <a
+          href={item.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={item.label}
+          class="mnav-link flex items-center gap-3 px-3 py-3 rounded-(--radius-lg)
+                text-sm font-medium text-(--fg-muted)
+                hover:text-(--fg) hover:bg-(--bg-muted) transition-colors"
+        >
+          <Icon name={item.label as any} className="w-4 h-4 shrink-0" />
+          <span class="capitalize">{item.label}</span>
+        </a>
+      ))}
   </nav>
 </div>
 
