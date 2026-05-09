@@ -2,597 +2,342 @@
 // src/components/layout/StatusPanel.astro
 import Icon from "../ui/Icon";
 
-const services = ["api", "web", "cdn", "bot"] as const;
+const services = ['api', 'web', 'cdn', 'bot'];
 ---
 
-<!-- Overlay -->
-<div id="status-overlay" class="sp-overlay"></div>
+<div id="status-overlay" class="status-overlay fixed inset-0 z-90 bg-(--bg)/60 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300"></div>
 
-<!-- Panel -->
 <div
   id="status-panel"
-  class="sp-panel"
+  class="fixed bottom-0 left-0 right-0 z-100 bg-(--bg) border-t border-(--border) shadow-lg rounded-t-(--radius-xl) max-h-[85vh] overflow-y-auto overscroll-contain transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
   style="transform: translateY(100%);"
   data-open="false"
-  aria-modal="true"
-  role="dialog"
-  aria-label="Status Sistem"
 >
-  <div class="sp-inner">
-
-    <!-- Header -->
-    <div class="sp-header">
-      <div class="sp-header-meta">
-        <div class="sp-header-title">
-          <span id="panel-dot" class="sp-dot"></span>
-          <p class="sp-title">Status Sistem</p>
+  <div class="max-w-2xl mx-auto p-5 sm:p-7">
+    <div class="flex items-center justify-between pb-5 border-b border-(--border) mb-1">
+      <div class="flex flex-col gap-2">
+        <div class="flex items-center gap-2">
+          <span id="panel-dot" class="w-2.5 h-2.5 bg-(--bg-subtle) shrink-0 transition-colors"></span>
+          <p class="text-sm md:text-base font-semibold tracking-tight text-(--fg) leading-relaxed">Status Sistem</p>
         </div>
-        <p id="last-updated-text" class="sp-updated">Menunggu sinkronisasi...</p>
+        <p id="last-updated-text" class="text-[13px] md:text-sm text(--fg-muted) leading-tight mt-0.5">Menunggu sinkronisasi...</p>
       </div>
-      <button
-        id="close-panel"
-        class="sp-close"
-        aria-label="Tutup panel status"
-      >
-        <Icon name="close" className="sp-close-icon" />
+      <button id="close-panel" class="w-8 h-8 flex items-center justify-center rounded-full border border-(--border) bg-transparent text-(--fg) hover:bg-(--bg-muted) transition-all" aria-label="Tutup panel status">
+        <Icon name="close" className="w-5 h-5" />
       </button>
     </div>
 
-    <!-- Services -->
-    <div class="services-list sp-services">
+    <div class="services-list flex flex-col divide-y divide-(--border)">
       {services.map((id) => (
-        <div class="service-row sp-service" data-service={id}>
-
-          <!-- Row: name + metrics -->
-          <div class="sp-service-row">
-            <div class="sp-service-left">
-              <span class="sp-service-name">{id.toUpperCase()}</span>
-              <span id={`s-${id}-status-text`} class="sp-service-latency"></span>
+        <div class="service-row py-4 cursor-pointer transition-colors hover:bg-(--bg-muted)/50" data-service={id}>
+          <div class="flex justify-between items-center mb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="text-[13px] md:text-sm font-mono font-semibold tracking-wide text-(--fg)">{id.toUpperCase()}</span>
+              <span id={`s-${id}-status-text`} class="text-[13px] md:text-sm font-mono opacity-90"></span>
             </div>
-            <span id={`s-${id}-metrics`} class="sp-service-metrics">—</span>
+            <span id={`s-${id}-metrics`} class="text-[13px] md:text-sm text-(--fg-subtle) font-mono">—</span>
           </div>
-
-          <!-- Chart -->
-          <canvas
-            id={`chart-${id}`}
-            data-service={id}
-            class="sp-chart"
-            width="320"
-            height="28"
-          ></canvas>
-
-          <!-- Details (toggle) -->
-          <div id={`details-${id}`} class="sp-details hidden">
-            <div class="sp-details-grid">
+          <div class="flex items-end gap-[2px] h-7 bg-transparent min-h-[28px]">
+            <canvas id={`chart-${id}`} data-service={id} class="w-full h-7 cursor-crosshair" width="320" height="28"></canvas>
+          </div>
+          <div id={`details-${id}`} class="hidden mt-3 p-3.5 bg-(--bg-subtle)/50 border border-(--border) rounded-(--radius-lg)">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
               <div>
-                <p class="sp-details-label">Waktu Aktif</p>
-                <p id={`s-${id}-uptime-val`} class="sp-details-val">Menghitung...</p>
+                <p class="text-xs font-semibold uppercase tracking-wider text-(--fg) mb-1">Waktu Aktif</p>
+                <p id={`s-${id}-uptime-val`} class="text-xs font-mono text-(--fg-muted)">Menghitung...</p>
               </div>
               <div>
-                <p class="sp-details-label">Node</p>
-                <p id={`s-${id}-node-val`} class="sp-details-val">Mengidentifikasi...</p>
+                <p class="text-xs font-semibold uppercase tracking-wider text-(--fg) mb-1">Node</p>
+                <p id={`s-${id}-node-val`} class="text-xs font-mono text-(--fg-muted)">Mengidentifikasi...</p>
               </div>
               <div>
-                <p class="sp-details-label">Pemeriksaan Terakhir</p>
-                <p id={`s-${id}-details-summary`} class="sp-details-val">—</p>
+                <p class="text-xs font-semibold uppercase tracking-wider text-(--fg) mb-1">Pemeriksaan Terakhir</p>
+                <p id={`s-${id}-details-summary`} class="text-xs font-mono text-(--fg-muted)">—</p>
               </div>
             </div>
           </div>
-
         </div>
       ))}
     </div>
-
   </div>
 </div>
 
 <style is:global>
-  /* ─── OVERLAY ────────────────────────────────────────────────────── */
-  .sp-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 50;
-    background: color-mix(in srgb, var(--bg) 60%, transparent);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s ease;
+  #status-panel[data-open="true"] {
+    transform: translateY(0)!important;
   }
 
-  .sp-overlay.visible {
+.status-overlay.visible {
     opacity: 1;
     pointer-events: auto;
   }
 
-  /* ─── PANEL ──────────────────────────────────────────────────────── */
-  .sp-panel {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    background: var(--bg);
-    border-top: 1px solid var(--border);
-    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-    max-height: 85vh;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    box-shadow: 0 -8px 32px rgb(0 0 0 / 0.08);
-    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .dark .sp-panel {
-    box-shadow: 0 -8px 32px rgb(0 0 0 / 0.4);
-  }
-
-  .sp-panel[data-open="true"] {
-    transform: translateY(0) !important;
-  }
-
-  /* ─── INNER ──────────────────────────────────────────────────────── */
-  .sp-inner {
-    max-width: 40rem;
-    margin-inline: auto;
-    padding: 1.25rem 1.25rem 2rem;
-  }
-
-  @media (min-width: 640px) {
-    .sp-inner {
-      padding: 1.75rem 1.75rem 2.5rem;
-    }
-  }
-
-  /* ─── HEADER ─────────────────────────────────────────────────────── */
-  .sp-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1rem;
-    padding-bottom: 1.25rem;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 0.25rem;
-  }
-
-  .sp-header-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
-  }
-
-  .sp-header-title {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .sp-dot {
-    display: block;
-    width: 0.625rem;
-    height: 0.625rem;
-    border-radius: var(--radius-full);
-    background: var(--bg-muted);
-    flex-shrink: 0;
-    transition: background-color 0.3s ease;
-  }
-
-  .sp-dot.pulse {
-    animation: sp-pulse-dot 1.5s ease-in-out infinite;
-  }
-
-  @keyframes sp-pulse-dot {
+  @keyframes pulse-dot {
     0%, 100% { opacity: 1; }
-    50%       { opacity: 0.35; }
+    50% { opacity: 0.4; }
   }
 
-  .sp-title {
-    font-size: 0.9375rem;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    color: var(--fg);
-    margin: 0;
+.header-dot.pulse {
+    animation: pulse-dot 1.5s ease-in-out infinite;
   }
 
-  .sp-updated {
-    font-size: 0.75rem;
-    color: var(--fg-subtle);
-    margin: 0;
-    letter-spacing: 0;
-    line-height: 1.4;
-  }
-
-  /* ─── CLOSE BUTTON ───────────────────────────────────────────────── */
-  .sp-close {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2rem;
-    height: 2rem;
-    flex-shrink: 0;
-    border-radius: var(--radius-full);
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--fg-subtle);
-    cursor: pointer;
-    transition: color 0.15s ease, background-color 0.15s ease;
-  }
-
-  .sp-close:hover {
-    color: var(--fg);
-    background-color: var(--bg-muted);
-  }
-
-  .sp-close:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
-
-  .sp-close-icon {
-    width: 1rem;
-    height: 1rem;
+  canvas {
     display: block;
-  }
-
-  /* ─── SERVICES ───────────────────────────────────────────────────── */
-  .sp-services {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .sp-service {
-    padding-block: 1rem;
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-    transition: background-color 0.15s ease;
-  }
-
-  .sp-service:last-child { border-bottom: none; }
-
-  .sp-service:hover { background-color: color-mix(in srgb, var(--bg-muted) 50%, transparent); }
-
-  .sp-service-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 0.625rem;
-  }
-
-  .sp-service-left {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .sp-service-name {
-    font-size: 0.75rem;
-    font-weight: 600;
-    font-family: var(--font-mono);
-    letter-spacing: 0.06em;
-    color: var(--fg);
-  }
-
-  .sp-service-latency {
-    font-size: 0.75rem;
-    font-family: var(--font-mono);
-    opacity: 0.9;
-    letter-spacing: 0;
-  }
-
-  .sp-service-metrics {
-    font-size: 0.75rem;
-    font-family: var(--font-mono);
-    color: var(--fg-subtle);
-    letter-spacing: 0;
-  }
-
-  /* ─── CHART ──────────────────────────────────────────────────────── */
-  .sp-chart {
-    display: block;
-    width: 100%;
-    height: 1.75rem;
-    cursor: crosshair;
     image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges;
     touch-action: none;
   }
-
-  /* ─── DETAILS ────────────────────────────────────────────────────── */
-  .sp-details {
-    margin-top: 0.75rem;
-    padding: 0.875rem 1rem;
-    background: color-mix(in srgb, var(--bg-subtle) 50%, transparent);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-  }
-
-  .sp-details.hidden { display: none; }
-
-  .sp-details-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.875rem;
-  }
-
-  @media (min-width: 480px) {
-    .sp-details-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 1rem;
-    }
-  }
-
-  .sp-details-label {
-    font-size: 0.625rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--fg);
-    margin: 0 0 0.25rem;
-  }
-
-  .sp-details-val {
-    font-size: 0.75rem;
-    font-family: var(--font-mono);
-    color: var(--fg-muted);
-    margin: 0;
-    letter-spacing: 0;
-  }
 </style>
 
 <script is:inline>
-(function () {
+(function() {
   const API_URL = "/api/status";
 
-  const panel       = document.getElementById("status-panel");
-  const overlay     = document.getElementById("status-overlay");
-  const closeBtn    = document.getElementById("close-panel");
-  const panelDot    = document.getElementById("panel-dot");
-  const lastUpdEl   = document.getElementById("last-updated-text");
+  const panel = document.getElementById("status-panel");
+  const overlay = document.getElementById("status-overlay");
+  const closeBtn = document.getElementById("close-panel");
+  const panelDot = document.getElementById("panel-dot");
+  const lastUpdatedEl = document.getElementById("last-updated-text");
   const footerLabel = document.getElementById("status-label");
-  const footerDot   = document.getElementById("status-dot");
+  const footerDot = document.getElementById("status-dot");
   const footerPulse = document.getElementById("status-pulse");
 
   let latestUpdateTs = null;
-  let hasFetched     = false;
-  const intervals    = [];
+  let hasFetched = false;
+  const intervals = [];
 
   const STATUS_COLORS = {
-    Fast:        "#0ea5e9",
+    Fast: "#0ea5e9",
     Operational: "#22c55e",
-    Warning:     "#f59e0b",
-    Outage:      "#ef4444",
+    Warning: "#f59e0b",
+    Outage: "#ef4444",
   };
 
   function getRelativeTime(ts) {
     const d = Math.floor((Date.now() - ts) / 1000);
-    if (d < 30)   return "Baru saja";
-    if (d < 60)   return `${d}s yang lalu`;
+    if (d < 30) return "Baru saja";
+    if (d < 60) return `${d}s yang lalu`;
     if (d < 3600) return `${Math.floor(d / 60)}m yang lalu`;
     return "Beberapa waktu yang lalu";
   }
 
-  /* ─── Toggle service details on click ──────────────────────── */
-  const servicesList = document.querySelector(".services-list");
-  if (servicesList) {
-    servicesList.addEventListener("click", (e) => {
-      const row = e.target.closest(".service-row");
-      if (!row) return;
-      const detailsEl = document.getElementById(`details-${row.dataset.service}`);
-      detailsEl?.classList.toggle("hidden");
+  const servicesContainer = document.querySelector('.services-list');
+  if (servicesContainer) {
+    servicesContainer.addEventListener('click', (e) => {
+      const serviceRow = e.target.closest('.service-row');
+      if (!serviceRow) return;
+      const id = serviceRow.dataset.service;
+      if (id) {
+        const detailsEl = document.getElementById(`details-${id}`);
+        if (detailsEl) detailsEl.classList.toggle('hidden');
+      }
     });
   }
 
-  /* ─── Open / close ──────────────────────────────────────────── */
   function openStatus() {
-    panel?.setAttribute("data-open", "true");
-    overlay?.classList.add("visible");
+    if (panel) panel.setAttribute('data-open', 'true');
+    if (overlay) overlay.classList.add("visible");
     document.body.style.overflow = "hidden";
 
     if (!hasFetched) {
       fetchStatus();
       hasFetched = true;
-      intervals.push(setInterval(fetchStatus, 300_000));
+      intervals.push(setInterval(fetchStatus, 300000));
       intervals.push(setInterval(() => {
-        if (latestUpdateTs && lastUpdEl)
-          lastUpdEl.textContent = `Periksa otomatis: ${getRelativeTime(latestUpdateTs)}`;
-      }, 60_000));
+        if (latestUpdateTs && lastUpdatedEl)
+          lastUpdatedEl.textContent = `Periksa otomatis: ${getRelativeTime(latestUpdateTs)}`;
+      }, 60000));
     }
   }
 
   function closeStatus() {
-    panel?.setAttribute("data-open", "false");
-    overlay?.classList.remove("visible");
+    if (panel) panel.setAttribute('data-open', 'false');
+    if (overlay) overlay.classList.remove("visible");
     document.body.style.overflow = "";
   }
 
-  window.openStatusPanel  = openStatus;
+  window.openStatusPanel = openStatus;
   window.closeStatusPanel = closeStatus;
 
-  /* ─── Footer indicator ──────────────────────────────────────── */
   function updateFooter(overall) {
     const accent = STATUS_COLORS[overall] || "#888";
-    if (footerLabel) {
-      footerLabel.textContent = overall === "Operational" ? "Semua Sistem Normal." : overall;
-      footerLabel.style.color = accent;
-    }
-    if (footerDot)   footerDot.style.backgroundColor   = accent;
+    if (footerLabel) footerLabel.textContent = overall === "Operational"? "Semua Sistem Normal." : overall;
+    footerLabel.style.color = accent;
+    if (footerDot) footerDot.style.backgroundColor = accent;
     if (footerPulse) footerPulse.style.backgroundColor = accent;
   }
 
   async function fetchFooterStatus() {
     try {
-      const res  = await fetch(API_URL);
+      const res = await fetch(API_URL);
       if (!res.ok) throw new Error();
       const data = await res.json();
       updateFooter(data.overall || "Operational");
     } catch {
-      if (footerLabel) {
-        footerLabel.textContent    = "Offline";
-        footerLabel.style.color    = STATUS_COLORS.Outage;
-      }
-      if (footerDot)   footerDot.style.backgroundColor   = STATUS_COLORS.Outage;
+      if (footerLabel) footerLabel.textContent = "Offline";
+    footerLabel.style.color = STATUS_COLORS.Outage;
+      if (footerDot) footerDot.style.backgroundColor = STATUS_COLORS.Outage;
       if (footerPulse) footerPulse.style.backgroundColor = STATUS_COLORS.Outage;
     }
   }
 
-  /* ─── Bar chart renderer ────────────────────────────────────── */
-  function renderBarChart(canvas, history) {
-    if (!canvas) return;
+function renderBarChart(canvas, history) {
+  if (!canvas) return;
 
-    const dpr  = window.devicePixelRatio || 1;
-    const rect = canvas.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
 
-    if (canvas.width !== Math.round(rect.width * dpr)) {
-      canvas.width       = Math.round(rect.width * dpr);
-      canvas.height      = Math.round(rect.height * dpr);
-      canvas.style.width  = rect.width  + "px";
-      canvas.style.height = rect.height + "px";
-    }
-
-    const ctx = canvas.getContext("2d");
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    const W    = rect.width;
-    const H    = rect.height;
-    const data = Array.isArray(history) ? history.slice(-40) : [];
-
-    ctx.clearRect(0, 0, W, H);
-    if (!data.length) return;
-
-    ctx.imageSmoothingEnabled = false;
-
-    const barCount  = data.length;
-    const barWidth  = 2;
-    const barHeight = H - 4;
-    const y         = 2;
-
-    data.forEach((h, i) => {
-      const x   = Math.floor(i * (W / barCount) + W / barCount / 2 - barWidth / 2);
-      const lat = h.latency || 0;
-
-      let color = "rgba(128,128,128,0.15)";
-      if (h.status === "Operational") {
-        if      (lat < 50)  color = "#0ea5e9";
-        else if (lat < 200) color = "#22c55e";
-        else if (lat < 500) color = "#f59e0b";
-        else                color = "#ef4444";
-      } else {
-        color = "#ef4444";
-      }
-
-      ctx.fillStyle = color;
-      ctx.fillRect(x, y, barWidth, barHeight);
-    });
-
-    if (!canvas._tooltipAttached) {
-      const handleMove = (e) => {
-        const r       = canvas.getBoundingClientRect();
-        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        const idx     = Math.floor(((clientX - r.left) / r.width) * data.length);
-        const h       = data[idx];
-        if (h?.ts && lastUpdEl) {
-          const time = new Date(h.ts).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
-          lastUpdEl.textContent = `${time} · ${h.latency}ms`;
-        }
-      };
-      const handleLeave = () => {
-        if (latestUpdateTs && lastUpdEl)
-          lastUpdEl.textContent = `Diperbarui ${getRelativeTime(latestUpdateTs)}`;
-      };
-      canvas.addEventListener("mousemove",  handleMove);
-      canvas.addEventListener("touchstart", handleMove, { passive: true });
-      canvas.addEventListener("mouseleave", handleLeave);
-      canvas.addEventListener("touchend",   handleLeave);
-      canvas._tooltipAttached = true;
-    }
+  if (canvas.width!== rect.width * dpr) {
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    canvas.style.width = rect.width + 'px';
+    canvas.style.height = rect.height + 'px';
   }
 
-  /* ─── Update UI ─────────────────────────────────────────────── */
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const W = rect.width;
+  const H = rect.height;
+  const data = Array.isArray(history)? history.slice(-40) : [];
+
+  ctx.clearRect(0, 0, W, H);
+  if (!data.length) return;
+
+  ctx.imageSmoothingEnabled = false;
+
+  const barCount = data.length;
+  const gap = 2;
+  const barWidth = 2;
+  const barHeight = H - 4;
+  const y = 2;
+
+  data.forEach((h, i) => {
+    const x = Math.floor(i * (W / barCount) + (W / barCount / 2) - (barWidth / 2));
+    const lat = h.latency || 0;
+
+    let color = 'rgba(128,128,128,0.15)';
+    if (h.status === "Operational") {
+      if (lat < 50) color = '#0ea5e9';
+      else if (lat < 200) color = '#22c55e';
+      else if (lat < 500) color = '#f59e0b';
+      else color = '#ef4444';
+    } else {
+      color = '#ef4444';
+    }
+
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, barWidth, barHeight);
+  });
+
+  if (!canvas._tooltipAttached) {
+    const handleMove = (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.touches? e.touches[0].clientX : e.clientX;
+      const x = clientX - rect.left;
+      const idx = Math.floor((x / rect.width) * data.length);
+      const h = data[idx];
+      if (h && h.ts && lastUpdatedEl) {
+        const time = new Date(h.ts).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+        lastUpdatedEl.textContent = `${time} · ${h.latency}ms`;
+      }
+    };
+    const handleLeave = () => {
+      if (latestUpdateTs && lastUpdatedEl)
+        lastUpdatedEl.textContent = `Diperbarui ${getRelativeTime(latestUpdateTs)}`;
+    };
+    canvas.addEventListener('mousemove', handleMove);
+    canvas.addEventListener('touchstart', handleMove, { passive: true });
+    canvas.addEventListener('mouseleave', handleLeave);
+    canvas.addEventListener('touchend', handleLeave);
+    canvas._tooltipAttached = true;
+  }
+}
+
   function updateUI(overall, services, updatedTs) {
-    overall      = overall || "Operational";
+    overall = overall || "Operational";
     const accent = STATUS_COLORS[overall] || "#888";
 
     updateFooter(overall);
 
     if (panelDot) {
       panelDot.style.backgroundColor = accent;
-      panelDot.classList.toggle("sp-dot pulse", overall !== "Operational");
+      if (overall!== "Operational") panelDot.classList.add("pulse");
+      else panelDot.classList.remove("pulse");
     }
 
     if (updatedTs) {
       latestUpdateTs = updatedTs;
-      if (lastUpdEl)
-        lastUpdEl.textContent = `Diperbarui ${getRelativeTime(latestUpdateTs)}`;
+      if (lastUpdatedEl)
+        lastUpdatedEl.textContent = `Diperbarui ${getRelativeTime(latestUpdateTs)}`;
     }
 
     (services || []).forEach((s) => {
-      const n = s.name;
+      const name = s.name;
       const status = s.status || "Outage";
 
-      const get = (id) => document.getElementById(id);
+      const summaryEl = document.getElementById(`s-${name}-details-summary`);
+      const uptimeEl = document.getElementById(`s-${name}-uptime-val`);
+      const nodeEl = document.getElementById(`s-${name}-node-val`);
+      const metricsEl = document.getElementById(`s-${name}-metrics`);
+      const latencyEl = document.getElementById(`s-${name}-status-text`);
+      const canvas = document.getElementById(`chart-${name}`);
 
-      const summary  = get(`s-${n}-details-summary`);
-      const uptime   = get(`s-${n}-uptime-val`);
-      const node     = get(`s-${n}-node-val`);
-      const metrics  = get(`s-${n}-metrics`);
-      const latency  = get(`s-${n}-status-text`);
-      const canvas   = get(`chart-${n}`);
+      if (summaryEl) summaryEl.textContent = s.details || "—";
+      if (uptimeEl) uptimeEl.textContent = `${s.uptime?? 0}% (40 cek terakhir)`;
+      if (nodeEl) nodeEl.textContent = s.details || "Node tidak dikenal";
 
-      if (summary)  summary.textContent  = s.details || "—";
-      if (uptime)   uptime.textContent   = `${s.uptime ?? 0}% (40 cek terakhir)`;
-      if (node)     node.textContent     = s.details  || "Node tidak dikenal";
-
-      if (latency) {
-        latency.textContent  = `${s.latency ?? "—"}ms`;
-        latency.style.color  = STATUS_COLORS[status] || "#888";
+      if (latencyEl) {
+        latencyEl.textContent = `${s.latency?? "—"}ms`;
+        latencyEl.style.color = STATUS_COLORS[status] || "#888";
       }
 
-      if (metrics) {
-        const up      = typeof s.uptime === "number" ? s.uptime : 100;
-        const history = Array.isArray(s.history) ? s.history : [];
-        const valid   = history.filter((h) => typeof h.latency === "number");
-        const avg     = valid.length
-          ? Math.round(valid.reduce((a, c) => a + c.latency, 0) / valid.length)
+      if (metricsEl) {
+        const up = typeof s.uptime === "number"? s.uptime : 100;
+        const history = Array.isArray(s.history)? s.history : [];
+        const valid = history.filter(h => typeof h.latency === "number");
+        const avg = valid.length
+       ? Math.round(valid.reduce((a, c) => a + c.latency, 0) / valid.length)
           : null;
-        metrics.textContent = `${up}% waktu aktif${avg !== null ? ` · avg ${avg}ms` : ""}`;
+        metricsEl.textContent = `${up}% waktu aktif${avg!== null? ` · avg ${avg}ms` : ""}`;
       }
 
       renderBarChart(canvas, s.history);
     });
   }
 
-  /* ─── Fetch ─────────────────────────────────────────────────── */
   async function fetchStatus() {
-    if (lastUpdEl && !hasFetched) lastUpdEl.textContent = "Memperbarui...";
+    if (lastUpdatedEl &&!hasFetched) lastUpdatedEl.textContent = "Memperbarui...";
     try {
-      const res  = await fetch(API_URL);
+      const res = await fetch(API_URL);
       if (!res.ok) throw new Error();
       const data = await res.json();
       updateUI(data.overall, data.services, data.updated);
     } catch {
-      if (lastUpdEl) lastUpdEl.textContent = "Offline";
+      if (lastUpdatedEl) lastUpdatedEl.textContent = "Offline";
       updateFooter("Outage");
     }
   }
 
-  /* ─── Event wiring ──────────────────────────────────────────── */
-  document.addEventListener("click", (e) => {
-    if (e.target.closest("#status-toggle")) {
+  document.addEventListener("astro:before-swap", () => {
+    intervals.forEach(clearInterval);
+  });
+
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('#status-toggle')) {
       e.preventDefault();
       openStatus();
     }
   });
 
-  closeBtn?.addEventListener("click", closeStatus);
-  overlay?.addEventListener("click", closeStatus);
+  if (closeBtn) closeBtn.addEventListener("click", closeStatus);
+  if (overlay) overlay.addEventListener("click", closeStatus);
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeStatus(); });
 
-  document.addEventListener("astro:before-swap", () => intervals.forEach(clearInterval));
-
-  /* ─── Init ──────────────────────────────────────────────────── */
-  const idleCb = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
-  idleCb(() => {
+  const idleCallback = window.requestIdleCallback || function(cb) { setTimeout(cb, 1); };
+  idleCallback(() => {
     fetchFooterStatus();
-    intervals.push(setInterval(fetchFooterStatus, 300_000));
+    intervals.push(setInterval(fetchFooterStatus, 300000));
   });
 })();
 </script>
