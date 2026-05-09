@@ -17,6 +17,7 @@ import BG from "@/components/ui/BG.astro";
 
 import Search from "@/components/layout/Search.astro";
 import MobileMenu from "@/components/layout/MobileMenu.astro";
+import StatusPanel from "@/components/layout/StatusPanel.astro";
 
 import ThemeScript from "@/components/scripts/ThemeScript.astro";
 import GtagScript from "@/components/scripts/GtagScript.astro";
@@ -164,6 +165,7 @@ const GTAG_ID =
       {footer && <Footer />}
     </div>
     <div id="modal-root"></div>
+    <StatusPanel />
     <Cookie />
     <MobileMenu />
     <AnchorScrollScript />
