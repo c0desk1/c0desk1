@@ -21,18 +21,25 @@ const metadataSchema = z.object({
   featured: z.boolean().default(false),
 });
 
-const socialSchema = z.object({
-  github: z.string().optional(),
-  facebook: z.string().optional(),
-  instagram: z.string().optional(),
-  youtube: z.string().optional(),
-  twitter: z.string().optional(),
-  telegram: z.string().optional(),
-  whatsapp: z.string().optional(),
-  tiktok: z.string().optional(),
-  linkedIn: z.string().optional(),
-  sitemap: z.string().optional(),
-}).optional();
+const socialSchema = z.array(z.object({
+    href: z.string(),
+    label: z.string(),
+})).optional();
+
+const NavSchema = z.array(z.object({
+    href: z.string(),
+    label: z.string(),
+    isExternal: z.boolean().default(false).optional(),
+})).optional();
+
+const sectionNavSchema = z.array(z.object({
+  title: z.string().optional(),
+  items: z.array(z.object({
+    href: z.string(),
+    label: z.string(),
+    isExternal: z.boolean().default(false).optional(),
+  }))
+})).optional();
 
 // ==========================================
 // 2. CORE ENTITIES
@@ -57,18 +64,9 @@ const settings = defineCollection({
     yandexMetricaId: z.string().optional(),
     yandexPubId: z.string().optional(),
     yandexAdsEnabled: z.boolean().default(true),
-    navItems: z.array(z.object({
-      href: z.string(),
-      label: z.string(),
-    })),
-    footerSections: z.array(z.object({
-      title: z.string(),
-      items: z.array(z.object({
-        href: z.string(),
-        label: z.string(),
-        isExternal: z.boolean().default(false),
-      })),
-    })),
+    navItems: NavSchema,
+    mobileNavItems: sectionNavSchema,
+    footerSections: sectionNavSchema,
   }),
 });
 
