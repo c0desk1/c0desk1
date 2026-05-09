@@ -1,6 +1,6 @@
 /* src/styles/prose/steps.css */
 
-/* BASE */
+/* ─── BASE ───────────────────────────────────────────────────────── */
 .prose-custom .steps-container {
   counter-reset: step;
   background-image: linear-gradient(var(--prose-border), var(--prose-border));
@@ -14,6 +14,7 @@
   border-left: none;
 }
 
+/* Cap the top of the vertical line */
 .prose-custom .steps-container::before {
   content: "";
   position: absolute;
@@ -25,6 +26,7 @@
   z-index: 1;
 }
 
+/* Mask the bottom of the vertical line after the last child */
 .prose-custom .steps-container > *:last-child::after {
   content: "";
   position: absolute;
@@ -37,7 +39,7 @@
   height: 100%;
 }
 
-/* HEADING */
+/* ─── STEP HEADINGS ──────────────────────────────────────────────── */
 .prose-custom .steps-container > h2,
 .prose-custom .steps-container > h3,
 .prose-custom .steps-container > h4 {
@@ -46,7 +48,7 @@
   margin-top: 0 !important;
   margin-bottom: 0.5rem !important;
   font-family: var(--prose-font-sans);
-  font-size: 1.25rem !important;
+  font-size: 1.125rem !important;
   font-weight: 600 !important;
   line-height: 1.75rem !important;
   letter-spacing: -0.02em !important;
@@ -60,6 +62,7 @@
   margin-top: 0 !important;
 }
 
+/* Step counter bubble */
 .prose-custom .steps-container > h2::before,
 .prose-custom .steps-container > h3::before,
 .prose-custom .steps-container > h4::before {
@@ -71,27 +74,29 @@
   width: 26px;
   height: 26px;
   background: var(--prose-surface);
-  color: var(--prose-fg);
-  border: 1.5px solid var(--prose-border);
-  font-size: 0.75rem;
+  color: var(--prose-fg-subtle);
+  border: 1px solid var(--prose-border);
+  font-size: 0.6875rem;
   font-weight: 700;
-  font-family: var(--prose-font-mono, monospace);
+  font-family: var(--prose-font-mono);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 10;
-  transition: all var(--prose-transition);
+  transition: background var(--prose-transition), border-color var(--prose-transition), color var(--prose-transition);
+  letter-spacing: 0;
 }
 
 .prose-custom .steps-container > h2:hover::before,
 .prose-custom .steps-container > h3:hover::before,
 .prose-custom .steps-container > h4:hover::before {
   background: var(--prose-surface-hover);
-  transform: translateY(-50%) scale(1.05);
+  border-color: var(--prose-fg-subtle);
+  color: var(--prose-fg);
 }
 
-/* CLEANUP */
+/* ─── CLEANUP ────────────────────────────────────────────────────── */
 .prose-custom .steps-container > h2,
 .prose-custom .steps-container > h3,
 .prose-custom .steps-container > h4,
@@ -111,8 +116,10 @@
   margin-bottom: 0 !important;
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   MOBILE  ≤767px
+══════════════════════════════════════════════════════════════════ */
 @media (max-width: 767px) {
-  /* MOBILE */
   .prose-custom .steps-container {
     margin: 1.5rem 0 1.5rem 0.75rem;
     padding-left: 1.5rem;
@@ -122,11 +129,10 @@
   .prose-custom .steps-container > h2,
   .prose-custom .steps-container > h3,
   .prose-custom .steps-container > h4 {
-    margin-top: 0 !important;
-    font-size: 1.125rem !important;
-    line-height: 1.75rem;
-    margin-bottom: 0.5rem;
-    letter-spacing: -0.01em;
+    font-size: 1rem !important;
+    line-height: 1.625rem !important;
+    margin-bottom: 0.375rem !important;
+    letter-spacing: -0.015em !important;
   }
 
   .prose-custom .steps-container > h2::before,
@@ -135,15 +141,7 @@
     left: calc(-1.5rem - 11px - 0.5px);
     width: 22px;
     height: 22px;
-    font-size: 0.6875rem !important;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  .prose-custom .steps-container > h2:hover::before,
-  .prose-custom .steps-container > h3:hover::before,
-  .prose-custom .steps-container > h4:hover::before {
-    transform: translateY(-50%) scale(1.05);
+    font-size: 0.625rem !important;
   }
 
   .prose-custom .steps-container > *:last-child::after {
