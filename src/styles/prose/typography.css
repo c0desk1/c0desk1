@@ -1,28 +1,33 @@
 /* src/styles/prose/typography.css */
 
-/* BASE */
+/* ─── BASE RESET ─────────────────────────────────────────────────── */
 .prose-custom :where(h1, h2, h3, h4, h5, h6, p, ul, ol, blockquote, pre, hr, table) {
   margin-top: 0;
   width: 100%;
 }
 
+/* ─── HEADINGS ───────────────────────────────────────────────────── */
 .prose-custom :where(h1, h2, h3, h4, h5, h6) {
-  font-family: var(--prose-font-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif);
+  font-family: var(--prose-font-sans);
   font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 1.25;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
   color: var(--prose-fg);
   margin-bottom: 0;
   scroll-margin-top: 56px;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
+/* ─── ANCHOR HEADINGS ────────────────────────────────────────────── */
 .prose-custom .heading-group.has-anchor {
   display: block;
   width: 100%;
   max-width: 100%;
   cursor: pointer;
   text-decoration: none;
-  line-height: 1.25;
+  line-height: 1.2;
 }
 
 .prose-custom .heading-text-content {
@@ -35,75 +40,78 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 1.25rem;
-  height: 1.25rem;
-  margin-left: 0.25rem;
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-left: 0.375rem;
   color: var(--prose-fg-subtle);
   text-decoration: none;
   opacity: 0;
   pointer-events: none;
-  transform: translateX(-4px);
-  transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
+  transform: translateX(-6px);
+  transition: opacity 0.15s ease, transform 0.15s ease, color 0.15s ease;
   vertical-align: baseline;
   position: relative;
 }
 
 .prose-custom .anchor-link svg {
-  width: 1.125rem;
-  height: 1.125rem;
+  width: 1rem;
+  height: 1rem;
   stroke: currentColor;
-  stroke-width: 2;
+  stroke-width: 1.75;
   fill: none;
 }
 
+/* ─── INLINE TYPOGRAPHY ──────────────────────────────────────────── */
 .prose-custom strong {
   font-weight: 600;
   color: var(--prose-fg);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
 }
 
 .prose-custom em {
   font-weight: 500;
   font-style: italic;
+  color: var(--prose-fg-muted);
 }
 
 .prose-custom strong em,
 .prose-custom em strong {
   font-style: italic;
+  font-weight: 600;
 }
 
+/* ─── SUP / SUB ──────────────────────────────────────────────────── */
 .prose-custom sup,
 .prose-custom sub {
-  font-size: 0.6875rem;
+  font-size: 0.65rem;
   line-height: 1;
   font-weight: 500;
   vertical-align: baseline;
   position: relative;
-  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+  transition: color 0.15s ease;
+  font-feature-settings: "sups" 1;
 }
 
 .prose-custom sup {
-  top: -0.2em;
-  margin-left: 0.05em;
-  margin-right: 0.05em;
+  top: -0.35em;
+  margin-left: 0.04em;
+  margin-right: 0.04em;
   color: var(--prose-fg-subtle);
-  text-decoration: none;
 }
 
 .prose-custom sub {
   bottom: -0.2em;
-  color: var(--prose-fg-subtle);
+  color: var(--prose-fg-accent);
 }
 
 .prose-custom sup a {
   text-decoration: none;
   color: inherit;
-  transition: color 0.2s ease;
+  transition: color 0.15s ease;
 }
 
 .prose-custom sup a:hover {
   color: var(--prose-accent);
-  text-decoration: none;
 }
 
 .prose-custom sup:has(a[href^="#fn"]) {
@@ -113,21 +121,22 @@
 .prose-custom h1 sup,
 .prose-custom h2 sup,
 .prose-custom h3 sup {
-  font-size: 0.625rem;
-  top: -0.3em;
+  font-size: 0.55rem;
+  top: -0.35em;
 }
 
+/* ─── CALLOUT OVERRIDES ──────────────────────────────────────────── */
 .prose-custom .callout-content p sup a {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 500;
-  color: var(--prose-fg)!important;
+  color: var(--prose-fg);
   text-decoration: none;
 }
 
 .prose-custom .callout-content p sup a:hover {
-  color: var(--prose-accent)!important;
+  color: var(--prose-accent);
   text-decoration: underline;
-  text-underline-offset: 4px;
+  text-underline-offset: 3px;
   text-decoration-thickness: 1px;
   text-decoration-color: var(--prose-accent-dim);
 }
@@ -135,16 +144,18 @@
 .prose-custom .callout sup,
 .prose-custom .callout sub {
   color: currentColor;
-  opacity: 0.8;
+  opacity: 0.75;
 }
 
+/* ─── SMALL ──────────────────────────────────────────────────────── */
 .prose-custom small {
   font-size: 0.8125rem;
-  line-height: 1.4;
+  line-height: 1.5;
   color: var(--prose-fg-subtle);
   font-weight: 400;
   display: inline-block;
-  transition: color 0.2s ease;
+  letter-spacing: 0;
+  transition: color 0.15s ease;
 }
 
 .prose-custom figcaption small,
@@ -158,15 +169,12 @@
   color: var(--prose-fg);
 }
 
+/* ─── MARK ───────────────────────────────────────────────────────── */
 .prose-custom mark {
   background-color: var(--prose-accent-yellow);
   color: var(--prose-accent-yellow-soft);
-  padding: 0.125em 0.2em;
-  border-radius: var(--prose-radius-sm);
-  font-weight: 500;
-  box-shadow: inset 0 0 0 1px var(--prose-accent-yellow-dim);
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
+  padding: 0.1em 0.25em;
+  border-radius: 2px;
 }
 
 .prose-custom mark:hover {
@@ -179,12 +187,13 @@
   border-bottom: none;
 }
 
+/* ─── ABBR ───────────────────────────────────────────────────────── */
 .prose-custom abbr[title] {
   text-decoration: none;
   border-bottom: 1px dashed var(--prose-border);
   cursor: help;
   font-feature-settings: "calt" 1;
-  transition: border-color 0.2s ease, color 0.2s ease;
+  transition: border-color 0.15s ease, color 0.15s ease;
 }
 
 .prose-custom abbr[title]:hover {
@@ -197,217 +206,231 @@
   transition: none;
 }
 
-/* MOBILE */
+/* ══════════════════════════════════════════════════════════════════
+   MOBILE  ≤767px
+══════════════════════════════════════════════════════════════════ */
 @media (max-width: 767px) {
- .prose-custom :where(h1, h2, h3, h4, h5, h6) {
+  .prose-custom :where(h1, h2, h3, h4, h5, h6) {
     scroll-margin-top: 56px;
   }
 
- .prose-custom h1 {
+  .prose-custom h1 {
     font-size: 1.875rem;
-    font-weight: 800;
-    letter-spacing: -0.03em;
+    font-weight: 700;
+    letter-spacing: -0.04em;
     line-height: 2.25rem;
     margin-top: 2.5rem;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem;
   }
 
- .prose-custom h2 {
+  .prose-custom h2 {
     font-size: 1.5rem;
-    font-weight: 700;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 2rem;
     margin-top: 2.25rem;
     margin-bottom: 0.75rem;
-    letter-spacing: -0.025em;
-    line-height: 2rem;
   }
 
- .prose-custom h3 {
+  .prose-custom h3 {
     font-size: 1.25rem;
     font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.75rem;
     margin-top: 1.75rem;
     margin-bottom: 0.625rem;
-    letter-spacing: -0.02em;
-    line-height: 1.75rem;
   }
 
- .prose-custom h4 {
-    font-size: 1.125rem;
+  .prose-custom h4 {
+    font-size: 1.0625rem;
     font-weight: 600;
-    line-height: 1.75rem;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
+    line-height: 1.625rem;
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;
   }
 
- .prose-custom h5 {
-    font-size: 1rem;
+  .prose-custom h5 {
+    font-size: 0.9375rem;
     font-weight: 600;
-    line-height: 1.5rem;
     letter-spacing: -0.01em;
+    line-height: 1.5rem;
     margin-top: 1.25rem;
     margin-bottom: 0.5rem;
   }
 
- .prose-custom h6 {
+  .prose-custom h6 {
     font-size: 0.875rem;
     font-weight: 600;
-    line-height: 1.25rem;
     letter-spacing: 0;
+    line-height: 1.375rem;
     margin-top: 1rem;
     margin-bottom: 0.5rem;
   }
 
- .prose-custom .anchor-link.anchor-link-active {
+  /* Mobile anchor — always visible on tap */
+  .prose-custom .anchor-link.anchor-link-active {
     opacity: 1;
     pointer-events: auto;
     transform: translateX(0);
-    color: var(--prose-fg);
-  }
-
-  .prose-custom .heading-group.has-anchor {
-    transition: background-color 0.1s ease;
-    border-radius: 0.5rem;
-  }
-
-  .prose-custom .heading-group.has-anchor:active {
-    background-color: var(--prose-surface-hover);
+    color: var(--prose-fg-subtle);
   }
 
   .prose-custom .heading-group.has-anchor:active .anchor-link {
     opacity: 1;
     pointer-events: auto;
     transform: translateX(0);
-    color: var(--prose-fg);
+    color: var(--prose-fg-subtle);
   }
 
- .prose-custom p {
+  .prose-custom p {
     font-size: 1rem;
     line-height: 1.75rem;
-    margin-bottom: 1.25rem;
     letter-spacing: -0.01em;
+    margin-bottom: 1.25rem;
   }
 
- .prose-custom strong {
+  .prose-custom strong {
     font-weight: 600;
   }
 
- .prose-custom em {
+  .prose-custom em {
     font-style: italic;
   }
 
- .prose-custom sup,
- .prose-custom sub {
-    font-size: 0.625rem;
+  .prose-custom sup,
+  .prose-custom sub {
+    font-size: 0.6rem;
   }
 
- .prose-custom mark {
-    padding: 0.1em 0.15em;
+  .prose-custom mark {
+    padding: 0.1em 0.2em;
     font-size: 0.875rem;
   }
 
- .prose-custom small {
+  .prose-custom small {
     font-size: 0.75rem;
   }
 
- .prose-custom abbr[title] {
+  .prose-custom abbr[title] {
     font-size: 0.875rem;
   }
 }
 
-/* DESKTOP */
+/* ══════════════════════════════════════════════════════════════════
+   DESKTOP  ≥768px
+══════════════════════════════════════════════════════════════════ */
 @media (min-width: 768px) {
- .prose-custom :where(h1, h2, h3, h4, h5, h6) {
+  .prose-custom :where(h1, h2, h3, h4, h5, h6) {
     scroll-margin-top: 57px;
   }
 
- .prose-custom h1 {
-    font-size: 2.25rem;
-    font-weight: 800;
-    letter-spacing: -0.04em;
-    line-height: 2.5rem;
+  /* h1 — display/hero: large, tight, heavy */
+  .prose-custom h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    line-height: 1;
     margin-top: 4rem;
     margin-bottom: 1.25rem;
   }
 
- .prose-custom h2 {
-    font-size: 1.875rem !important;
-    font-weight: 700 !important;
-    margin-top: 2.75rem !important;
-    margin-bottom: 1rem;
-    letter-spacing: -0.03em !important;
-    line-height: 2.25rem !important;
+  /* h2 — section title */
+  .prose-custom h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 2.25rem;
+    margin-top: 3rem;
+    margin-bottom: 0.875rem;
   }
 
- .prose-custom h3 {
-    font-size: 1.5rem !important;
-    font-weight: 600 !important;
+  /* h3 — subsection */
+  .prose-custom h3 {
+    font-size: 1.375rem;
+    font-weight: 600;
+    letter-spacing: -0.028em;
+    line-height: 2rem;
     margin-top: 2.25rem;
-    margin-bottom: 0.875rem;   
-    line-height: 2rem !important;
-    letter-spacing: -0.025em !important;
-  }
-
- .prose-custom h4 {
-    font-size: 1.25rem !important;
-    font-weight: 600 !important;
-    line-height: 1.75rem !important;
-    letter-spacing: -0.02em !important;
-    margin-top: 2rem;
     margin-bottom: 0.75rem;
   }
 
- .prose-custom h5 {
-    font-size: 1.125rem !important;
-    font-weight: 600 !important;
-    line-height: 1.75rem !important;
-    letter-spacing: -0.01em !important;
+  /* h4 — label-weight heading */
+  .prose-custom h4 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.75rem;
+    margin-top: 2rem;
+    margin-bottom: 0.625rem;
+  }
+
+  /* h5 — subheading / sidebar label */
+  .prose-custom h5 {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.5rem;
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;
-  }
-
- .prose-custom h6 {
-    font-size: 1rem !important;
-    font-weight: 600 !important;
-    line-height: 1.5rem !important;
-    letter-spacing: -0.01em !important;
-    margin-top: 1.25rem;
-    margin-bottom: 0.5rem;
-  }
-
- .prose-custom .heading-group.has-anchor:hover .anchor-link {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateX(0);
-  }
-
- .prose-custom .anchor-link:hover {
-    color: var(--prose-fg);
-  }
-
- .prose-custom p {
-    font-size: 1rem;
-    line-height: 1.75rem;
-    color: var(--prose-fg-muted);
-    margin-bottom: 1.5rem;
-    max-width: 100%;
-    text-wrap: pretty;
-    letter-spacing: -0.01em;
-  }
-
- .prose-custom strong {
+    color: var(--prose-fg-subtle);
+    text-transform: uppercase;
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
     font-weight: 600;
   }
 
- .prose-custom sup,
- .prose-custom sub {
-    font-size: 0.6875rem;
+  /* h6 — metadata / eyebrow */
+  .prose-custom h6 {
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    line-height: 1.25rem;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    color: var(--prose-fg-dim);
   }
 
- .prose-custom mark {
-    padding: 0.125em 0.2em;
+  /* Anchor reveal on hover */
+  .prose-custom .heading-group.has-anchor:hover .anchor-link {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0);
+    color: var(--prose-fg-subtle);
   }
 
- .prose-custom small {
+  .prose-custom .anchor-link:hover {
+    color: var(--prose-fg);
+  }
+
+  /* Body paragraph — Vercel editorial feel */
+  .prose-custom p {
+    font-size: 0.9375rem;
+    line-height: 1.8;
+    color: var(--prose-fg-muted);
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+    width: 100%;
+    text-wrap: pretty;
+    letter-spacing: -0.011em;
+    font-feature-settings: "kern" 1, "liga" 1;
+  }
+
+  .prose-custom strong {
+    font-weight: 600;
+  }
+
+  .prose-custom sup,
+  .prose-custom sub {
+    font-size: 0.65rem;
+  }
+
+  .prose-custom mark {
+    padding: 0.1em 0.25em;
+  }
+
+  .prose-custom small {
     font-size: 0.8125rem;
   }
 }
