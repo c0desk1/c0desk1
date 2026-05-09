@@ -1,6 +1,8 @@
 ---
 // src/pages/[slug].astro
 
+export const prerender = true;
+
 import '@/styles/prose/index.css';
 
 import { getEntry, getCollection, render } from 'astro:content';

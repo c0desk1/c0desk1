@@ -1,66 +1,76 @@
 // src/app.ts
 import { FetchState, astro } from 'astro/fetch';
-
-declare global {
-  var API_WORKER: { fetch: typeof fetch } | undefined;
-}
-
-if (import.meta.env.DEV && !globalThis.API_WORKER) {
-  globalThis.API_WORKER = {
-    fetch: async (input: RequestInfo | URL, init?: RequestInit) => {
-      console.log('[DEV] Mock fetch:', input);
-      return fetch(input, init);
-    },
-  };
-}
+import { env as cloudflareEnv } from 'cloudflare:workers';
 
 export default {
-  async fetch(request: Request): Promise<Response> {
+  async fetch(request: Request, env: any, ctx: any): Promise<Response> {
     const state = new FetchState(request);
     const url = new URL(request.url);
     const pathname = url.pathname;
 
-    // Health check point
-    if (pathname === '/health/' || pathname === '/health') {
-      return new Response(JSON.stringify({ ok: true, service: 'web', timestamp: Date.now() }), {
-        headers: { 
-          'Content-Type': 'application/json; charset=utf-8' 
-        },
+    // Health check
+    if (pathname === '/health' || pathname === '/health/') {
+      return new Response(JSON.stringify({ ok: true }), {
+        headers: { 'Content-Type': 'application/json; charset=utf-8' }
       });
     }
 
     // API status endpoint
-    if (pathname === '/api/status/') {
-      const apiWorker = globalThis.API_WORKER;
-      if (!apiWorker) {
-        return Response.json(
-          { error: 'Binding API_WORKER tidak ditemukan' },
-          { status: 500 }
-        );
-      }
+    if (pathname === '/api/status' || pathname === '/api/status/') {
       try {
-        const res = await apiWorker.fetch('https://api.c0desk1.my.id/status/all', {
-          cf: { cacheTtl: 60, cacheEverything: true },
-        } as RequestInit);
+        const activeEnv = env || cloudflareEnv;
+        const token = activeEnv?.ADMIN_TOKEN;
+
+        if (!token) {
+          return new Response(JSON.stringify({ 
+            error: 'ADMIN_TOKEN tidak ditemukan',
+            info: 'Pastikan token sudah disetel di Dashboard Cloudflare Workers'
+          }), { 
+            status: 500,
+            headers: { 'Content-Type': 'application/json; charset=utf-8' }
+          });
+        }
+
+        const res = await fetch('https://api.c0desk1.my.id/status/all', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`, 
+            'Origin': 'https://c0desk1-dev-mode.bimasaktiakbarr.workers.dev', 
+            'Content-Type': 'application/json; charset=utf-8'
+          }
+        });
+
+        if (!res.ok) {
+           const apiError = await res.text();
+           throw new Error(`API ditolak (${res.status}): ${apiError}`);
+        }
+
         return new Response(res.body, {
           status: res.status,
           headers: {
             'Content-Type': 'application/json; charset=utf-8',
-            'Cache-Control': 'public, max-age=60, stale-while-revalidate=5000',
-            'X-Status-Cache': 'edge',
+            'Cache-Control': 'public, max-age=60, stale-while-revalidate=5000'
           },
         });
       } catch (err) {
-        console.error('Gagal fetch API_WORKER:', err);
-        return Response.json(
-          { error: 'Gagal fetch Worker API' },
-          { status: 500 }
-        );
+        return new Response(JSON.stringify({ 
+          error: 'Gagal komunikasi dengan Server API',
+          detail: err instanceof Error ? err.message : String(err)
+        }), { 
+          status: 502, 
+          headers: { 'Content-Type': 'application/json; charset=utf-8' } 
+        });
       }
     }
 
+    // Astro pipeline
     try {
-      return await astro(state);
+      return await astro(state, env, ctx);
+    } catch (e) {
+      return new Response("Internal Server Error", {
+        status: 500,
+        headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+      });
     } finally {
       await state.finalizeAll();
     }

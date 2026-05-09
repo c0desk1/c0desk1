@@ -1,6 +1,8 @@
 ---
 // src/pages/blog/[...slug].astro
 
+export const prerender = true;
+
 import '@/styles/prose/index.css';
 
 import { getCollection, render, getEntry } from "astro:content";
@@ -128,7 +130,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
           <h2 class="sr-only">Navigasi Halaman</h2>
           <Breadcrumb items={Breadcrumbs} />
         </Section>
-        <article>
+        <article id="post-article">
           <Section size="sm">
             <h2 class="sr-only">Article Header</h2>
             <PostHeader
@@ -157,16 +159,15 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
           <Section size="sm" class="section-divider">
             <SharePost url={canonicalURL} title={post.data.title} description={post.data.description} tags={post.data.tags} variant='card' />
           </Section>
-	      </article>
-	    </Container>
-	  </Section>
-    
-	  <Section size="sm">
-	    <h2 class="sr-only">Navigasi Kembali ke atas halaman </h2>
-	    <Container size="lg">
-	      <BackToTop align="center" />
-	    </Container>
-	  </Section>
+	    </article>
+	  </Container>
+	</Section>
+	<Section size="sm">
+	  <h2 class="sr-only">Navigasi Kembali ke atas halaman </h2>
+	  <Container size="lg">
+	    <BackToTop align="center" />
+	  </Container>
+	</Section>
     <Section size="md" class="section-divider">
       <h2 class="sr-only">Artikel Terkait</h2>
       <Container size="xl">
@@ -174,8 +175,8 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
       </Container>
     </Section>
     <Section size="sm" class="section-divider">
-	    <h2 class="sr-only">Navigasi artikel </h2>
-	    <Container size="xl">
+	  <h2 class="sr-only">Navigasi artikel </h2>
+	  <Container size="xl">
         <PostNavigation prevPost={prevPost} nextPost={nextPost} />
       </Container>
     </Section>
