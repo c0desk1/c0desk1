@@ -33,8 +33,8 @@ const optimizedAvatar = isCdnUrl(authorAvatar) ? cdnImage(authorAvatar, { w: 48,
         width={48}
         height={48}
         class="w-6 h-6 rounded-full border-2 border-(--border) object-cover"
-        loading="eager"
-        decoding= async
+        loading="lazy"
+        decoding='async'
       />
     )}
     <div class="flex items-center gap-2 leading-tight">

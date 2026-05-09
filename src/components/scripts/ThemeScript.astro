@@ -1,20 +1,9 @@
 <script is:inline>
-  (() => {
-    try {
-      const stored = localStorage.getItem("theme");
-
-      const theme =
-        stored ||
-        (
-          window.matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light"
-        );
-
-      const root = document.documentElement;
-
-      root.classList.toggle("dark", theme === "dark");
-      root.setAttribute("data-theme", theme);
-    } catch {}
+  (function(){
+    var s = localStorage.getItem('theme-mode') || 'system';
+    var d = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var dark = s === 'dark' || (s === 'system' && d);
+    document.documentElement.classList.toggle('dark', dark);
+    document.documentElement.setAttribute('data-theme', s);
   })();
 </script>

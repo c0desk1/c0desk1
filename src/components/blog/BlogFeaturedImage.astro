@@ -15,7 +15,7 @@ const { image, alt = '', caption } = Astro.props;
 const optimizedSrc  = image && isCdnUrl(image)
   ? cdnImage(image, { w: 1280, h: 720, q: 85 })
   : image ?? '';
-const finalCaption  = caption || alt;
+const finalCaption  = caption || '';
 ---
 
 <figure>

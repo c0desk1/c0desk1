@@ -253,9 +253,10 @@ if (type === "creativeWork") {
   });
 }
 
-const twitterUsername = siteData.social?.twitter?.split('/').pop()
-  || siteConfig.social?.twitter?.split('/').pop()
-  || "@c0desk1";
+const twitterHandle =
+  siteData.social?.twitter
+    ? `@${siteData.social.twitter.split('/').pop()}`
+    : "@c0desk1";
 ---
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -268,7 +269,7 @@ const twitterUsername = siteData.social?.twitter?.split('/').pop()
 <link rel="dns-prefetch" href="https://cdn.c0desk1.my.id" />
 
 <!-- Yandex RTB + Metrica — early hints so ad script loads faster -->
-<link rel="preconnect" href="https://yandex.ru" crossorigin />
+<link rel="dns-prefetch" href="https://yandex.ru" />
 <link rel="dns-prefetch" href="https://yandex.ru" />
 <link rel="dns-prefetch" href="https://mc.yandex.ru" />
 <link rel="dns-prefetch" href="https://an.yandex.ru" />
@@ -309,6 +310,7 @@ const twitterUsername = siteData.social?.twitter?.split('/').pop()
 <meta property="og:url"         content={seoData.canonical.toString()} />
 <meta property="og:site_name"   content={siteData.siteName} />
 <meta property="og:image"       content={ogImageURL} />
+<meta property="og:image:alt"   content={propsImage?.alt || formattedTitle} />
 <meta property="og:image:secure_url" content={ogImageURL} />
 <meta property="og:image:width"  content="1200" />
 <meta property="og:image:height" content="630" />
@@ -335,8 +337,8 @@ const twitterUsername = siteData.social?.twitter?.split('/').pop()
 <meta name="twitter:title"       content={formattedTitle} />
 <meta name="twitter:description" content={seoData.description} />
 <meta name="twitter:image"       content={ogImageURL} />
-<meta name="twitter:site"        content={twitterUsername} />
-<meta name="twitter:creator"     content={twitterUsername} />
+<meta name="twitter:site"        content={twitterHandle} />
+<meta name="twitter:creator"     content={twitterHandle} />
 
 <!-- ═══════════════════════════════════════════════════════════
      ICONS & MANIFEST
@@ -348,8 +350,10 @@ const twitterUsername = siteData.social?.twitter?.split('/').pop()
 <!-- ═══════════════════════════════════════════════════════════
      THEME & PWA
      ═══════════════════════════════════════════════════════════ -->
+<meta name="color-scheme" content="light dark" />
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+
 <meta name="mobile-web-app-capable"                content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
