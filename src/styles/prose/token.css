@@ -53,17 +53,19 @@
 }
 
 .dark {
+  --prose-accent-soft:  #579bc2;
+
   --prose-accent-yellow: #78350F;
   --prose-accent-yellow-dim: #92400E;
   --prose-accent-yellow-soft: #FEF3C7;
 
   --prose-fg:            #ededed;
-  --prose-fg-muted:      #a1a1a1;
-  --prose-fg-subtle:     #666666;
+  --prose-fg-muted:      #c9c9c9;
+  --prose-fg-subtle:     #868686;
+
   --prose-border:        #262626;
   --prose-surface:       #000000;
   --prose-surface-hover: #1a1a1a;
-  --prose-accent-soft:  #579bc2;
 
   --callout-note-bg: #0b0b0e;
   --callout-note-border: #2a2a2f;
