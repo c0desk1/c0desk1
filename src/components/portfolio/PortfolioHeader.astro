@@ -32,18 +32,14 @@ const formattedDate = date ? formatDate(date) : "";
 const formattedUpdate = updatedDate ? formatDate(updatedDate) : null;
 ---
 
-<header class="space-y-8">
-  <div class="space-y-3 text-start">
-    <h1 class="prose-custom
-      text-3xl sm:text-4xl md:text-5xl
-      font-semibold tracking-tight
-      text-(--prose-black) dark:text-(--prose-white)
-      leading-[1.15]
-      text-balance
-      mb-6 md:mb-8">
-      {title}
-    </h1>
-    <div class="flex flex-wrap justify-center text-start items-center gap-3 text-sm md:text-[13px] text-(--fg-muted)">
+<header class="space-y-8 my-8">
+  <div class="space-y-3 text-center">
+    <div class="prose-custom ">
+      <h1 class="mb-6 md:mb-8">
+        {title}
+      </h1>
+    </div>
+    <div class="flex flex-wrap justify-center items-center gap-3 text-sm md:text-[13px] text-(--fg-muted)">
       <time datetime={date.toISOString()}>
         {formattedDate}
       </time>
@@ -61,7 +57,6 @@ const formattedUpdate = updatedDate ? formatDate(updatedDate) : null;
       )}
     </div>
   </div>
-
   <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm md:text-[13px] border border-(--border) rounded-(--radius-md) p-4 bg-(--bg-subtle)">
     <div class="space-y-1">
       <div class="text-[12px] uppercase tracking-wider text-(--fg-subtle) font-mono">Client</div>
