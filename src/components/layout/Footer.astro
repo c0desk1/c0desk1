@@ -12,6 +12,7 @@ import Icon from "@/components/ui/Icon";
 import StatusPanel from "../layout/StatusPanel.astro";
 import Newsletter from "../layout/Newsletter.astro";
 import StatusButton from "../ui/StatusButton.astro";
+import ThemeToggle from "../ui/ThemeToggle.astro";
 
 let settings;
 
@@ -22,11 +23,8 @@ try {
 }
 
 const siteData = settings?.data || siteConfig;
-
 const footerSections = siteData.footerSections || siteConfig.footerSections;
-
 const social = siteData.social || siteConfig.social;
-
 const year = new Date().getFullYear();
 ---
 
@@ -38,18 +36,18 @@ const year = new Date().getFullYear();
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             {footerSections.map((section) => (
               <div class="min-w-0">
-                <div class="mb-3 flex items-center text-[13px] font-semibold uppercase tracking-[0.18em] text-(--fg)">
+                <div class="mb-3 flex items-center text-xs font-mono uppercase tracking-[0.18em] text-(--fg)">
                   <span class="truncate">
                     {section.title}
                   </span>
                 </div>
-                <ul class="space-y-1">
+                <ul class="space-y-1 items-baseline justify-center">
                   {section.items.map((link) => (
                     <li>
-                      <a href={link.href} target={link.isExternal ? "_blank" : undefined} rel={link.isExternal ? "noopener noreferrer" : undefined} class="group flex items-center py-1 text-[13px] md:text-sm text-(--fg-muted) transition-colors hover:text-(--fg) gap-2">
+                      <a href={link.href} target={link.isExternal ? "_blank" : undefined} rel={link.isExternal ? "noopener noreferrer" : undefined} class="group flex items-center text-sm text-(--fg-muted) transition-colors hover:text-(--fg) gap-1 py-1">
                         {link.label}
                         {link.isExternal && (
-                          <Icon name="external" className="size-3 shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
+                          <Icon name="external" className="size-3 shrink-0 opacity-80 transition-opacity group-hover:opacity-100" />
                         )}
                       </a>
                     </li>
@@ -65,27 +63,35 @@ const year = new Date().getFullYear();
       </Container>
     </div>
     <Container size="xl">
-      <div class="flex flex-col gap-3 py-4 md:flex-row md:items-center md:justify-between">
-        <div class="flex flex-wrap items-center gap-2">
-           {social.map((item: { href: string; label: string }) => (
-            <a
-              href={item.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={item.label}
-              class="flex size-6 items-center justify-center rounded-(--radius-full) text-(--fg-muted) transition-all hover:bg-(--bg-muted) hover:text-(--fg)"
-            >
-              <Icon name={item.label as any} className="size-4" />
-            </a>
-          ))}
-        </div>
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-          <div class="flex items-center gap-3 text-sm text-(--fg-muted)">
+      <div class="flex flex-col w-full items-center py-4 gap-4 md:gap-8">
+        <div class="w-full flex justify-between items-center gap-4">
+          <div class="flex items-center text-(--fg-muted) gap-2">
+            {social.map((item: { href: string; label: string }) => (
+              <a
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={item.label}
+                class="flex items-center rounded-(--radius-full) transition-all hover:bg-(--bg-muted) hover:text-(--fg) gap-2"
+              >
+                <Icon name={item.label as any} className="size-4" />
+                <span class="hidden">{item.label}</span>
+              </a>
+            ))}
+          </div>
+          <div class="flex items-center text-sm text-(--fg-muted)">
             <span>
               © {year} {siteData.siteName}
             </span>
           </div>
-          <StatusButton />
+        </div>
+        <div class="w-full flex items-center justify-between gap-4">
+          <div class="flex items-center">
+           <StatusButton />
+          </div>
+          <div class="flex items-center">
+            <ThemeToggle />
+          </div>
         </div>
       </div>
     </Container>
