@@ -1,4 +1,4 @@
-name = "dev-c0desk1"
+name = "c0desk1"
 compatibility_date = "2026-05-08"
 compatibility_flags = ["global_fetch_strictly_public"]
 main = "@astrojs/cloudflare/entrypoints/server"
@@ -21,3 +21,7 @@ service = "c0desk1-bot"
 [[services]]
 binding = "CDN_WORKER"
 service = "c0desk1-cdn"
+
+[vars]
+API_URL = "https://api.c0desk1.my.id/"
+ADMIN_TOKEN = "awokawok_atmin"
