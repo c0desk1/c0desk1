@@ -7,38 +7,76 @@ import Icon from "./Icon";
   id="theme-toggle"
   role="group"
   aria-label="Pilih tema"
-  class="relative inline-flex items-center
-         rounded-full border border-(--border)"
+  class="tt-root"
 >
   {([
     { mode: "system", label: "Ikuti sistem" },
-    { mode: "light", label: "Tema terang" },
-    { mode: "dark", label: "Tema gelap" },
+    { mode: "light",  label: "Tema terang"  },
+    { mode: "dark",   label: "Tema gelap"   },
   ] as const).map(({ mode, label }) => (
     <button
       type="button"
       data-mode={mode}
       aria-label={label}
       title={label}
-      class="tt-btn relative flex items-center justify-center
-             rounded-full cursor-pointer
-             text-(--fg-subtle) border border-transparent
-             transition-all duration-150
-             hover:text-(--fg) hover:bg-(--bg-subtle)/50
-             focus-visible:outline-none focus-visible:ring-1
-             focus-visible:ring-(--border-strong)
-             data-[active=true]:text-(--fg)
-             data-[active=true]:bg-(--bg-subtle)
-             data-[active=true]:border-(--border)
-             size-6 p-1">
-
-      {mode === "system" && <Icon name="system" className="size-3.5" />}
-      {mode === "light" && <Icon name="sun" className="size-3.5" />}
-      {mode === "dark" && <Icon name="moon" className="size-3.5" />}
-
+      class="tt-btn"
+    >
+      {mode === "system" && <Icon name="system" className="tt-icon" />}
+      {mode === "light"  && <Icon name="sun"    className="tt-icon" />}
+      {mode === "dark"   && <Icon name="moon"   className="tt-icon" />}
     </button>
   ))}
 </div>
+
+<style>
+  .tt-root {
+    display: inline-flex;
+    align-items: center;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border);
+    background: var(--bg);
+    padding: 2px;
+    gap: 1px;
+  }
+
+  .tt-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0.25rem;
+    border-radius: var(--radius-full);
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--fg-subtle);
+    cursor: pointer;
+    transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .tt-btn:hover {
+    color: var(--fg);
+    background-color: var(--bg-subtle);
+  }
+
+  .tt-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .tt-btn[data-active="true"] {
+    color: var(--fg);
+    background-color: var(--bg-muted);
+    border-color: var(--border);
+  }
+
+  :global(.tt-icon) {
+    width: 0.875rem;
+    height: 0.875rem;
+    display: block;
+  }
+</style>
 
 <script>
   type Mode = "system" | "light" | "dark";
@@ -46,7 +84,7 @@ import Icon from "./Icon";
 
   function getMode(): Mode {
     const v = localStorage.getItem(KEY);
-    return v === "light" || v === "dark" || v === "system"? v : "system";
+    return v === "light" || v === "dark" || v === "system" ? v : "system";
   }
 
   function apply(mode: Mode) {
@@ -85,8 +123,8 @@ import Icon from "./Icon";
     });
 
     window
-   .matchMedia("(prefers-color-scheme: dark)")
-   .addEventListener("change", () => {
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", () => {
         if (getMode() === "system") apply("system");
       });
   }
