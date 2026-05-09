@@ -1,6 +1,5 @@
 ---
 // src/components/layout/StatusPanel.astro
-
 import Icon from "../ui/Icon";
 
 const services = ['api', 'web', 'cdn', 'bot'];
@@ -8,8 +7,8 @@ const services = ['api', 'web', 'cdn', 'bot'];
 
 <div id="status-overlay" class="status-overlay fixed inset-0 z-90 bg-(--bg)/60 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300"></div>
 
-<div 
-  id="status-panel" 
+<div
+  id="status-panel"
   class="fixed bottom-0 left-0 right-0 z-100 bg-(--bg) border-t border-(--border) shadow-lg rounded-t-(--radius-xl) max-h-[85vh] overflow-y-auto overscroll-contain transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
   style="transform: translateY(100%);"
   data-open="false"
@@ -39,9 +38,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
             <span id={`s-${id}-metrics`} class="text-[13px] md:text-sm text-(--fg-subtle) font-mono">—</span>
           </div>
           <div class="flex items-end gap-[2px] h-7 bg-transparent min-h-[28px]">
-            {Array.from({ length: 40 }).map((_, i) => (
-              <div data-bar={`${id}-${i}`} class="bar flex-1 h-full min-w-[2px] bg-(--bg-muted) rounded-sm transition-all duration-200 cursor-default relative hover:scale-y-110 origin-bottom"></div>
-            ))}
+            <canvas id={`chart-${id}`} data-service={id} class="w-full h-7 cursor-crosshair" width="320" height="28"></canvas>
           </div>
           <div id={`details-${id}`} class="hidden mt-3 p-3.5 bg-(--bg-subtle)/50 border border-(--border) rounded-(--radius-lg)">
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
@@ -67,10 +64,10 @@ const services = ['api', 'web', 'cdn', 'bot'];
 
 <style is:global>
   #status-panel[data-open="true"] {
-    transform: translateY(0) !important;
+    transform: translateY(0)!important;
   }
 
-  .status-overlay.visible {
+.status-overlay.visible {
     opacity: 1;
     pointer-events: auto;
   }
@@ -80,68 +77,50 @@ const services = ['api', 'web', 'cdn', 'bot'];
     50% { opacity: 0.4; }
   }
 
-  .header-dot.pulse {
+.header-dot.pulse {
     animation: pulse-dot 1.5s ease-in-out infinite;
   }
 
-  .bar[data-info]:hover::after {
-    content: attr(data-info);
-    position: absolute;
-    bottom: calc(100% + 6px);
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--bg-subtle) !important;
-    color: var(--fg) !important;
-    padding: 5px 8px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace;
-    white-space: nowrap;
-    border: 1px solid var(--border) !important;
-    z-index: 50;
-    pointer-events: none;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
-
-  .dark .bar[data-info]:hover::after {
-    background: var(--bg-muted) !important;
-    color: var(--fg) !important;
-    border-color: var(--border) !important;
+  canvas {
+    display: block;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    touch-action: none;
   }
 </style>
 
 <script is:inline>
 (function() {
-  const API_URL = "/api/status/";
- 
-  const panel     = document.getElementById("status-panel");
-  const overlay   = document.getElementById("status-overlay");
-  const closeBtn  = document.getElementById("close-panel");
-  const panelDot  = document.getElementById("panel-dot");
+  const API_URL = "/api/status";
+
+  const panel = document.getElementById("status-panel");
+  const overlay = document.getElementById("status-overlay");
+  const closeBtn = document.getElementById("close-panel");
+  const panelDot = document.getElementById("panel-dot");
   const lastUpdatedEl = document.getElementById("last-updated-text");
-  const footerLabel   = document.getElementById("status-label");
-  const footerDot     = document.getElementById("status-dot");
-  const footerPulse   = document.getElementById("status-pulse");
- 
+  const footerLabel = document.getElementById("status-label");
+  const footerDot = document.getElementById("status-dot");
+  const footerPulse = document.getElementById("status-pulse");
+
   let latestUpdateTs = null;
   let hasFetched = false;
   const intervals = [];
- 
+
   const STATUS_COLORS = {
-    Fast:        "#0ea5e9",
+    Fast: "#0ea5e9",
     Operational: "#22c55e",
-    Warning:     "#f59e0b",
-    Outage:      "#ef4444",
+    Warning: "#f59e0b",
+    Outage: "#ef4444",
   };
- 
+
   function getRelativeTime(ts) {
     const d = Math.floor((Date.now() - ts) / 1000);
-    if (d < 30)   return "Baru saja";
-    if (d < 60)   return `${d}s yang lalu`;
+    if (d < 30) return "Baru saja";
+    if (d < 60) return `${d}s yang lalu`;
     if (d < 3600) return `${Math.floor(d / 60)}m yang lalu`;
     return "Beberapa waktu yang lalu";
   }
- 
+
   const servicesContainer = document.querySelector('.services-list');
   if (servicesContainer) {
     servicesContainer.addEventListener('click', (e) => {
@@ -154,7 +133,7 @@ const services = ['api', 'web', 'cdn', 'bot'];
       }
     });
   }
- 
+
   function openStatus() {
     if (panel) panel.setAttribute('data-open', 'true');
     if (overlay) overlay.classList.add("visible");
@@ -170,20 +149,24 @@ const services = ['api', 'web', 'cdn', 'bot'];
       }, 60000));
     }
   }
- 
+
   function closeStatus() {
     if (panel) panel.setAttribute('data-open', 'false');
     if (overlay) overlay.classList.remove("visible");
     document.body.style.overflow = "";
   }
- 
+
+  window.openStatusPanel = openStatus;
+  window.closeStatusPanel = closeStatus;
+
   function updateFooter(overall) {
     const accent = STATUS_COLORS[overall] || "#888";
-    if (footerLabel) footerLabel.textContent = overall === "Operational" ? "Semua Sistem Normal" : overall;
-    if (footerDot)   footerDot.style.backgroundColor = accent;
+    if (footerLabel) footerLabel.textContent = overall === "Operational"? "Semua Sistem Normal." : overall;
+    footerLabel.style.color = accent;
+    if (footerDot) footerDot.style.backgroundColor = accent;
     if (footerPulse) footerPulse.style.backgroundColor = accent;
   }
- 
+
   async function fetchFooterStatus() {
     try {
       const res = await fetch(API_URL);
@@ -192,95 +175,141 @@ const services = ['api', 'web', 'cdn', 'bot'];
       updateFooter(data.overall || "Operational");
     } catch {
       if (footerLabel) footerLabel.textContent = "Offline";
-      if (footerDot)   footerDot.style.backgroundColor = STATUS_COLORS.Outage;
+    footerLabel.style.color = STATUS_COLORS.Outage;
+      if (footerDot) footerDot.style.backgroundColor = STATUS_COLORS.Outage;
       if (footerPulse) footerPulse.style.backgroundColor = STATUS_COLORS.Outage;
     }
   }
- 
+
+function renderBarChart(canvas, history) {
+  if (!canvas) return;
+
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+
+  if (canvas.width!== rect.width * dpr) {
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    canvas.style.width = rect.width + 'px';
+    canvas.style.height = rect.height + 'px';
+  }
+
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const W = rect.width;
+  const H = rect.height;
+  const data = Array.isArray(history)? history.slice(-40) : [];
+
+  ctx.clearRect(0, 0, W, H);
+  if (!data.length) return;
+
+  ctx.imageSmoothingEnabled = false;
+
+  const barCount = data.length;
+  const gap = 2;
+  const barWidth = 2;
+  const barHeight = H - 4;
+  const y = 2;
+
+  data.forEach((h, i) => {
+    const x = Math.floor(i * (W / barCount) + (W / barCount / 2) - (barWidth / 2));
+    const lat = h.latency || 0;
+
+    let color = 'rgba(128,128,128,0.15)';
+    if (h.status === "Operational") {
+      if (lat < 50) color = '#0ea5e9';
+      else if (lat < 200) color = '#22c55e';
+      else if (lat < 500) color = '#f59e0b';
+      else color = '#ef4444';
+    } else {
+      color = '#ef4444';
+    }
+
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, barWidth, barHeight);
+  });
+
+  if (!canvas._tooltipAttached) {
+    const handleMove = (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.touches? e.touches[0].clientX : e.clientX;
+      const x = clientX - rect.left;
+      const idx = Math.floor((x / rect.width) * data.length);
+      const h = data[idx];
+      if (h && h.ts && lastUpdatedEl) {
+        const time = new Date(h.ts).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+        lastUpdatedEl.textContent = `${time} · ${h.latency}ms`;
+      }
+    };
+    const handleLeave = () => {
+      if (latestUpdateTs && lastUpdatedEl)
+        lastUpdatedEl.textContent = `Diperbarui ${getRelativeTime(latestUpdateTs)}`;
+    };
+    canvas.addEventListener('mousemove', handleMove);
+    canvas.addEventListener('touchstart', handleMove, { passive: true });
+    canvas.addEventListener('mouseleave', handleLeave);
+    canvas.addEventListener('touchend', handleLeave);
+    canvas._tooltipAttached = true;
+  }
+}
+
   function updateUI(overall, services, updatedTs) {
     overall = overall || "Operational";
     const accent = STATUS_COLORS[overall] || "#888";
- 
+
     updateFooter(overall);
- 
+
     if (panelDot) {
       panelDot.style.backgroundColor = accent;
-      if (overall !== "Operational") panelDot.classList.add("pulse");
+      if (overall!== "Operational") panelDot.classList.add("pulse");
       else panelDot.classList.remove("pulse");
     }
- 
+
     if (updatedTs) {
       latestUpdateTs = updatedTs;
       if (lastUpdatedEl)
         lastUpdatedEl.textContent = `Diperbarui ${getRelativeTime(latestUpdateTs)}`;
     }
- 
+
     (services || []).forEach((s) => {
-      const name   = s.name;
+      const name = s.name;
       const status = s.status || "Outage";
- 
-      const summaryEl  = document.getElementById(`s-${name}-details-summary`);
-      const uptimeEl   = document.getElementById(`s-${name}-uptime-val`);
-      const nodeEl     = document.getElementById(`s-${name}-node-val`);
-      const metricsEl  = document.getElementById(`s-${name}-metrics`);
-      const latencyEl  = document.getElementById(`s-${name}-status-text`);
-      const bars       = document.querySelectorAll(`[data-bar^="${name}-"]`);
- 
+
+      const summaryEl = document.getElementById(`s-${name}-details-summary`);
+      const uptimeEl = document.getElementById(`s-${name}-uptime-val`);
+      const nodeEl = document.getElementById(`s-${name}-node-val`);
+      const metricsEl = document.getElementById(`s-${name}-metrics`);
+      const latencyEl = document.getElementById(`s-${name}-status-text`);
+      const canvas = document.getElementById(`chart-${name}`);
+
       if (summaryEl) summaryEl.textContent = s.details || "—";
-      if (uptimeEl)  uptimeEl.textContent  = `${s.uptime ?? 0}% (40 cek terakhir)`;
-      if (nodeEl)    nodeEl.textContent    = s.details || "Node tidak dikenal";
- 
+      if (uptimeEl) uptimeEl.textContent = `${s.uptime?? 0}% (40 cek terakhir)`;
+      if (nodeEl) nodeEl.textContent = s.details || "Node tidak dikenal";
+
       if (latencyEl) {
-        latencyEl.textContent = `${s.latency ?? "—"}ms`;
+        latencyEl.textContent = `${s.latency?? "—"}ms`;
         latencyEl.style.color = STATUS_COLORS[status] || "#888";
       }
- 
+
       if (metricsEl) {
-        const up  = typeof s.uptime === "number" ? s.uptime : 100;
-        const history = Array.isArray(s.history) ? s.history : [];
-        const valid   = history.filter(h => typeof h.latency === "number");
-        const avg     = valid.length
-          ? Math.round(valid.reduce((a, c) => a + c.latency, 0) / valid.length)
+        const up = typeof s.uptime === "number"? s.uptime : 100;
+        const history = Array.isArray(s.history)? s.history : [];
+        const valid = history.filter(h => typeof h.latency === "number");
+        const avg = valid.length
+       ? Math.round(valid.reduce((a, c) => a + c.latency, 0) / valid.length)
           : null;
-        metricsEl.textContent = `${up}% waktu aktif${avg !== null ? ` · avg ${avg}ms` : ""}`;
+        metricsEl.textContent = `${up}% waktu aktif${avg!== null? ` · avg ${avg}ms` : ""}`;
       }
- 
-      const history    = Array.isArray(s.history) ? s.history.slice(-40) : [];
-      const startIndex = 40 - history.length;
- 
-      bars.forEach(el => {
-        el.style.backgroundColor = "";
-        el.style.opacity = "0.3";
-        el.removeAttribute("data-info");
-      });
- 
-      history.forEach((h, i) => {
-        const el = bars[startIndex + i];
-        if (!el) return;
- 
-        let color = STATUS_COLORS.Outage;
-        if (h.status === "Operational") {
-          if (h.latency < 50)   color = STATUS_COLORS.Fast;
-          else if (h.latency > 1000) color = STATUS_COLORS.Warning;
-          else                   color = STATUS_COLORS.Operational;
-        }
- 
-        el.style.backgroundColor = color;
-        el.style.opacity = "1";
- 
-        if (h.ts) {
-          const time = new Date(h.ts).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
-          const detail = h.details ? ` · ${h.details}` : "";
-          el.setAttribute("data-info", `${time} · ${h.latency}ms${detail}`);
-        }
-      });
+
+      renderBarChart(canvas, s.history);
     });
   }
- 
+
   async function fetchStatus() {
-    if (lastUpdatedEl) lastUpdatedEl.textContent = "Memperbarui...";
+    if (lastUpdatedEl &&!hasFetched) lastUpdatedEl.textContent = "Memperbarui...";
     try {
-      const res  = await fetch(API_URL);
+      const res = await fetch(API_URL);
       if (!res.ok) throw new Error();
       const data = await res.json();
       updateUI(data.overall, data.services, data.updated);
@@ -289,25 +318,22 @@ const services = ['api', 'web', 'cdn', 'bot'];
       updateFooter("Outage");
     }
   }
- 
-  panel?.addEventListener("touchstart", (e) => {
-    const bar = e.target.closest("[data-bar]");
-    if (!bar) return;
-    e.preventDefault();
-    const info = bar.getAttribute("data-info");
-    if (info && lastUpdatedEl) lastUpdatedEl.textContent = info;
-  }, { passive: false });
- 
+
   document.addEventListener("astro:before-swap", () => {
     intervals.forEach(clearInterval);
   });
- 
-  const toggleBtn = document.getElementById("status-toggle");
-  if (toggleBtn) toggleBtn.addEventListener("click", openStatus);
+
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('#status-toggle')) {
+      e.preventDefault();
+      openStatus();
+    }
+  });
+
   if (closeBtn) closeBtn.addEventListener("click", closeStatus);
   if (overlay) overlay.addEventListener("click", closeStatus);
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeStatus(); });
- 
+
   const idleCallback = window.requestIdleCallback || function(cb) { setTimeout(cb, 1); };
   idleCallback(() => {
     fetchFooterStatus();
