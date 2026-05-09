@@ -1,6 +1,8 @@
 ---
 // src/pages/portfolio/[...slug].astro
 
+export const prerender = true;
+
 import "@/styles/prose/index.css";
 
 import { getCollection, render } from "astro:content";
@@ -119,19 +121,21 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
     <Section size="md">
       <Container size="md">
         <h2 class="sr-only">Portfolio Header</h2>
-        <Breadcrumb items={Breadcrumbs} />
-        <PortfolioHeader
-          title={title}
-          date={pubDate}
-          updatedDate={updatedDate}
-          featured={featured}
-          client={client}
-          role={role}
-          duration={duration}
-          techStack={techStack}
-          demoUrl={demoUrl}
-          repoUrl={repoUrl}
-        />
+        <div class="flex flex-col justify-center items-center">
+          <Breadcrumb items={Breadcrumbs} />
+          <PortfolioHeader
+            title={title}
+            date={pubDate}
+            updatedDate={updatedDate}
+            featured={featured}
+            client={client}
+            role={role}
+            duration={duration}
+            techStack={techStack}
+            demoUrl={demoUrl}
+            repoUrl={repoUrl}
+          />
+        </div>
       </Container>
     </Section>
     {image && (
