@@ -15,9 +15,13 @@ export default defineConfig({
   adapter: cloudflare(),
   i18n: {
     defaultLocale: "id",
-    locales: ["id", "en"],
+    locales: ["id", "en", "ru"],
     routing: {
-        prefixDefaultLocale: false
+        prefixDefaultLocale: false,
+        fallback: {
+          en: "id",
+          ru: "id"
+        }
     }
   },
   experimental: {
