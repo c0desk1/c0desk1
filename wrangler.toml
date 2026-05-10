@@ -10,18 +10,6 @@ binding = "ASSETS"
 [observability]
 enabled = false
 
-[[services]]
-binding = "API_WORKER"
-service = "c0desk1-api"
-
-[[services]]
-binding = "BOT_WORKER"
-service = "c0desk1-bot"
-
-[[services]]
-binding = "CDN_WORKER"
-service = "c0desk1-cdn"
-
 [vars]
 API_URL = "https://api.c0desk1.my.id/"
 ADMIN_TOKEN = "awokawok_atmin"
