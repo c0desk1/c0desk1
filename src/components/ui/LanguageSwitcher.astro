@@ -1,0 +1,23 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { siteConfig } from '@/config/site';
+import { getCurrentLocale } from '@/utils/i18n';
+
+const locale = getCurrentLocale(Astro);
+const currentPath = Astro.url.pathname.replace(/^\/(en|ru)/, '') || '/';
+---
+
+<div class="flex gap-2">
+  {siteConfig.locales.map(loc => (
+    <a
+      href={getRelativeLocaleUrl(loc, currentPath)}
+      class={`px-3 py-1 rounded text-sm ${
+        loc === locale 
+          ? 'bg-(--bg) text-(--fg) font-bold' 
+          : 'bg-(--bg-subtle) text-(--fg);hover:bg-(--bg-muted)'
+      }`}
+    >
+      {loc.toUpperCase()}
+    </a>
+  ))}
+</div>
