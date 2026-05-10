@@ -1,4 +1,4 @@
-name = "c0desk1-00"
+name = "c0desk1-v00"
 compatibility_date = "2026-05-08"
 compatibility_flags = ["global_fetch_strictly_public"]
 main = "@astrojs/cloudflare/entrypoints/server"
