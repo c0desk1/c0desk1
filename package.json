@@ -1,7 +1,7 @@
 {
-  "name": "c0desk1-00",
+  "name": "c0desk1-v00",
   "type": "module",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "engines": {
     "node": ">=22.12.0"
   },
