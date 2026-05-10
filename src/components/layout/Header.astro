@@ -6,6 +6,7 @@ import DesktopNav from "./DesktopNav.astro";
 import Container from "../ui/Container.astro";
 import SearchButton from "../ui/SearchButton.astro";
 import MenuButton from "@/components/ui/MenuButton.astro";
+import LanguageSwithcer from "@/components/ui/LanguageSwitcher.astro";
 ---
 
 <header id="main-header" class="sticky top-0 z-50 mx-auto w-full bg-(--bg) transition-all duration-300">
@@ -17,8 +18,8 @@ import MenuButton from "@/components/ui/MenuButton.astro";
       </div>
       <div class="ml-auto flex items-center gap-2">
         <SearchButton />
-
         <MenuButton />
+        <LanguageSwithcer />
       </div>
     </div>
   </Container>
