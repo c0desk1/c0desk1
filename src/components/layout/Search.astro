@@ -1,5 +1,5 @@
 ---
-// src/components/search/SearchModal.astro
+// src/components/search/Search.astro
 import { getCollection, getEntry } from "astro:content";
 import Icon from "@/components/ui/Icon";
 
@@ -92,7 +92,7 @@ const searchData = await Promise.all(
 </div>
 
 <style>
-  /* ─── MODAL ────────────────────────────────────────────────────── */
+  /* ─── MODAL */
   .sm-modal {
     position: fixed;
     inset: 0;
@@ -100,7 +100,7 @@ const searchData = await Promise.all(
     display: none;
   }
 
-  /* ─── BACKDROP ─────────────────────────────────────────────────── */
+  /* ─── BACKDROP */
   .sm-backdrop {
     position: absolute;
     inset: 0;
@@ -111,7 +111,7 @@ const searchData = await Promise.all(
     transition: opacity 0.2s ease;
   }
 
-  /* ─── POSITIONER ───────────────────────────────────────────────── */
+  /* ─── POSITIONER */
   .sm-positioner {
     position: relative;
     display: flex;
@@ -125,7 +125,7 @@ const searchData = await Promise.all(
     .sm-positioner { padding-top: 5rem; }
   }
 
-  /* ─── PANEL ────────────────────────────────────────────────────── */
+  /* ─── PANEL */
   .sm-panel {
     width: 100%;
     max-width: 36rem;
@@ -139,7 +139,7 @@ const searchData = await Promise.all(
     transition: opacity 0.2s ease, transform 0.2s ease;
   }
 
-  /* ─── INPUT ROW ────────────────────────────────────────────────── */
+  /* ─── INPUT ROW */
   .sm-input-row {
     display: flex;
     align-items: center;
@@ -169,7 +169,7 @@ const searchData = await Promise.all(
 
   .sm-input::placeholder { color: var(--fg-subtle); }
 
-  /* ─── ICON BUTTONS ─────────────────────────────────────────────── */
+  /* ─── ICON BUTTONS */
   .sm-icon-btn {
     display: inline-flex;
     align-items: center;
@@ -194,7 +194,7 @@ const searchData = await Promise.all(
     display: block;
   }
 
-  /* ─── ESC KEY ──────────────────────────────────────────────────── */
+  /* ─── ESC KEY */
   .sm-esc-key {
     display: none;
     align-items: center;
@@ -214,7 +214,7 @@ const searchData = await Promise.all(
     .sm-esc-key { display: inline-flex; }
   }
 
-  /* ─── RESULTS ──────────────────────────────────────────────────── */
+  /* ─── RESULTS */
   .sm-results {
     max-height: 55dvh;
     overflow-y: auto;
@@ -226,7 +226,7 @@ const searchData = await Promise.all(
   .sm-results::-webkit-scrollbar-track { background: transparent; }
   .sm-results::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-  /* ─── FOOTER ───────────────────────────────────────────────────── */
+  /* ─── FOOTER */
   .sm-footer {
     display: none;
     align-items: center;
@@ -270,14 +270,15 @@ const searchData = await Promise.all(
     letter-spacing: 0;
   }
 
-  /* ─── SEARCH HIGHLIGHT ─────────────────────────────────────────── */
+  /* ─── SEARCH HIGHLIGHT */
   :global(.sm-hl) {
     background: color-mix(in srgb, var(--fg) 12%, transparent);
     border-radius: 2px;
     padding: 0 1px;
+    color: var(--fg);
   }
 
-  /* ─── RESULT ITEMS (rendered via JS) ──────────────────────────── */
+  /* ─── RESULT ITEMS (rendered via JS) */
   :global(.sritem) {
     display: flex;
     align-items: flex-start;
@@ -327,7 +328,7 @@ const searchData = await Promise.all(
     letter-spacing: 0;
   }
 
-  /* ─── EMPTY STATE ──────────────────────────────────────────────── */
+  /* ─── EMPTY STATE */
   :global(.sm-empty) {
     display: flex;
     flex-direction: column;
@@ -360,7 +361,7 @@ const searchData = await Promise.all(
 
 <script define:vars={{ searchData }}>
   (() => {
-    /* ── Guard ────────────────────────────────────────────────────── */
+    /* ── Guard */
     if (!Array.isArray(searchData) || !searchData.length) {
       console.warn("[Search] No data available.");
       const results = document.getElementById("search-results");
@@ -384,7 +385,7 @@ const searchData = await Promise.all(
     let prevFocus = null;
     let debounce;
 
-    /* ── Helpers ──────────────────────────────────────────────────── */
+    /* ── Helpers */
     const esc = (s) =>
       String(s)
         .replace(/&/g, "&amp;").replace(/</g, "&lt;")
@@ -430,7 +431,7 @@ const searchData = await Promise.all(
       </div>`;
     }
 
-    /* ── Render ───────────────────────────────────────────────────── */
+    /* ── Render */
     const setActive = (items) =>
       items.forEach((el, i) =>
         el.classList.toggle("is-active", i === activeIdx)
@@ -472,7 +473,7 @@ const searchData = await Promise.all(
       if (countEl) countEl.textContent = "";
     };
 
-    /* ── Open / close ─────────────────────────────────────────────── */
+    /* ── Open / close */
     const openModal = () => {
       prevFocus = document.activeElement;
       modal.style.display = "block";
@@ -502,7 +503,7 @@ const searchData = await Promise.all(
       }, 200);
     };
 
-    /* ── Events ───────────────────────────────────────────────────── */
+    /* ── Events */
     document.addEventListener("open-search", openModal);
     backdrop.addEventListener("click", closeModal);
     closeMobile?.addEventListener("click", closeModal);
@@ -565,7 +566,7 @@ const searchData = await Promise.all(
       items[activeIdx]?.scrollIntoView({ block: "nearest" });
     });
 
-    /* ── URL param ────────────────────────────────────────────────── */
+    /* ── URL param */
     document.addEventListener("DOMContentLoaded", () => {
       const q = new URLSearchParams(window.location.search).get("q");
       if (!q) return;
