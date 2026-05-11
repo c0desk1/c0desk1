@@ -54,7 +54,7 @@ const iconType = icons[Math.floor(Math.random() * icons.length)];
 <a 
   href={postUrl} 
   class="group flex flex-col h-full px-6 py-8 rounded-xl border border-(--border) bg-(--bg) hover:bg-(--bg-muted)"
-  aria-label={`${getLabel(locale, 'readArticle')}: ${title}`} <!-- ← tambah a11y -->
+  aria-label={`${getLabel(locale, 'readArticle')}: ${title}`}
 >
   <div class="mb-4 md:mb-6 shrink-0">
     <div class="size-7 md:size-13 flex items-center justify-center rounded-full border border-(--border) bg-(--bg-subtle)">
@@ -95,7 +95,7 @@ const iconType = icons[Math.floor(Math.random() * icons.length)];
     {authorAvatar && (
       <Image
         src={optimizedAvatar}
-        alt={`${getLabel(locale, 'author')}: ${authorName}`} <!-- ← i18n alt -->
+        alt={`${getLabel(locale, 'author')}: ${authorName}`}
         width={48}
         height={48}
         loading="lazy"
