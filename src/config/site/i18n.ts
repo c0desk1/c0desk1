@@ -63,6 +63,16 @@ export const i18nConfig = {
       copyFailedAria: 'Gagal menyalin URL',
       copyToastSuccess: 'URL disalin ke clipboard!',
       copyToastFailed: 'Gagal menyalin URL, silakan coba lagi.',
+      
+      // TTS
+      listen: 'Bacakan',
+      listening: 'Membacakan...',
+      listenAria: 'Dengarkan artikel',
+      stopAria: 'Hentikan bacaan',
+      ttsPrev: 'Sebelumnya',
+      ttsNext: 'Berikutnya',
+      ttsPlayPause: 'Jeda / Lanjut',
+      ttsClose: 'Tutup',
     },
     en: {
       home: "Home",
@@ -123,6 +133,16 @@ export const i18nConfig = {
       copyFailedAria: 'Failed to copy URL',
       copyToastSuccess: 'URL copied to clipboard!',
       copyToastFailed: 'Failed to copy URL, please try again.',
+      
+      // TTS
+      listen: 'Listen',
+      listening: 'Listening...',
+      listenAria: 'Listen to article',
+      stopAria: 'Stop listening',
+      ttsPrev: 'Previous',
+      ttsNext: 'Next',
+      ttsPlayPause: 'Pause / Resume',
+      ttsClose: 'Close',
     },
     ru: {
       home: "дом",
@@ -184,6 +204,16 @@ export const i18nConfig = {
       copyFailedAria: 'Не удалось скопировать URL',
       copyToastSuccess: 'URL скопирован в буфер обмена!',
       copyToastFailed: 'Не удалось скопировать URL, попробуйте снова.',
+      
+      // TTS
+      listen: 'Прослушать',
+      listening: 'Воспроизведение...',
+      listenAria: 'Прослушать статью',
+      stopAria: 'Остановить',
+      ttsPrev: 'Назад',
+      ttsNext: 'Далее',
+      ttsPlayPause: 'Пауза / Продолжить',
+      ttsClose: 'Закрыть',
     }
   }
 } as const;
