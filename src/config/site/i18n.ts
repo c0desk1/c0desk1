@@ -27,7 +27,11 @@ export const i18nConfig = {
       backToTop: "Kembali ke atas",
       relatedArticles: "Artikel Terkait",
       
-      articleNavigation: "Navigasi artikel"
+      articleNavigation: "Navigasi artikel",
+      previous: "Sebelumnya",
+      next: "Selanjutnya",
+      previousArticle: "Artikel sebelumnya",
+      nextArticle: "Artikel selanjutnya"
     },
     en: {
       home: "Home",
@@ -52,7 +56,11 @@ export const i18nConfig = {
       
       backToTop: "Back to top",
       relatedArticles: "Related articles",
-      articleNavigation: "Article Navigation"
+      articleNavigation: "Article Navigation",
+      previous: "Previous",
+      next: "Next",
+      previousArticle: "Previous article",
+      nextArticle: "Next article"
     },
     ru: {
       home: "дом",
@@ -78,7 +86,11 @@ export const i18nConfig = {
       backToTop: "Вернуться наверх",
       relatedArticles: "Статьи по теме",
       
-      articleNavigation: "Навигация по статьям"
+      articleNavigation: "Навигация по статьям",
+      previous: "Предыдущий",
+      next: "Следующий",
+      previousArticle: "Предыдущая статья",
+      nextArticle: "Следующая статья"
     }
   }
 } as const;
