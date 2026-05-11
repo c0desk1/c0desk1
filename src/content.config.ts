@@ -110,6 +110,7 @@ const organizations = defineCollection({
 const blog = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/blog" }),
   schema: z.object({
+    lang: z.enum(['id', 'en', 'ru']).optional(),
     title: z.string().min(10).max(100),
     description: z.string().min(50).max(200),
     image: z.object({
@@ -128,6 +129,7 @@ const blog = defineCollection({
 const portfolio = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/portfolio" }),
   schema: z.object({
+    lang: z.enum(['id', 'en', 'ru']).optional(),
     title: z.string().min(5).max(100),
     description: z.string().min(50).max(200),
     image: z.object({
@@ -157,6 +159,7 @@ const portfolio = defineCollection({
 const legal = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/legal" }),
   schema: z.object({
+    lang: z.enum(['id', 'en', 'ru']).optional(),
     title: z.string(),
     description: z.string().optional(),
     lastUpdated: z.coerce.date(),
