@@ -1,0 +1,104 @@
+---
+// src/pages/[...locale]/[...slug].astro
+export const prerender = true;
+
+import '@/styles/prose/index.css';
+import { getEntry, getCollection, render } from 'astro:content';
+import { siteConfig } from '@/config/site';
+import { formatDate } from "@/lib/utils";
+import { components } from '@/components/layout/MDXComponents';
+import { getCurrentLocale, localizePath, getLabel } from "@/utils/i18n";
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/ui/Container.astro';
+import Breadcrumb from '@/components/ui/Breadcrumb.astro';
+import Section from '@/components/ui/Section.astro';
+
+export async function getStaticPaths() {
+  const legalPages = await getCollection('legal', ({ data }) =>!data.draft);
+
+  return legalPages.map((page) => {
+    const pathParts = page.id.split('/');
+    const baseId = pathParts[0];
+    const lang = page.data.lang || 'id';
+    const alternates = legalPages.filter(p => p.id.startsWith(baseId + '/'));
+    const alternateSlugs = Object.fromEntries(
+      alternates.map(p => [
+        p.data.lang || 'id',
+        p.id.split('/')[0]
+      ])
+    );
+
+    return {
+      params: {
+        locale: lang === 'id'? undefined : lang,
+        slug: baseId
+      },
+      props: { page, alternateSlugs },
+    };
+  });
+}
+
+const { page, alternateSlugs } = Astro.props;
+if (!page) return Astro.redirect('/404');
+
+const { Content } = await render(page);
+const locale = getCurrentLocale(Astro);
+
+const siteData = siteConfig;
+
+const siteURL = Astro.site?.toString()?? siteData.siteUrl;
+const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
+
+const seoTitle = page.data.seo?.title || page.data.title;
+const seoDescription = page.data.seo?.description || page.data.description || siteData.defaultSeo;
+
+const homeLabel = getLabel(locale, 'home') || 'Home';
+
+const SeoBreadcrumbItems = [
+  { name: homeLabel, href: localizePath('/', locale) },
+  { name: page.data.title, href: canonicalURL }
+];
+
+const Breadcrumbs = [
+  { name: homeLabel, href: localizePath('/', locale) },
+  { name: page.data.title, href: canonicalURL }
+];
+
+const dateLocale = locale === 'id' ? 'id-ID' : locale === 'ru' ? 'ru-RU' : 'en-US';
+const formattedLastUpdated = page.data.lastUpdated
+  ? formatDate(page.data.lastUpdated, dateLocale)
+  : null;
+---
+
+<BaseLayout
+  title={seoTitle}
+  description={seoDescription}
+  type="website"
+  canonicalURL={canonicalURL}
+  seoBreadcrumb={SeoBreadcrumbItems}
+  alternateSlugs={alternateSlugs}
+  basePath="">
+  <Section size="md" class="border-b border-dashed border-(--border)">
+    <Container size="md">
+      <Breadcrumb items={Breadcrumbs} />
+      <div class="mt-8 text-start md:text-center">
+        <h1 class="prose-custom text-3xl md:text-4xl">
+          {page.data.title}
+        </h1>
+        {formattedLastUpdated && (
+          <p class="mt-3 text-[13px] md:text-sm text-(--fg-muted)">
+            {getLabel(locale, 'lastUpdated') || 'Terakhir diperbarui'}: {formattedLastUpdated}
+          </p>
+        )}
+      </div>
+    </Container>
+  </Section>
+  <Section size="lg">
+    <Container size="md">
+      <div id="article-content" class="prose-custom">
+        <Content components={components} />
+      </div>
+    </Container>
+  </Section>
+</BaseLayout>
