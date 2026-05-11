@@ -1,0 +1,40 @@
+---
+// src/components/ui/Grid.astro
+
+type GridVariant =
+  | "default"
+  | "cards"
+  | "featured"
+  | "sidebar"
+  | "compact";
+
+interface Props {
+  cols?: GridVariant;
+  gap?: "sm" | "md" | "lg";
+  class?: string;
+}
+
+const {
+  cols = "default",
+  gap = "md",
+  class: className = ""
+} = Astro.props;
+
+const gridCols = {
+  default: "grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
+  cards: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
+  featured: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
+  sidebar: "grid-cols-1 lg:grid-cols-[1fr_280px]",
+  compact: "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"
+} as const;
+
+const gridGap = {
+  sm: "gap-4",
+  md: "gap-8",
+  lg: "gap-12"
+} as const;
+---
+
+<div class={`grid ${gridCols[cols]} ${gridGap[gap]} min-w-0 ${className}`}>
+  <slot />
+</div>

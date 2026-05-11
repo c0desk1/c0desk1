@@ -1,0 +1,36 @@
+---
+// src/components/layout/PostMeta.astro
+import { formatDate, getReadingTime } from '@/lib/utils';
+import { getCurrentLocale } from '@/utils/i18n';
+import Icon from '@/components/ui/Icon';
+
+interface Props {
+  pubDate: Date;
+  content: string;
+}
+
+const { pubDate, content } = Astro.props;
+const locale = getCurrentLocale(Astro);
+
+const dateLocale = locale === 'id'? 'id-ID' : locale === 'ru'? 'ru-RU' : 'en-US';
+const formattedDate = formatDate(pubDate, dateLocale);
+const readingTime = getReadingTime(content, locale);
+---
+
+<div class="flex flex-wrap items-center justify-start md:justify-center gap-x-2 gap-y-1 text- md:text-sm text-(--fg-muted)">
+  {readingTime && (
+    <div class="flex items-center justify-center gap-2">
+      <Icon name="clock" className="w-4 h-4" />
+      <span class="whitespace-nowrap">{readingTime}</span>
+    </div>
+  )}
+
+  {readingTime && <span aria-hidden="true">―</span>}
+
+  <div class="flex items-center justify-center gap-2">
+    <Icon name="calender" className="w-4 h-4" />
+    <time datetime={pubDate.toISOString()} class="whitespace-nowrap">
+      {formattedDate}
+    </time>
+  </div>
+</div>

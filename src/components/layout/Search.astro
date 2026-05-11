@@ -1,0 +1,582 @@
+---
+// src/components/layout/Search.astro
+
+import { getCollection, getEntry } from "astro:content";
+import Icon from "@/components/ui/Icon";
+
+const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+const searchData = await Promise.all(
+  posts.map(async (post) => {
+    const category = post.data.category ? await getEntry(post.data.category) : null;
+    return {
+      id:           post.id,
+      title:        post.data.title,
+      desc:         post.data.description ?? "",
+      category:     category?.data?.name  ?? "Uncategorized",
+      categorySlug: category?.data?.slug  ?? "uncategorized",
+      url:          `/blog/${post.id}/`,
+    };
+  })
+);
+---
+
+<div
+  id="search-modal"
+  class="sm-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Cari artikel"
+  inert
+>
+  <!-- Backdrop -->
+  <div id="search-backdrop" class="sm-backdrop"></div>
+
+  <!-- Positioner -->
+  <div class="sm-positioner">
+    <div id="search-panel" class="sm-panel">
+
+      <!-- Input row -->
+      <div class="sm-input-row">
+        <Icon name="search" className="sm-search-icon" />
+
+        <input
+          id="search-input"
+          type="text"
+          placeholder="Cari artikel…"
+          aria-label="Cari artikel"
+          class="sm-input"
+          autocomplete="off"
+          spellcheck="false"
+        />
+
+        <button
+          id="search-clear"
+          class="sm-icon-btn sm-clear hidden"
+          aria-label="Hapus teks pencarian"
+          tabindex="-1"
+        >
+          <Icon name="trash" className="sm-btn-icon" />
+        </button>
+
+        <button
+          id="search-close-mobile"
+          class="sm-icon-btn sm:hidden"
+          aria-label="Tutup pencarian"
+        >
+          <Icon name="close" className="sm-btn-icon" />
+        </button>
+
+        <kbd class="sm-esc-key">ESC</kbd>
+      </div>
+
+      <!-- Results -->
+      <div id="search-results" class="sm-results"></div>
+
+      <!-- Footer -->
+      <div class="sm-footer">
+        <div class="sm-shortcuts">
+          <span class="sm-shortcut">
+            <kbd class="sm-kbd">↑↓</kbd>
+            Navigasi
+          </span>
+          <span class="sm-shortcut">
+            <kbd class="sm-kbd">↵</kbd>
+            Buka
+          </span>
+        </div>
+        <span id="search-count" class="sm-count"></span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ─── MODAL */
+  .sm-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: none;
+  }
+
+  /* ─── BACKDROP */
+  .sm-backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: color-mix(in srgb, var(--bg) 50%, transparent);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  /* ─── POSITIONER */
+  .sm-positioner {
+    position: relative;
+    display: flex;
+    min-height: 100%;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 0.75rem;
+  }
+
+  @media (min-width: 640px) {
+    .sm-positioner { padding-top: 5rem; }
+  }
+
+  /* ─── PANEL */
+  .sm-panel {
+    width: 100%;
+    max-width: 36rem;
+    background-color: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    opacity: 0;
+    transform: scale(0.96);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  /* ─── INPUT ROW */
+  .sm-input-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-inline: 0.875rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  :global(.sm-search-icon) {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    color: var(--fg-subtle);
+  }
+
+  .sm-input {
+    flex: 1;
+    min-width: 0;
+    padding-block: 0.875rem;
+    font-size: 0.875rem;
+    letter-spacing: -0.005em;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--fg);
+  }
+
+  .sm-input::placeholder { color: var(--fg-subtle); }
+
+  /* ─── ICON BUTTONS */
+  .sm-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    flex-shrink: 0;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--fg-subtle);
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  .sm-icon-btn:hover         { background-color: var(--bg-muted); color: var(--fg); }
+  .sm-icon-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  :global(.sm-btn-icon) {
+    width: 0.875rem;
+    height: 0.875rem;
+    display: block;
+  }
+
+  /* ─── ESC KEY */
+  .sm-esc-key {
+    display: none;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 0.1875rem 0.375rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    font-family: var(--font-mono);
+    color: var(--fg-subtle);
+    background-color: var(--bg-muted);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    pointer-events: none;
+  }
+
+  @media (min-width: 640px) {
+    .sm-esc-key { display: inline-flex; }
+  }
+
+  /* ─── RESULTS */
+  .sm-results {
+    max-height: 55dvh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .sm-results::-webkit-scrollbar       { width: 3px; }
+  .sm-results::-webkit-scrollbar-track { background: transparent; }
+  .sm-results::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* ─── FOOTER */
+  .sm-footer {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.875rem;
+    border-top: 1px solid var(--border);
+    background-color: var(--bg-subtle);
+  }
+
+  @media (min-width: 640px) {
+    .sm-footer { display: flex; }
+  }
+
+  .sm-shortcuts {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.6875rem;
+    color: var(--fg-subtle);
+  }
+
+  .sm-shortcut {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  .sm-kbd {
+    padding: 0.125rem 0.375rem;
+    font-size: 0.625rem;
+    font-family: var(--font-mono);
+    background-color: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--fg-subtle);
+  }
+
+  .sm-count {
+    font-size: 0.6875rem;
+    color: var(--fg-subtle);
+    letter-spacing: 0;
+  }
+
+  /* ─── SEARCH HIGHLIGHT */
+  :global(.sm-hl) {
+    background: color-mix(in srgb, var(--fg) 12%, transparent);
+    border-radius: 2px;
+    padding: 0 1px;
+    color: var(--fg);
+  }
+
+  /* ─── RESULT ITEMS (rendered via JS) */
+  :global(.sritem) {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem 0.875rem;
+    transition: background-color 0.1s ease;
+    text-decoration: none;
+  }
+
+  :global(.sritem:hover),
+  :global(.sritem.is-active) {
+    background-color: var(--bg-muted);
+  }
+
+  :global(.sritem-icon) {
+    margin-top: 0.125rem;
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    color: var(--fg-subtle);
+  }
+
+  :global(.sritem-title) {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--fg);
+    letter-spacing: -0.01em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  :global(.sritem-desc) {
+    margin-top: 0.125rem;
+    font-size: 0.75rem;
+    color: var(--fg-muted);
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+
+  :global(.sritem-cat) {
+    margin-top: 0.25rem;
+    font-size: 0.6875rem;
+    color: var(--fg-subtle);
+    letter-spacing: 0;
+  }
+
+  /* ─── EMPTY STATE */
+  :global(.sm-empty) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 3rem 1rem;
+    text-align: center;
+  }
+
+  :global(.sm-empty-icon) {
+    width: 1.75rem;
+    height: 1.75rem;
+    color: var(--fg-subtle);
+  }
+
+  :global(.sm-empty-title) {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--fg);
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+
+  :global(.sm-empty-sub) {
+    font-size: 0.8125rem;
+    color: var(--fg-subtle);
+    margin: 0;
+  }
+</style>
+
+<script define:vars={{ searchData }}>
+  (() => {
+    /* ── Guard */
+    if (!Array.isArray(searchData) || !searchData.length) {
+      console.warn("[Search] No data available.");
+      const results = document.getElementById("search-results");
+      if (results) results.innerHTML = emptyHTML("Data belum siap", "Silakan refresh halaman", true);
+      return;
+    }
+
+    const modal       = document.getElementById("search-modal");
+    const backdrop    = document.getElementById("search-backdrop");
+    const panel       = document.getElementById("search-panel");
+    const input       = document.getElementById("search-input");
+    const results     = document.getElementById("search-results");
+    const clearBtn    = document.getElementById("search-clear");
+    const closeMobile = document.getElementById("search-close-mobile");
+    const countEl     = document.getElementById("search-count");
+
+    if (!modal || !backdrop || !panel || !input || !results) return;
+
+    let activeIdx = -1;
+    let filtered  = [];
+    let prevFocus = null;
+    let debounce;
+
+    /* ── Helpers */
+    const esc = (s) =>
+      String(s)
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;").replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+
+    const highlight = (str, q) => {
+      if (!q) return esc(str);
+      const safe = q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      return esc(str).replace(
+        new RegExp(`(${safe})`, "gi"),
+        '<mark class="sm-hl">$1</mark>'
+      );
+    };
+
+    const score = (post, q) => {
+      const tl = post.title.toLowerCase();
+      const dl = post.desc.toLowerCase();
+      const cl = post.category.toLowerCase();
+      if (tl === q)          return 100;
+      if (tl.startsWith(q)) return 80;
+      if (tl.includes(q))   return 60;
+      if (dl.includes(q))   return 40;
+      if (cl.includes(q))   return 30;
+      let qi = 0;
+      for (let i = 0; i < tl.length && qi < q.length; i++)
+        if (tl[i] === q[qi]) qi++;
+      return qi === q.length ? 10 : 0;
+    };
+
+    function emptyHTML(title, sub, isError = false) {
+      const icon = isError
+        ? `<svg class="sm-empty-icon" style="color:#ef4444" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+             <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
+             <line x1="12" y1="16" x2="12.01" y2="16"/>
+           </svg>`
+        : `<svg class="sm-empty-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+             <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+           </svg>`;
+      return `<div class="sm-empty">${icon}
+        <p class="sm-empty-title">${title}</p>
+        <p class="sm-empty-sub">${sub}</p>
+      </div>`;
+    }
+
+    /* ── Render */
+    const setActive = (items) =>
+      items.forEach((el, i) =>
+        el.classList.toggle("is-active", i === activeIdx)
+      );
+
+    const renderResults = (items, q) => {
+      if (!items.length) {
+        results.innerHTML = emptyHTML("Tidak ditemukan", "Coba kata kunci lain");
+        if (countEl) countEl.textContent = "";
+        return;
+      }
+
+      if (countEl) countEl.textContent = `${items.length} hasil`;
+
+      results.innerHTML = items.map((p, i) => `
+        <a
+          href="${esc(p.url)}"
+          data-idx="${i}"
+          class="sritem${i === activeIdx ? " is-active" : ""}"
+        >
+          <svg class="sritem-icon" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+          <div style="min-width:0;flex:1">
+            <div class="sritem-title">${highlight(p.title, q)}</div>
+            <div class="sritem-desc">${highlight(p.desc, q)}</div>
+            <div class="sritem-cat">${esc(p.category)}</div>
+          </div>
+        </a>
+      `).join("");
+    };
+
+    const resetView = () => {
+      activeIdx = -1;
+      filtered  = [];
+      results.innerHTML = emptyHTML("Cari artikel", "Ketik untuk mulai mencari");
+      if (countEl) countEl.textContent = "";
+    };
+
+    /* ── Open / close */
+    const openModal = () => {
+      prevFocus = document.activeElement;
+      modal.style.display = "block";
+      modal.removeAttribute("inert");
+      document.body.style.overflow = "hidden";
+      requestAnimationFrame(() => {
+        backdrop.style.opacity = "1";
+        panel.style.opacity    = "1";
+        panel.style.transform  = "scale(1)";
+        input.focus();
+      });
+      resetView();
+    };
+
+    const closeModal = () => {
+      backdrop.style.opacity = "0";
+      panel.style.opacity    = "0";
+      panel.style.transform  = "scale(0.96)";
+      document.body.style.overflow = "";
+      setTimeout(() => {
+        modal.style.display = "none";
+        modal.setAttribute("inert", "");
+        input.value = "";
+        clearBtn?.classList.add("hidden");
+        resetView();
+        prevFocus?.focus();
+      }, 200);
+    };
+
+    /* ── Events */
+    document.addEventListener("open-search", openModal);
+    backdrop.addEventListener("click", closeModal);
+    closeMobile?.addEventListener("click", closeModal);
+
+    clearBtn?.addEventListener("click", () => {
+      input.value = "";
+      clearBtn.classList.add("hidden");
+      input.focus();
+      resetView();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        modal.style.display === "none" ? openModal() : closeModal();
+        return;
+      }
+      if (e.key === "Escape" && modal.style.display !== "none") {
+        e.preventDefault();
+        closeModal();
+      }
+    });
+
+    input.addEventListener("input", () => {
+      const q = input.value.trim();
+      clearBtn?.classList.toggle("hidden", !q);
+      clearTimeout(debounce);
+      debounce = setTimeout(() => {
+        if (!q) { resetView(); return; }
+        const ql = q.toLowerCase();
+        filtered = searchData
+          .map((p) => ({ ...p, _score: score(p, ql) }))
+          .filter((p) => p._score > 0)
+          .sort((a, b) => b._score - a._score)
+          .slice(0, 8);
+        activeIdx = -1;
+        renderResults(filtered, ql);
+      }, 80);
+    });
+
+    input.addEventListener("keydown", (e) => {
+      const items = results.querySelectorAll(".sritem");
+      if (!items.length) return;
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        activeIdx = (activeIdx + 1) % items.length;
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        activeIdx = (activeIdx - 1 + items.length) % items.length;
+      } else if (e.key === "Enter" && activeIdx >= 0) {
+        e.preventDefault();
+        items[activeIdx]?.click();
+        return;
+      } else {
+        return;
+      }
+
+      setActive(items);
+      items[activeIdx]?.scrollIntoView({ block: "nearest" });
+    });
+
+    /* ── URL param */
+    document.addEventListener("DOMContentLoaded", () => {
+      const q = new URLSearchParams(window.location.search).get("q");
+      if (!q) return;
+      setTimeout(() => {
+        openModal();
+        input.value = q;
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+        history.replaceState({}, "", window.location.pathname);
+      }, 100);
+    });
+  })();
+</script>

@@ -1,0 +1,287 @@
+---
+// src/components/ui/TOC.astro
+import { filterHeadingsForTOC } from '@/lib/utils';
+import Icon from '@/components/ui/Icon';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+const tocHeadings = filterHeadingsForTOC(headings);
+---
+
+{tocHeadings.length > 0 && (
+  <aside class="toc-container">
+    <nav class="toc-nav">
+      <button
+        class="toc-trigger lg:hidden"
+        aria-expanded="false"
+        aria-controls="toc-list"
+      >
+        <span class="toc-trigger-text text-sm md:text-[13px] font-semibold">Daftar isi dihalaman ini</span>
+        <Icon name="chevron-down" className="toc-chevron w-4.5 h-4.5" />
+      </button>
+
+      <div id="toc-list" class="toc-content lg:block">
+        <ul class="toc-ul">
+          {tocHeadings.map(h => (
+            <li class:list={["toc-li", h.depth === 3 ? "pl-4" : ""]}>
+              <a href={`#${h.slug}`} class="toc-link">
+                <span class="toc-dot"></span>
+                {h.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </nav>
+  </aside>
+)}
+
+<style is:global>
+  :target {
+    scroll-margin-top: 56px;
+  }
+
+  @media (min-width: 768px) {
+    :target {
+      scroll-margin-top: 116px;
+    }
+  }
+
+  .toc-container {
+    position: sticky;
+    top: 60px;
+    z-index: 40;
+    width: 100%;
+    margin-bottom: 0 !important;
+  }
+
+  .toc-nav {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    max-height: calc(100vh - 6rem);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .toc-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--fg);
+  }
+
+  .toc-trigger-text {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80%;
+    transition: opacity 0.15s ease-in-out;
+  }
+
+  .toc-chevron {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .toc-trigger[aria-expanded="true"] .toc-chevron {
+    transform: rotate(180deg);
+  }
+
+  .toc-content {
+    border-top: 1px solid var(--border);
+    overflow-y: auto;
+  }
+
+  .toc-content[hidden] { display: none; }
+
+  .toc-ul {
+    padding: 1rem;
+    list-style: none;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .toc-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    font-size: 13px;
+    color: var(--fg-muted);
+    transition: color 0.2s;
+  }
+
+  .toc-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--fg-subtle);
+    flex-shrink: 0;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .active-link {
+    color: var(--fg) !important;
+    font-weight: 600;
+  }
+
+  .active-link .toc-dot {
+    background: var(--fg) !important;
+    transform: scale(1.5);
+  }
+
+	@media (min-width: 1024px) {
+		.toc-content {
+    		border-top: none;
+  		}
+	}
+</style>
+
+<script>
+  const initTOC = () => {
+    const trigger = document.querySelector<HTMLButtonElement>('.toc-trigger');
+    const triggerText = trigger?.querySelector<HTMLElement>('.toc-trigger-text');
+    const content = document.getElementById('toc-list');
+    const links = content?.querySelectorAll<HTMLAnchorElement>('.toc-link');
+
+    if (!trigger ||!content ||!links?.length ||!triggerText) return;
+	
+	const isDesktop = window.innerWidth >= 1024;
+	if (isDesktop) {
+		content.hidden = false;
+		trigger.setAttribute('aria-expanded', 'true');
+	} else {
+		content.hidden = true;
+		trigger.setAttribute('aria-expanded', 'false');
+	}
+
+    const DEFAULT_TEXT = 'Daftar isi dihalaman ini';
+
+    const closePanel = () => {
+      trigger.setAttribute('aria-expanded', 'false');
+      content.hidden = true;
+    };
+
+    trigger.addEventListener('click', () => {
+      const expanded = trigger.getAttribute('aria-expanded') === 'true';
+      trigger.setAttribute('aria-expanded', String(!expanded));
+      content.hidden = expanded;
+    });
+
+    links.forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 1024) closePanel();
+      });
+    });
+
+	let resizeTimer: ReturnType<typeof setTimeout>;
+	window.addEventListener('resize', () => {
+		clearTimeout(resizeTimer);
+		resizeTimer = setTimeout(() => {
+			const isDesktopNow = window.innerWidth >= 1024;
+			content.hidden = !isDesktopNow;
+			trigger.setAttribute('aria-expanded', String(isDesktopNow));
+		}, 150);
+	});
+
+    const headingEls: HTMLElement[] = Array.from(links)
+     .map(l => {
+        const id = l.getAttribute('href')?.slice(1);
+        return id? document.getElementById(id) : null;
+      })
+     .filter((el): el is HTMLElement => el!== null);
+
+    if (!headingEls.length) return;
+
+    let fadeTimer: ReturnType<typeof setTimeout>;
+    const setLabel = (text: string) => {
+      clearTimeout(fadeTimer);
+      triggerText.style.opacity = '0';
+      fadeTimer = setTimeout(() => {
+        triggerText.textContent = text;
+        triggerText.style.opacity = '1';
+      }, 80);
+    };
+
+    const HEADER_H = 56;
+    const TOC_TOP = 60;
+    const OFFSET = HEADER_H + TOC_TOP;
+
+    const visibleHeadings = new Set<HTMLElement>();
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const heading = entry.target as HTMLElement;
+          if (entry.isIntersecting) {
+            visibleHeadings.add(heading);
+          } else {
+            visibleHeadings.delete(heading);
+          }
+        });
+
+        let active: HTMLElement | null = null;
+        let minTop = Infinity;
+
+        visibleHeadings.forEach((h) => {
+          const top = h.getBoundingClientRect().top;
+          if (top >= 0 && top < minTop) {
+            minTop = top;
+            active = h;
+          }
+        });
+
+        if (!active) {
+          for (let i = headingEls.length - 1; i >= 0; i--) {
+            if (headingEls[i].getBoundingClientRect().top < OFFSET) {
+              active = headingEls[i];
+              break;
+            }
+          }
+        }
+
+        links.forEach(l => l.classList.remove('active-link'));
+
+        if (!active) {
+          setLabel(DEFAULT_TEXT);
+          return;
+        }
+
+        const id = active.getAttribute('id');
+        const link = id? content.querySelector<HTMLAnchorElement>(`[href="#${id}"]`) : null;
+        if (!link) return;
+
+        link.classList.add('active-link');
+        setLabel(link.innerText);
+      },
+      {
+        rootMargin: `-${OFFSET}px 0px -40% 0px`, // 116px atas, 40% bawah
+        threshold: 0
+      }
+    );
+
+    headingEls.forEach((h) => observer.observe(h));
+  };
+
+  initTOC();
+  document.addEventListener('astro:after-swap', initTOC);
+</script>

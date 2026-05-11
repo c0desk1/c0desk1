@@ -1,0 +1,229 @@
+---
+// src/components/layout/Footer.astro
+import { siteConfig } from "@/config/site";
+import { getCurrentLocale, localizePath, getLabel } from '@/utils/i18n';
+
+import Container from "../ui/Container.astro";
+import Section from "../ui/Section.astro";
+import Icon from "@/components/ui/Icon";
+import Newsletter from "../layout/Newsletter.astro";
+import StatusButton from "../ui/StatusButton.astro";
+import ThemeToggle from "../ui/ThemeToggle.astro";
+
+const locale = getCurrentLocale(Astro);
+
+const siteData = siteConfig;
+const social = siteConfig.social;
+const year = new Date().getFullYear();
+
+const footerSections = siteConfig.footerSections;
+---
+
+<footer class="ft-root">
+  <Section size="none">
+    <div class="ft-top">
+      <Container size="xl">
+        <div class="ft-top-inner">
+          <nav class="ft-nav" aria-label={getLabel(locale, 'navigation')}>
+            {footerSections.map((section) => (
+              <div class="ft-col">
+                <p class="ft-col-title">{getLabel(locale, section.titleKey)}</p>
+                <ul class="ft-col-list">
+                  {section.items.map((link) => (
+                    <li>
+                      <a
+                        href={link.isExternal ? link.href : localizePath(link.href, locale)}
+                        target={link.isExternal ? "_blank" : undefined}
+                        rel={link.isExternal ? "noopener noreferrer" : undefined}
+                        class="ft-link"
+                      >
+                        {getLabel(locale, link.labelKey)}
+                        {link.isExternal && (
+                          <Icon name="external" className="ft-external-icon" />
+                        )}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </nav>
+
+          <div class="ft-newsletter">
+            <Newsletter />
+          </div>
+        </div>
+      </Container>
+    </div>
+
+    <Container size="xl">
+      <div class="ft-bottom">
+        <div class="ft-bottom-row">
+          <div class="ft-social">
+            {social.map((item: { href: string; label: string }) => (
+              <a
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={item.label}
+                class="ft-social-link"
+              >
+                <Icon name={item.label as any} className="ft-social-icon" />
+              </a>
+            ))}
+          </div>
+          <span class="ft-copy">
+            © {year} {siteData.siteName}
+          </span>
+        </div>
+
+        <div class="ft-bottom-row">
+          <StatusButton />
+          <ThemeToggle />
+        </div>
+      </div>
+    </Container>
+  </Section>
+</footer>
+
+<style>
+  /* ─── FOOTER ROOT ────────────────────────────────────────────────── */
+  .ft-root {
+    position: relative;
+    border-top: 1px solid var(--border);
+    background-color: var(--bg);
+  }
+
+  /* ─── TOP BAND ───────────────────────────────────────────────────── */
+  .ft-top {
+    border-bottom: 1px dashed var(--border);
+    padding-block: 2.5rem;
+  }
+
+  .ft-top-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    align-items: flex-start;
+  }
+
+  @media (min-width: 768px) {
+    .ft-top-inner {
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+  }
+
+  /* ─── NAV COLUMNS ────────────────────────────────────────────────── */
+  .ft-nav {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem 2rem;
+    flex: 1;
+  }
+
+  @media (max-width: 480px) {
+    .ft-nav {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .ft-col-title {
+    margin: 0 0 0.75rem;
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fg);
+    font-family: var(--font-mono);
+  }
+
+  .ft-col-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .ft-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--fg-muted);
+    padding-block: 0.25rem;
+    letter-spacing: -0.005em;
+    transition: color 0.15s ease;
+  }
+
+  .ft-link:hover { color: var(--fg); }
+
+  :global(.ft-external-icon) {
+    width: 0.6875rem;
+    height: 0.6875rem;
+    flex-shrink: 0;
+    opacity: 0.5;
+    transition: opacity 0.15s ease;
+  }
+
+  .ft-link:hover :global(.ft-external-icon) { opacity: 1; }
+
+  /* ─── NEWSLETTER ─────────────────────────────────────────────────── */
+  .ft-newsletter {
+    flex-shrink: 0;
+  }
+
+  /* ─── BOTTOM BAND ────────────────────────────────────────────────── */
+  .ft-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    padding-block: 1rem;
+  }
+
+  .ft-bottom-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  /* ─── SOCIAL ─────────────────────────────────────────────────────── */
+  .ft-social {
+    display: flex;
+    align-items: center;
+    gap: 0.125rem;
+  }
+
+  .ft-social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-full);
+    color: var(--fg-muted);
+    transition: color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .ft-social-link:hover {
+    color: var(--fg);
+    background-color: var(--bg-muted);
+  }
+
+  :global(.ft-social-icon) {
+    width: 1rem;
+    height: 1rem;
+    display: block;
+  }
+
+  /* ─── COPYRIGHT ──────────────────────────────────────────────────── */
+  .ft-copy {
+    font-size: 0.8125rem;
+    color: var(--fg-subtle);
+    letter-spacing: -0.005em;
+  }
+</style>

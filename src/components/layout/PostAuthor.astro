@@ -1,0 +1,51 @@
+---
+// src/components/layout/PostAuthor.astro
+
+import { siteConfig } from '@/config/site';
+import { Image } from 'astro:assets';
+import { cdnImage, isCdnUrl } from '@/lib/utils';
+
+interface Props {
+  name?: string;
+  avatar?: string;
+  title?: string;
+  slug?: string;
+}
+
+const { name, avatar, title, slug } = Astro.props;
+
+const authorName = name || siteConfig.author?.name || siteConfig.siteName;
+const authorAvatar = avatar || siteConfig.author?.avatar || siteConfig.siteLogo;
+const authorTitle = title || siteConfig.author?.title || "Author";
+const authorSlug = slug || siteConfig.author?.slug || "author";
+
+const optimizedAvatar = isCdnUrl(authorAvatar) ? cdnImage(authorAvatar, { w: 48, h: 48, q: 80 }) : authorAvatar;
+---
+<div class="flex items-center gap-2">
+  <a href={`/author/${authorSlug}/`}
+    class="flex items-center gap-2 text-[13px] md:text-sm"
+    aria-label={`Author: ${authorName}`}
+    >
+    {authorAvatar && (
+      <Image
+        src={optimizedAvatar}
+        alt={`Avatar of ${authorName}`}
+        width={48}
+        height={48}
+        class="w-6 h-6 rounded-full border-2 border-(--border) object-cover"
+        loading="lazy"
+        decoding='async'
+      />
+    )}
+    <div class="flex items-center gap-2 leading-tight">
+      <span class="text-(--fg)">
+        {authorName}
+      </span>
+      {authorTitle && (
+        <span class="text-(--fg-muted)">
+          {authorTitle}
+        </span>
+      )}
+    </div>
+  </a>
+</div>

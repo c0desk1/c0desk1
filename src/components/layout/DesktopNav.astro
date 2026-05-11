@@ -1,0 +1,49 @@
+---
+import { getCurrentLocale, localizePath, getLabel } from '@/utils/i18n';
+import { siteConfig } from "@/config/site";
+
+import NavLink from "../ui/NavLink.astro";
+import Icon from "../ui/Icon";
+
+const locale = getCurrentLocale(Astro);
+const currentPath = Astro.url.pathname;
+
+const navItems = siteConfig.navItems;
+
+const normalize = (path: string) => path.replace(/\/$/, "") || "/";
+---
+
+<nav
+  class="hidden md:flex items-center justify-center gap-2 ml-2"
+  aria-label="Main navigation"
+>
+  {navItems.map((item) => {
+    const localizedHref = item.isExternal? item.href : localizePath(item.href, locale);
+    const label = getLabel(locale, item.labelKey);
+
+    const activePath = normalize(currentPath);
+    const targetPath = normalize(localizedHref);
+
+    const isActive =
+      activePath === targetPath ||
+      (targetPath!== "/" && activePath.startsWith(targetPath));
+
+    return (
+      <NavLink
+        href={localizedHref}
+        current={isActive}
+        target={item.isExternal? "_blank" : undefined}
+        rel={item.isExternal? "noopener noreferrer" : undefined}
+      >
+        {label}
+
+        {item.isExternal && (
+          <Icon
+            name="external"
+            className="size-3 shrink-0 opacity-0 transition-opacity group-hover:opacity-100"
+          />
+        )}
+      </NavLink>
+    );
+  })}
+</nav>
