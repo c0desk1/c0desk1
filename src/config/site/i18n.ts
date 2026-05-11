@@ -35,7 +35,20 @@ export const i18nConfig = {
       general: "Umum",
       author: "Penulis",
       readAlso: "Baca juga.",
-      readArticle: "Baca artikel"
+      readArticle: "Baca artikel",
+      
+      // NEWSLETTER
+      newsletterHeading: 'Tetap terhubung',
+      newsletterSub: 'Dapatkan postingan terbaru yang dikirimkan ke kotak masuk Anda.',
+      newsletterPlaceholder: 'nama@email.com',
+      newsletterBtn: 'Berlangganan',
+      newsletterSuccess: 'Terima kasih telah berlangganan!',
+      newsletterNote: 'Tidak ada spam. Anda dapat berhenti berlangganan kapan saja.',
+      newsletterInvalid: 'Silakan masukkan alamat email yang valid.',
+      newsletterExists: 'Email sudah terdaftar.',
+      newsletterError: 'Terjadi kesalahan. Silakan coba lagi.',
+      newsletterToastSuccess: 'Sudah berlangganan! Periksa kotak masuk Anda.',
+      newsletterNetwork: 'Gagal terhubung. Silakan coba lagi nanti.',
     },
     en: {
       home: "Home",
@@ -68,7 +81,20 @@ export const i18nConfig = {
       general: "General",
       author: "Author",
       readAlso: "Read also.",
-      readArticle: "Read article"
+      readArticle: "Read article",
+      
+      // NEWSLETTER
+      newsletterHeading: 'Stay connected',
+      newsletterSub: 'Get the latest posts delivered to your inbox.',
+      newsletterPlaceholder: 'name@email.com',
+      newsletterBtn: 'Subscribe',
+      newsletterSuccess: 'Thanks for subscribing!',
+      newsletterNote: 'No spam. Unsubscribe anytime.',
+      newsletterInvalid: 'Please enter a valid email address.',
+      newsletterExists: 'Email already subscribed.',
+      newsletterError: 'Something went wrong. Please try again.',
+      newsletterToastSuccess: 'Subscribed! Check your inbox.',
+      newsletterNetwork: 'Connection failed. Please try again later.',
     },
     ru: {
       home: "дом",
@@ -102,7 +128,20 @@ export const i18nConfig = {
       general: "Общее",
       author: "Автор",
       readAlso: "Читайте также.",
-      readArticle: "Читать статью"
+      readArticle: "Читать статью",
+      
+      // NEWSLETTER
+      newsletterHeading: 'Оставайтесь на связи',
+      newsletterSub: 'Получайте свежие публикации на почту.',
+      newsletterPlaceholder: 'name@email.com',
+      newsletterBtn: 'Подписаться',
+      newsletterSuccess: 'Спасибо за подписку!',
+      newsletterNote: 'Никакого спама. Отписаться можно в любой момент.',
+      newsletterInvalid: 'Пожалуйста, введите действительный email.',
+      newsletterExists: 'Email уже подписан.',
+      newsletterError: 'Что-то пошло не так. Попробуйте снова.',
+      newsletterToastSuccess: 'Вы подписаны! Проверьте почту.',
+      newsletterNetwork: 'Ошибка подключения. Попробуйте позже.',
     }
   }
 } as const;
