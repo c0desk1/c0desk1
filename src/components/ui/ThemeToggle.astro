@@ -1,18 +1,27 @@
 ---
 // src/components/ui/ThemeToggle.astro
 import Icon from "./Icon";
+import { getCurrentLocale, getLabel } from '@/utils/i18n';
+
+const locale = getCurrentLocale(Astro);
+
+const labels = {
+  group: getLabel(locale, 'themeToggleGroup'),
+  system: getLabel(locale, 'themeSystem'),
+  light: getLabel(locale, 'themeLight'),
+  dark: getLabel(locale, 'themeDark'),
+};
 ---
 
 <div
   id="theme-toggle"
   role="group"
-  aria-label="Pilih tema"
-  class="tt-root"
->
+  aria-label={labels.group}
+  class="tt-root">
   {([
-    { mode: "system", label: "Ikuti sistem" },
-    { mode: "light",  label: "Tema terang"  },
-    { mode: "dark",   label: "Tema gelap"   },
+    { mode: "system", label: labels.system },
+    { mode: "light",  label: labels.light },
+    { mode: "dark",   label: labels.dark },
   ] as const).map(({ mode, label }) => (
     <button
       type="button"
