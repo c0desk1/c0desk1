@@ -96,6 +96,23 @@ export const i18nConfig = {
 
       // STATUS //
       loadingSystem: "Memuat Sistem...",
+      waitingSync: "Menunggu sinkronisasi...",
+      justNow: "Baru saja",
+      ago: "yang lalu",
+      allSystemsNormal: "Semua Sistem Normal.",
+      updated: "Diperbarui",
+      lastChecks: "cek terakhir",
+      offline: "Offline",
+      uptime: "Waktu Aktif",
+      average: "rata-rata",
+      identifyingNode: "Mengidentifikasi...",
+      calculating: "Menghitung...",
+      systemStatus: "Status Sistem",
+      closePanel: "Tutup panel",
+      node: "Node",
+      lastCheck: "Pemeriksaan Terakhir",
+      someTimeAgo: "Beberapa waktu lalu",
+      globalEdge: "Global Edge",
 
       // COPY LINK
       copyUrl: 'Salin URL',
@@ -211,6 +228,23 @@ export const i18nConfig = {
 
       // STATUS //
       loadingSystem: "Loading System...",
+      waitingSync: "Waiting for sync...",
+      justNow: "Just now",
+      ago: "ago",
+      allSystemsNormal: "All Systems Operational.",
+      updated: "Updated",
+      lastChecks: "last checks",
+      offline: "Offline",
+      uptime: "Uptime",
+      average: "average",
+      identifyingNode: "Identifying...",
+      calculating: "Calculating...",
+      systemStatus: "System Status",
+      closePanel: "Close panel",
+      node: "Node",
+      lastCheck: "Last Check",
+      someTimeAgo: "Some time ago",
+      globalEdge: "Global Edge",
 
       // MENU //
       openMenu: "Open menu",
@@ -331,6 +365,23 @@ export const i18nConfig = {
 
       // STATUS //
       loadingSystem: "Загрузка системы...",
+      waitingSync: "Ожидание синхронизации...",
+      justNow: "Только что",
+      ago: "назад",
+      allSystemsNormal: "Все системы в норме.",
+      updated: "Обновлено",
+      lastChecks: "последних проверок",
+      offline: "Офлайн",
+      uptime: "Аптайм",
+      average: "в среднем",
+      identifyingNode: "Определение...",
+      calculating: "Вычисление...",
+      systemStatus: "Статус системы",
+      closePanel: "Закрыть панель",
+      node: "Узел",
+      lastCheck: "Последняя проверка",
+      someTimeAgo: "Некоторое время назад",
+      globalEdge: "Global Edge",
 
       // MENU //
       openMenu: "Открыть меню",
