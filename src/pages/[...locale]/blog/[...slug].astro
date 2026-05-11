@@ -6,6 +6,9 @@ import '@/styles/prose/index.css';
 import { getCollection, render, getEntry } from "astro:content";
 import { siteConfig } from "@/config/site";
 import { getCurrentLocale, localizePath, getLabel } from "@/utils/i18n";
+import { components } from '@/components/layout/MDXComponents';
+import { filterHeadingsForTOC, slugify } from "@/lib/utils";
+import { getSmartRelatedPosts } from "@/lib/botEngine";
 
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/ui/Container.astro";
@@ -17,10 +20,7 @@ import PostNavigation from '@/components/blog/PostNavigation.astro';
 import BlogRelatedPosts from "@/components/blog/BlogRelatedPosts.astro";
 import BackToTop from "@/components/ui/BackToTop.astro";
 import ReadingProgress from "@/components/ui/ReadingProgress.astro";
-import { components } from '@/components/layout/MDXComponents';
 import SharePost from '@/components/blog/SharePost.astro';
-import { filterHeadingsForTOC, getReadingTime, slugify } from "@/lib/utils";
-import { getSmartRelatedPosts } from "@/lib/botEngine";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) =>!data.draft);
@@ -101,7 +101,6 @@ const seoCategory = {
 const seoTitle = seo?.title || title;
 const seoDescription = seo?.description || description;
 const tocHeadings = filterHeadingsForTOC(headings);
-const readingTime = getReadingTime(post.body || "");
 
 const siteURL = Astro.site?.toString() ?? siteData.siteUrl;
 const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
