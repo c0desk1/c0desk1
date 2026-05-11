@@ -1,5 +1,7 @@
 ---
 // src/components/ui/Newsletter.astro
+import { getCurrentLocale, getLabel } from '@/utils/i18n';
+
 interface Props {
   heading?    : string;
   subheading? : string;
@@ -9,14 +11,24 @@ interface Props {
   note?       : string;
 }
 
+const locale = getCurrentLocale(Astro);
+
 const {
-  heading     = 'Tetap terhubung',
-  subheading  = 'Dapatkan postingan terbaru yang dikirimkan ke kotak masuk Anda.',
-  placeholder = 'nama@email.com',
-  btnLabel    = 'Berlangganan',
-  message     = 'Terima kasih telah berlangganan!',
-  note        = 'Tidak ada spam. Anda dapat berhenti berlangganan kapan saja.',
+  heading = getLabel(locale, 'newsletterHeading') || 'Stay connected',
+  subheading = getLabel(locale, 'newsletterSub') || 'Get the latest posts delivered to your inbox.',
+  placeholder = getLabel(locale, 'newsletterPlaceholder') || 'name@email.com',
+  btnLabel = getLabel(locale, 'newsletterBtn') || 'Subscribe',
+  message = getLabel(locale, 'newsletterSuccess') || 'Thanks for subscribing!',
+  note = getLabel(locale, 'newsletterNote') || 'No spam. Unsubscribe anytime.',
 } = Astro.props;
+
+const toastMessages = {
+  invalid: getLabel(locale, 'newsletterInvalid') || 'Please enter a valid email address.',
+  exists: getLabel(locale, 'newsletterExists') || 'Email already subscribed.',
+  error: getLabel(locale, 'newsletterError') || 'Something went wrong. Please try again.',
+  success: getLabel(locale, 'newsletterToastSuccess') || 'Subscribed! Check your inbox.',
+  network: getLabel(locale, 'newsletterNetwork') || 'Connection failed. Please try again later.',
+};
 ---
 
 <div class="nls-root">
@@ -237,7 +249,6 @@ const {
       font-size: 1.125rem;
     }
 
-    /* Stack input + button vertically */
     .nls-row {
       flex-direction: column;
       height: auto;
@@ -315,7 +326,7 @@ const {
       if (!email || !isValidEmail(email)) {
         shake();
         emailEl.focus();
-        toast?.show?.('Silakan masukkan alamat email yang valid.', { type: 'error' });
+        toast?.show?.(toastMessages.invalid, { type: 'error' });
         return;
       }
 
@@ -331,8 +342,8 @@ const {
         if (!res.ok) {
           shake();
           const msg = res.status === 409
-            ? 'Email sudah terdaftar.'
-            : 'Terjadi kesalahan. Silakan coba lagi.';
+            ? toastMessages.exists
+            : toastMessages.error;
           toast?.show?.(msg, { type: 'error' });
           return;
         }
@@ -346,11 +357,11 @@ const {
           if (formState) formState.hidden = false;
         }, 3500);
 
-        toast?.show?.('Sudah berlangganan! Periksa kotak masuk Anda.', { type: 'success' });
+        toast?.show?.toastMessages.success, { type: 'success' });
 
       } catch {
         shake();
-        toast?.show?.('Gagal terhubung. Silakan coba lagi nanti.', { type: 'error' });
+        toast?.show?.(toastMessages.network, { type: 'error' });
       } finally {
         setLoading(false);
       }
