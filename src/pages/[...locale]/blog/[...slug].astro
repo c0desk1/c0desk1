@@ -1,0 +1,192 @@
+---
+// src/pages/[...locale]/blog/[...slug].astro
+export const prerender = true;
+
+import '@/styles/prose/index.css';
+import { getCollection, render, getEntry } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import { siteConfig } from "@/config/site";
+import { getCurrentLocale, localizePath, getLabel } from "@/utils/i18n";
+
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import Breadcrumb from "@/components/ui/Breadcrumb.astro";
+import PostHeader from "@/components/layout/PostHeader.astro";
+import TOC from "@/components/ui/TOC.astro";
+import PostNavigation from '@/components/blog/PostNavigation.astro';
+import BlogRelatedPosts from "@/components/blog/BlogRelatedPosts.astro";
+import BackToTop from "@/components/ui/BackToTop.astro";
+import ReadingProgress from "@/components/ui/ReadingProgress.astro";
+import { components } from '@/components/layout/MDXComponents';
+import SharePost from '@/components/blog/SharePost.astro';
+import { filterHeadingsForTOC, getReadingTime } from "@/lib/utils";
+import { getSmartRelatedPosts } from "@/lib/botEngine";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  
+  return posts.flatMap((post: CollectionEntry<"blog">) => {
+    const lang = post.data.lang || 'id';
+    const slug = post.slug;
+    
+    const locale = lang === 'id' ? undefined : lang;
+    
+    return {
+      params: { 
+        locale, 
+        slug 
+      },
+      props: { post }
+    };
+  });
+}
+
+const { post } = Astro.props;
+const locale = getCurrentLocale(Astro);
+
+const allPosts = await getCollection("blog", ({ data }) => 
+  !data.draft && (data.lang || 'id') === locale
+);
+
+const sortedPosts = allPosts.sort((a, b) => 
+  new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+);
+
+const currentIndex = sortedPosts.findIndex(p => p.id === post.id);
+const prevPost = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
+const nextPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
+
+let settings;
+try {
+  settings = await getEntry('settings', 'site');
+} catch (error) {
+  console.warn('Settings not found, using siteConfig fallback');
+}
+const siteData = settings?.data || siteConfig;
+
+const authorEntry = await getEntry(post.data.author);
+const categoryEntry = await getEntry(post.data.category);
+
+const { Content, headings } = await render(post);
+const relatedPosts = getSmartRelatedPosts(post, allPosts, 3);
+
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  tags,
+  image,
+  seo
+} = post.data;
+
+const seoImage = {
+  src: seo?.ogImage || image?.src || siteData.defaultSeo?.ogImage || siteConfig.defaultSeo?.ogImage || siteConfig.ogImage,
+  alt: image?.alt || title
+};
+
+const seoCategory = {
+  name: categoryEntry?.data.name || getLabel(locale, 'blog'),
+  description: categoryEntry?.data.description || "",
+  slug: categoryEntry?.id || "blog"
+};
+
+const seoTitle = seo?.title || title;
+const seoDescription = seo?.description || description;
+const tocHeadings = filterHeadingsForTOC(headings);
+const readingTime = getReadingTime(post.body || "");
+
+const siteURL = Astro.site?.toString() ?? siteData.siteUrl;
+const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
+
+const SeoBreadcrumbItems = [
+  { name: getLabel(locale, 'home') || "Home", href: localizePath('/', locale) },
+  { name: getLabel(locale, 'blog') || "Blog", href: localizePath('/blog/', locale) },
+  { name: seoCategory.name, href: localizePath(`/category/${seoCategory.slug}/`, locale) },
+  { name: title, href: canonicalURL }
+];
+
+const Breadcrumbs = SeoBreadcrumbItems.filter(item => 
+  item.name === getLabel(locale, 'blog') || item.name === seoCategory.name
+);
+---
+
+<BaseLayout
+  title={seoTitle}
+  description={seoDescription}
+  image={seoImage}
+  type="article"
+  publishedTime={pubDate}
+  modifiedTime={updatedDate}
+  tags={tags}
+  category={seoCategory}
+  author={{
+    name: authorEntry?.data.name,
+    role: authorEntry?.data.role,
+    avatar: authorEntry?.data.avatar,
+    bio: authorEntry?.data.bio,
+    slug: authorEntry?.id
+  }}
+  canonicalURL={canonicalURL}
+>
+  <Section size="md">
+    <Section size="sm">
+      <Container size="md">
+        <h2 class="sr-only">{title}</h2>
+        <Section size="none">
+          <h2 class="sr-only">{getLabel(locale, 'pageNavigation') || 'Navigasi Halaman'}</h2>
+          <Breadcrumb items={Breadcrumbs} />
+        </Section>
+        <article id="post-article">
+          <Section size="sm">
+            <h2 class="sr-only">{getLabel(locale, 'articleHeader') || 'Article Header'}</h2>
+            <PostHeader
+              title={title}
+              pubDate={pubDate}
+              readingTime={readingTime}
+              authorName={authorEntry?.data.name}
+              authorAvatar={authorEntry?.data.avatar}
+              authorTitle={authorEntry?.data.role}
+              authorSlug={authorEntry?.id}
+              image={image}
+            />
+          </Section>
+          <Section size="sm" class="section-divider">
+            <div id="article">
+              <div id="article-toc" class="hidden sticky top-15 z-50 my-6">
+                {tocHeadings.length > 0 && (
+                  <TOC headings={tocHeadings} />
+                )}
+              </div>
+              <div id="article-content" class="prose-custom">
+                <Content components={components} />
+              </div>
+            </div>
+	        </Section>
+          <Section size="sm" class="section-divider">
+            <SharePost url={canonicalURL} title={post.data.title} description={post.data.description} tags={post.data.tags} variant='card' />
+          </Section>
+	    </article>
+	  </Container>
+	</Section>
+	<Section size="sm">
+	  <h2 class="sr-only">{getLabel(locale, 'backToTop') || 'Navigasi Kembali ke atas halaman'}</h2>
+	  <Container size="lg">
+	    <BackToTop align="center" />
+	  </Container>
+	</Section>
+    <Section size="md" class="section-divider">
+      <h2 class="sr-only">{getLabel(locale, 'relatedArticles') || 'Artikel Terkait'}</h2>
+      <Container size="xl">
+        <BlogRelatedPosts posts={relatedPosts} />
+      </Container>
+    </Section>
+    <Section size="sm" class="section-divider">
+	  <h2 class="sr-only">{getLabel(locale, 'articleNavigation') || 'Navigasi artikel'}</h2>
+	  <Container size="xl">
+        <PostNavigation prevPost={prevPost} nextPost={nextPost} />
+      </Container>
+    </Section>
+  <ReadingProgress />
+</BaseLayout>
