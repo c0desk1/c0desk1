@@ -39,8 +39,8 @@ const labels = {
   </div>
 </button>
 
-<script define:vars={{ labels }}>
-  import { copyToClipboard } from '@/lib/utils';
+<script type="module" define:vars={{ labels }}>
+  import { copyToClipboard } from '/src/lib/utils';
 
   (() => {
     if (window.__copyLinkReady) return;
