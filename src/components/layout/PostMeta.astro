@@ -1,8 +1,8 @@
 ---
 // src/components/layout/PostMeta.astro
-
 import { formatDate } from '@/lib/utils';
-import Icon from '@/components/ui/Icon';
+import { getCurrentLocale, getLabel } from '@/utils/i18n';
+import Icon from '@/components/ui/Icon.astro';
 
 interface Props {
   pubDate: Date;
@@ -10,28 +10,27 @@ interface Props {
 }
 
 const { pubDate, readingTime } = Astro.props;
+const locale = getCurrentLocale(Astro);
 
-const formattedDate = formatDate(pubDate);
+const dateLocale = locale === 'id'? 'id-ID' : locale === 'ru'? 'ru-RU' : 'en-US';
+const formattedDate = formatDate(pubDate, dateLocale);
+
+const minReadLabel = getLabel(locale, 'minRead') || 'min read';
+const readingTimeText = readingTime? `${readingTime} ${minReadLabel}` : '';
 ---
 
 <div class="flex flex-wrap items-center justify-start md:justify-center gap-x-2 gap-y-1 text-[13px] md:text-sm text-(--fg-muted)">
-  <div class="flex items-center justify-center gap-2">
-    <div class="relative w-4 h-4 items-center">
+  {readingTimeText && (
+    <div class="flex items-center justify-center gap-2">
       <Icon name="clock" className="w-4 h-4" />
+      <span class="whitespace-nowrap">{readingTimeText}</span>
     </div>
-    {readingTime && (
-      <>
-        <span class="whitespace-nowrap">
-          {readingTime}
-        </span>
-      </>
-    )}
-  </div>
-  <span>―</span>
+  )}
+
+  {readingTimeText && <span aria-hidden="true">―</span>}
+
   <div class="flex items-center justify-center gap-2">
-    <div class="relative w-4 h-4 items-center">
-      <Icon name="calender" className="w-4 h-4" />
-    </div>
+    <Icon name="calendar" className="w-4 h-4" />
     <time datetime={pubDate.toISOString()} class="whitespace-nowrap">
       {formattedDate}
     </time>
