@@ -144,9 +144,9 @@ export function calculateReadingTime(
 
 export function getReadingTime(
   content?: string,
-  locale: 'id' | 'en' = 'id'
+  locale: 'id' | 'en' | 'ru' = 'id'
 ): string {
-  const suffix = locale === 'id' ? 'menit baca' : 'min read';
+  const suffix = locale === 'id'? 'menit baca' : locale === 'ru'? 'мин чтения' : 'min read';
 
   if (!content?.trim()) {
     return `1 ${suffix}`;
@@ -156,7 +156,7 @@ export function getReadingTime(
   const minutes = Math.max(1, Math.ceil(words / 200));
 
   return minutes === 1
-    ? `1 ${suffix}`
+   ? `1 ${suffix}`
     : `${minutes} ${suffix}`;
 }
 
@@ -380,13 +380,13 @@ const cyrillicToLatinMap: Record<string, string> = {
 export function slugify(text: string): string {
   return text
    .split('')
-   .map(char => cyrillicToLatinMap[char] || char) // ← transliterate dulu
+   .map(char => cyrillicToLatinMap[char] || char)
    .join('')
    .toLowerCase()
    .trim()
    .normalize('NFD')
    .replace(/[\u0300-\u036f]/g, '')
-   .replace(/[^a-z0-9\s-]/g, '') // ← sekarang aman, udah jadi latin
+   .replace(/[^a-z0-9\s-]/g, '')
    .replace(/\s+/g, '-')
    .replace(/-+/g, '-')
    .replace(/^-+|-+$/g, '');
