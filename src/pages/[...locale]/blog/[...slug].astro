@@ -20,7 +20,7 @@ import BackToTop from "@/components/ui/BackToTop.astro";
 import ReadingProgress from "@/components/ui/ReadingProgress.astro";
 import { components } from '@/components/layout/MDXComponents';
 import SharePost from '@/components/blog/SharePost.astro';
-import { filterHeadingsForTOC, getReadingTime } from "@/lib/utils";
+import { filterHeadingsForTOC, getReadingTime, slugify } from "@/lib/utils";
 import { getSmartRelatedPosts } from "@/lib/botEngine";
 
 export async function getStaticPaths() {
@@ -28,14 +28,12 @@ export async function getStaticPaths() {
   
   return posts.flatMap((post: CollectionEntry<"blog">) => {
     const lang = post.data.lang || 'id';
-    const slug = post.slug;
-    
-    const locale = lang === 'id' ? undefined : lang;
+    const autoSlug = slugify(post.data.title);
     
     return {
       params: { 
-        locale, 
-        slug 
+        locale: lang === 'id' ? undefined : lang, 
+        slug: autoSlug 
       },
       props: { post }
     };
