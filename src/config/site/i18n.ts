@@ -34,6 +34,7 @@ export const i18nConfig = {
       nextArticle: "Artikel selanjutnya",
       general: "Umum",
       author: "Penulis",
+      readAlso: "Baca juga.",
       readArticle: "Baca artikel"
     },
     en: {
@@ -66,6 +67,7 @@ export const i18nConfig = {
       nextArticle: "Next article",
       general: "General",
       author: "Author",
+      readAlso: "Read also.",
       readArticle: "Read article"
     },
     ru: {
@@ -99,6 +101,7 @@ export const i18nConfig = {
       nextArticle: "Следующая статья",
       general: "Общее",
       author: "Автор",
+      readAlso: "Читайте также.",
       readArticle: "Читать статью"
     }
   }
