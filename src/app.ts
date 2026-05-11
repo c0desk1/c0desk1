@@ -35,7 +35,7 @@ export default {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`, 
-            'Origin': 'https://c0desk1-dev-mode.bimasaktiakbarr.workers.dev', 
+            'Origin': 'https://c0desk1-v00.bimasaktiakbarr.workers.dev', 
             'Content-Type': 'application/json; charset=utf-8'
           }
         });
