@@ -6,15 +6,17 @@ import { getEntry } from 'astro:content';
 import { Image } from 'astro:assets'; 
 
 import { siteConfig } from '@/config/site';
-import { generateExcerpt, formatDateCompact, cdnImage, isCdnUrl } from '@/lib/utils';
+import { generateExcerpt, formatDateCompact, cdnImage, isCdnUrl, slugify } from '@/lib/utils';
+import { getCurrentLocale, localizePath } from '@/utils/i18n';
 
 interface Props {
   post: CollectionEntry<'blog'>;
 }
 
 const { post } = Astro.props;
-const { data, id } = post;
+const locale = getCurrentLocale(Astro);
 
+const { data } = post;
 const { title, pubDate, category, author } = data;
 
 const excerpt = generateExcerpt(post.body || '', 140);
@@ -22,17 +24,21 @@ const excerpt = generateExcerpt(post.body || '', 140);
 const authorEntry = await getEntry(author);
 const categoryEntry = await getEntry(category);
 
-const formattedDate = formatDateCompact(pubDate);
+const dateLocale = locale === 'en'? 'en-US' : locale === 'ru'? 'ru-RU' : 'id-ID';
+const formattedDate = formatDateCompact(pubDate, dateLocale);
 
 const authorName = authorEntry?.data.name || siteConfig.author.name;
 const authorAvatar = authorEntry?.data.avatar || siteConfig.author.avatar;
 const optimizedAvatar = isCdnUrl(authorAvatar) ? cdnImage(authorAvatar, { w: 48, h: 48, q: 80 }) : authorAvatar;
 
 const categoryName = categoryEntry?.data.name || category;
+
+const autoSlug = slugify(title);
+const postUrl = localizePath(`/blog/${autoSlug}/`, locale);
 ---
 
 <a
-  href={`/blog/${id}/`}
+  href={postUrl}
    class="group flex flex-col h-full rounded-(--radius-xl) p-4 my-4 border border-(--border) hover:border-(--border-strong) focus:outline-none focus:ring-2 focus:ring-(--border-strong)"
   aria-label={`Read article: ${title}`}
 >
