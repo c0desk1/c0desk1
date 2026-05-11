@@ -1,10 +1,9 @@
 ---
 // src/layouts/BaseLayout.astro
-
 import "@/styles/global.css";
 
-import { getEntry } from "astro:content";
 import { siteConfig } from "@/config/site";
+import { getCurrentLocale, getLabel } from "@/utils/i18n";
 
 import BaseHead from "@/components/layout/BaseHead.astro";
 import Header from "@/components/layout/Header.astro";
@@ -31,40 +30,15 @@ import YandexAds from "@/components/ads/YandexAds.astro";
 interface Props {
   title?: string;
   description?: string;
-
-  image?: {
-    src: string;
-    alt: string;
-  };
-
+  image?: { src: string; alt: string };
   canonicalURL?: URL | string;
-
-  type?:
-    | "website"
-    | "article"
-    | "profile"
-    | "creativeWork";
-
+  type?: "website" | "article" | "profile" | "creativeWork";
   noIndex?: boolean;
-
   publishedTime?: Date;
   modifiedTime?: Date;
   tags?: string[];
-
-  category?: {
-    name: string;
-    description?: string;
-    slug: string;
-  };
-
-  author?: {
-    name: string;
-    role: string;
-    avatar: string;
-    bio: string;
-    slug: string;
-  };
-
+  category?: { name: string; description?: string; slug: string };
+  author?: { name: string; role: string; avatar: string; bio: string; slug: string };
   seo?: {
     title?: string;
     description?: string;
@@ -72,16 +46,10 @@ interface Props {
     canonical?: string;
     noIndex?: boolean;
   };
-
   header?: boolean;
   footer?: boolean;
   withContainer?: boolean;
-  size?:
-    | "sm"
-    | "md"
-    | "lg"
-    | "xl"
-    | "full";
+  size?: "sm" | "md" | "lg" | "xl" | "full";
   client?: string;
   role?: string;
   duration?: string;
@@ -90,6 +58,10 @@ interface Props {
   alternateSlugs?: Record<string, string>;
   basePath?: 'blog' | 'portfolio' | 'legal' | '';
 }
+
+const locale = getCurrentLocale(Astro);
+const htmlLang = locale === 'id' ? 'id-ID' : locale === 'en' ? 'en-US' : 'ru-RU';
+const skipToContentLabel = getLabel(locale, 'skipToContent') || 'loncat ke konten utama';
 
 const {
   header = true,
@@ -103,34 +75,21 @@ const {
   repoUrl,
   alternateSlugs,
   basePath = '',
-  ...seoProps
+ ...seoProps
 } = Astro.props;
 
-let settings;
+const siteData = siteConfig;
 
-try {
-  settings = await getEntry("settings", "site");
-} catch (error) {
-  console.warn(
-    "Settings not found, using siteConfig fallback"
-  );
-}
-
-const siteData =
-  settings?.data || siteConfig;
-
-const GTAG_ID =
-  siteData.googleAnalyticsId ||
-  siteConfig.googleAnalyticsId;
+const GTAG_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
 ---
 
 <!DOCTYPE html>
 
 <html
-  lang="id-ID"
+  lang={htmlLang}
   dir="ltr"
   class="scroll-smooth antialiased"
-  prefix={seoProps.type === "article" ? "og: https://ogp.me/ns# article: https://ogp.me/ns/article#" : "og: https://ogp.me/ns#"}>
+  prefix={seoProps.type === "article"? "og: https://ogp.me/ns# article: https://ogp.me/ns/article#" : "og: https://ogp.me/ns#"}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -143,19 +102,21 @@ const GTAG_ID =
       duration={duration}
       demoUrl={demoUrl}
       repoUrl={repoUrl}
+      alternateSlugs={alternateSlugs}
     />
     <GtagScript id={GTAG_ID} />
+    <AdsenseScript />
     <YandexLoader />
   </head>
   <body>
     <BG />
     <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:bg-(--bg) focus:text-(--fg) focus:px-4 focus:py-2 focus:border focus:border-(--border)">
-      loncat ke konten utama
+      {skipToContentLabel}
     </a>
     <div class="relative z-10 flex min-h-screen flex-col">
       {header && <Header alternateSlugs={alternateSlugs} basePath={basePath} />}
       <main id="main-content">
-        {withContainer ? (
+        {withContainer? (
             <Container size={size}>
               <slot />
             </Container>
