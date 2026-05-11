@@ -26,7 +26,7 @@ const { alternateSlugs, basePath = '' } = Astro.props;
       <div class="ml-auto flex items-center gap-2">
         <SearchButton />
         <MenuButton />
-        <LanguageSwitcher alternateSlugs={alternateSlugs} />
+        <LanguageSwitcher alternateSlugs={alternateSlugs} basePath={basePath} />
       </div>
     </div>
   </Container>
