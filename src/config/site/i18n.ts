@@ -37,6 +37,9 @@ export const i18nConfig = {
       readAlso: "Baca juga.",
       readArticle: "Baca artikel",
       
+      // POST META
+      minRead: 'menit baca',
+      
       // NEWSLETTER
       newsletterHeading: 'Tetap terhubung',
       newsletterSub: 'Dapatkan postingan terbaru yang dikirimkan ke kotak masuk Anda.',
@@ -82,6 +85,9 @@ export const i18nConfig = {
       author: "Author",
       readAlso: "Read also.",
       readArticle: "Read article",
+      
+      // POST META
+      minRead: 'min read',
       
       // NEWSLETTER
       newsletterHeading: 'Stay connected',
@@ -129,6 +135,9 @@ export const i18nConfig = {
       author: "Автор",
       readAlso: "Читайте также.",
       readArticle: "Читать статью",
+      
+      // POST META
+      minRead: 'мин чтения',
       
       // NEWSLETTER
       newsletterHeading: 'Оставайтесь на связи',
