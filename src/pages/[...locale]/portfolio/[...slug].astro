@@ -1,20 +1,19 @@
 ---
-// src/pages/portfolio/[...slug].astro
-
+// src/pages/[...locale]/portfolio/[...slug].astro
 export const prerender = true;
 
 import "@/styles/prose/index.css";
-
 import { getCollection, render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 
 import { siteConfig } from "@/config/site";
 import { getSmartRelatedProjects } from "@/lib/botEngine";
+import { getCurrentLocale, localizePath, getLabel } from "@/utils/i18n";
+import { slugify } from "@/lib/utils";
 
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
-
 import Breadcrumb from "@/components/ui/Breadcrumb.astro";
 import BackToTop from "@/components/ui/BackToTop.astro";
 import ReadingProgress from "@/components/ui/ReadingProgress.astro";
@@ -26,18 +25,37 @@ import PortfolioRelated from "@/components/portfolio/PortfolioRelated.astro";
 import PortfolioFeaturedImage from "@/components/portfolio/PortfolioFeaturedImage.astro";
 import PortfolioCaseStudy from "@/components/portfolio/PortfolioCaseStudy.astro";
 
-
 import { components } from '@/components/layout/MDXComponents';
 
 export async function getStaticPaths() {
-  const projects = await getCollection("portfolio", ({ data }) => !data.draft);
-  return projects.map((project: CollectionEntry<"portfolio">) => ({
-    params: { slug: project.id },
-    props: { project }
-  }));
+  const projects = await getCollection("portfolio", ({ data }) =>!data.draft);
+
+  return projects.map((project) => {
+    const lang = project.data.lang || 'id';
+    const urlSlug = slugify(project.data.title);
+    const baseId = project.id.split('/')[0];
+    const alternates = projects.filter(p => p.id.startsWith(baseId + '/'));
+
+    const alternateSlugs = Object.fromEntries(
+      alternates.map(p => [
+        p.data.lang || 'id',
+        slugify(p.data.title)
+      ])
+    );
+
+    return {
+      params: {
+        locale: lang === 'id'? undefined : lang,
+        slug: urlSlug
+      },
+      props: { project, alternateSlugs }
+    };
+  });
 }
 
-const { project } = Astro.props;
+const { project, alternateSlugs } = Astro.props;
+
+const locale = getCurrentLocale(Astro);
 
 const data = project.data;
 
@@ -71,56 +89,68 @@ const seoImage = {
   alt: image?.alt || title
 };
 
-const allProjects = await getCollection("portfolio", ({ data }) => !data.draft);
+const allProjects = await getCollection("portfolio", ({ data }) =>
+!data.draft && (data.lang || 'id') === locale
+);
 const relatedProjects = getSmartRelatedProjects(project, allProjects, 2);
+const displayGallery = Array.isArray(gallery)? gallery : [];
 
-const displayGallery = Array.isArray(gallery) ? gallery : [];
-
-const siteURL = Astro.site?.toString() ?? siteConfig.siteUrl;
+const siteURL = Astro.site?.toString()?? siteConfig.siteUrl;
 const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
-const seoData = {
-  title: seoTitle,
-  description: seoDescription,
-  image: seoImage,
-  type: "creativeWork" as const,
-  publishedTime: pubDate,
-  modifiedTime: updatedDate || pubDate,
-  tags: techStack,
-  canonicalURL,
-};
+// i18n labels
+const homeLabel = getLabel(locale, 'home');
+const portfolioLabel = getLabel(locale, 'portfolio');
+const portfolioDesc = getLabel(locale, 'portfolioPageDesc');
+const galleryLabel = getLabel(locale, 'portfolioGallery');
+
+// sr-only labels
+const srPortfolioHeader = getLabel(locale, 'portfolioHeader');
+const srPortfolioImage = getLabel(locale, 'portfolioImageContent');
+const srPortfolioMetrics = getLabel(locale, 'portfolioMetricsCase');
+const srPortfolioContent = getLabel(locale, 'portfolioContent');
+const srPortfolioRelated = getLabel(locale, 'portfolioRelatedContent');
 
 const portfolioCategory = {
-  name: "Portfolio",
+  name: portfolioLabel,
   slug: "portfolio",
-  description: "Koleksi karya digital"
+  description: portfolioDesc
 };
 
 const seoBreadcrumbItems = [
-  { name: "Home", href: siteURL },
-  { name: "Portfolio", href: new URL("portfolio/", siteURL).toString() },
+  { name: homeLabel, href: localizePath('/', locale) },
+  { name: portfolioLabel, href: localizePath('/portfolio', locale) },
   { name: title, href: canonicalURL }
 ];
 
-const Breadcrumbs = seoBreadcrumbItems.filter(item => 
-  item.name === "Home" || item.name === "Portfolio"
+const Breadcrumbs = seoBreadcrumbItems.filter(item =>
+  item.name === homeLabel || item.name === portfolioLabel
 );
 ---
 
-<BaseLayout 
-  {...seoData}
+<BaseLayout
+  title={seoTitle}
+  description={seoDescription}
+  image={seoImage}
+  type="creativeWork"
+  publishedTime={pubDate}
+  modifiedTime={updatedDate || pubDate}
+  tags={techStack}
   category={portfolioCategory}
   client={client}
   role={role}
   duration={duration}
   demoUrl={demoUrl}
   repoUrl={repoUrl}
+  canonicalURL={canonicalURL}
+  alternateSlugs={alternateSlugs}
+  basePath="portfolio"
 >
   <article>
     <h1 class="sr-only">{title}</h1>
     <Section size="md">
       <Container size="md">
-        <h2 class="sr-only">Portfolio Header</h2>
+        <h2 class="sr-only">{srPortfolioHeader}</h2>
         <div class="flex flex-col justify-center items-center">
           <Breadcrumb items={Breadcrumbs} />
           <PortfolioHeader
@@ -141,7 +171,7 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
     {image && (
       <Section size="sm">
         <Container size="md">
-          <h2 class="sr-only">Portfolio Image Content</h2>
+          <h2 class="sr-only">{srPortfolioImage}</h2>
           <PortfolioFeaturedImage
             src={image.src}
             alt={image.alt || title}
@@ -152,7 +182,7 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
     )}
     <Section size="sm">
       <Container size="md">
-        <h2 class="sr-only">Portfolio Metrics & Case Study</h2>
+        <h2 class="sr-only">{srPortfolioMetrics}</h2>
         <PortfolioMetrics metrics={metrics} />
         <PortfolioCaseStudy
           challenge={challenge}
@@ -164,10 +194,10 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
     </Section>
     <Section size="sm">
       <Container size="md">
-        <h2 class="sr-only">Portfolio Content</h2>
+        <h2 class="sr-only">{srPortfolioContent}</h2>
         {displayGallery.length > 0 && (
           <div class="prose-custom mb-6">
-            <h2 class="mb-4">Gallery</h2>
+            <h2 class="mb-4">{galleryLabel}</h2>
             <PortfolioGallery
               images={displayGallery}
               title={title}
@@ -181,7 +211,7 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
     </Section>
     <Section size="sm">
       <Container size="lg">
-        <h2 class="sr-only">Portfolio related Content</h2>
+        <h2 class="sr-only">{srPortfolioRelated}</h2>
         <PortfolioRelated projects={relatedProjects} />
         <BackToTop showBorder align="center" />
       </Container>
