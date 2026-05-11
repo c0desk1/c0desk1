@@ -1,11 +1,26 @@
 ---
 // src/components/ui/Listen.astro
 import Icon from "./Icon";
+import { getCurrentLocale, getLabel } from '@/utils/i18n';
+
+const locale = getCurrentLocale(Astro);
+
+const labels = {
+  listen: getLabel(locale, 'listen') || 'Listen',
+  listening: getLabel(locale, 'listening') || 'Listening...',
+  listenAria: getLabel(locale, 'listenAria') || 'Listen to article',
+  stopAria: getLabel(locale, 'stopAria') || 'Stop listening',
+  prev: getLabel(locale, 'ttsPrev') || 'Previous',
+  next: getLabel(locale, 'ttsNext') || 'Next',
+  playPause: getLabel(locale, 'ttsPlayPause') || 'Pause / Resume',
+  close: getLabel(locale, 'ttsClose') || 'Close',
+  ttsLang: locale === 'id'? 'id-ID' : locale === 'ru'? 'ru-RU' : 'en-US',
+};
 ---
 
-<button 
+<button
   id="listen-btn"
-  aria-label="Dengarkan artikel"
+  aria-label={labels.listenAria}
   class="relative flex items-center gap-1.5 text-(--fg-muted) hover:text-(--fg) group active:scale-95">
   <div class="flex shrink-0 items-center justify-center gap-1.5">
     <div class="relative w-4 h-4 items-center">
@@ -16,9 +31,8 @@ import Icon from "./Icon";
       <Icon name="volume-mute" className="w-4 h-4" />
     </span>
   </div>
-  </div>
-  <span class="text-[13px] md:text-sm font-medium leading-none">
-    Bacakan
+  <span id="listen-text" class="text-[13px] md:text-sm font-medium leading-none">
+    {labels.listen}
   </span>
 </button>
 
@@ -30,10 +44,10 @@ import Icon from "./Icon";
     <div class="tts-row">
       <span id="tts-label" class="tts-chunk-label"></span>
       <div class="tts-controls">
-        <button id="tts-prev" class="tts-btn" aria-label="Sebelumnya">
+        <button id="tts-prev" class="tts-btn" aria-label={labels.prev}>
           <Icon name="prev" className="w-4.5 h-4.5" />
         </button>
-        <button id="tts-playpause" class="tts-btn tts-btn--primary relative" aria-label="Jeda / Lanjut">
+        <button id="tts-playpause" class="tts-btn tts-btn--primary relative" aria-label={labels.playPause}>
           <span id="ic-pause">
             <Icon name="pause" className="w-4.5 h-4.5" />
           </span>
@@ -41,10 +55,10 @@ import Icon from "./Icon";
             <Icon name="play" className="w-4.5 h-4.5" />
           </span>
         </button>
-        <button id="tts-next" class="tts-btn" aria-label="Berikutnya">
+        <button id="tts-next" class="tts-btn" aria-label={labels.next}>
           <Icon name="next" className="w-4.5 h-4.5" />
         </button>
-        <button id="tts-close" class="tts-btn tts-btn--close" aria-label="Tutup">
+        <button id="tts-close" class="tts-btn tts-btn--close" aria-label={labels.close}>
           <Icon name="close" className="w-4.5 h-4.5" />
         </button>
       </div>
@@ -164,146 +178,130 @@ import Icon from "./Icon";
   .tts-btn--close { margin-left: 0.125rem; }
 </style>
 
-<script>
+<script define:vars={{ labels }}>
   (() => {
-    if ((window as any).__ttsReady) return;
-    (window as any).__ttsReady = true;
+    if (window.__ttsReady) return;
+    window.__ttsReady = true;
 
     const synth = window.speechSynthesis;
 
-    let chunks: string[]  = [];
-    let currentIdx        = 0;
-    let isPlaying         = false;
-    let isPaused          = false;
+    let chunks = [];
+    let currentIdx = 0;
+    let isPlaying = false;
+    let isPaused = false;
     let wasStoppedByBrowser = false;
-    let voice: SpeechSynthesisVoice | null = null;
-    let highlightMark: HTMLElement | null  = null;
-    let articleEl: HTMLElement | null      = null;
+    let voice = null;
+    let articleEl = null;
 
     const loadVoice = () => {
       const voices = synth.getVoices();
-      voice = voices.find(v => v.lang.startsWith('id')) ?? voices[0] ?? null;
+      voice = voices.find(v => v.lang.startsWith(labels.ttsLang.split('-')[0]))?? voices[0]?? null;
     };
     synth.getVoices().length
-      ? loadVoice()
+     ? loadVoice()
       : synth.addEventListener('voiceschanged', loadVoice, { once: true });
 
     const SKIP_SELECTORS = [
       'button', 'nav', 'aside', 'form', 'input', 'select', 'textarea',
-      // 'figcaption',
       '[role="navigation"]', '[role="complementary"]', '[role="banner"]',
       '[role="contentinfo"]', '[role="search"]', '[role="toolbar"]',
       '.toc-container', '.tts-bar', '.listen-btn',
-      'pre', 'code',
-      'script', 'style', 'noscript',
+      'pre', 'code', 'script', 'style', 'noscript',
     ].join(', ');
 
-    const getChunksFromArticle = (el: HTMLElement): string[] => {
-  	const clone = el.cloneNode(true) as HTMLElement;
-  	clone.querySelectorAll(SKIP_SELECTORS).forEach(n => n.remove());
-
-  	const contentSelectors = 'h1, h2, h3, h4, h5, h6, p, li, blockquote, td, th, figcaption';
-  	const nodes = clone.querySelectorAll<HTMLElement>(contentSelectors);
-
-  	const chunks: string[] = [];
-  	nodes.forEach(n => {
-    	const text = n.innerText.trim().replace(/\s+/g, ' ');
-    	if (text.length < 3) return;
-    
-    	if (n.tagName.startsWith('H') || text.length < 150) {
-      	chunks.push(text);
-    	} else {
-      	const sentences = text.split(/(?<=[.!?])\s+/).filter(s => s.length > 3);
-      	chunks.push(...sentences);
-    	}
-  	});
-  	return chunks;
-	};
-    
-    let highlightedEl: HTMLElement | null = null;
-    
-    const clearHighlight = () => {
-		highlightedEl?.classList.remove('tts-highlight');
-		highlightedEl = null;
-	};
-
-    const HEADER_H = 56;
-	const TOC_TOP = 60;
-	const TTS_OFFSET = HEADER_H + TOC_TOP + 16;
-
-	const highlightChunk = (chunk: string) => {
-  	if (!articleEl) return;
-  
-  	clearHighlight();
-  	const needle = chunk.trim();
-  	if (needle.length < 3) return;
-
-  	const candidates = articleEl.querySelectorAll<HTMLElement>(
-    	'p, h1, h2, h3, h4, h5, h6, li, blockquote, td'
-  	);
-  
-  	let found: HTMLElement | null = null;
-
-  	for (const el of candidates) {
-    	const elText = (el.innerText ?? el.textContent ?? '').trim();
-    	if (elText === needle) {
-      	found = el;
-      	break;
-    	}
-  	}
-
-  	if (!found) {
-    	const needleRaw = needle.slice(0, 40).replace(/\s+/g, ' ').trim();
-    	const escaped = needleRaw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    	const re = new RegExp(escaped, 'i');
-    
-    	for (const el of candidates) {
-      	if (el.closest('button, nav, aside, [role="navigation"], .toc-container')) continue;
-      	const elText = (el.innerText ?? el.textContent ?? '').replace(/\s+/g, ' ');
-      	if (re.test(elText)) {
-        	found = el;
-        	break;
-      	}
-    	}
-  	}
-
-  	if (!found) return;
-
-  	found.classList.add('tts-highlight');
-  	highlightedEl = found;
-  
-  	const rect = found.getBoundingClientRect();
-  	const absoluteTop = window.pageYOffset + rect.top;
-  	const targetY = absoluteTop - TTS_OFFSET;
-  
-  	window.scrollTo({ top: targetY, behavior: 'smooth' });
-	};
-
-    const $ = <T extends HTMLElement>(id: string) =>
-      document.getElementById(id) as T | null;
-
-    const setListenBtnState = (playing: boolean) => {
-      const ip = $('icon-play'), is = $('icon-stop');
-      if (ip) ip.style.cssText = playing
-        ? 'opacity:0;transform:scale(0.5)'
-        : 'opacity:1;transform:scale(1)';
-      if (is) is.style.cssText = playing
-        ? 'opacity:1;transform:scale(1)'
-        : 'opacity:0;transform:scale(0.5)';
+    const getChunksFromArticle = (el) => {
+      const clone = el.cloneNode(true);
+      clone.querySelectorAll(SKIP_SELECTORS).forEach(n => n.remove());
+      const contentSelectors = 'h1, h2, h3, h4, h5, h6, p, li, blockquote, td, th, figcaption';
+      const nodes = clone.querySelectorAll(contentSelectors);
+      const chunks = [];
+      nodes.forEach(n => {
+        const text = n.innerText.trim().replace(/\s+/g, ' ');
+        if (text.length < 3) return;
+        if (n.tagName.startsWith('H') || text.length < 150) {
+          chunks.push(text);
+        } else {
+          const sentences = text.split(/(?<=[.!?])\s+/).filter(s => s.length > 3);
+          chunks.push(...sentences);
+        }
+      });
+      return chunks;
     };
 
-    const setPlayPauseIcon = (paused: boolean) => {
+    let highlightedEl = null;
+    const clearHighlight = () => {
+      highlightedEl?.classList.remove('tts-highlight');
+      highlightedEl = null;
+    };
+
+    const HEADER_H = 56;
+    const TOC_TOP = 60;
+    const TTS_OFFSET = HEADER_H + TOC_TOP + 16;
+
+    const highlightChunk = (chunk) => {
+      if (!articleEl) return;
+      clearHighlight();
+      const needle = chunk.trim();
+      if (needle.length < 3) return;
+
+      const candidates = articleEl.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, blockquote, td');
+      let found = null;
+
+      for (const el of candidates) {
+        const elText = (el.innerText?? el.textContent?? '').trim();
+        if (elText === needle) {
+          found = el;
+          break;
+        }
+      }
+
+      if (!found) {
+        const needleRaw = needle.slice(0, 40).replace(/\s+/g, ' ').trim();
+        const escaped = needleRaw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const re = new RegExp(escaped, 'i');
+        for (const el of candidates) {
+          if (el.closest('button, nav, aside, [role="navigation"],.toc-container')) continue;
+          const elText = (el.innerText?? el.textContent?? '').replace(/\s+/g, ' ');
+          if (re.test(elText)) {
+            found = el;
+            break;
+          }
+        }
+      }
+
+      if (!found) return;
+      found.classList.add('tts-highlight');
+      highlightedEl = found;
+      const rect = found.getBoundingClientRect();
+      const absoluteTop = window.pageYOffset + rect.top;
+      const targetY = absoluteTop - TTS_OFFSET;
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const listenText = $('listen-text');
+    const btn = $('listen-btn');
+
+    const setListenBtnState = (playing) => {
+      const ip = $('icon-play'), is = $('icon-stop');
+      if (ip) ip.style.cssText = playing? 'opacity:0;transform:scale(0.5)' : 'opacity:1;transform:scale(1)';
+      if (is) is.style.cssText = playing? 'opacity:1;transform:scale(1)' : 'opacity:0;transform:scale(0.5)';
+      if (listenText) listenText.textContent = playing? labels.listening : labels.listen;
+      if (btn) btn.setAttribute('aria-label', playing? labels.stopAria : labels.listenAria);
+    };
+
+    const setPlayPauseIcon = (paused) => {
       const pi = $('ic-pause'), pli = $('ic-play');
-      if (pi)  pi.style.display  = paused ? 'none' : '';
-      if (pli) pli.style.display = paused ? ''     : 'none';
+      if (pi) pi.style.display = paused? 'none' : '';
+      if (pli) pli.style.display = paused? '' : 'none';
     };
 
     const updateBar = () => {
-      const fill  = $('tts-fill');
+      const fill = $('tts-fill');
       const label = $('tts-label');
-      const pct   = chunks.length ? (currentIdx / chunks.length) * 100 : 0;
-      if (fill)  fill.style.width     = `${pct}%`;
-      if (label) label.textContent    = chunks[currentIdx] ?? '';
+      const pct = chunks.length? (currentIdx / chunks.length) * 100 : 0;
+      if (fill) fill.style.width = `${pct}%`;
+      if (label) label.textContent = chunks[currentIdx]?? '';
     };
 
     const showBar = () => {
@@ -318,119 +316,105 @@ import Icon from "./Icon";
       bar?.classList.remove('tts-bar--visible');
     };
 
-    const speakAt = (idx: number) => {
+    const speakAt = (idx) => {
       if (idx >= chunks.length) { stopAll(); return; }
       if (idx < 0) idx = 0;
-
       synth.cancel();
       currentIdx = idx;
       updateBar();
 
       const utt = new SpeechSynthesisUtterance(chunks[idx]);
-      utt.lang = 'id-ID';
+      utt.lang = labels.ttsLang;
       if (voice) utt.voice = voice;
 
       utt.onstart = () => {
-    	highlightChunk(chunks[idx]);
-    	isPlaying = true;
-    	isPaused = false;
-    	wasStoppedByBrowser = false;
-    	setListenBtnState(true);
-    	setPlayPauseIcon(false);
-  	};
+        highlightChunk(chunks[idx]);
+        isPlaying = true;
+        isPaused = false;
+        wasStoppedByBrowser = false;
+        setListenBtnState(true);
+        setPlayPauseIcon(false);
+      };
       utt.onend = () => {
-    	if (isPlaying) speakAt(currentIdx + 1);
-  	};
+        if (isPlaying) speakAt(currentIdx + 1);
+      };
       utt.onerror = (e) => {
-    	if (e.error === 'interrupted' || e.error === 'canceled') {
-      	wasStoppedByBrowser = true;
-      	isPlaying = false;
-      	isPaused = true;
-      	setListenBtnState(false);
-      	setPlayPauseIcon(true);
-    	} else {
-      	stopAll();
-    	}
-  	};
-
+        if (e.error === 'interrupted' || e.error === 'canceled') {
+          wasStoppedByBrowser = true;
+          isPlaying = false;
+          isPaused = true;
+          setListenBtnState(false);
+          setPlayPauseIcon(true);
+        } else {
+          stopAll();
+        }
+      };
       synth.speak(utt);
     };
 
     const pauseResume = () => {
-  	if (wasStoppedByBrowser) {
-    	wasStoppedByBrowser = false;
-    	speakAt(currentIdx);
-    	return;
-  	}
+      if (wasStoppedByBrowser) {
+        wasStoppedByBrowser = false;
+        speakAt(currentIdx);
+        return;
+      }
+      if (!isPlaying &&!isPaused) return;
+      if (synth.paused || isPaused) {
+        synth.resume();
+        isPaused = false;
+        isPlaying = true;
+        setListenBtnState(true);
+        setPlayPauseIcon(false);
+      } else {
+        synth.pause();
+        isPaused = true;
+        isPlaying = false;
+        setListenBtnState(false);
+        setPlayPauseIcon(true);
+      }
+    };
 
-  	if (!isPlaying &&!isPaused) return;
-  	if (synth.paused || isPaused) {
-    	synth.resume();
-    	isPaused = false;
-    	isPlaying = true;
-    	setListenBtnState(true);
-    	setPlayPauseIcon(false);
-  	} else {
-    	synth.pause();
-    	isPaused = true;
-    	isPlaying = false;
-    	setListenBtnState(false);
-    	setPlayPauseIcon(true);
-  	}
-	};
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && isPlaying) {
+        synth.cancel();
+        wasStoppedByBrowser = true;
+        isPlaying = false;
+        isPaused = true;
+        setListenBtnState(false);
+        setPlayPauseIcon(true);
+      }
+    });
 
-
-	document.addEventListener('visibilitychange', () => {
-  	if (document.hidden && isPlaying) {
-    	synth.cancel();
-    	wasStoppedByBrowser = true;
-    	isPlaying = false;
-    	isPaused = true;
-    	setListenBtnState(false);
-    	setPlayPauseIcon(true);
-  	}
-	});
-	
-	const stopAll = () => {
-  	synth.cancel();
-  	isPlaying = false;
-  	isPaused = false;
-  	wasStoppedByBrowser = false;
-  	clearHighlight();
-  	setListenBtnState(false);
-  	setPlayPauseIcon(false);
-  	hideBar();
-  	updateBar();
-	};
+    const stopAll = () => {
+      synth.cancel();
+      isPlaying = false;
+      isPaused = false;
+      wasStoppedByBrowser = false;
+      clearHighlight();
+      setListenBtnState(false);
+      setPlayPauseIcon(false);
+      hideBar();
+      updateBar();
+    };
 
     const init = () => {
       $('listen-btn')?.addEventListener('click', () => {
         if (isPlaying || isPaused) { stopAll(); return; }
-
-        articleEl =
-          document.getElementById('article-content') ??
-          document.querySelector<HTMLElement>('article') ??
-          document.querySelector<HTMLElement>('main');
-
+        articleEl = document.getElementById('article-content')?? document.querySelector('article')?? document.querySelector('main');
         if (!articleEl) return;
-
         chunks = getChunksFromArticle(articleEl);
         currentIdx = 0;
-
         if (!chunks.length) return;
         showBar();
         speakAt(0);
       });
-
       $('tts-playpause')?.addEventListener('click', pauseResume);
-      $('tts-prev')?.addEventListener('click',      () => speakAt(currentIdx - 1));
-      $('tts-next')?.addEventListener('click',      () => speakAt(currentIdx + 1));
-      $('tts-close')?.addEventListener('click',     stopAll);
+      $('tts-prev')?.addEventListener('click', () => speakAt(currentIdx - 1));
+      $('tts-next')?.addEventListener('click', () => speakAt(currentIdx + 1));
+      $('tts-close')?.addEventListener('click', stopAll);
     };
 
     init();
-    
-
     document.addEventListener('astro:after-swap', () => {
       synth.cancel();
       isPlaying = false; isPaused = false;
