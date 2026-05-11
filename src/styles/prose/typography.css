@@ -1,0 +1,433 @@
+/* src/styles/prose/typography.css */
+
+/* ─── BASE RESET ─────────────────────────────────────────────────── */
+.prose-custom :where(h1, h2, h3, h4, h5, h6, p, ul, ol, blockquote, pre, hr, table) {
+  margin-top: 0;
+  width: 100%;
+}
+
+/* ─── HEADINGS ───────────────────────────────────────────────────── */
+.prose-custom :where(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--prose-font-sans);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  color: var(--prose-fg);
+  margin-bottom: 0;
+  scroll-margin-top: 56px;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── ANCHOR HEADINGS ────────────────────────────────────────────── */
+.prose-custom .heading-group.has-anchor {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  cursor: pointer;
+  text-decoration: none;
+  line-height: 1.2;
+}
+
+.prose-custom .heading-text-content {
+  display: inline;
+  word-break: break-word;
+}
+
+.prose-custom .anchor-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-left: 0.375rem;
+  color: var(--prose-fg-subtle);
+  text-decoration: none;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-6px);
+  transition: opacity 0.15s ease, transform 0.15s ease, color 0.15s ease;
+  vertical-align: baseline;
+  position: relative;
+}
+
+.prose-custom .anchor-link svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* ─── INLINE TYPOGRAPHY ──────────────────────────────────────────── */
+.prose-custom strong {
+  font-weight: 600;
+  color: var(--prose-fg);
+  letter-spacing: -0.015em;
+}
+
+.prose-custom em {
+  font-weight: 500;
+  font-style: italic;
+  color: var(--prose-fg-muted);
+}
+
+.prose-custom strong em,
+.prose-custom em strong {
+  font-style: italic;
+  font-weight: 600;
+}
+
+/* ─── SUP / SUB ──────────────────────────────────────────────────── */
+.prose-custom sup,
+.prose-custom sub {
+  font-size: 0.65rem;
+  line-height: 1;
+  font-weight: 500;
+  vertical-align: baseline;
+  position: relative;
+  transition: color 0.15s ease;
+  font-feature-settings: "sups" 1;
+}
+
+.prose-custom sup {
+  top: -0.35em;
+  margin-left: 0.04em;
+  margin-right: 0.04em;
+  color: var(--prose-fg-subtle);
+}
+
+.prose-custom sub {
+  bottom: -0.2em;
+  color: var(--prose-fg-accent);
+}
+
+.prose-custom sup a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.15s ease;
+}
+
+.prose-custom sup a:hover {
+  color: var(--prose-accent);
+}
+
+.prose-custom sup:has(a[href^="#fn"]) {
+  cursor: pointer;
+}
+
+.prose-custom h1 sup,
+.prose-custom h2 sup,
+.prose-custom h3 sup {
+  font-size: 0.55rem;
+  top: -0.35em;
+}
+
+/* ─── CALLOUT OVERRIDES ──────────────────────────────────────────── */
+.prose-custom .callout-content p sup a {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--prose-fg);
+  text-decoration: none;
+}
+
+.prose-custom .callout-content p sup a:hover {
+  color: var(--prose-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--prose-accent-dim);
+}
+
+.prose-custom .callout sup,
+.prose-custom .callout sub {
+  color: currentColor;
+  opacity: 0.75;
+}
+
+/* ─── SMALL ──────────────────────────────────────────────────────── */
+.prose-custom small {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--prose-fg-subtle);
+  font-weight: 400;
+  display: inline-block;
+  letter-spacing: 0;
+  transition: color 0.15s ease;
+}
+
+.prose-custom figcaption small,
+.prose-custom aside small,
+.prose-custom footer small {
+  font-size: 0.75rem;
+  color: var(--prose-fg-dim);
+}
+
+.prose-custom small:hover {
+  color: var(--prose-fg);
+}
+
+/* ─── MARK ───────────────────────────────────────────────────────── */
+.prose-custom mark {
+  background-color: var(--prose-accent-yellow);
+  color: var(--prose-accent-yellow-soft);
+  padding: 0.1em 0.25em;
+  border-radius: 2px;
+}
+
+.prose-custom mark:hover {
+  background-color: var(--prose-accent-yellow-dim);
+}
+
+.prose-custom mark .search-highlight {
+  background-color: var(--prose-accent-yellow);
+  color: var(--prose-accent-yellow-dim);
+  border-bottom: none;
+}
+
+/* ─── ABBR ───────────────────────────────────────────────────────── */
+.prose-custom abbr[title] {
+  text-decoration: none;
+  border-bottom: 1px dashed var(--prose-border);
+  cursor: help;
+  font-feature-settings: "calt" 1;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.prose-custom abbr[title]:hover {
+  border-bottom-color: var(--prose-accent);
+  color: var(--prose-accent);
+}
+
+.prose-custom abbr[title]:active {
+  border-bottom-style: solid;
+  transition: none;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   MOBILE  ≤767px
+══════════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  .prose-custom :where(h1, h2, h3, h4, h5, h6) {
+    scroll-margin-top: 56px;
+  }
+
+  .prose-custom h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 2.25rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .prose-custom h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 2rem;
+    margin-top: 2.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .prose-custom h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.75rem;
+    margin-top: 1.75rem;
+    margin-bottom: 0.625rem;
+  }
+
+  .prose-custom h4 {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.625rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .prose-custom h5 {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.5rem;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .prose-custom h6 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 1.375rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Mobile anchor — always visible on tap */
+  .prose-custom .anchor-link.anchor-link-active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0);
+    color: var(--prose-fg-subtle);
+  }
+
+  .prose-custom .heading-group.has-anchor:active .anchor-link {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0);
+    color: var(--prose-fg-subtle);
+  }
+
+  .prose-custom p {
+    font-size: 1rem;
+    line-height: 1.75rem;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.25rem;
+  }
+
+  .prose-custom strong {
+    font-weight: 600;
+  }
+
+  .prose-custom em {
+    font-style: italic;
+  }
+
+  .prose-custom sup,
+  .prose-custom sub {
+    font-size: 0.6rem;
+  }
+
+  .prose-custom mark {
+    padding: 0.1em 0.2em;
+    font-size: 0.875rem;
+  }
+
+  .prose-custom small {
+    font-size: 0.75rem;
+  }
+
+  .prose-custom abbr[title] {
+    font-size: 0.875rem;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   DESKTOP  ≥768px
+══════════════════════════════════════════════════════════════════ */
+@media (min-width: 768px) {
+  .prose-custom :where(h1, h2, h3, h4, h5, h6) {
+    scroll-margin-top: 60px;
+  }
+
+  /* h1 — display/hero: large, tight, heavy */
+  .prose-custom h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    line-height: 1;
+    margin-top: 4rem;
+    margin-bottom: 1.25rem;
+  }
+
+  /* h2 — section title */
+  .prose-custom h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 2.25rem;
+    margin-top: 3rem;
+    margin-bottom: 0.875rem;
+  }
+
+  /* h3 — subsection */
+  .prose-custom h3 {
+    font-size: 1.375rem;
+    font-weight: 600;
+    letter-spacing: -0.028em;
+    line-height: 2rem;
+    margin-top: 2.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  /* h4 — label-weight heading */
+  .prose-custom h4 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.75rem;
+    margin-top: 2rem;
+    margin-bottom: 0.625rem;
+  }
+
+  /* h5 — subheading / sidebar label */
+  .prose-custom h5 {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--prose-fg-subtle);
+    text-transform: uppercase;
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+
+  /* h6 — metadata / eyebrow */
+  .prose-custom h6 {
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    line-height: 1.25rem;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    color: var(--prose-fg-dim);
+  }
+
+  /* Anchor reveal on hover */
+  .prose-custom .heading-group.has-anchor:hover .anchor-link {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0);
+    color: var(--prose-fg-subtle);
+  }
+
+  .prose-custom .anchor-link:hover {
+    color: var(--prose-fg);
+  }
+
+  /* Body paragraph — Vercel editorial feel */
+  .prose-custom p {
+    font-size: 0.9375rem;
+    line-height: 1.8;
+    color: var(--prose-fg-muted);
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+    width: 100%;
+    text-wrap: pretty;
+    letter-spacing: -0.011em;
+    font-feature-settings: "kern" 1, "liga" 1;
+  }
+
+  .prose-custom strong {
+    font-weight: 600;
+  }
+
+  .prose-custom sup,
+  .prose-custom sub {
+    font-size: 0.65rem;
+  }
+
+  .prose-custom mark {
+    padding: 0.1em 0.25em;
+  }
+
+  .prose-custom small {
+    font-size: 0.8125rem;
+  }
+}

@@ -1,0 +1,119 @@
+/* src/styles/prose/blockquote.css */
+
+/* ─── BASE ───────────────────────────────────────────────────────── */
+.prose-custom .quote {
+  margin: 2rem 0;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+/* ─── BODY ───────────────────────────────────────────────────────── */
+.prose-custom .quote-body p {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.7;
+  font-style: italic;
+  color: var(--prose-fg);
+  text-align: start;
+  text-wrap: pretty;
+}
+
+.prose-custom .quote-body p + p {
+  margin-top: 1rem;
+}
+
+.prose-custom .quote-body p a {
+  color: var(--prose-accent);
+}
+
+.prose-custom .quote-body .external-icon {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+}
+
+.prose-custom .quote-body p:first-of-type::before {
+  content: "\275D";
+  margin-right: 0.2rem;
+  color: var(--prose-fg-subtle);
+  font-style: normal;
+}
+
+.prose-custom .quote-body p:last-of-type::after {
+  content: "\275E";
+  margin-left: 0.2rem;
+  color: var(--prose-fg-subtle);
+  font-style: normal;
+}
+
+/* ─── CITE ───────────────────────────────────────────────────────── */
+.prose-custom .quote-cite {
+  display: block;
+  margin-top: 1.25rem;
+  width: fit-content;
+  margin-left: auto;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.5rem;
+  color: var(--prose-fg-subtle);
+  font-style: normal;
+}
+
+.prose-custom .quote-cite::before {
+  content: "— ";
+  color: var(--prose-fg-dim);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   MOBILE  ≤767px
+══════════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  .prose-custom .quote {
+    margin: 1.75rem 0;
+  }
+
+  .prose-custom .quote-body p {
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: -0.018em;
+    line-height: 1.65;
+  }
+
+  .prose-custom .quote-body p + p {
+    margin-top: 0.75rem;
+  }
+
+  .prose-custom .quote-cite {
+    margin-top: 0.875rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   DESKTOP  ≥768px
+══════════════════════════════════════════════════════════════════ */
+@media (min-width: 768px) {
+  .prose-custom .quote {
+    margin: 2.5rem 0;
+  }
+
+  .prose-custom .quote-body p {
+    font-size: 1.125rem;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.75;
+  }
+
+  .prose-custom .quote-body p + p {
+    margin-top: 1rem;
+  }
+
+  .prose-custom .quote-cite {
+    margin-top: 1.25rem;
+    font-size: 0.8125rem;
+  }
+}

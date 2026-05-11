@@ -1,0 +1,92 @@
+/* src/styles/prose/components/media.css */
+
+/* ─── IMAGES ─────────────────────────────────────────────────────── */
+.prose-custom img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-inline: auto;
+  border-radius: var(--prose-radius-md);
+}
+
+/* ─── FIGURE ─────────────────────────────────────────────────────── */
+.prose-custom figure {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.prose-custom figure p {
+  margin: 0;
+}
+
+.prose-custom figure img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-inline: auto;
+}
+
+.prose-custom figcaption {
+  text-align: center;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--prose-fg-subtle);
+  letter-spacing: 0;
+  margin-top: 0.75rem;
+}
+
+/* ─── VIDEO ──────────────────────────────────────────────────────── */
+.prose-custom video {
+  width: 100%;
+  display: block;
+  overflow: hidden;
+  position: relative;
+  background-color: var(--prose-bg-subtle);
+  border-radius: var(--prose-radius-md);
+  border: 1px solid var(--prose-border);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   MOBILE  ≤767px
+══════════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  .prose-custom img {
+    margin: 1.5rem 0;
+  }
+
+  .prose-custom figure {
+    margin: 1.5rem 0;
+  }
+
+  .prose-custom figcaption {
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .prose-custom video {
+    margin: 1.5rem 0;
+    border-radius: var(--prose-radius-sm);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   DESKTOP  ≥768px
+══════════════════════════════════════════════════════════════════ */
+@media (min-width: 768px) {
+  .prose-custom img {
+    margin: 1.5rem 0;
+  }
+
+  .prose-custom figure {
+    margin: 2.5rem 0;
+  }
+
+  .prose-custom figcaption {
+    font-size: 0.8125rem;
+    margin-top: 0.75rem;
+  }
+
+  .prose-custom video {
+    margin: 2rem 0;
+  }
+}
