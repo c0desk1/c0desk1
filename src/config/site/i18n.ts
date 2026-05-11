@@ -73,6 +73,12 @@ export const i18nConfig = {
       ttsNext: 'Berikutnya',
       ttsPlayPause: 'Jeda / Lanjut',
       ttsClose: 'Tutup',
+      
+      // THEME TOGGLE
+      themeToggleGroup: 'Pilih tema',
+      themeSystem: 'Ikuti sistem',
+      themeLight: 'Tema terang',
+      themeDark: 'Tema gelap',
     },
     en: {
       home: "Home",
@@ -143,6 +149,12 @@ export const i18nConfig = {
       ttsNext: 'Next',
       ttsPlayPause: 'Pause / Resume',
       ttsClose: 'Close',
+      
+      // THEME TOGGLE
+      themeToggleGroup: 'Choose theme',
+      themeSystem: 'System',
+      themeLight: 'Light',
+      themeDark: 'Dark',
     },
     ru: {
       home: "дом",
@@ -214,6 +226,12 @@ export const i18nConfig = {
       ttsNext: 'Далее',
       ttsPlayPause: 'Пауза / Продолжить',
       ttsClose: 'Закрыть',
+      
+      // THEME TOGGLE
+      themeToggleGroup: 'Выбрать тему',
+      themeSystem: 'Как в системе',
+      themeLight: 'Светлая',
+      themeDark: 'Тёмная',
     }
   }
 } as const;
