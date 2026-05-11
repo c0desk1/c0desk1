@@ -64,13 +64,12 @@ const legalLabel = getLabel(locale, 'legal') || 'Legal';
 
 const SeoBreadcrumbItems = [
   { name: homeLabel, href: localizePath('/', locale) },
-  { name: legalLabel, href: localizePath('/legal', locale) },
   { name: page.data.title, href: canonicalURL }
 ];
 
 const Breadcrumbs = [
   { name: homeLabel, href: localizePath('/', locale) },
-  { name: legalLabel, href: localizePath('/legal', locale) }
+  { name: page.data.title, href: canonicalURL }
 ];
 
 const dateLocale = locale === 'id' ? 'id-ID' : locale === 'ru' ? 'ru-RU' : 'en-US';
