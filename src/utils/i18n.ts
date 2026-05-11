@@ -18,6 +18,11 @@ export function getCurrentLocale(Astro: any): Locale {
   return Astro.currentLocale || siteConfig.defaultLocale;
 }
 
+export function localizePath(path: string, locale: string) {
+  if (locale === 'id') return path;
+  return `/${locale}${path === '/'? '' : path}`;
+}
+
 // Buat check ada terjemahan apa nggak
 export function getAvailableLocales(slug: string, allPosts: any[]) {
   return siteConfig.locales.filter(loc =>
