@@ -50,8 +50,6 @@ export async function getStaticPaths() {
 }
 
 const { post, alternateSlugs} = Astro.props;
-const { Content, headings } = await render(post);
-
 const locale = getCurrentLocale(Astro);
 
 const allPosts = await getCollection("blog", ({ data }) => 
@@ -66,19 +64,19 @@ const currentIndex = sortedPosts.findIndex(p => p.id === post.id);
 const prevPost = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
 const nextPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
 
-const authorEntry = await getEntry(post.data.author);
-const categoryEntry = await getEntry(post.data.category);
-
-const relatedPosts = getSmartRelatedPosts(post, allPosts, 3);
-
 let settings;
 try {
   settings = await getEntry('settings', 'site');
 } catch (error) {
   console.warn('Settings not found, using siteConfig fallback');
 }
-
 const siteData = settings?.data || siteConfig;
+
+const authorEntry = await getEntry(post.data.author);
+const categoryEntry = await getEntry(post.data.category);
+
+const { Content, headings } = await render(post);
+const relatedPosts = getSmartRelatedPosts(post, allPosts, 3);
 
 const {
   title,
@@ -90,40 +88,39 @@ const {
   seo
 } = post.data;
 
-
-const seoTitle = seo?.title || title;
-const seoDescription = seo?.description || description;
-
 const seoImage = {
   src: seo?.ogImage || image?.src || siteData.defaultSeo?.ogImage || siteConfig.defaultSeo?.ogImage || siteConfig.ogImage,
   alt: image?.alt || title
 };
 
-const categorySlug = slugify(categoryName);
-
 const seoCategory = {
-  name: categoryEntry?.data.name || getLabel(locale, 'blog'),
-  description: categoryEntry?.data.description || "",
-  slug: categorySlug
+  name: categoryEntry?.data?.name || 'Uncategorized',
+  description: categoryEntry?.data?.description || "",
+  slug: categoryEntry?.id || 'uncategorized'
 };
 
+const seoTitle = seo?.title || title;
+const seoDescription = seo?.description || description;
 const tocHeadings = filterHeadingsForTOC(headings);
 const readingTime = getReadingTime(post.body || "");
 
 const siteURL = Astro.site?.toString() ?? siteData.siteUrl;
 const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
+const homeLabel = getLabel(locale, 'home') || 'Home';
+const blogLabel = getLabel(locale, 'blog') || 'Blog';
+
 const SeoBreadcrumbItems = [
-  { name: getLabel(locale, 'home'), href: localizePath('/', locale) },
-  { name: getLabel(locale, 'blog'), href: localizePath('/blog', locale) },
+  { name: homeLabel, href: localizePath('/', locale) },
+  { name: blogLabel, href: localizePath('/blog', locale) },
   { name: seoCategory.name, href: localizePath(`/category/${seoCategory.slug}`, locale) },
   { name: title, href: canonicalURL }
 ];
 
-const blogLabel = getLabel(locale, 'blog');
-const Breadcrumbs = SeoBreadcrumbItems.filter(item => 
-  item.name === blogLabel || item.name === seoCategory.name
-);
+const Breadcrumbs = [
+  { name: blogLabel, href: localizePath('/blog', locale) },
+  { name: seoCategory.name, href: localizePath(`/category/${seoCategory.slug}`, locale) }
+];
 ---
 
 <BaseLayout
