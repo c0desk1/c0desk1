@@ -52,6 +52,17 @@ export const i18nConfig = {
       newsletterError: 'Terjadi kesalahan. Silakan coba lagi.',
       newsletterToastSuccess: 'Sudah berlangganan! Periksa kotak masuk Anda.',
       newsletterNetwork: 'Gagal terhubung. Silakan coba lagi nanti.',
+      
+      // BUTTON
+      // COPY LINK
+      copyUrl: 'Salin URL',
+      copied: 'Tersalin!',
+      copyFailed: 'Gagal',
+      copyUrlAria: 'Salin tautan artikel',
+      copiedAria: 'URL berhasil disalin',
+      copyFailedAria: 'Gagal menyalin URL',
+      copyToastSuccess: 'URL disalin ke clipboard!',
+      copyToastFailed: 'Gagal menyalin URL, silakan coba lagi.',
     },
     en: {
       home: "Home",
@@ -101,6 +112,17 @@ export const i18nConfig = {
       newsletterError: 'Something went wrong. Please try again.',
       newsletterToastSuccess: 'Subscribed! Check your inbox.',
       newsletterNetwork: 'Connection failed. Please try again later.',
+      
+      // BUTTON
+      // COPY LINK
+      copyUrl: 'Copy URL',
+      copied: 'Copied!',
+      copyFailed: 'Failed',
+      copyUrlAria: 'Copy article URL',
+      copiedAria: 'URL copied successfully',
+      copyFailedAria: 'Failed to copy URL',
+      copyToastSuccess: 'URL copied to clipboard!',
+      copyToastFailed: 'Failed to copy URL, please try again.',
     },
     ru: {
       home: "дом",
@@ -151,6 +173,17 @@ export const i18nConfig = {
       newsletterError: 'Что-то пошло не так. Попробуйте снова.',
       newsletterToastSuccess: 'Вы подписаны! Проверьте почту.',
       newsletterNetwork: 'Ошибка подключения. Попробуйте позже.',
+      
+      // BUTTON
+      // COPY LINK
+      copyUrl: 'Копировать URL',
+      copied: 'Скопировано!',
+      copyFailed: 'Ошибка',
+      copyUrlAria: 'Копировать ссылку на статью',
+      copiedAria: 'URL успешно скопирован',
+      copyFailedAria: 'Не удалось скопировать URL',
+      copyToastSuccess: 'URL скопирован в буфер обмена!',
+      copyToastFailed: 'Не удалось скопировать URL, попробуйте снова.',
     }
   }
 } as const;
