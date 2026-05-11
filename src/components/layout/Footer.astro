@@ -1,51 +1,44 @@
 ---
 // src/components/layout/Footer.astro
 import { siteConfig } from "@/config/site";
+import { getCurrentLocale, localizePath, getLabel } from '@/utils/i18n'; // ← tambah getLabel
 import { getEntry } from "astro:content";
 
-import Container   from "../ui/Container.astro";
-import Section     from "../ui/Section.astro";
-import Icon        from "@/components/ui/Icon";
-import Newsletter  from "../layout/Newsletter.astro";
+import Container from "../ui/Container.astro";
+import Section from "../ui/Section.astro";
+import Icon from "@/components/ui/Icon";
+import Newsletter from "../layout/Newsletter.astro";
 import StatusButton from "../ui/StatusButton.astro";
 import ThemeToggle from "../ui/ThemeToggle.astro";
 
-let settings;
-try {
-  settings = await getEntry("settings", "site");
-} catch {
-  console.warn("Settings not found, menggunakan siteConfig fallback");
-}
+const locale = getCurrentLocale(Astro);
 
-const siteData      = settings?.data || siteConfig;
-const footerSections = siteData.footerSections || siteConfig.footerSections;
-const social        = siteData.social || siteConfig.social;
-const year          = new Date().getFullYear();
+const siteData = siteConfig.seoConfig;
+const social = siteConfig.social;
+const year = new Date().getFullYear();
+
+const footerSections = siteConfig.footerSections;
 ---
 
 <footer class="ft-root">
   <Section size="none">
-
-    <!-- ── Top: nav + newsletter ── -->
     <div class="ft-top">
       <Container size="xl">
         <div class="ft-top-inner">
-
-          <!-- Nav columns -->
-          <nav class="ft-nav" aria-label="Footer navigation">
+          <nav class="ft-nav" aria-label={getLabel(locale, 'navigation')}>
             {footerSections.map((section) => (
               <div class="ft-col">
-                <p class="ft-col-title">{section.title}</p>
+                <p class="ft-col-title">{getLabel(locale, section.titleKey)}</p>
                 <ul class="ft-col-list">
                   {section.items.map((link) => (
                     <li>
                       <a
-                        href={link.href}
+                        href={link.isExternal ? link.href : localizePath(link.href, locale)} <!-- ← skip localize kalau external -->
                         target={link.isExternal ? "_blank" : undefined}
                         rel={link.isExternal ? "noopener noreferrer" : undefined}
                         class="ft-link"
                       >
-                        {link.label}
+                        {getLabel(locale, link.labelKey)}
                         {link.isExternal && (
                           <Icon name="external" className="ft-external-icon" />
                         )}
@@ -57,20 +50,15 @@ const year          = new Date().getFullYear();
             ))}
           </nav>
 
-          <!-- Newsletter -->
           <div class="ft-newsletter">
             <Newsletter />
           </div>
-
         </div>
       </Container>
     </div>
 
-    <!-- ── Bottom: social + copyright + status + theme ── -->
     <Container size="xl">
       <div class="ft-bottom">
-
-        <!-- Row 1: social + copyright -->
         <div class="ft-bottom-row">
           <div class="ft-social">
             {social.map((item: { href: string; label: string }) => (
@@ -90,15 +78,12 @@ const year          = new Date().getFullYear();
           </span>
         </div>
 
-        <!-- Row 2: status + theme -->
         <div class="ft-bottom-row">
           <StatusButton />
           <ThemeToggle />
         </div>
-
       </div>
     </Container>
-
   </Section>
 </footer>
 
