@@ -2,14 +2,10 @@
 // src/components/layout/MobileMenu.astro
 
 import { siteConfig } from "@/config/site";
-import { getCurrentLocale, localizePath } from "@/utils/i18n";
-
+import { getCurrentLocale, localizePath, t } from "@/utils/i18n";
 import Icon from "@/components/ui/Icon";
 
-const siteData = siteConfig;
 const nav = siteConfig.mobileNavItems;
-const social = siteConfig.social;
-
 const locale = getCurrentLocale(Astro);
 ---
 
@@ -37,32 +33,32 @@ const locale = getCurrentLocale(Astro);
     <div class="w-9 h-1 rounded-full bg-(--border)"></div>
   </div>
 
-    <nav class="flex flex-col px-3 pt-2 pb-4 gap-3">
-      {nav.map((section) => (
-        <div class="flex flex-col gap-0.5">
-          <div class="px-3 py-2 text-base font-semibold uppercase tracking-wide text-(--fg)">
-            {section.title}
-          </div>
-
-          {section.items.map((item) => {
-            const href = item.isExternal
-             ? item.href
-              : localizePath(item.href, locale);
-
-            return (
-              <a href={href} target={item.isExternal? "_blank" : undefined} rel={item.isExternal? "noopener noreferrer" : undefined}
-                class="mnav-link flex items-center gap-2 px-3 py-1.5
-                      text-[13px] text-(--fg-muted) transition-colors"
-              >
-                {item.label}
-                {item.isExternal && (
-                  <Icon name="external" className="w-3 h-3 shrink-0 opacity-80 transition-opacity group-hover:opacity-100" />
-                )}
-              </a>
-            )
-          })}
+  <nav class="flex flex-col px-3 pt-2 pb-4 gap-3">
+    {nav.map((section) => (
+      <div class="flex flex-col gap-0.5">
+        <div class="px-3 py-2 text-base font-semibold uppercase tracking-wide text-(--fg)">
+          {t(section.titleKey, locale)}
         </div>
-      ))}
+
+        {section.items.map((item) => {
+          const href = item.isExternal
+           ? item.href
+            : localizePath(item.href, locale);
+
+          return (
+            <a href={href} target={item.isExternal? "_blank" : undefined} rel={item.isExternal? "noopener noreferrer" : undefined}
+              class="mnav-link flex items-center gap-2 px-3 py-1.5
+                    text-[13px] text-(--fg-muted) transition-colors"
+            >
+              {t(item.labelKey, locale)}
+              {item.isExternal && (
+                <Icon name="external" className="w-3 h-3 shrink-0 opacity-80 transition-opacity group-hover:opacity-100" />
+              )}
+            </a>
+          )
+        })}
+      </div>
+    ))}
   </nav>
 </div>
 
