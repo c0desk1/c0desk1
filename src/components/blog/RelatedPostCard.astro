@@ -30,7 +30,7 @@ const authorName = authorEntry?.data.name || siteConfig.author.name;
 const authorAvatar = authorEntry?.data.avatar || siteConfig.author.avatar;
 const optimizedAvatar = isCdnUrl(authorAvatar) ? cdnImage(authorAvatar, { w: 48, h: 48, q: 80 }) : authorAvatar;
 
-const categoryName = categoryEntry?.data.name || category;
+const categoryName = categoryEntry?.data.name || category.id || 'Uncategoized';
 
 const autoSlug = slugify(title);
 const postUrl = localizePath(`/blog/${autoSlug}/`, locale);
