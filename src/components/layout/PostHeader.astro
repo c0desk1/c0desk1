@@ -10,7 +10,7 @@ import BlogFeaturedImage from '../blog/BlogFeaturedImage.astro';
 interface Props {
   title: string;
   pubDate: Date;
-  readingTime: string;
+  content: string;
   authorName?: string;
   authorAvatar?: string;
   authorTitle?: string;
@@ -21,7 +21,7 @@ interface Props {
 const {
   title,
   pubDate,
-  readingTime,
+  content,
   authorName,
   authorAvatar,
   authorTitle,
@@ -45,7 +45,7 @@ const {
     <div class="prose-custom mb-4 md:mb-8">
       <h1>{title}</h1>
     </div>
-    <PostMeta pubDate={pubDate} readingTime={readingTime} />
+    <PostMeta pubDate={pubDate} content={content} />
 
     <div class="prose-custom mb-4 md:mb-8">
       {image && (
