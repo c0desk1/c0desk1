@@ -2,19 +2,13 @@
 // src/components/layout/MobileMenu.astro
 
 import { siteConfig } from "@/config/site";
-import { getEntry } from 'astro:content';
 import { getCurrentLocale, localizePath } from "@/utils/i18n";
 
 import Icon from "@/components/ui/Icon";
 
-let settings;
-try {
-  settings = await getEntry('settings', 'site');
-} catch (error) {}
-
-const siteData = settings?.data || siteConfig;
-const nav = siteData.mobileNavItems || siteConfig.mobileNavItems;
-const social = siteData.social || siteConfig.social;
+const siteData = siteConfig;
+const nav = siteConfig.mobileNavItems;
+const social = siteConfig.social;
 
 const locale = getCurrentLocale(Astro);
 ---
@@ -43,7 +37,6 @@ const locale = getCurrentLocale(Astro);
     <div class="w-9 h-1 rounded-full bg-(--border)"></div>
   </div>
 
-  <nav class="flex flex-col px-3 pt-2 pb-4 gap-0.5">
     <nav class="flex flex-col px-3 pt-2 pb-4 gap-3">
       {nav.map((section) => (
         <div class="flex flex-col gap-0.5">
@@ -51,40 +44,25 @@ const locale = getCurrentLocale(Astro);
             {section.title}
           </div>
 
-          {section.items.map((item) => (
+          {section.items.map((item) => {
             const href = item.isExternal
              ? item.href
               : localizePath(item.href, locale);
-            <a href={{href}} target={item.isExternal ? "_blank" : undefined} rel={item.isExternal ? "noopener noreferrer" : undefined}
-              class="mnav-link flex items-center gap-2 px-3 py-1.5
-                    text-[13px] text-(--fg-muted) transition-colors"
-            >
-              {item.label}
-              {item.isExternal && (
-                <Icon name="external" className="w-3 h-3 shrink-0 opacity-80 transition-opacity group-hover:opacity-100" />
-              )}
-            </a>
-          ))}
+
+            return (
+              <a href={href} target={item.isExternal? "_blank" : undefined} rel={item.isExternal? "noopener noreferrer" : undefined}
+                class="mnav-link flex items-center gap-2 px-3 py-1.5
+                      text-[13px] text-(--fg-muted) transition-colors"
+              >
+                {item.label}
+                {item.isExternal && (
+                  <Icon name="external" className="w-3 h-3 shrink-0 opacity-80 transition-opacity group-hover:opacity-100" />
+                )}
+              </a>
+            )
+          })}
         </div>
       ))}
-      <!--{nav.length > 0 && social.length > 0 && (
-        <div class="h-px bg-(--border) my-1.5 mx-1"></div>
-      )}
-
-      {social.map((item) => (
-        <a
-          href={item.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={item.label}
-          class="mnav-link flex items-center gap-3 px-3 py-1.5 rounded-(--radius-lg)
-                text-sm font-medium text-(--fg-muted)
-                hover:text-(--fg) hover:bg-(--bg-muted) transition-colors"
-        >
-          <Icon name={item.label as any} className="w-4 h-4 shrink-0" />
-          <span class="capitalize">{item.label}</span>
-        </a>
-      ))}-->
   </nav>
 </div>
 
