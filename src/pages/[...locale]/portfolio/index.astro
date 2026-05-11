@@ -1,0 +1,85 @@
+---
+// src/pages/portfolio/index.astro
+
+import { getCollection } from "astro:content";
+import { siteConfig } from "@/config/site";
+
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import Grid from "@/components/ui/Grid.astro";
+
+import Hero from "@/components/ui/Hero.astro";
+import PortfolioCard from "@/components/portfolio/PortfolioCard.astro";
+
+import {
+  sortByDate,
+  filterByFeatured,
+  filterByDraft,
+cn
+} from "@/lib/utils";
+
+const allProjects = await getCollection("portfolio");
+
+const projects = sortByDate(filterByDraft(allProjects), "pubDate");
+
+const featuredProjects = filterByFeatured(projects);
+const featuredProject = featuredProjects?.[0];
+
+const regularProjects = projects.filter((p) => p.id !== featuredProject?.id);
+
+const siteURL = Astro.site?.toString() ?? siteConfig.siteUrl;
+const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
+
+const seoData = {
+  title: "Portfolio & Projects",
+  description: "Koleksi karya digital, mulai dari web application, sistem desain, hingga eksperimen teknologi dan UI/UX modern.",
+  type: "website" as const,
+  canonicalURL,
+};
+
+const Herotitle = "Crafting";
+const HeroHighlight = "& experiences";
+const HeroDescription = "Kumpulan projek pengembangan web dan beberapa eksperimen visual.";
+---
+
+<BaseLayout {...seoData}>
+  <Section id="portfolio-hero" size="none" aria-label="portfolio introduction">
+    <div class="relative items-center">
+      <div
+        class={cn(
+          "absolute inset-0",
+          "bg-size-[20px_20px]",
+          "bg-[radial-gradient(#d4d4d4_1px,transparent_1px)]",
+          "dark:bg-[radial-gradient(#404040_1px,transparent_1px)]",
+        )}
+      />
+      <div class="pointer-events-none absolute inset-0 flex items-center justify-center bg-white mask-[radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
+      <Container size="full" class="relative items-center z-20"> 
+        <Hero 
+          title={Herotitle}
+          highlight={HeroHighlight}
+          description={HeroDescription}
+        />
+      </Container>
+    </div>
+  </Section>
+
+  <Section size="lg" class="section-divider">
+    <Container size="xl">
+      <h2 class="sr-only">Featured Project</h2>
+      {featuredProject && (
+        <div class="mb-10">
+          <PortfolioCard project={featuredProject} />
+        </div>
+      )}
+
+      <h2 class="sr-only">All Projects</h2>
+      <Grid cols="cards" gap="md">
+        {regularProjects.map((project) => (
+          <PortfolioCard project={project} />
+        ))}
+      </Grid>
+    </Container>
+  </Section>
+</BaseLayout>
