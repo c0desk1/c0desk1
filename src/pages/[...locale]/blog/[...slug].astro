@@ -49,7 +49,7 @@ export async function getStaticPaths() {
   });
 }
 
-const { post } = Astro.props;
+const { post, alternateSlugs} = Astro.props;
 const locale = getCurrentLocale(Astro);
 
 const allPosts = await getCollection("blog", ({ data }) => 
@@ -136,6 +136,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
     slug: authorEntry?.id
   }}
   canonicalURL={canonicalURL}
+  alternateSlugs={alternateSlugs}
 >
   <Section size="md">
     <Section size="sm">
