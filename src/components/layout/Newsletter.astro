@@ -14,20 +14,20 @@ interface Props {
 const locale = getCurrentLocale(Astro);
 
 const {
-  heading = getLabel(locale, 'newsletterHeading') || 'Stay connected',
-  subheading = getLabel(locale, 'newsletterSub') || 'Get the latest posts delivered to your inbox.',
-  placeholder = getLabel(locale, 'newsletterPlaceholder') || 'name@email.com',
-  btnLabel = getLabel(locale, 'newsletterBtn') || 'Subscribe',
-  message = getLabel(locale, 'newsletterSuccess') || 'Thanks for subscribing!',
-  note = getLabel(locale, 'newsletterNote') || 'No spam. Unsubscribe anytime.',
+  heading = getLabel(locale, 'newsletterHeading'),
+  subheading = getLabel(locale, 'newsletterSub'),
+  placeholder = getLabel(locale, 'newsletterPlaceholder'),
+  btnLabel = getLabel(locale, 'newsletterBtn'),
+  message = getLabel(locale, 'newsletterSuccess'),
+  note = getLabel(locale, 'newsletterNote'),
 } = Astro.props;
 
 const toastMessages = {
-  invalid: getLabel(locale, 'newsletterInvalid') || 'Please enter a valid email address.',
-  exists: getLabel(locale, 'newsletterExists') || 'Email already subscribed.',
-  error: getLabel(locale, 'newsletterError') || 'Something went wrong. Please try again.',
-  success: getLabel(locale, 'newsletterToastSuccess') || 'Subscribed! Check your inbox.',
-  network: getLabel(locale, 'newsletterNetwork') || 'Connection failed. Please try again later.',
+  invalid: getLabel(locale, 'newsletterInvalid'),
+  exists: getLabel(locale, 'newsletterExists'),
+  error: getLabel(locale, 'newsletterError'),
+  success: getLabel(locale, 'newsletterToastSuccess'),
+  network: getLabel(locale, 'newsletterNetwork'),
 };
 ---
 
@@ -357,7 +357,7 @@ const toastMessages = {
           if (formState) formState.hidden = false;
         }, 3500);
 
-        toast?.show?.toastMessages.success, { type: 'success' });
+        toast?.show?.(toastMessages.success, { type: 'success' });
 
       } catch {
         shake();
