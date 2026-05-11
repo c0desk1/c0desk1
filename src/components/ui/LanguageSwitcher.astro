@@ -14,7 +14,7 @@ const currentPath = Astro.url.pathname.replace(/^\/(en|ru)/, '') || '/';
       class={`px-3 py-1 rounded text-sm ${
         loc === locale 
           ? 'bg-(--bg) text-(--fg) font-bold' 
-          : 'bg-(--bg-subtle) text-(--fg) hover:bg-(--bg-muted)'
+          : 'bg-(--bg-subtle) text-(--fg);hover:bg-(--bg-muted)'
       }`}
     >
       {loc.toUpperCase()}
