@@ -35,6 +35,7 @@ export const i18nConfig = {
       nextArticle: "Artikel selanjutnya",
       general: "Umum",
       author: "Penulis",
+      avatarOf: "Avatar dari",
       readAlso: "Baca juga.",
       readArticle: "Baca artikel",
 
@@ -171,6 +172,7 @@ export const i18nConfig = {
       nextArticle: "Next article",
       general: "General",
       author: "Author",
+      avatarOf: "Avatar of",
       readAlso: "Read also.",
       readArticle: "Read article",
 
@@ -308,6 +310,7 @@ export const i18nConfig = {
       nextArticle: "Следующая статья",
       general: "Общее",
       author: "Автор",
+      avatarOf: "Аватар",
       readAlso: "Читайте также.",
       readArticle: "Читать статью",
 
