@@ -2,8 +2,14 @@
 import type { CollectionEntry } from 'astro:content';
 import { getEntry } from 'astro:content';
 import { Image } from 'astro:assets'; 
-
-import { generateExcerpt, formatDateCompact, cdnImage, isCdnUrl } from '@/lib/utils';
+import { getCurrentLocale, localizePath, getLabel } from '@/utils/i18n';
+import {
+  generateExcerpt,
+  formatDateCompact,
+  cdnImage,
+  isCdnUrl,
+  slugify
+} from '@/lib/utils';
 import { siteConfig } from '@/config/site';
 
 interface Props {
@@ -11,12 +17,13 @@ interface Props {
 }
 
 const { post } = Astro.props;
+const locale = getCurrentLocale(Astro);
 
 let title = '', excerpt = '', categoryName = '', pubDateISO = '', pubDateDisplay = '';
 let authorName = '', authorAvatar = '', optimizedAvatar = '', postUrl = '';
 
 if (post) {
-  const { data, id } = post;
+  const { data } = post;
   const { title: t, pubDate, category, author } = data;
   title = t;
   excerpt = generateExcerpt(post.body || '', 250);
@@ -24,22 +31,31 @@ if (post) {
   const categoryEntry = await getEntry(category);
   const authorEntry   = author ? await getEntry(author) : null;
 
-  categoryName    = categoryEntry?.data.name || 'General';
+  categoryName    = categoryEntry?.data.name || getLabel(locale, 'general');
   pubDateISO      = pubDate.toISOString();
-  pubDateDisplay  = formatDateCompact(pubDate);
+  
+  const dateLocale = locale === 'en' ? 'en-US' : locale === 'ru' ? 'ru-RU' : 'id-ID';
+  pubDateDisplay  = formatDateCompact(pubDate, dateLocale);
+  
   authorName      = authorEntry?.data.name   || siteConfig.author.name;
   authorAvatar    = authorEntry?.data.avatar || siteConfig.author.avatar;
   optimizedAvatar = isCdnUrl(authorAvatar)
     ? cdnImage(authorAvatar, { w: 48, h: 48, q: 80 })
     : authorAvatar;
-  postUrl = `/blog/${id}/`;
+    
+  const autoSlug = slugify(title);
+  postUrl = localizePath(`/blog/${autoSlug}/`, locale);
 }
 
 const icons = ["lines", "brackets", "grid"];
 const iconType = icons[Math.floor(Math.random() * icons.length)];
 ---
 
-<a href={postUrl} class="group flex flex-col h-full px-6 py-8 rounded-xl border border-(--border) bg-(--bg) hover:bg-(--bg-muted)">
+<a 
+  href={postUrl} 
+  class="group flex flex-col h-full px-6 py-8 rounded-xl border border-(--border) bg-(--bg) hover:bg-(--bg-muted)"
+  aria-label={`${getLabel(locale, 'readArticle')}: ${title}`} <!-- ← tambah a11y -->
+>
   <div class="mb-4 md:mb-6 shrink-0">
     <div class="size-7 md:size-13 flex items-center justify-center rounded-full border border-(--border) bg-(--bg-subtle)">
       {iconType === "lines" && (
@@ -63,7 +79,7 @@ const iconType = icons[Math.floor(Math.random() * icons.length)];
     </div>
   </div>
   <div class="mb-4 shrink-0">
-    <time datetime={pubDateISO} class="text-[13px] md:text-sm text-(--fg-subtle) font-medium">
+    <time datetime={pubDateISO} class="text- md:text-sm text-(--fg-subtle) font-medium">
       {pubDateDisplay}
     </time>
   </div>
@@ -79,7 +95,7 @@ const iconType = icons[Math.floor(Math.random() * icons.length)];
     {authorAvatar && (
       <Image
         src={optimizedAvatar}
-        alt={`Author ${authorName}`}
+        alt={`${getLabel(locale, 'author')}: ${authorName}`} <!-- ← i18n alt -->
         width={48}
         height={48}
         loading="lazy"
@@ -87,7 +103,7 @@ const iconType = icons[Math.floor(Math.random() * icons.length)];
         class="w-5 h-5 object-cover rounded-full"
       />
     )}
-    <span class="text-[13px] md:text-sm text-(--fg-subtle) font-medium">
+    <span class="text- md:text-sm text-(--fg-subtle) font-medium">
       {authorName}
     </span>
   </div>
