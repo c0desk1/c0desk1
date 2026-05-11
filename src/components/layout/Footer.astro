@@ -1,8 +1,7 @@
 ---
 // src/components/layout/Footer.astro
 import { siteConfig } from "@/config/site";
-import { getCurrentLocale, localizePath, getLabel } from '@/utils/i18n'; // ← tambah getLabel
-import { getEntry } from "astro:content";
+import { getCurrentLocale, localizePath, getLabel } from '@/utils/i18n';
 
 import Container from "../ui/Container.astro";
 import Section from "../ui/Section.astro";
@@ -13,7 +12,7 @@ import ThemeToggle from "../ui/ThemeToggle.astro";
 
 const locale = getCurrentLocale(Astro);
 
-const siteData = siteConfig.seoConfig;
+const siteData = siteConfig;
 const social = siteConfig.social;
 const year = new Date().getFullYear();
 
