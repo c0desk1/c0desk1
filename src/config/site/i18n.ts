@@ -4,6 +4,7 @@ export const i18nConfig = {
 
   labels: {
     id: {
+      home: "Beranda",
       blog: "Blog",
       portfolio: "Portfolio",
       about: "Tentang",
@@ -18,9 +19,18 @@ export const i18nConfig = {
       cookiePolicy: "Kebijakan Cookie",
       dmca: "DMCA",
       email: "Email",
-      contactUs: "Hubungi Kami"
+      contactUs: "Hubungi Kami",
+      
+      pageNavigation: "Navigasi Halaman",
+      articleHeader: "Judul Artikel",
+      
+      backToTop: "Kembali ke atas",
+      relatedArticles: "Artikel Terkait",
+      
+      articleNavigation: "Navigasi artikel"
     },
     en: {
+      home: "Home",
       blog: "Blog",
       portfolio: "Portfolio",
       about: "About",
@@ -35,9 +45,17 @@ export const i18nConfig = {
       cookiePolicy: "Cookie Policy",
       dmca: "DMCA",
       email: "Email",
-      contactUs: "Contact Us"
+      contactUs: "Contact Us",
+      
+      pageNavigation: "Page Navigation",
+      articleHeader: "Article Header",
+      
+      backToTop: "Back to top",
+      relatedArticles: "Related articles",
+      articleNavigation: "Article Navigation"
     },
     ru: {
+      home: "дом",
       blog: "Блог",
       portfolio: "Портфолио",
       about: "О нас",
@@ -52,7 +70,15 @@ export const i18nConfig = {
       cookiePolicy: "Политика использования cookie",
       dmca: "DMCA",
       email: "Email",
-      contactUs: "Связаться с нами"
+      contactUs: "Связаться с нами",
+      
+      pageNavigation: "навигация по страницам",
+      articleHeader: "Заголовок статьи",
+      
+      backToTop: "Вернуться наверх",
+      relatedArticles: "Статьи по теме",
+      
+      articleNavigation: "Навигация по статьям"
     }
   }
 } as const;
