@@ -31,7 +31,10 @@ export const i18nConfig = {
       previous: "Sebelumnya",
       next: "Selanjutnya",
       previousArticle: "Artikel sebelumnya",
-      nextArticle: "Artikel selanjutnya"
+      nextArticle: "Artikel selanjutnya",
+      general: "Umum",
+      author: "Penulis",
+      readArticle: "Baca artikel"
     },
     en: {
       home: "Home",
@@ -60,7 +63,10 @@ export const i18nConfig = {
       previous: "Previous",
       next: "Next",
       previousArticle: "Previous article",
-      nextArticle: "Next article"
+      nextArticle: "Next article",
+      general: "General",
+      author: "Author",
+      readArticle: "Read article"
     },
     ru: {
       home: "дом",
@@ -90,7 +96,10 @@ export const i18nConfig = {
       previous: "Предыдущий",
       next: "Следующий",
       previousArticle: "Предыдущая статья",
-      nextArticle: "Следующая статья"
+      nextArticle: "Следующая статья",
+      general: "Общее",
+      author: "Автор",
+      readArticle: "Читать статью"
     }
   }
 } as const;
