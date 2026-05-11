@@ -17,12 +17,12 @@ export default defineConfig({
     defaultLocale: "id",
     locales: ["id", "en", "ru"],
     routing: {
-        prefixDefaultLocale: false,
-        fallback: {
-          en: "id",
-          ru: "id"
-        }
-    }
+      prefixDefaultLocale: false,
+    },
+    fallback: {
+      en: "id",
+      ru: "id"
+    },
   },
   experimental: {
     advancedRouting: true,
