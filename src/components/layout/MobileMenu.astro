@@ -3,6 +3,8 @@
 
 import { siteConfig } from "@/config/site";
 import { getEntry } from 'astro:content';
+import { getCurrentLocale, localizePath } from "@/utils/i18n";
+
 import Icon from "@/components/ui/Icon";
 
 let settings;
@@ -13,6 +15,8 @@ try {
 const siteData = settings?.data || siteConfig;
 const nav = siteData.mobileNavItems || siteConfig.mobileNavItems;
 const social = siteData.social || siteConfig.social;
+
+const locale = getCurrentLocale(Astro);
 ---
 
 <div
@@ -48,7 +52,10 @@ const social = siteData.social || siteConfig.social;
           </div>
 
           {section.items.map((item) => (
-            <a href={item.href} target={item.isExternal ? "_blank" : undefined} rel={item.isExternal ? "noopener noreferrer" : undefined}
+            const href = item.isExternal
+             ? item.href
+              : localizePath(item.href, locale);
+            <a href={{href}} target={item.isExternal ? "_blank" : undefined} rel={item.isExternal ? "noopener noreferrer" : undefined}
               class="mnav-link flex items-center gap-2 px-3 py-1.5
                     text-[13px] text-(--fg-muted) transition-colors"
             >
