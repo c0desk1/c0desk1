@@ -18,8 +18,9 @@ let title = '', excerpt = '', categoryName = '', pubDateISO = '', pubDateDisplay
 let authorName = '', authorAvatar = '', optimizedAvatar = '', postUrl = '';
 
 if (post) {
-  const { data, slug } = post;
+  const { data } = post;
   const { title: t, pubDate, category, author } = data;
+  
   title = t;
   excerpt = generateExcerpt(post.body || '', 140);
   

@@ -184,44 +184,6 @@ export function generateHeadingId(text: string): string {
     .replace(/-+/g, '-');
 }
 
-// ==================== RELATED CONTENT ====================
-
-export function getRelatedPosts<T extends { id: string; data: { tags?: string[] } }>(
-  currentPost: T,
-  allPosts: T[],
-  limit: number = 3
-): T[] {
-  const currentTags = currentPost.data.tags || [];
-  const currentId = currentPost.id;
-  
-  let related = allPosts.filter(p => p.id !== currentId);
-  
-  if (currentTags.length > 0) {
-    const taggedPosts = related.filter(p => 
-      p.data.tags?.some(tag => currentTags.includes(tag))
-    );
-    
-    if (taggedPosts.length > 0) {
-      return taggedPosts.slice(0, limit);
-    }
-  }
-  
-  return related.slice(0, limit);
-}
-
-export function getRelatedProjects<T extends { data: { techStack?: string[] } }>(
-  currentProject: T,
-  allProjects: T[],
-  limit: number = 2
-): T[] {
-  const currentTechStack = currentProject.data.techStack || [];
-  
-  return allProjects
-    .filter(p => p !== currentProject)
-    .filter(p => hasCommonTechStack(currentTechStack, p.data.techStack || []))
-    .slice(0, limit);
-}
-
 // ==================== FILTER UTILITIES ====================
 
 export function filterByDraft<T extends { data: { draft?: boolean } }>(

@@ -13,103 +13,100 @@ const labels = {
   ariaSuccess: getLabel(locale, 'copiedAria') || 'URL copied successfully',
   ariaFailed: getLabel(locale, 'copyFailedAria') || 'Failed to copy URL',
   toastSuccess: getLabel(locale, 'copyToastSuccess') || 'URL copied to clipboard!',
-  toastFailed: getLabel(locale, 'copyToastFailed') || 'Failed to copy URL, please try again.',
+  toastFailed: getLabel(locale, 'copyToastFailed') || 'Failed to copy URL. Needs HTTPS.',
 };
 ---
 
 <button
-  id="copy-link-btn"
+  class="copy-link-btn relative text-(--accent-dim) hover:text-(--accent) group active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-200"
   aria-label={labels.ariaDefault}
   aria-live="polite"
-  class="relative text-(--accent-dim) hover:text-(--accent) group active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-200"
   data-url={Astro.url.href}
+  data-labels={JSON.stringify(labels)}
 >
   <div class="flex shrink-0 items-center justify-center gap-1.5">
     <div class="relative w-4 h-4 items-center">
-      <span id="icon-copy" class="absolute inset-0 w-full h-full transition-all duration-200">
+      <span class="icon-copy absolute inset-0 w-full h-full transition-all duration-200">
         <Icon name="link" className="w-4 h-4" />
       </span>
-      <span id="icon-check" class="absolute inset-0 w-full h-full opacity-0 scale-75 transition-all duration-200">
+      <span class="icon-check absolute inset-0 w-full h-full opacity-0 scale-75 transition-all duration-200">
         <Icon name="check" className="w-4 h-4" />
       </span>
     </div>
-    <span id="copy-text" class="text-[13px] md:text-sm font-medium leading-none">
+    <span class="copy-text text-[13px] md:text-sm font-medium leading-none">
       {labels.copy}
     </span>
   </div>
 </button>
 
-<script type="module" define:vars={{ labels }}>
-  import { copyToClipboard } from '/src/lib/utils';
+<script is:inline>
+  function initCopyButtons() {
+    document.querySelectorAll('.copy-link-btn:not([data-init])').forEach((btn) => {
+      btn.dataset.init = 'true';
+      
+      const labels = JSON.parse(btn.dataset.labels || '{}');
+      const copyIcon = btn.querySelector('.icon-copy');
+      const checkIcon = btn.querySelector('.icon-check');
+      const text = btn.querySelector('.copy-text');
+      
+      let timeoutId;
+      let isCopying = false;
 
-  (() => {
-    if (window.__copyLinkReady) return;
-    window.__copyLinkReady = true;
+      const isClipboardSupported = navigator.clipboard && window.isSecureContext;
 
-    const btn = document.getElementById('copy-link-btn');
-    const copyIcon = document.getElementById('icon-copy');
-    const checkIcon = document.getElementById('icon-check');
-    const text = document.getElementById('copy-text');
-
-    if (!btn || !copyIcon || !checkIcon || !text) return;
-
-    let timeoutId;
-    let isCopying = false;
-
-    const showToastMessage = (success) => {
-      const toast = window.toast;
-      if (!toast) return;
-      toast.show(
-        success ? labels.toastSuccess : labels.toastFailed,
-        { type: success ? 'success' : 'error', duration: 2000 }
-      );
-    };
-
-    const setState = (success) => {
-      clearTimeout(timeoutId);
-      btn.disabled = true;
-
-      if (success) {
-        copyIcon.style.cssText = 'opacity:0;transform:scale(0.75)';
-        checkIcon.style.cssText = 'opacity:1;transform:scale(1)';
-        text.textContent = labels.copied;
-        btn.setAttribute('aria-label', labels.ariaSuccess);
-        showToastMessage(true);
-      } else {
-        text.textContent = labels.failed;
-        btn.setAttribute('aria-label', labels.ariaFailed);
-        showToastMessage(false);
+      function showToast(message, type = 'success') {
+        if (window.toast?.show) {
+          window.toast.show(message, { type, duration: 2000 });
+        }
       }
 
-      timeoutId = window.setTimeout(() => {
-        copyIcon.style.cssText = 'opacity:1;transform:scale(1)';
-        checkIcon.style.cssText = 'opacity:0;transform:scale(0.75)';
-        text.textContent = labels.copy;
-        btn.setAttribute('aria-label', labels.ariaDefault);
-        btn.disabled = false;
-        isCopying = false;
-      }, 1500);
-    };
+      async function copyToClipboard(str) {
+        if (!isClipboardSupported) return false;
+        try {
+          await navigator.clipboard.writeText(str);
+          return true;
+        } catch {
+          return false;
+        }
+      }
 
-    const handleCopy = async () => {
-      if (isCopying) return;
-      isCopying = true;
-      const url = btn.getAttribute('data-url') || window.location.href;
-      const success = await copyToClipboard(url);
-      setState(success);
-    };
+      function setState(success) {
+        clearTimeout(timeoutId);
+        btn.disabled = true;
 
-    btn.addEventListener('click', handleCopy);
+        if (success) {
+          copyIcon.style.cssText = 'opacity:0;transform:scale(0.75)';
+          checkIcon.style.cssText = 'opacity:1;transform:scale(1)';
+          text.textContent = labels.copied;
+          btn.setAttribute('aria-label', labels.ariaSuccess);
+          showToast(labels.toastSuccess, 'success');
+        } else {
+          text.textContent = labels.failed;
+          btn.setAttribute('aria-label', labels.ariaFailed);
+          showToast(labels.toastFailed, 'error');
+        }
 
-    document.addEventListener('astro:after-swap', () => {
-      clearTimeout(timeoutId);
-      btn.disabled = false;
-      isCopying = false;
-      btn.setAttribute('data-url', window.location.href);
-      copyIcon.style.cssText = 'opacity:1;transform:scale(1)';
-      checkIcon.style.cssText = 'opacity:0;transform:scale(0.75)';
-      text.textContent = labels.copy;
-      btn.setAttribute('aria-label', labels.ariaDefault);
+        timeoutId = setTimeout(() => {
+          copyIcon.style.cssText = 'opacity:1;transform:scale(1)';
+          checkIcon.style.cssText = 'opacity:0;transform:scale(0.75)';
+          text.textContent = labels.copy;
+          btn.setAttribute('aria-label', labels.ariaDefault);
+          btn.disabled = false;
+          isCopying = false;
+        }, 1500);
+      }
+
+      btn.addEventListener('click', async () => {
+        if (isCopying) return;
+        isCopying = true;
+        const url = btn.dataset.url || window.location.href;
+        const success = await copyToClipboard(url);
+        setState(success);
+      });
     });
-  })();
+  }
+
+  initCopyButtons();
+  document.addEventListener('astro:page-load', initCopyButtons);
+  document.addEventListener('astro:after-swap', initCopyButtons);
 </script>

@@ -1,6 +1,7 @@
 ---
 // src/components/portfolio/PortfolioHeader.astro
 import { formatDate } from "@/lib/utils";
+import { getCurrentLocale, getLabel } from '@/utils/i18n';
 
 interface Props {
   title: string;
@@ -28,8 +29,21 @@ const {
   repoUrl
 } = Astro.props;
 
-const formattedDate = date ? formatDate(date) : "";
-const formattedUpdate = updatedDate ? formatDate(updatedDate) : null;
+const locale = getCurrentLocale(Astro);
+
+const updated_l = getLabel(locale, 'p_updated');
+const featured_l = getLabel(locale, 'p_featured');
+const client_l = getLabel(locale, 'p_client');
+const role_l = getLabel(locale, 'p_role');
+const duration_l = getLabel(locale, 'p_duration');
+const liveDemo_l = getLabel(locale, 'p_liveDemo');
+const sourceCode_l = getLabel(locale, 'p_sourceCode');
+const techStack_l = getLabel(locale, 'p_techStack');
+
+const dateLocale = locale === 'en'? 'en-US' : locale === 'ru'? 'ru-RU' : 'id-ID';
+
+const formattedDate = date? formatDate(date, dateLocale) : "";
+const formattedUpdate = updatedDate? formatDate(updatedDate, dateLocale) : null;
 ---
 
 <header class="space-y-8 my-8">
@@ -46,32 +60,31 @@ const formattedUpdate = updatedDate ? formatDate(updatedDate) : null;
       {formattedUpdate && (
         <>
           <span class="text-(--fg-subtle)" aria-hidden="true">/</span>
-          <span>Diperbarui {formattedUpdate}</span>
+          <span>{updated_l} {formattedUpdate}</span>
         </>
       )}
       {featured && (
         <>
           <span class="text-(--fg-subtle)" aria-hidden="true">/</span>
-          <span class="text-(--accent) font-medium">Unggulan</span>
+          <span class="text-(--accent) font-medium">{featured_l}</span>
         </>
       )}
     </div>
-  </div>
   <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm md:text-[13px] border border-(--border) rounded-(--radius-md) p-4 bg-(--bg-subtle)">
     <div class="space-y-1">
-      <div class="text-[12px] uppercase tracking-wider text-(--fg-subtle) font-mono">Client</div>
+      <div class="text-[12px] uppercase tracking-wider text-(--fg-subtle) font-mono">{client_l}</div>
       <div class="text-(--fg-muted) font-medium">
         {client || "-"}
       </div>
     </div>
     <div class="space-y-1">
-      <div class="text-[12px] uppercase tracking-wider text-(--fg-subtle) font-mono">Role</div>
+      <div class="text-[12px] uppercase tracking-wider text-(--fg-subtle) font-mono">{role_l}</div>
       <div class="text-(--fg-muted) font-medium">
         {role || "-"}
       </div>
     </div>
     <div class="space-y-1">
-      <div class="text-[12px] uppercase tracking-wider text-(--fg-subtle) font-mono">Duration</div>
+      <div class="text-[12px] uppercase tracking-wider text-(--fg-subtle) font-mono">{duration_l}</div>
       <div class="text-(--fg-muted) font-medium">
         {duration || "-"}
       </div>
@@ -87,7 +100,7 @@ const formattedUpdate = updatedDate ? formatDate(updatedDate) : null;
           rel="noopener noreferrer"
           class="px-4 py-2 rounded-(--radius-md) border border-(--border) hover:border-(--border-strong) bg-(--bg) focus:outline-none focus:ring-2 focus:ring-(--border-strong)"
         >
-          Live Demo
+          {liveDemo_l}
         </a>
       )}
       {repoUrl && (
@@ -97,7 +110,7 @@ const formattedUpdate = updatedDate ? formatDate(updatedDate) : null;
           rel="noopener noreferrer"
           class="px-4 py-2 rounded-(--radius-md) border border-(--border) hover:border-(--border-strong) bg-(--bg-subtle) focus:outline-none focus:ring-2 focus:ring-(--border-strong)"
         >
-          Source Code
+          {sourceCode_l}
         </a>
       )}
     </div>
@@ -106,7 +119,7 @@ const formattedUpdate = updatedDate ? formatDate(updatedDate) : null;
   {techStack.length > 0 && (
     <div class="space-y-3">
       <div class="text-xs md:text-sm uppercase tracking-wider text-(--fg) font-mono text-center">
-        Tech Stack
+        {techStack_l}
       </div>
       <div class="flex flex-wrap justify-center gap-2">
         {techStack.map((tech: string) => (

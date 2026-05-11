@@ -1,14 +1,17 @@
 ---
 // src/components/portfolio/PortfolioCard.astro
 import type { CollectionEntry } from "astro:content";
-import { formatDateCompact, generateExcerpt } from "@/lib/utils";
+import { formatDateCompact, generateExcerpt, slugify } from "@/lib/utils";
+import { getCurrentLocale, localizePath, getLabel } from "@/utils/i18n";
 
 interface Props {
   project: CollectionEntry<"portfolio">;
 }
 
 const { project } = Astro.props;
-const { id, data } = project;
+const locale = getCurrentLocale(Astro);
+
+const { data } = project;
 
 const {
   title,
@@ -17,10 +20,20 @@ const {
 } = data;
 
 const excerpt = generateExcerpt(project.body || '', 140);
+
+const dateLocale = locale === 'en'? 'en-US' : locale === 'ru'? 'ru-RU' : 'id-ID';
+const formattedDate = formatDateCompact(pubDate, dateLocale);
+
+const autoSlug = slugify(title);
+const postUrl = localizePath(`/portfolio/${autoSlug}/`, locale);
+
+const perfLabel = getLabel(locale, 'perf');
+const a11yLabel = getLabel(locale, 'a11y');
+const seoLabel = getLabel(locale, 'seo');
 ---
 
 <a 
-  href={`/portfolio/${id}/`}
+  href={postUrl}
   class="group block relative"
 >
   <div class="space-y-3">
@@ -29,7 +42,7 @@ const excerpt = generateExcerpt(project.body || '', 140);
       <div class="flex gap-3 pt-2">
         {metrics.performance && (
           <div class="flex items-center gap-1">
-            <span class="text-[13px] text-(--fg-subtle)">PERF</span>
+            <span class="text-[13px] text-(--fg-subtle)">{perfLabel}</span>
             <span class="text-[13px] font-semibold text-(--accent)">
               {metrics.performance}
             </span>
@@ -37,7 +50,7 @@ const excerpt = generateExcerpt(project.body || '', 140);
         )}
         {metrics.accessibility && (
           <div class="flex items-center gap-1">
-            <span class="text-[13px] text-(--fg-subtle)">A11Y</span>
+            <span class="text-[13px] text-(--fg-subtle)">{a11yLabel}</span>
             <span class="text-[13px] font-semibold text-(--accent)">
               {metrics.accessibility}
             </span>
@@ -45,7 +58,7 @@ const excerpt = generateExcerpt(project.body || '', 140);
         )}
         {metrics.seo && (
           <div class="flex items-center gap-1">
-            <span class="text-[13px] text-(--fg-subtle)">SEO</span>
+            <span class="text-[13px] text-(--fg-subtle)">{seoLabel}</span>
             <span class="text-[13px] font-semibold text-(--accent)">
               {metrics.seo}
             </span>
@@ -54,13 +67,13 @@ const excerpt = generateExcerpt(project.body || '', 140);
       </div>
     )}
       <time datetime={pubDate.toISOString()}>
-        {formatDateCompact(pubDate)}
+        {formattedDate}
       </time>
     </div>
     <h3 class="text-lg md:text-xl font-semibold tracking-tight text-(--fg) leading-tight">
       {title}
     </h3>
-    <p class="text-sm md:text-[13px] leading-relaxed line-clamp-3">
+    <p class="text-[13px] md:text-sm leading-relaxed line-clamp-3">
       {excerpt}
     </p>
   </div>

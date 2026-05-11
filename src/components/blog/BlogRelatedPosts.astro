@@ -25,7 +25,6 @@ const locale = getCurrentLocale(Astro);
       {posts.map(post => (
         <RelatedPostCard 
           post={post}
-          ariaLabelPrefix={getLabel(locale, 'readArticle')}
         />
       ))}
     </div>

@@ -2,23 +2,27 @@
 // src/components/portfolio/PortfolioRelated.astro
 import type { CollectionEntry } from 'astro:content';
 import PortfolioCard from './PortfolioCard.astro';
+import { getCurrentLocale, getLabel } from '@/utils/i18n';
 
 interface Props {
   projects: CollectionEntry<'portfolio'>[];
 }
 
 const { projects } = Astro.props;
+const locale = getCurrentLocale(Astro);
+
+const relatedProjects = getLabel(locale, 'pr_relatedProjects');
+
 ---
 
 {projects.length > 0 && (
   <div class="mt-10 pt-6 border-t border-(--border)">
     <div class="flex items-center gap-2 mb-4">
-      <h2 class="text-sm md:text-[13px] font-semibold text-(--fg)">
-        Proyek terkait
+      <h2 class="text-sm md:text- font-semibold text-(--fg)">
+        {relatedProjects}
       </h2>
-      <div class="h-px flex-1 bg-linear-to-r from-zinc-200 to-transparent dark:from-zinc-800/50"></div>
     </div>
-    
+
     <div class="space-y-0 divide-y divide-(--border)">
       {projects.map(project => (
         <PortfolioCard project={project} />

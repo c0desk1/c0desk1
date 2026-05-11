@@ -1,4 +1,3 @@
-import { visit } from "unist-util-visit";
 import type { CollectionEntry } from "astro:content";
 
 /* ================================
@@ -130,55 +129,6 @@ export function getSmartRelatedProjects(
     .sort((a, b) => b.score - a.score)
     .slice(0, limit)
     .map((item) => item.project);
-}
-
-/* ================================
-   AUTO INTERNAL LINK ENGINE
-================================ */
-
-export function remarkInternalLinks(allPosts: BlogPost[]) {
-  const keywordMap: Record<string, string> = {};
-  
-  allPosts.forEach((post) => {
-    const slug = `/blog/${post.id}/`;
-    const words = post.data.title
-      .toLowerCase()
-      .replace(/[^\w\s]/g, "")
-      .split(/\s+/)
-      .filter((w: string) => w.length >= 4);
-
-    words.forEach((word: string) => {
-      if (!keywordMap[word]) keywordMap[word] = slug;
-    });
-  });
-
-  const sortedKeywords = Object.keys(keywordMap).sort((a, b) => b.length - a.length);
-  
-  return (tree: any) => {
-    visit(tree, "text", (node, index, parent) => {
-      if (!parent || ["link", "code", "inlineCode", "heading"].includes(parent.type)) {
-        return;
-      }
-
-      let value = node.value;
-      let hasChange = false;
-
-      for (const keyword of sortedKeywords) {
-        const url = keywordMap[keyword];
-        const regex = new RegExp(`\\b(${keyword})\\b`, "gi");
-
-        if (regex.test(value)) {
-          value = value.replace(regex, `<a href="${url}" class="internal-link">〄 $1</a>`);
-          hasChange = true;
-        }
-      }
-
-      if (hasChange) {
-        node.type = "html";
-        node.value = value;
-      }
-    });
-  };
 }
 
 /* ================================

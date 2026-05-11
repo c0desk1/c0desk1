@@ -4,6 +4,7 @@ export const i18nConfig = {
 
   labels: {
     id: {
+      languageAria: "Pilih bahasa",
       home: "Beranda",
       blog: "Blog",
       portfolio: "Portfolio",
@@ -23,6 +24,8 @@ export const i18nConfig = {
       
       pageNavigation: "Navigasi Halaman",
       articleHeader: "Judul Artikel",
+      contentCreator: "Pembuat Konten",
+      skipToContent: "loncat ke konten utama",
       
       backToTop: "Kembali ke atas",
 
@@ -38,11 +41,64 @@ export const i18nConfig = {
       avatarOf: "Avatar dari",
       readAlso: "Baca juga.",
       readArticle: "Baca artikel",
+      lastUpdated: "Terakhir diperbarui",
+
+      // HOMEPAGE //
+      HeroTitle: "Creative.",
+      HeroHighlight: "engineer",
+      HeroDesc: "Eksplorasi workflow digital, AI tools, musik, anime, dan game dari perspektif kreator modern di era otomatisasi.",
 
       // BLOG //
+      blogPageTitle: "Blog & Insights",
+      blogPageDescription: "Catatan dari balik layar tentang sistem, kreativitas, dan eksplorasi dunia digital modern.",
+      blogHeroTitle: "Blog",
+      blogHeroHighlight: "& insights.",
+      blogHeroDesc: "Catatan dari balik layar tentang sistem, kreativitas, dan hal-hal yang gue anggap menarik. Sebuah jurnal untuk setiap fragmen yang sedang gue pelajari.",
       latestPosts: "Terbaru.",
       noBlogPosts: "Belum ada postingan blog.",
       viewAll: "Lihat semua",
+
+      // PORTFOLIO //
+      portfolioPageTitle: "Portfolio & Projects",
+      portfolioPageDesc: "Koleksi karya digital, mulai dari web application, sistem desain, hingga eksperimen teknologi dan UI/UX modern.",
+      portfolioHeroTitle: "Crafting",
+      portfolioHeroHighlight: "& experiences",
+      portfolioHeroDesc: "Kumpulan projek pengembangan web dan beberapa eksperimen visual.",
+      portfolioFeatured: "Featured Project",
+      portfolioAllProjects: "Semua Project",
+      portfolioEmpty: "Belum ada project yang dipublish.",
+      portfolioHeader: "Header Portfolio",
+      portfolioImageContent: "Gambar Konten Portfolio",
+      portfolioMetricsCase: "Metrik & Studi Kasus Portfolio",
+      portfolioContent: "Konten Portfolio",
+      portfolioGallery: "Galeri",
+      portfolioRelatedContent: "Konten Terkait Portfolio",
+
+      perf: "PERF", 
+      a11y: "A11Y", 
+      seo: "SEO",
+
+      challenge: "Tantangan", 
+      solution: "Solusi", 
+      result: "Hasil",
+
+      // Portfolio Header
+      p_updated: "Diperbarui",
+      p_featured: "Unggulan",
+      p_client: "Klien",
+      p_role: "Peran",
+      p_duration: "Durasi",
+      p_liveDemo: "Demo",
+      p_sourceCode: "Kode Sumber",
+      p_techStack: "Tech Stack",
+
+      // PORTFOLIO RELATED //
+      pr_relatedProjects: "Proyek terkait",
+
+      // PORTFOLIO METRICS //
+      pm_performance: "Performa",
+      pm_accessibility: "Aksesibilitas",
+      pm_seo: "SEO",
 
       // CATEGORY TAB //
       all: "Semua",
@@ -158,8 +214,16 @@ export const i18nConfig = {
       themeSystem: 'Ikuti sistem',
       themeLight: 'Tema terang',
       themeDark: 'Tema gelap',
+
+      // SHARE POST //
+      share: "Bagikan",
+      shareArticle: "Bagikan artikel ini",
+      otherPlatforms: "Platform lainnya",
+      more: "Lainnya",
+      shareTo: "Bagikan ke",
     },
     en: {
+      languageAria: "Select language",
       home: "Home",
       blog: "Blog",
       portfolio: "Portfolio",
@@ -179,8 +243,11 @@ export const i18nConfig = {
       
       pageNavigation: "Page Navigation",
       articleHeader: "Article Header",
+      contentCreator: "Content Creator",
+      skipToContent: "skip to main content",
       
       backToTop: "Back to top",
+      lastUpdated: "Last updated",
 
       relatedArticles: "Related articles",
       articleNavigation: "Article Navigation",
@@ -194,10 +261,60 @@ export const i18nConfig = {
       readAlso: "Read also.",
       readArticle: "Read article",
 
+      // HOMEPAGE //
+      HeroTitle: "Creative.",
+      HeroHighlight: "engineer",
+      HeroDesc: "Exploring digital workflows, AI tools, music, anime, and games from the perspective of a modern creator in the automation era.",
+
       // BLOG //
+      blogPageTitle: "Blog & Insights",
+      blogPageDescription: "Behind-the-scenes notes on systems, creativity, and modern digital exploration.",
+      blogHeroTitle: "Blog",
+      blogHeroHighlight: "& insights.",
+      blogHeroDesc: "Behind-the-scenes notes on systems, creativity, and things I find interesting. A journal for every fragment I'm learning.",
       latestPosts: "Latest.",
       noBlogPosts: "No blog posts yet.",
       viewAll: "View all",
+
+      // PORTFOLIO //
+      portfolioPageTitle: "Portfolio & Projects",
+      portfolioPageDesc: "A collection of digital works, from web applications, design systems, to tech experiments and modern UI/UX.",
+      portfolioHeroTitle: "Crafting",
+      portfolioHeroHighlight: "& experiences",
+      portfolioHeroDesc: "A collection of web development projects and visual experiments.",
+      portfolioFeatured: "Featured Project",
+      portfolioAllProjects: "All Projects",
+      portfolioEmpty: "No projects published yet.",
+      portfolioHeader: "Portfolio Header",
+      portfolioImageContent: "Portfolio Image Content",
+      portfolioMetricsCase: "Portfolio Metrics & Case Study",
+      portfolioContent: "Portfolio Content",
+      portfolioGallery: "Gallery",
+      portfolioRelatedContent: "Portfolio Related Content",
+      perf: "PERF", 
+      a11y: "A11Y", 
+      seo: "SEO",
+      challenge: "Challenge", 
+      solution: "Solution", 
+      result: "Result",
+
+      // Portfolio Header
+      p_updated: "Updated",
+      p_featured: "Featured",
+      p_client: "Client",
+      p_role: "Role",
+      p_duration: "Duration",
+      p_liveDemo: "Live Demo",
+      p_sourceCode: "Source Code",
+      p_techStack: "Tech Stack",
+
+      // PORTFOLIO RELATED //
+      pr_relatedProjects: "Related Projects",
+
+      // PORTFOLIO METRICS //
+      pm_performance: "Performance",
+      pm_accessibility: "Accessibility",
+      pm_seo: "SEO",
 
       // CATEGORY TAB //
       all: "All",
@@ -313,9 +430,17 @@ export const i18nConfig = {
       themeSystem: 'System',
       themeLight: 'Light',
       themeDark: 'Dark',
+
+      // SHARE POST //
+      share: "Share",
+      shareArticle: "Share this article",
+      otherPlatforms: "Other platforms",
+      more: "More",
+      shareTo: "Share to",
     },
     ru: {
-      home: "дом",
+      languageAria: "Выберите язык",
+      home: "Главная",
       blog: "Блог",
       portfolio: "Портфолио",
       about: "О нас",
@@ -334,10 +459,13 @@ export const i18nConfig = {
       
       pageNavigation: "навигация по страницам",
       articleHeader: "Заголовок статьи",
+      contentCreator: "Создатель контента",
       
-      backToTop: "Вернуться наверх",
+      backToTop: "Наверх",
+      skipToContent: "перейти к основному содержимому",
 
       relatedArticles: "Статьи по теме",
+      lastUpdated: "Последнее обновление",
       
       articleNavigation: "Навигация по статьям",
       previous: "Предыдущий",
@@ -350,10 +478,60 @@ export const i18nConfig = {
       readAlso: "Читайте также.",
       readArticle: "Читать статью",
 
+      // HOMEPAGE //
+      HeroTitle: "Креативный.",
+      HeroHighlight: "инженер",
+      HeroDesc: "Исследование цифровых рабочих процессов, ИИ-инструментов, музыки, аниме и игр с точки зрения современного творца в эпоху автоматизации.",
+
       // BLOG //
+      blogPageTitle: "Блог и инсайты",
+      blogPageDescription: "Закулисные заметки о системах, творчестве и исследовании современного цифрового мира.",
+      blogHeroTitle: "Блог",
+      blogHeroHighlight: "и инсайты.",
+      blogHeroDesc: "Закулисные заметки о системах, творчестве и вещах, которые я нахожу интересными. Журнал для каждого фрагмента, который я изучаю.",
       latestPosts: "Последнее.",
       noBlogPosts: "Пока нет записей в блоге.",
       viewAll: "Смотреть все",
+
+      // PORTFOLIO //
+      portfolioPageTitle: "Портфолио и проекты",
+      portfolioPageDesc: "Коллекция цифровых работ: от веб-приложений и дизайн-систем до технологических экспериментов и современного UI/UX.",
+      portfolioHeroTitle: "Создаю",
+      portfolioHeroHighlight: "опыт",
+      portfolioHeroDesc: "Коллекция проектов веб-разработки и визуальных экспериментов.",
+      portfolioFeatured: "Избранный проект",
+      portfolioAllProjects: "Все проекты",
+      portfolioEmpty: "Пока нет опубликованных проектов.",
+      portfolioHeader: "Заголовок портфолио",
+      portfolioImageContent: "Изображение портфолио",
+      portfolioMetricsCase: "Метрики и кейс-стади портфолио",
+      portfolioContent: "Контент портфолио",
+      portfolioGallery: "Галерея",
+      portfolioRelatedContent: "Связанный контент портфолио",
+      perf: "ПРОИЗВ", 
+      a11y: "ДОСТУП", 
+      seo: "SEO",
+      challenge: "Задача", 
+      solution: "Решение", 
+      result: "Результат",
+
+      // Portfolio Header
+      p_updated: "Обновлено",
+      p_featured: "Избранное",
+      p_client: "Клиент",
+      p_role: "Роль",
+      p_duration: "Продолжительность",
+      p_liveDemo: "Демо",
+      p_sourceCode: "Исходный код",
+      p_techStack: "Стек технологий",
+
+      // PORTFOLIO RELATED //
+      pr_relatedProjects: "Похожие проекты",
+
+      // PORTFOLIO METRICS //
+      pm_performance: "Производительность",
+      pm_accessibility: "Доступность",
+      pm_seo: "SEO",
 
       // CATEGORY TAB //
       all: "Все",
@@ -469,7 +647,14 @@ export const i18nConfig = {
       themeSystem: 'Как в системе',
       themeLight: 'Светлая',
       themeDark: 'Тёмная',
-    }
+
+      // SHARE POST //
+      share: "Поделиться",
+      shareArticle: "Поделиться статьей",
+      otherPlatforms: "Другие платформы",
+      more: "Ещё",
+      shareTo: "Поделиться в",
+    },
   }
 } as const;
 

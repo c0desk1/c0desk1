@@ -1,6 +1,7 @@
 ---
 // src/components/portfolio/PortfolioMetrics.astro
 import Container from "../ui/Container.astro";
+import { getCurrentLocale, getLabel } from '@/utils/i18n';
 
 interface Metric {
   label: string;
@@ -16,17 +17,23 @@ interface Props {
 }
 
 const { metrics } = Astro.props;
+const locale = getCurrentLocale(Astro);
+
+
+const performance_l = getLabel(locale, 'pm_performance');
+const accessibility_l = getLabel(locale, 'pm_accessibility');
+const seo_l = getLabel(locale, 'pm_seo');
 
 const items: Metric[] = [
-  { label: "Performa", value: metrics?.performance },
-  { label: "Aksebilitas", value: metrics?.accessibility },
-  { label: "SEO", value: metrics?.seo },
+  { label: performance_l, value: metrics?.performance },
+  { label: accessibility_l, value: metrics?.accessibility },
+  { label: seo_l, value: metrics?.seo },
 ].filter((m) => typeof m.value === "number");
 ---
 
 {items.length > 0 && (
   <div class="border-b border-(--border)">
-    <Container size="md" class="py-8 md:py-10">
+    <Container size="md" class="py-8">
       <div class="grid grid-cols-3 gap-6 md:gap-10 text-center">
         {items.map((item) => (
           <div class="group space-y-2">
@@ -36,10 +43,10 @@ const items: Metric[] = [
               </span>
               <span class="text-xs text-(--fg-muted) ml-1">%</span>
             </div>
-            
+
             <div class="flex items-center justify-center gap-2">
               <span class="h-1 w-1 rounded-full bg-(--accent) animate-pulse"></span>
-              <span class="text-sm md:text-[13px] text-(--fg-muted)">
+              <span class="text-sm md:text- text-(--fg-muted)">
                 {item.label}
               </span>
             </div>

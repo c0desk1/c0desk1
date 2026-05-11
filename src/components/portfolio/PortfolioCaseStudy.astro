@@ -1,5 +1,6 @@
 ---
 import Icon from '@/components/ui/Icon'
+import { getCurrentLocale, getLabel } from '@/utils/i18n'
 
 interface Props {
   challenge?: string;
@@ -8,6 +9,11 @@ interface Props {
   allowMultiple?: boolean;
 }
 const { challenge, solution, result, allowMultiple = true } = Astro.props;
+const locale = getCurrentLocale(Astro);
+
+const challengeLabel = getLabel(locale, 'challenge');
+const solutionLabel = getLabel(locale, 'solution');
+const resultLabel = getLabel(locale, 'result');
 
 interface Item {
   question: string;
@@ -15,14 +21,14 @@ interface Item {
 }
 
 const items: Item[] = [];
-if (challenge) items.push({ question: "Tantangan", answer: challenge });
-if (solution) items.push({ question: "Solusi", answer: solution });
-if (result) items.push({ question: "Hasil", answer: result });
+if (challenge) items.push({ question: challengeLabel, answer: challenge });
+if (solution) items.push({ question: solutionLabel, answer: solution });
+if (result) items.push({ question: resultLabel, answer: result });
 ---
 
 {items.length > 0 && (
   <div
-    class="accordion not-prose mx-auto max-w-3xl my-8"
+    class="accordion not-prose my-8"
     data-allow-multiple={allowMultiple? "true" : "false"}
   >
     {items.map((item, i) => (
@@ -35,7 +41,6 @@ if (result) items.push({ question: "Hasil", answer: result });
         >
           <span class="accordion-question text-sm md:text-[13px] font-semibold uppercase text-(--fg)">{item.question}</span>
           <Icon name="chevron-down" className="accordion-chevron w-4.5 h-4.5 shrink-0 text-(--fg)" />
-
         </button>
         <div
           class="accordion-panel"
@@ -85,7 +90,7 @@ if (result) items.push({ question: "Hasil", answer: result });
     color: var(--fg-subtle);
     transition: transform 200ms ease;
   }
-.accordion-trigger[aria-expanded="true"] .accordion-chevron {
+.accordion-trigger[aria-expanded="true"].accordion-chevron {
     transform: rotate(180deg);
   }
 

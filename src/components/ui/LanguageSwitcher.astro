@@ -1,7 +1,7 @@
 ---
 // src/components/LanguageSwitcher.astro
 import { siteConfig } from "@/config/site";
-import { getCurrentLocale, localizePath } from "@/utils/i18n";
+import { getCurrentLocale, getLabel, localizePath } from "@/utils/i18n";
 
 interface Props {
   alternateSlugs?: Record<string, string>;
@@ -12,9 +12,11 @@ const { alternateSlugs, basePath = "" } = Astro.props;
 const locale      = getCurrentLocale(Astro);
 const isPostPage  = !!alternateSlugs;
 const currentPath = Astro.url.pathname.replace(/^\/(en|ru)/, "") || "/";
+
+const AriaLabel = getLabel(locale, 'languageAria')
 ---
 
-<div class="ls-root" role="group" aria-label="Pilih bahasa">
+<div class="ls-root" role="group" aria-label={AriaLabel}>
   {siteConfig.locales.map((loc) => {
     let href: string;
 
