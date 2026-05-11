@@ -24,18 +24,27 @@ import { filterHeadingsForTOC, getReadingTime, slugify } from "@/lib/utils";
 import { getSmartRelatedPosts } from "@/lib/botEngine";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog", ({ data }) => !data.draft);
-  
-  return posts.flatMap((post: CollectionEntry<"blog">) => {
+  const posts = await getCollection("blog", ({ data }) =>!data.draft);
+
+  return posts.map((post) => {
     const lang = post.data.lang || 'id';
-    const autoSlug = slugify(post.data.title);
-    
+    const urlSlug = slugify(post.data.title);
+    const baseId = post.id.split('/')[0];
+    const alternates = posts.filter(p => p.id.startsWith(baseId + '/'));
+
+    const alternateSlugs = Object.fromEntries(
+      alternates.map(p => [
+        p.data.lang || 'id',
+        slugify(p.data.title)
+      ])
+    );
+
     return {
-      params: { 
-        locale: lang === 'id' ? undefined : lang, 
-        slug: autoSlug 
+      params: {
+        locale: lang === 'id'? undefined : lang,
+        slug: urlSlug
       },
-      props: { post }
+      props: { post, alternateSlugs }
     };
   });
 }
