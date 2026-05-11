@@ -1,6 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import { siteConfig } from './src/config/site.ts';
+import { siteConfig } from './src/config/site';
 
 import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
