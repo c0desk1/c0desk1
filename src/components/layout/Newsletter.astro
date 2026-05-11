@@ -291,20 +291,20 @@ const toastMessages = {
   }
 </style>
 
-<script>
+<script define:vars={{ toastMessages }}>
   (() => {
-    const form      = document.getElementById('nls-form') as HTMLFormElement | null;
-    const emailEl   = document.getElementById('nls-email') as HTMLInputElement | null;
-    const submitBtn = document.getElementById('nls-submit') as HTMLButtonElement | null;
-    const field     = document.getElementById('nls-field') as HTMLElement | null;
-    const formState = document.getElementById('nls-form-state') as HTMLElement | null;
-    const successEl = document.getElementById('nls-success') as HTMLElement | null;
+    const form = document.getElementById('nls-form');
+    const emailEl = document.getElementById('nls-email');
+    const submitBtn = document.getElementById('nls-submit');
+    const field = document.getElementById('nls-field');
+    const formState = document.getElementById('nls-form-state');
+    const successEl = document.getElementById('nls-success');
 
-    if (!form || !emailEl || !submitBtn) return;
+    if (!form ||!emailEl ||!submitBtn) return;
 
-    const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+    const isValidEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
-    const setLoading = (on: boolean) => {
+    const setLoading = (on) => {
       submitBtn.disabled = on;
       submitBtn.classList.toggle('is-loading', on);
     };
@@ -321,9 +321,9 @@ const toastMessages = {
       e.preventDefault();
 
       const email = emailEl.value.trim();
-      const toast = (window as any).toast;
+      const toast = window.toast;
 
-      if (!email || !isValidEmail(email)) {
+      if (!email ||!isValidEmail(email)) {
         shake();
         emailEl.focus();
         toast?.show?.(toastMessages.invalid, { type: 'error' });
@@ -333,16 +333,16 @@ const toastMessages = {
       setLoading(true);
 
       try {
-        const res  = await fetch('https://api.c0desk1.my.id/api/newsletter', {
-          method:  'POST',
+        const res = await fetch('https://api.c0desk1.my.id/api/newsletter', {
+          method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify({ email }),
+          body: JSON.stringify({ email }),
         });
 
         if (!res.ok) {
           shake();
           const msg = res.status === 409
-            ? toastMessages.exists
+           ? toastMessages.exists
             : toastMessages.error;
           toast?.show?.(msg, { type: 'error' });
           return;
