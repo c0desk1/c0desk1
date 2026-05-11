@@ -51,7 +51,7 @@ const labels = {
           <span id="ic-pause">
             <Icon name="pause" className="w-4.5 h-4.5" />
           </span>
-          <span id="ic-play">
+          <span id="ic-play" style="display: none">
             <Icon name="play" className="w-4.5 h-4.5" />
           </span>
         </button>
@@ -358,8 +358,10 @@ const labels = {
         speakAt(currentIdx);
         return;
       }
-      if (!isPlaying &&!isPaused) return;
-      if (synth.paused || isPaused) {
+
+      if (!synth.speaking && !isPaused) return;
+
+      if (synth.paused) {
         synth.resume();
         isPaused = false;
         isPlaying = true;
@@ -376,7 +378,7 @@ const labels = {
 
     document.addEventListener('visibilitychange', () => {
       if (document.hidden && isPlaying) {
-        synth.cancel();
+        synth.pause();
         wasStoppedByBrowser = true;
         isPlaying = false;
         isPaused = true;
