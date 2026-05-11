@@ -1,24 +1,24 @@
 ---
 // src/components/blog/PostCard.astro
-
 import type { CollectionEntry } from 'astro:content';
 import { getEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 import { siteConfig } from '@/config/site';
+import { getCurrentLocale, localizePath } from '@/utils/i18n';
 import { generateExcerpt, formatDateCompact, cdnImage, isCdnUrl } from '@/lib/utils';
 
 interface Props {
   post?: CollectionEntry<'blog'>;
-  loading?: boolean;
 }
 
 const { post } = Astro.props;
+const locale = getCurrentLocale(Astro);
 
 let title = '', excerpt = '', categoryName = '', pubDateISO = '', pubDateDisplay = '';
 let authorName = '', authorAvatar = '', optimizedAvatar = '', postUrl = '';
 
 if (post) {
-  const { data, id } = post;
+  const { data, slug } = post;
   const { title: t, pubDate, category, author } = data;
   title = t;
   excerpt = generateExcerpt(post.body || '', 140);
@@ -28,13 +28,14 @@ if (post) {
 
   categoryName    = categoryEntry?.data.name || 'General';
   pubDateISO      = pubDate.toISOString();
-  pubDateDisplay  = formatDateCompact(pubDate);
+  pubDateDisplay  = formatDateCompact(pubDate, locale);
   authorName      = authorEntry?.data.name   || siteConfig.author.name;
   authorAvatar    = authorEntry?.data.avatar || siteConfig.author.avatar;
   optimizedAvatar = isCdnUrl(authorAvatar)
     ? cdnImage(authorAvatar, { w: 48, h: 48, q: 80 })
     : authorAvatar;
-  postUrl = `/blog/${id}/`;
+  
+  postUrl = localizePath(`/blog/${slug}/`, locale);
 }
 ---
 
