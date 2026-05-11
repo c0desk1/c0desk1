@@ -5,7 +5,7 @@ export const prerender = true;
 import { getCollection } from "astro:content";
 import { cn, sortByDate } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
-import { getCurrentLocale } from "@/utils/i18n";
+import { getCurrentLocale, getLabel } from "@/utils/i18n";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
@@ -34,44 +34,19 @@ const allCategories = await getCollection("categories", ({ data }) =>
   data.lang === locale
 );
 
-const pageTexts = {
-  id: {
-    title: "Blog & Insights",
-    description: "Catatan dari balik layar tentang sistem, kreativitas, dan eksplorasi dunia digital modern.",
-    heroTitle: "Blog",
-    heroHighlight: "& insights.",
-    heroDesc: "Catatan dari balik layar tentang sistem, kreativitas, dan hal-hal yang gue anggap menarik. Sebuah jurnal untuk setiap fragmen yang sedang gue pelajari.",
-    latest: "Terbaru."
-  },
-  en: {
-    title: "Blog & Insights",
-    description: "Behind-the-scenes notes on systems, creativity, and modern digital exploration.",
-    heroTitle: "Blog",
-    heroHighlight: "& insights.",
-    heroDesc: "Behind-the-scenes notes on systems, creativity, and things I find interesting. A journal for every fragment I'm learning.",
-    latest: "Latest."
-  },
-  ru: {
-    title: "Блог и инсайты",
-    description: "Закулисные заметки о системах, творчестве и исследовании современного цифрового мира.",
-    heroTitle: "Блог",
-    heroHighlight: "и инсайты.",
-    heroDesc: "Закулисные заметки о системах, творчестве и вещах, которые я нахожу интересными. Журнал для каждого фрагмента, который я изучаю.",
-    latest: "Последнее."
-  }
-}
-
-const t = pageTexts[locale];
-
 const siteURL = Astro.site?.toString()?? siteConfig.siteUrl;
 const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
 const seoData = {
-  title: t.title,
-  description: t.description,
+  title: getLabel(locale, 'blogPageTitle'),
+  description: getLabel(locale, 'blogPageDescription'),
   type: "website" as const,
   canonicalURL,
 };
+
+const Herotitle = getLabel(locale, 'blogHeroTitle');
+const HeroHighlight = getLabel(locale, 'blogHeroHighlight');
+const HeroDescription = getLabel(locale, 'blogHeroDesc');
 ---
 
 <BaseLayout {...seoData}>
@@ -89,9 +64,9 @@ const seoData = {
       <div class="pointer-events-none absolute inset-0 flex items-center justify-center bg-white mask-[radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black" />
       <Container size="full" class="relative z-20 items-center">
         <Hero
-          title={t.heroTitle}
-          highlight={t.heroHighlight}
-          description={t.heroDesc}
+          title={Herotitle}
+          highlight={HeroHighlight}
+          description={HeroDescription}
         />
       </Container>
     </div>
@@ -115,7 +90,7 @@ const seoData = {
     <Container size="xl">
       <div class="flex items-center mb-6 md:mb-8">
         <h2 class="text-3xl md:text-4xl font-semibold tracking-tight text-(--fg)">
-          {t.latest}
+          {getLabel(locale, 'latestPosts')}
         </h2>
       </div>
       <CategoryTabs posts={regularPosts} categories={allCategories} />
