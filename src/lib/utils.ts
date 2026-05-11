@@ -128,31 +128,16 @@ export function generateExcerpt(content: string, maxLength: number = 160): strin
 
 // ==================== READING TIME ====================
 
-export function calculateReadingTime(
-  content: string,
-  wordsPerMinute: number = 200
-): string {
-  if (!content?.trim()) return '1 menit baca';
-
-  const words = content.trim().split(/\s+/).length;
-  const minutes = Math.max(1, Math.ceil(words / wordsPerMinute));
-
-  return minutes === 1
-    ? '1 menit baca'
-    : `${minutes} menit baca`;
-}
-
 export function getReadingTime(
   content?: string,
   locale: 'id' | 'en' | 'ru' = 'id'
 ): string {
   const suffix = locale === 'id'? 'menit baca' : locale === 'ru'? 'мин чтения' : 'min read';
 
-  if (!content?.trim()) {
-    return `1 ${suffix}`;
-  }
+  if (!content?.trim()) return `1 ${suffix}`;
 
-  const words = content.trim().split(/\s+/).length;
+  const cleanText = generateExcerpt(content, 999999);
+  const words = cleanText.trim().split(/\s+/).length;
   const minutes = Math.max(1, Math.ceil(words / 200));
 
   return minutes === 1
