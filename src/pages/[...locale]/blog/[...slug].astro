@@ -69,7 +69,14 @@ const currentIndex = sortedPosts.findIndex(p => p.id === post.id);
 const prevPost = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
 const nextPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
 
-const siteData = siteConfig;
+let settings;
+try {
+  settings = await getEntry('settings', 'site');
+} catch (error) {
+  console.warn('Settings not found, using siteConfig fallback');
+}
+
+const siteData = settings?.data || siteConfig;
 
 const authorEntry = await getEntry(post.data.author);
 const categoryEntry = await getEntry(post.data.category);
