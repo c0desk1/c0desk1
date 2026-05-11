@@ -1,31 +1,43 @@
+---
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import { siteConfig } from '@/config/site';
-import type { Locale, LabelKey } from '@/config/site';
+import { getCurrentLocale } from '@/utils/i18n';
 
-export function getLocalizedUrl(locale: Locale, path: string) {
-  return getRelativeLocaleUrl(locale, path);
+interface Props {
+  alternateSlugs?: Record<string, string>; // ← terima dari page
 }
 
-export function getLabel(locale: Locale, key: LabelKey): string {
-  return siteConfig.labels[locale][key];
-}
+const { alternateSlugs } = Astro.props;
+const locale = getCurrentLocale(Astro);
+const currentPath = Astro.url.pathname;
 
-export function getSeo(locale: Locale) {
-  return siteConfig.defaultSeo[locale];
-}
+// Deteksi blog post: /blog/ atau /en/blog/ atau /ru/blog/
+const blogMatch = currentPath.match(/^\/(?:(en|ru)\/)?blog\/(.+?)\/?$/);
+const isBlogPost = !!blogMatch;
+---
 
-export function getCurrentLocale(Astro: any): Locale {
-  return Astro.currentLocale || siteConfig.defaultLocale;
-}
+<div class="flex gap-2">
+  {siteConfig.locales.map(loc => {
+    let targetPath = currentPath.replace(/^\/(en|ru)/, '') || '/';
 
-export function localizePath(path: string, locale: string) {
-  if (locale === 'id') return path;
-  return `/${locale}${path === '/'? '' : path}`;
-}
+    // ← Kalau blog post + ada alternateSlugs, ganti slugnya
+    if (isBlogPost && alternateSlugs?.[loc]) {
+      targetPath = `/blog/${alternateSlugs[loc]}/`;
+    }
 
-// Buat check ada terjemahan apa nggak
-export function getAvailableLocales(slug: string, allPosts: any[]) {
-  return siteConfig.locales.filter(loc =>
-    allPosts.some(post => post.slug === `${slug}.${loc}`)
-  );
-}
+    const href = getRelativeLocaleUrl(loc, targetPath);
+
+    return (
+      <a
+        href={href}
+        class={`px-3 py-1 rounded text-sm ${
+          loc === locale
+            ? 'bg-(--bg) text-(--fg) font-bold'
+            : 'bg-(--bg-subtle) text-(--fg) hover:bg-(--bg-muted)'
+        }`}
+      >
+        {loc.toUpperCase()}
+      </a>
+    );
+  })}
+</div>
