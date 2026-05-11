@@ -53,7 +53,6 @@ const { post, alternateSlugs} = Astro.props;
 const { Content, headings } = await render(post);
 
 const locale = getCurrentLocale(Astro);
-const siteData = siteConfig;
 
 const allPosts = await getCollection("blog", ({ data }) => 
   !data.draft && (data.lang || 'id') === locale
@@ -71,6 +70,15 @@ const authorEntry = await getEntry(post.data.author);
 const categoryEntry = await getEntry(post.data.category);
 
 const relatedPosts = getSmartRelatedPosts(post, allPosts, 3);
+
+let settings;
+try {
+  settings = await getEntry('settings', 'site');
+} catch (error) {
+  console.warn('Settings not found, using siteConfig fallback');
+}
+
+const siteData = settings?.data || siteConfig;
 
 const {
   title,
