@@ -7,6 +7,11 @@ import Container from "../ui/Container.astro";
 import SearchButton from "../ui/SearchButton.astro";
 import MenuButton from "@/components/ui/MenuButton.astro";
 import LanguageSwithcer from "@/components/ui/LanguageSwitcher.astro";
+
+interface Props {
+  alternateSlugs?: Record<string, string>;
+}
+const { alternateSlugs } = Astro.props;
 ---
 
 <header id="main-header" class="sticky top-0 z-50 mx-auto w-full bg-(--bg) transition-all duration-300">
