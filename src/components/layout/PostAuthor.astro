@@ -1,9 +1,9 @@
 ---
 // src/components/layout/PostAuthor.astro
-
 import { siteConfig } from '@/config/site';
 import { Image } from 'astro:assets';
 import { cdnImage, isCdnUrl } from '@/lib/utils';
+import { getCurrentLocale, getLabel, localizePath } from "@/utils/i18n";
 
 interface Props {
   name?: string;
@@ -13,23 +13,28 @@ interface Props {
 }
 
 const { name, avatar, title, slug } = Astro.props;
+const locale = getCurrentLocale(Astro);
+
+const authorLabel = getLabel(locale, 'author') || 'Author';
+const avatarOfLabel = getLabel(locale, 'avatarOf') || 'Avatar of';
 
 const authorName = name || siteConfig.author?.name || siteConfig.siteName;
 const authorAvatar = avatar || siteConfig.author?.avatar || siteConfig.siteLogo;
-const authorTitle = title || siteConfig.author?.title || "Author";
+const authorTitle = title || siteConfig.author?.title || authorLabel;
 const authorSlug = slug || siteConfig.author?.slug || "author";
 
+const authorPath = localizePath(`/author/${authorSlug}`, locale);
 const optimizedAvatar = isCdnUrl(authorAvatar) ? cdnImage(authorAvatar, { w: 48, h: 48, q: 80 }) : authorAvatar;
 ---
 <div class="flex items-center gap-2">
-  <a href={`/author/${authorSlug}/`}
-    class="flex items-center gap-2 text-[13px] md:text-sm"
-    aria-label={`Author: ${authorName}`}
+  <a href={authorPath}
+    class="flex items-center gap-2 text- md:text-sm"
+    aria-label={`${authorLabel}: ${authorName}`}
     >
     {authorAvatar && (
       <Image
         src={optimizedAvatar}
-        alt={`Avatar of ${authorName}`}
+        alt={`${avatarOfLabel} ${authorName}`}
         width={48}
         height={48}
         class="w-6 h-6 rounded-full border-2 border-(--border) object-cover"
