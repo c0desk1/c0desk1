@@ -1,14 +1,29 @@
 ---
 // src/components/ui/CopyLink.astro
-import Icon from "./Icon";
+import Icon from "./Icon.astro";
+import { getCurrentLocale, getLabel } from '@/utils/i18n';
+
+const locale = getCurrentLocale(Astro);
+
+const labels = {
+  copy: getLabel(locale, 'copyUrl') || 'Copy URL',
+  copied: getLabel(locale, 'copied') || 'Copied!',
+  failed: getLabel(locale, 'copyFailed') || 'Failed',
+  ariaDefault: getLabel(locale, 'copyUrlAria') || 'Copy article URL',
+  ariaSuccess: getLabel(locale, 'copiedAria') || 'URL copied successfully',
+  ariaFailed: getLabel(locale, 'copyFailedAria') || 'Failed to copy URL',
+  toastSuccess: getLabel(locale, 'copyToastSuccess') || 'URL copied to clipboard!',
+  toastFailed: getLabel(locale, 'copyToastFailed') || 'Failed to copy URL, please try again.',
+};
 ---
 
 <button
   id="copy-link-btn"
-  aria-label="Salin tautan artikel"
+  aria-label={labels.ariaDefault}
   aria-live="polite"
   class="relative text-(--accent-dim) hover:text-(--accent) group active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-200"
-  data-url={Astro.url.href}>
+  data-url={Astro.url.href}
+>
   <div class="flex shrink-0 items-center justify-center gap-1.5">
     <div class="relative w-4 h-4 items-center">
       <span id="icon-copy" class="absolute inset-0 w-full h-full transition-all duration-200">
@@ -19,61 +34,58 @@ import Icon from "./Icon";
       </span>
     </div>
     <span id="copy-text" class="text-[13px] md:text-sm font-medium leading-none">
-      Salin URL
+      {labels.copy}
     </span>
   </div>
 </button>
 
-<script>
+<script define:vars={{ labels }}>
   import { copyToClipboard } from '@/lib/utils';
 
   (() => {
-    if ((window as any).__copyLinkReady) return;
-    (window as any).__copyLinkReady = true;
+    if (window.__copyLinkReady) return;
+    window.__copyLinkReady = true;
 
-    const btn = document.getElementById('copy-link-btn') as HTMLButtonElement;
+    const btn = document.getElementById('copy-link-btn');
     const copyIcon = document.getElementById('icon-copy');
     const checkIcon = document.getElementById('icon-check');
     const text = document.getElementById('copy-text');
 
     if (!btn || !copyIcon || !checkIcon || !text) return;
 
-    let timeoutId: number;
+    let timeoutId;
     let isCopying = false;
 
-    const showToastMessage = (success: boolean) => {
-      const toast = (window as any).toast;
-
+    const showToastMessage = (success) => {
+      const toast = window.toast;
       if (!toast) return;
-
-      if (success) {
-        toast.show('URL disalin ke Clipboard!', { type: 'success', duration: 2000 });
-      } else {
-        toast.show('Gagal menyalin URL, silahkan coba lagi.', { type: 'error', duration: 2000 });
-      }
+      toast.show(
+        success ? labels.toastSuccess : labels.toastFailed,
+        { type: success ? 'success' : 'error', duration: 2000 }
+      );
     };
 
-    const setState = (success: boolean) => {
+    const setState = (success) => {
       clearTimeout(timeoutId);
       btn.disabled = true;
 
       if (success) {
         copyIcon.style.cssText = 'opacity:0;transform:scale(0.75)';
         checkIcon.style.cssText = 'opacity:1;transform:scale(1)';
-        text.textContent = 'Tersalin!';
-        btn.setAttribute('aria-label', 'Url berhasil disalin');
+        text.textContent = labels.copied;
+        btn.setAttribute('aria-label', labels.ariaSuccess);
         showToastMessage(true);
       } else {
-        text.textContent = 'Gagal';
-        btn.setAttribute('aria-label', 'Gagal menyalin URL');
+        text.textContent = labels.failed;
+        btn.setAttribute('aria-label', labels.ariaFailed);
         showToastMessage(false);
       }
 
       timeoutId = window.setTimeout(() => {
         copyIcon.style.cssText = 'opacity:1;transform:scale(1)';
         checkIcon.style.cssText = 'opacity:0;transform:scale(0.75)';
-        text.textContent = 'Salin URL';
-        btn.setAttribute('aria-label', 'Salin URL artikel');
+        text.textContent = labels.copy;
+        btn.setAttribute('aria-label', labels.ariaDefault);
         btn.disabled = false;
         isCopying = false;
       }, 1500);
@@ -82,7 +94,6 @@ import Icon from "./Icon";
     const handleCopy = async () => {
       if (isCopying) return;
       isCopying = true;
-
       const url = btn.getAttribute('data-url') || window.location.href;
       const success = await copyToClipboard(url);
       setState(success);
@@ -97,8 +108,8 @@ import Icon from "./Icon";
       btn.setAttribute('data-url', window.location.href);
       copyIcon.style.cssText = 'opacity:1;transform:scale(1)';
       checkIcon.style.cssText = 'opacity:0;transform:scale(0.75)';
-      text.textContent = 'Salin URL';
-      btn.setAttribute('aria-label', 'Salin Url artikel');
+      text.textContent = labels.copy;
+      btn.setAttribute('aria-label', labels.ariaDefault);
     });
   })();
 </script>
