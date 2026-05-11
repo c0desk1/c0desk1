@@ -1,14 +1,13 @@
 ---
-// src/pages/[slug].astro
-
+// src/pages/[...locale]/[...slug].astro
 export const prerender = true;
 
 import '@/styles/prose/index.css';
-
 import { getEntry, getCollection, render } from 'astro:content';
 import { siteConfig } from '@/config/site';
 import { formatDate } from "@/lib/utils";
 import { components } from '@/components/layout/MDXComponents';
+import { getCurrentLocale, localizePath, getLabel } from "@/utils/i18n";
 
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Container from '@/components/ui/Container.astro';
@@ -16,23 +15,40 @@ import Breadcrumb from '@/components/ui/Breadcrumb.astro';
 import Section from '@/components/ui/Section.astro';
 
 export async function getStaticPaths() {
-  const legalPages = await getCollection('legal');
-  
-  return [
-    ...legalPages.map(page => ({
-      params: { slug: page.id },
-      props: { page },
-    })),
-  ];
+  const legalPages = await getCollection('legal', ({ data }) =>!data.draft);
+
+  return legalPages.map((page) => {
+    // Ambil folder name: Legal/disclaimer/index.id.mdx → 'disclaimer'
+    const pathParts = page.id.split('/');
+    const baseId = pathParts[0]; // 'disclaimer'
+    const lang = page.data.lang || 'id';
+
+    // Cari semua bahasa untuk baseId yang sama
+    const alternates = legalPages.filter(p => p.id.startsWith(baseId + '/'));
+    const alternateSlugs = Object.fromEntries(
+      alternates.map(p => [
+        p.data.lang || 'id',
+        p.id.split('/')[0] // slug folder: 'disclaimer'
+      ])
+    );
+
+    return {
+      params: {
+        locale: lang === 'id'? undefined : lang,
+        slug: baseId
+      },
+      props: { page, alternateSlugs },
+    };
+  });
 }
 
-const { page } = Astro.props;
+const { page, alternateSlugs } = Astro.props;
 if (!page) return Astro.redirect('/404');
 
 const { Content } = await render(page);
+const locale = getCurrentLocale(Astro);
 
 let settings;
-
 try {
   settings = await getEntry('settings', 'site');
 } catch (error) {
@@ -40,37 +56,51 @@ try {
 }
 const siteData = settings?.data || siteConfig;
 
-const siteURL = Astro.site?.toString() ?? siteData.siteUrl;
+const siteURL = Astro.site?.toString()?? siteData.siteUrl;
 const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
-const seoData = {
-  title: page.data.title,
-  description: page.data.description || siteData.siteDescription,
-  type: "website" as const,
-  canonicalURL,
-};
+const seoTitle = page.data.seo?.title || page.data.title;
+const seoDescription = page.data.seo?.description || page.data.description || siteData.siteDescription;
 
-const breadcrumbItems = [
-  { name: 'Home', href: siteURL },
-  { name: page.data.title, href: canonicalURL },
+const homeLabel = getLabel(locale, 'home') || 'Home';
+const legalLabel = getLabel(locale, 'legal') || 'Legal';
+
+// 1. SEO Breadcrumb - FULL
+const SeoBreadcrumbItems = [
+  { name: homeLabel, href: localizePath('/', locale) },
+  { name: legalLabel, href: localizePath('/legal', locale) },
+  { name: page.data.title, href: canonicalURL }
 ];
 
-const formattedLastUpdated = page.data.lastUpdated 
-  ? formatDate(page.data.lastUpdated, 'id-ID')
+// 2. UI Breadcrumb - pendek: Home > Legal
+const Breadcrumbs = [
+  { name: homeLabel, href: localizePath('/', locale) },
+  { name: legalLabel, href: localizePath('/legal', locale) }
+];
+
+const formattedLastUpdated = page.data.lastUpdated
+? formatDate(page.data.lastUpdated, locale === 'id'? 'id-ID' : 'en-US')
   : null;
 ---
 
-<BaseLayout {...seoData}>
+<BaseLayout
+  title={seoTitle}
+  description={seoDescription}
+  type="website"
+  canonicalURL={canonicalURL}
+  seoBreadcrumb={SeoBreadcrumbItems}
+  alternateSlugs={alternateSlugs}
+>
   <Section size="md" class="border-b border-dashed border-(--border)">
     <Container size="md">
-      <Breadcrumb items={breadcrumbItems} />   
+      <Breadcrumb items={Breadcrumbs} />
       <div class="mt-8 text-start md:text-center">
         <h1 class="prose-custom text-3xl md:text-4xl">
           {page.data.title}
         </h1>
         {formattedLastUpdated && (
-          <p class="mt-3 text-[13px] md:text-sm text-(--fg-muted)">
-            Terakhir diperbarui: {formattedLastUpdated}
+          <p class="mt-3 text- md:text-sm text-(--fg-muted)">
+            {getLabel(locale, 'lastUpdated') || 'Terakhir diperbarui'}: {formattedLastUpdated}
           </p>
         )}
       </div>
