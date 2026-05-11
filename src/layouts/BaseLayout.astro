@@ -1,0 +1,179 @@
+---
+// src/layouts/BaseLayout.astro
+
+import "@/styles/global.css";
+
+import { getEntry } from "astro:content";
+import { siteConfig } from "@/config/site";
+
+import BaseHead from "@/components/layout/BaseHead.astro";
+import Header from "@/components/layout/Header.astro";
+import Footer from "@/components/layout/Footer.astro";
+
+import Cookie from "@/components/layout/Cookie.astro";
+import Toast from "@/components/ui/Toast.astro";
+import Container from "@/components/ui/Container.astro";
+import BG from "@/components/ui/BG.astro";
+
+import Search from "@/components/layout/Search.astro";
+import MobileMenu from "@/components/layout/MobileMenu.astro";
+import StatusPanel from "@/components/layout/StatusPanel.astro";
+
+import ThemeScript from "@/components/scripts/ThemeScript.astro";
+import GtagScript from "@/components/scripts/GtagScript.astro";
+import AdsenseScript from "@/components/scripts/AdsenseScript.astro";
+import AnchorScrollScript from "@/components/scripts/AnchorScrollScript.astro";
+import ServiceWorkerScript from "@/components/scripts/ServiceWorkerScript.astro";
+
+import YandexLoader from "@/components/ads/YandexLoader.astro";
+import YandexAds from "@/components/ads/YandexAds.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+
+  image?: {
+    src: string;
+    alt: string;
+  };
+
+  canonicalURL?: URL | string;
+
+  type?:
+    | "website"
+    | "article"
+    | "profile"
+    | "creativeWork";
+
+  noIndex?: boolean;
+
+  publishedTime?: Date;
+  modifiedTime?: Date;
+  tags?: string[];
+
+  category?: {
+    name: string;
+    description?: string;
+    slug: string;
+  };
+
+  author?: {
+    name: string;
+    role: string;
+    avatar: string;
+    bio: string;
+    slug: string;
+  };
+
+  seo?: {
+    title?: string;
+    description?: string;
+    ogImage?: string;
+    canonical?: string;
+    noIndex?: boolean;
+  };
+
+  header?: boolean;
+  footer?: boolean;
+  withContainer?: boolean;
+  size?:
+    | "sm"
+    | "md"
+    | "lg"
+    | "xl"
+    | "full";
+  client?: string;
+  role?: string;
+  duration?: string;
+  demoUrl?: string;
+  repoUrl?: string;
+  alternateSlugs?: Record<string, string>;
+  basePath?: 'blog' | 'portfolio' | 'legal' | '';
+}
+
+const {
+  header = true,
+  footer = true,
+  withContainer = true,
+  size = "full",
+  client,
+  role: creativeWorkRole,
+  duration,
+  demoUrl,
+  repoUrl,
+  alternateSlugs,
+  basePath = '',
+  ...seoProps
+} = Astro.props;
+
+let settings;
+
+try {
+  settings = await getEntry("settings", "site");
+} catch (error) {
+  console.warn(
+    "Settings not found, using siteConfig fallback"
+  );
+}
+
+const siteData =
+  settings?.data || siteConfig;
+
+const GTAG_ID =
+  siteData.googleAnalyticsId ||
+  siteConfig.googleAnalyticsId;
+---
+
+<!DOCTYPE html>
+
+<html
+  lang="id-ID"
+  dir="ltr"
+  class="scroll-smooth antialiased"
+  prefix={seoProps.type === "article" ? "og: https://ogp.me/ns# article: https://ogp.me/ns/article#" : "og: https://ogp.me/ns#"}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <ThemeScript />
+    <BaseHead
+      {...seoProps}
+      siteData={siteData}
+      client={client}
+      role={creativeWorkRole}
+      duration={duration}
+      demoUrl={demoUrl}
+      repoUrl={repoUrl}
+    />
+    <GtagScript id={GTAG_ID} />
+    <YandexLoader />
+  </head>
+  <body>
+    <BG />
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:bg-(--bg) focus:text-(--fg) focus:px-4 focus:py-2 focus:border focus:border-(--border)">
+      loncat ke konten utama
+    </a>
+    <div class="relative z-10 flex min-h-screen flex-col">
+      {header && <Header alternateSlugs={alternateSlugs} basePath={basePath} />}
+      <main id="main-content">
+        {withContainer ? (
+            <Container size={size}>
+              <slot />
+            </Container>
+          ) : (
+            <slot />
+          )
+        }
+      </main>
+      <Search />
+      <YandexAds />
+      {footer && <Footer />}
+    </div>
+    <div id="modal-root"></div>
+    <StatusPanel />
+    <Cookie />
+    <MobileMenu />
+    <AnchorScrollScript />
+    <ServiceWorkerScript />
+    <Toast />
+  </body>
+</html>
