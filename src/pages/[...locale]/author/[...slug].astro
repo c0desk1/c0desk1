@@ -1,14 +1,12 @@
 ---
-
+// src/pages/[...locale]/author/[...slug].astro
 export const prerender = true;
 
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
-import Button from "@/components/ui/Button.astro";
 import Icon from "@/components/ui/Icon";
 import PostCard from "@/components/blog/PostCard.astro";
-
 import Breadcrumb from "@/components/ui/Breadcrumb.astro";
 import BackToTop from "@/components/ui/BackToTop.astro";
 
@@ -16,26 +14,66 @@ import { getCollection } from "astro:content";
 import { Image } from 'astro:assets';
 import { siteConfig } from "@/config/site";
 import { cdnImage, cn, isCdnUrl } from "@/lib/utils";
+import { getCurrentLocale, localizePath, getLabel } from "@/utils/i18n";
 
 export async function getStaticPaths() {
   const authors = await getCollection("authors");
-  return authors.map((author) => ({
-    params: { slug: author.id },
-    props: { author },
-  }));
+  const locales = siteConfig.locales;
+
+  return locales.flatMap((locale) =>
+    authors.map((author) => ({
+      params: {
+        locale: locale === siteConfig.defaultLocale? undefined : locale,
+        slug: author.id
+      },
+      props: { author, locale },
+    }))
+  );
 }
 
-const { author } = Astro.props;
-const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const { author, locale } = Astro.props;
+const allPosts = await getCollection("blog", ({ data }) => {
+  const postLang = data.lang || 'id';
+  return!data.draft && postLang === locale;
+});
 
 const authorPosts = allPosts
-  .filter((post) => post.data.author?.id === author.id)
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+ .filter((post) => post.data.author?.id === author.id)
+ .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
-const siteURL = Astro.site?.toString() ?? siteConfig.siteUrl;
+const siteURL = Astro.site?.toString()?? siteConfig.siteUrl;
 const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
 const social = author.data.social || siteConfig.author.social;
+
+const labels = {
+  id: {
+    author: "Penulis",
+    authorDesc: "Daftar artikel dari penulis.",
+    home: "Beranda",
+    latestArticles: "Artikel Terbaru",
+    articleCount: "artikel",
+    noArticles: "Belum ada artikel yang diterbitkan."
+  },
+  en: {
+    author: "Author",
+    authorDesc: "List of articles from the author.",
+    home: "Home",
+    latestArticles: "Latest Articles",
+    articleCount: "articles",
+    noArticles: "No articles have been published yet."
+  },
+  ru: {
+    author: "Автор",
+    authorDesc: "Список статей автора.",
+    home: "Главная",
+    latestArticles: "Последние статьи",
+    articleCount: "статей",
+    noArticles: "Статьи еще не опубликованы."
+  }
+}
+
+const t = labels[locale] || labels.id;
 
 const seoData = {
   title: author.data.name,
@@ -52,21 +90,21 @@ const seoData = {
 };
 
 const authorCategory = {
-  name: "Author",
+  name: t.author,
   slug: "author",
-  description: "Daftar artikel dari penulis."
+  description: t.authorDesc
 };
 
-const optimizedAvatar = isCdnUrl(author.data.avatar) ? cdnImage(author.data.avatar, { w: 112, h: 112, q: 85 }) : author.data.avatar;
+const optimizedAvatar = isCdnUrl(author.data.avatar)? cdnImage(author.data.avatar, { w: 112, h: 112, q: 85 }) : author.data.avatar;
 
 const seoBreadcrumbItems = [
-  { name: "Home", href: siteURL },
-  { name: "Author", href: new URL("authors/", siteURL).toString() },
+  { name: t.home, href: localizePath('/', locale) },
+  { name: t.author, href: localizePath('/authors/', locale) },
   { name: author.data.name, href: canonicalURL }
 ];
 
-const Breadcrumbs = seoBreadcrumbItems.filter(item => 
-  item.name === "Home" || item.name === "Author"
+const Breadcrumbs = seoBreadcrumbItems.filter(item =>
+  item.name === t.home || item.name === t.author
 );
 ---
 
@@ -88,14 +126,14 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
             <Breadcrumb items={Breadcrumbs} />
             <div class="mt-5 space-y-5">
               <div class="space-y-3">
-                <h1 id="author-heading" class="text-4xl md:text-5xl font-semibold tracking-[-0.04em] text-(--fg) text-center md:text-start">
+                <h1 id="author-heading" class="text-4xl md:text-5xl font-semibold tracking- text-(--fg) text-center md:text-start">
                   {author.data.name}
                 </h1>
-                <p class="text-[13px] md:text-sm text-(--fg-subtle) tracking-tight text-center md:text-start">
+                <p class="text- md:text-sm text-(--fg-subtle) tracking-tight text-center md:text-start">
                   {author.data.role}
                 </p>
               </div>
-              <p class="max-w-2xl text-[13px] md:text-sm leading-7 text-(--fg-muted) text-center md:text-start">
+              <p class="max-w-2xl text- md:text-sm leading-7 text-(--fg-muted) text-center md:text-start">
                 {author.data.bio}
               </p>
               <div class="flex items-center text-center md:text-start gap-2 pt-2 flex-wrap">
@@ -111,7 +149,7 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
                       name={item.label as any}
                       className="w-4 h-4 transition-transform duration-200 group-hover:scale-110"
                     />
-                    <span class="text-[13px] capitalize">
+                    <span class="text- capitalize">
                       {item.label}
                     </span>
                   </a>
@@ -141,9 +179,9 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
     <Container size="xl">
       <div class="flex items-center justify-between mb-8">
         <h2 class="text-(--fg) text-2xl md:text-3xl font-semibold tracking-tighter">
-          Artikel Terbaru
+          {t.latestArticles}
         </h2>
-        <span class="text-[13px] md:text-sm text-(--fg-muted)">{authorPosts.length} artikel</span>
+        <span class="text- md:text-sm text-(--fg-muted)">{authorPosts.length} {t.articleCount}</span>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
         {authorPosts.map((post) => (
@@ -152,7 +190,7 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
       </div>
       {authorPosts.length === 0 && (
         <div class="py-20 text-center rounded-2xl border border-dashed border-(--border)">
-          <p class="text-sm md:text-base text-(--fg-muted)">Belum ada artikel yang diterbitkan.</p>
+          <p class="text-sm md:text-base text-(--fg-muted)">{t.noArticles}</p>
         </div>
       )}
     </Container>
