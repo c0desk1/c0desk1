@@ -19,4 +19,4 @@ export const siteConfig = {
 } as const;
 
 export type SiteConfig = typeof siteConfig;
-export type { Locale } from './i18n';
+export type { Locale, LabelKey } from './i18n';
