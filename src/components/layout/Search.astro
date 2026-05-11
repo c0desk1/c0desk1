@@ -1,24 +1,53 @@
 ---
 // src/components/layout/Search.astro
-
 import { getCollection, getEntry } from "astro:content";
 import Icon from "@/components/ui/Icon";
+import { getCurrentLocale, getLabel, localizePath } from "@/utils/i18n";
 
-const posts = await getCollection("blog", ({ data }) => !data.draft);
+const locale = getCurrentLocale(Astro);
+
+// ← i18n labels
+const searchModalLabel = getLabel(locale, 'searchModalLabel');
+const searchPlaceholder = getLabel(locale, 'searchPlaceholder');
+const clearSearchLabel = getLabel(locale, 'clearSearch');
+const closeSearchLabel = getLabel(locale, 'closeSearch');
+const navigateLabel = getLabel(locale, 'navigate');
+const openLabel = getLabel(locale, 'open');
+const resultsLabel = getLabel(locale, 'results');
+const notFoundTitle = getLabel(locale, 'notFound');
+const tryOtherKeywords = getLabel(locale, 'tryOtherKeywords');
+const searchArticlesTitle = getLabel(locale, 'searchArticles');
+const typeToSearch = getLabel(locale, 'typeToSearch');
+const dataNotReady = getLabel(locale, 'dataNotReady');
+const refreshPage = getLabel(locale, 'refreshPage');
+const uncategorized = getLabel(locale, 'uncategorized');
+
+const posts = await getCollection("blog", ({ data }) =>!data.draft);
 
 const searchData = await Promise.all(
   posts.map(async (post) => {
-    const category = post.data.category ? await getEntry(post.data.category) : null;
+    const category = post.data.category? await getEntry(post.data.category) : null;
     return {
-      id:           post.id,
-      title:        post.data.title,
-      desc:         post.data.description ?? "",
-      category:     category?.data?.name  ?? "Uncategorized",
-      categorySlug: category?.data?.slug  ?? "uncategorized",
-      url:          `/blog/${post.id}/`,
+      id: post.id,
+      title: post.data.title,
+      desc: post.data.description?? "",
+      category: category?.data?.name?? uncategorized,
+      categorySlug: category?.data?.slug?? "uncategorized",
+      url: localizePath(`/blog/${post.id}`, locale),
     };
   })
 );
+
+// Kirim labels ke script
+const scriptLabels = {
+  notFoundTitle,
+  tryOtherKeywords,
+  searchArticlesTitle,
+  typeToSearch,
+  dataNotReady,
+  refreshPage,
+  resultsLabel
+};
 ---
 
 <div
@@ -26,7 +55,7 @@ const searchData = await Promise.all(
   class="sm-modal"
   role="dialog"
   aria-modal="true"
-  aria-label="Cari artikel"
+  aria-label={searchModalLabel}
   inert
 >
   <!-- Backdrop -->
@@ -43,8 +72,8 @@ const searchData = await Promise.all(
         <input
           id="search-input"
           type="text"
-          placeholder="Cari artikel…"
-          aria-label="Cari artikel"
+          placeholder={searchPlaceholder}
+          aria-label={searchModalLabel}
           class="sm-input"
           autocomplete="off"
           spellcheck="false"
@@ -53,7 +82,7 @@ const searchData = await Promise.all(
         <button
           id="search-clear"
           class="sm-icon-btn sm-clear hidden"
-          aria-label="Hapus teks pencarian"
+          aria-label={clearSearchLabel}
           tabindex="-1"
         >
           <Icon name="trash" className="sm-btn-icon" />
@@ -62,7 +91,7 @@ const searchData = await Promise.all(
         <button
           id="search-close-mobile"
           class="sm-icon-btn sm:hidden"
-          aria-label="Tutup pencarian"
+          aria-label={closeSearchLabel}
         >
           <Icon name="close" className="sm-btn-icon" />
         </button>
@@ -78,11 +107,11 @@ const searchData = await Promise.all(
         <div class="sm-shortcuts">
           <span class="sm-shortcut">
             <kbd class="sm-kbd">↑↓</kbd>
-            Navigasi
+            {navigateLabel}
           </span>
           <span class="sm-shortcut">
             <kbd class="sm-kbd">↵</kbd>
-            Buka
+            {openLabel}
           </span>
         </div>
         <span id="search-count" class="sm-count"></span>
@@ -94,7 +123,7 @@ const searchData = await Promise.all(
 
 <style>
   /* ─── MODAL */
-  .sm-modal {
+ .sm-modal {
     position: fixed;
     inset: 0;
     z-index: 50;
@@ -102,7 +131,7 @@ const searchData = await Promise.all(
   }
 
   /* ─── BACKDROP */
-  .sm-backdrop {
+ .sm-backdrop {
     position: absolute;
     inset: 0;
     background-color: color-mix(in srgb, var(--bg) 50%, transparent);
@@ -113,7 +142,7 @@ const searchData = await Promise.all(
   }
 
   /* ─── POSITIONER */
-  .sm-positioner {
+ .sm-positioner {
     position: relative;
     display: flex;
     min-height: 100%;
@@ -123,11 +152,11 @@ const searchData = await Promise.all(
   }
 
   @media (min-width: 640px) {
-    .sm-positioner { padding-top: 5rem; }
+   .sm-positioner { padding-top: 5rem; }
   }
 
   /* ─── PANEL */
-  .sm-panel {
+ .sm-panel {
     width: 100%;
     max-width: 36rem;
     background-color: var(--bg);
@@ -141,7 +170,7 @@ const searchData = await Promise.all(
   }
 
   /* ─── INPUT ROW */
-  .sm-input-row {
+ .sm-input-row {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -156,7 +185,7 @@ const searchData = await Promise.all(
     color: var(--fg-subtle);
   }
 
-  .sm-input {
+ .sm-input {
     flex: 1;
     min-width: 0;
     padding-block: 0.875rem;
@@ -168,10 +197,10 @@ const searchData = await Promise.all(
     color: var(--fg);
   }
 
-  .sm-input::placeholder { color: var(--fg-subtle); }
+ .sm-input::placeholder { color: var(--fg-subtle); }
 
   /* ─── ICON BUTTONS */
-  .sm-icon-btn {
+ .sm-icon-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -186,8 +215,8 @@ const searchData = await Promise.all(
     transition: background-color 0.15s ease, color 0.15s ease;
   }
 
-  .sm-icon-btn:hover         { background-color: var(--bg-muted); color: var(--fg); }
-  .sm-icon-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+ .sm-icon-btn:hover { background-color: var(--bg-muted); color: var(--fg); }
+ .sm-icon-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   :global(.sm-btn-icon) {
     width: 0.875rem;
@@ -196,7 +225,7 @@ const searchData = await Promise.all(
   }
 
   /* ─── ESC KEY */
-  .sm-esc-key {
+ .sm-esc-key {
     display: none;
     align-items: center;
     flex-shrink: 0;
@@ -212,23 +241,23 @@ const searchData = await Promise.all(
   }
 
   @media (min-width: 640px) {
-    .sm-esc-key { display: inline-flex; }
+   .sm-esc-key { display: inline-flex; }
   }
 
   /* ─── RESULTS */
-  .sm-results {
+ .sm-results {
     max-height: 55dvh;
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: var(--border) transparent;
   }
 
-  .sm-results::-webkit-scrollbar       { width: 3px; }
-  .sm-results::-webkit-scrollbar-track { background: transparent; }
-  .sm-results::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+ .sm-results::-webkit-scrollbar { width: 3px; }
+ .sm-results::-webkit-scrollbar-track { background: transparent; }
+ .sm-results::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
   /* ─── FOOTER */
-  .sm-footer {
+ .sm-footer {
     display: none;
     align-items: center;
     justify-content: space-between;
@@ -238,10 +267,10 @@ const searchData = await Promise.all(
   }
 
   @media (min-width: 640px) {
-    .sm-footer { display: flex; }
+   .sm-footer { display: flex; }
   }
 
-  .sm-shortcuts {
+ .sm-shortcuts {
     display: flex;
     align-items: center;
     gap: 0.75rem;
@@ -249,13 +278,13 @@ const searchData = await Promise.all(
     color: var(--fg-subtle);
   }
 
-  .sm-shortcut {
+ .sm-shortcut {
     display: inline-flex;
     align-items: center;
     gap: 0.375rem;
   }
 
-  .sm-kbd {
+ .sm-kbd {
     padding: 0.125rem 0.375rem;
     font-size: 0.625rem;
     font-family: var(--font-mono);
@@ -265,7 +294,7 @@ const searchData = await Promise.all(
     color: var(--fg-subtle);
   }
 
-  .sm-count {
+ .sm-count {
     font-size: 0.6875rem;
     color: var(--fg-subtle);
     letter-spacing: 0;
@@ -279,7 +308,7 @@ const searchData = await Promise.all(
     color: var(--fg);
   }
 
-  /* ─── RESULT ITEMS (rendered via JS) */
+  /* ─── RESULT ITEMS */
   :global(.sritem) {
     display: flex;
     align-items: flex-start;
@@ -360,38 +389,38 @@ const searchData = await Promise.all(
   }
 </style>
 
-<script define:vars={{ searchData }}>
+<script define:vars={{ searchData, labels: scriptLabels }}>
   (() => {
     /* ── Guard */
-    if (!Array.isArray(searchData) || !searchData.length) {
+    if (!Array.isArray(searchData) ||!searchData.length) {
       console.warn("[Search] No data available.");
       const results = document.getElementById("search-results");
-      if (results) results.innerHTML = emptyHTML("Data belum siap", "Silakan refresh halaman", true);
+      if (results) results.innerHTML = emptyHTML(labels.dataNotReady, labels.refreshPage, true);
       return;
     }
 
-    const modal       = document.getElementById("search-modal");
-    const backdrop    = document.getElementById("search-backdrop");
-    const panel       = document.getElementById("search-panel");
-    const input       = document.getElementById("search-input");
-    const results     = document.getElementById("search-results");
-    const clearBtn    = document.getElementById("search-clear");
+    const modal = document.getElementById("search-modal");
+    const backdrop = document.getElementById("search-backdrop");
+    const panel = document.getElementById("search-panel");
+    const input = document.getElementById("search-input");
+    const results = document.getElementById("search-results");
+    const clearBtn = document.getElementById("search-clear");
     const closeMobile = document.getElementById("search-close-mobile");
-    const countEl     = document.getElementById("search-count");
+    const countEl = document.getElementById("search-count");
 
-    if (!modal || !backdrop || !panel || !input || !results) return;
+    if (!modal ||!backdrop ||!panel ||!input ||!results) return;
 
     let activeIdx = -1;
-    let filtered  = [];
+    let filtered = [];
     let prevFocus = null;
     let debounce;
 
     /* ── Helpers */
     const esc = (s) =>
       String(s)
-        .replace(/&/g, "&amp;").replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;").replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;");
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;").replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
 
     const highlight = (str, q) => {
       if (!q) return esc(str);
@@ -406,25 +435,25 @@ const searchData = await Promise.all(
       const tl = post.title.toLowerCase();
       const dl = post.desc.toLowerCase();
       const cl = post.category.toLowerCase();
-      if (tl === q)          return 100;
+      if (tl === q) return 100;
       if (tl.startsWith(q)) return 80;
-      if (tl.includes(q))   return 60;
-      if (dl.includes(q))   return 40;
-      if (cl.includes(q))   return 30;
+      if (tl.includes(q)) return 60;
+      if (dl.includes(q)) return 40;
+      if (cl.includes(q)) return 30;
       let qi = 0;
       for (let i = 0; i < tl.length && qi < q.length; i++)
         if (tl[i] === q[qi]) qi++;
-      return qi === q.length ? 10 : 0;
+      return qi === q.length? 10 : 0;
     };
 
     function emptyHTML(title, sub, isError = false) {
       const icon = isError
-        ? `<svg class="sm-empty-icon" style="color:#ef4444" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      ? `<svg class="sm-empty-icon" style="color:#ef4444" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
              <line x1="12" y1="16" x2="12.01" y2="16"/>
            </svg>`
         : `<svg class="sm-empty-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-             <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+             <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35"/>
            </svg>`;
       return `<div class="sm-empty">${icon}
         <p class="sm-empty-title">${title}</p>
@@ -440,18 +469,18 @@ const searchData = await Promise.all(
 
     const renderResults = (items, q) => {
       if (!items.length) {
-        results.innerHTML = emptyHTML("Tidak ditemukan", "Coba kata kunci lain");
+        results.innerHTML = emptyHTML(labels.notFoundTitle, labels.tryOtherKeywords);
         if (countEl) countEl.textContent = "";
         return;
       }
 
-      if (countEl) countEl.textContent = `${items.length} hasil`;
+      if (countEl) countEl.textContent = `${items.length} ${labels.resultsLabel}`;
 
       results.innerHTML = items.map((p, i) => `
         <a
           href="${esc(p.url)}"
           data-idx="${i}"
-          class="sritem${i === activeIdx ? " is-active" : ""}"
+          class="sritem${i === activeIdx? " is-active" : ""}"
         >
           <svg class="sritem-icon" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
@@ -469,8 +498,8 @@ const searchData = await Promise.all(
 
     const resetView = () => {
       activeIdx = -1;
-      filtered  = [];
-      results.innerHTML = emptyHTML("Cari artikel", "Ketik untuk mulai mencari");
+      filtered = [];
+      results.innerHTML = emptyHTML(labels.searchArticlesTitle, labels.typeToSearch);
       if (countEl) countEl.textContent = "";
     };
 
@@ -482,8 +511,8 @@ const searchData = await Promise.all(
       document.body.style.overflow = "hidden";
       requestAnimationFrame(() => {
         backdrop.style.opacity = "1";
-        panel.style.opacity    = "1";
-        panel.style.transform  = "scale(1)";
+        panel.style.opacity = "1";
+        panel.style.transform = "scale(1)";
         input.focus();
       });
       resetView();
@@ -491,8 +520,8 @@ const searchData = await Promise.all(
 
     const closeModal = () => {
       backdrop.style.opacity = "0";
-      panel.style.opacity    = "0";
-      panel.style.transform  = "scale(0.96)";
+      panel.style.opacity = "0";
+      panel.style.transform = "scale(0.96)";
       document.body.style.overflow = "";
       setTimeout(() => {
         modal.style.display = "none";
@@ -519,10 +548,10 @@ const searchData = await Promise.all(
     document.addEventListener("keydown", (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
-        modal.style.display === "none" ? openModal() : closeModal();
+        modal.style.display === "none"? openModal() : closeModal();
         return;
       }
-      if (e.key === "Escape" && modal.style.display !== "none") {
+      if (e.key === "Escape" && modal.style.display!== "none") {
         e.preventDefault();
         closeModal();
       }
@@ -530,16 +559,16 @@ const searchData = await Promise.all(
 
     input.addEventListener("input", () => {
       const q = input.value.trim();
-      clearBtn?.classList.toggle("hidden", !q);
+      clearBtn?.classList.toggle("hidden",!q);
       clearTimeout(debounce);
       debounce = setTimeout(() => {
         if (!q) { resetView(); return; }
         const ql = q.toLowerCase();
         filtered = searchData
-          .map((p) => ({ ...p, _score: score(p, ql) }))
-          .filter((p) => p._score > 0)
-          .sort((a, b) => b._score - a._score)
-          .slice(0, 8);
+        .map((p) => ({...p, _score: score(p, ql) }))
+        .filter((p) => p._score > 0)
+        .sort((a, b) => b._score - a._score)
+        .slice(0, 8);
         activeIdx = -1;
         renderResults(filtered, ql);
       }, 80);
