@@ -26,35 +26,21 @@ import { getSmartRelatedPosts } from "@/lib/botEngine";
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
   
-  const postsById = posts.reduce((acc, post) => {
-    if (!acc[post.id]) acc[post.id] = [];
-    acc[post.id].push(post);
-    return acc;
-  }, {} as Record<string, CollectionEntry<"blog">[]>);
-  
   return posts.flatMap((post: CollectionEntry<"blog">) => {
     const lang = post.data.lang || 'id';
     const autoSlug = slugify(post.data.title);
-    
-    const alternates = postsById[post.id] || [];
-    const alternateSlugs = Object.fromEntries(
-      alternates.map(p => [
-        p.data.lang || 'id',
-        slugify(p.data.title)
-      ])
-    );
     
     return {
       params: { 
         locale: lang === 'id' ? undefined : lang, 
         slug: autoSlug 
       },
-      props: { post, alternateSlugs }
+      props: { post }
     };
   });
 }
 
-const { post, alternateSlugs } = Astro.props;
+const { post } = Astro.props;
 const locale = getCurrentLocale(Astro);
 
 const allPosts = await getCollection("blog", ({ data }) => 
@@ -142,7 +128,6 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(item =>
     slug: authorEntry?.id
   }}
   canonicalURL={canonicalURL}
-  alternateSlugs={alternateSlugs}
 >
   <Section size="md">
     <Section size="sm">
