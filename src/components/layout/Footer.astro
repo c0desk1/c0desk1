@@ -32,7 +32,7 @@ const footerSections = siteConfig.footerSections;
                   {section.items.map((link) => (
                     <li>
                       <a
-                        href={link.isExternal ? link.href : localizePath(link.href, locale)} <!-- ← skip localize kalau external -->
+                        href={link.isExternal ? link.href : localizePath(link.href, locale)}
                         target={link.isExternal ? "_blank" : undefined}
                         rel={link.isExternal ? "noopener noreferrer" : undefined}
                         class="ft-link"
