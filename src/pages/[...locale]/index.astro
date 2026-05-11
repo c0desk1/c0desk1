@@ -5,7 +5,7 @@ export const prerender = true;
 import { getCollection } from "astro:content";
 import { sortByDate } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
-import { getSeo, getCurrentLocale } from "@/utils/i18n";
+import { getSeo, getCurrentLocale, getLabel } from "@/utils/i18n";
 import { cn } from "@/lib/utils";
 
 import BaseLayout from "@/layouts/BaseLayout.astro";
@@ -20,6 +20,7 @@ export function getStaticPaths() {
     { params: { locale: undefined } },
     { params: { locale: 'en' } },
     { params: { locale: 'ru' } },
+    { params: { locale: 'jp' } },
   ];
 }
 
@@ -38,25 +39,9 @@ const allProjects = await getCollection("portfolio", ({ data }) =>
 );
 const portfolioProjects = sortByDate(allProjects).slice(0, 3);
 
-const heroTexts = {
-  id: {
-    title: "Creative.",
-    highlight: "engineer",
-    description: "Eksplorasi workflow digital, AI tools, musik, anime, dan game dari perspektif kreator modern di era otomatisasi."
-  },
-  en: {
-    title: "Creative.",
-    highlight: "engineer",
-    description: "Exploring digital workflows, AI tools, music, anime, and games from the perspective of a modern creator in the automation era."
-  },
-  ru: {
-    title: "Креативный.",
-    highlight: "инженер",
-    description: "Исследование цифровых рабочих процессов, ИИ-инструментов, музыки, аниме и игр с точки зрения современного творца в эпоху автоматизации."
-  }
-}
-
-const hero = heroTexts[locale];
+const hero_t = getLabel(locale, "HeroTitle");
+const hero_h = getLabel(locale, "HeroHighlight");
+const hero_d = getLabel(locale, "HeroDesc");
 
 const seoData = {
   title: seo.title,
@@ -84,9 +69,9 @@ const seoData = {
       <div class="pointer-events-none absolute inset-0 flex items-center justify-center bg-white mask-[radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
       <Container size="full" class="relative items-center z-20">
         <Hero
-          title={hero.title}
-          highlight={hero.highlight}
-          description={hero.description}
+          title={hero_t}
+          highlight={hero_h}
+          description={hero_d}
         />
       </Container>
     </div>
