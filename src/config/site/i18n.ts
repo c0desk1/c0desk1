@@ -80,6 +80,19 @@ export const i18nConfig = {
       // SEARCH //
       search: "Cari",
       searchPlaceholder: "Cari...",
+      searchModalLabel: "Cari artikel",
+      clearSearch: "Hapus teks pencarian",
+      closeSearch: "Tutup pencarian",
+      navigate: "Navigasi",
+      open: "Buka",
+      results: "hasil",
+      notFound: "Tidak ditemukan",
+      tryOtherKeywords: "Coba kata kunci lain",
+      searchArticles: "Cari artikel",
+      typeToSearch: "Ketik untuk mulai mencari",
+      dataNotReady: "Data belum siap",
+      refreshPage: "Silakan refresh halaman",
+      uncategorized: "Uncategorized",
 
       // STATUS //
       loadingSystem: "Memuat Sistem...",
@@ -182,6 +195,19 @@ export const i18nConfig = {
       // SEARCH //
       search: "Search",
       searchPlaceholder: "Search...",
+      searchModalLabel: "Search articles",
+      clearSearch: "Clear search text",
+      closeSearch: "Close search",
+      navigate: "Navigate",
+      open: "Open",
+      results: "results",
+      notFound: "Not found",
+      tryOtherKeywords: "Try other keywords",
+      searchArticles: "Search articles",
+      typeToSearch: "Type to start searching",
+      dataNotReady: "Data not ready",
+      refreshPage: "Please refresh the page",
+      uncategorized: "Uncategorized",
 
       // STATUS //
       loadingSystem: "Loading System...",
@@ -289,6 +315,19 @@ export const i18nConfig = {
       // SEARCH //
       search: "Поиск",
       searchPlaceholder: "Поиск...",
+      searchModalLabel: "Поиск статей",
+      clearSearch: "Очистить поиск",
+      closeSearch: "Закрыть поиск",
+      navigate: "Навигация",
+      open: "Открыть",
+      results: "результатов",
+      notFound: "Не найдено",
+      tryOtherKeywords: "Попробуйте другие ключевые слова",
+      searchArticles: "Поиск статей",
+      typeToSearch: "Начните вводить для поиска",
+      dataNotReady: "Данные не готовы",
+      refreshPage: "Обновите страницу",
+      uncategorized: "Без категории",
 
       // STATUS //
       loadingSystem: "Загрузка системы...",
