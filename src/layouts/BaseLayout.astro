@@ -87,6 +87,7 @@ interface Props {
   duration?: string;
   demoUrl?: string;
   repoUrl?: string;
+  alternateSlugs?: Record<string, string>;
 }
 
 const {
@@ -99,6 +100,7 @@ const {
   duration,
   demoUrl,
   repoUrl,
+  alternateSlugs,
   ...seoProps
 } = Astro.props;
 
@@ -149,7 +151,7 @@ const GTAG_ID =
       loncat ke konten utama
     </a>
     <div class="relative z-10 flex min-h-screen flex-col">
-      {header && <Header />}
+      {header && <Header alternateSlugs={alternateSlugs} />}
       <main id="main-content">
         {withContainer ? (
             <Container size={size}>
