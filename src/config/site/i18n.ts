@@ -52,6 +52,24 @@ export const i18nConfig = {
       seeAllPosts: "Lihat semua postingan",
       browsePostsByCategory: "Jelajahi postingan berdasarkan kategori",
       filterCategory: "Filter kategori",
+
+      // COOKIE //
+      cookiePreference: "Preferensi cookie",
+      cookieValuePrivacy: "Kami menghargai privasi kamu",
+      cookieSelectCookie: "Pilih cookie mana yang kamu izinkan",
+      close: "Tutup",
+      cookieFunctional: "Fungsional",
+      cookieFunctionalDesc: "Diperlukan agar situs berjalan. Tidak dapat dinonaktifkan.",
+      cookieAnalytics: "Analitik",
+      cookieAnalyticsDesc: "Membantu kami memahami cara pengunjung berinteraksi dengan konten.",
+      cookieAds: "Iklan & Personalisasi",
+      cookieAdsDesc: "Menampilkan iklan yang relevan untuk Anda. Nonaktifkan jika tidak ingin iklan.",
+      cookieToggleAnalytics: "Toggle analitik",
+      cookieToggleAds: "Toggle iklan",
+      cookieRejectAll: "Tolak semua",
+      cookieSaveChoice: "Simpan pilihan",
+      cookieAcceptAll: "Terima semua",
+      cookieChangePreference: "Ubah preferensi cookie",
       
       // POST META
       minRead: 'menit baca',
@@ -189,6 +207,24 @@ export const i18nConfig = {
       seeAllPosts: "See all posts",
       browsePostsByCategory: "Browse posts by category",
       filterCategory: "Filter category",
+
+      // COOKIE //
+      cookiePreference: "Cookie preference",
+      cookieValuePrivacy: "We value your privacy",
+      cookieSelectCookie: "Choose which cookies you allow",
+      close: "Close",
+      cookieFunctional: "Functional",
+      cookieFunctionalDesc: "Required for the site to work. Cannot be disabled.",
+      cookieAnalytics: "Analytics",
+      cookieAnalyticsDesc: "Help us understand how visitors interact with content.",
+      cookieAds: "Ads & Personalization",
+      cookieAdsDesc: "Show relevant ads for you. Disable if you don't want ads.",
+      cookieToggleAnalytics: "Toggle analytics",
+      cookieToggleAds: "Toggle ads",
+      cookieRejectAll: "Reject all",
+      cookieSaveChoice: "Save choice",
+      cookieAcceptAll: "Accept all",
+      cookieChangePreference: "Change cookie preference",
       
       // POST META
       minRead: 'min read',
@@ -327,6 +363,24 @@ export const i18nConfig = {
       seeAllPosts: "Смотреть все записи",
       browsePostsByCategory: "Просмотр записей по категориям",
       filterCategory: "Фильтр категорий",
+
+      // COOKIE //
+      cookiePreference: "Настройки cookie",
+      cookieValuePrivacy: "Мы ценим вашу конфиденциальность",
+      cookieSelectCookie: "Выберите какие cookie разрешить",
+      close: "Закрыть",
+      cookieFunctional: "Функциональные",
+      cookieFunctionalDesc: "Необходимы для работы сайта. Нельзя отключить.",
+      cookieAnalytics: "Аналитика",
+      cookieAnalyticsDesc: "Помогают понять как посетители взаимодействуют с контентом.",
+      cookieAds: "Реклама и персонализация",
+      cookieAdsDesc: "Показывать релевантную рекламу. Отключите если не хотите рекламу.",
+      cookieToggleAnalytics: "Переключить аналитику",
+      cookieToggleAds: "Переключить рекламу",
+      cookieRejectAll: "Отклонить все",
+      cookieSaveChoice: "Сохранить выбор",
+      cookieAcceptAll: "Принять все",
+      cookieChangePreference: "Изменить настройки cookie",
       
       // POST META
       minRead: 'мин чтения',
