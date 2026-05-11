@@ -5,7 +5,7 @@ import { getEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 import { siteConfig } from '@/config/site';
 import { getCurrentLocale, localizePath } from '@/utils/i18n';
-import { generateExcerpt, formatDateCompact, cdnImage, isCdnUrl } from '@/lib/utils';
+import { generateExcerpt, formatDateCompact, cdnImage, isCdnUrl, slugify } from '@/lib/utils';
 
 interface Props {
   post?: CollectionEntry<'blog'>;
@@ -22,20 +22,24 @@ if (post) {
   const { title: t, pubDate, category, author } = data;
   title = t;
   excerpt = generateExcerpt(post.body || '', 140);
+  
+  const dateLocale = locale === 'en' ? 'en-US' : locale === 'ru' ? 'ru-RU' : 'id-ID';
+  const autoSlug = slugify(t);
 
   const categoryEntry = await getEntry(category);
   const authorEntry   = author ? await getEntry(author) : null;
 
   categoryName    = categoryEntry?.data.name || 'General';
   pubDateISO      = pubDate.toISOString();
-  pubDateDisplay  = formatDateCompact(pubDate, locale);
+  
+  pubDateDisplay  = formatDateCompact(pubDate, dateLocale);
   authorName      = authorEntry?.data.name   || siteConfig.author.name;
   authorAvatar    = authorEntry?.data.avatar || siteConfig.author.avatar;
   optimizedAvatar = isCdnUrl(authorAvatar)
     ? cdnImage(authorAvatar, { w: 48, h: 48, q: 80 })
     : authorAvatar;
   
-  postUrl = localizePath(`/blog/${slug}/`, locale);
+  postUrl = localizePath(`/blog/${autoSlug}/`, locale);
 }
 ---
 
