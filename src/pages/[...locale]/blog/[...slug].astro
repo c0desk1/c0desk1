@@ -49,7 +49,7 @@ export async function getStaticPaths() {
         locale: lang === 'id' ? undefined : lang, 
         slug: autoSlug 
       },
-      props: { alternateSlugs }
+      props: { post, alternateSlugs }
     };
   });
 }
