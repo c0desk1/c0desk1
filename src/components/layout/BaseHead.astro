@@ -1,12 +1,14 @@
 ---
 // src/components/layout/BaseHead.astro
-// Audited & production-ready for Astro v6.3
-// Fixes: dangling WebSite @id, Person image, client property, codeRepository type,
-//        SearchAction URL, og:locale consistency, ImageObject on Person
 
 import { siteConfig } from "@/config/site";
 import { getEntry } from "astro:content";
 import { getCurrentLocale, getLabel } from "@/utils/i18n";
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+type Locale = "id" | "en" | "ru";
+type LocaleMap = { id: string; en: string; ru: string };
+type PartialLocaleMap = { id?: string; en?: string; ru?: string };
 
 interface Props {
   title?: string;
@@ -18,8 +20,21 @@ interface Props {
   publishedTime?: Date;
   modifiedTime?: Date;
   tags?: string[];
-  category?: { name: string; description?: string; slug: string };
-  author?: { name: string; role: string; avatar: string; bio: string; slug: string };
+
+  category?: {
+    name: LocaleMap;
+    description?: PartialLocaleMap;
+    slug: string;
+  };
+
+  author?: {
+    name: string;
+    role: string;
+    avatar: string;
+    bio: string;
+    slug: string;
+  };
+
   seo?: {
     title?: string;
     description?: string;
@@ -27,6 +42,7 @@ interface Props {
     canonical?: string;
     noIndex?: boolean;
   };
+
   organization?: any;
   client?: string;
   role?: string;
@@ -37,7 +53,7 @@ interface Props {
   alternateSlugs?: Record<string, string>;
 }
 
-const locale = getCurrentLocale(Astro);
+const locale = getCurrentLocale(Astro) as Locale;
 
 const {
   title: propsTitle,
@@ -60,8 +76,7 @@ const {
   alternateSlugs,
 } = Astro.props;
 
-// ─── LOCALISATION ────────────────────────────────────────────────────────────
-// Map locale code → BCP-47 tag used in HTML / hreflang / OG
+// ─── LOCALISATION HELPERS ────────────────────────────────────────────────────
 function toBcp47(lang: string): string {
   if (lang === "id") return "id-ID";
   if (lang === "en") return "en-US";
@@ -69,22 +84,22 @@ function toBcp47(lang: string): string {
   return lang;
 }
 
-// Map locale code → underscore form required by Open Graph
 function toOgLocale(lang: string): string {
   return toBcp47(lang).replace("-", "_");
 }
 
-const htmlLang = toBcp47(locale);
+function t(map: PartialLocaleMap | LocaleMap): string {
+  return map[locale] ?? (map as LocaleMap).en ?? (map as LocaleMap).id ?? "";
+}
 
-const contentCreatorLabel = getLabel(locale, "contentCreator") || "Content Creator";
-const homeLabel           = getLabel(locale, "home") || "Home";
+const htmlLang  = toBcp47(locale);
+const homeLabel = getLabel(locale, "home") ?? "Home";
+const contentCreatorLabel = getLabel(locale, "contentCreator") ?? "Content Creator";
 
 // ─── SITE DATA ────────────────────────────────────────────────────────────────
-const siteData = siteDataFromProps || siteConfig;
+const siteData = siteDataFromProps ?? siteConfig;
 
 // ─── ORGANISATION ─────────────────────────────────────────────────────────────
-// FIX: getEntry() in Astro v6 Content Layer returns undefined (not throws) when
-// the entry is missing, but we keep the try/catch for safety.
 let org: { data: any } | undefined;
 if (orgFromProps) {
   org = { data: orgFromProps };
@@ -93,16 +108,13 @@ if (orgFromProps) {
     const entry = await getEntry("organizations", "c0desk1");
     if (entry) org = { data: entry.data };
   } catch {
-    // Organisation collection absent — degrade gracefully
+    // Collection absent — degrade gracefully
   }
 }
-
 const orgData = org?.data;
 
 // ─── URLS ─────────────────────────────────────────────────────────────────────
-// FIX: guarantee trailing slash so URL concatenation never produces e.g.
-// "https://example.comsearch?q=…"
-const rawSiteURL = Astro.site?.toString() ?? siteData.siteUrl ?? siteConfig.siteUrl;
+const rawSiteURL = Astro.site?.toString() ?? siteConfig.siteUrl;
 const siteURL    = rawSiteURL.endsWith("/") ? rawSiteURL : `${rawSiteURL}/`;
 
 // ─── HREFLANG ────────────────────────────────────────────────────────────────
@@ -113,61 +125,73 @@ const pathWithoutLocale = currentPath.replace(localePattern, "") || "/";
 const hreflangLinks = (siteConfig.locales as string[]).map((lang) => {
   const langSlug = alternateSlugs?.[lang];
   const path     = langSlug ?? pathWithoutLocale;
-
-  const href =
+  const href     =
     lang === siteConfig.defaultLocale
       ? new URL(path, siteURL).toString()
       : new URL(`/${lang}${path}`, siteURL).toString();
-
   return { lang: toBcp47(lang), href };
 });
 
 const xDefaultHref = new URL(pathWithoutLocale, siteURL).toString();
 
 // ─── AUTHOR ───────────────────────────────────────────────────────────────────
+const authorBioResolved: string =
+  author?.bio ??
+  (siteConfig.author?.bio ? t(siteConfig.author.bio as PartialLocaleMap) : "");
+
 const activeAuthor = {
-  name:   author?.name   || siteData.siteName,
-  role:   author?.role   || siteConfig.author?.title || contentCreatorLabel,
-  avatar: author?.avatar || siteData.siteLogo,
-  bio:    author?.bio    || siteData.siteDescription,
-  slug:   author?.slug   || "bima-akbar",
+  name:   author?.name   ?? siteConfig.author?.name   ?? siteConfig.siteName,
+  role:   author?.role   ?? siteConfig.author?.title  ?? contentCreatorLabel,
+  avatar: author?.avatar ?? siteConfig.author?.avatar ?? siteConfig.siteLogo,
+  bio:    authorBioResolved,
+  slug:   author?.slug   ?? siteConfig.author?.slug   ?? "bima-akbar",
 };
 
+// ─── DEFAULT SEO ───────────────────────────────────────
+// siteConfig.defaultSeo = { id: { title, description }, en: {...}, ru: {...} }
+const localeSeo = (siteConfig.defaultSeo as Record<string, { title?: string; description?: string }>)?.[locale];
+
 // ─── SEO CORE ─────────────────────────────────────────────────────────────────
-const seoData = {
-  title: seo?.title || propsTitle || siteData.defaultSeo?.title || siteData.siteName,
+const seoResolved = {
+  title:
+    seo?.title ??
+    propsTitle ??
+    localeSeo?.title ??
+    siteConfig.siteName,
+
   description:
-    seo?.description ||
-    propsDescription ||
-    siteData.defaultSeo?.description ||
-    siteData.siteDescription,
+    seo?.description ??
+    propsDescription ??
+    localeSeo?.description ??
+    authorBioResolved,
+
   canonical: seo?.canonical
     ? new URL(seo.canonical, siteURL)
     : Astro.props.canonicalURL
     ? new URL(Astro.props.canonicalURL, siteURL)
     : new URL(Astro.url.pathname, siteURL),
+
   noIndex: seo?.noIndex ?? Astro.props.noIndex ?? false,
 };
 
 const formattedTitle =
-  seoData.title === siteData.siteName
-    ? siteData.siteName
-    : `${seoData.title} — ${siteData.siteName}`;
+  seoResolved.title === siteConfig.siteName
+    ? siteConfig.siteName
+    : `${seoResolved.title} — ${siteConfig.siteName}`;
 
 // ─── OG IMAGE ────────────────────────────────────────────────────────────────
-const rawImage = seo?.ogImage || propsImage?.src || siteData.defaultSeo?.ogImage || siteConfig.ogImage;
+const rawImage = seo?.ogImage ?? propsImage?.src ?? siteConfig.ogImage;
 const ogImageURL: string = !rawImage
-  ? new URL(siteData.siteLogo, siteURL).toString()
+  ? new URL(siteConfig.siteLogo, siteURL).toString()
   : rawImage.startsWith("http")
   ? rawImage
   : new URL(rawImage, siteURL).toString();
 
+// ─── CATEGORY — resolve to active locale ─────────────────────────────────────
+const categoryName: string | undefined = category ? t(category.name) : undefined;
+
 // ─── PAGE CONTEXT ─────────────────────────────────────────────────────────────
 const pathname = Astro.url.pathname;
-
-// FIX: treat ALL locale root paths as "homepage" so /en/ and /ru/ don't get
-// spurious BreadcrumbList nodes (they are homepage variants, not sub-pages).
-// Matches: "/" | "/en/" | "/ru/" | "/id/" etc.
 const localeRootPattern = new RegExp(
   `^\\/(${siteConfig.locales.join("|")})\\/?$`
 );
@@ -175,7 +199,16 @@ const isHomepage = pathname === "/" || localeRootPattern.test(pathname);
 
 // ─── DATES ───────────────────────────────────────────────────────────────────
 const datePublished = publishedTime?.toISOString();
-const dateModified  = modifiedTime?.toISOString() || publishedTime?.toISOString();
+const dateModified  = modifiedTime?.toISOString() ?? datePublished;
+
+// ─── TWITTER HANDLE ───────────────────────────────────────────────────────────
+// siteConfig.social is an array: [{ label, href }, ...]
+const twitterHandle = (() => {
+  const tw = Array.isArray(siteConfig.social)
+    ? siteConfig.social.find((s: { label: string; href: string }) => s.label === "twitter")
+    : null;
+  return tw ? `@${tw.href.split("/").pop()}` : "@c0desk1";
+})();
 
 // ─── JSON-LD GRAPH ────────────────────────────────────────────────────────────
 const schemaGraph: any[] = [];
@@ -183,47 +216,46 @@ const schemaGraph: any[] = [];
 // 1. Organization
 if (orgData) {
   schemaGraph.push({
-    "@type":     "Organization",
-    "@id":       `${siteURL}#organization`,
-    name:        orgData.name,
-    legalName:   orgData.legalName,
-    url:         orgData.url || siteURL,
+    "@type":   "Organization",
+    "@id":     `${siteURL}#organization`,
+    name:      orgData.name,
+    legalName: orgData.legalName,
+    url:       orgData.url ?? siteURL,
     logo: {
-      "@type":  "ImageObject",
-      "@id":    `${siteURL}#logo`,
-      url:      new URL(orgData.logo, siteURL).toString(),
-      width:    512,
-      height:   512,
+      "@type": "ImageObject",
+      "@id":   `${siteURL}#logo`,
+      url:     new URL(orgData.logo, siteURL).toString(),
+      width:   512,
+      height:  512,
     },
-    sameAs: Object.values(orgData.social || {}).filter(Boolean),
+    sameAs: Object.values(orgData.social ?? {}).filter(Boolean),
   });
 } else {
   schemaGraph.push({
     "@type": "Organization",
     "@id":   `${siteURL}#organization`,
-    name:    siteData.siteName,
+    name:    siteConfig.siteName,
     url:     siteURL,
     logo: {
-      "@type":  "ImageObject",
-      "@id":    `${siteURL}#logo`,
-      url:      new URL(siteData.siteLogo, siteURL).toString(),
-      width:    512,
-      height:   512,
+      "@type": "ImageObject",
+      "@id":   `${siteURL}#logo`,
+      url:     new URL(siteConfig.siteLogo, siteURL).toString(),
+      width:   512,
+      height:  512,
     },
   });
 }
 
-// 2. WebSite — FIX: always included (was homepage-only → dangling @id on all other pages)
+// 2. WebSite
 schemaGraph.push({
-  "@type": "WebSite",
-  "@id":   `${siteURL}#website`,
-  url:     siteURL,
-  name:    siteData.siteName,
+  "@type":   "WebSite",
+  "@id":     `${siteURL}#website`,
+  url:       siteURL,
+  name:      siteConfig.siteName,
   publisher: { "@id": `${siteURL}#organization` },
   potentialAction: [
     {
       "@type": "SearchAction",
-      // FIX: siteURL already has trailing slash, so no slash needed before "search"
       target: {
         "@type":      "EntryPoint",
         urlTemplate: `${siteURL}search?q={search_term_string}`,
@@ -233,20 +265,20 @@ schemaGraph.push({
   ],
 });
 
-// 3. Person — FIX: image is now an ImageObject (was plain string)
+// 3. Person
 schemaGraph.push({
-  "@type":       "Person",
-  "@id":         `${siteURL}#person`,
-  name:          activeAuthor.name,
-  jobTitle:      activeAuthor.role,
-  description:   activeAuthor.bio,
+  "@type":     "Person",
+  "@id":       `${siteURL}#person`,
+  name:        activeAuthor.name,
+  jobTitle:    activeAuthor.role,
+  description: activeAuthor.bio,
   image: {
     "@type": "ImageObject",
     url:     activeAuthor.avatar.startsWith("http")
                ? activeAuthor.avatar
                : new URL(activeAuthor.avatar, siteURL).toString(),
-    width:  400,
-    height: 400,
+    width:   400,
+    height:  400,
   },
   url:      new URL(`author/${activeAuthor.slug}/`, siteURL).toString(),
   worksFor: { "@id": `${siteURL}#organization` },
@@ -254,123 +286,102 @@ schemaGraph.push({
 
 // 4. WebPage
 schemaGraph.push({
-  "@type":       "WebPage",
-  "@id":         `${seoData.canonical}#webpage`,
-  url:           seoData.canonical.toString(),
-  name:          formattedTitle,
-  description:   seoData.description,
-  isPartOf:      { "@id": `${siteURL}#website` },
-  ...(!isHomepage && { breadcrumb: { "@id": `${seoData.canonical}#breadcrumb` } }),
-  inLanguage:    htmlLang,
+  "@type":      "WebPage",
+  "@id":        `${seoResolved.canonical}#webpage`,
+  url:          seoResolved.canonical.toString(),
+  name:         formattedTitle,
+  description:  seoResolved.description,
+  isPartOf:     { "@id": `${siteURL}#website` },
+  ...(!isHomepage && { breadcrumb: { "@id": `${seoResolved.canonical}#breadcrumb` } }),
+  inLanguage:   htmlLang,
   ...(datePublished && { datePublished }),
   ...(dateModified  && { dateModified }),
-  potentialAction: [{ "@type": "ReadAction", target: [seoData.canonical.toString()] }],
+  potentialAction: [{ "@type": "ReadAction", target: [seoResolved.canonical.toString()] }],
 });
 
-// 5. BreadcrumbList (non-homepage only)
+// 5. BreadcrumbList — non-homepage only
 if (!isHomepage) {
   const breadcrumbItems: any[] = [
     { "@type": "ListItem", position: 1, name: homeLabel, item: siteURL },
   ];
 
-  if (category) {
+  if (category && categoryName) {
     breadcrumbItems.push({
-      "@type":   "ListItem",
-      position:  2,
-      name:      category.name,
-      item:      new URL(`category/${category.slug}/`, siteURL).toString(),
+      "@type":  "ListItem",
+      position: 2,
+      name:     categoryName,
+      item:     new URL(`category/${category.slug}/`, siteURL).toString(),
     });
   }
 
   breadcrumbItems.push({
-    "@type":   "ListItem",
-    position:  category ? 3 : 2,
-    name:      seoData.title,
-    item:      seoData.canonical.toString(),
+    "@type":  "ListItem",
+    position: category ? 3 : 2,
+    name:     seoResolved.title,
+    item:     seoResolved.canonical.toString(),
   });
 
   schemaGraph.push({
-    "@type":           "BreadcrumbList",
-    "@id":             `${seoData.canonical}#breadcrumb`,
-    itemListElement:   breadcrumbItems,
+    "@type":         "BreadcrumbList",
+    "@id":           `${seoResolved.canonical}#breadcrumb`,
+    itemListElement: breadcrumbItems,
   });
 }
 
-// 6. BlogPosting (article pages)
+// 6. BlogPosting
 if (type === "article") {
   schemaGraph.push({
     "@type":       "BlogPosting",
-    "@id":         `${seoData.canonical}#article`,
-    headline:      seoData.title,
-    description:   seoData.description,
+    "@id":         `${seoResolved.canonical}#article`,
+    headline:      seoResolved.title,
+    description:   seoResolved.description,
     author:        { "@id": `${siteURL}#person` },
     publisher:     { "@id": `${siteURL}#organization` },
     datePublished,
     dateModified,
     image: {
-      "@type":  "ImageObject",
-      "@id":    `${seoData.canonical}#primaryimage`,
-      url:      ogImageURL,
-      width:    1200,
-      height:   630,
+      "@type": "ImageObject",
+      "@id":   `${seoResolved.canonical}#primaryimage`,
+      url:     ogImageURL,
+      width:   1200,
+      height:  630,
     },
-    mainEntityOfPage: { "@id": `${seoData.canonical}#webpage` },
-    articleSection:   category?.name,
+    mainEntityOfPage: { "@id": `${seoResolved.canonical}#webpage` },
+    articleSection:   categoryName,
     keywords:         tags.join(", "),
     inLanguage:       htmlLang,
   });
 }
 
 // 7. SoftwareSourceCode / CreativeWork
-// FIX: repoUrl signals software → use SoftwareSourceCode (has codeRepository).
-//      Without repoUrl use CreativeWork.
-//      "client" replaced with "provider" (valid Schema.org property).
 if (type === "creativeWork") {
   const baseWork = {
-    url:         seoData.canonical.toString(),
-    name:        seoData.title,
-    headline:    seoData.title,
-    description: seoData.description,
+    url:         seoResolved.canonical.toString(),
+    name:        seoResolved.title,
+    headline:    seoResolved.title,
+    description: seoResolved.description,
     image:       { "@type": "ImageObject", url: ogImageURL },
-    ...(datePublished && { dateCreated: datePublished }),
-    ...(dateModified  && { dateModified }),
-    author:            { "@id": `${siteURL}#person` },
-    creator:           { "@id": `${siteURL}#person` },
-    publisher:         { "@id": `${siteURL}#organization` },
-    keywords:          tags.join(", "),
-    isPartOf:          { "@id": `${siteURL}#website` },
-    mainEntityOfPage:  { "@id": `${seoData.canonical}#webpage` },
-    inLanguage:        htmlLang,
-    // FIX: "client" → "provider" (valid Schema.org property for CreativeWork / SoftwareSourceCode)
-    ...(client && { provider: { "@type": "Organization", name: client } }),
-    ...(creativeWorkRole && {
-      contributor: { "@id": `${siteURL}#person`, roleName: creativeWorkRole },
-    }),
-    ...(duration && { timeRequired: duration }),
-    ...(demoUrl  && { workExample: { "@type": "WebSite", url: demoUrl } }),
+    ...(datePublished    && { dateCreated:  datePublished }),
+    ...(dateModified     && { dateModified }),
+    author:           { "@id": `${siteURL}#person` },
+    creator:          { "@id": `${siteURL}#person` },
+    publisher:        { "@id": `${siteURL}#organization` },
+    keywords:         tags.join(", "),
+    isPartOf:         { "@id": `${siteURL}#website` },
+    mainEntityOfPage: { "@id": `${seoResolved.canonical}#webpage` },
+    inLanguage:       htmlLang,
+    ...(client           && { provider:    { "@type": "Organization", name: client } }),
+    ...(creativeWorkRole && { contributor: { "@id": `${siteURL}#person`, roleName: creativeWorkRole } }),
+    ...(duration         && { timeRequired: duration }),
+    ...(demoUrl          && { workExample:  { "@type": "WebSite", url: demoUrl } }),
   };
 
-  if (repoUrl) {
-    // FIX: codeRepository belongs to SoftwareSourceCode, not CreativeWork
-    schemaGraph.push({
-      "@type":          "SoftwareSourceCode",
-      "@id":            `${seoData.canonical}#creativework`,
-      codeRepository:   repoUrl,
-      ...baseWork,
-    });
-  } else {
-    schemaGraph.push({
-      "@type": "CreativeWork",
-      "@id":   `${seoData.canonical}#creativework`,
-      ...baseWork,
-    });
-  }
+  schemaGraph.push(
+    repoUrl
+      ? { "@type": "SoftwareSourceCode", "@id": `${seoResolved.canonical}#creativework`, codeRepository: repoUrl, ...baseWork }
+      : { "@type": "CreativeWork",        "@id": `${seoResolved.canonical}#creativework`, ...baseWork }
+  );
 }
-
-// ─── TWITTER HANDLE ───────────────────────────────────────────────────────────
-const twitterHandle = siteData.social?.twitter
-  ? `@${siteData.social.twitter.split("/").pop()}`
-  : "@c0desk1";
 ---
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -378,10 +389,8 @@ const twitterHandle = siteData.social?.twitter
      ═══════════════════════════════════════════════════════════ -->
 <link rel="preconnect" href="https://api.c0desk1.my.id" crossorigin />
 <link rel="dns-prefetch" href="https://api.c0desk1.my.id" />
-
 <link rel="preconnect" href="https://cdn.c0desk1.my.id" crossorigin />
 <link rel="dns-prefetch" href="https://cdn.c0desk1.my.id" />
-
 <!-- Yandex RTB + Metrica -->
 <link rel="dns-prefetch" href="https://yandex.ru" />
 <link rel="dns-prefetch" href="https://mc.yandex.ru" />
@@ -398,38 +407,37 @@ const twitterHandle = siteData.social?.twitter
 <meta name="generator" content={Astro.generator} />
 
 <title>{formattedTitle}</title>
-<meta name="description" content={seoData.description} />
-<meta name="author" content={activeAuthor.name} />
+<meta name="description" content={seoResolved.description} />
+<meta name="author"      content={activeAuthor.name} />
 
-<link rel="canonical" href={seoData.canonical.toString()} />
+<link rel="canonical" href={seoResolved.canonical.toString()} />
 
 <meta
   name="robots"
-  content={seoData.noIndex
+  content={seoResolved.noIndex
     ? "noindex,nofollow"
     : "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"}
 />
 <meta
   name="googlebot"
-  content={seoData.noIndex ? "noindex,nofollow" : "index,follow"}
+  content={seoResolved.noIndex ? "noindex,nofollow" : "index,follow"}
 />
 
 <!-- ═══════════════════════════════════════════════════════════
      OPEN GRAPH
      ═══════════════════════════════════════════════════════════ -->
-<meta property="og:type"              content={type === "article" ? "article" : "website"} />
-<meta property="og:title"             content={formattedTitle} />
-<meta property="og:description"       content={seoData.description} />
-<meta property="og:url"               content={seoData.canonical.toString()} />
-<meta property="og:site_name"         content={siteData.siteName} />
-<meta property="og:image"             content={ogImageURL} />
-<meta property="og:image:alt"         content={propsImage?.alt || formattedTitle} />
-<meta property="og:image:secure_url"  content={ogImageURL} />
-<meta property="og:image:width"       content="1200" />
-<meta property="og:image:height"      content="630" />
-<!-- FIX: toOgLocale() used consistently (underscore form) for all og:locale tags -->
-<meta property="og:locale"            content={toOgLocale(locale)} />
-<meta name="google"                   content="notranslate" />
+<meta property="og:type"             content={type === "article" ? "article" : "website"} />
+<meta property="og:title"            content={formattedTitle} />
+<meta property="og:description"      content={seoResolved.description} />
+<meta property="og:url"              content={seoResolved.canonical.toString()} />
+<meta property="og:site_name"        content={siteConfig.siteName} />
+<meta property="og:image"            content={ogImageURL} />
+<meta property="og:image:alt"        content={propsImage?.alt ?? formattedTitle} />
+<meta property="og:image:secure_url" content={ogImageURL} />
+<meta property="og:image:width"      content="1200" />
+<meta property="og:image:height"     content="630" />
+<meta property="og:locale"           content={toOgLocale(locale)} />
+<meta name="google"                  content="notranslate" />
 
 {(siteConfig.locales as string[])
   .filter((l) => l !== locale)
@@ -447,8 +455,8 @@ const twitterHandle = siteData.social?.twitter
 {type === "article" && dateModified && (
   <meta property="article:modified_time" content={dateModified} />
 )}
-{type === "article" && category && (
-  <meta property="article:section" content={category.name} />
+{type === "article" && categoryName && (
+  <meta property="article:section" content={categoryName} />
 )}
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -456,7 +464,7 @@ const twitterHandle = siteData.social?.twitter
      ═══════════════════════════════════════════════════════════ -->
 <meta name="twitter:card"        content="summary_large_image" />
 <meta name="twitter:title"       content={formattedTitle} />
-<meta name="twitter:description" content={seoData.description} />
+<meta name="twitter:description" content={seoResolved.description} />
 <meta name="twitter:image"       content={ogImageURL} />
 <meta name="twitter:site"        content={twitterHandle} />
 <meta name="twitter:creator"     content={twitterHandle} />
@@ -471,10 +479,10 @@ const twitterHandle = siteData.social?.twitter
 <!-- ═══════════════════════════════════════════════════════════
      THEME & PWA
      ═══════════════════════════════════════════════════════════ -->
-<meta name="color-scheme"                        content="light dark" />
-<meta name="theme-color"                         content="#ffffff" media="(prefers-color-scheme: light)" />
-<meta name="theme-color"                         content="#000000" media="(prefers-color-scheme: dark)" />
-<meta name="mobile-web-app-capable"              content="yes" />
+<meta name="color-scheme"                          content="light dark" />
+<meta name="theme-color"                           content="#ffffff" media="(prefers-color-scheme: light)" />
+<meta name="theme-color"                           content="#000000" media="(prefers-color-scheme: dark)" />
+<meta name="mobile-web-app-capable"                content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -488,14 +496,14 @@ const twitterHandle = siteData.social?.twitter
 <!-- ═══════════════════════════════════════════════════════════
      VERIFICATIONS & AD ACCOUNTS
      ═══════════════════════════════════════════════════════════ -->
-{siteData.googleSiteVerification && (
-  <meta name="google-site-verification" content={siteData.googleSiteVerification} />
+{siteConfig.googleSiteVerification && (
+  <meta name="google-site-verification" content={siteConfig.googleSiteVerification} />
 )}
-{siteData.googleAdsenseId && (
-  <meta name="google-adsense-account" content={siteData.googleAdsenseId} />
+{siteConfig.googleAdsenseId && (
+  <meta name="google-adsense-account" content={siteConfig.googleAdsenseId} />
 )}
-{siteData.yandexVerification && (
-  <meta name="yandex-verification" content={siteData.yandexVerification} />
+{siteConfig.yandexVerification && (
+  <meta name="yandex-verification" content={siteConfig.yandexVerification} />
 )}
 
 <!-- ═══════════════════════════════════════════════════════════
