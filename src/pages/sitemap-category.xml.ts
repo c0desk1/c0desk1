@@ -1,19 +1,11 @@
-// src/pages/sitemap-category.xml.ts
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import type { APIRoute } from 'astro';
 import { siteConfig } from '@/config/site';
 
-let settings;
-try {
-  settings = await getEntry('settings', 'site');
-} catch (error) {
-  console.warn('Settings not found, using siteConfig fallback');
-}
-const siteData = settings?.data || siteConfig;
-const siteUrl = siteData.siteUrl;
-
 export const GET: APIRoute = async () => {
+  const siteUrl = siteConfig.siteUrl;
+
   const categories = await getCollection('categories');
   
   const sortedCategories = categories.sort((a: CollectionEntry<"categories">, b: CollectionEntry<"categories">) =>
