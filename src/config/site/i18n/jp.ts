@@ -10,6 +10,7 @@ export const jp = {
     readArticle: "記事を読む",
     lastUpdated: "最終更新",
     uncategorized: "未分類",
+    articles: "記事",
 
     //_________Header___________//
 
