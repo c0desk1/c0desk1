@@ -2,11 +2,13 @@
   "name": {
     "id": "Anime",
     "en": "Anime",
-    "ru": "Аниме"
+    "ru": "Аниме",
+    "jp": "アニメ"
   },
   "description": {
     "id": "Review, rekomendasi, dan diskusi seputar anime",
     "en": "Reviews, recommendations, and discussions about anime",
-    "ru": "Обзоры, рекомендации и обсуждения об аниме."
+    "ru": "Обзоры, рекомендации и обсуждения об аниме.",
+    "jp": "アニメに関するレビュー、おすすめ、ディスカッション"
   }
 }
