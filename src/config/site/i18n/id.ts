@@ -235,4 +235,11 @@ export const id = {
     seeAllPosts: "Lihat semua postingan",
     browsePostsByCategory: "Jelajahi postingan berdasarkan kategori",
     filterCategory: "Filter kategori",
+
+  // 404 page
+  pageNotFound: "Halaman tidak ditemukan",
+  notFoundTitle: "404: Tidak Ditemukan",
+  notFoundDesc: "Halaman yang Anda cari tidak dapat ditemukan.",
+  returnHome: "Kembali ke Beranda",
+  searchArticles: "Cari Artikel",
 } as const;
