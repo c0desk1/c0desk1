@@ -235,10 +235,15 @@ export const ru = {
     browsePostsByCategory: "Искать записи по категориям",
     filterCategory: "Фильтр категорий",
 
-  //____404
-  notFoundTitle: "404: Не найдено",
-  notFoundDesc: "Страница, которую вы ищете, не найдена.",
-  returnHome: "Вернуться на главную",
-  searchArticles: "Поиск статей",
-  pageNotFound: "Страница не найдена",
+    //____404
+    notFoundTitle: "404: Не найдено",
+    notFoundDesc: "Страница, которую вы ищете, не найдена.",
+    returnHome: "Вернуться на главную",
+    searchArticles: "Поиск статей",
+    pageNotFound: "Страница не найдена",
+    
+    // Offline page
+    offlineTitle: "Вы не в сети",
+    offlineDesc: "Подключение к интернету потеряно. Проверьте соединение и попробуйте позже.",
+   tryAgain: "Попробовать снова",
 } as const;
