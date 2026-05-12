@@ -232,6 +232,21 @@ export const jp = {
     seeAllPosts: "すべての投稿を見る",
     browsePostsByCategory: "カテゴリーで投稿を探す",
     filterCategory: "カテゴリーフィルター",
+    
+    // 401 page
+    unauthorizedTitle: "401: 認証が必要",
+    unauthorizedDesc: "アクセスが拒否されました。最初にログインしてください。",
+    unauthorizedHeading: "認証が必要です。",
+    unauthorizedMessage: "このリソースにアクセスするには認証が必要です。有効な資格情報でサインインしてください。",
+    signIn: "サインイン",
+    
+    // 403 page
+    forbiddenTitle: "403: 禁止されています",
+    forbiddenDesc: "このページにアクセスする権限がありません。",
+    forbiddenHeading: "アクセスが拒否されました。",
+    forbiddenMessage: "資格情報は有効ですが、このページまたはディレクトリを表示するために必要な権限レベルがありません。",
+    goBack: "戻る",
+
 
     //____404
     notFoundTitle: "404: 見つかりません",
@@ -239,6 +254,12 @@ export const jp = {
     returnHome: "ホームに戻る",
     searchArticles: "記事を検索",
     pageNotFound: "ページが見つかりません",
+    
+    // 500 page
+    serverErrorTitle: "500: サーバーエラー",
+    serverErrorDesc: "サーバーでエラーが発生しました。",
+    serverErrorHeading: "サーバーエラー。",
+    serverErrorMessage: "リクエストの処理を妨げる予期しない問題がシステムで発生しました。この異常は記録されました。",
     
     //____Offline page
     offlineTitle: "オフラインです",
