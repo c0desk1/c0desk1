@@ -15,12 +15,15 @@ interface Props {
 const { post } = Astro.props;
 const locale = getCurrentLocale(Astro);
 
-
 const { title, pubDate, category, author } = post.data;
 
 const excerpt = generateExcerpt(post.body || '', 140);
 
-const dateLocale = locale === 'en'? 'en-US' : locale === 'ru'? 'ru-RU' : 'id-ID';
+const dateLocale =
+  locale === 'en' ? 'en-US' :
+  locale === 'ru' ? 'ru-RU' :
+  locale === 'jp' ? 'ja-JP' :
+  'id-ID';
 const formattedDate = formatDateCompact(pubDate, dateLocale);
 
 const categoryEntry = await getEntry(category);
@@ -37,8 +40,8 @@ const postUrl = localizePath(`/blog/${autoSlug}/`, locale);
 
 <a
   href={postUrl}
-   class="group flex flex-col h-full rounded-(--radius-xl) p-4 my-4 border border-(--border) hover:border-(--border-strong) focus:outline-none focus:ring-2 focus:ring-(--border-strong)"
-  aria-label={`Read article: ${title}`}
+  class="group flex flex-col h-full rounded-(--radius-xl) p-4 my-4 border border-(--border) hover:border-(--border-strong) focus:outline-none focus:ring-2 focus:ring-(--border-strong)"
+  aria-label={`${getLabel(locale, 'readArticle')}: ${title}`}
 >
   <div class="flex items-center justify-between text-[13px] text-(--fg-subtle) mb-2">
     <span class="tracking-tight">
