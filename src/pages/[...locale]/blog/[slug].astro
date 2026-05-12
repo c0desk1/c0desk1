@@ -1,5 +1,5 @@
 ---
-// src/pages/[...locale]/blog/[slug].astro
+// src/pages/[...locale]/blog/[...slug].astro
 export const prerender = true;
 
 import '@/styles/prose/index.css';
@@ -109,17 +109,21 @@ const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 const homeLabel = getLabel(locale, 'home') || 'Home';
 const blogLabel = getLabel(locale, 'blog') || 'Blog';
 
+const categoryLabel = categoryEntry?.data?.name?.[locale] 
+  || categoryEntry?.data?.name?.id 
+  || getLabel(locale, "general");
+
 const SeoBreadcrumbItems = [
   { name: homeLabel, href: localizePath('/', locale) },
   { name: blogLabel, href: localizePath('/blog', locale) },
-  { name: seoCategory.name, href: localizePath(`/category/${seoCategory.slug}`, locale) },
+  { name: categoryLabel, href: localizePath(`/category/${seoCategory.slug}`, locale) },
   { name: title, href: canonicalURL }
 ];
 
 const Breadcrumbs = SeoBreadcrumbItems.filter(
   (item) =>
     item.name === blogLabel ||
-    item.name === seoCategory.name
+    item.name === categoryLabel
 );
 ---
 
