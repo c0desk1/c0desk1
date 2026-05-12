@@ -1,80 +1,99 @@
 ---
-// src/pages/category/[slug].astro
+// src/pages/[...locale]/category/[slug].astro
 export const prerender = true;
 
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/ui/Container.astro";
 import Breadcrumb from "@/components/ui/Breadcrumb.astro";
-import { getCollection, getEntry, type CollectionEntry } from "astro:content";
+
+import { getCollection, getEntry } from "astro:content";
 import { siteConfig } from "@/config/site";
 import { formatDateCompact } from "@/lib/utils";
+import { getCurrentLocale, localizePath, getLabel } from "@/utils/i18n";
 
 export async function getStaticPaths() {
   const categories = await getCollection("categories");
+  const locales = siteConfig.locales;
 
-  // Group per slug: "tools" -> { id: tools.id, en: tools.en, ru: tools.ru }
-  const categoriesBySlug = new Map<string, Record<string, CollectionEntry<'categories'>>>();
+  return locales.flatMap((locale) => {
+    // Filter kategori berdasarkan bahasa saat ini (jika kategori kamu memiliki field lang)
+    const localeCategories = categories.filter(c => (c.data.lang || siteConfig.defaultLocale) === locale);
+    
+    // Jika tidak punya field lang dan slugnya universal, gunakan semua 'categories' 
+    const targetCategories = localeCategories.length > 0 ? localeCategories : categories;
 
-  for (const cat of categories) {
-    const slug = cat.id.split('/')[1]; // "tools"
-    const lang = cat.data.lang; // "id" | "en" | "ru"
+    return targetCategories.map((category) => {
+      // Mendapatkan base ID untuk mencari alternateSlugs antar bahasa
+      const baseId = category.id.split('/')[0];
+      const alternates = categories.filter(c => c.id.startsWith(baseId + '/'));
+      
+      const alternateSlugs = Object.fromEntries(
+        alternates.map(c => [
+          c.data.lang || siteConfig.defaultLocale,
+          c.data.slug || baseId
+        ])
+      );
 
-    if (!categoriesBySlug.has(slug)) {
-      categoriesBySlug.set(slug, {});
-    }
-    categoriesBySlug.get(slug)![lang] = cat;
-  }
-
-  // Generate 1 path per slug, pake 'id' sebagai default buat title/desc
-  return Array.from(categoriesBySlug.entries()).map(([slug, langs]) => {
-    const defaultCategory = langs['id'] || langs['en'] || langs['ru']; // fallback kalo ga ada id
-
-    return {
-      params: { slug }, // /category/tools
-      props: {
-        defaultCategory, // buat title/desc halaman
-        allCategoryEntries: Object.values(langs), // [tools.id, tools.en, tools.ru]
-      },
-    };
+      return {
+        params: { 
+          locale: locale === siteConfig.defaultLocale ? undefined : locale,
+          slug: category.data.slug || baseId
+        },
+        props: { category, alternateSlugs },
+      };
+    });
   });
 }
 
-const { defaultCategory, allCategoryEntries } = Astro.props;
-const allPosts = await getCollection("blog", ({ data }) =>!data.draft);
+const { category, alternateSlugs } = Astro.props;
+const locale = getCurrentLocale(Astro);
 
-// Ambil semua id: ["categories/tools/index.id", "categories/tools/index.en", "categories/tools/index.ru"]
-const categoryIds = allCategoryEntries.map(c => c.id);
+// Hanya ambil artikel sesuai locale aktif
+const allPosts = await getCollection("blog", ({ data }) => {
+  const postLang = data.lang || siteConfig.defaultLocale;
+  return !data.draft && postLang === locale;
+});
 
-// Filter post yang category-nya tools, apapun bahasanya
 const categoryPosts = allPosts
-.filter((post) => categoryIds.includes(post.data.category?.id))
-.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+  .filter((post) => post.data.category?.id === category.id || post.data.category?.slug === category.data.slug)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
 const postsWithAuthor = await Promise.all(
   categoryPosts.map(async (post) => {
-    const author = post.data.author? await getEntry(post.data.author) : null;
-    return {...post, authorData: author?.data };
+    const author = post.data.author ? await getEntry(post.data.author) : null;
+    return { ...post, authorData: author?.data };
   })
 );
 
-const siteURL = Astro.site?.toString()?? siteConfig.siteUrl;
+const siteURL = Astro.site?.toString() ?? siteConfig.siteUrl;
 const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
+const t_home = getLabel(locale, 'home');
+const t_blog = getLabel(locale, 'blog');
+const t_empty = getLabel(locale, 'noPostsInCategory');
+
 const seoData = {
-  title: defaultCategory.data.name, // ambil dari tools/index.id.json
-  description: defaultCategory.data.description || `Artikel tentang ${defaultCategory.data.name}`,
+  title: category.data.name,
+  description: category.data.description || `${t_blog} - ${category.data.name}`,
   type: "website" as const,
   canonicalURL,
+  alternateSlugs,
+};
+
+const blogCategory = {
+  name: t_blog,
+  slug: "blog",
+  description: getLabel(locale, 'blog_PageDescription')
 };
 
 const breadcrumbItems = [
-  { name: "Home", href: siteURL },
-  { name: "Blog", href: new URL("blog/", siteURL).toString() },
-  { name: defaultCategory.data.name, href: canonicalURL }
+  { name: t_home, href: localizePath('/', locale) },
+  { name: t_blog, href: localizePath('/blog', locale) },
+  { name: category.data.name, href: canonicalURL }
 ];
 ---
 
-<BaseLayout {...seoData}>
+<BaseLayout {...seoData} category={blogCategory}>
     <Container size="lg" class="pt-8">
       <Breadcrumb items={breadcrumbItems} />
     </Container>
@@ -82,20 +101,24 @@ const breadcrumbItems = [
       <Container size="lg" class="py-16 md:py-24">
         <div class="max-w-2xl mx-auto text-center">
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 mb-6">
-            <span class="text-[11px] font-mono uppercase tracking-wider text-zinc-500">Category</span>
+            <span class="text-[11px] font-mono uppercase tracking-wider text-zinc-500">
+              {getLabel(locale, 'filterCategory').split(' ')[1] || 'Category'}
+            </span>
           </div>
           <h1 class="text-3xl md:text-5xl font-bold tracking-tight text-zinc-900 dark:text-white mb-4">
-            {defaultCategory.data.name}
+            {category.data.name}
           </h1>
-
-          {defaultCategory.data.description && (
+        
+          {category.data.description && (
             <p class="text-lg text-zinc-600 dark:text-zinc-400 max-w-md mx-auto">
-              {defaultCategory.data.description}
+              {category.data.description}
             </p>
           )}
-
+          
           <div class="mt-6 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
-            <span class="text-[11px] font-mono text-zinc-500">{categoryPosts.length} articles</span>
+            <span class="text-[11px] font-mono text-zinc-500">
+              {categoryPosts.length} {locale === 'id' ? 'artikel' : locale === 'ru' ? 'статей' : 'articles'}
+            </span>
           </div>
         </div>
       </Container>
@@ -103,14 +126,14 @@ const breadcrumbItems = [
 
     <Container size="lg" class="py-16 md:py-24">
       <div class="max-w-3xl mx-auto">
-        {categoryPosts.length > 0? (
+        {categoryPosts.length > 0 ? (
           <div class="space-y-px">
             {postsWithAuthor.map((post) => (
               <article class="group py-8 border-b border-zinc-100 dark:border-zinc-800 last:border-0">
-                <a href={`/blog/${post.id}/`} class="block">
+                <a href={localizePath(`/blog/${post.id.split('/').pop() || post.data.slug}/`, locale)} class="block">
                   <div class="flex flex-col md:flex-row md:items-center gap-3 md:gap-6 mb-2">
                     <time class="text-[13px] text-zinc-500 font-mono tabular-nums">
-                      {formatDateCompact(post.data.pubDate)}
+                      {formatDateCompact(post.data.pubDate, locale === 'id' ? 'id-ID' : locale === 'ru' ? 'ru-RU' : 'en-US')}
                     </time>
                     {post.authorData && (
                       <>
@@ -121,11 +144,11 @@ const breadcrumbItems = [
                       </>
                     )}
                   </div>
-
+                  
                   <h2 class="text-xl md:text-2xl font-medium tracking-tight text-zinc-900 dark:text-white mb-2 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors">
                     {post.data.title}
                   </h2>
-
+                  
                   <p class="text-sm text-zinc-500 dark:text-zinc-400 line-clamp-2 leading-relaxed">
                     {post.data.description}
                   </p>
@@ -135,7 +158,7 @@ const breadcrumbItems = [
           </div>
         ) : (
           <div class="text-center py-12">
-            <p class="text-zinc-400 dark:text-zinc-600">No articles in this category yet.</p>
+            <p class="text-zinc-400 dark:text-zinc-600">{t_empty}</p>
           </div>
         )}
       </div>
