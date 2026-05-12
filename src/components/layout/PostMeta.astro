@@ -12,12 +12,17 @@ interface Props {
 const { pubDate, content } = Astro.props;
 const locale = getCurrentLocale(Astro);
 
-const dateLocale = locale === 'id'? 'id-ID' : locale === 'ru'? 'ru-RU' : 'en-US';
+const dateLocale =
+  locale === 'id' ? 'id-ID' :
+  locale === 'ru' ? 'ru-RU' :
+  locale === 'jp' ? 'ja-JP' :
+  'en-US';
+
 const formattedDate = formatDate(pubDate, dateLocale);
-const readingTime = getReadingTime(content, locale);
+const readingTime = getReadingTime(content, locale as 'id' | 'en' | 'ru' | 'jp');
 ---
 
-<div class="flex flex-wrap items-center justify-start md:justify-center gap-x-2 gap-y-1 text- md:text-sm text-(--fg-muted)">
+<div class="flex flex-wrap items-center justify-start md:justify-center gap-x-2 gap-y-1 text-sm md:text-sm text-(--fg-muted)">
   {readingTime && (
     <div class="flex items-center justify-center gap-2">
       <Icon name="clock" className="w-4 h-4" />
