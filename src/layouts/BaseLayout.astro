@@ -103,7 +103,7 @@ interface Props {
 }
 
 const locale = getCurrentLocale(Astro);
-const htmlLang = locale === 'id' ? 'id-ID' : locale === 'en' ? 'en-US' : 'ru-RU';
+const htmlLang = locale === 'id' ? 'id-ID' : locale === 'en' ? 'en-US' : locale === 'ru' ? 'ru-RU': 'ja-JP';
 const skipToContentLabel = getLabel(locale, 'skipToContent') || 'loncat ke konten utama';
 
 const {
