@@ -3,6 +3,7 @@
 import { getCollection, getEntry } from "astro:content";
 import Icon from "@/components/ui/Icon";
 import { getCurrentLocale, getLabel, localizePath } from "@/utils/i18n";
+import { slugify } from "@/lib/utils";
 
 const locale = getCurrentLocale(Astro);
 const loc = locale as "id" | "en" | "ru" | "jp";
@@ -35,13 +36,16 @@ const searchData = await Promise.all(
       ? nameObj[loc] || nameObj.id
       : uncategorized;
 
+    const autoSlug = slugify(post.data.title);
+    const url = localizePath(`/blog/${autoSlug}/`, locale);
+
     return {
       id: post.id,
       title: post.data.title,
       desc: post.data.description ?? "",
       category: categoryName,
       categorySlug: categoryEntry?.id ?? "uncategorized",
-      url: localizePath(`/blog/${post.id}`, locale).replace(/\/index$/, '/'),
+      url,
     };
   })
 );
