@@ -1,18 +1,10 @@
-// src/pages/sitemap-portfolio.xml.ts
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import type { APIRoute } from 'astro';
 import { siteConfig } from '@/config/site';
 
 export const GET: APIRoute = async () => {
-  let settings;
-  try {
-    settings = await getEntry('settings', 'site');
-  } catch (error) {
-    console.warn('Settings not found, using siteConfig fallback');
-  }
-  const siteData = settings?.data || siteConfig;
-  const siteUrl = siteData.siteUrl;
+  const siteUrl = siteConfig.siteUrl;
 
   const projects = await getCollection('portfolio', (project: CollectionEntry<"portfolio">) => !project.data.draft);
   
