@@ -5,9 +5,9 @@ import { siteConfig } from "@/config/site";
 import { getEntry } from "astro:content";
 import { getCurrentLocale, getLabel } from "@/utils/i18n";
 
-type Locale = "id" | "en" | "ru";
-type LocaleMap = { id: string; en: string; ru: string };
-type PartialLocaleMap = { id?: string; en?: string; ru?: string };
+type Locale = "id" | "en" | "ru" | "jp";
+type LocaleMap = { id: string; en: string; ru: string; jp: string };
+type PartialLocaleMap = { id?: string; en?: string; ru?: string; jp?: string };
 
 interface Props {
   title?: string;
@@ -81,6 +81,7 @@ function toBcp47(lang: string): string {
   if (lang === "id") return "id-ID";
   if (lang === "en") return "en-US";
   if (lang === "ru") return "ru-RU";
+  if (lang === "jp") return "ja-JP";
   return lang;
 }
 
