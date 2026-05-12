@@ -11,6 +11,8 @@ export const id = {
     lastUpdated: "Terakhir diperbarui",
     uncategorized: "Uncategorized",
 
+   
+
     //_________Header___________//
 
     //____Logo
@@ -63,7 +65,8 @@ export const id = {
     refreshPage: "Silakan refresh halaman",
 
     //____Language Switcher
-    languageAria: "Pilih bahasa",
+    languageSwitcherLabel: "Bahasa saat ini: ID. Pilih bahasa",
+    languageList: "Pilih bahasa",
 
     //_________Footer__________//
 
@@ -103,6 +106,7 @@ export const id = {
     //____Author______//
     author: "Penulis",
     avatarOf: "Avatar dari",
+    contentCreator: "Kreator",
 
     //____Homepage______//
     HeroAria: "Hero section",
@@ -224,11 +228,11 @@ export const id = {
     shareTo: "Bagikan ke",
 
     //_______Category__________//
+    allCategory: "Semua",
     selectCategory: "Pilih kategori",
     noPostsInCategory: "Belum ada postingan di kategori ini.",
     showMore: "Tampilkan lebih banyak",
     seeAllPosts: "Lihat semua postingan",
     browsePostsByCategory: "Jelajahi postingan berdasarkan kategori",
     filterCategory: "Filter kategori",
-    allCategory: "Semua",
 } as const;
