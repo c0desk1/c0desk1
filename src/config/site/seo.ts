@@ -7,15 +7,15 @@ export const seoConfig = {
   defaultSeo: {
     id: {
       title: "c0desk1",
-      description: "Music producer, Adobe Stock contributor, dan developer. Bahas teknologi, game, anime, dan apapun yang gue anggap unik.",
+      description: "Portal kreatif yang mengeksplorasi workflow digital, AI tools, musik, anime, dan game dari perspektif kreator modern di era otomatisasi.",
     },
     en: {
       title: "c0desk1",
-      description: "Music producer, Adobe Stock contributor, and developer. Discussing tech, games, anime, and anything I find unique.",
+      description: "A creative portal exploring digital workflows, AI tools, music, anime, and games through the lens of a modern creator in the age of automation.",
     },
     ru: {
       title: "c0desk1",
-      description: "Музыкальный продюсер, автор Adobe Stock и разработчик. Обсуждаю технологии, игры, аниме и всё, что считаю уникальным.",
+      description: "Креативный портал, исследующий цифровые рабочие процессы, ИИ-инструменты, музыку, аниме и игры с точки зрения современного творца в эпоху автоматизации.",
     },
   }
 } as const;
