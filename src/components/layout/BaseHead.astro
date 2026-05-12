@@ -5,7 +5,6 @@ import { siteConfig } from "@/config/site";
 import { getEntry } from "astro:content";
 import { getCurrentLocale, getLabel } from "@/utils/i18n";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
 type Locale = "id" | "en" | "ru";
 type LocaleMap = { id: string; en: string; ru: string };
 type PartialLocaleMap = { id?: string; en?: string; ru?: string };
@@ -76,7 +75,6 @@ const {
   alternateSlugs,
 } = Astro.props;
 
-// ─── LOCALISATION HELPERS ────────────────────────────────────────────────────
 function toBcp47(lang: string): string {
   if (lang === "id") return "id-ID";
   if (lang === "en") return "en-US";
@@ -96,10 +94,8 @@ const htmlLang  = toBcp47(locale);
 const homeLabel = getLabel(locale, "home") ?? "Home";
 const contentCreatorLabel = getLabel(locale, "contentCreator") ?? "Content Creator";
 
-// ─── SITE DATA ────────────────────────────────────────────────────────────────
 const siteData = siteDataFromProps ?? siteConfig;
 
-// ─── ORGANISATION ─────────────────────────────────────────────────────────────
 let org: { data: any } | undefined;
 if (orgFromProps) {
   org = { data: orgFromProps };
@@ -108,16 +104,13 @@ if (orgFromProps) {
     const entry = await getEntry("organizations", "c0desk1");
     if (entry) org = { data: entry.data };
   } catch {
-    // Collection absent — degrade gracefully
   }
 }
 const orgData = org?.data;
 
-// ─── URLS ─────────────────────────────────────────────────────────────────────
 const rawSiteURL = Astro.site?.toString() ?? siteConfig.siteUrl;
 const siteURL    = rawSiteURL.endsWith("/") ? rawSiteURL : `${rawSiteURL}/`;
 
-// ─── HREFLANG ────────────────────────────────────────────────────────────────
 const currentPath       = Astro.url.pathname;
 const localePattern     = new RegExp(`^\\/(${siteConfig.locales.join("|")})`);
 const pathWithoutLocale = currentPath.replace(localePattern, "") || "/";
@@ -134,7 +127,6 @@ const hreflangLinks = (siteConfig.locales as string[]).map((lang) => {
 
 const xDefaultHref = new URL(pathWithoutLocale, siteURL).toString();
 
-// ─── AUTHOR ───────────────────────────────────────────────────────────────────
 const authorBioResolved: string =
   author?.bio ??
   (siteConfig.author?.bio ? t(siteConfig.author.bio as PartialLocaleMap) : "");
@@ -147,11 +139,9 @@ const activeAuthor = {
   slug:   author?.slug   ?? siteConfig.author?.slug   ?? "bima-akbar",
 };
 
-// ─── DEFAULT SEO ───────────────────────────────────────
 // siteConfig.defaultSeo = { id: { title, description }, en: {...}, ru: {...} }
 const localeSeo = (siteConfig.defaultSeo as Record<string, { title?: string; description?: string }>)?.[locale];
 
-// ─── SEO CORE ─────────────────────────────────────────────────────────────────
 const seoResolved = {
   title:
     seo?.title ??
@@ -179,7 +169,6 @@ const formattedTitle =
     ? siteConfig.siteName
     : `${seoResolved.title} — ${siteConfig.siteName}`;
 
-// ─── OG IMAGE ────────────────────────────────────────────────────────────────
 const rawImage = seo?.ogImage ?? propsImage?.src ?? siteConfig.ogImage;
 const ogImageURL: string = !rawImage
   ? new URL(siteConfig.siteLogo, siteURL).toString()
@@ -187,22 +176,17 @@ const ogImageURL: string = !rawImage
   ? rawImage
   : new URL(rawImage, siteURL).toString();
 
-// ─── CATEGORY — resolve to active locale ─────────────────────────────────────
 const categoryName: string | undefined = category ? t(category.name) : undefined;
 
-// ─── PAGE CONTEXT ─────────────────────────────────────────────────────────────
 const pathname = Astro.url.pathname;
 const localeRootPattern = new RegExp(
   `^\\/(${siteConfig.locales.join("|")})\\/?$`
 );
 const isHomepage = pathname === "/" || localeRootPattern.test(pathname);
 
-// ─── DATES ───────────────────────────────────────────────────────────────────
 const datePublished = publishedTime?.toISOString();
 const dateModified  = modifiedTime?.toISOString() ?? datePublished;
 
-// ─── TWITTER HANDLE ───────────────────────────────────────────────────────────
-// siteConfig.social is an array: [{ label, href }, ...]
 const twitterHandle = (() => {
   const tw = Array.isArray(siteConfig.social)
     ? siteConfig.social.find((s: { label: string; href: string }) => s.label === "twitter")
@@ -210,7 +194,6 @@ const twitterHandle = (() => {
   return tw ? `@${tw.href.split("/").pop()}` : "@c0desk1";
 })();
 
-// ─── JSON-LD GRAPH ────────────────────────────────────────────────────────────
 const schemaGraph: any[] = [];
 
 // 1. Organization
@@ -384,26 +367,18 @@ if (type === "creativeWork") {
 }
 ---
 
-<!-- ═══════════════════════════════════════════════════════════
-     PRECONNECT & DNS PREFETCH
-     ═══════════════════════════════════════════════════════════ -->
 <link rel="preconnect" href="https://api.c0desk1.my.id" crossorigin />
 <link rel="dns-prefetch" href="https://api.c0desk1.my.id" />
 <link rel="preconnect" href="https://cdn.c0desk1.my.id" crossorigin />
 <link rel="dns-prefetch" href="https://cdn.c0desk1.my.id" />
+
 <!-- Yandex RTB + Metrica -->
 <link rel="dns-prefetch" href="https://yandex.ru" />
 <link rel="dns-prefetch" href="https://mc.yandex.ru" />
 <link rel="dns-prefetch" href="https://an.yandex.ru" />
 
-<!-- ═══════════════════════════════════════════════════════════
-     FONT PRELOAD
-     ═══════════════════════════════════════════════════════════ -->
 <link rel="preload" href="/fonts/Geist.woff2" as="font" type="font/woff2" crossorigin />
 
-<!-- ═══════════════════════════════════════════════════════════
-     CORE META
-     ═══════════════════════════════════════════════════════════ -->
 <meta name="generator" content={Astro.generator} />
 
 <title>{formattedTitle}</title>
@@ -423,9 +398,6 @@ if (type === "creativeWork") {
   content={seoResolved.noIndex ? "noindex,nofollow" : "index,follow"}
 />
 
-<!-- ═══════════════════════════════════════════════════════════
-     OPEN GRAPH
-     ═══════════════════════════════════════════════════════════ -->
 <meta property="og:type"             content={type === "article" ? "article" : "website"} />
 <meta property="og:title"            content={formattedTitle} />
 <meta property="og:description"      content={seoResolved.description} />
@@ -445,7 +417,6 @@ if (type === "creativeWork") {
     <meta property="og:locale:alternate" content={toOgLocale(l)} />
   ))}
 
-<!-- Article-specific OG -->
 {type === "article" && tags.map((tag) => (
   <meta property="article:tag" content={tag} />
 ))}
@@ -459,9 +430,6 @@ if (type === "creativeWork") {
   <meta property="article:section" content={categoryName} />
 )}
 
-<!-- ═══════════════════════════════════════════════════════════
-     TWITTER / X CARD
-     ═══════════════════════════════════════════════════════════ -->
 <meta name="twitter:card"        content="summary_large_image" />
 <meta name="twitter:title"       content={formattedTitle} />
 <meta name="twitter:description" content={seoResolved.description} />
@@ -469,33 +437,21 @@ if (type === "creativeWork") {
 <meta name="twitter:site"        content={twitterHandle} />
 <meta name="twitter:creator"     content={twitterHandle} />
 
-<!-- ═══════════════════════════════════════════════════════════
-     ICONS & MANIFEST
-     ═══════════════════════════════════════════════════════════ -->
 <link rel="icon"             href="/favicon.svg" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <link rel="manifest"         href="/site.webmanifest" />
 
-<!-- ═══════════════════════════════════════════════════════════
-     THEME & PWA
-     ═══════════════════════════════════════════════════════════ -->
 <meta name="color-scheme"                          content="light dark" />
 <meta name="theme-color"                           content="#ffffff" media="(prefers-color-scheme: light)" />
 <meta name="theme-color"                           content="#000000" media="(prefers-color-scheme: dark)" />
 <meta name="mobile-web-app-capable"                content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-<!-- ═══════════════════════════════════════════════════════════
-     JSON-LD STRUCTURED DATA
-     ═══════════════════════════════════════════════════════════ -->
 <script
   type="application/ld+json"
   set:html={JSON.stringify({ "@context": "https://schema.org", "@graph": schemaGraph })}
 />
 
-<!-- ═══════════════════════════════════════════════════════════
-     VERIFICATIONS & AD ACCOUNTS
-     ═══════════════════════════════════════════════════════════ -->
 {siteConfig.googleSiteVerification && (
   <meta name="google-site-verification" content={siteConfig.googleSiteVerification} />
 )}
@@ -506,9 +462,6 @@ if (type === "creativeWork") {
   <meta name="yandex-verification" content={siteConfig.yandexVerification} />
 )}
 
-<!-- ═══════════════════════════════════════════════════════════
-     HREFLANG — SEO MULTILINGUAL
-     ═══════════════════════════════════════════════════════════ -->
 {hreflangLinks.map(({ lang, href }: { lang: string; href: string }) => (
   <link rel="alternate" hreflang={lang} href={href} />
 ))}
