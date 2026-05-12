@@ -234,6 +234,20 @@ export const en = {
     seeAllPosts: "See all posts",
     browsePostsByCategory: "Browse posts by category",
     filterCategory: "Filter categories",
+    
+    // 401 Page
+    unauthorizedTitle: "401: Unauthorized", 
+    unauthorizedDesc: "Access denied. Please log in first.",
+    unauthorizedHeading: "Unauthorized.",
+    unauthorizedMessage: "You need to authenticate to access this resource. Please sign in with valid credentials.",
+    signIn: "Sign In",
+    
+    // 403 page
+    forbiddenTitle: "403: Forbidden",
+    forbiddenDesc: "You do not have permission to access this page.",
+    forbiddenHeading: "Access denied.",
+    forbiddenMessage: "Your credentials are valid, but you do not have the necessary permission level to view this page or directory.",
+    goBack: "Go Back",
 
     //______404
     pageNotFound: "Page not found",
@@ -241,6 +255,12 @@ export const en = {
     notFoundDesc: "The page you are looking for cannot be found.",
     returnHome: "Return to Home",
     searchArticles: "Search Articles",
+    
+    // 500 page
+    serverErrorTitle: "500: Internal Server Error",
+    serverErrorDesc: "An error occurred on our server.",
+    serverErrorHeading: "Server error.",
+    serverErrorMessage: "An unexpected problem occurred on our system that prevented your request from being processed. We have logged this anomaly.",
     
     // Offline page
     offlineTitle: "You are Offline",
