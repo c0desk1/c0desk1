@@ -2,11 +2,13 @@
   "name": {
     "id": "Tips",
     "en": "Tips",
-    "ru": "Парады"
+    "ru": "Парады",
+    "jp": "ヒント"
   },
   "description": {
     "id": "Tips dan trik cepat untuk meningkatkan produktivitas coding",
     "en": "Quick tips and tricks to increase coding productivity",
-    "ru": "Хуткія парады і рэкамендацыі па павышэнні прадукцыйнасці кадавання"
+    "ru": "Хуткія парады і рэкамендацыі па павышэнні прадукцыйнасці кадавання",
+    "jp": "コーディングの生産性を高めるための簡単なヒントとコツ"
   }
 }
