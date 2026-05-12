@@ -255,7 +255,6 @@ export const id = {
     notFoundTitle: "404: Tidak Ditemukan",
     notFoundDesc: "Halaman yang Anda cari tidak dapat ditemukan.",
     returnHome: "Kembali ke Beranda",
-    searchArticles: "Cari Artikel",
     
     // 500 page
     serverErrorTitle: "500: Kesalahan Server",
