@@ -100,16 +100,16 @@ const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
 // i18n labels
 const homeLabel = getLabel(locale, 'home');
-const portfolioLabel = getLabel(locale, 'portfolio');
-const portfolioDesc = getLabel(locale, 'portfolioPageDesc');
-const galleryLabel = getLabel(locale, 'portfolioGallery');
+const portfolioLabel = getLabel(locale, 'p_PageTitle');
+const portfolioDesc = getLabel(locale, 'p_PageDesc');
+const galleryLabel = getLabel(locale, 'p_Gallery');
 
 // sr-only labels
-const srPortfolioHeader = getLabel(locale, 'portfolioHeader');
-const srPortfolioImage = getLabel(locale, 'portfolioImageContent');
-const srPortfolioMetrics = getLabel(locale, 'portfolioMetricsCase');
-const srPortfolioContent = getLabel(locale, 'portfolioContent');
-const srPortfolioRelated = getLabel(locale, 'portfolioRelatedContent');
+const srPortfolioHeader = getLabel(locale, 'p_Header');
+const srPortfolioImage = getLabel(locale, 'p_ImageContent');
+const srPortfolioMetrics = getLabel(locale, 'p_MetricsCase');
+const srPortfolioContent = getLabel(locale, 'p_Content');
+const srPortfolioRelated = getLabel(locale, 'p_RelatedContent');
 
 const portfolioCategory = {
   name: portfolioLabel,
@@ -169,7 +169,7 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
       </Container>
     </Section>
     {image && (
-      <Section size="sm">
+      <Section size="none">
         <Container size="md">
           <h2 class="sr-only">{srPortfolioImage}</h2>
           <PortfolioFeaturedImage
