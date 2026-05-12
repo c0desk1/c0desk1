@@ -5,11 +5,30 @@ export const GET: APIRoute = () => {
   const siteUrl = siteConfig.siteUrl;
 
   const sitemaps = [
+    // Indonesia (default)
     'sitemap-pages.xml',
     'sitemap-blog.xml',
     'sitemap-portfolio.xml',
     'sitemap-author.xml',
     'sitemap-category.xml',
+    // English
+    'en/sitemap-pages.xml',
+    'en/sitemap-blog.xml',
+    'en/sitemap-portfolio.xml',
+    'en/sitemap-author.xml',
+    'en/sitemap-category.xml',
+    // Russian
+    'ru/sitemap-pages.xml',
+    'ru/sitemap-blog.xml',
+    'ru/sitemap-portfolio.xml',
+    'ru/sitemap-author.xml',
+    'ru/sitemap-category.xml',
+    // Japanese
+    'jp/sitemap-pages.xml',
+    'jp/sitemap-blog.xml',
+    'jp/sitemap-portfolio.xml',
+    'jp/sitemap-author.xml',
+    'jp/sitemap-category.xml',
   ];
 
   const buildDate = new Date().toISOString();
