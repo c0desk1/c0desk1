@@ -235,6 +235,20 @@ export const id = {
     seeAllPosts: "Lihat semua postingan",
     browsePostsByCategory: "Jelajahi postingan berdasarkan kategori",
     filterCategory: "Filter kategori",
+    
+    // 401 page
+    unauthorizedTitle: "401: Tidak Diizinkan",
+    unauthorizedDesc: "Akses ditolak. Silakan login terlebih dahulu.",
+    unauthorizedHeading: "Tidak Diizinkan.",
+    unauthorizedMessage: "Anda harus melakukan autentikasi untuk mengakses sumber daya ini. Silakan masuk menggunakan kredensial yang valid.",
+    signIn: "Masuk",
+    
+    // 403 page
+    forbiddenTitle: "403: Terlarang",
+    forbiddenDesc: "Anda tidak memiliki izin untuk mengakses halaman ini.",
+    forbiddenHeading: "Akses ditolak.",
+    forbiddenMessage: "Kredensial Anda valid, tetapi Anda tidak memiliki tingkat izin yang diperlukan untuk melihat halaman atau direktori ini.",
+    goBack: "Kembali",
 
     // 404 page
     pageNotFound: "Halaman tidak ditemukan",
@@ -242,9 +256,16 @@ export const id = {
     notFoundDesc: "Halaman yang Anda cari tidak dapat ditemukan.",
     returnHome: "Kembali ke Beranda",
     searchArticles: "Cari Artikel",
+    
+    // 500 page
+    serverErrorTitle: "500: Kesalahan Server",
+    serverErrorDesc: "Terjadi kesalahan pada server kami.",
+    serverErrorHeading: "Kesalahan server.",
+    serverErrorMessage: "Terjadi masalah tidak terduga pada sistem kami yang mencegah pemrosesan permintaan Anda. Kami telah mencatat anomali ini.",
 
     // Offline page
     offlineTitle: "Anda Offline",
     offlineDesc: "Koneksi internet terputus. Silakan cek kembali koneksi Anda dan coba lagi nanti.",
     tryAgain: "Coba lagi",
+    
 } as const;
