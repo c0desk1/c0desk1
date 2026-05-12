@@ -73,11 +73,13 @@ const categories = defineCollection({
       id: z.string(),
       en: z.string().optional(),
       ru: z.string().optional(),
+      jp: z.string().optional(),
     }),
     description: z.object({
       id: z.string().optional(),
       en: z.string().optional(),
-      ru: z.string().optional()
+      ru: z.string().optional(),
+      jp: z.string().optional(),
     })
   }),
 });
@@ -100,7 +102,7 @@ const organizations = defineCollection({
 const blog = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/blog" }),
   schema: z.object({
-    lang: z.enum(['id', 'en', 'ru']).default('id').optional(),
+    lang: z.enum(['id', 'en', 'ru', 'jp']).default('id').optional(),
     title: z.string(),
     description: z.string(),
     image: z.object({
@@ -119,7 +121,7 @@ const blog = defineCollection({
 const portfolio = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/portfolio" }),
   schema: z.object({
-    lang: z.enum(['id', 'en', 'ru']).default('id').optional(),
+    lang: z.enum(['id', 'en', 'ru', 'jp']).default('id').optional(),
     title: z.string(),
     description: z.string(),
     image: z.object({
@@ -149,7 +151,7 @@ const portfolio = defineCollection({
 const legal = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/legal" }),
   schema: z.object({
-    lang: z.enum(['id', 'en', 'ru']).default('id').optional(),
+    lang: z.enum(['id', 'en', 'ru', 'jp']).default('id').optional(),
     title: z.string(),
     description: z.string().optional(),
     lastUpdated: z.coerce.date(),
