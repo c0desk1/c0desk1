@@ -63,7 +63,8 @@ export const ru = {
     refreshPage: "Калі ласка, абнавіце старонку",
 
     //____Language Switcher
-    languageAria: "Выберыце мову",
+    languageSwitcherLabel: "Бягучая мова: RU. Выберыце мову",
+    languageList: "Выберыце мову",
     //_________Footer__________//
 
     //____Newsletter
@@ -102,6 +103,7 @@ export const ru = {
     //____Author______//
     author: "Аўтар",
     avatarOf: "Аватар",
+    contentCreator: "Создатель контента",
 
     //____Homepage______//
     HeroAria: "Раздзел герояў",
@@ -213,6 +215,7 @@ export const ru = {
     shareTo: "Падзяліцца з",
 
     //_______Category__________//
+    allCategory: "Усе",
     selectCategory: "Выберыце катэгорыю",
     noPostsInCategory: "У гэтай катэгорыі пакуль няма паведамленняў.",
     showMore: "Паказаць больш",
