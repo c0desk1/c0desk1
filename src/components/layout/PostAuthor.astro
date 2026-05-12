@@ -8,19 +8,30 @@ import { getCurrentLocale, getLabel, localizePath } from "@/utils/i18n";
 interface Props {
   name?: string;
   avatar?: string;
-  title?: string;
+  title?: string | { id?: string; en?: string; ru?: string };
   slug?: string;
 }
 
 const { name, avatar, title, slug } = Astro.props;
+
 const locale = getCurrentLocale(Astro);
+
+function resolveLocale(val: unknown): string {
+  if (typeof val === 'object' && val !== null) {
+    const map = val as Record<string, string>;
+    return map[locale] ?? map.en ?? map.id ?? '';
+  }
+  return String(val ?? '');
+}
 
 const authorLabel = getLabel(locale, 'author') || 'Author';
 const avatarOfLabel = getLabel(locale, 'avatarOf') || 'Avatar of';
 
 const authorName = name || siteConfig.author?.name || siteConfig.siteName;
 const authorAvatar = avatar || siteConfig.author?.avatar || siteConfig.siteLogo;
-const authorTitle = title || siteConfig.author?.title || authorLabel;
+const authorTitle = title
+  ? resolveLocale(title)
+  : resolveLocale(siteConfig.author?.title) || authorLabel;
 const authorSlug = slug || siteConfig.author?.slug || "author";
 
 const authorPath = localizePath(`/author/${authorSlug}`, locale);
