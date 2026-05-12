@@ -10,7 +10,7 @@
 
     window.addEventListener("load", () => {
       navigator.serviceWorker
-        .register("/pwa.js")
+        .register("/pwa.js", { scope: "/" })
         .catch(console.error);
     });
   })();
