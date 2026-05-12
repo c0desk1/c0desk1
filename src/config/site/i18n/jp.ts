@@ -252,7 +252,6 @@ export const jp = {
     notFoundTitle: "404: 見つかりません",
     notFoundDesc: "お探しのページは見つかりませんでした。",
     returnHome: "ホームに戻る",
-    searchArticles: "記事を検索",
     pageNotFound: "ページが見つかりません",
     
     // 500 page
