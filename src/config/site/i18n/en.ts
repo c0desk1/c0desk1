@@ -63,7 +63,8 @@ export const en = {
     refreshPage: "Please refresh the page",
 
     //____Language Switcher
-    languageAria: "Select language",
+    languageSwitcherLabel: "Current language: EN. Select language",
+    languageList: "Select Language",
 
     //_________Footer__________//
 
@@ -103,6 +104,7 @@ export const en = {
     //____Author______//
     author: "Author",
     avatarOf: "Avatar of",
+    contentCreator: "Creator Content",
 
     //____Homepage______//
     HeroAria: "Hero section",
@@ -224,6 +226,7 @@ export const en = {
     shareTo: "Share to",
 
     //_______Category__________//
+    allCategory: "All",
     selectCategory: "Select a category",
     noPostsInCategory: "There are no posts in this category yet.",
     showMore: "Show more",
