@@ -1,18 +1,25 @@
 ---
-// src/pages/403.astro
-
 import ErrorLayout from '@/layouts/ErrorLayout.astro';
 import Container from '@/components/ui/Container.astro';
 import { siteConfig } from '@/config/site';
+import { getCurrentLocale, getLabel, localizePath } from "@/utils/i18n";
 
+const locale = getCurrentLocale(Astro);
 const siteURL = Astro.site?.toString() ?? siteConfig.siteUrl;
 
+const forbiddenTitle = getLabel(locale, 'forbiddenTitle') || '403: Forbidden';
+const forbiddenDesc = getLabel(locale, 'forbiddenDesc') || 'You do not have permission to access this page.';
+const forbiddenHeading = getLabel(locale, 'forbiddenHeading') || 'Access denied.';
+const forbiddenMessage = getLabel(locale, 'forbiddenMessage') || 'Your credentials are valid, but you do not have the necessary permission level.';
+const goBackLabel = getLabel(locale, 'goBack') || 'Go Back';
+const returnHomeLabel = getLabel(locale, 'returnHome') || 'Return to Home';
+
 const seoData = {
-  title: "403: Forbidden",
-  description: "Anda tidak memiliki izin untuk mengakses halaman ini.",
+  title: forbiddenTitle,
+  description: forbiddenDesc,
   noIndex: true,
   type: "website" as const,
-  canonicalURL: new URL('403', siteURL).toString(),
+  canonicalURL: new URL(Astro.url.pathname, siteURL).toString(),
 };
 ---
 
@@ -26,11 +33,11 @@ const seoData = {
       </div>
 
       <h1 class="text-4xl md:text-5xl font-semibold tracking-tighter text-(--fg) mb-4">
-        Access denied.
+        {forbiddenHeading}
       </h1>
       
       <p class="text-sm md:text-base text-(--fg-muted) max-w-[400px] mb-10 leading-relaxed">
-        Kredensial Anda valid, tetapi Anda tidak memiliki tingkat izin yang diperlukan untuk melihat halaman atau direktori ini.
+        {forbiddenMessage}
       </p>
 
       <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
@@ -38,13 +45,13 @@ const seoData = {
           onclick="window.history.back()"
           class="w-full sm:w-auto inline-flex justify-center items-center h-10 px-6 rounded-md bg-(--bg-subtle) text-(--fg) text-sm font-medium hover:bg-(--bg-muted) transition-colors"
         >
-          Go Back
+          {goBackLabel}
         </button>
         <a 
-          href={siteURL} 
+          href={localizePath('/', locale)} 
           class="w-full sm:w-auto inline-flex justify-center items-center h-10 px-6 rounded-md bg-transparent text-(--fg) text-sm font-medium border border-(--border) hover:border-(--border-strong) transition-colors"
         >
-          Return Home
+          {returnHomeLabel}
         </a>
       </div>
 
