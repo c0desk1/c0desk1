@@ -1,5 +1,5 @@
 ---
-// src/pages/[...locale]/blog/[slug].astro
+// src/pages/[...locale]/blog/[...slug].astro
 export const prerender = true;
 
 import '@/styles/prose/index.css';
@@ -93,8 +93,8 @@ const seoImage = {
 };
 
 const seoCategory = {
-  name: categoryEntry?.data?.name || 'Uncategorized',
-  description: categoryEntry?.data?.description || "",
+  name: categoryEntry?.data?.name?.[locale] || categoryEntry?.data?.name?.id || getLabel(locale, "general"),
+  description: categoryEntry?.data?.description?.[locale] || categoryEntry?.data?.description?.id || "",
   slug: categoryEntry?.id || 'uncategorized'
 };
 
