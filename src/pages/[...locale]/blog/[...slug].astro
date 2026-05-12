@@ -147,12 +147,12 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
       <Container size="md">
         <h2 class="sr-only">{title}</h2>
         <Section size="none">
-          <h2 class="sr-only">{getLabel(locale, 'pageNavigation') || 'Navigasi Halaman'}</h2>
+          <h2 class="sr-only">{getLabel(locale, 'b_breadcrumb') || 'Navigasi Halaman'}</h2>
           <Breadcrumb items={Breadcrumbs} />
         </Section>
         <article id="post-article">
           <Section size="sm">
-            <h2 class="sr-only">{getLabel(locale, 'articleHeader') || 'Article Header'}</h2>
+            <h2 class="sr-only">{getLabel(locale, 'b_articleHeader') || 'Article Header'}</h2>
             <PostHeader
               title={title}
               pubDate={pubDate}
@@ -189,13 +189,13 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
 	  </Container>
 	</Section>
     <Section size="md" class="section-divider">
-      <h2 class="sr-only">{getLabel(locale, 'relatedArticles') || 'Artikel Terkait'}</h2>
+      <h2 class="sr-only">{getLabel(locale, 'b_relatedPosts') || 'Artikel Terkait'}</h2>
       <Container size="xl">
         <BlogRelatedPosts posts={relatedPosts} />
       </Container>
     </Section>
     <Section size="sm" class="section-divider">
-	  <h2 class="sr-only">{getLabel(locale, 'articleNavigation') || 'Navigasi artikel'}</h2>
+	  <h2 class="sr-only">{getLabel(locale, 'b_articleNavigation') || 'Navigasi artikel'}</h2>
 	  <Container size="xl">
         <PostNavigation prevPost={prevPost} nextPost={nextPost} />
       </Container>
