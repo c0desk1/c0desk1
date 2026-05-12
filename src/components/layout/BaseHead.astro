@@ -96,6 +96,7 @@ const htmlLang  = toBcp47(locale);
 
 const homeLabel = getLabel(locale, "home") ?? "Home";
 const blogLabel = getLabel(locale, "blog") ?? "Blog";
+const portfolioLabel = getLabel(locale, "portfolio") ?? "Portfolio";
 
 const contentCreatorLabel = getLabel(locale, "contentCreator") ?? "Content Creator";
 
@@ -293,12 +294,21 @@ if (!isHomepage) {
     { "@type": "ListItem", position: 1, name: homeLabel, item: siteURL },
   ];
 
-  if (type === "article" && basePath === "blog") {
+  if (basePath === "blog") {
     breadcrumbItems.push({
       "@type": "ListItem",
       position: breadcrumbItems.length + 1,
       name: blogLabel,
       item: new URL("blog/", siteURL).toString(),
+    });
+  }
+
+  if (type === "creativeWork" && basePath === "portfolio") {
+    breadcrumbItems.push({
+      "@type": "ListItem",
+      position: breadcrumbItems.length + 1,
+      name: portfolioLabel,
+      item: new URL("portfolio/", siteURL).toString(),
     });
   }
 
