@@ -1,195 +1,143 @@
 ---
-// src/pages/[...locale]/author/[...slug].astro
+// src/pages/category/[slug].astro
 export const prerender = true;
 
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/ui/Container.astro";
-import Section from "@/components/ui/Section.astro";
-import Icon from "@/components/ui/Icon";
-import PostCard from "@/components/blog/PostCard.astro";
 import Breadcrumb from "@/components/ui/Breadcrumb.astro";
-import BackToTop from "@/components/ui/BackToTop.astro";
-import { getCollection } from "astro:content";
-import { Image } from 'astro:assets';
+import { getCollection, getEntry, type CollectionEntry } from "astro:content";
 import { siteConfig } from "@/config/site";
-import { cdnImage, cn, isCdnUrl } from "@/lib/utils";
-import { getCurrentLocale, localizePath } from "@/utils/i18n";
+import { formatDateCompact } from "@/lib/utils";
 
 export async function getStaticPaths() {
-  const authors = await getCollection("authors");
-  const locales = ['id', 'en', 'ru'];
+  const categories = await getCollection("categories");
 
-  return locales.flatMap(locale =>
-    authors.map((author) => ({
-      params: {
-        locale: locale === 'id'? undefined : locale,
-        slug: author.id
-      },
-      props: { author },
-    }))
-  );
-}
+  // Group per slug: "tools" -> { id: tools.id, en: tools.en, ru: tools.ru }
+  const categoriesBySlug = new Map<string, Record<string, CollectionEntry<'categories'>>>();
 
-const { author } = Astro.props;
-const locale = getCurrentLocale(Astro);
+  for (const cat of categories) {
+    const slug = cat.id.split('/')[1]; // "tools"
+    const lang = cat.data.lang; // "id" | "en" | "ru"
 
-const labels = {
-  id: {
-    author: "Penulis",
-    home: "Beranda",
-    latestArticles: "Artikel Terbaru",
-    articles: "artikel",
-    noArticles: "Belum ada artikel yang diterbitkan."
-  },
-  en: {
-    author: "Author",
-    home: "Home",
-    latestArticles: "Latest Articles",
-    articles: "articles",
-    noArticles: "No articles published yet."
-  },
-  ru: {
-    author: "Автор",
-    home: "Главная",
-    latestArticles: "Последние статьи",
-    articles: "статей",
-    noArticles: "Пока нет опубликованных статей."
+    if (!categoriesBySlug.has(slug)) {
+      categoriesBySlug.set(slug, {});
+    }
+    categoriesBySlug.get(slug)![lang] = cat;
   }
+
+  // Generate 1 path per slug, pake 'id' sebagai default buat title/desc
+  return Array.from(categoriesBySlug.entries()).map(([slug, langs]) => {
+    const defaultCategory = langs['id'] || langs['en'] || langs['ru']; // fallback kalo ga ada id
+
+    return {
+      params: { slug }, // /category/tools
+      props: {
+        defaultCategory, // buat title/desc halaman
+        allCategoryEntries: Object.values(langs), // [tools.id, tools.en, tools.ru]
+      },
+    };
+  });
 }
 
-const t = labels[locale] || labels.id;
+const { defaultCategory, allCategoryEntries } = Astro.props;
+const allPosts = await getCollection("blog", ({ data }) =>!data.draft);
 
-const allPosts = await getCollection("blog", ({ data }) =>
- !data.draft && (data.lang || 'id') === locale
+// Ambil semua id: ["categories/tools/index.id", "categories/tools/index.en", "categories/tools/index.ru"]
+const categoryIds = allCategoryEntries.map(c => c.id);
+
+// Filter post yang category-nya tools, apapun bahasanya
+const categoryPosts = allPosts
+.filter((post) => categoryIds.includes(post.data.category?.id))
+.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const postsWithAuthor = await Promise.all(
+  categoryPosts.map(async (post) => {
+    const author = post.data.author? await getEntry(post.data.author) : null;
+    return {...post, authorData: author?.data };
+  })
 );
-
-const authorPosts = allPosts
- .filter((post) => post.data.author?.id === author.id)
- .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
 const siteURL = Astro.site?.toString()?? siteConfig.siteUrl;
 const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
-const social = author.data.social || siteConfig.author.social;
-
 const seoData = {
-  title: author.data.name,
-  description: author.data.bio,
-  type: "profile" as const,
+  title: defaultCategory.data.name, // ambil dari tools/index.id.json
+  description: defaultCategory.data.description || `Artikel tentang ${defaultCategory.data.name}`,
+  type: "website" as const,
   canonicalURL,
-  author: {
-    name: author.data.name,
-    role: author.data.role,
-    avatar: author.data.avatar,
-    bio: author.data.bio,
-    slug: author.id,
-  },
 };
 
-const authorCategory = {
-  name: t.author,
-  slug: "author",
-  description: "Daftar artikel dari penulis."
-};
-
-const optimizedAvatar = isCdnUrl(author.data.avatar)? cdnImage(author.data.avatar, { w: 112, h: 112, q: 85 }) : author.data.avatar;
-
-const seoBreadcrumbItems = [
-  { name: t.home, href: localizePath('/', locale) },
-  { name: t.author, href: localizePath('/authors/', locale) },
-  { name: author.data.name, href: canonicalURL }
+const breadcrumbItems = [
+  { name: "Home", href: siteURL },
+  { name: "Blog", href: new URL("blog/", siteURL).toString() },
+  { name: defaultCategory.data.name, href: canonicalURL }
 ];
-
-const Breadcrumbs = seoBreadcrumbItems.filter(item =>
-  item.name === t.home || item.name === t.author
-);
 ---
 
-<BaseLayout {...seoData} category={authorCategory}>
-  <Section size="none" class="border-b border-dashed border-(--border)">
-    <div class="relative items-center">
-      <div
-        class={cn(
-          "absolute inset-0 z-1",
-          "bg-size-[20px_20px]",
-          "bg-[radial-gradient(#d4d4d4_1px,transparent_1px)]",
-          "dark:bg-[radial-gradient(#404040_1px,transparent_1px)]",
-        )}
-      />
-      <div class="pointer-events-none absolute inset-0 z-1 flex items-center justify-center bg-(--bg) mask-[radial-gradient(ellipse_at_center,transparent_20%,black)]" />
-      <Container size="lg" class="py-16">
-        <section class="flex flex-col-reverse md:flex-row items-center justify-center md:justify-between gap-4" aria-labelledby="author-heading">
-          <div class="flex flex-col justify-center md:justify-start items-center md:items-start z-3">
-            <Breadcrumb items={Breadcrumbs} />
-            <div class="mt-5 space-y-5">
-              <div class="space-y-3">
-                <h1 id="author-heading" class="text-4xl md:text-5xl font-semibold tracking-[-0.04em] text-(--fg) text-center md:text-start">
-                  {author.data.name}
-                </h1>
-                <p class="text- md:text-sm text-(--fg-subtle) tracking-tight text-center md:text-start">
-                  {author.data.role}
-                </p>
-              </div>
-              <p class="max-w-2xl text- md:text-sm leading-7 text-(--fg-muted) text-center md:text-start">
-                {author.data.bio}
-              </p>
-              <div class="flex items-center text-center md:text-start gap-2 pt-2 flex-wrap">
-                {social.map((item: { href: string; label: string }) => (
-                  <a
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={item.label}
-                    class="group flex items-center justify-center rounded-full border border-transparent text-(--fg-muted) transition-all duration-200 hover:border-(--border) hover:bg-(--bg-muted) hover:text-(--fg) gap-2"
-                  >
-                    <Icon
-                      name={item.label as any}
-                      className="w-4 h-4 transition-transform duration-200 group-hover:scale-110"
-                    />
-                    <span class="text- capitalize">
-                      {item.label}
-                    </span>
-                  </a>
-                ))}
-              </div>
-            </div>
-          <div class="flex items-center z-3">
-            <div
-              class="relative overflow-hidden rounded-[28px] border border-(--border) bg-(--bg-subtle) p-2 shadow-sm">
-              <Image
-                src={optimizedAvatar}
-                alt={author.data.name}
-                width={224}
-                height={224}
-                loading="eager"
-                decoding="async"
-                class="h-auto w-full md:h-full md:w-56 rounded-[22px] object-cover"
-              />
-            </div>
+<BaseLayout {...seoData}>
+    <Container size="lg" class="pt-8">
+      <Breadcrumb items={breadcrumbItems} />
+    </Container>
+    <div class="border-b border-zinc-100 dark:border-zinc-800">
+      <Container size="lg" class="py-16 md:py-24">
+        <div class="max-w-2xl mx-auto text-center">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 mb-6">
+            <span class="text-[11px] font-mono uppercase tracking-wider text-zinc-500">Category</span>
           </div>
-        </section>
+          <h1 class="text-3xl md:text-5xl font-bold tracking-tight text-zinc-900 dark:text-white mb-4">
+            {defaultCategory.data.name}
+          </h1>
+
+          {defaultCategory.data.description && (
+            <p class="text-lg text-zinc-600 dark:text-zinc-400 max-w-md mx-auto">
+              {defaultCategory.data.description}
+            </p>
+          )}
+
+          <div class="mt-6 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+            <span class="text-[11px] font-mono text-zinc-500">{categoryPosts.length} articles</span>
+          </div>
+        </div>
       </Container>
     </div>
-  </Section>
-  <Section size="lg">
-    <Container size="xl">
-      <div class="flex items-center justify-between mb-8">
-        <h2 class="text-(--fg) text-2xl md:text-3xl font-semibold tracking-tighter">
-          {t.latestArticles}
-        </h2>
-        <span class="text- md:text-sm text-(--fg-muted)">{authorPosts.length} {t.articles}</span>
+
+    <Container size="lg" class="py-16 md:py-24">
+      <div class="max-w-3xl mx-auto">
+        {categoryPosts.length > 0? (
+          <div class="space-y-px">
+            {postsWithAuthor.map((post) => (
+              <article class="group py-8 border-b border-zinc-100 dark:border-zinc-800 last:border-0">
+                <a href={`/blog/${post.id}/`} class="block">
+                  <div class="flex flex-col md:flex-row md:items-center gap-3 md:gap-6 mb-2">
+                    <time class="text-[13px] text-zinc-500 font-mono tabular-nums">
+                      {formatDateCompact(post.data.pubDate)}
+                    </time>
+                    {post.authorData && (
+                      <>
+                        <span class="hidden md:inline text-zinc-300 dark:text-zinc-700">•</span>
+                        <span class="text-[13px] text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors">
+                          {post.authorData.name}
+                        </span>
+                      </>
+                    )}
+                  </div>
+
+                  <h2 class="text-xl md:text-2xl font-medium tracking-tight text-zinc-900 dark:text-white mb-2 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors">
+                    {post.data.title}
+                  </h2>
+
+                  <p class="text-sm text-zinc-500 dark:text-zinc-400 line-clamp-2 leading-relaxed">
+                    {post.data.description}
+                  </p>
+                </a>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div class="text-center py-12">
+            <p class="text-zinc-400 dark:text-zinc-600">No articles in this category yet.</p>
+          </div>
+        )}
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
-        {authorPosts.map((post) => (
-          <PostCard post={post} />
-        ))}
-      </div>
-      {authorPosts.length === 0 && (
-        <div class="py-20 text-center rounded-2xl border border-dashed border-(--border)">
-          <p class="text-sm md:text-base text-(--fg-muted)">{t.noArticles}</p>
-        </div>
-      )}
     </Container>
-    <BackToTop align="center" />
-  </Section>
 </BaseLayout>
