@@ -23,7 +23,7 @@ const locale = getCurrentLocale(Astro);
 const isPostPage = !!alternateSlugs;
 
 const currentPath =
-  Astro.url.pathname.replace(/^\/(en|ru)/, "") || "/";
+  Astro.url.pathname.replace(/^\/(en|ru|jp)/, "") || "/";
 
 const languageLabel =
   getLabel(locale, "languageSwitcherLabel");
