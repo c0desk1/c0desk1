@@ -21,7 +21,12 @@ const {
 
 const excerpt = generateExcerpt(project.body || '', 140);
 
-const dateLocale = locale === 'en'? 'en-US' : locale === 'ru'? 'ru-RU' : 'id-ID';
+const dateLocale = 
+  locale === 'en'? 'en-US' : 
+  locale === 'ru'? 'ru-RU' :
+  locale === 'jp'? 'ja-JP' :
+ 'id-ID';
+
 const formattedDate = formatDateCompact(pubDate, dateLocale);
 
 const autoSlug = slugify(title);
