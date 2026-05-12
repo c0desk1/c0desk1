@@ -2,6 +2,7 @@ import rss from "@astrojs/rss";
 import { getCollection, getEntry } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import { siteConfig } from "@/config/site";
+import { slugify } from "@/lib/utils";
 
 export async function GET(context: any) {
   const siteData = siteConfig;
@@ -30,7 +31,8 @@ export async function GET(context: any) {
   }
 
   const items = await Promise.all(sorted.map(async (post: CollectionEntry<"blog">) => {
-    const url = new URL(`blog/${post.id}/`, site).toString();
+    const autoSlug = slugify(post.data.title);
+    const url = new URL(`ru/blog/${autoSlug}/`, site).toString();
 
     let authorName = siteData.siteName;
     if (post.data.author) {
@@ -79,7 +81,7 @@ export async function GET(context: any) {
       <language>ru-RU</language>
       <lastBuildDate>${sorted[0]?.data.pubDate.toUTCString() || new Date().toUTCString()}</lastBuildDate>
       <generator>Astro Content Engine</generator>
-      <atom:link href="${new URL('rss.xml', site).toString()}" rel="self" type="application/rss+xml" />
+      <atom:link href="${new URL('ru/rss.xml', site).toString()}" rel="self" type="application/rss+xml" />
     `,
     xmlns: {
       dc: "http://purl.org/dc/elements/1.1/",
