@@ -4,13 +4,15 @@ export const authorConfig = {
     title: {
       id: "Penulis",
       en: "Author",
-      ru: "Автор"
+      ru: "Автор",
+      jp: "著者",
     },
     avatar: "/org/author.jpg",
     bio: {
       id: "Music producer, Adobe Stock contributor, dan developer.",
       en: "Music producer, Adobe Stock contributor, and developer.",
-      ru: "Музыкальный продюсер, автор Adobe Stock и разработчик."
+      ru: "Музыкальный продюсер, автор Adobe Stock и разработчик.",
+      jp: "音楽プロデューサー、Adobe Stock投稿者、そして開発者。",
     },
     slug: "bima-akbar",
     social: [
