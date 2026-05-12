@@ -11,7 +11,7 @@ interface Props {
 const { alternateSlugs, basePath = "" } = Astro.props;
 const locale = getCurrentLocale(Astro);
 const isPostPage = !!alternateSlugs;
-const currentPath = Astro.url.pathname.replace(/^\/(en|ru)/, "") || "/";
+const currentPath = Astro.url.pathname.replace(/^\/(en|ru|jp)/, "") || "/";
 
 const AriaLabel = getLabel(locale, "languageSwitcherLabel");
 ---
