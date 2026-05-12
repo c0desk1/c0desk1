@@ -235,11 +235,16 @@ export const en = {
     browsePostsByCategory: "Browse posts by category",
     filterCategory: "Filter categories",
 
-  //______404
-  pageNotFound: "Page not found",
-  notFoundTitle: "404: Not Found",
-  notFoundDesc: "The page you are looking for cannot be found.",
-  returnHome: "Return to Home",
-  searchArticles: "Search Articles",
+    //______404
+    pageNotFound: "Page not found",
+    notFoundTitle: "404: Not Found",
+    notFoundDesc: "The page you are looking for cannot be found.",
+    returnHome: "Return to Home",
+    searchArticles: "Search Articles",
+    
+    // Offline page
+    offlineTitle: "You are Offline",
+    offlineDesc: "Your internet connection has been lost. Please check your connection and try again later.",
+    tryAgain: "Try again",
   
-} as const;
+} as const;
