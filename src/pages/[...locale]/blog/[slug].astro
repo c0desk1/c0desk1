@@ -76,6 +76,7 @@ const authorEntry = await getEntry(post.data.author);
 const categoryEntry = await getEntry(post.data.category);
 
 const { Content, headings } = await render(post);
+
 const relatedPosts = getSmartRelatedPosts(post, allPosts, 3);
 
 const {
@@ -93,10 +94,17 @@ const seoImage = {
   alt: image?.alt || title
 };
 
+const categorySlug = categoryEntry?.id 
+  || slugify(
+       categoryEntry?.data?.name?.[locale] 
+       || categoryEntry?.data?.name?.id 
+       || getLabel(locale, "general")
+     );
+
 const seoCategory = {
   name: categoryEntry?.data?.name || { [locale]: getLabel(locale, "general") },
   description: categoryEntry?.data?.description || { [locale]: "" },
-  slug: categoryEntry?.id || 'uncategorized'
+  slug: categorySlug
 };
 
 const seoTitle = seo?.title || title;
