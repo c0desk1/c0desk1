@@ -234,4 +234,12 @@ export const en = {
     seeAllPosts: "See all posts",
     browsePostsByCategory: "Browse posts by category",
     filterCategory: "Filter categories",
+
+  //______404
+  pageNotFound: "Page not found",
+  notFoundTitle: "404: Not Found",
+  notFoundDesc: "The page you are looking for cannot be found.",
+  returnHome: "Return to Home",
+  searchArticles: "Search Articles",
+  
 } as const;
