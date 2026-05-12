@@ -1,17 +1,8 @@
-// src/pages/sitemap-index.xml.ts
-import { getEntry } from 'astro:content';
 import type { APIRoute } from 'astro';
 import { siteConfig } from '@/config/site';
 
-export const GET: APIRoute = async () => {
-  let settings;
-  try {
-    settings = await getEntry('settings', 'site');
-  } catch (error) {
-    console.warn('Settings not found, using siteConfig fallback');
-  }
-  const siteData = settings?.data || siteConfig;
-  const siteUrl = siteData.siteUrl;
+export const GET: APIRoute = () => {
+  const siteUrl = siteConfig.siteUrl;
 
   const sitemaps = [
     'sitemap-pages.xml',
