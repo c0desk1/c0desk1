@@ -1,0 +1,149 @@
+---
+// src/components/ui/ThemeToggle.astro
+
+import { getCurrentLocale, getLabel } from '@/utils/i18n';
+import Icon from "./Icon";
+
+const locale = getCurrentLocale(Astro);
+
+const labels = {
+  group: getLabel(locale, 'themeToggleGroup'),
+  system: getLabel(locale, 'themeSystem'),
+  light: getLabel(locale, 'themeLight'),
+  dark: getLabel(locale, 'themeDark'),
+};
+---
+
+<div
+  id="theme-toggle"
+  role="group"
+  aria-label={labels.group}
+  class="tt-root">
+  {([
+    { mode: "system", label: labels.system },
+    { mode: "light",  label: labels.light },
+    { mode: "dark",   label: labels.dark },
+  ] as const).map(({ mode, label }) => (
+    <button
+      type="button"
+      data-mode={mode}
+      aria-label={label}
+      title={label}
+      class="tt-btn"
+    >
+      {mode === "system" && <Icon name="system" className="tt-icon" />}
+      {mode === "light"  && <Icon name="sun"    className="tt-icon" />}
+      {mode === "dark"   && <Icon name="moon"   className="tt-icon" />}
+    </button>
+  ))}
+</div>
+
+<style>
+  .tt-root {
+    display: inline-flex;
+    align-items: center;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border);
+    background: var(--bg);
+    padding: 2px;
+    gap: 1px;
+  }
+
+  .tt-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0.25rem;
+    border-radius: var(--radius-full);
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--fg-subtle);
+    cursor: pointer;
+    transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .tt-btn:hover {
+    color: var(--fg);
+    background-color: var(--bg-subtle);
+  }
+
+  .tt-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .tt-btn[data-active="true"] {
+    color: var(--fg);
+    background-color: var(--bg-muted);
+    border-color: var(--border);
+  }
+
+  :global(.tt-icon) {
+    width: 0.875rem;
+    height: 0.875rem;
+    display: block;
+  }
+</style>
+
+<script>
+  type Mode = "system" | "light" | "dark";
+  const KEY = "theme-mode";
+
+  function getMode(): Mode {
+    const v = localStorage.getItem(KEY);
+    return v === "light" || v === "dark" || v === "system" ? v : "system";
+  }
+
+  function apply(mode: Mode) {
+    const dark =
+      mode === "dark" ||
+      (mode === "system" &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches);
+    document.documentElement.classList.toggle("dark", dark);
+    document.documentElement.setAttribute("data-theme", mode);
+    localStorage.setItem(KEY, mode);
+  }
+
+  function mark(mode: Mode) {
+    document.querySelectorAll<HTMLElement>(".tt-btn").forEach((b) => {
+      const active = b.dataset.mode === mode;
+      b.setAttribute("aria-pressed", String(active));
+      b.dataset.active = String(active);
+    });
+  }
+
+  function boot() {
+    const mode = getMode();
+    apply(mode);
+    mark(mode);
+  }
+
+  function wire() {
+    document.querySelectorAll<HTMLButtonElement>(".tt-btn").forEach((btn) => {
+      const fresh = btn.cloneNode(true) as HTMLButtonElement;
+      btn.replaceWith(fresh);
+      fresh.addEventListener("click", () => {
+        const mode = fresh.dataset.mode as Mode;
+        apply(mode);
+        mark(mode);
+      });
+    });
+
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", () => {
+        if (getMode() === "system") apply("system");
+      });
+  }
+
+  boot();
+  wire();
+
+  document.addEventListener("astro:page-load", () => {
+    boot();
+    wire();
+  });
+</script>

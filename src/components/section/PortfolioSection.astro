@@ -1,0 +1,43 @@
+---
+import Button from '../ui/Button.astro';
+import ProjectCard from '@/components/portfolio/PortfolioCard.astro';
+import type { CollectionEntry } from 'astro:content';
+import { getCurrentLocale, getLabel, localizePath } from '@/utils/i18n';
+
+interface Props {
+  projects: CollectionEntry<'portfolio'>[];
+}
+
+const { projects } = Astro.props;
+const locale = getCurrentLocale(Astro);
+
+const p_l = getLabel(locale, "p_latestPost") || "Proyek Terbaru";
+const p_e = getLabel(locale, "p_Empty") || "Tidak ada proyek";
+const p_a = getLabel(locale, "p_AllProjects") || "Semua Proyek";
+---
+
+<div class="py-4 md:py-8">
+  <div class="mb-4 md:mb-8">
+    <h2 class="text-(--fg) text-3xl md:text-4xl font-semibold tracking-tighter">
+      {p_l}
+    </h2>
+  </div>
+  {projects.length > 0? (
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 divide-y md:divide-y-0 divide-(--border)">
+      {projects.map((project) => (
+        <ProjectCard project={project} />
+      ))}
+    </div>
+  ) : (
+    <div class="py-12 text-center border border-dashed border-(--border) rounded-lg">
+      <p class="text-(--fg-subtle) text-sm md:text-lg">
+        {p_e}
+      </p>
+    </div>
+  )}
+  <div class="flex justify-center my-16">
+    <Button href={localizePath('/portfolio/', locale)} variant="secondary" size="md">
+      {p_a}
+    </Button>
+  </div>
+</div>

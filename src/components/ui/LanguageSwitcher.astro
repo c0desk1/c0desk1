@@ -1,0 +1,431 @@
+---
+// src/components/LanguageSwitcher.astro
+
+import { siteConfig } from "@/config/site";
+import {
+  getCurrentLocale,
+  getLabel,
+  localizePath,
+} from "@/utils/i18n";
+
+interface Props {
+  alternateSlugs?: Record<string, string>;
+  basePath?: "blog" | "portfolio" | "legal" | "";
+}
+
+const {
+  alternateSlugs,
+  basePath = "",
+} = Astro.props;
+
+const locale = getCurrentLocale(Astro);
+
+const isPostPage = !!alternateSlugs;
+
+const currentPath =
+  Astro.url.pathname.replace(/^\/(en|ru)/, "") || "/";
+
+const languageLabel =
+  getLabel(locale, "languageSwitcherLabel");
+
+const locales = siteConfig.locales.map((loc) => {
+  let href: string;
+
+  if (isPostPage && alternateSlugs?.[loc]) {
+    const prefix = basePath
+      ? `/${basePath}/`
+      : "/";
+
+    href = localizePath(
+      `${prefix}${alternateSlugs[loc]}/`,
+      loc
+    );
+  } else {
+    href = localizePath(currentPath, loc);
+  }
+
+  return {
+    code: loc,
+    href,
+    active: loc === locale,
+  };
+});
+
+const currentLocale =
+  locales.find((l) => l.active) || locales[0];
+---
+
+<div class="ls">
+  <button
+    type="button"
+    class="ls-trigger"
+    id="ls-trigger"
+    aria-haspopup="listbox"
+    aria-expanded="false"
+    aria-controls="ls-menu"
+    aria-label={languageLabel}
+  >
+    <span
+      class="ls-trigger__icon"
+      aria-hidden="true"
+    >
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+      >
+        <path
+          d="M12 22C17.523 22 22 17.523 22 12C22 6.477 17.523 2 12 2C6.477 2 2 6.477 2 12C2 17.523 6.477 22 12 22Z"
+          stroke="currentColor"
+          stroke-width="1.5"
+        />
+
+        <path
+          d="M2 12H22"
+          stroke="currentColor"
+          stroke-width="1.5"
+        />
+
+        <path
+          d="M12 2C14.5 4.7 15.9 8.3 15.9 12C15.9 15.7 14.5 19.3 12 22C9.5 19.3 8.1 15.7 8.1 12C8.1 8.3 9.5 4.7 12 2Z"
+          stroke="currentColor"
+          stroke-width="1.5"
+        />
+      </svg>
+    </span>
+
+    <span class="ls-trigger__label">
+      {currentLocale.code.toUpperCase()}
+    </span>
+
+    <svg
+      class="ls-chevron"
+      width="12"
+      height="12"
+      viewBox="0 0 12 12"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M3 4.5L6 7.5L9 4.5"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </button>
+
+  <div
+    id="ls-menu"
+    class="ls-menu"
+    role="listbox"
+    aria-label={languageLabel}
+  >
+    {locales.map((loc) => (
+      <a
+        href={loc.href}
+        lang={loc.code}
+        hreflang={loc.code}
+        role="option"
+        aria-selected={loc.active ? "true" : "false"}
+        aria-current={loc.active ? "true" : undefined}
+        class:list={[
+          "ls-option",
+          loc.active && "ls-option--active",
+        ]}
+      >
+        <span>{loc.code.toUpperCase()}</span>
+
+        {loc.active && (
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 14 14"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M4 7L6.5 9.5L10 5"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        )}
+      </a>
+    ))}
+  </div>
+</div>
+
+<style>
+  .ls {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .ls-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    height: 2rem;
+    padding-inline: 0.75rem;
+
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius-xl) - 2px);
+
+    background: color-mix(
+      in srgb,
+      var(--bg) 92%,
+      transparent
+    );
+
+    backdrop-filter: blur(10px);
+
+    color: var(--fg);
+
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: var(--font-mono);
+
+    letter-spacing: 0.06em;
+
+    cursor: pointer;
+
+    transition:
+      border-color 0.15s ease,
+      background-color 0.15s ease,
+      color 0.15s ease,
+      transform 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+
+  .ls-trigger:hover {
+    border-color: var(--border-strong);
+    background: var(--bg-subtle);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.04) inset,
+      0 0 0 1px rgba(255,255,255,.02) inset;
+  }
+
+  .ls-trigger:active {
+    transform: scale(0.985);
+  }
+
+  .ls-trigger:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+ .ls-trigger__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--fg-subtle);
+  }
+
+  .ls-trigger:hover .ls-trigger__icon {
+    color: var(--fg);
+  }
+
+  .ls-trigger__label {
+    line-height: 1;
+  }
+
+  .ls-chevron {
+    color: var(--fg-subtle);
+
+    transition:
+      color 0.15s ease,
+      transform 0.18s ease;
+  }
+
+  .ls-trigger:hover .ls-chevron {
+    color: var(--fg);
+  }
+
+  .ls-trigger[aria-expanded="true"] .ls-chevron {
+    transform: rotate(180deg);
+  }
+
+  .ls-menu {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+
+    min-width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+
+    padding: 0.3rem;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+
+    background: color-mix(
+      in srgb,
+      var(--bg) 94%,
+      transparent
+    );
+
+    backdrop-filter: blur(14px);
+
+    box-shadow:
+      0 10px 38px rgba(0,0,0,.12),
+      0 2px 12px rgba(0,0,0,.06);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transform:
+      translateY(-4px)
+      scale(.98);
+
+    pointer-events: none;
+
+    transition:
+      opacity .16s ease,
+      transform .16s ease,
+      visibility .16s ease;
+
+    z-index: 60;
+  }
+
+  .ls-menu[data-open="true"] {
+    opacity: 1;
+    visibility: visible;
+
+    transform:
+      translateY(0)
+      scale(1);
+
+    pointer-events: auto;
+  }
+
+  .ls-option {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 0.75rem;
+
+    min-height: 2rem;
+
+    padding-inline: 0.75rem;
+
+    border-radius:
+      calc(var(--radius-lg) - 2px);
+
+    text-decoration: none;
+
+    color: var(--fg-muted);
+
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: var(--font-mono);
+
+    letter-spacing: 0.06em;
+
+    transition:
+      background-color .15s ease,
+      color .15s ease;
+  }
+
+  .ls-option:hover {
+    background: var(--bg-subtle);
+    color: var(--fg);
+  }
+
+  .ls-option:focus-visible {
+    outline: none;
+    background: var(--bg-subtle);
+    color: var(--fg);
+  }
+
+  .ls-option--active {
+    background: var(--bg-muted);
+    color: var(--fg);
+  }
+</style>
+
+<script>
+  const root =
+    document.querySelector(".ls");
+
+  const trigger =
+    document.getElementById("ls-trigger");
+
+  const menu =
+    document.getElementById("ls-menu");
+
+  if (root && trigger && menu) {
+    const close = () => {
+      trigger.setAttribute(
+        "aria-expanded",
+        "false"
+      );
+
+      menu.setAttribute(
+        "data-open",
+        "false"
+      );
+    };
+
+    const open = () => {
+      trigger.setAttribute(
+        "aria-expanded",
+        "true"
+      );
+
+      menu.setAttribute(
+        "data-open",
+        "true"
+      );
+    };
+
+    trigger.addEventListener(
+      "click",
+      (e) => {
+        e.stopPropagation();
+
+        const expanded =
+          trigger.getAttribute(
+            "aria-expanded"
+          ) === "true";
+
+        expanded
+          ? close()
+          : open();
+      }
+    );
+
+    document.addEventListener(
+      "click",
+      (e) => {
+        if (
+          !root.contains(
+            e.target as Node
+          )
+        ) {
+          close();
+        }
+      }
+    );
+
+    document.addEventListener(
+      "keydown",
+      (e) => {
+        if (e.key === "Escape") {
+          close();
+        }
+      }
+    );
+  }
+</script>

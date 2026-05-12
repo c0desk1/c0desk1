@@ -1,0 +1,33 @@
+---
+// src/components/blog/BlogFeaturedImage.astro
+import { Image } from 'astro:assets';
+import { cdnImage, isCdnUrl } from '@/lib/utils';
+
+interface Props {
+  image?: string;
+  alt?: string;
+  caption?: string;
+  loading?: boolean;
+}
+
+const { image, alt = '', caption } = Astro.props;
+
+const optimizedSrc  = image && isCdnUrl(image)
+  ? cdnImage(image, { w: 1280, h: 720, q: 85 })
+  : image ?? '';
+const finalCaption  = caption || '';
+---
+
+<figure>
+  <div class="flex items-center">
+    <Image
+      src={optimizedSrc}
+      alt={alt}
+      width={1280}
+      height={720}
+      loading="eager"
+      decoding="async"
+    />
+  </div>
+  {finalCaption && <figcaption>{finalCaption}</figcaption>}
+</figure>

@@ -26,21 +26,6 @@ const socialSchema = z.array(z.object({
     label: z.string(),
 })).optional();
 
-const NavSchema = z.array(z.object({
-    href: z.string(),
-    label: z.string(),
-    isExternal: z.boolean().default(false).optional(),
-})).optional();
-
-const sectionNavSchema = z.array(z.object({
-  title: z.string().optional(),
-  items: z.array(z.object({
-    href: z.string(),
-    label: z.string(),
-    isExternal: z.boolean().default(false).optional(),
-  }))
-})).optional();
-
 // ==========================================
 // 2. CORE ENTITIES
 // ==========================================
@@ -55,6 +40,7 @@ const settings = defineCollection({
     siteMail: z.string(),
     social: socialSchema,
     defaultSeo: seoSchema.optional(),
+
     googleSiteVerification: z.string().optional(),
     googleAdsenseId: z.string().optional(),
     googleAnalyticsId: z.string().optional(),
@@ -64,14 +50,11 @@ const settings = defineCollection({
     yandexMetricaId: z.string().optional(),
     yandexPubId: z.string().optional(),
     yandexAdsEnabled: z.boolean().default(true),
-    navItems: NavSchema,
-    mobileNavItems: sectionNavSchema,
-    footerSections: sectionNavSchema,
   }),
 });
 
 const authors = defineCollection({
-  loader: glob({ pattern: "**/*.{json,md}", base: "./src/content/authors" }),
+  loader: glob({ pattern: "**/[^_]*.{json,md}", base: "./src/content/authors" }),
   schema: z.object({
     slug: z.string().optional(),
     name: z.string(),
@@ -84,7 +67,7 @@ const authors = defineCollection({
 });
 
 const categories = defineCollection({
-  loader: glob({ pattern: "**/*.json", base: "./src/content/categories" }),
+  loader: glob({ pattern: '**/[^_]*.json', base: './src/content/categories' }),
   schema: z.object({
     name: z.object({
       id: z.string(),
@@ -94,13 +77,13 @@ const categories = defineCollection({
     description: z.object({
       id: z.string().optional(),
       en: z.string().optional(),
-      ru: z.string().optional(),
-    }).optional(),
+      ru: z.string().optional()
+    })
   }),
 });
 
 const organizations = defineCollection({
-  loader: glob({ pattern: "**/*.json", base: "./src/content/organizations" }),
+  loader: glob({ pattern: "**/[^_]*.json", base: "./src/content/organizations" }),
   schema: z.object({
     name: z.string(),
     legalName: z.string().optional(),
@@ -117,9 +100,9 @@ const organizations = defineCollection({
 const blog = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/blog" }),
   schema: z.object({
-    lang: z.enum(['id', 'en', 'ru']).optional(),
-    title: z.string().min(10).max(100),
-    description: z.string().min(50).max(200),
+    lang: z.enum(['id', 'en', 'ru']).default('id').optional(),
+    title: z.string(),
+    description: z.string(),
     image: z.object({
       src: z.string(),
       alt: z.string(),
@@ -136,9 +119,9 @@ const blog = defineCollection({
 const portfolio = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/portfolio" }),
   schema: z.object({
-    lang: z.enum(['id', 'en', 'ru']).optional(),
-    title: z.string().min(5).max(100),
-    description: z.string().min(50).max(200),
+    lang: z.enum(['id', 'en', 'ru']).default('id').optional(),
+    title: z.string(),
+    description: z.string(),
     image: z.object({
       src: z.string(),
       alt: z.string(),
@@ -166,7 +149,7 @@ const portfolio = defineCollection({
 const legal = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/legal" }),
   schema: z.object({
-    lang: z.enum(['id', 'en', 'ru']).optional(),
+    lang: z.enum(['id', 'en', 'ru']).default('id').optional(),
     title: z.string(),
     description: z.string().optional(),
     lastUpdated: z.coerce.date(),

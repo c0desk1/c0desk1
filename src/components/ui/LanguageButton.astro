@@ -1,0 +1,94 @@
+---
+// src/components/LanguageSwitcherInline.astro
+import { siteConfig } from "@/config/site";
+import { getCurrentLocale, getLabel, localizePath } from "@/utils/i18n";
+
+interface Props {
+  alternateSlugs?: Record<string, string>;
+  basePath?: "blog" | "portfolio" | "legal" | "";
+}
+
+const { alternateSlugs, basePath = "" } = Astro.props;
+const locale = getCurrentLocale(Astro);
+const isPostPage = !!alternateSlugs;
+const currentPath = Astro.url.pathname.replace(/^\/(en|ru)/, "") || "/";
+
+const AriaLabel = getLabel(locale, "languageSwitcherLabel");
+---
+
+<div class="ls-inline" role="group" aria-label={AriaLabel}>
+  {siteConfig.locales.map((loc, i) => {
+    let href: string;
+
+    if (isPostPage && alternateSlugs?.[loc]) {
+      const prefix = basePath ? `/${basePath}/` : "/";
+      href = localizePath(`${prefix}${alternateSlugs[loc]}/`, loc);
+    } else {
+      href = localizePath(currentPath, loc);
+    }
+
+    const isActive = loc === locale;
+
+    return (
+      <Fragment>
+        {i > 0 && <span class="ls-divider" aria-hidden="true">|</span>}
+        <a
+          href={href}
+          class={`ls-inline-item${isActive ? " active" : ""}`}
+          aria-current={isActive ? "true" : undefined}
+          lang={loc}
+        >
+          {loc.toUpperCase()}
+        </a>
+      </Fragment>
+    );
+  })}
+</div>
+
+<style>
+  .ls-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .ls-divider {
+    color: var(--border-strong);
+    font-size: 0.625rem;
+    line-height: 1;
+    user-select: none;
+  }
+
+  .ls-inline-item {
+    font-size: 0.75rem;
+    font-weight: 500;
+    font-family: var(--font-mono);
+    letter-spacing: 0.04em;
+    color: var(--fg-subtle);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .ls-inline-item:hover {
+    color: var(--fg);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--border-strong);
+  }
+
+  .ls-inline-item.active {
+    color: var(--fg);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--fg);
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .ls-inline-item:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+</style>

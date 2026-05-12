@@ -1,0 +1,32 @@
+---
+// src/components/blog/BlogRelatedPosts.astro
+
+import type { CollectionEntry } from 'astro:content';
+import RelatedPostCard from './RelatedPostCard.astro';
+import { getCurrentLocale, getLabel } from '@/utils/i18n';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+}
+
+const { posts } = Astro.props;
+const locale = getCurrentLocale(Astro);
+---
+
+{posts.length > 0 && (
+  <div class="py-4 md:py-6">
+    <div class="flex items-center mb-3 md:mb-6">
+      <h2 class="text-(--fg) text-2xl md:text-3xl font-semibold tracking-tighter">
+        {getLabel(locale, 'b_relatedPosts')}
+      </h2>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+      {posts.map(post => (
+        <RelatedPostCard 
+          post={post}
+        />
+      ))}
+    </div>
+  </div>
+)}

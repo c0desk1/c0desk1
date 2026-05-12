@@ -1,0 +1,135 @@
+---
+import Icon from '@/components/ui/Icon'
+import { getCurrentLocale, getLabel } from '@/utils/i18n'
+
+interface Props {
+  challenge?: string;
+  solution?: string;
+  result?: string;
+  allowMultiple?: boolean;
+}
+const { challenge, solution, result, allowMultiple = true } = Astro.props;
+const locale = getCurrentLocale(Astro);
+
+const challengeLabel = getLabel(locale, 'p_challenge');
+const solutionLabel = getLabel(locale, 'p_solution');
+const resultLabel = getLabel(locale, 'p_result');
+
+interface Item {
+  question: string;
+  answer: string;
+}
+
+const items: Item[] = [];
+if (challenge) items.push({ question: challengeLabel, answer: challenge });
+if (solution) items.push({ question: solutionLabel, answer: solution });
+if (result) items.push({ question: resultLabel, answer: result });
+---
+
+{items.length > 0 && (
+  <div
+    class="accordion not-prose my-8"
+    data-allow-multiple={allowMultiple? "true" : "false"}
+  >
+    {items.map((item, i) => (
+      <div class="accordion-item" data-index={i}>
+        <button
+          class="accordion-trigger"
+          aria-expanded="false"
+          aria-controls={`case-panel-${i}`}
+          id={`case-btn-${i}`}
+        >
+          <span class="accordion-question text-sm md:text-[13px] font-semibold uppercase text-(--fg)">{item.question}</span>
+          <Icon name="chevron-down" className="accordion-chevron w-4.5 h-4.5 shrink-0 text-(--fg)" />
+        </button>
+        <div
+          class="accordion-panel"
+          id={`case-panel-${i}`}
+          aria-labelledby={`case-btn-${i}`}
+          hidden
+        >
+          <div class="accordion-body">
+            <p class="text-(--fg-muted) leading-relaxed text-sm" set:html={item.answer} />
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+)}
+
+<style is:global>
+.accordion {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md, 8px);
+    overflow: hidden;
+  }
+.accordion-item { border-bottom: 1px solid var(--border); }
+.accordion-item:last-child { border-bottom: none; }
+
+.accordion-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 150ms ease;
+  }
+.accordion-trigger:hover { background-color: var(--bg-subtle); }
+.accordion-trigger:focus-visible {
+    outline: 2px solid var(--accent, #10b981);
+    outline-offset: -2px;
+  }
+
+.accordion-chevron {
+    flex-shrink: 0;
+    color: var(--fg-subtle);
+    transition: transform 200ms ease;
+  }
+.accordion-trigger[aria-expanded="true"].accordion-chevron {
+    transform: rotate(180deg);
+  }
+
+.accordion-panel { overflow: hidden; }
+.accordion-panel[hidden] { display: none; }
+.accordion-body { padding: 0 1.25rem 1rem; }
+.accordion-body p { margin: 0; padding-top: 4px; }
+</style>
+
+<script>
+  const initAccordion = () => {
+    document.querySelectorAll<HTMLElement>('.accordion').forEach(root => {
+      const allowMultiple = root.dataset.allowMultiple === 'true';
+      const triggers = root.querySelectorAll<HTMLButtonElement>('.accordion-trigger');
+
+      const open = (trigger: HTMLButtonElement) => {
+        const panelId = trigger.getAttribute('aria-controls')!;
+        const panel = document.getElementById(panelId);
+        trigger.setAttribute('aria-expanded', 'true');
+        panel?.removeAttribute('hidden');
+      };
+
+      const close = (trigger: HTMLButtonElement) => {
+        const panelId = trigger.getAttribute('aria-controls')!;
+        const panel = document.getElementById(panelId);
+        trigger.setAttribute('aria-expanded', 'false');
+        panel?.setAttribute('hidden', '');
+      };
+
+      triggers.forEach(trigger => {
+        trigger.addEventListener('click', () => {
+          const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+          if (!allowMultiple) {
+            triggers.forEach(t => { if (t!== trigger) close(t); });
+          }
+          isOpen? close(trigger) : open(trigger);
+        });
+      });
+    });
+  };
+  initAccordion();
+</script>

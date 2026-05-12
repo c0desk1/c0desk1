@@ -1,0 +1,685 @@
+---
+// src/components/ui/Cookie.astro
+import { siteConfig } from "@/config/site";
+import { getCurrentLocale, getLabel } from "@/utils/i18n";
+
+const locale = getCurrentLocale(Astro);
+
+const GA_ID = siteConfig.googleAnalyticsId;
+const YA_ID = siteConfig.yandexMetricaId;
+const GA_AD = siteConfig.googleAdsenseId;
+const YA_AD = siteConfig.yandexPubId;
+
+const cookieLabels = {
+  preferenceTitle: getLabel(locale, 'cookiePreference'),
+  valuePrivacy: getLabel(locale, 'cookieValuePrivacy'),
+  selectCookie: getLabel(locale, 'cookieSelectCookie'),
+  close: getLabel(locale, 'close'),
+  functional: getLabel(locale, 'cookieFunctional'),
+  functionalDesc: getLabel(locale, 'cookieFunctionalDesc'),
+  analytics: getLabel(locale, 'cookieAnalytics'),
+  analyticsDesc: getLabel(locale, 'cookieAnalyticsDesc'),
+  ads: getLabel(locale, 'cookieAds'),
+  adsDesc: getLabel(locale, 'cookieAdsDesc'),
+  toggleAnalytics: getLabel(locale, 'cookieToggleAnalytics'),
+  toggleAds: getLabel(locale, 'cookieToggleAds'),
+  rejectAll: getLabel(locale, 'cookieRejectAll'),
+  saveChoice: getLabel(locale, 'cookieSaveChoice'),
+  acceptAll: getLabel(locale, 'cookieAcceptAll'),
+  changePreference: getLabel(locale, 'cookieChangePreference'),
+};
+---
+
+<div id="ck-config" style="display:none"
+  data-ga-id={GA_ID}
+  data-ya-id={YA_ID}
+  data-ga-ad={GA_AD}
+  data-ya-ad={YA_AD}>
+</div>
+
+<script is:inline define:vars={{ cookieLabels }}>
+  (function () {
+    const KEY = 'cookie-consent-v2';
+    const configEl = document.getElementById('ck-config');
+
+    const GA_ID = configEl?.dataset.gaId || '';
+    const YA_ID = configEl?.dataset.yaId || '';
+    const GA_AD = configEl?.dataset.gaAd || '';
+    const YA_AD = configEl?.dataset.yaAd || '';
+
+    function getStored() {
+      try {
+        return JSON.parse(localStorage.getItem(KEY));
+      } catch {
+        return null;
+      }
+    }
+
+    function run() {
+      const isBannerPresent = !!document.getElementById('ck-host');
+      const isBtnPresent = !!document.getElementById('ck-pref-btn');
+
+      if (isBannerPresent) {
+        applyConsent(getStored() || {});
+        return;
+      }
+
+      const stored = getStored();
+
+      if (stored) {
+        applyConsent(stored);
+        if (!isBtnPresent) injectPreferenceToggle();
+      } else {
+        setTimeout(buildBanner, 1000);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', run);
+    } else {
+      run();
+    }
+    
+    document.addEventListener('astro:page-load', run);
+
+    function applyConsent(prefs) {
+      const analyticsOn = prefs?.analytics === true;
+      const adsOn = prefs?.ads === true;
+
+      if (typeof gtag === 'function') {
+        gtag('consent', 'update', {
+          analytics_storage: analyticsOn? 'granted' : 'denied',
+          ad_storage: adsOn? 'granted' : 'denied',
+          ad_user_data: adsOn? 'granted' : 'denied',
+          ad_personalization: adsOn? 'granted' : 'denied',
+        });
+      }
+
+      if (GA_ID) window['ga-disable-' + GA_ID] =!analyticsOn;
+
+      if (GA_AD &&!adsOn) {
+        window['google_ad_client'] = GA_AD;
+        window['google_ad_status'] = 'disabled';
+      }
+
+      if (YA_ID) {
+        window['ya-disable-' + YA_ID] =!analyticsOn;
+      }
+
+      window.__cookieConsent = { 
+        adsAllowed: adsOn, 
+        analyticsAllowed: analyticsOn,
+        yandexPubId: YA_AD,
+        googleAdId: GA_AD
+      };
+      
+      document.dispatchEvent(new CustomEvent('cookie-consent-changed', { detail: prefs }));
+    }
+
+    function saveAndApply(prefs) {
+      localStorage.setItem(KEY, JSON.stringify(prefs));
+      applyConsent(prefs);
+    }
+
+    function buildBanner() {
+      if (document.getElementById('ck-host')) return;
+      
+      let analyticsChecked = true;
+      let adsChecked = true;
+      
+      const stored = getStored();
+        if (stored) {
+          analyticsChecked = stored.analytics!== false;
+          adsChecked = stored.ads!== false;
+        }
+
+      if (!document.getElementById('ck-style')) {
+        const s = document.createElement('style');
+        s.id = 'ck-style';
+        s.textContent = getCss();
+        document.head.appendChild(s);
+      }
+
+      const host = document.createElement('div');
+
+      host.id = 'ck-host';
+
+      host.setAttribute('role', 'dialog');
+      host.setAttribute('aria-modal', 'false');
+      host.setAttribute('aria-label', cookieLabels.preferenceTitle);
+      host.innerHTML = `
+        <div id="ck-card" class="ck-card">
+          <div class="ck-header">
+            <div class="ck-header-content">
+              <div class="ck-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/>
+                  <path d="M8.5 8.5v.01M16 15.5v.01M12 12v.01"/>
+                </svg>
+              </div>
+              <div>
+                <p class="ck-title">${cookieLabels.valuePrivacy}</p>
+                <p class="ck-sub">${cookieLabels.selectCookie}</p>
+              </div>
+             </div>
+             <button id="ck-close-btn" class="ck-close-btn" aria-label="${cookieLabels.close}">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                 <line x1="18" y1="6" x2="6" y2="18"/>
+                 <line x1="6" y1="6" x2="18" y2="18"/>
+               </svg>
+             </button>
+          </div>
+          <div class="ck-toggles">
+            <div class="ck-toggle-row ck-toggle-row--disabled">
+              <div class="ck-toggle-info">
+                <span class="ck-toggle-name">${cookieLabels.functional}</span>
+                <span class="ck-toggle-desc">${cookieLabels.functionalDesc}</span>
+              </div>
+              <div class="ck-pill ck-pill--on" aria-hidden="true">
+                <span class="ck-pill-thumb"></span>
+              </div>
+            </div>
+            <div class="ck-toggle-row" id="ck-analytics-row">
+              <div class="ck-toggle-info">
+                <span class="ck-toggle-name">${cookieLabels.analytics}</span>
+                <span class="ck-toggle-desc">${cookieLabels.analyticsDesc}</span>
+              </div>
+              <button
+                id="ck-analytics-toggle"
+                role="switch"
+                aria-checked="${analyticsChecked}"
+                class="ck-pill ${analyticsChecked? 'ck-pill--on' : 'ck-pill--off'}"
+                aria-label="${cookieLabels.toggleAnalytics}"
+              >
+                <span class="ck-pill-thumb"></span>
+              </button>
+            </div>
+            <div class="ck-toggle-row" id="ck-ads-row">
+              <div class="ck-toggle-info">
+                <span class="ck-toggle-name">${cookieLabels.ads}</span>
+                <span class="ck-toggle-desc">${cookieLabels.adsDesc}</span>
+              </div>
+              <button
+                id="ck-ads-toggle"
+                role="switch"
+                aria-checked="${adsChecked}"
+                class="ck-pill ${adsChecked? 'ck-pill--on' : 'ck-pill--off'}"
+                aria-label="${cookieLabels.toggleAds}">
+                <span class="ck-pill-thumb"></span>
+              </button>
+            </div>
+          </div>
+          <div class="ck-actions">
+            <button id="ck-reject-all" class="ck-btn ck-btn--ghost">${cookieLabels.rejectAll}</button>
+            <button id="ck-save" class="ck-btn ck-btn--outline">${cookieLabels.saveChoice}</button>
+            <button id="ck-accept-all" class="ck-btn ck-btn--primary">${cookieLabels.acceptAll}</button>
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(host);
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          host.classList.add('ck-visible');
+        });
+      });
+
+      const analyticsToggle = document.getElementById('ck-analytics-toggle');
+      if (analyticsToggle) {
+        analyticsToggle.setAttribute('aria-checked', String(analyticsChecked));
+        analyticsToggle.classList.toggle('ck-pill--on', analyticsChecked);
+        analyticsToggle.classList.toggle('ck-pill--off',!analyticsChecked);
+
+        analyticsToggle.addEventListener('click', () => {
+          analyticsChecked =!analyticsChecked;
+          analyticsToggle.setAttribute('aria-checked', String(analyticsChecked));
+          analyticsToggle.classList.toggle('ck-pill--on', analyticsChecked);
+          analyticsToggle.classList.toggle('ck-pill--off',!analyticsChecked);
+       });
+     }
+
+     const adsToggle = document.getElementById('ck-ads-toggle');
+     if (adsToggle) {
+       adsToggle.setAttribute('aria-checked', String(adsChecked));
+       adsToggle.classList.toggle('ck-pill--on', adsChecked);
+       adsToggle.classList.toggle('ck-pill--off',!adsChecked);
+
+       adsToggle.addEventListener('click', () => {
+         adsChecked =!adsChecked;
+         adsToggle.setAttribute('aria-checked', String(adsChecked));
+         adsToggle.classList.toggle('ck-pill--on', adsChecked);
+         adsToggle.classList.toggle('ck-pill--off',!adsChecked);
+       });
+      }
+      
+      document.getElementById('ck-close-btn')?.addEventListener('click', () => {
+        dismiss();
+      });
+
+      const dismiss = () => {
+        host.classList.remove('ck-visible');
+        setTimeout(() => { 
+          host.remove(); 
+          injectPreferenceToggle(); 
+        }, 350);
+    
+        const prefs = { 
+          functional: true, 
+          analytics: analyticsChecked, 
+          ads: adsChecked 
+        };
+    
+        saveAndApply(prefs);
+      };
+
+      document.getElementById('ck-accept-all')?.addEventListener('click', () => {
+        analyticsChecked = true;
+        adsChecked = true;
+
+        if (analyticsToggle) {
+          analyticsToggle.setAttribute('aria-checked', 'true');
+          analyticsToggle.classList.add('ck-pill--on');
+          analyticsToggle.classList.remove('ck-pill--off');
+        }
+
+        if (adsToggle) {
+          adsToggle.setAttribute('aria-checked', 'true');
+          adsToggle.classList.add('ck-pill--on');
+          adsToggle.classList.remove('ck-pill--off');
+        }
+
+        dismiss();
+      });
+
+      document.getElementById('ck-reject-all')?.addEventListener('click', () => {
+        analyticsChecked = false;
+        adsChecked = false;
+
+        if (analyticsToggle) {
+          analyticsToggle.setAttribute('aria-checked', 'false');
+          analyticsToggle.classList.remove('ck-pill--on');
+          analyticsToggle.classList.add('ck-pill--off');
+        }
+
+        if (adsToggle) {
+          adsToggle.setAttribute('aria-checked', 'false');
+          adsToggle.classList.remove('ck-pill--on');
+          adsToggle.classList.add('ck-pill--off');
+        }
+
+        dismiss();
+      });
+
+      document.getElementById('ck-save')?.addEventListener('click', () => {
+        dismiss();
+      });
+    }
+
+    function injectPreferenceToggle() {
+      if (document.getElementById('ck-pref-btn')) return;
+
+      if (!document.getElementById('ck-style')) {
+        const s = document.createElement('style');
+        s.id = 'ck-style';
+        s.textContent = getCss();
+        document.head.appendChild(s);
+      }
+
+      const btn = document.createElement('button');
+      btn.id = 'ck-pref-btn';
+      btn.setAttribute('aria-label', cookieLabels.changePreference);
+      btn.title = cookieLabels.changePreference;
+      btn.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/>
+          <path d="M8.5 8.5v.01M16 15.5v.01M12 12v.01"/>
+        </svg>
+      `;
+
+      btn.addEventListener('click', () => {
+        btn.remove();
+        buildBanner();
+      });
+
+      document.body.appendChild(btn);
+    }
+
+    function getCss() {
+      return `
+        #ck-host {
+          position: fixed;
+          bottom: 1.25rem;
+          right: 1.25rem;
+          z-index: 10000;
+          width: min(22rem, calc(100vw - 2rem));
+          opacity: 0;
+          transform: translateY(1rem);
+          transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
+          pointer-events: none;
+        }
+            
+        #ck-host.ck-visible {
+          opacity: 1;
+          transform: translateY(0);
+          pointer-events: all;
+        }
+            
+        .ck-card {
+          background: var(--bg);
+          border: 1.5px solid var(--border);
+          color: var(--fg);
+          border-radius: var(--radius-xl);
+          box-shadow: 0 4px 6px -1px rgba(0,0,0,.06), 0 20px 40px -8px rgba(0,0,0,.12);
+          padding: 1.25rem;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          overflow: hidden;
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+        }
+            
+        .ck-header { 
+          display: flex; 
+          align-items: flex-start; 
+          justify-content: space-between; 
+          gap: 0.75rem; 
+        }
+
+        .ck-header-content {
+          display: flex;
+          align-items: flex-start;
+          gap: 0.75rem;
+          flex: 1;
+        }
+
+       .ck-close-btn {
+         background: none;
+         border: none;
+         cursor: pointer;
+         color: var(--fg-muted);
+         padding: 0.25rem;
+         border-radius: 0.25rem;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         transition: color 0.15s;
+       }
+
+      .ck-close-btn:hover {
+        color: var(--fg);
+        background: var(--bg-muted);
+       }
+
+       .ck-close-btn svg {
+         width: 1.25rem;
+         height: 1.25rem;
+       }
+            
+        .ck-icon {
+          width: 2rem; 
+          height: 2rem; 
+          flex-shrink: 0; 
+          display: flex; 
+          align-items: center; 
+          justify-content: center;
+          background: var(--bg-muted); 
+          border: 1px solid var(--border);
+          border-radius: var(--radius-lg); 
+          color: var(--fg);
+        }
+            
+        .ck-icon svg { 
+          width: 1rem; 
+          height: 1rem; 
+        }
+            
+        .ck-title { 
+          font-size: 1rem; 
+          font-weight: 600; 
+          color: var(--fg); 
+          margin: 0 0 0.2rem; 
+          letter-spacing: -0.01em; 
+        }
+            
+        .ck-sub { 
+          font-size: 0.8375rem;
+          color: var(--fg-muted); 
+          margin: 0; 
+        }
+            
+        .ck-toggles { 
+          display: flex; 
+          flex-direction: column; 
+          gap: 0; 
+          border: 1px solid var(--border); 
+          border-radius: var(--radius-lg); 
+          overflow: hidden; 
+        }
+            
+        .ck-toggle-row { 
+          display: flex; 
+          align-items: center; 
+          justify-content: space-between; 
+          gap: 0.75rem; 
+          padding: 0.75rem 0.875rem; 
+          cursor: pointer; 
+          transition: background 0.15s; 
+        }
+            
+        .ck-toggle-row:not(.ck-toggle-row--disabled):hover { 
+          background: var(--bg-muted);
+          opacity: 1;
+        }
+            
+        .ck-toggle-row--disabled { 
+          cursor: default;
+          color: var(--fg-subtle);
+          background: var(--bg-muted);
+          pointer-events: none;
+          opacity: 0.8;
+        }
+            
+        .ck-toggle-row + .ck-toggle-row { 
+          border-top: 1px solid var(--border); 
+        }
+            
+        .ck-toggle-info { 
+          display: flex; 
+          flex-direction: column; 
+          gap: 0.15rem; 
+          min-width: 0; 
+        }
+            
+        .ck-toggle-name { 
+          font-size: 1rem; 
+          color: var(--fg); 
+        }
+            
+        .ck-toggle-desc { 
+          font-size: 0.8375rem;
+          color: var(--fg-muted); 
+          line-height: 1.65; 
+        }
+            
+        .ck-pill { 
+          position: relative; 
+          width: 2.25rem; 
+          height: 1.25rem; 
+          border-radius: 999px; 
+          border: none; 
+          flex-shrink: 0; 
+          cursor: pointer; 
+          transition: background 0.2s ease; 
+          padding: 0; 
+          display: flex; 
+          align-items: center; 
+        }
+            
+        .ck-pill--on  { 
+          background: var(--fg); 
+        }
+            
+        .ck-pill--off { 
+          background: var(--border); 
+        }
+            
+        .ck-pill-thumb { 
+          position: absolute; 
+          left: 0.2rem; 
+          width: 0.85rem; 
+          height: 0.85rem; 
+          border-radius: 50%; 
+          background: var(--bg); 
+          box-shadow: 0 1px 3px rgba(0,0,0,.2); 
+          transition: transform 0.2s cubic-bezier(0.34, 1.4, 0.64, 1); 
+          pointer-events: none; 
+        }
+            
+        .ck-pill--on  .ck-pill-thumb { 
+          transform: translateX(1rem); 
+        }
+            
+        .ck-pill--off .ck-pill-thumb { 
+          transform: translateX(0); 
+        }
+            
+        .ck-actions { 
+          display: flex; 
+          justify-content: flex-end; 
+          flex-wrap: wrap; 
+          width: 100%; 
+          align-items: center; 
+          gap: 0.75rem; 
+          margin-top: 0.5rem; 
+        }
+            
+        .ck-btn { 
+          flex: 0 0 auto; 
+          width: auto; 
+          padding: 0.5rem 1rem; 
+          font-size: 0.9375rem; 
+          font-weight: 500; 
+          border-radius: 0.5rem; 
+          text-align: center; 
+          white-space: nowrap; 
+          cursor: pointer; 
+          transition: opacity 0.15s, transform 0.1s; 
+          border: none; 
+        }
+            
+        .ck-btn:active { 
+          transform: scale(0.96); 
+        }
+            
+        .ck-btn--primary { 
+          background: var(--fg); 
+          color: var(--bg); 
+        }
+            
+        .ck-btn--primary:hover { 
+          opacity: 0.82; 
+        }
+            
+        .ck-btn--outline { 
+          background: transparent; 
+          color: var(--fg); 
+          border: 1.5px solid var(--border); 
+        }
+            
+        .ck-btn--outline:hover {
+          background: var(--bg-muted); 
+        }
+            
+        .ck-btn--ghost { 
+          background: transparent; 
+          color: var(--fg-muted); 
+        }
+            
+        .ck-btn--ghost:hover { 
+          color: var(--fg); 
+          background: var(--bg-muted); 
+        }
+            
+        .ck-btn:focus-visible { 
+          outline: 2px solid var(--accent); 
+          outline-offset: 2px; 
+        }
+            
+        #ck-pref-btn {
+          position: fixed; 
+          bottom: 1.25rem; 
+          left: 1.25rem; 
+          z-index: 50; 
+          width: 2rem; 
+          height: 2rem;
+          display: flex; 
+          align-items: center; 
+          justify-content: center; 
+          background: var(--bg);
+          border: 1.5px solid var(--border); 
+          border-radius: 999px; 
+          color: var(--fg-muted);
+          cursor: pointer; 
+          box-shadow: 0 2px 8px rgba(0,0,0,.08);
+          transition: color 0.15s, transform 0.15s, opacity 0.15s; 
+          opacity: 0.6; 
+          padding: 0;
+        }
+            
+        #ck-pref-btn:hover { 
+          opacity: 1; 
+          color: var(--fg); 
+          background: var(--bg-muted); 
+          transform: scale(1.08); 
+        }
+            
+        #ck-pref-btn svg { 
+          width: 1rem; 
+          height: 1rem; 
+        }
+            
+        .tts-bar--visible ~ #ck-pref-btn, body:has(.tts-bar--visible) #ck-pref-btn { 
+          bottom: 4rem; 
+          transition: bottom 0.25s ease, opacity 0.15s, transform 0.15s; 
+        }
+            
+        @media (max-width: 767px) {
+          #ck-host { 
+            bottom: 1rem; 
+            right: 1rem; 
+            left: 1rem;
+            width: auto;
+          }
+              
+          body:has(.tts-bar--visible) #ck-host { 
+            bottom: 4.5rem; 
+          }
+
+          .ck-title,
+          .ck-toggle-name { 
+            font-size: 0.9375rem; 
+          }
+              
+          .ck-actions { 
+            flex-direction: column;
+            gap: 0.5rem; 
+          }
+              
+          .ck-btn { 
+            width: 100%; 
+            justify-content: center; 
+            white-space: normal;
+            font-size: 0.8375rem;
+          }
+  
+          .ck-btn--ghost   { order: 1; }
+          .ck-btn--outline { order: 2; }
+          .ck-btn--primary { order: 3; }
+        }
+      `;
+    }
+  })();
+</script>
