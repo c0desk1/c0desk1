@@ -5,9 +5,8 @@ import Icon from "@/components/ui/Icon";
 import { getCurrentLocale, getLabel, localizePath } from "@/utils/i18n";
 
 const locale = getCurrentLocale(Astro);
-const loc = locale as "id" | "en" | "ru" | "jp"; // untuk akses field multilingual
+const loc = locale as "id" | "en" | "ru" | "jp";
 
-// ← i18n labels
 const searchModalLabel = getLabel(locale, 'searchModalLabel');
 const searchPlaceholder = getLabel(locale, 'searchPlaceholder');
 const clearSearchLabel = getLabel(locale, 'clearSearch');
@@ -23,7 +22,10 @@ const dataNotReady = getLabel(locale, 'dataNotReady');
 const refreshPage = getLabel(locale, 'refreshPage');
 const uncategorized = getLabel(locale, 'uncategorized');
 
-const posts = await getCollection("blog", ({ data }) => !data.draft);
+const posts = await getCollection("blog", ({ data }) => {
+  const postLang = data.lang || 'id';
+  return !data.draft && postLang === locale;
+});
 
 const searchData = await Promise.all(
   posts.map(async (post) => {
