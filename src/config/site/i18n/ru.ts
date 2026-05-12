@@ -234,6 +234,20 @@ export const ru = {
     seeAllPosts: "Посмотреть все записи",
     browsePostsByCategory: "Искать записи по категориям",
     filterCategory: "Фильтр категорий",
+    
+    // 401 page
+    unauthorizedTitle: "401: Не авторизован",
+    unauthorizedDesc: "Доступ запрещен. Пожалуйста, войдите в систему.",
+    unauthorizedHeading: "Не авторизован.",
+    unauthorizedMessage: "Для доступа к этому ресурсу необходимо пройти аутентификацию. Пожалуйста, войдите с действительными учетными данными.",
+    signIn: "Войти",
+    
+    // 403 page
+    forbiddenTitle: "403: Запрещено",
+    forbiddenDesc: "У вас нет разрешения на доступ к этой странице.",
+    forbiddenHeading: "Доступ запрещен.",
+    forbiddenMessage: "Ваши учетные данные действительны, но у вас нет необходимого уровня разрешений для просмотра этой страницы или каталога.",
+    goBack: "Назад",
 
     //____404
     notFoundTitle: "404: Не найдено",
@@ -241,6 +255,12 @@ export const ru = {
     returnHome: "Вернуться на главную",
     searchArticles: "Поиск статей",
     pageNotFound: "Страница не найдена",
+    
+    // 500 page
+    serverErrorTitle: "500: Внутренняя ошибка сервера",
+    serverErrorDesc: "На нашем сервере произошла ошибка.",
+    serverErrorHeading: "Ошибка сервера.",
+    serverErrorMessage: "В нашей системе возникла непредвиденная проблема, которая помешала обработке вашего запроса. Мы зарегистрировали эту аномалию.",
     
     // Offline page
     offlineTitle: "Вы не в сети",
