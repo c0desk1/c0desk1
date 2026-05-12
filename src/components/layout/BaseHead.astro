@@ -133,15 +133,16 @@ const hreflangLinks = (siteConfig.locales as string[]).map((lang) => {
 
 const xDefaultHref = new URL(pathWithoutLocale, siteURL).toString();
 
-const authorBioResolved: string =
+const authorTitle = author?.role ?? t(siteConfig.author.title) ?? contentCreatorLabel;
+const authorBio: string =
   author?.bio ??
   (siteConfig.author?.bio ? t(siteConfig.author.bio as PartialLocaleMap) : "");
 
 const activeAuthor = {
   name:   author?.name   ?? siteConfig.author?.name   ?? siteConfig.siteName,
-  role:   author?.role   ?? siteConfig.author?.title  ?? contentCreatorLabel,
+  role: authorTitle,
   avatar: author?.avatar ?? siteConfig.author?.avatar ?? siteConfig.siteLogo,
-  bio:    authorBioResolved,
+  bio:    authorBio,
   slug:   author?.slug   ?? siteConfig.author?.slug   ?? "bima-akbar",
 };
 
@@ -159,7 +160,7 @@ const seoResolved = {
     seo?.description ??
     propsDescription ??
     localeSeo?.description ??
-    authorBioResolved,
+    authorBio,
 
   canonical: seo?.canonical
     ? new URL(seo.canonical, siteURL)
