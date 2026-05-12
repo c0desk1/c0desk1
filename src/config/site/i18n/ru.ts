@@ -1,0 +1,222 @@
+export const ru = {
+    //_________Base___________//
+    skipToContent: "перайсці да асноўнага зместу",
+    backToTop: "Наверх",
+    minRead: "хвілін чытання",
+    breadcrumbAria: "Навігацыя па хлебных крошках",
+    openMenu: "Адкрыць меню",
+    closeMenu: "Закрыць меню",
+    general: "Агульнае",
+    readArticle: "Чытаць артыкул",
+    lastUpdated: "Апошняе абнаўленне",
+    uncategorized: "Без катэгорыі",
+
+    //_________Header___________//
+
+    //____Logo
+
+    //____Navigasi
+    navAria: "Асноўная навігацыя",
+    mobileAria: "Навігацыя па меню",
+    footerNav: "Ніжняя навігацыя",
+
+    //____NavSection
+    navigation: "Навігацыя",
+    tools: "Інструменты",
+    legal: "Юрыдычная інфармацыя",
+    contact: "Кантакт",
+
+    //____DesktopNav + MobileMenu + FooterMenu
+    home: "Галоўная",
+    blog: "Блог",
+    portfolio: "Партфоліа",
+    about: "Пра нас",
+    adogen: "Adogen",
+    privacyPolicy: "Палітыка прыватнасці",
+    termsOfService: "Умовы абслугоўвання",
+    disclaimer: "Адмова ад адказнасці",
+    cookiePolicy: "Палітыка выкарыстання файлаў cookie",
+    dmca: "DMCA",
+    email: "Электронная пошта",
+    contactUs: "Звязацца з намі",
+
+    //____Theme Toggle
+    themeToggleGroup: 'Выберыце тэму',
+    themeSystem: 'Прытрымлівайцеся сістэмы',
+    themeLight: 'Светлая тэма',
+    themeDark: 'Цёмная тэма',
+
+    //____Search
+    search: "Пошук",
+    searchPlaceholder: "Пошук...",
+    searchModalLabel: "Пошук артыкулаў",
+    clearSearch: "Ачысціць тэкст пошуку",
+    closeSearch: "Закрыць пошук",
+    navigate: "Навігацыя",
+    open: "Адкрыць",
+    results: "вынікі",
+    notFound: "Не знойдзена",
+    tryOtherKeywords: "Паспрабуйце іншыя ключавыя словы",
+    searchArticles: "Пошук артыкулаў",
+    typeToSearch: "Увядзіце тэкст, каб пачаць пошук",
+    dataNotReady: "Дадзеныя не гатовыя",
+    refreshPage: "Калі ласка, абнавіце старонку",
+
+    //____Language Switcher
+    languageAria: "Выберыце мову",
+    //_________Footer__________//
+
+    //____Newsletter
+    newsletterHeading: "Заставайцеся на сувязі",
+    newsletterSub: "Атрымлівайце апошнія паведамленні ў сваю паштовую скрыню.",
+    newsletterPlaceholder: "name@email.com",
+    newsletterBtn: "Пад пісацца",
+    newsletterSuccess: "Дзякуй за падпіску!",
+    newsletterNote: "Няма спаму. Вы можаце адпісацца ў любы час.",
+    newsletterInvalid: "Калі ласка, увядзіце правільны адрас электроннай пошты.",
+    newsletterExists: "Адрас электроннай пошты ўжо зарэгістраваны.",
+    newsletterError: "Адбылася памылка. Паспрабуйце яшчэ раз.",
+    newsletterToastSuccess: "Ужо падпісаны! Праверце сваю паштовую скрыню.",
+    newsletterNetwork: "Не атрымалася падключыцца. Паспрабуйце яшчэ раз пазней.",
+
+    //____Status Panel
+    s_LoadingSystem: "Загрузка сістэмы...",
+    s_WaitingSync: "Чаканне сінхранізацыі...",
+    s_JustNow: "Толькі што",
+    s_Ago: "таму",
+    s_AllSystemsNormal: "Усе сістэмы ў норме.",
+    s_Updated: "Абноўлена",
+    s_LastChecks: "апошняя праверка",
+    s_Offline: "Афлайн",
+    s_Uptime: "Час бесперабойнай працы",
+    s_Average: "сярэдні",
+    s_IdentifyingNode: "Вызначэнне...",
+    s_Calculating: "Разлік...",
+    s_SystemStatus: "Стан сістэмы",
+    s_ClosePanel: "Закрыць панэль",
+    s_Node: "Вузел",
+    s_LastCheck: "Апошняя праверка",
+    s_SomeTimeAgo: "Некаторы час таму",
+    s_GlobalEdge: "Глабальны край",
+
+    //____Author______//
+    author: "Аўтар",
+    avatarOf: "Аватар",
+
+    //____Homepage______//
+    HeroAria: "Раздзел герояў",
+    HeroTitle: "Творчы.",
+    HeroHighlight: "інжынер",
+    HeroDesc: "Даследаванне лічбавых працоўных працэсаў, інструментаў штучнага інтэлекту, музыкі, анімэ і гульняў з пункту гледжання сучаснага стваральніка ў эпоху аўтаматызацыі.",
+
+    home_BlogSection: "Апошнія артыкулы",
+    home_PortfolioSection: "Рэкамендаваныя праекты",
+
+    //____Blogpage______//
+    blog_PageTitle: "Блог і ідэі",
+    blog_PageDescription: "Закулісныя нататкі пра сістэмы, творчасць і вывучэнне сучаснага лічбавага свету.",
+    blog_HeroAria: "Уводзіны ў блог",
+    blog_HeroTitle: "Блог",
+    blog_HeroHighlight: "і ідэі.",
+    blog_HeroDesc: "Закулісныя нататкі пра сістэмы, творчасць і рэчы, якія я лічу цікавымі. Дзённік для кожнага фрагмента, які я вывучаю.",
+    blog_featuredPosts: "Рэкамендаваныя артыкулы",
+    blog_latestPosts: "Апошнія.",
+    blog_browsePosts: "Фільтраваць артыкулы па катэгорыі",
+    b_relatedPosts: "Падобныя артыкулы",
+    blog_noBlogPosts: "Пакуль няма паведамленняў у блогу.",
+    blog_viewAll: "Праглядзець усе",
+    b_breadcrumb: "Навігацыя па старонцы",
+    b_articleHeader: "Назва артыкула",
+    b_contentCreator: "Стваральнік кантэнту",
+    b_articleNavigation: "Навігацыя па артыкулах",
+    b_prevPost: "Папярэдні",
+    b_nextPosts: "Наступны",
+
+    //_____Portfolio_____//
+    p_PageTitle: "Партфоліа і праекты",
+    p_PageDesc: "Калекцыя лічбавых работ, пачынаючы ад вэб-прыкладанняў і дызайн-сістэм і заканчваючы сучаснымі тэхналогіямі і эксперыментамі UI/UX.",
+    p_HeroAria: "Уводзіны ў партфоліа",
+    p_HeroTitle: "Рабяцце",
+    p_HeroHighlight: "& вопыт",
+    p_HeroDesc: "Калекцыя праектаў вэб-распрацоўкі і некаторыя візуальныя эксперыменты.",
+    p_FeaturedPosts: "Рэкамендаваны праект",
+    p_latestPost: "Апошні праект",
+    p_AllProjects: "Усе праекты",
+    p_relatedProjects: "Звязаныя праекты",
+    p_Empty: "Пакуль што праектаў не апублікавана.",
+    p_Header: "Загаловак партфоліа",
+    p_ImageContent: "Выява кантэнту партфоліа",
+    p_MetricsCase: "Паказчыкі партфоліа і тэматычныя даследаванні",
+    p_Content: "Змест партфоліа",
+    p_Gallery: "Галерэя",
+    p_RelatedContent: "Змест, звязаны з партфоліа",
+    p_perf: "PERF",
+    p_a11y: "A11Y",
+    p_performance: "Прадукцыйнасць",
+    p_accessibility: "Даступнасць",
+    p_seo: "SEO",
+    p_challenge: "Задача",
+    p_solution: "Рашэнне",
+    p_result: "Вынік",
+    p_updated: "Абноўлена",
+    p_featured: "Рэкамендаваны",
+    p_client: "Кліент",
+    p_role: "Роля",
+    p_duration: "Працягласць",
+    p_liveDemo: "Дэманстрацыя",
+    p_sourceCode: "Зыходны код",
+    p_techStack: "Тэхналагічны стэк",
+
+    //_______Cookie________//
+    cookiePreference: "Налады файлаў cookie",
+    cookieValuePrivacy: "Мы шануем вашу прыватнасць",
+    cookieSelectCookie: "Выберыце, якія файлы cookie вы дазваляеце",
+    close: "Закрыць",
+    cookieFunctional: "Функцыянальны",
+    cookieFunctionalDesc: "Неабходны для працы сайта. Нельга адключыць.",
+    cookieAnalytics: "Аналітыка",
+    cookieAnalyticsDesc: "Дапамагае нам зразумець, як наведвальнікі ўзаемадзейнічаюць з кантэнтам.",
+    cookieAds: "Рэклама і персаналізацыя",
+    cookieAdsDesc: "Паказвае рэкламу, адпаведную вам. Адключыце, калі вы не хочаце бачыць рэкламу.",
+    cookieToggleAnalytics: "Пераключыць аналітыку",
+    cookieToggleAds: "Пераключыць рэкламу",
+    cookieRejectAll: "Адхіліць усё",
+    cookieSaveChoice: "Захаваць выбар",
+    cookieAcceptAll: "Прыняць усё",
+    cookieChangePreference: "Змяніць налады файлаў cookie",
+
+    //_________CopyLink________//
+    copyUrl: 'Капіяваць URL',
+    copyed: 'Скапіявана!',
+    copyFailed: 'Памылка',
+    copyUrlAria: 'Скапіяваць спасылку на артыкул',
+    copyedAria: 'URL паспяхова скапіяваны',
+    copyFailedAria: 'Капіяваць URL не ўдалося',
+    copyToastSuccess: 'URL скапіяваны ў буфер абмену!',
+    copyToastFailed: 'Капіяваць URL не ўдалося, паспрабуйце яшчэ раз.',
+
+    //__________TTS_________//
+    listen: 'Чытаць',
+    listening: 'Чытаю...',
+    listenAria: 'Праслухаць артыкул',
+    stopAria: 'Спыніць чытанне',
+    ttsPrev: 'Папярэдні',
+    ttsNext: 'Наступны',
+    ttsPlayPause: 'Паўза / Працягнуць',
+    ttsClose: 'Закрыць',
+
+    //_________Share Posts_______//
+    share: "Падзяліцца",
+    shareArticle: "Падзяліцца гэтым артыкулам",
+    otherPlatforms: "Іншыя платформы",
+    more: "Больш",
+    shareTo: "Падзяліцца з",
+
+    //_______Category__________//
+    selectCategory: "Выберыце катэгорыю",
+    noPostsInCategory: "У гэтай катэгорыі пакуль няма паведамленняў.",
+    showMore: "Паказаць больш",
+    seeAllPosts: "Глядзець усе паведамленні",
+    browsePostsByCategory: "Праглядаць паведамленні па катэгорыях",
+    filterCategory: "Фільтраваць катэгорыі",
+} as const;
