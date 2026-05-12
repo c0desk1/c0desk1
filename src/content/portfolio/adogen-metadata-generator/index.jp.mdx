@@ -1,0 +1,75 @@
+---
+lang: jp
+title: "Adogen: AIによるメタデータ自動化"
+description: Astro、Cloudflare Workers、Vision AIを使用して、マイクロストックコントリビューター向けの画像メタデータ自動化システムを構築。
+image:
+  src: https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAANTafMnN0v-_0fmbRjb4QbNH3SFWd0AAuAQaxsYJZlXZ87OXo5ihRwBAAMCAAN3AAM7BA
+  alt: Adogen ダッシュボードのプレビュー
+techStack:
+  - Astro
+  - Tailwind CSS
+  - TypeScript
+  - Cloudflare Workers
+  - Groq AI
+  - Zod
+client: 個人プロジェクト / オープンツール
+role: フルスタック開発者 & UI/UXデザイナー
+duration: 3週間
+demoUrl: https://dev-adogen.bimasaktiakbarr.workers.dev
+repoUrl: https://github.com/bimaakbar/adogen
+metrics:
+  performance: 100
+  accessibility: 100
+  seo: 100
+challenge: ストックフォトのコントリビューターは、メタデータの管理業務に60%もの時間を費やしています。低コストでありながら正確な、大量のバッチ視覚分析が課題でした。
+solution: Cloudflare Workersを介したVision AI（Llama 3.2 & Pixtral）の統合と、帯域幅効率を高めるクライアントサイドでの画像リサイズ処理の実装。
+result: 1画像あたりのメタデータ入力時間を5分から10秒未満に短縮し、一度に最大50枚のバッチアップロードをサポートします。
+gallery:
+  - https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAANRafMm_BLjTBjoJeblYvwWQJc9f64AAt8QaxsYJZlXj7Q0_ueaA6kBAAMCAAN3AAM7BA
+pubDate: 2026-04-27
+updatedDate: 2026-04-27
+draft: false
+featured: true
+seo:
+  title: インドネシアのコントリビューターのための最速AIメタデータジェネレーター
+  description: 手動でのキーワード入力に時間を無駄にするのはやめましょう。Adogenを使ってAdobe StockのSEO最適化を自動で、しかも無料で行いましょう。
+  ogImage: https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAANRafMm_BLjTBjoJeblYvwWQJc9f64AAt8QaxsYJZlXj7Q0_ueaA6kBAAMCAAN3AAM7BA
+  noIndex: false
+---
+
+## プロジェクトの歩み
+
+Adogenの構築は、単なるAIラッパーを作ることではなく、インドネシアのストックフォトコントリビューターが直面する実際の問題を解決することでした。私が主に焦点を当てたのは、処理速度とデータのプライバシーです。
+
+## 主な機能と技術的判断
+
+### AstroとTailwindによる「爆速」パフォーマンス
+
+**Astro**を選んだことは極めて重要な決断でした。なぜなら、ほとんどのインタラクションは画像キュー部分を除いて静的だからです。ブラウザへのJavaScript配信を最小限に抑えることで、このアプリケーションは**Lighthouseのスコア100/100** を容易に達成しました。
+
+### 「Bring Your Own Key」モデルによるデータセキュリティ
+
+ユーザーに月額料金を負担させる代わりに、*BYOK（Bring Your Own Key)* システムを実装しました。ユーザーは自身のGroqまたはMistralのAPIキーをブラウザの`localStorage` に安全に保存します。これにより：
+
+- サーバー運用コストはほぼゼロ（$0）。
+- ユーザーの画像は私のサーバーに一切保存されないため、プライバシーが保護されます。
+
+### キュー管理アーキテクチャ
+
+無料枠のAIプロバイダーによる*レート制限*に対処するため、**セーフディレイロジック**を用いたキューシステムを構築しました。このシステムは、`429 Too Many Requests` エラーを回避するために、リクエストが一定の間隔で1つずつ送信されることを保証します。
+
+### 堅牢なCSVサニタイズ
+
+AIからのデータには、しばしば不正な文字や乱雑なフォーマットが含まれています。**TypeScript** を使用して専用のユーティリティを構築し、改行（`\n`）のクリーンアップ、禁止記号（`©`、`™`）の削除、50キーワード制限の遵守を徹底しました。
+
+<Code titles={["Typescript"]}>
+```typescript
+// 使用しているサニタイズロジックの例
+const clean = (str: string) => {
+  return str
+    .replace(/\r?\n|\r/g, " ")
+    .replace(/[™®©]/g, "")
+    .replace(/"/g, '""')
+    .trim();
+};
+</Code>
