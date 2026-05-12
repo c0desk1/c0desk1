@@ -10,6 +10,7 @@ export const en = {
     readArticle: "Read article",
     lastUpdated: "Last updated",
     uncategorized: "Uncategorized",
+    articles: "articles",
 
     //_________Header___________//
 
