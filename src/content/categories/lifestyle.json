@@ -2,11 +2,13 @@
   "name": {
     "id": "Gaya Hidup",
     "en": "Lifestyle",
-    "ru": "Лад жыцця"
+    "ru": "Лад жыцця",
+    "jp": "ライフスタイル"
   },
   "description": {
     "id": "Kumpulan Artikel tentang gaya hidup.",
     "en": "Collection of articles about lifestyle.",
-    "ru": "Зборнік артыкулаў пра лад жыцця."
+    "ru": "Зборнік артыкулаў пра лад жыцця.",
+    "jp": "ライフスタイルに関する記事のコレクション。"
   }
 }
