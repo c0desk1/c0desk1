@@ -29,7 +29,7 @@ export async function getStaticPaths() {
 
 const { category, locale } = Astro.props;
 
-type Locale = 'id' | 'en' | 'ru';
+type Locale = 'id' | 'en' | 'ru' | 'jp';
 
 const loc = locale as Locale;
 
@@ -72,7 +72,11 @@ const breadcrumbItems = [
 ];
 ---
 
-<BaseLayout {...seoData} category={blogCategory}>
+<BaseLayout 
+  {...seoData} 
+  category={blogCategory}
+  basePath="blog"
+  >
   <!-- Breadcrumb -->
   <Container size="lg" class="pt-6">
     <Breadcrumb items={breadcrumbItems} />
@@ -99,8 +103,7 @@ const breadcrumbItems = [
       )}
 
       <p class="mt-8 text-sm font-mono text-(--fg-dim)">
-        {categoryPosts.length}{" "}
-        {locale === 'id' ? 'artikel' : locale === 'ru' ? 'статей' : 'articles'}
+        {categoryPosts.length} {t_articles}
       </p>
     </Container>
   </section>
