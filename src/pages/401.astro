@@ -1,18 +1,25 @@
 ---
-// src/pages/401.astro
-
 import ErrorLayout from '@/layouts/ErrorLayout.astro';
 import Container from '@/components/ui/Container.astro';
 import { siteConfig } from '@/config/site';
+import { getCurrentLocale, getLabel, localizePath } from "@/utils/i18n";
 
+const locale = getCurrentLocale(Astro);
 const siteURL = Astro.site?.toString() ?? siteConfig.siteUrl;
 
+const unauthorizedTitle = getLabel(locale, 'unauthorizedTitle') || '401: Unauthorized';
+const unauthorizedDesc = getLabel(locale, 'unauthorizedDesc') || 'Access denied. Please log in first.';
+const unauthorizedHeading = getLabel(locale, 'unauthorizedHeading') || 'Unauthorized.';
+const unauthorizedMessage = getLabel(locale, 'unauthorizedMessage') || 'You need to authenticate to access this resource.';
+const signInLabel = getLabel(locale, 'signIn') || 'Sign In';
+const returnHomeLabel = getLabel(locale, 'returnHome') || 'Return to Home';
+
 const seoData = {
-  title: "401: Unauthorized",
-  description: "Akses ditolak. Silakan login terlebih dahulu.",
+  title: unauthorizedTitle,
+  description: unauthorizedDesc,
   noIndex: true,
   type: "website" as const,
-  canonicalURL: new URL('401', siteURL).toString(),
+  canonicalURL: new URL(Astro.url.pathname, siteURL).toString(),
 };
 ---
 
@@ -26,11 +33,11 @@ const seoData = {
       </div>
 
       <h1 class="text-4xl md:text-5xl font-semibold tracking-tighter text-(--fg) mb-4">
-        Unauthorized.
+        {unauthorizedHeading}
       </h1>
       
       <p class="text-sm md:text-base text-(--fg-muted) max-w-[400px] mb-10 leading-relaxed">
-        Anda harus melakukan autentikasi untuk mengakses sumber daya ini. Silakan masuk menggunakan kredensial yang valid.
+        {unauthorizedMessage}
       </p>
 
       <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
@@ -38,13 +45,13 @@ const seoData = {
           href={new URL('login/', siteURL).toString()} 
           class="w-full sm:w-auto inline-flex justify-center items-center h-10 px-6 rounded-md bg-(--bg-subtle) text-(--fg) text-sm font-medium hover:bg-(--bg-muted) transition-colors"
         >
-          Sign In
+          {signInLabel}
         </a>
         <a 
-          href={siteURL} 
+          href={localizePath('/', locale)} 
           class="w-full sm:w-auto inline-flex justify-center items-center h-10 px-6 rounded-md bg-transparent text-(--fg) text-sm font-medium border border-(--border) hover:border-(--border-strong) transition-colors"
         >
-          Return Home
+          {returnHomeLabel}
         </a>
       </div>
 
