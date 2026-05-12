@@ -10,7 +10,7 @@ export const id = {
     readArticle: "Baca artikel",
     lastUpdated: "Terakhir diperbarui",
     uncategorized: "Uncategorized",
-
+    articles: "artikel",
    
 
     //_________Header___________//
