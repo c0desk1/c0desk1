@@ -1,20 +1,18 @@
-// public/pwa.js
-const CACHE_NAME = 'c0desk1';
+const CACHE_NAME = 'c0desk1-v1';
+const OFFLINE_URL = '/offline';
+
+// Cache halaman penting, termasuk varian offline untuk semua bahasa
 const urlsToCache = [
   '/',
   '/offline',
+  '/en/offline',
+  '/ru/offline',
+  '/jp/offline',
   '/favicon.svg',
   '/site.webmanifest',
 ];
 
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(urlsToCache);
-    })
-  );
-});
-
+// ---------- INSTALL ----------
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(async (cache) => {
@@ -30,6 +28,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
+// ---------- ACTIVATE ----------
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -42,4 +41,23 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
+});
+
+// ---------- FETCH ----------
+self.addEventListener('fetch', (event) => {
+  // Hanya tangani permintaan navigasi (halaman HTML)
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request).catch(() => {
+        // Coba ambil dari cache sesuai URL yang diminta
+        return caches.match(event.request).then((cachedResponse) => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          // Fallback terakhir: tampilkan halaman offline universal
+          return caches.match(OFFLINE_URL);
+        });
+      })
+    );
+  }
 });
