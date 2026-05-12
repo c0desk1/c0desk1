@@ -1,7 +1,8 @@
 ---
 // src/components/layout/BaseHead.astro
+
 import { siteConfig } from "@/config/site";
-import { getEntry } from 'astro:content';
+import { getEntry } from "astro:content";
 import { getCurrentLocale, getLabel } from "@/utils/i18n";
 
 interface Props {
@@ -56,244 +57,301 @@ const {
   alternateSlugs,
 } = Astro.props;
 
-const contentCreatorLabel = getLabel(locale, 'contentCreator') || 'Content Creator';
-const homeLabel = getLabel(locale, 'home') || 'Home';
-const htmlLang = locale === 'id'? 'id-ID' : locale === 'en'? 'en-US' : 'ru-RU';
+// ─── LOCALISATION ────────────────────────────────────────────────────────────
+function toBcp47(lang: string): string {
+  if (lang === "id") return "id-ID";
+  if (lang === "en") return "en-US";
+  if (lang === "ru") return "ru-RU";
+  return lang;
+}
 
-// ================= DATA SETTINGS =================
+// Map locale code → underscore form required by Open Graph
+function toOgLocale(lang: string): string {
+  return toBcp47(lang).replace("-", "_");
+}
+
+const htmlLang = toBcp47(locale);
+
+const contentCreatorLabel = getLabel(locale, "contentCreator") || "Content Creator";
+const homeLabel           = getLabel(locale, "home") || "Home";
+
+// ─── SITE DATA ────────────────────────────────────────────────────────────────
 const siteData = siteDataFromProps || siteConfig;
 
-// ================= DATA ORGANIZATION =================
-let org;
+// ─── ORGANISATION ─────────────────────────────────────────────────────────────
+let org: { data: any } | undefined;
 if (orgFromProps) {
   org = { data: orgFromProps };
 } else {
   try {
-    org = await getEntry('organizations', 'c0desk1');
-  } catch (error) {
-    console.warn('Organization not found, proceeding without');
+    const entry = await getEntry("organizations", "c0desk1");
+    if (entry) org = { data: entry.data };
+  } catch {
+    // Organisation collection absent — degrade gracefully
   }
 }
 
 const orgData = org?.data;
-const siteURL = Astro.site?.toString()?? siteData.siteUrl?? siteConfig.siteUrl;
 
-// ================= HREFLANG GENERATOR =================
-const currentPath = Astro.url.pathname;
-const pathWithoutLocale = currentPath.replace(new RegExp(`^\/(${siteConfig.locales.join('|')})`), '') || '/';
+// ─── URLS ─────────────────────────────────────────────────────────────────────
+const rawSiteURL = Astro.site?.toString() ?? siteData.siteUrl ?? siteConfig.siteUrl;
+const siteURL    = rawSiteURL.endsWith("/") ? rawSiteURL : `${rawSiteURL}/`;
 
-const hreflangLinks = siteConfig.locales.map((lang: string) => {
+// ─── HREFLANG ────────────────────────────────────────────────────────────────
+const currentPath       = Astro.url.pathname;
+const localePattern     = new RegExp(`^\\/(${siteConfig.locales.join("|")})`);
+const pathWithoutLocale = currentPath.replace(localePattern, "") || "/";
+
+const hreflangLinks = (siteConfig.locales as string[]).map((lang) => {
   const langSlug = alternateSlugs?.[lang];
-  let href: string;
+  const path     = langSlug ?? pathWithoutLocale;
 
-  if (langSlug) {
-    href = lang === siteConfig.defaultLocale
-    ? new URL(langSlug, siteURL).toString()
-      : new URL(`/${lang}${langSlug}`, siteURL).toString();
-  } else {
-    href = lang === siteConfig.defaultLocale
-    ? new URL(pathWithoutLocale, siteURL).toString()
-      : new URL(`/${lang}${pathWithoutLocale}`, siteURL).toString();
-  }
+  const href =
+    lang === siteConfig.defaultLocale
+      ? new URL(path, siteURL).toString()
+      : new URL(`/${lang}${path}`, siteURL).toString();
 
-  return {
-    lang: lang === 'id'? 'id-ID' : lang === 'en'? 'en-US' : 'ru-RU',
-    href
-  };
+  return { lang: toBcp47(lang), href };
 });
 
 const xDefaultHref = new URL(pathWithoutLocale, siteURL).toString();
 
-// ================= DYNAMIC DATA RESOLVER =================
+// ─── AUTHOR ───────────────────────────────────────────────────────────────────
 const activeAuthor = {
-  name: author?.name || siteData.siteName,
-  role: author?.role || siteConfig.author?.title || contentCreatorLabel,
+  name:   author?.name   || siteData.siteName,
+  role:   author?.role   || siteConfig.author?.title || contentCreatorLabel,
   avatar: author?.avatar || siteData.siteLogo,
-  bio: author?.bio || siteData.siteDescription,
-  slug: author?.slug || "bima-akbar",
+  bio:    author?.bio    || siteData.siteDescription,
+  slug:   author?.slug   || "bima-akbar",
 };
 
+// ─── SEO CORE ─────────────────────────────────────────────────────────────────
 const seoData = {
   title: seo?.title || propsTitle || siteData.defaultSeo?.title || siteData.siteName,
-  description: seo?.description || propsDescription || siteData.defaultSeo?.description || siteData.siteDescription,
+  description:
+    seo?.description ||
+    propsDescription ||
+    siteData.defaultSeo?.description ||
+    siteData.siteDescription,
   canonical: seo?.canonical
-  ? new URL(seo.canonical, siteURL)
-    : (Astro.props.canonicalURL
-  ? new URL(Astro.props.canonicalURL, siteURL)
-        : new URL(Astro.url.pathname, siteURL)),
-  noIndex: seo?.noIndex?? Astro.props.noIndex?? false,
+    ? new URL(seo.canonical, siteURL)
+    : Astro.props.canonicalURL
+    ? new URL(Astro.props.canonicalURL, siteURL)
+    : new URL(Astro.url.pathname, siteURL),
+  noIndex: seo?.noIndex ?? Astro.props.noIndex ?? false,
 };
 
-const formattedTitle = seoData.title === siteData.siteName
- ? siteData.siteName
-  : `${seoData.title} — ${siteData.siteName}`;
+const formattedTitle =
+  seoData.title === siteData.siteName
+    ? siteData.siteName
+    : `${seoData.title} — ${siteData.siteName}`;
 
-let ogImageURL: string;
+// ─── OG IMAGE ────────────────────────────────────────────────────────────────
 const rawImage = seo?.ogImage || propsImage?.src || siteData.defaultSeo?.ogImage || siteConfig.ogImage;
-if (!rawImage) {
-  ogImageURL = new URL(siteData.siteLogo, siteURL).toString();
-} else {
-  ogImageURL = rawImage.startsWith("http")? rawImage : new URL(rawImage, siteURL).toString();
-}
+const ogImageURL: string = !rawImage
+  ? new URL(siteData.siteLogo, siteURL).toString()
+  : rawImage.startsWith("http")
+  ? rawImage
+  : new URL(rawImage, siteURL).toString();
 
-// ================= PAGE CONTEXT =================
-const pathname = Astro.url.pathname;
-const isHomepage = pathname === '/';
+// ─── PAGE CONTEXT ─────────────────────────────────────────────────────────────
+const pathname   = Astro.url.pathname;
+const isHomepage = pathname === "/";
 
-// ================= DATES =================
+// ─── DATES ───────────────────────────────────────────────────────────────────
 const datePublished = publishedTime?.toISOString();
-const dateModified = modifiedTime?.toISOString() || publishedTime?.toISOString();
+const dateModified  = modifiedTime?.toISOString() || publishedTime?.toISOString();
 
-// ================= JSON-LD GRAPH =================
+// ─── JSON-LD GRAPH ────────────────────────────────────────────────────────────
 const schemaGraph: any[] = [];
 
-// Organization
+// 1. Organization
 if (orgData) {
   schemaGraph.push({
-    "@type": "Organization",
-    "@id": `${siteURL}#organization`,
-    "name": orgData.name,
-    "legalName": orgData.legalName,
-    "url": orgData.url || siteURL,
-    "logo": {
-      "@type": "ImageObject",
-      "@id": `${siteURL}#logo`,
-      "url": new URL(orgData.logo, siteURL).toString(),
-      "width": 512,
-      "height": 512,
+    "@type":     "Organization",
+    "@id":       `${siteURL}#organization`,
+    name:        orgData.name,
+    legalName:   orgData.legalName,
+    url:         orgData.url || siteURL,
+    logo: {
+      "@type":  "ImageObject",
+      "@id":    `${siteURL}#logo`,
+      url:      new URL(orgData.logo, siteURL).toString(),
+      width:    512,
+      height:   512,
     },
-    "sameAs": Object.values(orgData.social || {}).filter(Boolean),
+    sameAs: Object.values(orgData.social || {}).filter(Boolean),
   });
-} else if (siteData.siteName) {
+} else {
   schemaGraph.push({
     "@type": "Organization",
-    "@id": `${siteURL}#organization`,
-    "name": siteData.siteName,
-    "url": siteURL,
-    "logo": {
-      "@type": "ImageObject",
-      "@id": `${siteURL}#logo`,
-      "url": new URL(siteData.siteLogo, siteURL).toString(),
-      "width": 512,
-      "height": 512,
+    "@id":   `${siteURL}#organization`,
+    name:    siteData.siteName,
+    url:     siteURL,
+    logo: {
+      "@type":  "ImageObject",
+      "@id":    `${siteURL}#logo`,
+      url:      new URL(siteData.siteLogo, siteURL).toString(),
+      width:    512,
+      height:   512,
     },
   });
 }
 
-// Person
+// 2. WebSite
 schemaGraph.push({
-  "@type": "Person",
-  "@id": `${siteURL}#person`,
-  "name": activeAuthor.name,
-  "jobTitle": activeAuthor.role,
-  "description": activeAuthor.bio,
-  "image": activeAuthor.avatar,
-  "url": new URL(`author/${activeAuthor.slug}/`, siteURL).toString(),
-  ...(orgData || siteData.siteName? { "worksFor": { "@id": `${siteURL}#organization` } } : {}),
-});
-
-// WebPage
-schemaGraph.push({
-  "@type": "WebPage",
-  "@id": `${seoData.canonical}#webpage`,
-  "url": seoData.canonical.toString(),
-  "name": formattedTitle,
-  "description": seoData.description,
-  "isPartOf": { "@id": `${siteURL}#website` },
-  ...(!isHomepage && { "breadcrumb": { "@id": `${seoData.canonical}#breadcrumb` } }),
-  "inLanguage": htmlLang,
-  ...(datePublished && { "datePublished": datePublished }),
-  ...(dateModified && { "dateModified": dateModified }),
-  "potentialAction": [{ "@type": "ReadAction", "target": [seoData.canonical.toString()] }],
-});
-
-// WebSite (homepage only)
-if (isHomepage) {
-  schemaGraph.push({
-    "@type": "WebSite",
-    "@id": `${siteURL}#website`,
-    "url": siteURL,
-    "name": siteData.siteName,
-    "publisher": { "@id": `${siteURL}#organization` },
-    "potentialAction": [{
+  "@type": "WebSite",
+  "@id":   `${siteURL}#website`,
+  url:     siteURL,
+  name:    siteData.siteName,
+  publisher: { "@id": `${siteURL}#organization` },
+  potentialAction: [
+    {
       "@type": "SearchAction",
-      "target": { "@type": "EntryPoint", "urlTemplate": `${siteURL}search?q={search_term_string}` },
+      // FIX: siteURL already has trailing slash, so no slash needed before "search"
+      target: {
+        "@type":      "EntryPoint",
+        urlTemplate: `${siteURL}search?q={search_term_string}`,
+      },
       "query-input": "required name=search_term_string",
-    }],
-  });
-}
+    },
+  ],
+});
 
-// Breadcrumb (non-homepage)
+// 3. Person
+schemaGraph.push({
+  "@type":       "Person",
+  "@id":         `${siteURL}#person`,
+  name:          activeAuthor.name,
+  jobTitle:      activeAuthor.role,
+  description:   activeAuthor.bio,
+  image: {
+    "@type": "ImageObject",
+    url:     activeAuthor.avatar.startsWith("http")
+               ? activeAuthor.avatar
+               : new URL(activeAuthor.avatar, siteURL).toString(),
+    width:  400,
+    height: 400,
+  },
+  url:      new URL(`author/${activeAuthor.slug}/`, siteURL).toString(),
+  worksFor: { "@id": `${siteURL}#organization` },
+});
+
+// 4. WebPage
+schemaGraph.push({
+  "@type":       "WebPage",
+  "@id":         `${seoData.canonical}#webpage`,
+  url:           seoData.canonical.toString(),
+  name:          formattedTitle,
+  description:   seoData.description,
+  isPartOf:      { "@id": `${siteURL}#website` },
+  ...(!isHomepage && { breadcrumb: { "@id": `${seoData.canonical}#breadcrumb` } }),
+  inLanguage:    htmlLang,
+  ...(datePublished && { datePublished }),
+  ...(dateModified  && { dateModified }),
+  potentialAction: [{ "@type": "ReadAction", target: [seoData.canonical.toString()] }],
+});
+
+// 5. BreadcrumbList (non-homepage only)
 if (!isHomepage) {
+  const breadcrumbItems: any[] = [
+    { "@type": "ListItem", position: 1, name: homeLabel, item: siteURL },
+  ];
+
+  if (category) {
+    breadcrumbItems.push({
+      "@type":   "ListItem",
+      position:  2,
+      name:      category.name,
+      item:      new URL(`category/${category.slug}/`, siteURL).toString(),
+    });
+  }
+
+  breadcrumbItems.push({
+    "@type":   "ListItem",
+    position:  category ? 3 : 2,
+    name:      seoData.title,
+    item:      seoData.canonical.toString(),
+  });
+
   schemaGraph.push({
-    "@type": "BreadcrumbList",
-    "@id": `${seoData.canonical}#breadcrumb`,
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": homeLabel, "item": siteURL },
-      category
-      ? { "@type": "ListItem", "position": 2, "name": category.name, "item": new URL(`category/${category.slug}/`, siteURL).toString() }
-        : null,
-      { "@type": "ListItem", "position": category? 3 : 2, "name": seoData.title, "item": seoData.canonical.toString() },
-    ].filter(Boolean),
+    "@type":           "BreadcrumbList",
+    "@id":             `${seoData.canonical}#breadcrumb`,
+    itemListElement:   breadcrumbItems,
   });
 }
 
-// BlogPosting
+// 6. BlogPosting (article pages)
 if (type === "article") {
   schemaGraph.push({
-    "@type": "BlogPosting",
-    "@id": `${seoData.canonical}#article`,
-    "headline": seoData.title,
-    "description": seoData.description,
-    "author": { "@id": `${siteURL}#person` },
-    "publisher": { "@id": `${siteURL}#organization` },
-    "datePublished": datePublished,
-    "dateModified": dateModified,
-    "image": {
-      "@type": "ImageObject",
-      "@id": `${seoData.canonical}#primaryimage`,
-      "url": ogImageURL,
-      "width": 1200,
-      "height": 630,
+    "@type":       "BlogPosting",
+    "@id":         `${seoData.canonical}#article`,
+    headline:      seoData.title,
+    description:   seoData.description,
+    author:        { "@id": `${siteURL}#person` },
+    publisher:     { "@id": `${siteURL}#organization` },
+    datePublished,
+    dateModified,
+    image: {
+      "@type":  "ImageObject",
+      "@id":    `${seoData.canonical}#primaryimage`,
+      url:      ogImageURL,
+      width:    1200,
+      height:   630,
     },
-    "mainEntityOfPage": { "@id": `${seoData.canonical}#webpage` },
-    "articleSection": category?.name,
-    "keywords": tags.join(", "),
-    "inLanguage": htmlLang,
+    mainEntityOfPage: { "@id": `${seoData.canonical}#webpage` },
+    articleSection:   category?.name,
+    keywords:         tags.join(", "),
+    inLanguage:       htmlLang,
   });
 }
 
-// CreativeWork
+// 7. SoftwareSourceCode / CreativeWork
 if (type === "creativeWork") {
-  schemaGraph.push({
-    "@type": "CreativeWork",
-    "@id": `${seoData.canonical}#creativework`,
-    "url": seoData.canonical.toString(),
-    "name": seoData.title,
-    "headline": seoData.title,
-    "description": seoData.description,
-    "image": { "@type": "ImageObject", "url": ogImageURL },
-    "dateCreated": datePublished,
-    "dateModified": dateModified,
-    "author": { "@id": `${siteURL}#person` },
-    "creator": { "@id": `${siteURL}#person` },
-    "publisher": { "@id": `${siteURL}#organization` },
-    "keywords": tags.join(", "),
-    "isPartOf": { "@id": `${siteURL}#website` },
-    "mainEntityOfPage": { "@id": `${seoData.canonical}#webpage` },
-    "inLanguage": htmlLang,
-    ...(client && { "client": { "@type": "Organization", "name": client } }),
-    ...(creativeWorkRole && { "contributor": { "@id": `${siteURL}#person`, "roleName": creativeWorkRole } }),
-    ...(duration && { "timeRequired": duration }),
-    ...(demoUrl && { "workExample": { "@type": "WebSite", "url": demoUrl } }),
-    ...(repoUrl && { "codeRepository": repoUrl }),
-  });
+  const baseWork = {
+    url:         seoData.canonical.toString(),
+    name:        seoData.title,
+    headline:    seoData.title,
+    description: seoData.description,
+    image:       { "@type": "ImageObject", url: ogImageURL },
+    ...(datePublished && { dateCreated: datePublished }),
+    ...(dateModified  && { dateModified }),
+    author:            { "@id": `${siteURL}#person` },
+    creator:           { "@id": `${siteURL}#person` },
+    publisher:         { "@id": `${siteURL}#organization` },
+    keywords:          tags.join(", "),
+    isPartOf:          { "@id": `${siteURL}#website` },
+    mainEntityOfPage:  { "@id": `${seoData.canonical}#webpage` },
+    inLanguage:        htmlLang,
+    ...(client && { provider: { "@type": "Organization", name: client } }),
+    ...(creativeWorkRole && {
+      contributor: { "@id": `${siteURL}#person`, roleName: creativeWorkRole },
+    }),
+    ...(duration && { timeRequired: duration }),
+    ...(demoUrl  && { workExample: { "@type": "WebSite", url: demoUrl } }),
+  };
+
+  if (repoUrl) {
+    // FIX: codeRepository belongs to SoftwareSourceCode, not CreativeWork
+    schemaGraph.push({
+      "@type":          "SoftwareSourceCode",
+      "@id":            `${seoData.canonical}#creativework`,
+      codeRepository:   repoUrl,
+      ...baseWork,
+    });
+  } else {
+    schemaGraph.push({
+      "@type": "CreativeWork",
+      "@id":   `${seoData.canonical}#creativework`,
+      ...baseWork,
+    });
+  }
 }
 
-const twitterHandle =
-  siteData.social?.twitter
-  ? `@${siteData.social.twitter.split('/').pop()}`
-    : "@c0desk1";
+// ─── TWITTER HANDLE ───────────────────────────────────────────────────────────
+const twitterHandle = siteData.social?.twitter
+  ? `@${siteData.social.twitter.split("/").pop()}`
+  : "@c0desk1";
 ---
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -326,30 +384,38 @@ const twitterHandle =
 
 <link rel="canonical" href={seoData.canonical.toString()} />
 
-<meta name="robots" content={seoData.noIndex
- ? "noindex,nofollow"
-  : "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"} />
-<meta name="googlebot" content={seoData.noIndex? "noindex,nofollow" : "index,follow"} />
+<meta
+  name="robots"
+  content={seoData.noIndex
+    ? "noindex,nofollow"
+    : "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"}
+/>
+<meta
+  name="googlebot"
+  content={seoData.noIndex ? "noindex,nofollow" : "index,follow"}
+/>
 
 <!-- ═══════════════════════════════════════════════════════════
      OPEN GRAPH
      ═══════════════════════════════════════════════════════════ -->
-<meta property="og:type" content={type === "article"? "article" : "website"} />
-<meta property="og:title" content={formattedTitle} />
-<meta property="og:description" content={seoData.description} />
-<meta property="og:url" content={seoData.canonical.toString()} />
-<meta property="og:site_name" content={siteData.siteName} />
-<meta property="og:image" content={ogImageURL} />
-<meta property="og:image:alt" content={propsImage?.alt || formattedTitle} />
-<meta property="og:image:secure_url" content={ogImageURL} />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:locale" content={htmlLang} />
-<meta name="google" content="notranslate" />
+<meta property="og:type"              content={type === "article" ? "article" : "website"} />
+<meta property="og:title"             content={formattedTitle} />
+<meta property="og:description"       content={seoData.description} />
+<meta property="og:url"               content={seoData.canonical.toString()} />
+<meta property="og:site_name"         content={siteData.siteName} />
+<meta property="og:image"             content={ogImageURL} />
+<meta property="og:image:alt"         content={propsImage?.alt || formattedTitle} />
+<meta property="og:image:secure_url"  content={ogImageURL} />
+<meta property="og:image:width"       content="1200" />
+<meta property="og:image:height"      content="630" />
+<meta property="og:locale"            content={toOgLocale(locale)} />
+<meta name="google"                   content="notranslate" />
 
-{siteConfig.locales.filter(l => l !== locale).map(l => (
-  <meta property="og:locale:alternate" content={l === 'id'? 'id_ID' : l === 'en'? 'en_US' : 'ru_RU'} />
-))}
+{(siteConfig.locales as string[])
+  .filter((l) => l !== locale)
+  .map((l) => (
+    <meta property="og:locale:alternate" content={toOgLocale(l)} />
+  ))}
 
 <!-- Article-specific OG -->
 {type === "article" && tags.map((tag) => (
@@ -368,37 +434,36 @@ const twitterHandle =
 <!-- ═══════════════════════════════════════════════════════════
      TWITTER / X CARD
      ═══════════════════════════════════════════════════════════ -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content={formattedTitle} />
+<meta name="twitter:card"        content="summary_large_image" />
+<meta name="twitter:title"       content={formattedTitle} />
 <meta name="twitter:description" content={seoData.description} />
-<meta name="twitter:image" content={ogImageURL} />
-<meta name="twitter:site" content={twitterHandle} />
-<meta name="twitter:creator" content={twitterHandle} />
+<meta name="twitter:image"       content={ogImageURL} />
+<meta name="twitter:site"        content={twitterHandle} />
+<meta name="twitter:creator"     content={twitterHandle} />
 
 <!-- ═══════════════════════════════════════════════════════════
      ICONS & MANIFEST
      ═══════════════════════════════════════════════════════════ -->
-<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="icon"             href="/favicon.svg" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-<link rel="manifest" href="/site.webmanifest" />
+<link rel="manifest"         href="/site.webmanifest" />
 
 <!-- ═══════════════════════════════════════════════════════════
      THEME & PWA
      ═══════════════════════════════════════════════════════════ -->
-<meta name="color-scheme" content="light dark" />
-<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
-
-<meta name="mobile-web-app-capable" content="yes" />
+<meta name="color-scheme"                        content="light dark" />
+<meta name="theme-color"                         content="#ffffff" media="(prefers-color-scheme: light)" />
+<meta name="theme-color"                         content="#000000" media="(prefers-color-scheme: dark)" />
+<meta name="mobile-web-app-capable"              content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
 <!-- ═══════════════════════════════════════════════════════════
      JSON-LD STRUCTURED DATA
      ═══════════════════════════════════════════════════════════ -->
-<script type="application/ld+json" set:html={JSON.stringify({
-  "@context": "https://schema.org",
-  "@graph": schemaGraph,
-})} />
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify({ "@context": "https://schema.org", "@graph": schemaGraph })}
+/>
 
 <!-- ═══════════════════════════════════════════════════════════
      VERIFICATIONS & AD ACCOUNTS
@@ -414,7 +479,7 @@ const twitterHandle =
 )}
 
 <!-- ═══════════════════════════════════════════════════════════
-     HREFLANG - SEO MULTILINGUAL
+     HREFLANG — SEO MULTILINGUAL
      ═══════════════════════════════════════════════════════════ -->
 {hreflangLinks.map(({ lang, href }: { lang: string; href: string }) => (
   <link rel="alternate" hreflang={lang} href={href} />
