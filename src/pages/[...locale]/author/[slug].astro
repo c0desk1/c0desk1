@@ -1,5 +1,5 @@
 ---
-// src/pages/[...locale]/author/[...slug].astro
+// src/pages/[...locale]/author/[slug].astro
 export const prerender = true;
 
 import BaseLayout from "@/layouts/BaseLayout.astro";
@@ -70,10 +70,18 @@ const labels = {
     latestArticles: "Последние статьи",
     articleCount: "статей",
     noArticles: "Статьи еще не опубликованы."
+  },
+  jp: {
+    author: "著者",
+    authorDesc: "著者の記事一覧。",
+    home: "ホーム",
+    latestArticles: "最新記事",
+    articleCount: "記事",
+    noArticles: "まだ記事が公開されていません。"
   }
 }
 
-const t = labels[locale] || labels.id;
+const t = labels[locale as 'id'|'en'|'ru'|'jp'] || labels.id;
 
 const seoData = {
   title: author.data.name,
@@ -149,7 +157,7 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
                       name={item.label as any}
                       className="w-4 h-4 transition-transform duration-200 group-hover:scale-110"
                     />
-                    <span class="text- capitalize">
+                    <span class="text-[13px] capitalize">
                       {item.label}
                     </span>
                   </a>
