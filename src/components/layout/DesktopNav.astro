@@ -1,22 +1,19 @@
 ---
-import { getCurrentLocale, localizePath, getLabel } from '@/utils/i18n';
 import { siteConfig } from "@/config/site";
+import { getCurrentLocale, localizePath, getLabel } from '@/utils/i18n';
 
-import NavLink from "../ui/NavLink.astro";
-import Icon from "../ui/Icon";
+import NavLink from "@/components/ui/NavLink.astro";
+import Icon from "@/components/ui/Icon";
 
 const locale = getCurrentLocale(Astro);
 const currentPath = Astro.url.pathname;
-
 const navItems = siteConfig.navItems;
-
 const normalize = (path: string) => path.replace(/\/$/, "") || "/";
 ---
 
 <nav
   class="hidden md:flex items-center justify-center gap-2 ml-2"
-  aria-label="Main navigation"
->
+  aria-label="Main navigation">
   {navItems.map((item) => {
     const localizedHref = item.isExternal? item.href : localizePath(item.href, locale);
     const label = getLabel(locale, item.labelKey);
@@ -24,9 +21,7 @@ const normalize = (path: string) => path.replace(/\/$/, "") || "/";
     const activePath = normalize(currentPath);
     const targetPath = normalize(localizedHref);
 
-    const isActive =
-      activePath === targetPath ||
-      (targetPath!== "/" && activePath.startsWith(targetPath));
+    const isActive = activePath === targetPath || (targetPath!== "/" && activePath.startsWith(targetPath));
 
     return (
       <NavLink
