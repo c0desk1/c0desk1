@@ -254,7 +254,6 @@ export const en = {
     notFoundTitle: "404: Not Found",
     notFoundDesc: "The page you are looking for cannot be found.",
     returnHome: "Return to Home",
-    searchArticles: "Search Articles",
     
     // 500 page
     serverErrorTitle: "500: Internal Server Error",
