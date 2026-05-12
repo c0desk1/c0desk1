@@ -106,7 +106,7 @@ export const id = {
     //____Author______//
     author: "Penulis",
     avatarOf: "Avatar dari",
-    contentCreator: "Kreator",
+    contentCreatorLabel: "Kreator",
 
     //____Homepage______//
     HeroAria: "Hero section",
