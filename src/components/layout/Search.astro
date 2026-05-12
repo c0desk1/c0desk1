@@ -5,7 +5,7 @@ import Icon from "@/components/ui/Icon";
 import { getCurrentLocale, getLabel, localizePath } from "@/utils/i18n";
 
 const locale = getCurrentLocale(Astro);
-const loc = locale as "id" | "en" | "ru"; // untuk akses field multilingual
+const loc = locale as "id" | "en" | "ru" | "jp"; // untuk akses field multilingual
 
 // ← i18n labels
 const searchModalLabel = getLabel(locale, 'searchModalLabel');
@@ -39,7 +39,7 @@ const searchData = await Promise.all(
       desc: post.data.description ?? "",
       category: categoryName,
       categorySlug: categoryEntry?.id ?? "uncategorized",
-      url: localizePath(`/blog/${post.id}`, locale),
+      url: localizePath(`/blog/${post.id}`, locale).replace(/\/index$/, '/'),
     };
   })
 );
