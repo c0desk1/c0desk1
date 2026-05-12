@@ -1,16 +1,7 @@
-// src/pages/sitemap-pages.xml.ts
 import type { APIRoute } from 'astro';
 import { siteConfig } from '@/config/site';
-import { getEntry } from 'astro:content';
 
-let settings;
-try {
-  settings = await getEntry('settings', 'site');
-} catch (error) {
-  console.warn('Settings not found, using siteConfig fallback');
-}
-const siteData = settings?.data || siteConfig;
-let siteUrl = siteData.siteUrl;
+let siteUrl = siteConfig.siteUrl;
 if (!siteUrl.endsWith('/')) siteUrl += '/';
 
 const pages = [
