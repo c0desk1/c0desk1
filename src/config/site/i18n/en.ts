@@ -104,7 +104,7 @@ export const en = {
     //____Author______//
     author: "Author",
     avatarOf: "Avatar of",
-    contentCreator: "Creator Content",
+    contentCreatorLabel: "Creator Content",
 
     //____Homepage______//
     HeroAria: "Hero section",
