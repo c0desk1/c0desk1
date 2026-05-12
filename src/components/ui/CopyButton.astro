@@ -1,0 +1,112 @@
+---
+// src/components/ui/CopyLink.astro
+import Icon from "./Icon";
+import { getCurrentLocale, getLabel } from '@/utils/i18n';
+
+const locale = getCurrentLocale(Astro);
+
+const labels = {
+  copy: getLabel(locale, 'copyUrl') || 'Copy URL',
+  copied: getLabel(locale, 'copied') || 'Copied!',
+  failed: getLabel(locale, 'copyFailed') || 'Failed',
+  ariaDefault: getLabel(locale, 'copyUrlAria') || 'Copy article URL',
+  ariaSuccess: getLabel(locale, 'copiedAria') || 'URL copied successfully',
+  ariaFailed: getLabel(locale, 'copyFailedAria') || 'Failed to copy URL',
+  toastSuccess: getLabel(locale, 'copyToastSuccess') || 'URL copied to clipboard!',
+  toastFailed: getLabel(locale, 'copyToastFailed') || 'Failed to copy URL. Needs HTTPS.',
+};
+---
+
+<button
+  class="copy-link-btn relative text-(--accent-dim) hover:text-(--accent) group active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-200"
+  aria-label={labels.ariaDefault}
+  aria-live="polite"
+  data-url={Astro.url.href}
+  data-labels={JSON.stringify(labels)}
+>
+  <div class="flex shrink-0 items-center justify-center gap-1.5">
+    <div class="relative w-4 h-4 items-center">
+      <span class="icon-copy absolute inset-0 w-full h-full transition-all duration-200">
+        <Icon name="link" className="w-4 h-4" />
+      </span>
+      <span class="icon-check absolute inset-0 w-full h-full opacity-0 scale-75 transition-all duration-200">
+        <Icon name="check" className="w-4 h-4" />
+      </span>
+    </div>
+    <span class="copy-text text-[13px] md:text-sm font-medium leading-none">
+      {labels.copy}
+    </span>
+  </div>
+</button>
+
+<script is:inline>
+  function initCopyButtons() {
+    document.querySelectorAll('.copy-link-btn:not([data-init])').forEach((btn) => {
+      btn.dataset.init = 'true';
+      
+      const labels = JSON.parse(btn.dataset.labels || '{}');
+      const copyIcon = btn.querySelector('.icon-copy');
+      const checkIcon = btn.querySelector('.icon-check');
+      const text = btn.querySelector('.copy-text');
+      
+      let timeoutId;
+      let isCopying = false;
+
+      const isClipboardSupported = navigator.clipboard && window.isSecureContext;
+
+      function showToast(message, type = 'success') {
+        if (window.toast?.show) {
+          window.toast.show(message, { type, duration: 2000 });
+        }
+      }
+
+      async function copyToClipboard(str) {
+        if (!isClipboardSupported) return false;
+        try {
+          await navigator.clipboard.writeText(str);
+          return true;
+        } catch {
+          return false;
+        }
+      }
+
+      function setState(success) {
+        clearTimeout(timeoutId);
+        btn.disabled = true;
+
+        if (success) {
+          copyIcon.style.cssText = 'opacity:0;transform:scale(0.75)';
+          checkIcon.style.cssText = 'opacity:1;transform:scale(1)';
+          text.textContent = labels.copied;
+          btn.setAttribute('aria-label', labels.ariaSuccess);
+          showToast(labels.toastSuccess, 'success');
+        } else {
+          text.textContent = labels.failed;
+          btn.setAttribute('aria-label', labels.ariaFailed);
+          showToast(labels.toastFailed, 'error');
+        }
+
+        timeoutId = setTimeout(() => {
+          copyIcon.style.cssText = 'opacity:1;transform:scale(1)';
+          checkIcon.style.cssText = 'opacity:0;transform:scale(0.75)';
+          text.textContent = labels.copy;
+          btn.setAttribute('aria-label', labels.ariaDefault);
+          btn.disabled = false;
+          isCopying = false;
+        }, 1500);
+      }
+
+      btn.addEventListener('click', async () => {
+        if (isCopying) return;
+        isCopying = true;
+        const url = btn.dataset.url || window.location.href;
+        const success = await copyToClipboard(url);
+        setState(success);
+      });
+    });
+  }
+
+  initCopyButtons();
+  document.addEventListener('astro:page-load', initCopyButtons);
+  document.addEventListener('astro:after-swap', initCopyButtons);
+</script>

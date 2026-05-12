@@ -1,0 +1,90 @@
+---
+// src/components/LanguageSwitcher.astro
+import { siteConfig } from "@/config/site";
+import { getCurrentLocale, getLabel, localizePath } from "@/utils/i18n";
+
+interface Props {
+  alternateSlugs?: Record<string, string>;
+  basePath?: "blog" | "portfolio" | "legal" | "";
+}
+
+const { alternateSlugs, basePath = "" } = Astro.props;
+const locale      = getCurrentLocale(Astro);
+const isPostPage  = !!alternateSlugs;
+const currentPath = Astro.url.pathname.replace(/^\/(en|ru)/, "") || "/";
+
+const AriaLabel = getLabel(locale, 'languageAria')
+---
+
+<div class="ls-root" role="group" aria-label={AriaLabel}>
+  {siteConfig.locales.map((loc) => {
+    let href: string;
+
+    if (isPostPage && alternateSlugs?.[loc]) {
+      const prefix = basePath ? `/${basePath}/` : "/";
+      href = localizePath(`${prefix}${alternateSlugs[loc]}/`, loc);
+    } else {
+      href = localizePath(currentPath, loc);
+    }
+
+    const isActive = loc === locale;
+
+    return (
+      <a
+        href={href}
+        class={`ls-item${isActive ? " ls-item--active" : ""}`}
+        aria-current={isActive ? "true" : undefined}
+        lang={loc}
+      >
+        {loc.toUpperCase()}
+      </a>
+    );
+  })}
+</div>
+
+<style>
+  .ls-root {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    padding: 2px;
+    background: var(--bg);
+  }
+
+  .ls-item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0.625rem;
+    border-radius: var(--radius-full);
+    border: 1px solid transparent;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    letter-spacing: 0.06em;
+    color: var(--fg-subtle);
+    background: transparent;
+    text-decoration: none;
+    transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .ls-item:hover {
+    color: var(--fg);
+    background-color: var(--bg-subtle);
+  }
+
+  .ls-item:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .ls-item--active {
+    color: var(--fg);
+    background-color: var(--bg-muted);
+    border-color: var(--border);
+    cursor: default;
+    pointer-events: none;
+  }
+</style>

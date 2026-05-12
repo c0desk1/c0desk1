@@ -1,0 +1,15 @@
+---
+// src/components/mdx/FootnoteMarker.astro
+---
+<sup class="footnote-marker">
+  <slot />
+</sup>
+
+<style is:global>
+  .prose-custom .footnote-marker a {
+    color: inherit !important;
+    text-decoration: none !important;
+    border: none !important;
+    background: transparent !important;
+  }
+</style>

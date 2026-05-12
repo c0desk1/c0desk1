@@ -1,0 +1,17 @@
+---
+// src/components/ui/StatusButton.astro
+import { getCurrentLocale, getLabel } from "@/utils/i18n";
+
+const locale = getCurrentLocale(Astro);
+const loadingSystem = getLabel(locale, 's_LoadingSystem');
+---
+
+<button id="status-toggle" class="group w-auto flex items-center gap-2 transition-all active:scale-95">
+    <span class="relative flex h-2.5 w-2.5">
+        <span id="status-pulse" class="animate-ping absolute inline-flex h-full w-full bg-(--bg-muted) opacity-75"></span>
+        <span id="status-dot" class="relative inline-flex h-2.5 w-2.5 bg-(--bg-subtle)"></span>
+    </span>
+    <span id="status-label" class="text-[13px] md:text-sm font-mono text-(--fg-muted) group-hover:text-(--fg) transition-colors">
+        {loadingSystem}
+    </span>
+</button>

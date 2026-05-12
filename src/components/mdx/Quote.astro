@@ -1,0 +1,24 @@
+---
+const raw = await Astro.slots.render('default');
+
+const text = raw.replace(/<[^>]+>/g, '').trim();
+
+let quote = text;
+let cite = '';
+
+if (text.includes('—')) {
+  const parts = text.split('—');
+  quote = parts[0].trim();
+  cite = parts.slice(1).join('—').trim();
+}
+---
+
+<blockquote class="quote">
+  <div class="quote-body">
+    <p>{quote}</p>
+  </div>
+
+  {cite && (
+    <span class="quote-cite">{cite}</span>
+  )}
+</blockquote>

@@ -1,0 +1,296 @@
+---
+// src/components/ads/YandexAds.astro
+
+import { siteConfig } from "@/config/site";
+import { getEntry } from "astro:content";
+
+import Section from "@/components/ui/Section.astro";
+import Container from "@/components/ui/Container.astro";
+
+let settings;
+try {
+  settings = await getEntry('settings', 'site');
+} catch (error) {}
+
+const siteData  = settings?.data || siteConfig;
+
+const YA_PUB_ID = siteData.yandexPubId || siteConfig.yandexPubId || "R-A-19179231";
+const YA_METRICA_ID = siteData.yandexMetricaId || siteConfig.yandexMetricaId || "";
+const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? true;
+---
+
+<div id="ya-data" style="display:none" data-pub-id={YA_PUB_ID} data-metrica-id={YA_METRICA_ID} data-ads-enabled={String(ADS_ENABLED)}></div>
+
+<Section size="sm">
+  <Container size="xl">
+    <div id="yandex_rtb_R-A-19179231-6" style="min-height:0"></div>
+  </Container>
+</Section>
+
+<script is:inline>
+(function () {
+  // ─── Config ───────────────────────────────────────────────────────────────
+  const el         = document.getElementById('ya-data');
+  const PUB_ID     = el?.dataset.pubId     || 'R-A-19179231';
+  const METRICA_ID = el?.dataset.metricaId || '';
+  const ADS_ON     = el?.dataset.adsEnabled !== 'false';
+
+  const CONSENT_KEY = 'cookie-consent-v2';
+
+  const DELAY = {
+    floorAd:    2500,
+    inImage:    3500,
+    fullscreen: 8000,
+    topAd:      1500,
+    banner:     2500,
+    metrica:    1000,
+  };
+
+  // ─── Helpers
+  function getConsent() {
+    try { return JSON.parse(localStorage.getItem(CONSENT_KEY)); }
+    catch { return null; }
+  }
+
+  function analyticsAllowed() {
+    const c = getConsent();
+    return c?.analytics === true;
+  }
+
+  function adsAllowed() {
+    // Adjust to c?.ads if you add a separate ads toggle in Cookie.astro
+    // const c = getConsent();
+    // return c?.adsAllowed === true;
+    return analyticsAllowed();
+  }
+
+  function waitForYa(cb, retries = 20) {
+    if (window.Ya?.Context?.AdvManager && window.yaContextCb) {
+      cb();
+    } else if (retries > 0) {
+      setTimeout(() => waitForYa(cb, retries - 1), 300);
+    }
+  }
+
+  function afterDelay(ms, fn) {
+    if (document.readyState === 'complete') {
+      setTimeout(fn, ms);
+    } else {
+      window.addEventListener('load', () => setTimeout(fn, ms), { once: true });
+    }
+  }
+  
+  function isDesktop() {
+    const ua = navigator.userAgent;
+    const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet|Kindle|Silk/i;
+    const isIPad = /Macintosh/i.test(ua) && navigator.maxTouchPoints && navigator.maxTouchPoints > 1;
+    return !mobileRegex.test(ua) && !isIPad;
+  }
+  
+  function isTouchDevice() {
+    return !isDesktop();
+  }
+
+  // ─── Ad renderers
+
+  // Block-1
+  function renderFloorTouch() {
+    if (!isTouchDevice()) return;
+    
+    afterDelay(DELAY.floorAd, () => {
+      waitForYa(() => {
+        window.yaContextCb.push(() => {
+          Ya.Context.AdvManager.render({
+            blockId:  `${PUB_ID}-1`,
+            type:     'floorAd',
+            platform: 'touch',
+          });
+        });
+      });
+    });
+  }
+
+  // Block-2
+  function renderInImage() {
+    afterDelay(DELAY.inImage, () => {
+      waitForYa(() => {
+        const render = (imageId) => {
+          window.yaContextCb.push(() => {
+            Ya.Context.AdvManager.render({
+              renderTo: imageId,
+              blockId:  `${PUB_ID}-2`,
+              type:     'inImage',
+            });
+          });
+        };
+
+        const tryImages = (images) => {
+          if (!images.length) return;
+          const image = images.shift();
+          const { width, height } = image.getBoundingClientRect();
+          if (width < 320 || height < 190) return tryImages(images);
+
+          image.id = `yandex_rtb_${PUB_ID}-2-${Math.random().toString(16).slice(2)}`;
+          if (image.tagName === 'IMG' && !image.complete) {
+            image.addEventListener('load', () => render(image.id), { once: true });
+          } else {
+            render(image.id);
+          }
+          tryImages(images);
+        };
+
+        tryImages(Array.from(document.querySelectorAll('img')));
+      });
+    });
+  }
+
+  // Block-3
+  function renderFullscreen() {
+    if (!isTouchDevice()) return;
+    
+    afterDelay(DELAY.fullscreen, () => {
+      waitForYa(() => {
+        window.yaContextCb.push(() => {
+          Ya.Context.AdvManager.render({
+            blockId:  `${PUB_ID}-3`,
+            type:     'fullscreen',
+            platform: 'touch',
+          });
+        });
+      });
+    });
+  }
+
+  // Block-4
+  function renderTopAd() {
+    if (!isTouchDevice()) return;
+    
+    afterDelay(DELAY.topAd, () => {
+      waitForYa(() => {
+        window.yaContextCb.push(() => {
+          Ya.Context.AdvManager.render({
+            blockId: `${PUB_ID}-4`,
+            type:    'topAd',
+          });
+        });
+      });
+    });
+  }
+
+  // Block-5
+  function renderFloorDesktop() {
+    if (!isDesktop()) return;
+    
+    afterDelay(DELAY.floorAd, () => {
+      waitForYa(() => {
+        window.yaContextCb.push(() => {
+          Ya.Context.AdvManager.render({
+            blockId:  `${PUB_ID}-5`,
+            type:     'floorAd',
+            platform: 'desktop',
+          });
+        });
+      });
+    });
+  }
+
+  // Block-6
+  function renderBanner() {
+    afterDelay(DELAY.banner, () => {
+      waitForYa(() => {
+        window.yaContextCb.push(() => {
+          Ya.Context.AdvManager.render({
+            blockId:  `${PUB_ID}-6`,
+            renderTo: `yandex_rtb_${PUB_ID}-6`,
+          });
+        });
+      });
+    });
+  }
+
+  // ─── Yandex Metrica
+  function initMetrica() {
+    if (!METRICA_ID) return;
+
+    afterDelay(DELAY.metrica, () => {
+      (function(m, e, t, r, i, k, a) {
+        m[i] = m[i] || function() { (m[i].a = m[i].a || []).push(arguments); };
+        m[i].l = 1 * new Date();
+        for (var j = 0; j < document.scripts.length; j++) {
+          if (document.scripts[j].src === r) { return; }
+        }
+        k = e.createElement(t);
+        a = e.getElementsByTagName(t)[0];
+        k.async = 1;
+        k.src   = r;
+        a.parentNode.insertBefore(k, a);
+      })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
+
+      ym(Number(METRICA_ID), 'init', {
+        clickmap:    true,
+        trackLinks:  true,
+        accurateTrackBounce: true,
+        webvisor:    false,
+      });
+
+      if (!document.getElementById('ya-metrica-ns')) {
+        const ns = document.createElement('noscript');
+        ns.id = 'ya-metrica-ns';
+        const img = document.createElement('img');
+        img.src    = `https://mc.yandex.ru/watch/${METRICA_ID}`;
+        img.style.cssText = 'position:absolute;left:-9999px';
+        img.alt    = '';
+        ns.appendChild(img);
+        document.body.appendChild(ns);
+      }
+    });
+  }
+
+  function initAll() {
+    if (!ADS_ON) return;
+
+    if (adsAllowed()) {
+      renderFloorTouch();
+      renderInImage();
+      renderFullscreen();
+      renderTopAd();
+      renderFloorDesktop();
+      renderBanner();
+    }
+
+    if (analyticsAllowed()) {
+      initMetrica();
+    }
+  }
+
+  function waitForConsent() {
+    let attempts = 0;
+    const max    = 60;
+    const timer  = setInterval(() => {
+      attempts++;
+      if (getConsent() !== null || attempts >= max) {
+        clearInterval(timer);
+        initAll();
+      }
+    }, 1000);
+  }
+
+  // ─── Boot
+  function boot() {
+    const consent = getConsent();
+    if (consent !== null) {
+      initAll();
+    } else {
+      waitForConsent();
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+
+  document.addEventListener('astro:page-load', boot);
+})();
+</script>
