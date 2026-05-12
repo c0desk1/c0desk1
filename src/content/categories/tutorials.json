@@ -1,0 +1,12 @@
+{
+  "name": {
+    "id": "Tutorial",
+    "en": "Tutorials",
+    "ru": "Учебные пособия"
+  },
+  "description": {
+    "id": "Panduan langkah demi langkah untuk belajar teknologi tertentu",
+    "en": "A step-by-step guide to learning a specific technology",
+    "ru": "Пошаговое руководство по изучению конкретной технологии."
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": {
+    "id": "Anime",
+    "en": "Anime",
+    "ru": "Аниме"
+  },
+  "description": {
+    "id": "Review, rekomendasi, dan diskusi seputar anime",
+    "en": "Reviews, recommendations, and discussions about anime",
+    "ru": "Обзоры, рекомендации и обсуждения об аниме."
+  }
+}
