@@ -50,6 +50,7 @@ interface Props {
   repoUrl?: string;
   siteData?: any;
   alternateSlugs?: Record<string, string>;
+  basePath?: 'blog' | 'portfolio' | 'legal' | '';
 }
 
 const locale = getCurrentLocale(Astro) as Locale;
@@ -73,6 +74,7 @@ const {
   repoUrl,
   siteData: siteDataFromProps,
   alternateSlugs,
+  basePath= '',
 } = Astro.props;
 
 function toBcp47(lang: string): string {
@@ -91,7 +93,10 @@ function t(map: PartialLocaleMap | LocaleMap): string {
 }
 
 const htmlLang  = toBcp47(locale);
+
 const homeLabel = getLabel(locale, "home") ?? "Home";
+const blogLabel = getLabel(locale, "blog") ?? "Blog";
+
 const contentCreatorLabel = getLabel(locale, "contentCreator") ?? "Content Creator";
 
 const siteData = siteDataFromProps ?? siteConfig;
@@ -288,25 +293,34 @@ if (!isHomepage) {
     { "@type": "ListItem", position: 1, name: homeLabel, item: siteURL },
   ];
 
+  if (type === "article" && basePath === "blog") {
+    breadcrumbItems.push({
+      "@type": "ListItem",
+      position: breadcrumbItems.length + 1,
+      name: blogLabel,
+      item: new URL("blog/", siteURL).toString(),
+    });
+  }
+
   if (category && categoryName) {
     breadcrumbItems.push({
-      "@type":  "ListItem",
-      position: 2,
-      name:     categoryName,
-      item:     new URL(`category/${category.slug}/`, siteURL).toString(),
+      "@type": "ListItem",
+      position: breadcrumbItems.length + 1,
+      name: categoryName,
+      item: new URL(`category/${category.slug}/`, siteURL).toString(),
     });
   }
 
   breadcrumbItems.push({
-    "@type":  "ListItem",
-    position: category ? 3 : 2,
-    name:     seoResolved.title,
-    item:     seoResolved.canonical.toString(),
+    "@type": "ListItem",
+    position: breadcrumbItems.length + 1,
+    name: seoResolved.title,
+    item: seoResolved.canonical.toString(),
   });
 
   schemaGraph.push({
-    "@type":         "BreadcrumbList",
-    "@id":           `${seoResolved.canonical}#breadcrumb`,
+    "@type": "BreadcrumbList",
+    "@id": `${seoResolved.canonical}#breadcrumb`,
     itemListElement: breadcrumbItems,
   });
 }
