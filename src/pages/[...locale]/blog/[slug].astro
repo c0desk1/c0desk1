@@ -1,8 +1,9 @@
 ---
-// src/pages/[...locale]/blog/[...slug].astro
+// src/pages/[...locale]/blog/[slug].astro
 export const prerender = true;
 
 import '@/styles/prose/index.css';
+
 import { getCollection, render, getEntry } from "astro:content";
 import { siteConfig } from "@/config/site";
 import { getCurrentLocale, localizePath, getLabel } from "@/utils/i18n";
@@ -93,8 +94,8 @@ const seoImage = {
 };
 
 const seoCategory = {
-  name: categoryEntry?.data?.name?.[locale] || categoryEntry?.data?.name?.id || getLabel(locale, "general"),
-  description: categoryEntry?.data?.description?.[locale] || categoryEntry?.data?.description?.id || "",
+  name: categoryEntry?.data?.name || { [locale]: getLabel(locale, "general") },
+  description: categoryEntry?.data?.description || { [locale]: "" },
   slug: categoryEntry?.id || 'uncategorized'
 };
 
