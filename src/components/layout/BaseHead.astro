@@ -378,7 +378,13 @@ if (type === "creativeWork") {
     mainEntityOfPage: { "@id": `${seoResolved.canonical}#webpage` },
     inLanguage:       htmlLang,
     ...(client           && { provider:    { "@type": "Organization", name: client } }),
-    ...(creativeWorkRole && { contributor: { "@id": `${siteURL}#person`, roleName: creativeWorkRole } }),
+    ...(creativeWorkRole && { 
+      contributor: {
+        "@type": "Role",
+        roleName: creativeWorkRole,
+        person: { "@id": `${siteURL}#person` }
+      }
+    }),
     ...(duration         && { timeRequired: duration }),
     ...(demoUrl          && { workExample:  { "@type": "WebSite", url: demoUrl } }),
   };
@@ -433,6 +439,7 @@ if (type === "creativeWork") {
 <meta property="og:image:width"      content="1200" />
 <meta property="og:image:height"     content="630" />
 <meta property="og:locale"           content={toOgLocale(locale)} />
+
 <meta name="google"                  content="notranslate" />
 
 {(siteConfig.locales as string[])
