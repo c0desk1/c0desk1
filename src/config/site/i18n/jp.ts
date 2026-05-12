@@ -232,4 +232,11 @@ export const jp = {
     seeAllPosts: "すべての投稿を見る",
     browsePostsByCategory: "カテゴリーで投稿を探す",
     filterCategory: "カテゴリーフィルター",
+
+  //____404
+  notFoundTitle: "404: 見つかりません",
+  notFoundDesc: "お探しのページは見つかりませんでした。",
+  returnHome: "ホームに戻る",
+  searchArticles: "記事を検索",
+  pageNotFound: "ページが見つかりません",
 } as const;
