@@ -4,7 +4,7 @@ import { ru } from './ru';
 import { jo } from './jp';
 
 export const i18nConfig = {
-  locales: ['id', 'en', 'ru', 'jp] as const,
+  locales: ['id', 'en', 'ru', 'jp'] as const,
   defaultLocale: 'id' as const,
   labels: { id, en, ru, jp },
 } as const;
