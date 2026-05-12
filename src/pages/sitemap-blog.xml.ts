@@ -1,19 +1,11 @@
-// src/pages/sitemap-blog.xml.ts
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import type { APIRoute } from 'astro';
 import { siteConfig } from '@/config/site';
 
-let settings;
-  try {
-    settings = await getEntry('settings', 'site');
-  } catch (error) {
-    console.warn('Settings not found, using siteConfig fallback');
-  }
-  const siteData = settings?.data || siteConfig;
-  const siteUrl = siteData.siteUrl;
-
 export const GET: APIRoute = async () => {
+  const siteUrl = siteConfig.siteUrl;
+
   const posts = await getCollection('blog', (post: CollectionEntry<"blog">) => !post.data.draft);
   
   const sortedPosts = posts.sort((a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) => 
