@@ -63,7 +63,12 @@ const Breadcrumbs = [
   { name: page.data.title, href: canonicalURL }
 ];
 
-const dateLocale = locale === 'id'? 'id-ID' : locale === 'ru'? 'ru-RU' : 'en-US';
+const dateLocale = 
+  locale === 'en'? 'en-Us' : 
+  locale === 'ru'? 'ru-RU' :
+  locale === 'jp'? 'ja-JP' : 
+  'id-ID';
+
 const formattedLastUpdated = page.data.lastUpdated
 ? formatDate(page.data.lastUpdated, dateLocale)
   : null;
