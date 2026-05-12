@@ -38,20 +38,24 @@ const siteURL = Astro.site?.toString()?? siteConfig.siteUrl;
 const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
 const seoData = {
-  title: getLabel(locale, 'blogPageTitle'),
-  description: getLabel(locale, 'blogPageDescription'),
+  title: getLabel(locale, 'blog_PageTitle'),
+  description: getLabel(locale, 'blog_PageDescription'),
   type: "website" as const,
   canonicalURL,
 };
 
-const Herotitle = getLabel(locale, 'blogHeroTitle');
-const HeroHighlight = getLabel(locale, 'blogHeroHighlight');
-const HeroDescription = getLabel(locale, 'blogHeroDesc');
+const HeroAria = getLabel(locale, 'blog_HeroAria');
+const Herotitle = getLabel(locale, 'blog_HeroTitle');
+const HeroHighlight = getLabel(locale, 'blog_HeroHighlight');
+const HeroDescription = getLabel(locale, 'blog_HeroDesc');
+
+const blog_f = getLabel(locale, "blog_featuredPosts");
+const blog_c = getLabel(locale, "blog_browsePosts");
 ---
 
 <BaseLayout {...seoData}>
   <!-- Hero -->
-  <Section id="blog-hero" size="none" aria-label="Blog introduction">
+  <Section id="blog-hero" size="none" aria-label={HeroAria}>
     <div class="relative items-center">
       <div
         class={cn(
@@ -71,8 +75,8 @@ const HeroDescription = getLabel(locale, 'blogHeroDesc');
       </Container>
     </div>
   </Section>
-  <Section id="featured-posts" size="lg" aria-label="Featured articles" class="section-divider">
-    <h2 class="sr-only">Featured Posts</h2>
+  <Section id="featured-posts" size="lg" aria-label={blog_f} class="section-divider">
+    <h2 class="sr-only">{blog_f}</h2>
     <Container size="xl">
       {featuredPosts.length > 0 && (
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -85,12 +89,12 @@ const HeroDescription = getLabel(locale, 'blogHeroDesc');
       )}
     </Container>
   </Section>
-  <Section id="browse-posts" size="lg" aria-label="Browse posts by category">
-    <h2 class="sr-only">Browse posts by category</h2>
+  <Section id="browse-posts" size="lg" aria-label={blog_c}>
+    <h2 class="sr-only">{blog_c}</h2>
     <Container size="xl">
       <div class="flex items-center mb-6 md:mb-8">
         <h2 class="text-3xl md:text-4xl font-semibold tracking-tight text-(--fg)">
-          {getLabel(locale, 'latestPosts')}
+          {getLabel(locale, 'blog_latestPosts')}
         </h2>
       </div>
       <CategoryTabs posts={regularPosts} categories={allCategories} />
