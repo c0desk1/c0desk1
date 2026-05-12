@@ -21,10 +21,8 @@ export default function Icon({ name, className = 'w-5 h-5' }: IconProps) {
   switch (name) {
     case 'logo':
       return ( 
-        <svg {...s} viewBox="0 0 24 24" fill="none">
-          <polygon points="12,1 21.5,6.5 21.5,17.5 12,23 2.5,17.5 2.5,6.5" fill="currentColor" />
-          <polygon points="12,6.5 16.5,9 16.5,15 12,17.5 7.5,15 7.5,9" fill="var(--bg, #ffffff)" />
-          <line x1="8.5" y1="8.5" x2="15.5" y2="15.5" stroke="currentColor" stroke-width="1.5" />
+        <svg {...s} viewBox="0 0 24 24" width={24} height={24} fill="none">
+          <polygon points="2,7 22,7 12,22" fill="currentColor" />
         </svg>
       );
 
