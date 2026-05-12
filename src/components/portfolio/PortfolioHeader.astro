@@ -26,7 +26,7 @@ const {
   duration,
   techStack = [],
   demoUrl,
-  repoUrl
+  repoUrl,
 } = Astro.props;
 
 const locale = getCurrentLocale(Astro);
@@ -40,67 +40,72 @@ const liveDemo_l = getLabel(locale, 'p_liveDemo');
 const sourceCode_l = getLabel(locale, 'p_sourceCode');
 const techStack_l = getLabel(locale, 'p_techStack');
 
-const dateLocale = locale === 'en'? 'en-US' : locale === 'ru'? 'ru-RU' : 'id-ID';
+const dateLocale =
+  locale === 'en' ? 'en-US' :
+  locale === 'ru' ? 'ru-RU' :
+  locale === 'jp' ? 'ja-JP' :
+  'id-ID';
 
-const formattedDate = date? formatDate(date, dateLocale) : "";
-const formattedUpdate = updatedDate? formatDate(updatedDate, dateLocale) : null;
+const formattedDate = date ? formatDate(date, dateLocale) : "";
+const formattedUpdate = updatedDate ? formatDate(updatedDate, dateLocale) : null;
 ---
 
-<header class="space-y-8 my-8 gap-4">
-  <div class="space-y-3 text-center">
-    <div class="prose-custom mb-6 md:mb-8">
-      <h1>
-        {title}
-      </h1>
-    </div>
-    <div class="flex flex-wrap justify-center items-center gap-3 text-sm md:text-[13px] text-(--fg-muted) mb-6 md:mb-8">
+<header class="w-full max-w-3xl mx-auto pt-20 pb-16 text-center space-y-10">
+  <!-- Judul & tanggal -->
+  <div class="space-y-4">
+    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-(--fg) leading-tight">
+      {title}
+    </h1>
+    <div class="flex items-center justify-center gap-3 text-sm text-(--fg-muted)">
       <time datetime={date.toISOString()}>
         {formattedDate}
       </time>
       {formattedUpdate && (
         <>
-          <span class="text-(--fg-subtle)" aria-hidden="true">/</span>
+          <span class="w-1 h-1 rounded-full bg-(--fg-subtle)"></span>
           <span>{updated_l} {formattedUpdate}</span>
         </>
       )}
       {featured && (
         <>
-          <span class="text-(--fg-subtle)" aria-hidden="true">/</span>
-          <span class="text-(--accent) font-medium">{featured_l}</span>
+          <span class="w-1 h-1 rounded-full bg-(--fg-subtle)"></span>
+          <span class="font-medium text-(--accent)">{featured_l}</span>
         </>
       )}
     </div>
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm md:text-[13px] border border-(--border) rounded-(--radius-md) p-4 bg-(--bg-subtle) mb-6 md:mb-8">
-    <div class="space-y-1">
-      <div class="text-[12px] uppercase tracking-wider text-(--fg-subtle) font-mono">{client_l}</div>
-      <div class="text-(--fg-muted) font-medium">
-        {client || "-"}
-      </div>
+  </div>
+
+  <!-- Informasi proyek (client, role, duration) -->
+  <div class="flex flex-wrap justify-center gap-x-10 gap-y-6 text-sm">
+    <div class="text-center">
+      <div class="text-xs uppercase tracking-widest text-(--fg-subtle) mb-1">{client_l}</div>
+      <div class="font-medium text-(--fg)">{client || "—"}</div>
     </div>
-    <div class="space-y-1">
-      <div class="text-[12px] uppercase tracking-wider text-(--fg-subtle) font-mono">{role_l}</div>
-      <div class="text-(--fg-muted) font-medium">
-        {role || "-"}
-      </div>
+    <div class="text-center">
+      <div class="text-xs uppercase tracking-widest text-(--fg-subtle) mb-1">{role_l}</div>
+      <div class="font-medium text-(--fg)">{role || "—"}</div>
     </div>
-    <div class="space-y-1">
-      <div class="text-[12px] uppercase tracking-wider text-(--fg-subtle) font-mono">{duration_l}</div>
-      <div class="text-(--fg-muted) font-medium">
-        {duration || "-"}
-      </div>
+    <div class="text-center">
+      <div class="text-xs uppercase tracking-widest text-(--fg-subtle) mb-1">{duration_l}</div>
+      <div class="font-medium text-(--fg)">{duration || "—"}</div>
     </div>
   </div>
 
+  <!-- Tautan demo & repo -->
   {(demoUrl || repoUrl) && (
-    <div class="flex flex-wrap justify-center gap-4 text-sm md:text-[13px] mb-6 md:mb-8">
+    <div class="flex items-center justify-center gap-6">
       {demoUrl && (
         <a
           href={demoUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="px-4 py-2 rounded-(--radius-md) border border-(--border) hover:border-(--border-strong) bg-(--bg) focus:outline-none focus:ring-2 focus:ring-(--border-strong)"
+          class="inline-flex items-center gap-2 text-sm font-medium text-(--fg) hover:text-(--accent) transition-colors"
         >
-          {liveDemo_l}
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M14 2.5H5.5C4.67 2.5 4 3.17 4 4v8c0 .83.67 1.5 1.5 1.5H12c.83 0 1.5-.67 1.5-1.5V5.5L14 2.5Z" />
+            <path d="M9.5 2.5v3h3" />
+          </svg>
+          <span>{liveDemo_l}</span>
         </a>
       )}
       {repoUrl && (
@@ -108,22 +113,27 @@ const formattedUpdate = updatedDate? formatDate(updatedDate, dateLocale) : null;
           href={repoUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="px-4 py-2 rounded-(--radius-md) border border-(--border) hover:border-(--border-strong) bg-(--bg-subtle) focus:outline-none focus:ring-2 focus:ring-(--border-strong)"
+          class="inline-flex items-center gap-2 text-sm font-medium text-(--fg) hover:text-(--accent) transition-colors"
         >
-          {sourceCode_l}
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M6 2h3l3 3v8a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1Z" />
+            <path d="M9 2v3h3" />
+            <line x1="8" y1="8" x2="8" y2="12" />
+            <line x1="6" y1="10" x2="10" y2="10" />
+          </svg>
+          <span>{sourceCode_l}</span>
         </a>
       )}
     </div>
   )}
 
+  <!-- Tech stack -->
   {techStack.length > 0 && (
     <div class="space-y-3">
-      <div class="text-xs md:text-sm uppercase tracking-wider text-(--fg) font-mono text-center">
-        {techStack_l}
-      </div>
+      <div class="text-xs uppercase tracking-widest text-(--fg-subtle)">{techStack_l}</div>
       <div class="flex flex-wrap justify-center gap-2">
         {techStack.map((tech: string) => (
-          <span class="text-xs px-2.5 py-1 rounded-(--radius-md) border border-(--border) text-(--fg-subtle) bg-(--bg-subtle)">
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-(--bg-muted) text-(--fg-muted) border border-(--border)">
             {tech}
           </span>
         ))}
