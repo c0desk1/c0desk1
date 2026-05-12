@@ -1,18 +1,25 @@
 ---
-// src/pages/500.astro
-
 import ErrorLayout from '@/layouts/ErrorLayout.astro';
 import Container from '@/components/ui/Container.astro';
 import { siteConfig } from '@/config/site';
+import { getCurrentLocale, getLabel, localizePath } from "@/utils/i18n";
 
+const locale = getCurrentLocale(Astro);
 const siteURL = Astro.site?.toString() ?? siteConfig.siteUrl;
 
+const serverErrorTitle = getLabel(locale, 'serverErrorTitle') || '500: Internal Server Error';
+const serverErrorDesc = getLabel(locale, 'serverErrorDesc') || 'An error occurred on our server.';
+const serverErrorHeading = getLabel(locale, 'serverErrorHeading') || 'Server error.';
+const serverErrorMessage = getLabel(locale, 'serverErrorMessage') || 'An unexpected problem occurred on our system.';
+const tryAgainLabel = getLabel(locale, 'tryAgain') || 'Try Again';
+const returnHomeLabel = getLabel(locale, 'returnHome') || 'Return to Home';
+
 const seoData = {
-  title: "500: Internal Server Error",
-  description: "Terjadi kesalahan pada server kami.",
+  title: serverErrorTitle,
+  description: serverErrorDesc,
   noIndex: true,
   type: "website" as const,
-  canonicalURL: new URL('500', siteURL).toString(),
+  canonicalURL: new URL(Astro.url.pathname, siteURL).toString(),
 };
 ---
 
@@ -26,11 +33,11 @@ const seoData = {
       </div>
 
       <h1 class="text-4xl md:text-5xl font-semibold tracking-tighter text-(--fg) mb-4">
-        Server error.
+        {serverErrorHeading}
       </h1>
       
       <p class="text-sm md:text-base text-(--fg-muted) max-w-[400px] mb-10 leading-relaxed">
-        Terjadi masalah tidak terduga pada sistem kami yang mencegah pemrosesan permintaan Anda. Kami telah mencatat anomali ini.
+        {serverErrorMessage}
       </p>
 
       <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
@@ -38,13 +45,13 @@ const seoData = {
           onclick="window.location.reload()"
           class="w-full sm:w-auto inline-flex justify-center items-center h-10 px-6 rounded-md bg-(--bg-subtle) text-(--fg) text-sm font-medium hover:bg-(--bg-muted) transition-colors"
         >
-          Try Again
+          {tryAgainLabel}
         </button>
         <a 
-          href={siteURL} 
+          href={localizePath('/', locale)} 
           class="w-full sm:w-auto inline-flex justify-center items-center h-10 px-6 rounded-md bg-transparent text-(--fg) text-sm font-medium border border-(--border) hover:border-(--border-strong) transition-colors"
         >
-          Return Home
+          {returnHomeLabel}
         </a>
       </div>
 
