@@ -109,9 +109,13 @@ export function generateExcerpt(content: string, maxLength: number = 160): strin
 
 export function getReadingTime(
   content?: string,
-  locale: 'id' | 'en' | 'ru' = 'id'
+  locale: 'id' | 'en' | 'ru' | 'jp' = 'id'
 ): string {
-  const suffix = locale === 'id'? 'menit baca' : locale === 'ru'? 'мин чтения' : 'min read';
+  const suffix =
+    locale === 'id' ? 'menit baca' :
+    locale === 'ru' ? 'мин чтения' :
+    locale === 'jp' ? '分で読める' :
+    'min read';
 
   if (!content?.trim()) return `1 ${suffix}`;
 
@@ -120,7 +124,7 @@ export function getReadingTime(
   const minutes = Math.max(1, Math.ceil(words / 200));
 
   return minutes === 1
-   ? `1 ${suffix}`
+    ? `1 ${suffix}`
     : `${minutes} ${suffix}`;
 }
 
