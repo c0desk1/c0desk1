@@ -236,10 +236,15 @@ export const id = {
     browsePostsByCategory: "Jelajahi postingan berdasarkan kategori",
     filterCategory: "Filter kategori",
 
-  // 404 page
-  pageNotFound: "Halaman tidak ditemukan",
-  notFoundTitle: "404: Tidak Ditemukan",
-  notFoundDesc: "Halaman yang Anda cari tidak dapat ditemukan.",
-  returnHome: "Kembali ke Beranda",
-  searchArticles: "Cari Artikel",
-} as const;
+    // 404 page
+    pageNotFound: "Halaman tidak ditemukan",
+    notFoundTitle: "404: Tidak Ditemukan",
+    notFoundDesc: "Halaman yang Anda cari tidak dapat ditemukan.",
+    returnHome: "Kembali ke Beranda",
+    searchArticles: "Cari Artikel",
+
+    // Offline page
+    offlineTitle: "Anda Offline",
+    offlineDesc: "Koneksi internet terputus. Silakan cek kembali koneksi Anda dan coba lagi nanti.",
+    tryAgain: "Coba lagi",
+} as const;
