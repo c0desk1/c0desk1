@@ -253,7 +253,6 @@ export const ru = {
     notFoundTitle: "404: Не найдено",
     notFoundDesc: "Страница, которую вы ищете, не найдена.",
     returnHome: "Вернуться на главную",
-    searchArticles: "Поиск статей",
     pageNotFound: "Страница не найдена",
     
     // 500 page
