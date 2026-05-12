@@ -233,10 +233,15 @@ export const jp = {
     browsePostsByCategory: "カテゴリーで投稿を探す",
     filterCategory: "カテゴリーフィルター",
 
-  //____404
-  notFoundTitle: "404: 見つかりません",
-  notFoundDesc: "お探しのページは見つかりませんでした。",
-  returnHome: "ホームに戻る",
-  searchArticles: "記事を検索",
-  pageNotFound: "ページが見つかりません",
+    //____404
+    notFoundTitle: "404: 見つかりません",
+    notFoundDesc: "お探しのページは見つかりませんでした。",
+    returnHome: "ホームに戻る",
+    searchArticles: "記事を検索",
+    pageNotFound: "ページが見つかりません",
+    
+    //____Offline page
+    offlineTitle: "オフラインです",
+    offlineDesc: "インターネット接続が切断されました。接続を確認して、もう一度お試しください。",
+    tryAgain: "再試行",
 } as const;
