@@ -9,36 +9,65 @@ import BaseHead from "@/components/layout/BaseHead.astro";
 import Header from "@/components/layout/Header.astro";
 import Footer from "@/components/layout/Footer.astro";
 
-import Cookie from "@/components/layout/Cookie.astro";
-import Toast from "@/components/ui/Toast.astro";
-import Container from "@/components/ui/Container.astro";
 import BG from "@/components/ui/BG.astro";
+import Container from "@/components/ui/Container.astro";
 
-import Search from "@/components/layout/Search.astro";
 import MobileMenu from "@/components/layout/MobileMenu.astro";
+import Cookie from "@/components/layout/Cookie.astro";
+import Search from "@/components/layout/Search.astro";
 import StatusPanel from "@/components/layout/StatusPanel.astro";
 
+import Toast from "@/components/ui/Toast.astro";
+
 import ThemeScript from "@/components/scripts/ThemeScript.astro";
+
 import GtagScript from "@/components/scripts/GtagScript.astro";
 import AdsenseScript from "@/components/scripts/AdsenseScript.astro";
-import AnchorScrollScript from "@/components/scripts/AnchorScrollScript.astro";
-import ServiceWorkerScript from "@/components/scripts/ServiceWorkerScript.astro";
-
 import YandexLoader from "@/components/ads/YandexLoader.astro";
 import YandexAds from "@/components/ads/YandexAds.astro";
+
+import AnchorScrollScript from "@/components/scripts/AnchorScrollScript.astro";
+import ServiceWorkerScript from "@/components/scripts/ServiceWorkerScript.astro";
 
 interface Props {
   title?: string;
   description?: string;
-  image?: { src: string; alt: string };
-  canonicalURL?: URL | string;
-  type?: "website" | "article" | "profile" | "creativeWork";
+  
+  image?: { 
+    src: string; 
+    alt: string 
+  };
+  
+  canonicalURL?: 
+    URL | 
+    string;
+    
+  type?: 
+    "website" | 
+    "article" | 
+    "profile" | 
+    "creativeWork";
+    
   noIndex?: boolean;
   publishedTime?: Date;
   modifiedTime?: Date;
   tags?: string[];
-  category?: { name: string; description?: string; slug: string };
-  author?: { name: string; role: string; avatar: string; bio: string; slug: string };
+  
+  category?: { 
+    name: string; 
+    description?: 
+    string; 
+    slug: string 
+  };
+  
+  author?: { 
+    name: string; 
+    role: string; 
+    avatar: string; 
+    bio: string; 
+    slug: string 
+  };
+  
   seo?: {
     title?: string;
     description?: string;
@@ -46,17 +75,31 @@ interface Props {
     canonical?: string;
     noIndex?: boolean;
   };
+  
   header?: boolean;
   footer?: boolean;
   withContainer?: boolean;
-  size?: "sm" | "md" | "lg" | "xl" | "full";
+  
+  size?: 
+    "sm" | 
+    "md" | 
+    "lg" | 
+    "xl" | 
+    "full";
+    
   client?: string;
   role?: string;
   duration?: string;
   demoUrl?: string;
   repoUrl?: string;
-  alternateSlugs?: Record<string, string>;
-  basePath?: 'blog' | 'portfolio' | 'legal' | '';
+  
+  alternateSlugs?: 
+    Record<string, string>;
+    
+  basePath?: 
+    'blog' | 
+    'portfolio' | 
+    'legal' | '';
 }
 
 const locale = getCurrentLocale(Astro);
@@ -80,7 +123,7 @@ const {
 
 const siteData = siteConfig;
 
-const GTAG_ID = siteData.googleAnalyticsId || siteConfig.googleAnalyticsId;
+const GTAG_ID = siteConfig.googleAnalyticsId;
 ---
 
 <!DOCTYPE html>
