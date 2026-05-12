@@ -20,7 +20,6 @@ export function getStaticPaths() {
     { params: { locale: undefined } },
     { params: { locale: 'en' } },
     { params: { locale: 'ru' } },
-    { params: { locale: 'jp' } },
   ];
 }
 
@@ -42,6 +41,10 @@ const portfolioProjects = sortByDate(allProjects).slice(0, 3);
 const hero_t = getLabel(locale, "HeroTitle");
 const hero_h = getLabel(locale, "HeroHighlight");
 const hero_d = getLabel(locale, "HeroDesc");
+const hero_a = getLabel(locale, "HeroAria");
+
+const blog_s = getLabel(locale, "home_BlogSection");
+const portfolio_s = getLabel(locale, "home_PortfolioSection");
 
 const seoData = {
   title: seo.title,
@@ -56,7 +59,7 @@ const seoData = {
 ---
 
 <BaseLayout {...seoData}>
-  <Section id="hero" size="none" aria-label="Hero section">
+  <Section id="hero" size="none" aria-label={hero_a}>
     <div class="relative items-center">
       <div
         class={cn(
@@ -66,7 +69,7 @@ const seoData = {
           "dark:bg-[radial-gradient(#404040_1px,transparent_1px)]",
         )}
       />
-      <div class="pointer-events-none absolute inset-0 flex items-center justify-center bg-white mask-[radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
+      <div class="pointer-events-none absolute inset-0 flex items-center justify-center bg-(--bg) mask-[radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
       <Container size="full" class="relative items-center z-20">
         <Hero
           title={hero_t}
@@ -76,14 +79,14 @@ const seoData = {
       </Container>
     </div>
   </Section>
-  <Section id="blog" size="md" aria-label="Latest articles" class="section-divider">
-    <h2 class="sr-only">Latest articles</h2>
+  <Section id="blog" size="md" aria-label={blog_s} class="section-divider">
+    <h2 class="sr-only">{blog_s}</h2>
     <Container size="xl">
       <BlogSection posts={blogPosts} />
     </Container>
   </Section>
-  <Section id="portfolio" size="md" aria-label="Featured projects" class="section-divider">
-    <h2 class="sr-only">Featured projects</h2>
+  <Section id="portfolio" size="md" aria-label={portfolio_s} class="section-divider">
+    <h2 class="sr-only">{portfolio_s}</h2>
     <Container size="xl">
       <PortfolioSection projects={portfolioProjects} />
     </Container>
