@@ -10,6 +10,7 @@ export const ru = {
     readArticle: "Читать статью",
     lastUpdated: "Последнее обновление",
     uncategorized: "Без категории",
+    articles: "статей",
 
     //_________Header___________//
 
