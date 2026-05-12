@@ -31,7 +31,7 @@ const featuredPosts = posts.filter((p) => p.data.featured);
 const regularPosts = posts.filter((p) =>!p.data.featured);
 
 const allCategories = await getCollection("categories", ({ data }) =>
-  data.lang === locale
+  data.name[locale]
 );
 
 const siteURL = Astro.site?.toString()?? siteConfig.siteUrl;
@@ -97,7 +97,7 @@ const blog_c = getLabel(locale, "blog_browsePosts");
           {getLabel(locale, 'blog_latestPosts')}
         </h2>
       </div>
-      <CategoryTabs posts={regularPosts} categories={allCategories} />
+      <CategoryTabs posts={posts} categories={allCategories} />
     </Container>
   </Section>
 </BaseLayout>
