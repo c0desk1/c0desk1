@@ -1,22 +1,31 @@
 ---
 // src/components/layout/Header.astro
+import Container from "@/components/ui/Container.astro";
+
 import Logo from "@/components/ui/Logo.astro";
 import DesktopNav from "./DesktopNav.astro";
 
-import Container from "../ui/Container.astro";
-import SearchButton from "../ui/SearchButton.astro";
+import SearchButton from "@/components/ui/SearchButton.astro";
 import MenuButton from "@/components/ui/MenuButton.astro";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher.astro";
 
 interface Props {
-  alternateSlugs?: Record<string, string>;
-  basePath?: 'blog' | 'portfolio' | 'legal' | '';
+  alternateSlugs?: 
+    Record<string, string>
+  ;
+  
+  basePath?: 
+    'blog' | 
+    'portfolio' | 
+    'legal' | 
+    ''
+  ;
 }
 
 const { alternateSlugs, basePath = '' } = Astro.props;
 ---
 
-<header id="main-header" class="sticky top-0 z-50 mx-auto w-full bg-(--bg) transition-all duration-300">
+<header id="main-header" class="sticky top-0 z-50 mx-auto w-full bg-(--bg)">
   <Container size="full">
     <div class="flex h-15 items-center justify-baseline">
       <div class="flex items-center gap-6">
@@ -34,7 +43,7 @@ const { alternateSlugs, basePath = '' } = Astro.props;
 
 <style is:global>
   #main-header {
-    box-shadow: 0 1px 0 0 transparent;
+    box-shadow: 0 0px 0 0 transparent;
   }
   
   #main-header.scrolled {
