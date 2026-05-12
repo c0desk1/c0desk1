@@ -1,7 +1,7 @@
 import { id } from './id';
 import { en } from './en';
 import { ru } from './ru';
-import { jo } from './jp';
+import { jp } from './jp';
 
 export const i18nConfig = {
   locales: ['id', 'en', 'ru', 'jp'] as const,
