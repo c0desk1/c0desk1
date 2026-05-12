@@ -103,7 +103,7 @@ export const ru = {
     //____Author______//
     author: "Аўтар",
     avatarOf: "Аватар",
-    contentCreator: "Создатель контента",
+    contentCreatorLabel: "Создатель контента",
 
     //____Homepage______//
     HeroAria: "Раздзел герояў",
