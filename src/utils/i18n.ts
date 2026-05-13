@@ -2,6 +2,13 @@ import { getRelativeLocaleUrl } from 'astro:i18n';
 import { siteConfig } from '@/config/site';
 import type { Locale, LabelKey } from '@/config/site';
 
+export type LocaleMap = {
+  id: string;
+  en?: string;
+  ru?: string;
+  jp?: string;
+};
+
 export function getCurrentLocale(Astro: any): Locale {
   const locale = Astro.params.locale || Astro.currentLocale || siteConfig.defaultLocale;
   if (siteConfig.locales.includes(locale)) return locale as Locale;
