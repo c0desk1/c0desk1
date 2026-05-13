@@ -22,20 +22,10 @@ const formattedDate = formatDate(pubDate, dateLocale);
 const readingTime = getReadingTime(content, locale as 'id' | 'en' | 'ru' | 'jp');
 ---
 
-<div class="flex flex-wrap items-center justify-start md:justify-center gap-x-2 gap-y-1 text-sm md:text-sm text-(--fg-muted)">
-  {readingTime && (
-    <div class="flex items-center justify-center gap-2">
-      <Icon name="clock" className="w-4 h-4" />
-      <span class="whitespace-nowrap">{readingTime}</span>
-    </div>
-  )}
-
-  {readingTime && <span aria-hidden="true">―</span>}
-
-  <div class="flex items-center justify-center gap-2">
-    <Icon name="calender" className="w-4 h-4" />
-    <time datetime={pubDate.toISOString()} class="whitespace-nowrap">
-      {formattedDate}
-    </time>
+<div class="flex flex-row items-center justify-between flex-initial w-full gap-4 pt-2">
+  <div class="flex flex-row items-center justify-start gap-1.5 flex-initial text-[14px] text-(--fg-muted)">
+    <Icon name="clock" className="w-4 h-4" />
+    {readingTime && ( <span class="whitespace-nowrap">{readingTime}</span>)}
   </div>
+  <time datetime={pubDate.toISOString()} class="text-[14px] text-(--fg-muted) order-2 md:order-3 whitespace-nowrap">{formattedDate}</time>
 </div>
