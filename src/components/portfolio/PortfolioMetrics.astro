@@ -1,53 +1,52 @@
 ---
 // src/components/portfolio/PortfolioMetrics.astro
 import Container from "../ui/Container.astro";
-import { getCurrentLocale, getLabel } from '@/utils/i18n';
+import { getCurrentLocale, getLabel } from "@/utils/i18n";
 
 interface Metric {
   label: string;
-  value?: number;
+  value: number;
 }
 
 interface Props {
   metrics?: {
-    performance?: number;
+    performance?  : number;
     accessibility?: number;
-    seo?: number;
+    seo?          : number;
   };
 }
 
 const { metrics } = Astro.props;
 const locale = getCurrentLocale(Astro);
 
-const performance_l = getLabel(locale, 'p_performance');
-const accessibility_l = getLabel(locale, 'p_accessibility');
-const seo_l = getLabel(locale, 'p_seo');
-
 const items: Metric[] = [
-  { label: performance_l, value: metrics?.performance },
-  { label: accessibility_l, value: metrics?.accessibility },
-  { label: seo_l, value: metrics?.seo },
-].filter((m) => typeof m.value === "number");
+  { label: getLabel(locale, "p_performance"),   value: metrics?.performance   },
+  { label: getLabel(locale, "p_accessibility"), value: metrics?.accessibility },
+  { label: getLabel(locale, "p_seo"),           value: metrics?.seo           },
+].filter((m): m is Metric => typeof m.value === "number");
+
+/* Score → accent color */
+const scoreColor = (v: number) =>
+  v >= 90 ? "var(--color-success, #10b981)" :
+  v >= 50 ? "var(--color-warning, #f59e0b)" :
+            "var(--color-danger,  #ef4444)";
 ---
 
 {items.length > 0 && (
-  <div class="border-b border-(--border)">
-    <Container size="md" class="py-8">
-      <div class="grid grid-cols-3 gap-6 md:gap-10 text-center">
+  <div class="pm-band">
+    <Container size="md">
+      <div class="pm-grid">
         {items.map((item) => (
-          <div class="group space-y-2">
-            <div class="flex items-baseline justify-center font-mono tabular-nums transition-transform duration-300 group-hover:-translate-y-1">
-              <span class="text-2xl md:text-3xl semifont-bold text-(--fg)">
+          <div class="pm-item">
+            <div class="pm-value-row">
+              <span class="pm-value" style={`color: ${scoreColor(item.value)}`}>
                 {item.value}
               </span>
-              <span class="text-xs text-(--fg-muted) ml-1">%</span>
+              <span class="pm-unit">%</span>
             </div>
-
-            <div class="flex items-center justify-center gap-2">
-              <span class="h-1 w-1 rounded-full bg-(--accent) animate-pulse"></span>
-              <span class="text-sm md:text- text-(--fg-muted)">
-                {item.label}
-              </span>
+            <div class="pm-label-row">
+              <span class="pm-dot" style={`background: ${scoreColor(item.value)}`}></span>
+              <span class="pm-label">{item.label}</span>
             </div>
           </div>
         ))}
@@ -55,3 +54,93 @@ const items: Metric[] = [
     </Container>
   </div>
 )}
+
+<style>
+  /* ─── BAND ────────────────────────────────────────────────────── */
+  .pm-band {
+    border-bottom: 1px solid var(--border);
+    padding-block: 2rem;
+  }
+
+  /* ─── GRID ────────────────────────────────────────────────────── */
+  .pm-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .pm-grid { gap: 2.5rem; }
+  }
+
+  /* ─── ITEM ────────────────────────────────────────────────────── */
+  .pm-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s var(--ease, ease);
+  }
+
+  .pm-item:hover {
+    transform: translateY(-2px);
+  }
+
+  /* ─── VALUE ROW ───────────────────────────────────────────────── */
+  .pm-value-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.125rem;
+  }
+
+  .pm-value {
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    transition: color 0.2s ease;
+  }
+
+  @media (min-width: 768px) {
+    .pm-value { font-size: 2.5rem; }
+  }
+
+  .pm-unit {
+    font-size: 0.75rem;
+    font-weight: 500;
+    font-family: var(--font-mono);
+    color: var(--fg-subtle);
+    margin-left: 0.125rem;
+  }
+
+  /* ─── LABEL ROW ───────────────────────────────────────────────── */
+  .pm-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+  }
+
+  .pm-dot {
+    width: 0.25rem;
+    height: 0.25rem;
+    border-radius: var(--radius-full);
+    flex-shrink: 0;
+    animation: pm-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pm-pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.4; }
+  }
+
+  .pm-label {
+    font-size: 0.8125rem;
+    color: var(--fg-muted);
+    letter-spacing: -0.005em;
+  }
+</style>
