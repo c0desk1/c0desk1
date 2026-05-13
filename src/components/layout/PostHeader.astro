@@ -29,43 +29,29 @@ const {
 } = Astro.props;
 ---
 
-<div class="relative w-full items-center">
-  <div
-    class={cn(
-      "absolute inset-0",
-      "bg-size-[20px_20px]",
-      "bg-[radial-gradient(#d4d4d4_1px,transparent_1px)]",
-      "dark:bg-[radial-gradient(#404040_1px,transparent_1px)]",
+<header class="w-full text-center justify-center">
+  <div class="prose-custom flex flex-col items-center flex-initial mb-4 md:mb-8">
+    <h1>{title}</h1>
+  </div>
+  {content && <PostMeta pubDate={pubDate} content={content} />}
+  <div class="prose-custom mb-4 md:mb-8">
+    {image && (
+      <BlogFeaturedImage
+        image={image.src}
+        alt={image.alt || title}
+        caption={(image as any).caption}
+      />
     )}
-  />
-  <div class="pointer-events-none absolute inset-0 flex items-center justify-center bg-(--bg) mask-[radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
-
-  <header class="relative z-20 w-full text-start md:text-center justify-start md:justify-center">
-    <div class="prose-custom mb-4 md:mb-8">
-      <h1>{title}</h1>
-    </div>
-    {content && <PostMeta pubDate={pubDate} content={content} />}
-
-    <div class="prose-custom mb-4 md:mb-8">
-      {image && (
-        <BlogFeaturedImage
-          image={image.src}
-          alt={image.alt || title}
-          caption={(image as any).caption}
-        />
-      )}
-    </div>
-
-    <div class="flex flex-wrap gap-4 items-center justify-start md:justify-center">
-      {authorName && (
-        <PostAuthor
-          name={authorName}
-          avatar={authorAvatar}
-          title={authorTitle}
-          slug={authorSlug}
-        />
-      )}
-      <PostAction />
-    </div>
-  </header>
-</div>
+  </div>
+  <div class="flex flex-wrap gap-4 items-center justify-start md:justify-center">
+    {authorName && (
+      <PostAuthor
+        name={authorName}
+        avatar={authorAvatar}
+        title={authorTitle}
+        slug={authorSlug}
+      />
+    )}
+    <PostAction />
+  </div>
+</header>
