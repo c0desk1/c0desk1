@@ -2,6 +2,7 @@ import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import type { APIRoute } from 'astro';
 import { siteConfig } from '@/config/site';
+import { slugify } from '@/lib/utils';
 
 export const GET: APIRoute = async () => {
   const siteUrl = siteConfig.siteUrl;
@@ -17,10 +18,11 @@ export const GET: APIRoute = async () => {
 
   const projectsSitemap = sortedProjects.map((project: CollectionEntry<"portfolio">) => {
     const lastModDate = project.data.updatedDate || project.data.pubDate;
+    const autoSlug = slugify(project.data.title);
     
     return `
   <url>
-    <loc>${new URL(`jp/portfolio/${project.id}/`, siteUrl).toString()}</loc>
+    <loc>${new URL(`jp/portfolio/${autoSlug}/`, siteUrl).toString()}</loc>
     <lastmod>${lastModDate.toISOString()}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
