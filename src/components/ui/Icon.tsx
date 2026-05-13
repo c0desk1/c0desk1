@@ -7,7 +7,7 @@ export type IconName =
   | 'dribbble' | 'behance' | 'adobestock' | 'wirestock' | 'spotify' | 'soundcloud'
   | 'copy' | 'external' | 'link' | 'email' | 'user' | 'rss' | 'globe' | 'share' | 'sitemap' | 'cookie'
   | 'arrow-up' | 'arrow-down' | 'arrow-right' | 'arrow-left' | 'arrow-path'
-  | 'chevron-down' | 'chevron-right' | 'more' | 'system'
+  | 'chevron-up' |'chevron-down' | 'chevron-right' | 'chevron-left' | 'more' | 'system' | 'language'
   | 'volume' | 'volume-mute' | 'play' | 'pause' | 'next' | 'prev' | 'music' | 'image';
 
 interface IconProps {
@@ -16,7 +16,7 @@ interface IconProps {
 }
 
 export default function Icon({ name, className = 'w-5 h-5' }: IconProps) {
-  const s = { className, 'aria-hidden': true as const };
+  const s = { className, 'aria-hidden': true as const, 'focusable': false as const };
 
   switch (name) {
     case 'logo':
@@ -91,8 +91,8 @@ export default function Icon({ name, className = 'w-5 h-5' }: IconProps) {
 
     case 'check':
       return (
-        <svg {...s} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-          <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+        <svg {...s} fill="currentColor" viewBox="0 0 24 24">
+          <path d="M9.9997 15.1709L19.1921 5.97852L20.6063 7.39273L9.9997 17.9993L3.63574 11.6354L5.04996 10.2212L9.9997 15.1709Z" />
         </svg>
       );
 
@@ -369,17 +369,31 @@ export default function Icon({ name, className = 'w-5 h-5' }: IconProps) {
         </svg>
       );
 
+    case 'chevron-up':
+      return (
+        <svg {...s} fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 11.8284L9.17154 14.6569L7.75732 13.2426L12 9L16.2426 13.2426L14.8284 14.6569L12 11.8284Z" />
+        </svg>
+      );
+    
     case 'chevron-down':
       return (
-        <svg {...s} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        <svg {...s} fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 15.0006L7.75732 10.758L9.17154 9.34375L12 12.1722L14.8284 9.34375L16.2426 10.758L12 15.0006Z" />
         </svg>
       );
 
     case 'chevron-right':
       return (
-        <svg {...s} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-          <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+        <svg {...s} fill="currentColor" viewBox="0 0 24 24">
+          <path d="M13.1717 12.0007L8.22192 7.05093L9.63614 5.63672L16.0001 12.0007L9.63614 18.3646L8.22192 16.9504L13.1717 12.0007Z" />
+        </svg>
+      );
+    
+    case 'chevron-left':
+      return (
+        <svg {...s} fill="currentColor" viewBox="0 0 24 24">
+          <path d="M11.8284 12.0005L14.6569 14.8289L13.2426 16.2431L9 12.0005L13.2426 7.75781L14.6569 9.17203L11.8284 12.0005Z" />
         </svg>
       );
 
@@ -394,6 +408,13 @@ export default function Icon({ name, className = 'w-5 h-5' }: IconProps) {
       return (
         <svg {...s} fill="currentColor" viewBox="0 0 24 24">
           <path d="M4 16H20V5H4V16ZM13 18V20H17V22H7V20H11V18H2.9918C2.44405 18 2 17.5511 2 16.9925V4.00748C2 3.45107 2.45531 3 2.9918 3H21.0082C21.556 3 22 3.44892 22 4.00748V16.9925C22 17.5489 21.5447 18 21.0082 18H13Z" />
+        </svg>
+      );
+
+    case 'language':
+      return (
+        <svg {...s} fill="currentColor" viewBox="0 0 24 24">
+          <path d="M5 15V17C5 18.0544 5.81588 18.9182 6.85074 18.9945L7 19H10V21H7C4.79086 21 3 19.2091 3 17V15H5ZM18 10L22.4 21H20.245L19.044 18H14.954L13.755 21H11.601L16 10H18ZM17 12.8852L15.753 16H18.245L17 12.8852ZM8 2V4H12V11H8V14H6V11H2V4H6V2H8ZM17 3C19.2091 3 21 4.79086 21 7V9H19V7C19 5.89543 18.1046 5 17 5H14V3H17ZM6 6H4V9H6V6ZM10 6H8V9H10V6Z" />
         </svg>
       );
 

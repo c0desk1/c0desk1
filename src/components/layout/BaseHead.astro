@@ -3,10 +3,9 @@
 
 import { siteConfig } from "@/config/site";
 import { getEntry } from "astro:content";
-import { getCurrentLocale, getLabel } from "@/utils/i18n";
+import { getCurrentLocale, getLabel, type LocaleMap } from "@/utils/i18n";
 
 type Locale = "id" | "en" | "ru" | "jp";
-type LocaleMap = { id: string; en: string; ru: string; jp: string };
 type PartialLocaleMap = { id?: string; en?: string; ru?: string; jp?: string };
 
 interface Props {
@@ -21,8 +20,8 @@ interface Props {
   tags?: string[];
 
   category?: {
-    name: LocaleMap;
-    description?: PartialLocaleMap;
+    name: LocaleMap | string;
+    description?: string;
     slug: string;
   };
 
@@ -99,9 +98,7 @@ const homeLabel = getLabel(locale, "home") ?? "Home";
 const blogLabel = getLabel(locale, "blog") ?? "Blog";
 const portfolioLabel = getLabel(locale, "portfolio") ?? "Portfolio";
 
-const contentCreatorLabel = getLabel(locale, "contentCreator") ?? "Content Creator";
-
-const siteData = siteDataFromProps ?? siteConfig;
+const contentCreatorLabel = getLabel(locale, "contentCreatorLabel") ?? "Content Creator";
 
 let org: { data: any } | undefined;
 if (orgFromProps) {
@@ -122,7 +119,7 @@ const currentPath       = Astro.url.pathname;
 const localePattern     = new RegExp(`^\\/(${siteConfig.locales.join("|")})`);
 const pathWithoutLocale = currentPath.replace(localePattern, "") || "/";
 
-const hreflangLinks = (siteConfig.locales as string[]).map((lang) => {
+const hreflangLinks = (siteConfig.locales as unknown as string[]).map((lang) => {
   const langSlug = alternateSlugs?.[lang];
   const path     = langSlug ?? pathWithoutLocale;
   const href     =
@@ -147,7 +144,6 @@ const activeAuthor = {
   slug:   author?.slug   ?? siteConfig.author?.slug   ?? "bima-akbar",
 };
 
-// siteConfig.defaultSeo = { id: { title, description }, en: {...}, ru: {...} }
 const localeSeo = (siteConfig.defaultSeo as Record<string, { title?: string; description?: string }>)?.[locale];
 
 const seoResolved = {
@@ -184,7 +180,9 @@ const ogImageURL: string = !rawImage
   ? rawImage
   : new URL(rawImage, siteURL).toString();
 
-const categoryName: string | undefined = category ? t(category.name) : undefined;
+const categoryName: string | undefined = category
+  ? (typeof category.name === 'string' ? category.name : t(category.name))
+  : undefined;
 
 const pathname = Astro.url.pathname;
 const localeRootPattern = new RegExp(
@@ -444,11 +442,12 @@ if (type === "creativeWork") {
 
 <meta name="google"                  content="notranslate" />
 
-{(siteConfig.locales as string[])
+{(siteConfig.locales as unknown as string[])
   .filter((l) => l !== locale)
   .map((l) => (
     <meta property="og:locale:alternate" content={toOgLocale(l)} />
-  ))}
+  ))
+}
 
 {type === "article" && tags.map((tag) => (
   <meta property="article:tag" content={tag} />

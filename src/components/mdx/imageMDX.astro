@@ -16,15 +16,19 @@ const optimizedSrc = src && isCdnUrl(src)
 const caption = title || alt;
 ---
 
-<figure class="prose-custom mx-auto max-w-3xl overflow-hidden">
-  <Image
-    src={optimizedSrc}
-    alt={alt}
-    loading="lazy"
-    decoding="async"
-    width={1280}
-    height={720}
-    class="block w-full h-auto object-cover"
-  />
+<figure class="prose-custom">
+  <div class="relative overflow-hidden">
+    <div class="absolute aspect-video inset-0 bg-(--bg) animate-pulse" aria-hidden="true"></div>
+    <Image
+      src={optimizedSrc}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      width={1280}
+      height={720}
+      class="relative z-10 h-full w-full object-cover aspect-video rounded-none transition duration-500 opacity-0"
+      onload="this.classList.remove('opacity-0')"
+    />
+  </div>
   {caption && ( <figcaption>{caption}</figcaption> )}
 </figure>

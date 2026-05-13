@@ -9,6 +9,7 @@ import Icon from "@/components/ui/Icon";
 import Newsletter from "../layout/Newsletter.astro";
 import StatusButton from "../ui/StatusButton.astro";
 import ThemeToggle from "../ui/ThemeToggle.astro";
+import SocialLinks from "../ui/SocialLinks.astro";
 
 const locale = getCurrentLocale(Astro);
 
@@ -57,19 +58,7 @@ const footerSections = siteConfig.footerSections;
     <Container size="xl">
       <div class="ft-bottom">
         <div class="ft-bottom-row">
-          <div class="ft-social">
-            {social.map((item: { href: string; label: string }) => (
-              <a
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={item.label}
-                class="ft-social-link"
-              >
-                <Icon name={item.label as any} className="ft-social-icon" />
-              </a>
-            ))}
-          </div>
+          <SocialLinks items={social} class="ft-social" iconClass="ft-social-icon" />
           <span class="ft-copy">
             © {year} {siteData.siteName}
           </span>

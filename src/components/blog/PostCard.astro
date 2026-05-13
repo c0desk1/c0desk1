@@ -25,6 +25,7 @@ if (post) {
     locale === 'ru' ? 'ru-RU' :
     locale === 'jp' ? 'ja-JP' :
     'id-ID';
+
   const categoryEntry = await getEntry(category);
   const authorEntry   = author ? await getEntry(author) : null;
   const autoSlug = slugify(t);
@@ -62,7 +63,8 @@ if (post) {
           alt={`Author ${authorName}`}
           width={48}
           height={48}
-          decoding="async"
+          loading='eager'
+          decoding='async'
           class="w-5 h-5 object-cover rounded-full"
         />
       )}

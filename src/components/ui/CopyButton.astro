@@ -20,6 +20,7 @@ const labels = {
 <button
   class="copy-link-btn relative text-(--accent-dim) hover:text-(--accent) group active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-200"
   aria-label={labels.ariaDefault}
+  title={labels.ariaDefault}
   aria-live="polite"
   data-url={Astro.url.href}
   data-labels={JSON.stringify(labels)}

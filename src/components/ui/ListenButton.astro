@@ -14,14 +14,18 @@ const labels = {
   next: getLabel(locale, 'ttsNext'),
   playPause: getLabel(locale, 'ttsPlayPause'),
   close: getLabel(locale, 'ttsClose'),
-
-  ttsLang: locale === 'id'? 'id-ID' : locale === 'ru'? 'ru-RU' : 'en-US',
+  ttsLang: 
+    locale === 'en'? 'en-US' : 
+    locale === 'jp'? 'ja-JP' : 
+    locale === 'ru'? 'ru-RU' : 
+    'id-ID',
 };
 ---
 
 <button
   id="listen-btn"
   aria-label={labels.listenAria}
+  title={labels.listenAria}
   class="relative flex items-center gap-1.5 text-(--fg-muted) hover:text-(--fg) group active:scale-95">
   <div class="flex shrink-0 items-center justify-center gap-1.5">
     <div class="relative w-4 h-4 items-center">
@@ -45,10 +49,10 @@ const labels = {
     <div class="tts-row">
       <span id="tts-label" class="tts-chunk-label"></span>
       <div class="tts-controls">
-        <button id="tts-prev" class="tts-btn" aria-label={labels.prev}>
+        <button id="tts-prev" class="tts-btn" aria-label={labels.prev} title={labels.prev}>
           <Icon name="prev" className="w-4.5 h-4.5" />
         </button>
-        <button id="tts-playpause" class="tts-btn tts-btn--primary relative" aria-label={labels.playPause}>
+        <button id="tts-playpause" class="tts-btn tts-btn--primary relative" aria-label={labels.playPause} title={labels.playPause}>
           <span id="ic-pause">
             <Icon name="pause" className="w-4.5 h-4.5" />
           </span>
@@ -56,10 +60,10 @@ const labels = {
             <Icon name="play" className="w-4.5 h-4.5" />
           </span>
         </button>
-        <button id="tts-next" class="tts-btn" aria-label={labels.next}>
+        <button id="tts-next" class="tts-btn" aria-label={labels.next} title={labels.next}>
           <Icon name="next" className="w-4.5 h-4.5" />
         </button>
-        <button id="tts-close" class="tts-btn tts-btn--close" aria-label={labels.close}>
+        <button id="tts-close" class="tts-btn tts-btn--close" aria-label={labels.close} title={labels.close}>
           <Icon name="close" className="w-4.5 h-4.5" />
         </button>
       </div>
@@ -325,8 +329,13 @@ const labels = {
       currentIdx = idx;
       updateBar();
 
+      const RATE = 0.95;
+      const PAUSE_BETWEEN = 250;
+
       const utt = new SpeechSynthesisUtterance(chunks[idx]);
       utt.lang = labels.ttsLang;
+      utt.rate = RATE;
+
       if (voice) utt.voice = voice;
 
       utt.onstart = () => {
@@ -338,7 +347,11 @@ const labels = {
         setPlayPauseIcon(false);
       };
       utt.onend = () => {
-        if (isPlaying) speakAt(currentIdx + 1);
+        if (isPlaying) {
+          setTimeout(() => {
+            if (isPlaying) speakAt(currentIdx + 1);
+          }, PAUSE_BETWEEN);
+        }
       };
       utt.onerror = (e) => {
         if (e.error === 'interrupted' || e.error === 'canceled') {
