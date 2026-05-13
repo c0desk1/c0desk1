@@ -1,5 +1,7 @@
 ---
 // src/components/prose/FootnotesWrapper.astro
+// Wraps the footnotes block to prevent long URLs from causing
+// horizontal scroll on the page.
 ---
 
 <div class="fn-wrapper">
@@ -7,11 +9,17 @@
 </div>
 
 <style>
+  /*
+   * Three layers of containment:
+   * 1. overflow:hidden  — clips anything that escapes
+   * 2. min-width:0      — allows flex/grid children to shrink below content size
+   * 3. contain:inline-size — tells the browser this box won't grow past its parent
+   */
   .fn-wrapper {
-    min-width: 0;
+    width: 100%;
     max-width: 100%;
-    overflow-x: hidden;
-    overflow-wrap: break-word;
-    word-break: break-word;
+    min-width: 0;
+    overflow: hidden;
+    contain: inline-size;
   }
 </style>
