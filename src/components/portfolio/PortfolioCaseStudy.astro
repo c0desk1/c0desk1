@@ -1,55 +1,58 @@
 ---
-import Icon from '@/components/ui/Icon'
-import { getCurrentLocale, getLabel } from '@/utils/i18n'
+// src/components/portfolio/CaseStudyAccordion.astro
+import Icon from "@/components/ui/Icon";
+import { getCurrentLocale, getLabel } from "@/utils/i18n";
 
 interface Props {
-  challenge?: string;
-  solution?: string;
-  result?: string;
+  challenge?    : string;
+  solution?     : string;
+  result?       : string;
   allowMultiple?: boolean;
 }
-const { challenge, solution, result, allowMultiple = true } = Astro.props;
+
+const {
+  challenge,
+  solution,
+  result,
+  allowMultiple = true,
+} = Astro.props;
+
 const locale = getCurrentLocale(Astro);
 
-const challengeLabel = getLabel(locale, 'p_challenge');
-const solutionLabel = getLabel(locale, 'p_solution');
-const resultLabel = getLabel(locale, 'p_result');
+interface Item { question: string; answer: string; }
 
-interface Item {
-  question: string;
-  answer: string;
-}
-
-const items: Item[] = [];
-if (challenge) items.push({ question: challengeLabel, answer: challenge });
-if (solution) items.push({ question: solutionLabel, answer: solution });
-if (result) items.push({ question: resultLabel, answer: result });
+const items: Item[] = [
+  challenge && { question: getLabel(locale, "p_challenge"), answer: challenge },
+  solution  && { question: getLabel(locale, "p_solution"),  answer: solution  },
+  result    && { question: getLabel(locale, "p_result"),    answer: result    },
+].filter(Boolean) as Item[];
 ---
 
 {items.length > 0 && (
   <div
-    class="accordion not-prose my-8"
-    data-allow-multiple={allowMultiple? "true" : "false"}
+    class="csa-root not-prose"
+    data-allow-multiple={allowMultiple ? "true" : "false"}
   >
     {items.map((item, i) => (
-      <div class="accordion-item" data-index={i}>
+      <div class="csa-item">
         <button
-          class="accordion-trigger"
+          class="csa-trigger"
           aria-expanded="false"
-          aria-controls={`case-panel-${i}`}
-          id={`case-btn-${i}`}
+          aria-controls={`csa-panel-${i}`}
+          id={`csa-btn-${i}`}
         >
-          <span class="accordion-question text-sm md:text-[13px] font-semibold uppercase text-(--fg)">{item.question}</span>
-          <Icon name="chevron-down" className="accordion-chevron w-4.5 h-4.5 shrink-0 text-(--fg)" />
+          <span class="csa-question">{item.question}</span>
+          <Icon name="chevron-down" className="csa-chevron" />
         </button>
+
         <div
-          class="accordion-panel"
-          id={`case-panel-${i}`}
-          aria-labelledby={`case-btn-${i}`}
+          class="csa-panel"
+          id={`csa-panel-${i}`}
+          aria-labelledby={`csa-btn-${i}`}
           hidden
         >
-          <div class="accordion-body">
-            <p class="text-(--fg-muted) leading-relaxed text-sm" set:html={item.answer} />
+          <div class="csa-body">
+            <p set:html={item.answer} />
           </div>
         </div>
       </div>
@@ -57,79 +60,124 @@ if (result) items.push({ question: resultLabel, answer: result });
   </div>
 )}
 
-<style is:global>
-.accordion {
+<style>
+  /* ─── ROOT ────────────────────────────────────────────────────── */
+  .csa-root {
+    margin-block: 2rem;
     border: 1px solid var(--border);
-    border-radius: var(--radius-md, 8px);
+    border-radius: var(--radius-md);
     overflow: hidden;
   }
-.accordion-item { border-bottom: 1px solid var(--border); }
-.accordion-item:last-child { border-bottom: none; }
 
-.accordion-trigger {
+  /* ─── ITEM ────────────────────────────────────────────────────── */
+  .csa-item {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .csa-item:last-child {
+    border-bottom: none;
+  }
+
+  /* ─── TRIGGER ─────────────────────────────────────────────────── */
+  .csa-trigger {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 1rem 1.25rem;
+    padding: 0.875rem 1.125rem;
     background: transparent;
     border: none;
     cursor: pointer;
     text-align: left;
-    transition: background-color 150ms ease;
+    transition: background-color 0.15s ease;
   }
-.accordion-trigger:hover { background-color: var(--bg-subtle); }
-.accordion-trigger:focus-visible {
-    outline: 2px solid var(--accent, #10b981);
+
+  .csa-trigger:hover {
+    background-color: var(--bg-subtle);
+  }
+
+  .csa-trigger:focus-visible {
+    outline: 2px solid var(--accent);
     outline-offset: -2px;
   }
 
-.accordion-chevron {
+  /* ─── QUESTION LABEL ──────────────────────────────────────────── */
+  .csa-question {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+    color: var(--fg);
+  }
+
+  /* ─── CHEVRON ─────────────────────────────────────────────────── */
+  :global(.csa-chevron) {
+    width: 1rem;
+    height: 1rem;
     flex-shrink: 0;
     color: var(--fg-subtle);
-    transition: transform 200ms ease;
+    transition: transform 0.2s ease;
   }
-.accordion-trigger[aria-expanded="true"].accordion-chevron {
+
+  .csa-trigger[aria-expanded="true"] :global(.csa-chevron) {
     transform: rotate(180deg);
   }
 
-.accordion-panel { overflow: hidden; }
-.accordion-panel[hidden] { display: none; }
-.accordion-body { padding: 0 1.25rem 1rem; }
-.accordion-body p { margin: 0; padding-top: 4px; }
+  /* ─── PANEL ───────────────────────────────────────────────────── */
+  .csa-panel {
+    overflow: hidden;
+  }
+
+  .csa-panel[hidden] {
+    display: none;
+  }
+
+  /* ─── BODY ────────────────────────────────────────────────────── */
+  .csa-body {
+    padding: 0 1.125rem 1rem;
+  }
+
+  .csa-body p {
+    margin: 0;
+    padding-top: 0.25rem;
+    font-size: 0.9375rem;
+    line-height: 1.75;
+    color: var(--fg-muted);
+    letter-spacing: -0.01em;
+    text-wrap: pretty;
+  }
 </style>
 
 <script>
   const initAccordion = () => {
-    document.querySelectorAll<HTMLElement>('.accordion').forEach(root => {
-      const allowMultiple = root.dataset.allowMultiple === 'true';
-      const triggers = root.querySelectorAll<HTMLButtonElement>('.accordion-trigger');
+    document.querySelectorAll<HTMLElement>(".csa-root").forEach((root) => {
+      const allowMultiple = root.dataset.allowMultiple === "true";
+      const triggers = root.querySelectorAll<HTMLButtonElement>(".csa-trigger");
 
-      const open = (trigger: HTMLButtonElement) => {
-        const panelId = trigger.getAttribute('aria-controls')!;
-        const panel = document.getElementById(panelId);
-        trigger.setAttribute('aria-expanded', 'true');
-        panel?.removeAttribute('hidden');
+      const open = (btn: HTMLButtonElement) => {
+        const panel = document.getElementById(btn.getAttribute("aria-controls")!);
+        btn.setAttribute("aria-expanded", "true");
+        panel?.removeAttribute("hidden");
       };
 
-      const close = (trigger: HTMLButtonElement) => {
-        const panelId = trigger.getAttribute('aria-controls')!;
-        const panel = document.getElementById(panelId);
-        trigger.setAttribute('aria-expanded', 'false');
-        panel?.setAttribute('hidden', '');
+      const close = (btn: HTMLButtonElement) => {
+        const panel = document.getElementById(btn.getAttribute("aria-controls")!);
+        btn.setAttribute("aria-expanded", "false");
+        panel?.setAttribute("hidden", "");
       };
 
-      triggers.forEach(trigger => {
-        trigger.addEventListener('click', () => {
-          const isOpen = trigger.getAttribute('aria-expanded') === 'true';
-          if (!allowMultiple) {
-            triggers.forEach(t => { if (t!== trigger) close(t); });
-          }
-          isOpen? close(trigger) : open(trigger);
+      triggers.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const isOpen = btn.getAttribute("aria-expanded") === "true";
+          if (!allowMultiple) triggers.forEach((t) => { if (t !== btn) close(t); });
+          isOpen ? close(btn) : open(btn);
         });
       });
     });
   };
+
   initAccordion();
+  document.addEventListener("astro:page-load", initAccordion);
 </script>
