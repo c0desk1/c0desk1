@@ -1,0 +1,14 @@
+{
+  "name": {
+    "id": "Workflow",
+    "en": "Workflow",
+    "ru": "Рабочий процесс",
+    "jp": "ワークフロー"
+  },
+  "description": {
+    "id": "Optimasi alur kerja, produktivitas, dan manajemen proyek",
+    "en": "Workflow optimization, productivity, and project management",
+    "ru": "Оптимизация рабочих процессов, повышение производительности и управление проектами.",
+    "jp": "ワークフローの最適化、生産性向上、プロジェクト管理"
+  }
+}

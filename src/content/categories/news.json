@@ -1,0 +1,14 @@
+{
+  "name": {
+    "id": "Kabar Berita",
+    "en": "News",
+    "ru": "Навіны",
+    "jp": "ニュース"
+  },
+  "description": {
+    "id": "Berita terbaru seputar teknologi dan dunia programming",
+    "en": "The latest news about technology and the world of programming",
+    "ru": "Апошнія навіны пра тэхналогіі і свет праграмавання",
+    "jp": "テクノロジーとプログラミングの世界の最新ニュース"
+  }
+}

@@ -62,8 +62,7 @@ export const jp = {
     refreshPage: "ページを更新してください",
 
     //____Language Switcher
-    languageSwitcherLabel: "現在の言語: ID。言語を選択",
-    languageList: "言語を選択",
+    languageSwitcherLabel: "言語を選択",
 
     //_________Footer__________//
 
@@ -81,6 +80,7 @@ export const jp = {
     newsletterNetwork: '接続に失敗しました。後でもう一度お試しください。',
 
     //____Status Panel
+    s_label: 'ステータスシステム',
     s_LoadingSystem: "システム読み込み中...",
     s_WaitingSync: "同期待機中...",
     s_JustNow: "たった今",

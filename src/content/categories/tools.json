@@ -1,0 +1,14 @@
+{
+  "name": {
+    "id": "Alat",
+    "en": "Tools",
+    "ru": "Инструменты",
+    "jp": "ツール"
+  },
+  "description": {
+    "id": "Kumpulan alat dan perangkat lunak untuk meningkatkan produktivitas kreator digital.",
+    "en": "A collection of tools and software to increase the productivity of digital creators.",
+    "ru": "Набор инструментов и программного обеспечения для повышения продуктивности цифровых создателей.",
+    "jp": "デジタルクリエイターの生産性を高めるためのツールとソフトウェアのコレクション。"
+  }
+}

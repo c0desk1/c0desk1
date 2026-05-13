@@ -64,8 +64,7 @@ export const ru = {
     refreshPage: "Пожалуйста, обновите страницу",
 
     //____Language Switcher
-    languageSwitcherLabel: "Текущий язык: ID. Выберите язык",
-    languageList: "Выберите язык",
+    languageSwitcherLabel: "Выберите язык",
 
     //_________Footer__________//
 
@@ -83,6 +82,7 @@ export const ru = {
     newsletterNetwork: 'Ошибка подключения. Пожалуйста, попробуйте позже.',
 
     //____Status Panel
+    s_label: 'Статусная система',
     s_LoadingSystem: "Загрузка системы...",
     s_WaitingSync: "Ожидание синхронизации...",
     s_JustNow: "Только что",

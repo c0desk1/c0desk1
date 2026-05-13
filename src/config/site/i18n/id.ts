@@ -65,8 +65,7 @@ export const id = {
     refreshPage: "Silakan refresh halaman",
 
     //____Language Switcher
-    languageSwitcherLabel: "Bahasa saat ini: ID. Pilih bahasa",
-    languageList: "Pilih bahasa",
+    languageSwitcherLabel: "Pilih bahasa",
 
     //_________Footer__________//
 
@@ -84,6 +83,7 @@ export const id = {
     newsletterNetwork: 'Gagal terhubung. Silakan coba lagi nanti.',
 
     //____Status Panel
+    s_label: 'Status Sistem',
     s_LoadingSystem: "Memuat Sistem...",
     s_WaitingSync: "Menunggu sinkronisasi...",
     s_JustNow: "Baru saja",
@@ -267,4 +267,4 @@ export const id = {
     offlineDesc: "Koneksi internet terputus. Silakan cek kembali koneksi Anda dan coba lagi nanti.",
     tryAgain: "Coba lagi",
     
-} as const;
+} as const;

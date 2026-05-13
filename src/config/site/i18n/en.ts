@@ -64,8 +64,7 @@ export const en = {
     refreshPage: "Please refresh the page",
 
     //____Language Switcher
-    languageSwitcherLabel: "Current language: EN. Select language",
-    languageList: "Select Language",
+    languageSwitcherLabel: "Select Language",
 
     //_________Footer__________//
 
@@ -83,6 +82,7 @@ export const en = {
     newsletterNetwork: 'Failed to connect. Please try again later.',
 
     //____Status Panel
+    s_label: 'Status System',
     s_LoadingSystem: "Loading System...",
     s_WaitingSync: "Waiting for sync...",
     s_JustNow: "Just now",
@@ -266,4 +266,4 @@ export const en = {
     offlineDesc: "Your internet connection has been lost. Please check your connection and try again later.",
     tryAgain: "Try again",
   
-} as const;
+} as const;

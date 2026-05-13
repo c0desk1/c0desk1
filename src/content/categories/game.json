@@ -1,0 +1,14 @@
+{
+  "name": {
+    "id": "Game",
+    "en": "Game",
+    "ru": "Гульня",
+    "jp": "ゲーム"
+  },
+  "description": {
+    "id": "Review game, tips gameplay, dan perkembangan industri game",
+    "en": "Game reviews, gameplay tips, and gaming industry developments",
+    "ru": "Агляды гульняў, парады па геймплэі і распрацоўкі гульнявой індустрыі",
+    "jp": "ゲームレビュー、ゲームプレイのヒント、ゲーム業界の動向"
+  }
+}

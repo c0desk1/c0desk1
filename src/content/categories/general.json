@@ -1,0 +1,14 @@
+{
+  "name": {
+    "id": "Umum",
+    "en": "General",
+    "ru": "Агульныя",
+    "jp": "一般"
+  },
+  "description": {
+    "id": "Artikel umum seputar teknologi dan programming",
+    "en": "General articles about technology and programming",
+    "ru": "Агульныя артыкулы пра тэхналогіі і праграмаванне",
+    "jp": "テクノロジーとプログラミングに関する一般的な記事"
+  }
+}

@@ -3,7 +3,7 @@
 import "@/styles/global.css";
 
 import { siteConfig } from "@/config/site";
-import { getCurrentLocale, getLabel } from "@/utils/i18n";
+import { getCurrentLocale, getLabel, type LocaleMap } from "@/utils/i18n"
 
 import BaseHead from "@/components/layout/BaseHead.astro";
 import Header from "@/components/layout/Header.astro";
@@ -54,10 +54,9 @@ interface Props {
   tags?: string[];
   
   category?: { 
-    name: string; 
-    description?: 
-    string; 
-    slug: string 
+    name: string | LocaleMap;
+    description?: string;
+    slug: string;
   };
   
   author?: { 
