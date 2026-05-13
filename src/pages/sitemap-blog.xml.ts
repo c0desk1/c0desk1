@@ -2,11 +2,15 @@ import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import type { APIRoute } from 'astro';
 import { siteConfig } from '@/config/site';
+import { slugify } from '@/lib/utils';
 
 export const GET: APIRoute = async () => {
   const siteUrl = siteConfig.siteUrl;
 
-  const posts = await getCollection('blog', (post: CollectionEntry<"blog">) => !post.data.draft);
+  const posts = await getCollection('blog', (post: CollectionEntry<"blog">) => {
+    const lang = (post.data as any).lang || 'id';
+    return !post.data.draft && lang === 'id';
+  });
   
   const sortedPosts = posts.sort((a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) => 
     b.data.pubDate.getTime() - a.data.pubDate.getTime()
@@ -14,10 +18,11 @@ export const GET: APIRoute = async () => {
 
   const postsSitemap = sortedPosts.map((post: CollectionEntry<"blog">) => {
     const lastModDate = post.data.updatedDate || post.data.pubDate;
+    const autoSlug = slugify(post.data.title);
     
     return `
   <url>
-    <loc>${new URL(`blog/${post.id}/`, siteUrl).toString()}</loc>
+    <loc>${new URL(`blog/${autoSlug}/`, siteUrl).toString()}</loc>
     <lastmod>${lastModDate.toISOString()}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
