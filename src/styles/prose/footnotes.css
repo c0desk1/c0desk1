@@ -1,11 +1,12 @@
 /* src/styles/prose/components/footnotes.css */
 
-/* ─── BASE ───────────────────────────────────────────────────────── */
+/* ─── BASE */
 .prose-custom .footnotes,
 .prose-custom section[data-footnotes] {
   margin: 2.5rem 0;
   padding-top: 2rem;
   border-top: 1px solid var(--prose-border);
+  overflow-x: hidden;
 }
 
 .prose-custom section[data-footnotes] h2 {
@@ -19,6 +20,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  max-width: 100%;
 }
 
 .prose-custom section[data-footnotes] li {
@@ -32,6 +34,10 @@
   line-height: 1.6;
   position: relative;
   letter-spacing: -0.005em;
+  min-width: 0;
+  max-width: 100%;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
 .prose-custom section[data-footnotes] li::marker {
@@ -57,6 +63,14 @@
   color: var(--prose-fg-subtle);
   font-size: inherit;
   line-height: inherit;
+  min-width: 0;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+.prose-custom section[data-footnotes] a {
+  overflow-wrap: break-word;
+  word-break: break-all;
 }
 
 .prose-custom section[data-footnotes] .data-footnote-backref {
@@ -84,7 +98,7 @@
   border-radius: 4px;
 }
 
-/* ─── INLINE REF LINKS ───────────────────────────────────────────── */
+/* ─── INLINE REF LINKS */
 .prose-custom a[href^="#fn"] {
   scroll-margin-top: 80px;
   text-decoration: none;
@@ -97,9 +111,7 @@
   text-underline-offset: 3px;
 }
 
-/* ══════════════════════════════════════════════════════════════════
-   MOBILE  ≤767px
-══════════════════════════════════════════════════════════════════ */
+/* MOBILE  ≤767px */
 @media (max-width: 767px) {
   .prose-custom .footnotes,
   .prose-custom section[data-footnotes] {
@@ -123,9 +135,7 @@
   }
 }
 
-/* ══════════════════════════════════════════════════════════════════
-   DESKTOP  ≥768px
-══════════════════════════════════════════════════════════════════ */
+/* DESKTOP  ≥768px */
 @media (min-width: 768px) {
   .prose-custom .footnotes,
   .prose-custom section[data-footnotes] {
