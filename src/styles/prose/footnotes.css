@@ -6,11 +6,10 @@
   margin: 2.5rem 0;
   padding-top: 2rem;
   border-top: 1px solid var(--prose-border);
-  /* Hard-contain any overflow — long URLs must not escape */
+  /* Container-level clipping */
   width: 100%;
   max-width: 100%;
   overflow: hidden;
-  contain: inline-size;
 }
 
 .prose-custom section[data-footnotes] h2 {
@@ -24,8 +23,10 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  /* ol must also be clipped — it's a flex container */
   width: 100%;
   max-width: 100%;
+  overflow: hidden;
 }
 
 .prose-custom section[data-footnotes] li {
@@ -38,7 +39,11 @@
   font-size: 0.8125rem;
   line-height: 1.6;
   letter-spacing: -0.005em;
-  /* Flex child must declare min-width:0 to allow shrinking */
+  /*
+   * min-width:0 is the key fix for flex children:
+   * by default flex items have min-width:auto which prevents
+   * shrinking below content size — setting 0 allows wrapping.
+   */
   min-width: 0;
   width: 100%;
   overflow: hidden;
@@ -61,25 +66,28 @@
   letter-spacing: 0;
 }
 
-/* The paragraph and any inline text must wrap, not push width */
+/*
+ * The paragraph wraps the text content of each footnote.
+ * overflow-wrap:anywhere is stronger than break-word —
+ * it will break at any character when no soft-wrap point exists.
+ */
 .prose-custom section[data-footnotes] p {
   display: inline;
   margin: 0;
   color: var(--prose-fg-subtle);
   font-size: inherit;
   line-height: inherit;
-  /* These three together are the real fix */
+  min-width: 0;
+  max-width: 100%;
   overflow-wrap: anywhere;
   word-break: break-word;
-  min-width: 0;
 }
 
-/* Links (especially bare URLs) are the usual culprit */
+/* Bare URLs are the main culprit — break-all ensures they wrap */
 .prose-custom section[data-footnotes] a {
   overflow-wrap: anywhere;
   word-break: break-all;
   max-width: 100%;
-  display: inline;
 }
 
 /* ─── BACKREF ────────────────────────────────────────────────────── */
