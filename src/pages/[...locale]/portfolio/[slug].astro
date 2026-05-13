@@ -3,9 +3,8 @@
 export const prerender = true;
 
 import "@/styles/prose/index.css";
-import { getCollection, render } from "astro:content";
-import type { CollectionEntry } from "astro:content";
 
+import { getCollection, render } from "astro:content";
 import { siteConfig } from "@/config/site";
 import { getSmartRelatedProjects } from "@/lib/botEngine";
 import { getCurrentLocale, localizePath, getLabel } from "@/utils/i18n";
