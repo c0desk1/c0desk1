@@ -1,25 +1,37 @@
 ---
 // src/components/prose/FootnotesWrapper.astro
-// Wraps the footnotes block to prevent long URLs from causing
-// horizontal scroll on the page.
+// Wraps the footnotes section to prevent long URLs from causing
+// horizontal scroll. Uses explicit width + overflow:hidden at
+// every layer — the only reliable fix for flex-child overflow.
 ---
 
-<div class="fn-wrapper">
-  <slot />
+<div class="fn-outer">
+  <div class="fn-inner">
+    <slot />
+  </div>
 </div>
 
 <style>
   /*
-   * Three layers of containment:
-   * 1. overflow:hidden  — clips anything that escapes
-   * 2. min-width:0      — allows flex/grid children to shrink below content size
-   * 3. contain:inline-size — tells the browser this box won't grow past its parent
+   * Two-layer containment:
+   *
+   * fn-outer — sets the boundary. position:relative + overflow:hidden
+   *            clips anything that tries to escape.
+   *
+   * fn-inner — min-width:0 is critical inside any flex/grid parent.
+   *            Without it, the child's minimum size is its content
+   *            size, so it will never shrink to allow wrapping.
    */
-  .fn-wrapper {
+  .fn-outer {
     width: 100%;
     max-width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .fn-inner {
+    width: 100%;
     min-width: 0;
     overflow: hidden;
-    contain: inline-size;
   }
 </style>
