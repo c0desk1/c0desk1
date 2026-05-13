@@ -34,7 +34,7 @@ export async function GET(context: any) {
     const autoSlug = slugify(post.data.title);
     const url = new URL(`blog/${autoSlug}/`, site).toString();
 
-    let authorName = siteData.siteName;
+    let authorName: string = siteData.siteName;
     if (post.data.author) {
       try {
         const authorEntry = await getEntry(post.data.author);
@@ -73,8 +73,8 @@ export async function GET(context: any) {
   }));
 
   const rssResponse = await rss({
-    title: siteData.siteName,
-    description: siteData.defaultSeo?.id?.description ?? siteData.siteDescription ?? '',
+    title: siteData.siteName as string,
+    description: siteData.defaultSeo?.id?.description ?? '',
     site,
     items,
     customData: `

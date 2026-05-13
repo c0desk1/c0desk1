@@ -2,6 +2,7 @@ import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import type { APIRoute } from 'astro';
 import { siteConfig } from '@/config/site';
+import { slugify } from '@/lib/utils';
 
 export const GET: APIRoute = async () => {
   const siteUrl = siteConfig.siteUrl;
@@ -9,15 +10,17 @@ export const GET: APIRoute = async () => {
   const categories = await getCollection('categories');
   
   const sortedCategories = categories.sort((a: CollectionEntry<"categories">, b: CollectionEntry<"categories">) =>
-    a.data.slug.localeCompare(b.data.slug)
+    a.data.name.id.localeCompare(b.data.name.id)
   );
 
+  const now = new Date().toISOString();
+
   const categoriesSitemap = sortedCategories.map((category: CollectionEntry<"categories">) => {
-    const lastModDate = category.data.updatedDate ? new Date(category.data.updatedDate) : new Date();
+    const categorySlug = slugify(category.data.name.en || category.data.name.id) || category.id;
     return `
   <url>
-    <loc>${new URL(`en/category/${category.data.slug}/`, siteUrl).toString()}</loc>
-    <lastmod>${lastModDate.toISOString()}</lastmod>
+    <loc>${new URL(`en/category/${categorySlug}/`, siteUrl).toString()}</loc>
+    <lastmod>${now}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>`;
