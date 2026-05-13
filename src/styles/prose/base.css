@@ -1,13 +1,9 @@
 /* src/styles/prose/base.css */
 
-/* ══════════════════════════════════════════════════════════════════
-   PROSE BASE
-   Container defaults — all component styles layer on top of this.
-══════════════════════════════════════════════════════════════════ */
-
 .prose-custom {
   max-width: none;
   font-family: var(--prose-font-sans);
+  overflow-x: hidden;
   color: var(--prose-fg);
   font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
   -webkit-font-smoothing: antialiased;
@@ -15,6 +11,9 @@
   text-rendering: optimizeLegibility;
 }
 
-/* Prevent margin bleed at the edges */
-.prose-custom > :first-child { margin-top: 0 !important; }
-.prose-custom > :last-child  { margin-bottom: 0 !important; }
+.prose-custom > :first-child { 
+  margin-top: 0 !important; 
+}
+.prose-custom > :last-child  { 
+  margin-bottom: 0 !important; 
+}
