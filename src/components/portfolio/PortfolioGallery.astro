@@ -1,6 +1,7 @@
 ---
-import { Image } from 'astro:assets';
-import { cdnImage, isCdnUrl } from '@/lib/utils';
+// src/components/portfolio/PortfolioGallery.astro
+import { Image } from "astro:assets";
+import { cdnImage, isCdnUrl } from "@/lib/utils";
 
 interface ImageItem {
   src: string;
@@ -14,56 +15,139 @@ interface Props {
 
 const { images = [], title } = Astro.props;
 
-const getSrc = (img: string | ImageItem) => {
-  if (!img) return "";
-  return typeof img === "object" ? img.src : img;
-};
+const getSrc = (img: string | ImageItem) =>
+  typeof img === "object" ? img.src : img;
 
-const getAlt = (img: string | ImageItem, index: number) => {
-  if (typeof img === "object" && img.alt) return img.alt;
-  return `${title} Showcase ${index + 1}`;
-};
+const getAlt = (img: string | ImageItem, i: number) =>
+  typeof img === "object" && img.alt
+    ? img.alt
+    : `${title} Showcase ${i + 1}`;
 ---
 
 {images.length > 0 && (
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+  <div class="pg-grid">
     {images.map((img, idx) => {
       const src = getSrc(img);
-      const alt = getAlt(img, idx);
-      const isPrimary = idx === 0;
-
       if (!src) return null;
 
-      const optimizedSrc = isCdnUrl(src)
-        ? cdnImage(src, { q: 85 })
-        : src;
+      const alt          = getAlt(img, idx);
+      const isPrimary    = idx === 0;
+      const optimizedSrc = isCdnUrl(src) ? cdnImage(src, { q: 85 }) : src;
 
       return (
-        <figure
-          class:list={[
-            "group relative overflow-hidden border border-(--border) bg-(--bg-subtle) transition-all duration-300",
-            isPrimary && "md:col-span-2"
-          ]}
-        >
-          <div class="relative aspect-video overflow-hidden">
-            <div class="absolute inset-0 bg-(--bg) animate-pulse" />
+        <figure class:list={["pg-figure", isPrimary && "pg-figure--primary"]}>
+          {/* Number badge */}
+          <span class="pg-badge" aria-hidden="true">
+            {String(idx + 1).padStart(2, "0")}
+          </span>
 
+          {/* Skeleton */}
+          <div class="pg-skeleton" aria-hidden="true"></div>
+
+          {/* Image — scale is on the wrapper, not the img itself */}
+          <div class="pg-img-wrap">
             <Image
               src={optimizedSrc}
               alt={alt}
               width={1280}
               height={720}
-              loading="lazy"
+              loading={idx === 0 ? "eager" : "lazy"}
               decoding="async"
-              class="relative z-10 h-full w-full object-cover transition duration-500 group-hover:scale-[1.01]"
+              class="pg-img"
             />
-          </div>
-
-          <div class="absolute top-2 left-2 z-20 px-1.5 py-0.5 bg-black/50 backdrop-blur-sm rounded text-[9px] font-mono text-white/70">
-            {String(idx + 1).padStart(2, "0")}
           </div>
         </figure>
       );
     })}
   </div>
 )}
+
+<style>
+  /* GRID */
+  .pg-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .pg-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  /* FIGURE */
+  .pg-figure {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background-color: var(--bg-subtle);
+    aspect-ratio: 16 / 9;
+    transition: border-color 0.2s ease;
+  }
+
+  .pg-figure:hover {
+    border-color: var(--border-strong);
+  }
+
+  @media (min-width: 768px) {
+    .pg-figure--primary {
+      grid-column: span 2;
+    }
+  }
+
+  /* SKELETON */
+  .pg-skeleton {
+    position: absolute;
+    inset: 0;
+    background-color: var(--bg-muted);
+    animation: pg-shimmer 1.5s ease-in-out infinite;
+    z-index: 0;
+  }
+
+  @keyframes pg-shimmer {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.5; }
+  }
+
+  /* IMAGE WRAPPER */
+  .pg-img-wrap {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    transition: transform 0.5s var(--ease, cubic-bezier(0.16, 1, 0.3, 1));
+    will-change: transform;
+  }
+
+  .pg-figure:hover .pg-img-wrap {
+    transform: scale(1.02);
+  }
+
+  /* IMAGE */
+  .pg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* BADGE */
+  .pg-badge {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    z-index: 2;
+    padding: 0.125rem 0.375rem;
+    border-radius: var(--radius-sm);
+    background: rgb(0 0 0 / 0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    font-size: 0.5625rem;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    color: rgb(255 255 255 / 0.75);
+    letter-spacing: 0.05em;
+    pointer-events: none;
+  }
+</style>
