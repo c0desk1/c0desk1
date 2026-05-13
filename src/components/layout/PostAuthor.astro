@@ -53,8 +53,8 @@ const optimizedAvatar = isCdnUrl(authorAvatar) ? cdnImage(authorAvatar, { w: 48,
           />
         )}
         <div class="flex flex-row items-stretch justify-start gap-2 flex-initial">
-          <span class="text-[14px] leading-[20px] font-medium text-gray-1000">{authorName}</span>
-          {authorTitle && (<span class="text-copy-14 text-(--fg-muted)">{authorTitle}</span>)}
+          <span class="text-[14px] leading-[20px] font-medium text-(--fg)/90">{authorName}</span>
+          {authorTitle && (<span class="text-[14px] text-(--fg-muted)">{authorTitle}</span>)}
         </div>
       </div>
     </a>
