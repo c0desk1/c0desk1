@@ -2,6 +2,7 @@ import rss from "@astrojs/rss";
 import { getCollection, getEntry } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import { siteConfig } from "@/config/site";
+import { slugify } from "@/lib/utils";
 
 export async function GET(context: any) {
   const siteData = siteConfig;
@@ -30,7 +31,8 @@ export async function GET(context: any) {
   }
 
   const items = await Promise.all(sorted.map(async (post: CollectionEntry<"blog">) => {
-    const url = new URL(`blog/${post.id}/`, site).toString();
+    const autoSlug = slugify(post.data.title);
+    const url = new URL(`blog/${autoSlug}/`, site).toString();
 
     let authorName = siteData.siteName;
     if (post.data.author) {
