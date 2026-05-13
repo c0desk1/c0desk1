@@ -25,7 +25,7 @@
   display: flex;
   gap: 0.75rem;
   color: var(--prose-fg-subtle);
-  scroll-margin-top: 80px;
+  scroll-margin-top: 56px;
   margin-bottom: 0;
   padding-left: 0;
   font-size: 0.8125rem;
@@ -93,7 +93,7 @@
   background-color: var(--prose-bg-subtle);
   border-radius: var(--prose-radius-sm);
   padding-inline: 0.375rem;
-  margin-inline: -0.375rem;
+  margin-inline: 0;
 }
 
 /* ─── INLINE REF LINKS ───────────────────────────────────────────── */
@@ -111,26 +111,19 @@
 
 /* ══════════════════════════════════════════════════════════════════
    MOBILE  ≤767px
-   — overflow only needs fixing here; desktop is fine
 ══════════════════════════════════════════════════════════════════ */
 @media (max-width: 767px) {
   .prose-custom .footnotes,
   .prose-custom section[data-footnotes] {
     margin: 2rem 0;
     padding-top: 1.5rem;
-    /*
-     * On mobile the prose column has no explicit width constraint,
-     * so a long URL inside a flex child can push the section wider
-     * than the viewport. Clip it here at the section level.
-     */
     width: 100%;
-    max-width: 100vw;
+    max-width: 100%;
     overflow-x: hidden;
   }
 
   .prose-custom section[data-footnotes] ol {
     gap: 0.375rem;
-    /* ol is also a flex container — needs its own clip */
     width: 100%;
     overflow-x: hidden;
   }
@@ -139,7 +132,6 @@
     gap: 0.5rem;
     font-size: 0.8125rem;
     line-height: 1.55;
-    /* flex child: min-width:0 allows it to shrink below content size */
     min-width: 0;
     max-width: 100%;
     overflow-x: hidden;
@@ -150,11 +142,6 @@
     min-width: 1.125rem;
   }
 
-  /*
-   * The text node container — this is where long URLs live.
-   * overflow-wrap:anywhere breaks at any character when no
-   * other soft-wrap opportunity exists (stronger than break-word).
-   */
   .prose-custom section[data-footnotes] p {
     overflow-wrap: anywhere;
     word-break: break-word;
@@ -179,7 +166,9 @@
     padding-top: 2rem;
   }
 
-  .prose-custom section[data-footnotes] ol { gap: 0.5rem; }
+  .prose-custom section[data-footnotes] ol { 
+    gap: 0.5rem; 
+  }
 
   .prose-custom section[data-footnotes] li {
     gap: 0.75rem;
