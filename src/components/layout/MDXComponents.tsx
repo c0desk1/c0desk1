@@ -29,4 +29,5 @@ export const components: MDXComponents = {
   Steps,
   Code,
   Footnotes,
+  footnotes: Footnotes,
 };
