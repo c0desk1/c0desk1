@@ -64,13 +64,7 @@ const currentIndex = sortedPosts.findIndex(p => p.id === post.id);
 const prevPost = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
 const nextPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
 
-let settings;
-try {
-  settings = await getEntry('settings', 'site');
-} catch (error) {
-  console.warn('Settings not found, using siteConfig fallback');
-}
-const siteData = settings?.data || siteConfig;
+const siteData = siteConfig;
 
 const authorEntry = await getEntry(post.data.author);
 const categoryEntry = await getEntry(post.data.category);
@@ -94,17 +88,14 @@ const seoImage = {
   alt: image?.alt || title
 };
 
-const categorySlug = categoryEntry?.id 
-  || slugify(
-       categoryEntry?.data?.name?.[locale] 
-       || categoryEntry?.data?.name?.id 
-       || getLabel(locale, "general")
-     );
+const categorySlug = categoryEntry?.id || slugify(
+  categoryEntry?.data?.name?.[locale] || categoryEntry?.data?.name?.id || getLabel(locale, "general")
+);
 
 const seoCategory = {
-  name: categoryEntry?.data?.name || { [locale]: getLabel(locale, "general") },
-  description: categoryEntry?.data?.description || { [locale]: "" },
-  slug: categorySlug
+  name: categoryEntry?.data?.name || { id: getLabel(locale, "general"), en: getLabel(locale, "general"), ru: getLabel(locale, "general"), jp: getLabel(locale, "general") },
+  description: categoryEntry?.data?.description?.[locale] || categoryEntry?.data?.description?.id || "",
+  slug: categorySlug,
 };
 
 const seoTitle = seo?.title || title;
@@ -117,14 +108,15 @@ const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 const homeLabel = getLabel(locale, 'home') || 'Home';
 const blogLabel = getLabel(locale, 'blog') || 'Blog';
 
-const categoryLabel = categoryEntry?.data?.name?.[locale] 
-  || categoryEntry?.data?.name?.id 
-  || getLabel(locale, "general");
+const categoryLabel =
+  (typeof seoCategory.name === 'object' ? (seoCategory.name as Record<string, string>)[locale] : seoCategory.name)
+  || getLabel(locale, "general")
+  || "Umum";
 
 const SeoBreadcrumbItems = [
   { name: homeLabel, href: localizePath('/', locale) },
   { name: blogLabel, href: localizePath('/blog', locale) },
-  { name: categoryLabel, href: localizePath(`/category/${seoCategory.slug}`, locale) },
+  { name: categoryLabel, href: localizePath(`/blog/category/${seoCategory.slug}`, locale) },
   { name: title, href: canonicalURL }
 ];
 
@@ -155,17 +147,17 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
   alternateSlugs={alternateSlugs}
   basePath="blog"
 >
-  <Section size="md">
+  <Section size="lg">
     <Section size="sm">
       <Container size="md">
         <h2 class="sr-only">{title}</h2>
         <Section size="none">
-          <h2 class="sr-only">{getLabel(locale, 'b_breadcrumb') || 'Navigasi Halaman'}</h2>
+          <h2 class="sr-only">{getLabel(locale, 'b_breadcrumb')}</h2>
           <Breadcrumb items={Breadcrumbs} />
         </Section>
         <article id="post-article">
           <Section size="sm">
-            <h2 class="sr-only">{getLabel(locale, 'b_articleHeader') || 'Article Header'}</h2>
+            <h2 class="sr-only">{getLabel(locale, 'b_articleHeader')}</h2>
             <PostHeader
               title={title}
               pubDate={pubDate}
@@ -177,7 +169,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
               image={image}
             />
           </Section>
-          <Section size="sm" class="section-divider">
+          <Section size="sm">
             <div id="article">
               <div id="article-toc" class="hidden sticky top-15 z-50 my-6">
                 {tocHeadings.length > 0 && (
@@ -196,19 +188,19 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
 	  </Container>
 	</Section>
 	<Section size="sm">
-	  <h2 class="sr-only">{getLabel(locale, 'backToTop') || 'Navigasi Kembali ke atas halaman'}</h2>
+	  <h2 class="sr-only">{getLabel(locale, 'backToTop')}</h2>
 	  <Container size="lg">
 	    <BackToTop align="center" />
 	  </Container>
 	</Section>
     <Section size="md" class="section-divider">
-      <h2 class="sr-only">{getLabel(locale, 'b_relatedPosts') || 'Artikel Terkait'}</h2>
+      <h2 class="sr-only">{getLabel(locale, 'b_relatedPosts')}</h2>
       <Container size="xl">
         <BlogRelatedPosts posts={relatedPosts} />
       </Container>
     </Section>
     <Section size="sm" class="section-divider">
-	  <h2 class="sr-only">{getLabel(locale, 'b_articleNavigation') || 'Navigasi artikel'}</h2>
+	  <h2 class="sr-only">{getLabel(locale, 'b_articleNavigation')}</h2>
 	  <Container size="xl">
         <PostNavigation prevPost={prevPost} nextPost={nextPost} />
       </Container>
