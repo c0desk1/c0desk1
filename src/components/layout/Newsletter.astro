@@ -33,8 +33,8 @@ const toastMessages = {
 
 <div class="nls-root">
   <div class="nls-header">
-    <h2 class="nls-heading">{heading}</h2>
-    <p class="nls-sub">{subheading}</p>
+    <h2 class="text-heading-24 md:text-heading-32 lg:text-heading-48 nls-heading">{heading}</h2>
+    <p class="text-label-14 lg:text-label-18 nls-sub">{subheading}</p>
   </div>
 
   <div id="nls-form-state">
@@ -76,7 +76,7 @@ const toastMessages = {
     <span>{message}</span>
   </div>
 
-  <p class="nls-note">{note}</p>
+  <p class="text-copy-13 nls-note">{note}</p>
 </div>
 
 <style>
@@ -97,20 +97,13 @@ const toastMessages = {
   }
 
   .nls-heading {
-    font-size: 1.25rem;
-    font-weight: 600;
-    letter-spacing: -0.03em;
-    line-height: 1.25;
     color: var(--fg);
     margin: 0;
   }
 
   .nls-sub {
-    font-size: 0.875rem;
     color: var(--fg-muted);
-    line-height: 1.55;
     margin: 0;
-    letter-spacing: -0.005em;
   }
 
   /* ─── FIELD ROW ─────────────────────────────────────────────────── */
@@ -229,11 +222,8 @@ const toastMessages = {
 
   /* ─── NOTE ───────────────────────────────────────────────────────── */
   .nls-note {
-    font-size: 0.75rem;
     color: var(--fg-subtle);
     margin: 0;
-    letter-spacing: 0;
-    line-height: 1.5;
   }
 
   /* ══════════════════════════════════════════════════════════════════
@@ -241,12 +231,7 @@ const toastMessages = {
   ══════════════════════════════════════════════════════════════════ */
   @media (max-width: 480px) {
     .nls-root {
-      max-width: 100%;
       gap: 0.875rem;
-    }
-
-    .nls-heading {
-      font-size: 1.125rem;
     }
 
     .nls-row {
