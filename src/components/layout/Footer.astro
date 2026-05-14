@@ -106,12 +106,6 @@ const footerSections = siteConfig.footerSections;
     flex: 1;
   }
 
-  @media (max-width: 480px) {
-    .ft-nav {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
   .ft-col-title {
     margin: 0 0 0.75rem;
     text-transform: uppercase;
@@ -130,7 +124,7 @@ const footerSections = siteConfig.footerSections;
   .ft-link {
     display: inline-flex;
     align-items: center;
-    gap: 0.25rem;   
+    gap: 0.25rem;
     color: var(--fg-muted);
     padding-block: 0.25rem;
     transition: color 0.15s ease;
@@ -194,4 +188,32 @@ const footerSections = siteConfig.footerSections;
     display: block;
   }
 
+  /* MOBILE (≤480px) */
+  @media (max-width: 480px) {
+    .ft-top {
+      padding-block: 1.5rem;
+    }
+
+    .ft-top-inner {
+      gap: 2rem;
+    }
+
+    .ft-nav {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2rem 1.5rem;
+      width: 100%;
+    }
+
+    .ft-col-list {
+      gap: 0.5rem;
+    }
+
+    .ft-col-title {
+      margin-bottom: 0.5rem;
+    }
+
+    .ft-newsletter {
+      width: 100%;
+    }
+  }
 </style>
