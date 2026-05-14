@@ -11,7 +11,7 @@ import { components } from '@/components/layout/MDXComponents';
 import { filterHeadingsForTOC, slugify } from "@/lib/utils";
 import { getSmartRelatedPosts } from "@/lib/botEngine";
 
-import PostsLayout from "@/layouts/PostsLayout.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import Breadcrumb from "@/components/ui/Breadcrumb.astro";
@@ -127,7 +127,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
 );
 ---
 
-<PostsLayout
+<BaseLayout
   title={seoTitle}
   description={seoDescription}
   image={seoImage}
@@ -145,8 +145,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
   }}
   canonicalURL={canonicalURL}
   alternateSlugs={alternateSlugs}
-  basePath="blog"
->
+  basePath="blog">
   <Section size="lg">
     <Section size="sm">
       <Container size="md">
@@ -176,7 +175,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
                   <TOC headings={tocHeadings} />
                 )}
               </div>
-              <div id="article-content" class="prose-custom">
+              <div id="article-content" class="prose-custom min-w-0 max-w-3xl mx-auto">
                 <Content components={components} />
               </div>
             </div>
@@ -205,5 +204,6 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
         <PostNavigation prevPost={prevPost} nextPost={nextPost} />
       </Container>
     </Section>
+  </Section>
   <ReadingProgress />
-</PostsLayout>
+</BaseLayout>
