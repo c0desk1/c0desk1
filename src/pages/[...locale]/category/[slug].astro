@@ -1,209 +1,144 @@
 ---
-// src/pages/[...locale]/blog/[...slug].astro
+// src/pages/[...locale]/category/[slug].astro
 export const prerender = true;
-
-import '@/styles/prose/index.css';
-
-import { getCollection, render, getEntry } from "astro:content";
-import { siteConfig } from "@/config/site";
-import { getCurrentLocale, localizePath, getLabel } from "@/utils/i18n";
-import { components } from '@/components/layout/MDXComponents';
-import { filterHeadingsForTOC, slugify } from "@/lib/utils";
-import { getSmartRelatedPosts } from "@/lib/botEngine";
 
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/ui/Container.astro";
-import Section from "@/components/ui/Section.astro";
 import Breadcrumb from "@/components/ui/Breadcrumb.astro";
-import PostHeader from "@/components/layout/PostHeader.astro";
-import TOC from "@/components/ui/TOC.astro";
-import PostNavigation from '@/components/blog/PostNavigation.astro';
-import BlogRelatedPosts from "@/components/blog/BlogRelatedPosts.astro";
-import BackToTop from "@/components/ui/BackToTop.astro";
-import ReadingProgress from "@/components/ui/ReadingProgress.astro";
-import SharePost from '@/components/blog/SharePost.astro';
+
+import { getCollection } from "astro:content";
+import { siteConfig } from "@/config/site";
+import { localizePath, getLabel } from "@/utils/i18n";
+import { slugify } from "@/lib/utils";
+
+import PostCard from "@/components/blog/PostCard.astro";
+import Icon from "@/components/ui/Icon";
+
+type Locale = 'id' | 'en' | 'ru' | 'jp';
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog", ({ data }) =>!data.draft);
+  const categories = await getCollection("categories");
+  const locales = siteConfig.locales;
 
-  return posts.map((post) => {
-    const lang = post.data.lang || 'id';
-    const urlSlug = slugify(post.data.title);
-    const baseId = post.id.split('/')[0];
-    const alternates = posts.filter(p => p.id.startsWith(baseId + '/'));
+  return locales.flatMap((locale) =>
+    categories.map((category) => {
+      const loc = locale as Locale;
+      const categoryName = category.data.name[loc] || category.data.name.id;
+      const slug = slugify(categoryName) || category.id;
 
-    const alternateSlugs = Object.fromEntries(
-      alternates.map(p => [
-        p.data.lang || 'id',
-        slugify(p.data.title)
-      ])
-    );
-
-    return {
-      params: {
-        locale: lang === 'id'? undefined : lang,
-        slug: urlSlug
-      },
-      props: { post, alternateSlugs }
-    };
-  });
+      return {
+        params: {
+          locale: locale === siteConfig.defaultLocale ? undefined : locale,
+          slug,
+        },
+        props: { category, locale },
+      };
+    })
+  );
 }
 
-const { post, alternateSlugs} = Astro.props;
-const locale = getCurrentLocale(Astro);
+const { category, locale } = Astro.props;
 
-const allPosts = await getCollection("blog", ({ data }) => 
-  !data.draft && (data.lang || 'id') === locale
-);
+const loc = locale as Locale;
 
-const sortedPosts = allPosts.sort((a, b) => 
-  new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
-);
+const allPosts = await getCollection("blog", ({ data }) => {
+  const postLang = data.lang || siteConfig.defaultLocale;
+  return !data.draft && postLang === locale;
+});
 
-const currentIndex = sortedPosts.findIndex(p => p.id === post.id);
-const prevPost = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
-const nextPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
+const categoryPosts = allPosts
+  .filter((post) => post.data.category?.id === category.id)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
-const siteData = siteConfig;
+const siteURL = Astro.site?.toString() ?? siteConfig.siteUrl;
 
-const authorEntry = await getEntry(post.data.author);
-const categoryEntry = await getEntry(post.data.category);
+const categoryName = category.data.name[loc] || category.data.name.id;
+const categoryDesc = category.data.description?.[loc] || category.data.description?.id || '';
+const categorySlug = slugify(categoryName) || category.id;
 
-const { Content, headings } = await render(post);
+const canonicalURL = new URL(
+  localizePath(`/category/${categorySlug}`, locale),
+  siteURL
+).toString();
 
-const relatedPosts = getSmartRelatedPosts(post, allPosts, 3);
+const t_home = getLabel(locale, 'home');
+const t_blog = getLabel(locale, 'blog');
+const t_empty = getLabel(locale, 'noPostsInCategory');
+const t_articles = getLabel(locale, 'articles');
 
-const {
-  title,
-  description,
-  pubDate,
-  updatedDate,
-  tags,
-  image,
-  seo
-} = post.data;
-
-const seoImage = {
-  src: seo?.ogImage || image?.src || siteConfig.ogImage,
-  alt: image?.alt || title
+const seoData = {
+  title: categoryName,
+  description: categoryDesc || `${t_blog} - ${categoryName}`,
+  type: "website" as const,
+  canonicalURL,
 };
 
-const categorySlug = categoryEntry?.id || slugify(
-  categoryEntry?.data?.name?.[locale] || categoryEntry?.data?.name?.id || getLabel(locale, "general")
-);
-
-const seoCategory = {
-  name: categoryEntry?.data?.name || { id: getLabel(locale, "general"), en: getLabel(locale, "general"), ru: getLabel(locale, "general"), jp: getLabel(locale, "general") },
-  description: categoryEntry?.data?.description?.[locale] || categoryEntry?.data?.description?.id || "",
-  slug: categorySlug,
+const blogCategory = {
+  name: t_blog,
+  slug: "blog",
+  description: getLabel(locale, 'blog_PageDescription')
 };
 
-const seoTitle = seo?.title || title;
-const seoDescription = seo?.description || description;
-const tocHeadings = filterHeadingsForTOC(headings);
-
-const siteURL = Astro.site?.toString() ?? siteData.siteUrl;
-const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
-
-const homeLabel = getLabel(locale, 'home') || 'Home';
-const blogLabel = getLabel(locale, 'blog') || 'Blog';
-
-const categoryLabel =
-  (typeof seoCategory.name === 'object' ? (seoCategory.name as Record<string, string>)[locale] : seoCategory.name)
-  || getLabel(locale, "general")
-  || "Umum";
-
-const SeoBreadcrumbItems = [
-  { name: homeLabel, href: localizePath('/', locale) },
-  { name: blogLabel, href: localizePath('/blog', locale) },
-  { name: categoryLabel, href: localizePath(`/blog/category/${seoCategory.slug}`, locale) },
-  { name: title, href: canonicalURL }
+const breadcrumbItems = [
+  { name: t_home, href: localizePath('/', locale) },
+  { name: t_blog, href: localizePath('/blog', locale) },
+  { name: categoryName, href: localizePath(`/category/${categorySlug}`, locale) }
 ];
-
-const Breadcrumbs = SeoBreadcrumbItems.filter(
-  (item) =>
-    item.name === blogLabel ||
-    item.name === categoryLabel
-);
 ---
 
-<BaseLayout
-  title={seoTitle}
-  description={seoDescription}
-  image={seoImage}
-  type="article"
-  publishedTime={pubDate}
-  modifiedTime={updatedDate}
-  tags={tags}
-  category={seoCategory}
-  author={{
-    name: authorEntry?.data.name,
-    role: authorEntry?.data.role,
-    avatar: authorEntry?.data.avatar,
-    bio: authorEntry?.data.bio,
-    slug: authorEntry?.id
-  }}
-  canonicalURL={canonicalURL}
-  alternateSlugs={alternateSlugs}
-  basePath="blog">
-  <Section size="lg">
-    <Section size="sm">
-      <Container size="md">
-        <h2 class="sr-only">{title}</h2>
-        <Section size="none">
-          <h2 class="sr-only">{getLabel(locale, 'b_breadcrumb')}</h2>
-          <Breadcrumb items={Breadcrumbs} />
-        </Section>
-        <article id="post-article">
-          <Section size="sm">
-            <h2 class="sr-only">{getLabel(locale, 'b_articleHeader')}</h2>
-            <PostHeader
-              title={title}
-              pubDate={pubDate}
-              content={post.body}
-              authorName={authorEntry?.data.name}
-              authorAvatar={authorEntry?.data.avatar}
-              authorTitle={authorEntry?.data.role}
-              authorSlug={authorEntry?.id}
-              image={image}
-            />
-          </Section>
-          <Section size="sm">
-            <div id="article">
-              <div id="article-toc" class="hidden sticky top-15 z-50 my-6">
-                {tocHeadings.length > 0 && (
-                  <TOC headings={tocHeadings} />
-                )}
-              </div>
-              <div id="article-content" class="prose-custom min-w-0 max-w-3xl mx-auto">
-                <Content components={components} />
-              </div>
-            </div>
-	        </Section>
-          <Section size="sm" class="section-divider">
-            <SharePost url={canonicalURL} title={post.data.title} description={post.data.description} tags={post.data.tags} variant='card' />
-          </Section>
-	    </article>
-	  </Container>
-	</Section>
-	<Section size="sm">
-	  <h2 class="sr-only">{getLabel(locale, 'backToTop')}</h2>
-	  <Container size="lg">
-	    <BackToTop align="center" />
-	  </Container>
-	</Section>
-    <Section size="md" class="section-divider">
-      <h2 class="sr-only">{getLabel(locale, 'b_relatedPosts')}</h2>
-      <Container size="xl">
-        <BlogRelatedPosts posts={relatedPosts} />
-      </Container>
-    </Section>
-    <Section size="sm" class="section-divider">
-	  <h2 class="sr-only">{getLabel(locale, 'b_articleNavigation')}</h2>
-	  <Container size="xl">
-        <PostNavigation prevPost={prevPost} nextPost={nextPost} />
-      </Container>
-    </Section>
-  </Section>
-  <ReadingProgress />
+<BaseLayout 
+  {...seoData} 
+  category={blogCategory}
+  basePath="blog"
+  >
+  <!-- Breadcrumb -->
+  <Container size="lg" class="pt-6">
+    <Breadcrumb items={breadcrumbItems} />
+  </Container>
+
+  <!-- Category header – Vercel‑style -->
+  <section class="pb-16 pt-12 md:pb-24 md:pt-20">
+    <Container size="lg" class="text-center">
+      <div class="inline-flex items-center gap-1.5 rounded-full bg-(--bg-muted) px-3 py-1 text-xs font-medium text-(--fg-muted) ring-1 ring-(--border) mb-8">
+        <svg class="h-3.5 w-3.5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+        </svg>
+        {getLabel(locale, 'filterCategory')}
+      </div>
+
+      <h1 class="text-4xl font-bold tracking-tight text-(--fg) sm:text-5xl md:text-6xl">
+        {categoryName}
+      </h1>
+
+      {categoryDesc && (
+        <p class="mx-auto mt-6 max-w-xl text-lg text-(--fg-subtle) leading-relaxed">
+          {categoryDesc}
+        </p>
+      )}
+
+      <p class="mt-8 text-sm font-mono text-(--fg-dim)">
+        {categoryPosts.length} {t_articles}
+      </p>
+    </Container>
+  </section>
+
+  <!-- Posts list -->
+  <section class="pb-24 pt-8 md:pb-32">
+    <Container size="lg">
+      {categoryPosts.length > 0 ? (
+        <div class="space-y-10">
+          {categoryPosts.map((post) => (
+            <PostCard post={post} />
+          ))}
+        </div>
+      ) : (
+        <div class="flex flex-col items-center justify-center py-20 text-center">
+          <div class="rounded-full bg-(--bg-muted) p-4 text-(--fg-dim) mb-4">
+            <Icon name="logo" />
+          </div>
+          <p class="text-(--fg-muted)">{t_empty}</p>
+        </div>
+      )}
+    </Container>
+  </section>
 </BaseLayout>
