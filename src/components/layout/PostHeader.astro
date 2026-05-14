@@ -2,8 +2,6 @@
 // src/components/blog/postHeader.astro
 import PostMeta from './PostMeta.astro';
 import PostAuthor from './PostAuthor.astro';
-import PostAction from './PostAction.astro';
-import { cn } from "@/lib/utils";
 import BlogFeaturedImage from '../blog/BlogFeaturedImage.astro';
 
 interface Props {
@@ -29,21 +27,11 @@ const {
 } = Astro.props;
 ---
 
-<header class="w-full text-center justify-center relative">
-  <div class="flex flex-col items-center justify-center flex-initial">
-    <h1 class="text-[24px] md:text-[32px] lg:text-[48px] font-semibold text-center mb-4 md:mb-8">{title}</h1>
-  </div>
-  {content && <PostMeta pubDate={pubDate} content={content} />}
-  <div class="prose-custom flex flex-col items-center justify-center flex-initial mb-4 md:mb-8">
-    {image && (
-      <BlogFeaturedImage
-        image={image.src}
-        alt={image.alt || title}
-        caption={(image as any).caption}
-      />
-    )}
-  </div>
-  <div class="flex flex-col items-center justify-center flex-initial">
+<header class="w-full">
+  <div class="flex flex-col items-center text-center gap-4 md:gap-6">
+    <h1 class="text-heading-24 md:text-heading-32 lg:text-heading-48 text-(--fg) font-semibold">
+      {title}
+    </h1>
     {authorName && (
       <PostAuthor
         name={authorName}
@@ -51,6 +39,20 @@ const {
         title={authorTitle}
         slug={authorSlug}
       />
+    )}
+    {image && (
+      <div class="w-full mt-4 md:mt-8">
+        <BlogFeaturedImage
+          image={image.src}
+          alt={image.alt || title}
+          caption={(image as any).caption}
+        />
+      </div>
+    )}
+    {content && (
+      <div class="w-full max-w-2xl mt-4">
+        <PostMeta pubDate={pubDate} content={content} />
+      </div>
     )}
   </div>
 </header>
