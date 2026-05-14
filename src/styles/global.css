@@ -1,10 +1,8 @@
 /* src/styles/global.css */
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
-
+@plugin "@tailwindcss/typography";
 @import "@/styles/utilities/index.css";
-@import "@/styles/prose/index.css";
-
+@import "@/styles/prose/index.css";
 @custom-variant dark (&:where(.dark,.dark *));
 
 @font-face{
@@ -177,6 +175,12 @@
   a{
     color:inherit;
     text-decoration:none
+  }
+
+  a:active,
+  button:active {
+    opacity: 0.85;
+    transform: scale(0.98);
   }
 
   ::selection{
