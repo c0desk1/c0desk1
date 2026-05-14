@@ -21,7 +21,7 @@ export default defineConfig({
     },
   },
   experimental: {
-    advancedRouting: true,
+    advancedRouting: false,
   },
   vite: {
     plugins: [tailwindcss()]
