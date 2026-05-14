@@ -173,6 +173,7 @@
   transition:none
 }
 
+/* @media (width >= 40rem) {} */
 @media (max-width:767px){
   .prose-custom :where(h1,h2,h3,h4,h5,h6){
     scroll-margin-top:56px
@@ -252,7 +253,8 @@
   }
 }
 
-@media (min-width:768px){
+/* @media (width >= 48rem) {} */
+ @media (width >= 48rem /* 768px */) {
   .prose-custom :where(h1,h2,h3,h4,h5,h6){
     scroll-margin-top:60px
   }
@@ -332,7 +334,8 @@
   }
 }
 
-@media (min-width:1024px){
+/* @media (width >= 64rem) {} */
+ @media (width >= 64rem /* 1024px */) {
   .prose-custom h1{
     @apply text-heading-48;
     margin-top:4rem;
