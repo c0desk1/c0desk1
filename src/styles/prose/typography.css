@@ -64,13 +64,16 @@
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   INLINE TYPOGRAPHY (paragraphs, strong, em, etc.)
+   INLINE TYPOGRAPHY
 ══════════════════════════════════════════════════════════════════ */
+
+/* Paragraf */
 .prose-custom p {
   @apply text-copy-16;
   margin-bottom: 1.25rem;
 }
 
+/* Strong / Em */
 .prose-custom strong {
   font-weight: 600;
   color: var(--prose-fg);
@@ -89,7 +92,7 @@
   font-weight: 600;
 }
 
-/* sup/sub */
+/* Sup / Sub */
 .prose-custom sup,
 .prose-custom sub {
   font-size: 10px;
@@ -134,14 +137,12 @@
   top: -0.35em;
 }
 
-/* small */
+/* Small */
 .prose-custom small {
-  font-size: 14px;
-  line-height: 1.5;
+  @apply text-copy-14;           /* 14/20, letter-spacing:0, weight:400 */
+  line-height: 1.5;              /* override utility */
   color: var(--prose-fg-subtle);
-  font-weight: 400;
   display: inline-block;
-  letter-spacing: 0;
   transition: color 0.15s ease;
 }
 
@@ -156,7 +157,7 @@
   color: var(--prose-fg);
 }
 
-/* mark */
+/* Mark */
 .prose-custom mark {
   background-color: var(--prose-accent-yellow);
   color: var(--prose-accent-yellow-soft);
@@ -174,7 +175,7 @@
   border-bottom: none;
 }
 
-/* abbr */
+/* Abbr */
 .prose-custom abbr[title] {
   text-decoration: none;
   border-bottom: 1px dashed var(--prose-border);
@@ -216,14 +217,14 @@
 
   .prose-custom h3 {
     @apply text-heading-20;
-    font-weight: 600;        /* utility default 500 -> 600 */
+    font-weight: 600;          /* utility default 500 -> 600 */
     margin-top: 1.75rem;
     margin-bottom: 0.625rem;
   }
 
   .prose-custom h4 {
-    @apply text-heading-20;
-    font-weight: 600;
+    @apply text-heading-16;    /* 16/20, weight 500 */
+    font-weight: 600;          /* override ke 600 */
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;
   }
@@ -273,7 +274,7 @@
   }
 
   .prose-custom small {
-    font-size: 12px;
+    font-size: 12px;          /* pengecualian di mobile untuk small */
   }
 
   .prose-custom abbr[title] {
@@ -310,7 +311,7 @@
   }
 
   .prose-custom h4 {
-    @apply text-heading-20;
+    @apply text-heading-16;
     font-weight: 600;
     margin-top: 2rem;
     margin-bottom: 0.625rem;
@@ -360,7 +361,7 @@
   }
 
   .prose-custom small {
-    font-size: 14px;
+    font-size: 14px;          /* kembali ke ukuran asli */
   }
 }
 
