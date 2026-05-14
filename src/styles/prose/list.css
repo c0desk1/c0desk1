@@ -61,7 +61,7 @@
   color:var(--prose-fg-subtle)
 }
 
-@media (min-width:768px){
+@media (width >= 48rem){
   .prose-custom ul,
   .prose-custom ol{
     padding-left:1.75rem
@@ -72,9 +72,18 @@
   }
 }
 
-@media (min-width:1024px){
+@media (width >= 64rem){
   .prose-custom ul,
   .prose-custom ol{
-    @apply text-copy-18
+    @apply text-copy-18;
+    margin-bottom:1.5rem
+  }
+
+  .prose-custom li{
+    margin-bottom:.625rem
+  }
+
+  .prose-custom li>p{
+    margin-bottom:.375rem
   }
 }
