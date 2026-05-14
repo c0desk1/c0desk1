@@ -123,7 +123,7 @@
 
   html{
     font-family:var(--font-sans);
-    font-size:clamp(15px,1.5vw,16px);
+    font-size:16px;
     line-height:1.5;
     letter-spacing:-.011em;
     scroll-behavior:smooth;
