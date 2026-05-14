@@ -45,7 +45,7 @@ if (post) {
 ---
 
 <a href={postUrl} class="group flex flex-col h-full w-full py-8">
-  <div class="flex items-center justify-between mb-4 text-label-13 text-(--fg-subtle) group-hover:text-(--fg)">
+  <div class="flex items-center justify-between mb-4 text-label-13 md:text-label-14 text-(--fg-subtle) group-hover:text-(--fg)">
     <span>{categoryName}</span>
     <time datetime={pubDateISO}>{pubDateDisplay}</time>
   </div>
@@ -53,20 +53,23 @@ if (post) {
     <h2 class="text-heading-16 md:text-heading-20 lg:text-heading-24 text-(--fg) font-semibold line-clamp-3">
       {title}
     </h2>
-    <p class="text-copy-13 font-medium text-(--fg-muted) line-clamp-3 group-hover:text-(--fg)">
+    <p class="text-copy-13 md:text-copy-14 font-medium text-(--fg-muted) line-clamp-3 group-hover:text-(--fg)">
       {excerpt}
     </p>
-    <div class="mt-auto flex items-center gap-2 text-label-13 text-(--fg-subtle) group-hover:text-(--fg)">
+    <div class="mt-auto flex items-center gap-2 text-label-13 md:text-label-14 text-(--fg-subtle) group-hover:text-(--fg)">
       {authorAvatar && (
-        <Image
-          src={optimizedAvatar}
-          alt={`Author ${authorName}`}
-          width={48}
-          height={48}
-          loading='eager'
-          decoding='async'
-          class="w-5 h-5 object-cover rounded-full"
-        />
+        <span aria-hidden="true" aria-label="" role="img" class="w-6 h-6 shrink-0 rounded-full inline-block overflow-hidden leading-0 align-top relative transition-[background] duration-200 ease-in-out">
+          <Image
+            src={optimizedAvatar}
+            alt={`Author ${authorName}`}
+            width={48}
+            height={48}
+            loading='eager'
+            decoding='async'
+            class="h-full w-full object-cover"
+          />
+          <span class="absolute inset-0 rounded-full border-(--border)"></span>
+        </span>
       )}
       <span>{authorName}</span>
     </div>
