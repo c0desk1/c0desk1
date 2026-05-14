@@ -4,7 +4,8 @@
 .prose-custom ul,
 .prose-custom ol {
   margin: 1.5rem 0;
-  padding-left: 1.5rem;
+  padding-left: 0;
+  list-style-position: outside;
 }
 
 /* UNORDERED */
@@ -12,22 +13,11 @@
   list-style: none;
 }
 
-.prose-custom ul > li {
-  padding-left: 0.5rem;
-}
-
 .prose-custom ul > li::marker {
   content: "—";
   color: var(--prose-fg-subtle);
   font-weight: 400;
-}
-
-.prose-custom ul > li::marker {
-  content: "–";
-}
-
-.prose-custom ul > li::marker {
-  content: "·";
+  font-size: 18px;
 }
 
 /* ORDERED */
@@ -49,6 +39,7 @@
   color: var(--prose-fg-subtle);
   font-weight: 500;
   font-variant-numeric: tabular-nums;
+  font-size: 18px;
 }
 
 /* LI */
@@ -58,6 +49,7 @@
   line-height: 26px;
   margin-bottom: 0.5rem;
   letter-spacing: -0.011em;
+  padding-left: 0.75rem;
 }
 
 .prose-custom li:last-child {
@@ -109,7 +101,6 @@
   .prose-custom ul,
   .prose-custom ol {
     margin: 1.25rem 0;
-    padding-left: 1.25rem;
   }
 
   .prose-custom li {
@@ -117,10 +108,11 @@
     margin-bottom: 0.375rem;
     line-height: 24px;
     letter-spacing: -0.01em;
+    padding-left: 0.625rem;
   }
 
-  .prose-custom ul > li {
-    padding-left: 0.375rem;
+  .prose-custom ul > li::marker {
+    font-size: 14px;
   }
 
   .prose-custom .task-list-item {
@@ -139,7 +131,6 @@
   .prose-custom ul,
   .prose-custom ol {
     margin: 1.5rem 0;
-    padding-left: 1.5rem;
   }
 
   .prose-custom li {
@@ -147,10 +138,6 @@
     margin-bottom: 0.5rem;
     line-height: 26px;
     letter-spacing: -0.011em;
-  }
-
-  .prose-custom ul > li {
-    padding-left: 0.5rem;
   }
 
   .prose-custom .task-list-item {
