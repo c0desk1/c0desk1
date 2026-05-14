@@ -28,7 +28,7 @@ const footerSections = siteConfig.footerSections;
           <nav class="ft-nav" aria-label={getLabel(locale, 'footerNav')}>
             {footerSections.map((section) => (
               <div class="ft-col">
-                <p class="text-label-16 ft-col-title">{getLabel(locale, section.titleKey)}</p>
+                <p class="text-label-14 ft-col-title">{getLabel(locale, section.titleKey)}</p>
                 <ul class="ft-col-list">
                   {section.items.map((link) => (
                     <li>
@@ -36,7 +36,7 @@ const footerSections = siteConfig.footerSections;
                         href={link.isExternal ? link.href : localizePath(link.href, locale)}
                         target={link.isExternal ? "_blank" : undefined}
                         rel={link.isExternal ? "noopener noreferrer" : undefined}
-                        class="text-copy-16 ft-link"
+                        class="text-copy-14 ft-link"
                       >
                         {getLabel(locale, link.labelKey)}
                         {link.isExternal && (
@@ -61,12 +61,12 @@ const footerSections = siteConfig.footerSections;
           <SocialLinks items={social} class="ft-social" iconClass="ft-social-icon" />
           <ThemeToggle />
         </div>
-        <div class="hidden ft-bottom-row">
+        <!--<div class="ft-bottom-row">-->
           <!--<StatusButton />-->
-          <span class="ft-copy">
-            © {year} {siteData.siteName}
-          </span>
-        </div>
+          <!--<span class="ft-copy">-->
+           <!-- © {year} {siteData.siteName}-->
+         <!-- </span>-->
+       <!-- </div>-->
       </div>
     </Container>
   </Section>
