@@ -1,5 +1,5 @@
 {
-  "name": "c0desk1-v00",
+  "name": "c0desk1",
   "type": "module",
   "version": "0.0.3",
   "engines": {
@@ -22,6 +22,7 @@
     "@types/react-dom": "^19.2.3",
     "astro": "^6.3.1",
     "clsx": "^2.1.1",
+    "cssnano": "^7.1.9",
     "limax": "^4.2.3",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
