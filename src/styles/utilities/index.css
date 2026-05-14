@@ -69,7 +69,7 @@
   letter-spacing: -0.01em;
   font-weight: 500;
 }
-
+
 @utility text-copy-24 {
   font-size: 24px;
   line-height: 32px;
@@ -111,7 +111,7 @@
   letter-spacing: 0;
   font-weight: 400;
 }
-
+
 @utility text-label-20 {
   font-size: 20px;
   line-height: 28px;
@@ -155,7 +155,7 @@
   font-weight: 500;
   text-transform: uppercase;
 }
-
+
 @utility text-button-16 {
   font-size: 16px;
   line-height: 20px;
@@ -176,7 +176,7 @@
   letter-spacing: 0;
   font-weight: 500;
 }
-
+
 @utility text-label-14-mono {
   font-size: 14px;
   line-height: 20px;
@@ -207,6 +207,21 @@
     monospace;
 }
 
+@utility text-label-12-mono {
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0;
+  font-weight: 500;
+  font-family:
+    var(--font-mono),
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    monospace;
+}
+
 @utility text-copy-13-mono {
   font-size: 13px;
   line-height: 18px;
@@ -221,7 +236,7 @@
     Consolas,
     monospace;
 }
-
+
 .text-copy-24 strong,
 .text-copy-20 strong,
 .text-copy-18 strong,
@@ -235,4 +250,11 @@
 .text-label-13 strong,
 .text-label-12 strong {
   font-weight: 600;
+}
+
+.text-heading-32 strong,
+.text-heading-24 strong,
+.text-heading-20 strong,
+.text-heading-16 strong {
+  font-weight: 400;
 }
