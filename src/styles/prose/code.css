@@ -7,7 +7,7 @@
   font-weight: 500;
   background-color: var(--prose-surface);
   color: var(--prose-fg);
-  padding: 0.15em 0.4em;
+  padding: 0.2em 0.4em;
   border-radius: var(--prose-radius-md);
   border: 1px solid var(--prose-border);
   white-space: break-spaces;
@@ -186,7 +186,7 @@
   }
 
   .prose-custom pre {
-    padding: 0 1rem;
+    padding: 1.5rem 1rem;
     margin: 1.5rem 0;
     border-radius: var(--prose-radius-sm);
   }
@@ -222,7 +222,7 @@
 
   .prose-custom pre {
     /* padding: 1.25rem 1.5rem; */
-    padding: 0 1.5rem;
+    padding: 1.25 1.5rem;
     margin: 2rem 0;
   }
 
