@@ -8,7 +8,12 @@ import { getCurrentLocale, getLabel, localizePath } from "@/utils/i18n";
 interface Props {
   name?: string;
   avatar?: string;
-  title?: string | { id?: string; en?: string; ru?: string; jp?: string };
+  title?: string | { 
+    id?: string; 
+    en?: string; 
+    ru?: string; 
+    jp?: string 
+  };
   slug?: string;
 }
 
@@ -31,7 +36,7 @@ const authorName = name || siteConfig.author?.name || siteConfig.siteName;
 const authorAvatar = avatar || siteConfig.author?.avatar || siteConfig.siteLogo;
 
 const authorTitle = title
- ? resolveLocale(title)
+? resolveLocale(title)
   : resolveLocale(siteConfig.author?.title) || authorLabel;
 
 const authorSlug = slug || siteConfig.author?.slug || "author";
@@ -63,11 +68,11 @@ const optimizedAvatar = isCdnUrl(authorAvatar)? cdnImage(authorAvatar, { w: 40, 
     )}
 
     <div class="flex items-center gap-2">
-      <span class="text-[14px] leading-5 font-medium text-(--fg)/90 tracking-[-0.01em]">
+      <span class="text-label-14 text-(--fg)/90">
         {authorName}
       </span>
       {authorTitle && (
-        <span class="text-[14px] leading-5 text-(--fg-muted)">
+        <span class="text-copy-14 text-(--fg-muted)">
           {authorTitle}
         </span>
       )}
