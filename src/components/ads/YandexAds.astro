@@ -129,7 +129,7 @@ const ADS_ENABLED = siteData.yandexAdsEnabled ?? siteConfig.yandexAdsEnabled ?? 
           if (!images.length) return;
           const image = images.shift();
           const { width, height } = image.getBoundingClientRect();
-          if (width < 320 || height < 190) return tryImages(images);
+          if (width < 375 || height < 196) return tryImages(images);
 
           image.id = `yandex_rtb_${PUB_ID}-2-${Math.random().toString(16).slice(2)}`;
           if (image.tagName === 'IMG' && !image.complete) {

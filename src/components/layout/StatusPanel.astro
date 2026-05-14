@@ -109,7 +109,6 @@ const labels = {
 </div>
 
 <style is:global>
-  /* ─── OVERLAY ──────────────────────────────────────────────────── */
  .sp-overlay {
     position: fixed;
     inset: 0;
@@ -127,7 +126,6 @@ const labels = {
     pointer-events: auto;
   }
 
-  /* ─── PANEL ────────────────────────────────────────────────────── */
  .sp-panel {
     position: fixed;
     bottom: 0;
@@ -148,7 +146,6 @@ const labels = {
     transform: translateY(0)!important;
   }
 
-  /* ─── INNER ────────────────────────────────────────────────────── */
  .sp-inner {
     max-width: 42rem;
     margin-inline: auto;
@@ -159,7 +156,6 @@ const labels = {
   .sp-inner { padding: 2rem 1.75rem 2.5rem; }
   }
 
-  /* ─── HEADER ───────────────────────────────────────────────────── */
  .sp-header {
     display: flex;
     align-items: flex-start;
@@ -216,7 +212,6 @@ const labels = {
     margin: 0;
   }
 
-  /* ─── CLOSE ────────────────────────────────────────────────────── */
  .sp-close {
     display: flex;
     align-items: center;
@@ -237,7 +232,6 @@ const labels = {
 
  .sp-close-icon { width: 1rem; height: 1rem; display: block; }
 
-  /* ─── ROWS ─────────────────────────────────────────────────────── */
  .sp-row {
     padding-block: 1rem;
     border-bottom: 1px solid var(--border);
@@ -275,7 +269,6 @@ const labels = {
     letter-spacing: 0;
   }
 
-  /* ─── CANVAS ───────────────────────────────────────────────────── */
  .sp-canvas {
     display: block;
     width: 100%;
@@ -285,7 +278,6 @@ const labels = {
     touch-action: none;
   }
 
-  /* ─── DETAILS ──────────────────────────────────────────────────── */
  .sp-details {
     margin-top: 0.75rem;
     padding: 0.875rem 1rem;
@@ -356,7 +348,6 @@ const labels = {
     Outage: "#ef4444",
   };
 
-  /* ── Relative time ─────────────────────────────────────────────── */
   function relTime(ts) {
     const s = Math.floor((Date.now() - ts) / 1000);
     if (s < 30) return labels.justNow;
@@ -365,7 +356,6 @@ const labels = {
     return labels.someTimeAgo;
   }
 
-  /* ── Open / close ──────────────────────────────────────────────── */
   function openStatus() {
     panel?.setAttribute("data-open", "true");
     overlay?.classList.add("visible");
@@ -391,7 +381,6 @@ const labels = {
   window.openStatusPanel = openStatus;
   window.closeStatusPanel = closeStatus;
 
-  /* ── Footer ────────────────────────────────────────────────────── */
   function updateFooter(overall) {
     const color = STATUS_COLORS[overall] || "#888";
     if (footerLabel) {
@@ -414,7 +403,6 @@ const labels = {
     }
   }
 
-  /* ── Fetch full status ─────────────────────────────────────────── */
   async function fetchStatus() {
     if (lastUpdEl &&!hasFetched) lastUpdEl.textContent = labels.waiting;
     try {
@@ -428,7 +416,6 @@ const labels = {
     }
   }
 
-  /* ── Update UI ─────────────────────────────────────────────────── */
   function updateUI(overall, services, updatedTs) {
     overall = overall || "Operational";
     const color = STATUS_COLORS[overall] || "#888";
@@ -482,7 +469,6 @@ const labels = {
     });
   }
 
-  /* ── Bar chart ─────────────────────────────────────────────────── */
   function renderBarChart(canvas, history) {
     if (!canvas) return;
 
@@ -558,7 +544,6 @@ const labels = {
     }
   }
 
-  /* ── Row toggle ────────────────────────────────────────────────── */
   document.querySelector(".services-list")?.addEventListener("click", (e) => {
     const row = e.target.closest(".service-row");
     if (!row) return;
@@ -566,7 +551,6 @@ const labels = {
    ?.classList.toggle("sp-details--hidden");
   });
 
-  /* ── Events ────────────────────────────────────────────────────── */
   document.addEventListener("click", (e) => {
     if (e.target.closest("#status-toggle")) {
       e.preventDefault();
@@ -583,7 +567,6 @@ const labels = {
     intervals.forEach(clearInterval);
   });
 
-  /* ── Boot ──────────────────────────────────────────────────────── */
   const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
   idle(() => {
     fetchFooterStatus();

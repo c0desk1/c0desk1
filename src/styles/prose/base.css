@@ -1,18 +1,20 @@
 /* src/styles/prose/base.css */
+@reference '@/styles/utilities/index.css';
 
-.prose-custom {
-  max-width: none;
-  font-family: var(--prose-font-sans);
-  color: var(--prose-fg);
-  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
+.prose-custom{
+  max-width:initial;
+  font-family:var(--prose-font-sans);
+  font-feature-settings:"kern" 1,"liga" 1,"calt" 1;
+  color:var(--prose-fg);
+  text-rendering:optimizeLegibility;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale
 }
 
-.prose-custom > :first-child { 
-  margin-top: 0 !important; 
+.prose-custom>:first-child{
+  margin-top:0!important
 }
-.prose-custom > :last-child  { 
-  margin-bottom: 0 !important; 
+
+.prose-custom>:last-child{
+  margin-bottom:0!important
 }

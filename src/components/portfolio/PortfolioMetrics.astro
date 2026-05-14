@@ -25,7 +25,6 @@ const items: Metric[] = [
   { label: getLabel(locale, "p_seo"),           value: metrics?.seo           },
 ].filter((m): m is Metric => typeof m.value === "number");
 
-/* Score → accent color */
 const scoreColor = (v: number) =>
   v >= 90 ? "var(--color-success, #10b981)" :
   v >= 50 ? "var(--color-warning, #f59e0b)" :
@@ -56,13 +55,13 @@ const scoreColor = (v: number) =>
 )}
 
 <style>
-  /* ─── BAND ────────────────────────────────────────────────────── */
+  /* BAND */
   .pm-band {
     border-bottom: 1px solid var(--border);
     padding-block: 2rem;
   }
 
-  /* ─── GRID ────────────────────────────────────────────────────── */
+  /* GRID */
   .pm-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -74,7 +73,7 @@ const scoreColor = (v: number) =>
     .pm-grid { gap: 2.5rem; }
   }
 
-  /* ─── ITEM ────────────────────────────────────────────────────── */
+  /* ITEM */
   .pm-item {
     display: flex;
     flex-direction: column;
@@ -87,7 +86,7 @@ const scoreColor = (v: number) =>
     transform: translateY(-2px);
   }
 
-  /* ─── VALUE ROW ───────────────────────────────────────────────── */
+  /* VALUE ROW */
   .pm-value-row {
     display: flex;
     align-items: baseline;
@@ -117,7 +116,7 @@ const scoreColor = (v: number) =>
     margin-left: 0.125rem;
   }
 
-  /* ─── LABEL ROW ───────────────────────────────────────────────── */
+  /* LABEL ROW */
   .pm-label-row {
     display: flex;
     align-items: center;

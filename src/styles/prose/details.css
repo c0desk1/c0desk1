@@ -1,116 +1,106 @@
 /* src/styles/prose/details.css */
-
 @reference '@/styles/utilities/index.css';
 
-/* BASE */
-.prose-custom .details {
-  margin: 2.5rem 0;
-  border: 1px solid var(--prose-border);
-  border-radius: var(--prose-radius-md);
-  background-color: var(--prose-surface);
-  overflow: hidden;
-  transition: border-color var(--prose-transition), box-shadow var(--prose-transition);
+.prose-custom .details{
+  margin:2.5rem 0;
+  border:1px solid var(--prose-border);
+  border-radius:var(--prose-radius-md);
+  background-color:var(--prose-surface);
+  overflow:hidden;
+  transition:border-color var(--prose-transition),box-shadow var(--prose-transition)
 }
 
-.prose-custom .details:hover {
-  border-color: var(--prose-surface-hover);
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
+.prose-custom .details:hover{
+  border-color:var(--prose-surface-hover);
+  box-shadow:0 1px 0 rgba(0,0,0,.03)
 }
 
-/* SUMMARY */
-.prose-custom .details-summary {
+.prose-custom .details-summary{
   @apply text-copy-16;
-  font-weight: 600;
-  line-height: 1.5rem;
-  color: var(--prose-fg);
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-  cursor: pointer;
-  user-select: none;
-  list-style: none;
-  padding: 12px 14px;
+  font-weight:600;
+  line-height:1.5rem;
+  color:var(--prose-fg);
+  display:flex;
+  align-items:center;
+  gap:.625rem;
+  cursor:pointer;
+  user-select:none;
+  list-style:none;
+  padding:12px 14px
 }
 
-.prose-custom .details-summary ::-webkit-details-marker {
-  display: none;
+.prose-custom .details-summary ::-webkit-details-marker{
+  display:none
 }
 
-/* ICON */
-.prose-custom .details-icon {
-  opacity: 0.8;
-  color: var(--prose-fg-subtle);
-  width: 1rem;
-  height: 1rem;
-  flex-shrink: 0;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+.prose-custom .details-icon{
+  opacity:.8;
+  color:var(--prose-fg-subtle);
+  width:1rem;
+  height:1rem;
+  flex-shrink:0;
+  transition:transform .2s ease,opacity .2s ease
 }
 
-.prose-custom .details[open] .details-icon {
-  transform: rotate(90deg);
+.prose-custom .details[open] .details-icon{
+  transform:rotate(90deg)
 }
 
-.prose-custom .details-icon svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  stroke: currentColor;
-  stroke-width: 2;
-  fill: none;
+.prose-custom .details-icon svg{
+  display:block;
+  width:100%;
+  height:100%;
+  stroke:currentColor;
+  stroke-width:2;
+  fill:none
 }
 
-/* CONTENT */
-.prose-custom .details-content {
-  padding: 0 14px 12px;
-  border-top: 1px solid var(--prose-border);
+.prose-custom .details-content{
+  padding:0 14px 12px;
+  border-top:1px solid var(--prose-border)
 }
 
-.prose-custom .details-content > *:first-child {
-  margin-top: 12px !important;
+.prose-custom .details-content>*:first-child{
+  margin-top:12px!important
 }
 
-.prose-custom .details-content > *:last-child {
-  margin-bottom: 0 !important;
+.prose-custom .details-content>*:last-child,
+.prose-custom .details-content p:last-child{
+  margin-bottom:0!important
 }
 
-.prose-custom .details-content p:last-child {
-  margin-bottom: 0 !important;
-}
-
-/* MOBILE */
-@media (max-width: 767px) {
-  .prose-custom .details {
-    margin: 1.25rem 0;
+@media (max-width:767px){
+  .prose-custom .details{
+    margin:1.25rem 0
   }
 
-  .prose-custom .details-summary {
+  .prose-custom .details-summary{
     @apply text-copy-16;
-    font-weight: 600;
-    padding: 10px 12px;
+    font-weight:600;
+    padding:10px 12px
   }
 
-  .prose-custom .details-content {
+  .prose-custom .details-content{
     @apply text-copy-14;
-    padding: 0 12px 10px;
-    line-height: 1.375rem;
-    letter-spacing: 0;
-    font-weight: 400;
+    padding:0 12px 10px;
+    line-height:1.375rem;
+    letter-spacing:0;
+    font-weight:400
   }
 
-  .prose-custom .details-content > *:first-child {
-    margin-top: 10px !important;
+  .prose-custom .details-content>*:first-child{
+    margin-top:10px!important
   }
 }
 
-/* DESKTOP */
-@media (min-width: 768px) {
-  .prose-custom .details {
-    margin: 1.5rem 0;
+@media (min-width:768px){
+  .prose-custom .details{
+    margin:1.5rem 0
   }
 
-  .prose-custom .details-summary {
+  .prose-custom .details-summary{
     @apply text-copy-16;
-    font-weight: 600;
-    padding: 12px 14px;
+    font-weight:600;
+    padding:12px 14px
   }
 }

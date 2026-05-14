@@ -1,95 +1,80 @@
 /* src/styles/prose/list.css */
-
 @reference '@/styles/utilities/index.css';
 
-/* ══════════════════════════════════════════════════════════════════
-   LIST BASE
-══════════════════════════════════════════════════════════════════ */
-
 .prose-custom ul,
-.prose-custom ol {
+.prose-custom ol{
   @apply text-copy-16;
-  padding-left: 1.5rem;
-  margin-top: 0;
-  margin-bottom: 1.25rem;
-  list-style-position: outside;
-  color: var(--prose-fg);
+  padding-left:1.5rem;
+  margin-top:0;
+  margin-bottom:1.25rem;
+  list-style-position:outside;
+  color:var(--prose-fg)
 }
 
-.prose-custom ul {
-  list-style-type: disc;
+.prose-custom ul{
+  list-style-type:disc
 }
 
-.prose-custom ol {
-  list-style-type: decimal;
+.prose-custom ol{
+  list-style-type:decimal
 }
 
-/* Item spacing */
-.prose-custom li {
-  margin-bottom: 0.375rem;
-  padding-left: 0.25rem;
+.prose-custom li{
+  margin-bottom:.375rem;
+  padding-left:.25rem
 }
 
-.prose-custom li:last-child {
-  margin-bottom: 0;
+.prose-custom li:last-child{
+  margin-bottom:0
 }
 
-/* Nested list */
 .prose-custom ul ul,
 .prose-custom ol ol,
 .prose-custom ul ol,
-.prose-custom ol ul {
-  margin-top: 0.375rem;
-  margin-bottom: 0.375rem;
-  padding-left: 1.25rem;
+.prose-custom ol ul{
+  margin-top:.375rem;
+  margin-bottom:.375rem;
+  padding-left:1.25rem
 }
 
-.prose-custom ul ul {
-  list-style-type: circle;
+.prose-custom ul ul{
+  list-style-type:circle
 }
 
-.prose-custom ul ul ul {
-  list-style-type: square;
+.prose-custom ul ul ul{
+  list-style-type:square
 }
 
-.prose-custom ol ol {
-  list-style-type: lower-alpha;
+.prose-custom ol ol{
+  list-style-type:lower-alpha
 }
 
-.prose-custom ol ol ol {
-  list-style-type: lower-roman;
+.prose-custom ol ol ol{
+  list-style-type:lower-roman
 }
 
-/* List inside paragraph-like context */
-.prose-custom li > p {
-  margin-bottom: 0.25rem;
+.prose-custom li>p{
+  margin-bottom:.25rem
 }
 
-/* Marker color */
-.prose-custom ::marker {
-  color: var(--prose-fg-subtle);
+.prose-custom ::marker{
+  color:var(--prose-fg-subtle)
 }
 
-/* ══════════════════════════════════════════════════════════════════
-   DESKTOP (min-width: 768px)
-══════════════════════════════════════════════════════════════════ */
-@media (min-width: 768px) {
+@media (min-width:768px){
   .prose-custom ul,
-  .prose-custom ol {
-    padding-left: 1.75rem;
+  .prose-custom ol{
+    padding-left:1.75rem
   }
 
-  .prose-custom li {
-    margin-bottom: 0.5rem;
+  .prose-custom li{
+    margin-bottom:.5rem
   }
 }
 
-/* ══════════════════════════════════════════════════════════════════
-   LARGE DESKTOP (min-width: 1024px)
-══════════════════════════════════════════════════════════════════ */
-@media (min-width: 1024px) {
+@media (min-width:1024px){
   .prose-custom ul,
-  .prose-custom ol {
-    @apply text-copy-18;
+  .prose-custom ol{
+    @apply text-copy-18
   }
 }

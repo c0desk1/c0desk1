@@ -22,8 +22,8 @@ export default function Icon({ name, className = 'w-5 h-5' }: IconProps) {
     case 'logo':
       return ( 
         <svg {...s} viewBox="0 0 24 24" width={32} height={32} fill="none">
-          <circle cx="16" cy="16" r="16" class="bg"/>
-          <path d="M5 9h22L16 27Z" class="icon"/>
+          <circle cx="16" cy="16" r="16"/>
+          <path d="M5 9h22L16 27Z"/>
         </svg>
       );
 

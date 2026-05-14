@@ -25,7 +25,7 @@
 
   /* ─── Surface ────────────────────────────────────────────────── */
   --prose-border:        #e5e5e5;
-  --prose-surface:       #fafafa;
+  --prose-surface:       #fafafa;          /* Vercel light background */
   --prose-surface-hover: #f2f2f2;
   --prose-surface-dim:   #f5f5f5;
   --prose-bg-subtle:     #f7f7f7;
@@ -75,6 +75,7 @@
 
 /* ══════════════════════════════════════════════════════════════════
    DARK MODE
+   Background pure black (#000000) ala Vercel
 ══════════════════════════════════════════════════════════════════ */
 .dark {
   /* ─── Accent ─────────────────────────────────────────────────── */
@@ -95,14 +96,15 @@
   --prose-fg-dim:    #525252;
 
   /* ─── Surface ────────────────────────────────────────────────── */
-  --prose-border:        #262626;
-  --prose-surface:       #0a0a0a;
-  --prose-surface-hover: #171717;
-  --prose-surface-dim:   #111111;
-  --prose-bg-subtle:     #111111;
-  --prose-bg-muted:      #141414;
+  --prose-border:        #333333;          /* lebih terang agar terlihat di atas hitam */
+  --prose-surface:       #000000;          /* pure black */
+  --prose-surface-hover: #0a0a0a;          /* sedikit lebih terang dari hitam */
+  --prose-surface-dim:   #050505;
+  --prose-bg-subtle:     #080808;
+  --prose-bg-muted:      #0d0d0d;
 
   /* ─── Callouts ───────────────────────────────────────────────── */
+  /* Beri sedikit cahaya agar tidak tenggelam di hitam */
   --callout-note-bg:     #111111;
   --callout-note-border: #2a2a2a;
   --callout-note-text:   #d4d4d8;
