@@ -23,15 +23,11 @@ const readingTime = getReadingTime(content, locale as 'id' | 'en' | 'ru' | 'jp')
 ---
 
 <div class="flex flex-row items-center justify-between w-full gap-4 pt-2">
-  <div class="flex items-center gap-1.5 text-copy-14 text-(--fg-muted)">
+  <div class="flex flex-row items-center justify-start gap-1.5 flex-initial text-(--fg-muted)">
     <Icon name="clock" className="w-4 h-4" />
-    {readingTime && <span class="whitespace-nowrap">{readingTime}</span>}
+    {readingTime && <span class="text-copy-14">{readingTime}</span>}
   </div>
-
-  <time 
-    datetime={pubDate.toISOString()} 
-    class="text-copy-14 text-(--fg-muted) whitespace-nowrap order-2 md:order-3"
-  >
+  <time datetime={pubDate.toISOString()} class="text-copy-14 text-(--fg-muted) whitespace-nowrap order-2 md:order-3">
     {formattedDate}
   </time>
 </div>
