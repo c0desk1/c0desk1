@@ -45,18 +45,18 @@ if (post) {
 ---
 
 <a href={postUrl} class="group flex flex-col h-full w-full py-8">
-  <div class="flex items-center justify-between mb-4 text-[13px] md:text-sm text-(--fg-subtle) group-hover:text-(--fg) font-medium">
-    <span class="tracking-tight">{categoryName}</span>
+  <div class="flex items-center justify-between mb-4 text-label-13 text-(--fg-subtle) group-hover:text-(--fg)">
+    <span>{categoryName}</span>
     <time datetime={pubDateISO}>{pubDateDisplay}</time>
   </div>
   <div class="flex flex-col gap-4 flex-1">
-    <h2 class="text-xl md:text-2xl font-semibold tracking-tight text-(--fg) leading-tight line-clamp-3">
+    <h2 class="text-heading-20 md:text-heading-24 text-(--fg) line-clamp-3">
       {title}
     </h2>
-    <p class="text-[13px] md:text-sm font-medium text-(--fg-muted) leading-relaxed line-clamp-3 group-hover:text-(--fg)">
+    <p class="text-copy-13 font-medium text-(--fg-muted) line-clamp-3 group-hover:text-(--fg)">
       {excerpt}
     </p>
-    <div class="mt-auto flex items-center gap-2 text-[13px] md:text-sm text-(--fg-subtle) group-hover:text-(--fg) font-medium">
+    <div class="mt-auto flex items-center gap-2 text-label-13 text-(--fg-subtle) group-hover:text-(--fg)">
       {authorAvatar && (
         <Image
           src={optimizedAvatar}
