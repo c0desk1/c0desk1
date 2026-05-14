@@ -34,7 +34,7 @@ export const en = {
     about: "About",
     adogen: "Adogen",
     privacyPolicy: "Privacy Policy",
-    termsOfService: "TermsOfService",
+    termsOfService: "Terms Of Service",
     disclaimer: "Disclaimer",
     cookiePolicy: "Cookie Policy",
     dmca: "DMCA",
