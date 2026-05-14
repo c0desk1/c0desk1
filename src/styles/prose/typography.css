@@ -2,17 +2,13 @@
 
 @reference '@/styles/utilities/index.css';
 
-/* ══════════════════════════════════════════════════════════════════
-   BASE RESET
-══════════════════════════════════════════════════════════════════ */
+/* BASE */
 .prose-custom :where(h1, h2, h3, h4, h5, h6, p, ul, ol, blockquote, pre, hr, table) {
   margin-top: 0;
   width: 100%;
 }
 
-/* ══════════════════════════════════════════════════════════════════
-   HEADINGS (shared)
-══════════════════════════════════════════════════════════════════ */
+/* HEADINGS */
 .prose-custom :where(h1, h2, h3, h4, h5, h6) {
   font-family: var(--prose-font-sans);
   color: var(--prose-fg);
@@ -23,9 +19,7 @@
   -webkit-font-smoothing: antialiased;
 }
 
-/* ══════════════════════════════════════════════════════════════════
-   ANCHOR HEADINGS
-══════════════════════════════════════════════════════════════════ */
+/* ANCHOR HEADINGS */
 .prose-custom .heading-group.has-anchor {
   display: block;
   width: 100%;
@@ -63,9 +57,7 @@
   height: 1rem;
 }
 
-/* ══════════════════════════════════════════════════════════════════
-   INLINE TYPOGRAPHY
-══════════════════════════════════════════════════════════════════ */
+/* INLINE TYPOGRAPHY */
 
 /* Paragraf */
 .prose-custom p {
@@ -139,8 +131,8 @@
 
 /* Small */
 .prose-custom small {
-  @apply text-copy-14;           /* 14/20, letter-spacing:0, weight:400 */
-  line-height: 1.5;              /* override utility */
+  @apply text-copy-14;
+  line-height: 1.5;
   color: var(--prose-fg-subtle);
   display: inline-block;
   transition: color 0.15s ease;
@@ -149,7 +141,7 @@
 .prose-custom figcaption small,
 .prose-custom aside small,
 .prose-custom footer small {
-  font-size: 12px;
+  /*font-size: 12px;*/
   color: var(--prose-fg-dim);
 }
 
@@ -194,9 +186,7 @@
   transition: none;
 }
 
-/* ══════════════════════════════════════════════════════════════════
-   MOBILE (max-width: 767px)
-══════════════════════════════════════════════════════════════════ */
+/* MOBILE */
 @media (max-width: 767px) {
   .prose-custom :where(h1, h2, h3, h4, h5, h6) {
     scroll-margin-top: 56px;
@@ -217,14 +207,14 @@
 
   .prose-custom h3 {
     @apply text-heading-20;
-    font-weight: 600;          /* utility default 500 -> 600 */
+    font-weight: 600;
     margin-top: 1.75rem;
     margin-bottom: 0.625rem;
   }
 
   .prose-custom h4 {
-    @apply text-heading-16;    /* 16/20, weight 500 */
-    font-weight: 600;          /* override ke 600 */
+    @apply text-heading-16;
+    font-weight: 600;
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;
   }
@@ -274,7 +264,7 @@
   }
 
   .prose-custom small {
-    font-size: 12px;          /* pengecualian di mobile untuk small */
+    font-size: 12px;
   }
 
   .prose-custom abbr[title] {
@@ -282,9 +272,7 @@
   }
 }
 
-/* ══════════════════════════════════════════════════════════════════
-   DESKTOP (min-width: 768px)
-══════════════════════════════════════════════════════════════════ */
+/* DESKTOP */
 @media (min-width: 768px) {
   .prose-custom :where(h1, h2, h3, h4, h5, h6) {
     scroll-margin-top: 60px;
@@ -361,13 +349,11 @@
   }
 
   .prose-custom small {
-    font-size: 14px;          /* kembali ke ukuran asli */
+    font-size: 14px;
   }
 }
 
-/* ══════════════════════════════════════════════════════════════════
-   LARGE DESKTOP (min-width: 1024px)
-══════════════════════════════════════════════════════════════════ */
+/* LARGE DESKTOP */
 @media (min-width: 1024px) {
   .prose-custom h1 {
     @apply text-heading-48;
