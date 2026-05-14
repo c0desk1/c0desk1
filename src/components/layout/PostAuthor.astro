@@ -4,6 +4,7 @@ import { siteConfig } from '@/config/site';
 import { Image } from 'astro:assets';
 import { cdnImage, isCdnUrl } from '@/lib/utils';
 import { getCurrentLocale, getLabel, localizePath } from "@/utils/i18n";
+import Listen from '../ui/ListenButton.astro';
 
 interface Props {
   name?: string;
@@ -45,24 +46,31 @@ const authorPath = localizePath(`/author/${authorSlug}`, locale);
 const optimizedAvatar = isCdnUrl(authorAvatar)? cdnImage(authorAvatar, { w: 40, h: 40, q: 80 }) : authorAvatar;
 ---
 
-<div class="flex w-full justify-center">
-  <a href={authorPath} rel="author" aria-label={`${authorLabel}: ${authorName}`} class="inline-flex items-center gap-2 no-underline transition-opacity duration-150 hover:opacity-70">
-    {authorAvatar && (
-      <span class="relative inline-block h-5 w-5 shrink-0 overflow-hidden rounded-full">
-        <Image
-          src={optimizedAvatar}
-          alt={`${avatarOfLabel} ${authorName}`}
-          width={40}
-          height={40}
-          class="h-full w-full object-cover"
-          loading="eager"
-          decoding="async"
-        />
-        <span class="absolute inset-0 rounded-full border-(--border)"></span>
-      </span>
-    )}
+<div class="flex w-full justify-center gap-2">
+  <a
+    href={authorPath}
+    rel="author"
+    aria-label={`${authorLabel}: ${authorName}`}
+    class="inline-flex items-center gap-2 no-underline"
+  >
+    <div class="inline-flex cursor-pointer flex-[0_1_auto] overflow-hidden">
+      {authorAvatar && (
+        <span aria-hidden="true" aria-label="" role="img" class="w-6 h-6 shrink-0 rounded-full inline-block overflow-hidden leading-0 align-top relative transition-[background] duration-200 ease-in-out">
+          <Image
+            src={optimizedAvatar}
+            alt={`${avatarOfLabel} ${authorName}`}
+            width={40}
+            height={40}
+            class="h-full w-full object-cover"
+            loading="eager"
+            decoding="async"
+          />
+          <span class="absolute inset-0 rounded-full border-(--border)"></span>
+        </span>
+      )}
+    </div>
     <div class="flex items-center gap-2">
-      <span class="text-[14px] leading-[20px] font-medium text-(--fg)/90">
+      <span class="text-[14px] leading-5 font-medium text-(--fg)">
         {authorName}
       </span>
       {authorTitle && (
@@ -72,4 +80,5 @@ const optimizedAvatar = isCdnUrl(authorAvatar)? cdnImage(authorAvatar, { w: 40, 
       )}
     </div>
   </a>
+  <Listen />
 </div>
