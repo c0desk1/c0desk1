@@ -1,12 +1,12 @@
 /* src/styles/prose/typography.css */
 
-/* ─── BASE RESET ─────────────────────────────────────────────────── */
+/* BASE RESET */
 .prose-custom :where(h1, h2, h3, h4, h5, h6, p, ul, ol, blockquote, pre, hr, table) {
   margin-top: 0;
   width: 100%;
 }
 
-/* ─── HEADINGS ───────────────────────────────────────────────────── */
+/* HEADINGS */
 .prose-custom :where(h1, h2, h3, h4, h5, h6) {
   font-family: var(--prose-font-sans);
   font-weight: 600;
@@ -20,8 +20,8 @@
   -webkit-font-smoothing: antialiased;
 }
 
-/* ─── ANCHOR HEADINGS ────────────────────────────────────────────── */
-.prose-custom.heading-group.has-anchor {
+/* ANCHOR HEADINGS */
+.prose-custom .heading-group.has-anchor {
   display: block;
   width: 100%;
   max-width: 100%;
@@ -30,12 +30,12 @@
   line-height: 1.2;
 }
 
-.prose-custom.heading-text-content {
+.prose-custom .heading-text-content {
   display: inline;
   word-break: break-word;
 }
 
-.prose-custom.anchor-link {
+.prose-custom .anchor-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -53,12 +53,12 @@
   position: relative;
 }
 
-.prose-custom.anchor-link svg {
+.prose-custom .anchor-link svg {
   width: 1rem;
   height: 1rem;
 }
 
-/* ─── INLINE TYPOGRAPHY ──────────────────────────────────────────── */
+/* INLINE TYPOGRAPHY */
 .prose-custom strong {
   font-weight: 600;
   color: var(--prose-fg);
@@ -77,7 +77,7 @@
   font-weight: 600;
 }
 
-/* ─── SUP / SUB ──────────────────────────────────────────────────── */
+/* SUP / SUB */
 .prose-custom sup,
 .prose-custom sub {
   font-size: 10px;
@@ -122,15 +122,15 @@
   top: -0.35em;
 }
 
-/* ─── CALLOUT OVERRIDES ──────────────────────────────────────────── */
-.prose-custom.callout-content p sup a {
+/* CALLOUT OVERRIDES */
+.prose-custom .callout-content p sup a {
   font-size: 11px;
   font-weight: 500;
   color: var(--prose-fg);
   text-decoration: none;
 }
 
-.prose-custom.callout-content p sup a:hover {
+.prose-custom .callout-content p sup a:hover {
   color: var(--prose-accent);
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -138,13 +138,13 @@
   text-decoration-color: var(--prose-accent-dim);
 }
 
-.prose-custom.callout sup,
-.prose-custom.callout sub {
+.prose-custom .callout sup,
+.prose-custom .callout sub {
   color: currentColor;
   opacity: 0.75;
 }
 
-/* ─── SMALL ──────────────────────────────────────────────────────── */
+/* SMALL */
 .prose-custom small {
   font-size: 14px;
   line-height: 1.5;
@@ -166,7 +166,7 @@
   color: var(--prose-fg);
 }
 
-/* ─── MARK ───────────────────────────────────────────────────────── */
+/* MARK */
 .prose-custom mark {
   background-color: var(--prose-accent-yellow);
   color: var(--prose-accent-yellow-soft);
@@ -184,7 +184,7 @@
   border-bottom: none;
 }
 
-/* ─── ABBR ───────────────────────────────────────────────────────── */
+/* ABBR */
 .prose-custom abbr[title] {
   text-decoration: none;
   border-bottom: 1px dashed var(--prose-border);
@@ -203,9 +203,7 @@
   transition: none;
 }
 
-/* ══════════
-   MOBILE ≤767px
-══════════ */
+/* MOBILE */
 @media (max-width: 767px) {
  .prose-custom :where(h1, h2, h3, h4, h5, h6) {
     scroll-margin-top: 56px;
@@ -218,6 +216,7 @@
     line-height: 44px;
     margin-top: 2.5rem;
     margin-bottom: 1rem;
+    text-align: left;
   }
 
  .prose-custom h2 {
@@ -267,14 +266,14 @@
     text-transform: uppercase;
   }
 
- .prose-custom.anchor-link.anchor-link-active {
+ .prose-custom .anchor-link.anchor-link-active {
     opacity: 1;
     pointer-events: auto;
     transform: translateX(0);
     color: var(--prose-fg-subtle);
   }
 
- .prose-custom.heading-group.has-anchor:active.anchor-link {
+ .prose-custom .heading-group.has-anchor:active .anchor-link {
     opacity: 1;
     pointer-events: auto;
     transform: translateX(0);
@@ -307,9 +306,7 @@
   }
 }
 
-/* ══════════
-   DESKTOP ≥768px
-══════════ */
+/* DESKTOP */
 @media (min-width: 768px) {
  .prose-custom :where(h1, h2, h3, h4, h5, h6) {
     scroll-margin-top: 60px;
@@ -322,6 +319,7 @@
     line-height: 52px;
     margin-top: 4rem;
     margin-bottom: 1.25rem;
+    text-align: center;
   }
 
  .prose-custom h2 {
@@ -373,24 +371,26 @@
     color: var(--prose-fg-dim);
   }
 
- .prose-custom.heading-group.has-anchor:hover.anchor-link {
+ .prose-custom .heading-group.has-anchor:hover .anchor-link {
     opacity: 1;
     pointer-events: auto;
     transform: translateX(0);
     color: var(--prose-fg-subtle);
   }
 
- .prose-custom.anchor-link:hover {
+ .prose-custom .anchor-link:hover {
     color: var(--prose-fg);
   }
 
  .prose-custom p {
     font-size: 18px;
     line-height: 26px;
-    letter-spacing: -0.011em;
+    color: color-mix(in srgb, var(--prose-fg) 90%, transparent);
     font-weight: 400;
     margin-bottom: 1.5rem;
+    width: 100%;
     text-wrap: pretty;
+    letter-spacing: -0.011em;
     font-feature-settings: "kern" 1, "liga" 1;
   }
 
