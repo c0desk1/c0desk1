@@ -59,8 +59,8 @@
 :root{
   color-scheme:light;
 
-  --bg:#fff;
-  --bg-subtle:#fafafa;
+  --bg:#fafafa;
+  --bg-subtle:#fff;
   --bg-muted:#f5f5f5;
 
   --fg:#111;
@@ -182,7 +182,7 @@
   a:active,
   button:active {
     opacity: 0.85;
-    transform: scale(0.98);
+    background: var(--bg-muted);
   }
 
   ::selection{
