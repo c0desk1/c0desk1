@@ -101,7 +101,7 @@ const overflow = [
         title={moreLabel}
         aria-expanded="false"
         aria-haspopup="menu">
-        <Icon name="more" class="w-3.5 h-3.5" />
+        <Icon name="more" class="w-4 h-4" />
       </button>
 
       <div class="sa-overflow-menu" role="menu" hidden>
@@ -165,7 +165,14 @@ const overflow = [
     display: flex;
     align-items: center;
     gap: 0.375rem;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .sa-links::-webkit-scrollbar {
+    height: 4px;
   }
 
   .sa-link {
