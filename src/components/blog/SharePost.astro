@@ -31,7 +31,6 @@ const moreLabel = getLabel(locale, 'more');
 const shareToLabel = getLabel(locale, 'shareTo');
 
 const baseUrls = getShareUrls(url, title);
-
 const enc = encodeURIComponent;
 
 const allUrls = {
@@ -74,7 +73,6 @@ const overflow = [
   )}
 
   <div class="sa-links" aria-label={otherPlatformsLabel}>
-
     {primary.map((link) => (
       <a
         href={link.href}
@@ -84,6 +82,7 @@ const overflow = [
         title={link.label}
         class="sa-link"
         data-platform={link.id}
+        key={link.id}
       >
         {link.id === "x" && <Icon name="twitter" class="w-4 h-4" />}
         {link.id === "facebook" && <Icon name="facebook" class="w-4 h-4" />}
@@ -100,7 +99,8 @@ const overflow = [
         aria-label={otherPlatformsLabel}
         title={moreLabel}
         aria-expanded="false"
-        aria-haspopup="menu">
+        aria-haspopup="menu"
+      >
         <Icon name="more" class="w-4 h-4" />
       </button>
 
@@ -113,9 +113,10 @@ const overflow = [
             role="menuitem"
             class="sa-overflow-item text-button-12"
             data-platform={link.id}
+            key={link.id}
           >
-            {link.id === "email" && <Icon name="email" class="w-3.5 h-3.5 shrink-0" />}
-            {link.id === "reddit" && <Icon name="reddit" class="w-3.5 h-3.5" />}
+            {link.id === "email" && <Icon name="email" class="w-4 h-4 shrink-0" />}
+            {link.id === "reddit" && <Icon name="reddit" class="w-4 h-4" />}
             <span>{link.label}</span>
           </a>
         ))}
@@ -163,16 +164,10 @@ const overflow = [
 
   .sa-links {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 0.375rem;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-  }
-
-  .sa-links::-webkit-scrollbar {
-    height: 4px;
+    gap: 0.5rem;
+    overflow: visible;
   }
 
   .sa-link {
@@ -198,6 +193,7 @@ const overflow = [
   }
   .sa-link:active { transform: translateY(0) scale(0.95); }
 
+  /* Warna hover spesifik platform (opsional) */
   .sa-link[data-platform="x"]:hover { color: #000; }
   .sa-link[data-platform="whatsapp"]:hover { color: #25d366; }
   .sa-link[data-platform="telegram"]:hover { color: #2aabee; }
@@ -208,30 +204,32 @@ const overflow = [
     .sa-link[data-platform="x"]:hover { color: #fff; }
   }
 
-  .sa-overflow-wrap { position: relative; }
+  .sa-overflow-wrap {
+    position: relative;
+    display: inline-flex;
+  }
 
   .sa-overflow-menu {
     position: absolute;
     bottom: calc(100% + 0.5rem);
-    left: 50%;
-    transform: translateX(-50%);
+    right: 0;
     background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 0.75rem;
-    box-shadow: 0 4px 16px rgba(0,0,0,.1);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
     padding: 0.375rem;
     display: flex;
     flex-direction: column;
     gap: 0.125rem;
     min-width: 8rem;
-    z-index: 50;
+    z-index: 100;
     animation: sa-menu-in 0.15s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
   .sa-overflow-menu[hidden] { display: none; }
 
   @keyframes sa-menu-in {
-    from { opacity: 0; transform: translateX(-50%) translateY(4px); }
-    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .sa-overflow-item {
@@ -250,6 +248,7 @@ const overflow = [
 </style>
 
 <script>
+  // Sama seperti script sebelumnya
   document.querySelectorAll<HTMLElement>(".sa-wrap").forEach((wrap) => {
     const btn = wrap.querySelector<HTMLButtonElement>(".sa-native");
     if (!btn || !navigator.share) return;
