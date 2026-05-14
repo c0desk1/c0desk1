@@ -1,6 +1,8 @@
 /* src/styles/prose/steps.css */
 
-/* ─── BASE ───────────────────────────────────────────────────────── */
+@reference '@/styles/utilities/index.css';
+
+/* BASE */
 .prose-custom .steps-container {
   counter-reset: step;
   background-image: linear-gradient(var(--prose-border), var(--prose-border));
@@ -14,7 +16,6 @@
   border-left: none;
 }
 
-/* Cap the top of the vertical line */
 .prose-custom .steps-container::before {
   content: "";
   position: absolute;
@@ -26,7 +27,6 @@
   z-index: 1;
 }
 
-/* Mask the bottom of the vertical line after the last child */
 .prose-custom .steps-container > *:last-child::after {
   content: "";
   position: absolute;
@@ -39,7 +39,7 @@
   height: 100%;
 }
 
-/* ─── STEP HEADINGS ──────────────────────────────────────────────── */
+/* STEP HEADINGS */
 .prose-custom .steps-container > h2,
 .prose-custom .steps-container > h3,
 .prose-custom .steps-container > h4 {
@@ -48,12 +48,17 @@
   margin-top: 0 !important;
   margin-bottom: 0.5rem !important;
   font-family: var(--prose-font-sans);
-  font-size: 1.125rem !important;
   font-weight: 600 !important;
   line-height: 1.75rem !important;
   letter-spacing: -0.02em !important;
   color: var(--prose-fg);
   overflow: visible;
+}
+
+.prose-custom .steps-container > h2,
+.prose-custom .steps-container > h3,
+.prose-custom .steps-container > h4 {
+  @apply text-heading-20;
 }
 
 .prose-custom .steps-container > h2:first-child,
@@ -62,7 +67,6 @@
   margin-top: 0 !important;
 }
 
-/* Step counter bubble */
 .prose-custom .steps-container > h2::before,
 .prose-custom .steps-container > h3::before,
 .prose-custom .steps-container > h4::before {
@@ -96,7 +100,7 @@
   color: var(--prose-fg);
 }
 
-/* ─── CLEANUP ────────────────────────────────────────────────────── */
+/* CLEANUP */
 .prose-custom .steps-container > h2,
 .prose-custom .steps-container > h3,
 .prose-custom .steps-container > h4,
@@ -116,9 +120,7 @@
   margin-bottom: 0 !important;
 }
 
-/* ══════════════════════════════════════════════════════════════════
-   MOBILE  ≤767px
-══════════════════════════════════════════════════════════════════ */
+/* MOBILE */
 @media (max-width: 767px) {
   .prose-custom .steps-container {
     margin: 1.5rem 0 1.5rem 0.75rem;
@@ -129,10 +131,11 @@
   .prose-custom .steps-container > h2,
   .prose-custom .steps-container > h3,
   .prose-custom .steps-container > h4 {
-    font-size: 1rem !important;
+    @apply text-heading-16;
+    font-weight: 600 !important;
     line-height: 1.625rem !important;
-    margin-bottom: 0.375rem !important;
     letter-spacing: -0.015em !important;
+    margin-bottom: 0.375rem !important;
   }
 
   .prose-custom .steps-container > h2::before,
