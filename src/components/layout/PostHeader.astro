@@ -29,9 +29,9 @@ const {
 
 <header class="w-full">
   <div class="flex flex-col items-center text-center gap-4 md:gap-6">
-    <h1 class="text-heading-24 md:text-heading-32 lg:text-heading-48 text-(--fg) font-semibold">
-      {title}
-    </h1>
+    <div class="prose-custom">
+      <h1 class="text-heading-24 md:text-heading-32 lg:text-heading-48 text-(--fg) font-semibold justify-center">{title}</h1>
+    </div>
     {authorName && (
       <PostAuthor
         name={authorName}
