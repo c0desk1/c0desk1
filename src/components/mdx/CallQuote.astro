@@ -1,8 +1,10 @@
 ---
 import Icon from '@/components/ui/Icon';
+import { getCurrentLocale } from '@/utils/i18n';
+
+const locale = getCurrentLocale(Astro);
 
 const raw = await Astro.slots.render('default');
-
 const cleanRaw = raw.replace(/^<p>/, '').replace(/<\/p>$/, '').trim();
 
 const alertTypes = {
@@ -26,8 +28,16 @@ if (activeToken) {
   isAlert = true;
   alertConfig = alertTypes[activeToken as keyof typeof alertTypes];
 
-  const rawTitle = activeToken.replace(/[\[\]!]/g, '');
-  calloutTitle = rawTitle.charAt(0).toUpperCase() + rawTitle.slice(1).toLowerCase();
+  const tokenKey = activeToken.replace(/[\[\]!]/g, '').toLowerCase();
+  const translations: Record<string, Record<string, string>> = {
+    note:    { id: 'Catatan',      en: 'Note',         ru: 'Примечание',     jp: 'ノート' },
+    info:    { id: 'Info',         en: 'Info',         ru: 'Информация',     jp: '情報' },
+    tip:     { id: 'Tips',         en: 'Tip',          ru: 'Совет',          jp: 'ヒント' },
+    warning: { id: 'Peringatan',   en: 'Warning',      ru: 'Предупреждение', jp: '警告' },
+    danger:  { id: 'Bahaya',       en: 'Danger',       ru: 'Опасность',      jp: '危険' },
+  };
+  calloutTitle = translations[tokenKey]?.[locale] || translations[tokenKey]?.en || tokenKey.charAt(0).toUpperCase() + tokenKey.slice(1);
+
   finalQuote = cleanRaw.replace(activeToken, '').trim();
 } else {
   const slashRegex = /\/(?![^<]*>)/; 
@@ -56,12 +66,14 @@ if (activeToken) {
     </div>
   </aside>
 ) : (
-  <blockquote class="quote">
+  <blockquote class="quote flex flex-col items-stretch justify-start gap-6 lg:gap-8 flex-initial">
     <div class="quote-body">
       <div set:html={finalQuote} />
     </div>
-    {finalCite && (
-      <span class="quote-cite">{finalCite}</span>
-    )}
+    <div class="flex flex-col md:flex-row items-end md:items-center justify-end gap-2 md:gap-3 flex-initial">
+      {finalCite && (
+        <span class="quote-cite">{finalCite}</span>
+      )}
+    </div>
   </blockquote>
 )}
