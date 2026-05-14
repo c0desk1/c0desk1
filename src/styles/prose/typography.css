@@ -21,7 +21,7 @@
 }
 
 /* ─── ANCHOR HEADINGS ────────────────────────────────────────────── */
-.prose-custom .heading-group.has-anchor {
+.prose-custom.heading-group.has-anchor {
   display: block;
   width: 100%;
   max-width: 100%;
@@ -30,12 +30,12 @@
   line-height: 1.2;
 }
 
-.prose-custom .heading-text-content {
+.prose-custom.heading-text-content {
   display: inline;
   word-break: break-word;
 }
 
-.prose-custom .anchor-link {
+.prose-custom.anchor-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -53,7 +53,7 @@
   position: relative;
 }
 
-.prose-custom .anchor-link svg {
+.prose-custom.anchor-link svg {
   width: 1rem;
   height: 1rem;
 }
@@ -80,7 +80,7 @@
 /* ─── SUP / SUB ──────────────────────────────────────────────────── */
 .prose-custom sup,
 .prose-custom sub {
-  font-size: 0.65rem;
+  font-size: 10px;
   line-height: 1;
   font-weight: 500;
   vertical-align: baseline;
@@ -118,19 +118,19 @@
 .prose-custom h1 sup,
 .prose-custom h2 sup,
 .prose-custom h3 sup {
-  font-size: 0.55rem;
+  font-size: 9px;
   top: -0.35em;
 }
 
 /* ─── CALLOUT OVERRIDES ──────────────────────────────────────────── */
-.prose-custom .callout-content p sup a {
-  font-size: 0.7rem;
+.prose-custom.callout-content p sup a {
+  font-size: 11px;
   font-weight: 500;
   color: var(--prose-fg);
   text-decoration: none;
 }
 
-.prose-custom .callout-content p sup a:hover {
+.prose-custom.callout-content p sup a:hover {
   color: var(--prose-accent);
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -138,15 +138,15 @@
   text-decoration-color: var(--prose-accent-dim);
 }
 
-.prose-custom .callout sup,
-.prose-custom .callout sub {
+.prose-custom.callout sup,
+.prose-custom.callout sub {
   color: currentColor;
   opacity: 0.75;
 }
 
 /* ─── SMALL ──────────────────────────────────────────────────────── */
 .prose-custom small {
-  font-size: 0.8125rem;
+  font-size: 14px;
   line-height: 1.5;
   color: var(--prose-fg-subtle);
   font-weight: 400;
@@ -158,7 +158,7 @@
 .prose-custom figcaption small,
 .prose-custom aside small,
 .prose-custom footer small {
-  font-size: 0.75rem;
+  font-size: 12px;
   color: var(--prose-fg-dim);
 }
 
@@ -178,7 +178,7 @@
   background-color: var(--prose-accent-yellow-dim);
 }
 
-.prose-custom mark .search-highlight {
+.prose-custom mark.search-highlight {
   background-color: var(--prose-accent-yellow);
   color: var(--prose-accent-yellow-dim);
   border-bottom: none;
@@ -203,231 +203,208 @@
   transition: none;
 }
 
-/* ══════════════════════════════════════════════════════════════════
-   MOBILE  ≤767px
-══════════════════════════════════════════════════════════════════ */
+/* ══════════
+   MOBILE ≤767px
+══════════ */
 @media (max-width: 767px) {
-  .prose-custom :where(h1, h2, h3, h4, h5, h6) {
+.prose-custom :where(h1, h2, h3, h4, h5, h6) {
     scroll-margin-top: 56px;
   }
 
-  .prose-custom h1 {
-    font-size: 1.875rem;
+.prose-custom h1 {
+    font-size: 40px;
     font-weight: 700;
-    letter-spacing: -0.04em;
-    line-height: 2.25rem;
+    letter-spacing: -0.03em;
+    line-height: 44px;
     margin-top: 2.5rem;
     margin-bottom: 1rem;
   }
 
-  .prose-custom h2 {
-    font-size: 1.5rem;
+.prose-custom h2 {
+    font-size: 24px;
     font-weight: 600;
-    letter-spacing: -0.03em;
-    line-height: 2rem;
+    letter-spacing: -0.02em;
+    line-height: 28px;
     margin-top: 2.25rem;
     margin-bottom: 0.75rem;
   }
 
-  .prose-custom h3 {
-    font-size: 1.25rem;
+.prose-custom h3 {
+    font-size: 20px;
     font-weight: 600;
-    letter-spacing: -0.025em;
-    line-height: 1.75rem;
+    letter-spacing: -0.02em;
+    line-height: 24px;
     margin-top: 1.75rem;
     margin-bottom: 0.625rem;
   }
 
-  .prose-custom h4 {
-    font-size: 1.0625rem;
+.prose-custom h4 {
+    font-size: 16px;
     font-weight: 600;
-    letter-spacing: -0.015em;
-    line-height: 1.625rem;
+    letter-spacing: -0.01em;
+    line-height: 20px;
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;
   }
 
-  .prose-custom h5 {
-    font-size: 0.9375rem;
+.prose-custom h5 {
+    font-size: 14px;
     font-weight: 600;
-    letter-spacing: -0.01em;
-    line-height: 1.5rem;
+    letter-spacing: 0.08em;
+    line-height: 20px;
     margin-top: 1.25rem;
     margin-bottom: 0.5rem;
+    text-transform: uppercase;
   }
 
-  .prose-custom h6 {
-    font-size: 0.875rem;
+.prose-custom h6 {
+    font-size: 14px;
     font-weight: 600;
-    letter-spacing: 0;
-    line-height: 1.375rem;
+    letter-spacing: 0.08em;
+    line-height: 18px;
     margin-top: 1rem;
     margin-bottom: 0.5rem;
+    text-transform: uppercase;
   }
 
-  /* Mobile anchor — always visible on tap */
-  .prose-custom .anchor-link.anchor-link-active {
+.prose-custom.anchor-link.anchor-link-active {
     opacity: 1;
     pointer-events: auto;
     transform: translateX(0);
     color: var(--prose-fg-subtle);
   }
 
-  .prose-custom .heading-group.has-anchor:active .anchor-link {
+.prose-custom.heading-group.has-anchor:active.anchor-link {
     opacity: 1;
     pointer-events: auto;
     transform: translateX(0);
     color: var(--prose-fg-subtle);
   }
 
-  .prose-custom p {
-    font-size: 1rem;
-    line-height: 1.75rem;
+.prose-custom p {
+    font-size: 16px;
+    line-height: 24px;
     letter-spacing: -0.01em;
     margin-bottom: 1.25rem;
   }
 
-  .prose-custom strong {
-    font-weight: 600;
+.prose-custom sup,
+.prose-custom sub {
+    font-size: 9px;
   }
 
-  .prose-custom em {
-    font-style: italic;
-  }
-
-  .prose-custom sup,
-  .prose-custom sub {
-    font-size: 0.6rem;
-  }
-
-  .prose-custom mark {
+.prose-custom mark {
     padding: 0.1em 0.2em;
-    font-size: 0.875rem;
+    font-size: 14px;
   }
 
-  .prose-custom small {
-    font-size: 0.75rem;
+.prose-custom small {
+    font-size: 12px;
   }
 
-  .prose-custom abbr[title] {
-    font-size: 0.875rem;
+.prose-custom abbr[title] {
+    font-size: 14px;
   }
 }
 
-/* ══════════════════════════════════════════════════════════════════
-   DESKTOP  ≥768px
-══════════════════════════════════════════════════════════════════ */
+/* ══════════
+   DESKTOP ≥768px
+══════════ */
 @media (min-width: 768px) {
-  .prose-custom :where(h1, h2, h3, h4, h5, h6) {
+.prose-custom :where(h1, h2, h3, h4, h5, h6) {
     scroll-margin-top: 60px;
   }
 
-  /* h1 — display/hero: large, tight, heavy */
-  .prose-custom h1 {
-    font-size: 2.5rem;
+.prose-custom h1 {
+    font-size: 48px;
     font-weight: 700;
     letter-spacing: -0.05em;
-    line-height: 1;
+    line-height: 52px;
     margin-top: 4rem;
     margin-bottom: 1.25rem;
   }
 
-  /* h2 — section title */
-  .prose-custom h2 {
-    font-size: 1.75rem;
+.prose-custom h2 {
+    font-size: 32px;
     font-weight: 600;
     letter-spacing: -0.035em;
-    line-height: 2.25rem;
+    line-height: 36px;
     margin-top: 3rem;
     margin-bottom: 0.875rem;
   }
 
-  /* h3 — subsection */
-  .prose-custom h3 {
-    font-size: 1.375rem;
+.prose-custom h3 {
+    font-size: 24px;
     font-weight: 600;
     letter-spacing: -0.028em;
-    line-height: 2rem;
+    line-height: 28px;
     margin-top: 2.25rem;
     margin-bottom: 0.75rem;
   }
 
-  /* h4 — label-weight heading */
-  .prose-custom h4 {
-    font-size: 1.125rem;
+.prose-custom h4 {
+    font-size: 20px;
     font-weight: 600;
     letter-spacing: -0.02em;
-    line-height: 1.75rem;
+    line-height: 24px;
     margin-top: 2rem;
     margin-bottom: 0.625rem;
   }
 
-  /* h5 — subheading / sidebar label */
-  .prose-custom h5 {
-    font-size: 0.9375rem;
+.prose-custom h5 {
+    font-size: 14px;
     font-weight: 600;
-    letter-spacing: -0.01em;
-    line-height: 1.5rem;
+    letter-spacing: 0.08em;
+    line-height: 20px;
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;
     color: var(--prose-fg-subtle);
     text-transform: uppercase;
-    font-size: 0.6875rem;
-    letter-spacing: 0.08em;
-    font-weight: 600;
   }
 
-  /* h6 — metadata / eyebrow */
-  .prose-custom h6 {
-    font-size: 0.625rem;
+.prose-custom h6 {
+    font-size: 14px;
     font-weight: 600;
-    letter-spacing: 0.1em;
-    line-height: 1.25rem;
+    letter-spacing: 0.08em;
+    line-height: 18px;
     margin-top: 1.25rem;
     margin-bottom: 0.5rem;
     text-transform: uppercase;
     color: var(--prose-fg-dim);
   }
 
-  /* Anchor reveal on hover */
-  .prose-custom .heading-group.has-anchor:hover .anchor-link {
+.prose-custom.heading-group.has-anchor:hover.anchor-link {
     opacity: 1;
     pointer-events: auto;
     transform: translateX(0);
     color: var(--prose-fg-subtle);
   }
 
-  .prose-custom .anchor-link:hover {
+.prose-custom.anchor-link:hover {
     color: var(--prose-fg);
   }
 
-  /* Body paragraph — Vercel editorial feel */
-  .prose-custom p {
-    font-size: 0.9375rem;
-    line-height: 1.8;
-    color: var(--prose-fg-muted);
+.prose-custom p {
+    font-size: 18px;
+    line-height: 26px;
+    letter-spacing: -0.011em;
     font-weight: 400;
     margin-bottom: 1.5rem;
-    width: 100%;
     text-wrap: pretty;
-    letter-spacing: -0.011em;
     font-feature-settings: "kern" 1, "liga" 1;
   }
 
-  .prose-custom strong {
-    font-weight: 600;
+.prose-custom sup,
+.prose-custom sub {
+    font-size: 10px;
   }
 
-  .prose-custom sup,
-  .prose-custom sub {
-    font-size: 0.65rem;
-  }
-
-  .prose-custom mark {
+.prose-custom mark {
     padding: 0.1em 0.25em;
+    font-size: 14px;
   }
 
-  .prose-custom small {
-    font-size: 0.8125rem;
+.prose-custom small {
+    font-size: 14px;
   }
 }
