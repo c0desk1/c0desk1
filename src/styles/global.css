@@ -4,6 +4,7 @@
 @plugin "@tailwindcss/typography";
 
 @import "@/styles/prose/index.css";
+@import "./utilities/index.css";
 
 @custom-variant dark (&:where(.dark,.dark *));
 
