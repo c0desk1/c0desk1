@@ -1,5 +1,7 @@
 /* src/styles/prose/details.css */
 
+@reference '@/styles/utilities/index.css';
+
 /* BASE */
 .prose-custom .details {
   margin: 2.5rem 0;
@@ -15,10 +17,10 @@
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
 }
 
+/* SUMMARY */
 .prose-custom .details-summary {
-  font-family: var(--prose-font-sans);
+  @apply text-copy-16;
   font-weight: 600;
-  letter-spacing: -0.01em;
   line-height: 1.5rem;
   color: var(--prose-fg);
   display: flex;
@@ -34,6 +36,7 @@
   display: none;
 }
 
+/* ICON */
 .prose-custom .details-icon {
   opacity: 0.8;
   color: var(--prose-fg-subtle);
@@ -56,6 +59,7 @@
   fill: none;
 }
 
+/* CONTENT */
 .prose-custom .details-content {
   padding: 0 14px 12px;
   border-top: 1px solid var(--prose-border);
@@ -73,7 +77,6 @@
   margin-bottom: 0 !important;
 }
 
-
 /* MOBILE */
 @media (max-width: 767px) {
   .prose-custom .details {
@@ -81,19 +84,17 @@
   }
 
   .prose-custom .details-summary {
-    font-size: 0.9375rem;
+    @apply text-copy-16;
     font-weight: 600;
-    letter-spacing: -0.01em;
-    line-height: 1.5rem;
     padding: 10px 12px;
   }
 
   .prose-custom .details-content {
+    @apply text-copy-14;
     padding: 0 12px 10px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    letter-spacing: 0;
     line-height: 1.375rem;
+    letter-spacing: 0;
+    font-weight: 400;
   }
 
   .prose-custom .details-content > *:first-child {
@@ -103,23 +104,13 @@
 
 /* DESKTOP */
 @media (min-width: 768px) {
-.prose-custom .details {
+  .prose-custom .details {
     margin: 1.5rem 0;
   }
 
-.prose-custom .details-summary {
-    font-size: 0.9375rem;
+  .prose-custom .details-summary {
+    @apply text-copy-16;
     font-weight: 600;
-    letter-spacing: -0.01em;
-    line-height: 1.5rem;
     padding: 12px 14px;
-  }
-
-.prose-custom .details-content {
-    padding: 0 14px 12px;
-  }
-
-.prose-custom .details-content > *:first-child {
-    margin-top: 12px !important;
   }
 }
