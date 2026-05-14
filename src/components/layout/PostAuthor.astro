@@ -1,15 +1,19 @@
 ---
+
 // src/components/layout/PostAuthor.astro
+
 import { siteConfig } from '@/config/site';
 import { Image } from 'astro:assets';
 import { cdnImage, isCdnUrl } from '@/lib/utils';
 import { getCurrentLocale, getLabel, localizePath } from "@/utils/i18n";
 
+
 interface Props {
   name?: string;
   avatar?: string;
-  title?: string | { id?: string; en?: string; ru?: string };
+  title?: string | { id?: string; en?: string; ru?: string; jp?: string };
   slug?: string;
+
 }
 
 const { name, avatar, title, slug } = Astro.props;
@@ -24,19 +28,24 @@ function resolveLocale(val: unknown): string {
   return String(val ?? '');
 }
 
-const authorLabel = getLabel(locale, 'author') || 'Author';
-const avatarOfLabel = getLabel(locale, 'avatarOf') || 'Avatar of';
+const authorLabel = getLabel(locale, 'author');
+const avatarOfLabel = getLabel(locale, 'avatarOf');
 
 const authorName = name || siteConfig.author?.name || siteConfig.siteName;
 const authorAvatar = avatar || siteConfig.author?.avatar || siteConfig.siteLogo;
+
 const authorTitle = title
   ? resolveLocale(title)
   : resolveLocale(siteConfig.author?.title) || authorLabel;
+  
 const authorSlug = slug || siteConfig.author?.slug || "author";
 
 const authorPath = localizePath(`/author/${authorSlug}`, locale);
+
 const optimizedAvatar = isCdnUrl(authorAvatar) ? cdnImage(authorAvatar, { w: 48, h: 48, q: 80 }) : authorAvatar;
+
 ---
+
 <div class="flex flex-col items-center w-full relative">
   <div class="flex flex-col items-center justify-center flex-initial">
     <a href={authorPath} aria-label={`${authorLabel}: ${authorName}`}>
