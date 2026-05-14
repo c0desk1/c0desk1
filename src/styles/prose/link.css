@@ -1,6 +1,6 @@
 /* src/styles/prose/components/link.css */
 
-/* ─── GLOBAL ─────────────────────────────────────────────────────── */
+/* BASE */
 .prose-custom a {
   color: var(--prose-accent-dim);
   font-weight: 500;
@@ -32,7 +32,7 @@
   }
 }
 
-/* ─── INLINE LINK ────────────────────────────────────────────────── */
+/* INLINE LINK */
 .prose-custom .inline-link {
   display: inline-flex;
   align-items: center;
@@ -46,7 +46,7 @@
   color: var(--prose-accent);
 }
 
-/* ─── EXTERNAL ICON ──────────────────────────────────────────────── */
+/* EXTERNAL ICON */
 .prose-custom .external-icon {
   opacity: 0.5;
   width: 0.875em;
@@ -59,7 +59,7 @@
   transform: translate(1px, -1px);
 }
 
-/* ─── MOBILE ADJUSTMENT ──────────────────────────────────────────── */
+/* MOBILE */
 @media (max-width: 767px) {
   .prose-custom a,
   .prose-custom .inline-link {
