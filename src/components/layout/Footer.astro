@@ -59,13 +59,13 @@ const footerSections = siteConfig.footerSections;
       <div class="ft-bottom">
         <div class="ft-bottom-row">
           <SocialLinks items={social} class="ft-social" iconClass="ft-social-icon" />
+          <ThemeToggle />
+        </div>
+        <div class="hidden ft-bottom-row">
+          <!--<StatusButton />-->
           <span class="ft-copy">
             © {year} {siteData.siteName}
           </span>
-        </div>
-        <div class="ft-bottom-row">
-          <!--<StatusButton />-->
-          <ThemeToggle />
         </div>
       </div>
     </Container>
@@ -114,9 +114,6 @@ const footerSections = siteConfig.footerSections;
 
   .ft-col-title {
     margin: 0 0 0.75rem;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--fg);
     font-family: var(--font-mono);
@@ -134,11 +131,9 @@ const footerSections = siteConfig.footerSections;
   .ft-link {
     display: inline-flex;
     align-items: center;
-    gap: 0.25rem;
-    font-size: 13px;
+    gap: 0.25rem;   
     color: var(--fg-muted);
     padding-block: 0.25rem;
-    letter-spacing: -0.005em;
     transition: color 0.15s ease;
   }
 
