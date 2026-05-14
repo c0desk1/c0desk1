@@ -1,6 +1,10 @@
 /* src/styles/prose/callout.css */
 
-/* ─── BASE ───────────────────────────────────────────────────────── */
+@reference '@/styles/utilities/index.css';
+
+/* ══════════════════════════════════════════════════════════════════
+   BASE
+══════════════════════════════════════════════════════════════════ */
 .prose-custom .callout {
   display: flex;
   align-items: flex-start;
@@ -17,7 +21,9 @@
   flex: 1;
 }
 
-/* ─── HEADER ─────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════
+   HEADER
+══════════════════════════════════════════════════════════════════ */
 .prose-custom .callout-header {
   display: flex;
   gap: 0.5rem;
@@ -41,27 +47,27 @@
 .prose-custom .callout-title {
   margin: 0 !important;
   color: inherit;
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  line-height: 1.5rem;
-  text-transform: uppercase;
+  @apply text-label-12;               /* 12/16, weight 500, uppercase */
+  font-weight: 600;                   /* override */
+  letter-spacing: 0.08em;             /* override tracking lebih besar */
+  line-height: 1.5rem;                /* pertahankan */
 }
 
-/* ─── CONTENT ────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════
+   CONTENT
+══════════════════════════════════════════════════════════════════ */
 .prose-custom .callout-content {
   color: inherit;
 }
 
 .prose-custom .callout-content p {
-  font-size: 0.9375rem;
-  line-height: 1.8;
+  @apply text-copy-14;                /* 14/20, letter-spacing:0, weight 400 */
+  line-height: 1.8;                   /* override line-height */
+  letter-spacing: -0.011em;           /* override tracking */
   color: inherit !important;
-  font-weight: 400;
   margin-bottom: 1rem;
   width: 100%;
   text-wrap: pretty;
-  letter-spacing: -0.011em;
   font-feature-settings: "kern" 1, "liga" 1;
 }
 
@@ -157,14 +163,16 @@
   display: none !important;
 }
 
-/* ─── LISTS INSIDE CALLOUT ───────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════
+   LISTS INSIDE CALLOUT
+══════════════════════════════════════════════════════════════════ */
 .prose-custom .callout-content ul,
 .prose-custom .callout-content ol {
+  @apply text-copy-14;                /* 14/20 */
+  line-height: 1.75;                  /* override */
   padding-left: 1.25rem;
   margin-bottom: 0.75rem;
   color: inherit;
-  font-size: 0.9375rem;
-  line-height: 1.75;
 }
 
 .prose-custom .callout-content li {
@@ -183,7 +191,9 @@
   opacity: 0.5;
 }
 
-/* ─── VARIANTS ───────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════
+   VARIANTS
+══════════════════════════════════════════════════════════════════ */
 .prose-custom [data-callout="note"] {
   background-color: var(--callout-note-bg);
   border-color: var(--callout-note-border);
@@ -230,7 +240,7 @@
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   MOBILE  ≤767px
+   MOBILE (max-width: 767px)
 ══════════════════════════════════════════════════════════════════ */
 @media (max-width: 767px) {
   .prose-custom .callout {
@@ -255,7 +265,7 @@
   .prose-custom .callout-content p,
   .prose-custom .callout-content ul,
   .prose-custom .callout-content ol {
-    font-size: 0.9375rem;
+    @apply text-copy-14;             /* tetap 14px di mobile */
     line-height: 1.75rem;
     letter-spacing: -0.01em;
     margin-bottom: 1rem;
@@ -277,7 +287,7 @@
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   DESKTOP  ≥768px
+   DESKTOP (min-width: 768px)
 ══════════════════════════════════════════════════════════════════ */
 @media (min-width: 768px) {
   .prose-custom .callout {
@@ -297,8 +307,9 @@
   .prose-custom .callout-content p,
   .prose-custom .callout-content ul,
   .prose-custom .callout-content ol {
-    font-size: 0.9375rem;
+    @apply text-copy-14;             /* tetap 14px di desktop */
     line-height: 1.8;
+    letter-spacing: -0.011em;
     margin-bottom: 1rem;
   }
 
