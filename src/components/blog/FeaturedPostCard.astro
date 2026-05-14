@@ -50,17 +50,15 @@ if (post) {
 <a 
   href={postUrl} 
   class="group flex flex-col h-full px-6 py-8 rounded-xl border border-(--border) bg-(--bg) hover:bg-(--bg-muted)"
-  aria-label={`${getLabel(locale, 'readArticle')}: ${title}`}
->
-  <!-- Tanggal -->
+  aria-label={`${getLabel(locale, 'readArticle')}: ${title}`}>
   <div class="mb-4 shrink-0">
-    <time datetime={pubDateISO} class="text-label-13 text-(--fg-subtle)">
+    <time datetime={pubDateISO} class="text-label-13 md:text-label-14 text-(--fg-subtle)">
       {pubDateDisplay}
     </time>
   </div>
 
   <div class="flex flex-col gap-3 md:gap-6 flex-1 min-h-0">
-    <h2 class="text-heading-20 md:text-heading-24 lg:text-heading-32 text-(--fg) line-clamp-3 md:line-clamp-4">
+    <h2 class="text-heading-20 md:text-heading-24 lg:text-heading-32 text-(--fg) line-clamp-3 md:line-clamp-4 font-semibold">
       {title}
     </h2>
     <p class="post-excerpt text-copy-14 md:text-copy-16 font-medium text-(--fg-muted) line-clamp-4 md:line-clamp-8 group-hover:text-(--fg)">
@@ -75,12 +73,12 @@ if (post) {
         alt={`${getLabel(locale, 'author')}: ${authorName}`}
         width={48}
         height={48}
-        loading="lazy"
+        loading="eager"
         decoding="async"
-        class="w-5 h-5 object-cover rounded-full"
+        class="w-6 h-6 object-cover rounded-full"
       />
     )}
-    <span class="text-label-13 text-(--fg-subtle)">
+    <span class="text-label-13 md:text-label-14 text-(--fg-subtle)">
       {authorName}
     </span>
   </div>
@@ -93,10 +91,6 @@ if (post) {
       var(--bg) 30%,
       transparent 100%
     );
-    mask-image: linear-gradient(
-      to bottom,
-      var(--bg) 30%,
-      transparent 100%
-    );
+    mask-image: linear-gradient(to bottom, var(--bg) 30%, transparent 100%);
   }
 </style>
