@@ -210,7 +210,7 @@
   }
 
  .prose-custom h1 {
-    font-size: 40px;
+    font-size: 24px;
     font-weight: 700;
     letter-spacing: -0.03em;
     line-height: 44px;
@@ -313,7 +313,7 @@
   }
 
  .prose-custom h1 {
-    font-size: 48px;
+    font-size: 32px;
     font-weight: 700;
     letter-spacing: -0.05em;
     line-height: 52px;
@@ -406,5 +406,17 @@
 
  .prose-custom small {
     font-size: 14px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .prose-custom h1 {
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    line-height: 52px;
+    margin-top: 4rem;
+    margin-bottom: 1.25rem;
+    text-align: center;
   }
 }
