@@ -1,6 +1,10 @@
 /* src/styles/prose/components/table.css */
 
-/* ─── WRAPPER ────────────────────────────────────────────────────── */
+@reference '@/styles/utilities/index.css';
+
+/* ══════════════════════════════════════════════════════════════════
+   WRAPPER
+══════════════════════════════════════════════════════════════════ */
 .prose-custom .table-wrapper {
   overflow-x: auto;
   overflow-y: hidden;
@@ -16,15 +20,14 @@
   border-spacing: 0;
 }
 
-/* ─── HEAD ───────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════
+   HEAD
+══════════════════════════════════════════════════════════════════ */
 .prose-custom thead th {
+  @apply text-label-12;                   /* 12/16, weight 500, uppercase */
+  font-weight: 600;                       /* lebih tebal */
+  letter-spacing: 0.06em;                 /* lebih renggang */
   padding: 0.75rem 1rem;
-  font-family: var(--prose-font-sans);
-  font-size: 0.6875rem;
-  font-weight: 600;
-  line-height: 1.25rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
   color: var(--prose-fg-subtle);
   background: var(--prose-surface-hover);
   border-bottom: 1px solid var(--prose-border);
@@ -32,15 +35,17 @@
   white-space: nowrap;
 }
 
-/* ─── BODY ───────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════
+   BODY
+══════════════════════════════════════════════════════════════════ */
 .prose-custom tbody td {
+  @apply text-copy-14;                    /* 14/20, weight 400 */
+  line-height: 1.6;                       /* sesuaikan */
+  letter-spacing: -0.008em;               /* sentuhan minor */
   padding: 0.75rem 1rem;
-  font-size: 0.875rem;
-  line-height: 1.6;
   color: var(--prose-fg-muted);
   background: var(--prose-surface);
   border-bottom: 1px solid var(--prose-border);
-  letter-spacing: -0.008em;
 }
 
 .prose-custom tbody td strong {
@@ -50,11 +55,10 @@
 }
 
 .prose-custom tbody td small {
-  font-size: 0.75rem;
-  font-weight: 400;
+  @apply text-label-12;                   /* 12/16, weight 500 */
+  font-weight: 400;                       /* lebih ringan */
+  line-height: 1.25rem;                   /* override utility */
   color: var(--prose-fg-subtle);
-  line-height: 1.25rem;
-  letter-spacing: 0;
 }
 
 .prose-custom tbody tr:last-child td {
@@ -65,7 +69,9 @@
   background: var(--prose-surface-hover);
 }
 
-/* ─── BORDERS ────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════
+   BORDERS
+══════════════════════════════════════════════════════════════════ */
 .prose-custom th,
 .prose-custom td {
   white-space: nowrap;
@@ -77,7 +83,7 @@
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   MOBILE  ≤767px
+   MOBILE (max-width: 767px)
 ══════════════════════════════════════════════════════════════════ */
 @media (max-width: 767px) {
   .prose-custom .table-wrapper {
@@ -86,24 +92,27 @@
   }
 
   .prose-custom thead th {
+    @apply text-label-12;                 /* tetap 12px, tidak perlu 10px */
+    font-weight: 600;
+    letter-spacing: 0.07em;               /* sedikit lebih renggang */
     padding: 0.625rem 0.875rem;
-    font-size: 0.625rem;
-    letter-spacing: 0.07em;
   }
 
   .prose-custom tbody td {
-    padding: 0.625rem 0.875rem;
-    font-size: 0.8125rem;
+    @apply text-copy-13;                  /* 13/18, weight 400 */
     line-height: 1.55;
+    padding: 0.625rem 0.875rem;
   }
 
   .prose-custom tbody td small {
-    font-size: 0.6875rem;
+    @apply text-label-12;
+    font-weight: 400;
+    line-height: 1.25rem;
   }
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   DESKTOP  ≥768px
+   DESKTOP (min-width: 768px)
 ══════════════════════════════════════════════════════════════════ */
 @media (min-width: 768px) {
   .prose-custom .table-wrapper {
@@ -111,18 +120,22 @@
   }
 
   .prose-custom thead th {
-    padding: 0.875rem 1.25rem;
-    font-size: 0.6875rem;
+    @apply text-label-12;
+    font-weight: 600;
     letter-spacing: 0.06em;
+    padding: 0.875rem 1.25rem;
   }
 
   .prose-custom tbody td {
-    padding: 0.875rem 1.25rem;
-    font-size: 0.875rem;
+    @apply text-copy-14;
     line-height: 1.65;
+    letter-spacing: -0.008em;
+    padding: 0.875rem 1.25rem;
   }
 
   .prose-custom tbody td small {
-    font-size: 0.75rem;
+    @apply text-label-12;
+    font-weight: 400;
+    line-height: 1.25rem;
   }
 }
