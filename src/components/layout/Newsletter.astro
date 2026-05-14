@@ -46,10 +46,10 @@ const toastMessages = {
           required
           placeholder={placeholder}
           autocomplete="email"
-          class="nls-input"
+          class="nls-input text-copy-14"
           aria-label="Alamat email"
         />
-        <button id="nls-submit" type="submit" class="nls-btn" aria-label={btnLabel}>
+        <button id="nls-submit" type="submit" class="nls-btn text-label-13 font-semibold" aria-label={btnLabel}>
           <span class="nls-btn-label">{btnLabel}</span>
           <svg
             class="nls-spinner"
@@ -67,7 +67,7 @@ const toastMessages = {
     </form>
   </div>
 
-  <div id="nls-success" class="nls-success" hidden aria-live="polite">
+  <div id="nls-success" class="nls-success text-label-14" hidden aria-live="polite">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
       stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
       stroke-linejoin="round" aria-hidden="true">
@@ -80,7 +80,6 @@ const toastMessages = {
 </div>
 
 <style>
-  /* ─── ROOT ─────────────────────────────────────────────────────── */
   .nls-root {
     display: flex;
     flex-direction: column;
@@ -89,7 +88,6 @@ const toastMessages = {
     max-width: 22rem;
   }
 
-  /* ─── HEADER ────────────────────────────────────────────────────── */
   .nls-header {
     display: flex;
     flex-direction: column;
@@ -106,7 +104,6 @@ const toastMessages = {
     margin: 0;
   }
 
-  /* ─── FIELD ROW ─────────────────────────────────────────────────── */
   .nls-row {
     display: flex;
     height: 2.375rem;
@@ -134,13 +131,10 @@ const toastMessages = {
     75%       { transform: translateX(4px); }
   }
 
-  /* ─── INPUT ─────────────────────────────────────────────────────── */
   .nls-input {
     flex: 1;
     min-width: 0;
     padding: 0 0.75rem;
-    font-size: 0.875rem;
-    letter-spacing: -0.005em;
     background: transparent;
     border: none;
     outline: none;
@@ -151,16 +145,12 @@ const toastMessages = {
     color: var(--fg-dim, var(--fg-subtle));
   }
 
-  /* ─── BUTTON ────────────────────────────────────────────────────── */
   .nls-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.375rem;
     padding: 0 0.875rem;
-    font-size: 0.8125rem;
-    font-weight: 600;
-    letter-spacing: -0.005em;
     background: var(--fg);
     color: var(--bg);
     border: none;
@@ -183,7 +173,6 @@ const toastMessages = {
     cursor: not-allowed;
   }
 
-  /* ─── SPINNER ────────────────────────────────────────────────────── */
   .nls-spinner {
     width: 0.9375rem;
     height: 0.9375rem;
@@ -198,15 +187,11 @@ const toastMessages = {
   .nls-btn.is-loading .nls-btn-label { display: none; }
   .nls-btn.is-loading .nls-spinner   { display: block; }
 
-  /* ─── SUCCESS ────────────────────────────────────────────────────── */
   .nls-success {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.875rem;
-    font-weight: 500;
     color: var(--fg-muted);
-    letter-spacing: -0.005em;
     animation: nls-fade 0.2s ease;
   }
 
@@ -220,16 +205,12 @@ const toastMessages = {
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  /* ─── NOTE ───────────────────────────────────────────────────────── */
   .nls-note {
     color: var(--fg-subtle);
     margin: 0;
   }
 
-  /* ══════════════════════════════════════════════════════════════════
-     MOBILE  ≤480px
-  ══════════════════════════════════════════════════════════════════ */
-  @media (max-width: 480px) {
+  @media (max-width: 40rem) {
     .nls-root {
       gap: 0.875rem;
     }
@@ -252,7 +233,6 @@ const toastMessages = {
       border: 1px solid var(--border);
       border-radius: var(--radius-md, 8px);
       padding: 0.6875rem 0.875rem;
-      font-size: 1rem;
       transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
 
@@ -271,7 +251,6 @@ const toastMessages = {
       width: 100%;
       padding: 0.6875rem 1rem;
       border-radius: var(--radius-md, 8px);
-      font-size: 0.9375rem;
     }
   }
 </style>
