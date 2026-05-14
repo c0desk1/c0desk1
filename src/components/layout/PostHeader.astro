@@ -40,18 +40,18 @@ const {
         slug={authorSlug}
       />
     )}
+    {content && (
+      <div class="w-full max-w-3xl mt-4">
+        <PostMeta pubDate={pubDate} content={content} />
+      </div>
+    )}
     {image && (
-      <div class="w-full mt-4 md:mt-8">
+      <div class="prose-custom w-full mt-4 md:mt-8">
         <BlogFeaturedImage
           image={image.src}
           alt={image.alt || title}
           caption={(image as any).caption}
         />
-      </div>
-    )}
-    {content && (
-      <div class="w-full max-w-2xl mt-4">
-        <PostMeta pubDate={pubDate} content={content} />
       </div>
     )}
   </div>
