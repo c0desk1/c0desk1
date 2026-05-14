@@ -37,6 +37,9 @@ const optimizedAvatar = isCdnUrl(authorAvatar) ? cdnImage(authorAvatar, { w: 48,
 
 const autoSlug = slugify(title);
 const postUrl = localizePath(`/blog/${autoSlug}/`, locale);
+
+const avatarOfLabel = getLabel(locale, 'avatarOf');
+const authorLabel = getLabel(locale, 'author');
 ---
 
 <a
