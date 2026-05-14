@@ -1,14 +1,14 @@
 /* src/styles/prose/components/link.css */
 
-/* BASE */
+@reference '@/styles/utilities/index.css';
+
+/* ══════════════════════════════════════════════════════════════════
+   BASE
+══════════════════════════════════════════════════════════════════ */
 .prose-custom a {
   color: var(--prose-accent-dim);
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  text-decoration-thickness: 1px;
-  text-decoration-color: var(--prose-accent-dim);
+  font-weight: 600;                     /* setebal strong */
+  text-decoration: none;                /* tanpa garis bawah */
   outline-offset: 2px;
   -webkit-tap-highlight-color: transparent;
   transition: color var(--prose-transition), text-decoration-color var(--prose-transition);
@@ -16,37 +16,55 @@
 
 .prose-custom a:visited {
   color: var(--prose-accent-dim);
-  text-decoration-color: var(--prose-accent-dim);
 }
 
 .prose-custom a:focus-visible {
   outline: 2px solid var(--prose-accent);
   outline-offset: 2px;
   border-radius: var(--prose-radius-sm);
+  text-decoration: underline;
+  text-decoration-color: var(--prose-accent);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
 }
 
 @media (hover: hover) {
   .prose-custom a:hover {
     color: var(--prose-accent);
-    text-decoration-color: var(--prose-accent);
+    text-decoration: none;
   }
 }
 
-/* INLINE LINK */
+.prose-custom a:active {
+  text-decoration: underline;
+  text-decoration-color: var(--prose-accent);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   INLINE LINK
+══════════════════════════════════════════════════════════════════ */
 .prose-custom .inline-link {
   display: inline-flex;
   align-items: center;
   gap: 4px;
   text-decoration: none;
-  font-weight: 500;
-  letter-spacing: -0.01em;
+  font-weight: 600;
 }
 
 .prose-custom .inline-link:hover {
   color: var(--prose-accent);
+  text-decoration: none;
 }
 
-/* EXTERNAL ICON */
+.prose-custom .inline-link:active {
+  text-decoration: underline;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   EXTERNAL ICON
+══════════════════════════════════════════════════════════════════ */
 .prose-custom .external-icon {
   opacity: 0.5;
   width: 0.875em;
@@ -59,10 +77,13 @@
   transform: translate(1px, -1px);
 }
 
-/* MOBILE */
+/* ══════════════════════════════════════════════════════════════════
+   MOBILE (max-width: 767px)
+══════════════════════════════════════════════════════════════════ */
 @media (max-width: 767px) {
-  .prose-custom a,
-  .prose-custom .inline-link {
+  .prose-custom a:focus-visible,
+  .prose-custom a:active,
+  .prose-custom .inline-link:active {
     text-underline-offset: 2px;
   }
 }
