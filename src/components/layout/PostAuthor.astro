@@ -46,12 +46,7 @@ const optimizedAvatar = isCdnUrl(authorAvatar)? cdnImage(authorAvatar, { w: 40, 
 ---
 
 <div class="flex w-full justify-center">
-  <a
-    href={authorPath}
-    rel="author"
-    aria-label={`${authorLabel}: ${authorName}`}
-    class="inline-flex items-center gap-2 no-underline transition-opacity duration-150 hover:opacity-70"
-  >
+  <a href={authorPath} rel="author" aria-label={`${authorLabel}: ${authorName}`} class="inline-flex items-center gap-2 no-underline transition-opacity duration-150 hover:opacity-70">
     {authorAvatar && (
       <span class="relative inline-block h-5 w-5 shrink-0 overflow-hidden rounded-full">
         <Image
@@ -66,9 +61,8 @@ const optimizedAvatar = isCdnUrl(authorAvatar)? cdnImage(authorAvatar, { w: 40, 
         <span class="absolute inset-0 rounded-full border-(--border)"></span>
       </span>
     )}
-
     <div class="flex items-center gap-2">
-      <span class="text-label-14 text-(--fg)/90">
+      <span class="text-[14px] leading-[20px] font-medium text-(--fg)/90">
         {authorName}
       </span>
       {authorTitle && (
