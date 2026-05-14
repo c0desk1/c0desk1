@@ -15,8 +15,6 @@ import Container from "@/components/ui/Container.astro";
 import MobileMenu from "@/components/layout/MobileMenu.astro";
 import Cookie from "@/components/layout/Cookie.astro";
 import Search from "@/components/layout/Search.astro";
-import StatusPanel from "@/components/layout/StatusPanel.astro";
-
 import Toast from "@/components/ui/Toast.astro";
 
 import ThemeScript from "@/components/scripts/ThemeScript.astro";
@@ -173,7 +171,6 @@ const GTAG_ID = siteConfig.googleAnalyticsId;
       {footer && <Footer />}
     </div>
     <div id="modal-root"></div>
-    <StatusPanel />
     <Cookie />
     <MobileMenu alternateSlugs={alternateSlugs} basePath={basePath} />
     <AnchorScrollScript />
