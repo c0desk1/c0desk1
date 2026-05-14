@@ -207,11 +207,11 @@
    MOBILE ≤767px
 ══════════ */
 @media (max-width: 767px) {
-.prose-custom :where(h1, h2, h3, h4, h5, h6) {
+ .prose-custom :where(h1, h2, h3, h4, h5, h6) {
     scroll-margin-top: 56px;
   }
 
-.prose-custom h1 {
+ .prose-custom h1 {
     font-size: 40px;
     font-weight: 700;
     letter-spacing: -0.03em;
@@ -220,7 +220,7 @@
     margin-bottom: 1rem;
   }
 
-.prose-custom h2 {
+ .prose-custom h2 {
     font-size: 24px;
     font-weight: 600;
     letter-spacing: -0.02em;
@@ -229,7 +229,7 @@
     margin-bottom: 0.75rem;
   }
 
-.prose-custom h3 {
+ .prose-custom h3 {
     font-size: 20px;
     font-weight: 600;
     letter-spacing: -0.02em;
@@ -238,7 +238,7 @@
     margin-bottom: 0.625rem;
   }
 
-.prose-custom h4 {
+ .prose-custom h4 {
     font-size: 16px;
     font-weight: 600;
     letter-spacing: -0.01em;
@@ -247,7 +247,7 @@
     margin-bottom: 0.5rem;
   }
 
-.prose-custom h5 {
+ .prose-custom h5 {
     font-size: 14px;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -257,7 +257,7 @@
     text-transform: uppercase;
   }
 
-.prose-custom h6 {
+ .prose-custom h6 {
     font-size: 14px;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -267,42 +267,42 @@
     text-transform: uppercase;
   }
 
-.prose-custom.anchor-link.anchor-link-active {
+ .prose-custom.anchor-link.anchor-link-active {
     opacity: 1;
     pointer-events: auto;
     transform: translateX(0);
     color: var(--prose-fg-subtle);
   }
 
-.prose-custom.heading-group.has-anchor:active.anchor-link {
+ .prose-custom.heading-group.has-anchor:active.anchor-link {
     opacity: 1;
     pointer-events: auto;
     transform: translateX(0);
     color: var(--prose-fg-subtle);
   }
 
-.prose-custom p {
+ .prose-custom p {
     font-size: 16px;
     line-height: 24px;
     letter-spacing: -0.01em;
     margin-bottom: 1.25rem;
   }
 
-.prose-custom sup,
-.prose-custom sub {
+ .prose-custom sup,
+ .prose-custom sub {
     font-size: 9px;
   }
 
-.prose-custom mark {
+ .prose-custom mark {
     padding: 0.1em 0.2em;
     font-size: 14px;
   }
 
-.prose-custom small {
+ .prose-custom small {
     font-size: 12px;
   }
 
-.prose-custom abbr[title] {
+ .prose-custom abbr[title] {
     font-size: 14px;
   }
 }
@@ -311,11 +311,11 @@
    DESKTOP ≥768px
 ══════════ */
 @media (min-width: 768px) {
-.prose-custom :where(h1, h2, h3, h4, h5, h6) {
+ .prose-custom :where(h1, h2, h3, h4, h5, h6) {
     scroll-margin-top: 60px;
   }
 
-.prose-custom h1 {
+ .prose-custom h1 {
     font-size: 48px;
     font-weight: 700;
     letter-spacing: -0.05em;
@@ -324,7 +324,7 @@
     margin-bottom: 1.25rem;
   }
 
-.prose-custom h2 {
+ .prose-custom h2 {
     font-size: 32px;
     font-weight: 600;
     letter-spacing: -0.035em;
@@ -333,7 +333,7 @@
     margin-bottom: 0.875rem;
   }
 
-.prose-custom h3 {
+ .prose-custom h3 {
     font-size: 24px;
     font-weight: 600;
     letter-spacing: -0.028em;
@@ -342,7 +342,7 @@
     margin-bottom: 0.75rem;
   }
 
-.prose-custom h4 {
+ .prose-custom h4 {
     font-size: 20px;
     font-weight: 600;
     letter-spacing: -0.02em;
@@ -351,7 +351,7 @@
     margin-bottom: 0.625rem;
   }
 
-.prose-custom h5 {
+ .prose-custom h5 {
     font-size: 14px;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -362,7 +362,7 @@
     text-transform: uppercase;
   }
 
-.prose-custom h6 {
+ .prose-custom h6 {
     font-size: 14px;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -373,18 +373,18 @@
     color: var(--prose-fg-dim);
   }
 
-.prose-custom.heading-group.has-anchor:hover.anchor-link {
+ .prose-custom.heading-group.has-anchor:hover.anchor-link {
     opacity: 1;
     pointer-events: auto;
     transform: translateX(0);
     color: var(--prose-fg-subtle);
   }
 
-.prose-custom.anchor-link:hover {
+ .prose-custom.anchor-link:hover {
     color: var(--prose-fg);
   }
 
-.prose-custom p {
+ .prose-custom p {
     font-size: 18px;
     line-height: 26px;
     letter-spacing: -0.011em;
@@ -394,17 +394,17 @@
     font-feature-settings: "kern" 1, "liga" 1;
   }
 
-.prose-custom sup,
-.prose-custom sub {
+ .prose-custom sup,
+ .prose-custom sub {
     font-size: 10px;
   }
 
-.prose-custom mark {
+ .prose-custom mark {
     padding: 0.1em 0.25em;
     font-size: 14px;
   }
 
-.prose-custom small {
+ .prose-custom small {
     font-size: 14px;
   }
 }
