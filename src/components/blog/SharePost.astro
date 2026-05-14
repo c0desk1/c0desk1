@@ -64,7 +64,7 @@ const overflow = [
   data-title={title}
   data-description={description}
 >
-  <button class="sa-native text-label-13" aria-label={shareArticleLabel} title={shareLabel} hidden>
+  <button class="sa-native text-button-14" aria-label={shareArticleLabel} title={shareLabel} hidden>
     <Icon name="share" class="w-4 h-4" />
     <span>{shareLabel}</span>
   </button>
@@ -100,8 +100,7 @@ const overflow = [
         aria-label={otherPlatformsLabel}
         title={moreLabel}
         aria-expanded="false"
-        aria-haspopup="menu"
-      >
+        aria-haspopup="menu">
         <Icon name="more" class="w-3.5 h-3.5" />
       </button>
 
@@ -112,7 +111,7 @@ const overflow = [
             target={link.id !== "email" ? "_blank" : undefined}
             rel={link.id !== "email" ? "noopener noreferrer" : undefined}
             role="menuitem"
-            class="sa-overflow-item text-label-13"
+            class="sa-overflow-item text-button-12"
             data-platform={link.id}
           >
             {link.id === "email" && <Icon name="email" class="w-3.5 h-3.5 shrink-0" />}
@@ -143,7 +142,6 @@ const overflow = [
     background: var(--bg-muted);
   }
 
-  /* Typography sudah diatur via utility, hapus manual font-size dll */
   .sa-label {
     margin: 0;
   }
