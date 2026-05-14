@@ -12,7 +12,7 @@ const { title, highlight, description } = Astro.props;
   <div class="space-y-4">
     <h1 
       id="hero-title"
-      class="text-4xl md:text-6xl font-semibold tracking-tight text-(--fg)"
+      class="text-heading-40 md:text-heading-56 lg:text-heading-64 text-(--fg)"
     >
       {title}
       {highlight && (
@@ -21,7 +21,7 @@ const { title, highlight, description } = Astro.props;
         </span>
       )}
     </h1>
-    <p class="text-base md:text-lg leading-relaxed text-(--fg-muted) max-w-3xl">
+    <p class="text-copy-20 md:text-copy-24 text-(--fg-muted) max-w-3xl">
       {description}
     </p>
   </div>
