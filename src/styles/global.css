@@ -3,7 +3,7 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-@import "@/styles/utilities/index.css";
+@import "@/styles/utils.css";
 @import "@/styles/prose/index.css";
 
 @custom-variant dark (&:where(.dark,.dark *));
