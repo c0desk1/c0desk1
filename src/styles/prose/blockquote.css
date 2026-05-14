@@ -39,14 +39,14 @@
 }
 
 .prose-custom .quote-body p:first-of-type::before {
-  content: "\201C";
+  content: "❝";
   margin-right: 0.2rem;
   color: var(--prose-fg-subtle);
   font-style: normal;
 }
 
 .prose-custom .quote-body p:last-of-type::after {
-  content: "\201D";
+  content: "❞";
   margin-left: 0.2rem;
   color: var(--prose-fg-subtle);
   font-style: normal;
