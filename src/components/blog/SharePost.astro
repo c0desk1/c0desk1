@@ -64,13 +64,13 @@ const overflow = [
   data-title={title}
   data-description={description}
 >
-  <button class="sa-native" aria-label={shareArticleLabel} title={shareLabel} hidden>
-    <Icon name="share" className="w-4 h-4" />
+  <button class="sa-native text-label-13" aria-label={shareArticleLabel} title={shareLabel} hidden>
+    <Icon name="share" class="w-4 h-4" />
     <span>{shareLabel}</span>
   </button>
 
   {variant === "card" && (
-    <p class="sa-label">{shareArticleLabel}</p>
+    <p class="sa-label text-label-13 font-semibold tracking-wide">{shareArticleLabel}</p>
   )}
 
   <div class="sa-links" aria-label={otherPlatformsLabel}>
@@ -85,12 +85,12 @@ const overflow = [
         class="sa-link"
         data-platform={link.id}
       >
-        {link.id === "x" && <Icon name="twitter" className="w-4 h-4" />}
-        {link.id === "facebook" && <Icon name="facebook" className="w-4 h-4" />}
-        {link.id === "linkedin" && <Icon name="linkedin" className="w-4 h-4" />}
-        {link.id === "whatsapp" && <Icon name="whatsapp" className="w-4 h-4" />}
-        {link.id === "telegram" && <Icon name="telegram" className="w-4 h-4" />}
-        {link.id === "threads" && <Icon name="threads" className="w-4 h-4" />}
+        {link.id === "x" && <Icon name="twitter" class="w-4 h-4" />}
+        {link.id === "facebook" && <Icon name="facebook" class="w-4 h-4" />}
+        {link.id === "linkedin" && <Icon name="linkedin" class="w-4 h-4" />}
+        {link.id === "whatsapp" && <Icon name="whatsapp" class="w-4 h-4" />}
+        {link.id === "telegram" && <Icon name="telegram" class="w-4 h-4" />}
+        {link.id === "threads" && <Icon name="threads" class="w-4 h-4" />}
       </a>
     ))}
 
@@ -102,7 +102,7 @@ const overflow = [
         aria-expanded="false"
         aria-haspopup="menu"
       >
-        <Icon name="more" className="w-3.5 h-3.5" />
+        <Icon name="more" class="w-3.5 h-3.5" />
       </button>
 
       <div class="sa-overflow-menu" role="menu" hidden>
@@ -112,11 +112,11 @@ const overflow = [
             target={link.id !== "email" ? "_blank" : undefined}
             rel={link.id !== "email" ? "noopener noreferrer" : undefined}
             role="menuitem"
-            class="sa-overflow-item"
+            class="sa-overflow-item text-label-13"
             data-platform={link.id}
           >
-            {link.id === "email" && <Icon name="email" className="w-3.5 h-3.5 shrink-0" />}
-            {link.id === "reddit" && <Icon name="reddit" className="w-3.5 h-3.5" />}
+            {link.id === "email" && <Icon name="email" class="w-3.5 h-3.5 shrink-0" />}
+            {link.id === "reddit" && <Icon name="reddit" class="w-3.5 h-3.5" />}
             <span>{link.label}</span>
           </a>
         ))}
@@ -143,12 +143,8 @@ const overflow = [
     background: var(--bg-muted);
   }
 
+  /* Typography sudah diatur via utility, hapus manual font-size dll */
   .sa-label {
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: var(--fg-muted);
-    letter-spacing: 0.03em;
-
     margin: 0;
   }
 
@@ -157,8 +153,6 @@ const overflow = [
     align-items: center;
     gap: 0.4rem;
     padding: 0.4rem 0.875rem 0.4rem 0.625rem;
-    font-size: 0.8125rem;
-    font-weight: 500;
     color: var(--fg);
     background: var(--bg);
     border: 1px solid var(--border);
@@ -241,8 +235,6 @@ const overflow = [
     gap: 0.5rem;
     padding: 0.5rem 0.625rem;
     border-radius: 0.5rem;
-    font-size: 0.8125rem;
-    font-weight: 500;
     color: var(--fg-muted);
     text-decoration: none;
     white-space: nowrap;
