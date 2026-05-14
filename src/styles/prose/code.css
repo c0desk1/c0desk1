@@ -1,28 +1,32 @@
 /* src/styles/prose/code.css */
 
-/* INLINE CODE */
+@reference '@/styles/utilities/index.css';
+
+/* ══════════════════════════════════════════════════════════════════
+   INLINE CODE
+══════════════════════════════════════════════════════════════════ */
 .prose-custom code:not(pre code) {
-  font-family: var(--prose-font-mono);
-  font-size: 14px;
-  font-weight: 500;
+  @apply text-label-14-mono;           /* 14/20, weight 500, letter-spacing:0 */
   background-color: var(--prose-surface);
   color: var(--prose-fg);
   padding: 0.2em 0.4em;
   border-radius: var(--prose-radius-md);
   border: 1px solid var(--prose-border);
   white-space: break-spaces;
-  letter-spacing: -0.01em;
+  line-height: normal;                 /* override utility line-height agar tidak 20px */
 }
 
 .prose-custom h1 code,
 .prose-custom h2 code,
 .prose-custom h3 code,
 .prose-custom summary code {
-  font-size: 0.9em;
+  font-size: 0.9em;                    /* relatif terhadap heading */
   background-color: var(--prose-surface-hover);
 }
 
-/* CODE BLOCK */
+/* ══════════════════════════════════════════════════════════════════
+   CODE BLOCK (pre)
+══════════════════════════════════════════════════════════════════ */
 .prose-custom pre {
   font-family: var(--prose-font-mono);
   background-color: var(--prose-surface) !important;
@@ -44,12 +48,14 @@
 }
 
 .prose-custom pre code {
-  font-size: 14px;
-  line-height: 22px;
-  letter-spacing: -0.01em;
+  @apply text-label-14-mono;           /* 14/20, weight 500 */
+  line-height: 22px;                   /* sesuaikan */
+  letter-spacing: -0.01em;             /* tambahan */
 }
 
-/* COPY BUTTON */
+/* ══════════════════════════════════════════════════════════════════
+   COPY BUTTON (manual)
+══════════════════════════════════════════════════════════════════ */
 .prose-custom pre .copy-btn {
   position: absolute;
   top: 0.75rem;
@@ -77,7 +83,9 @@
   border-color: var(--prose-accent);
 }
 
-/* CODE GROUP (Code Block Custom) */
+/* ══════════════════════════════════════════════════════════════════
+   CODE GROUP (code block custom)
+══════════════════════════════════════════════════════════════════ */
 .prose-custom .code-group {
   margin: 2.5rem 0;
   overflow-x: auto;
@@ -106,7 +114,7 @@
   padding-block: 0.625rem;
   color: var(--prose-fg-subtle);
   font-weight: 500;
-  font-size: 14px;
+  font-size: 14px;                  /* tetap manual */
   letter-spacing: -0.005em;
   transition: color var(--prose-transition);
   cursor: pointer;
@@ -171,17 +179,19 @@
 
 .prose-custom .code-group-content {
   margin: 0;
-  /* margin: 1.5rem 0; */
   border-radius: 0;
   border-style: none;
   background-color: transparent;
 }
 
-/* MOBILE */
+/* ══════════════════════════════════════════════════════════════════
+   MOBILE (max-width: 767px)
+══════════════════════════════════════════════════════════════════ */
 @media (max-width: 767px) {
   .prose-custom code:not(pre code) {
-    font-size: 13px;
+    @apply text-label-13-mono;       /* 13/18, weight 500 */
     padding: 0.15em 0.3em;
+    line-height: normal;
   }
 
   .prose-custom pre {
@@ -191,8 +201,9 @@
   }
 
   .prose-custom pre code {
-    font-size: 13px;
+    @apply text-label-13-mono;       /* 13/18, weight 500 */
     line-height: 20px;
+    letter-spacing: -0.01em;
   }
 
   .prose-custom pre .copy-btn {
@@ -213,14 +224,16 @@
   }
 }
 
-/* DESKTOP */
+/* ══════════════════════════════════════════════════════════════════
+   DESKTOP (min-width: 768px)
+══════════════════════════════════════════════════════════════════ */
 @media (min-width: 768px) {
   .prose-custom code:not(pre code) {
-    font-size: 14px;
+    @apply text-label-14-mono;
   }
 
   .prose-custom pre code {
-    font-size: 14px;
+    @apply text-label-14-mono;
     line-height: 22px;
     letter-spacing: -0.01em;
   }
@@ -230,7 +243,9 @@
   }
 }
 
-/* DARK MODE (Shiki) */
+/* ══════════════════════════════════════════════════════════════════
+   DARK MODE (Shiki)
+══════════════════════════════════════════════════════════════════ */
 .dark .astro-code {
   background-color: var(--shiki-dark-bg, var(--prose-surface)) !important;
 }
