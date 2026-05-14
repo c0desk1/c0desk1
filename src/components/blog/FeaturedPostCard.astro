@@ -68,15 +68,18 @@ if (post) {
 
   <div class="mt-auto flex items-center gap-2 shrink-0">
     {authorAvatar && (
-      <Image
-        src={optimizedAvatar}
-        alt={`${getLabel(locale, 'author')}: ${authorName}`}
-        width={48}
-        height={48}
-        loading="eager"
-        decoding="async"
-        class="w-6 h-6 object-cover rounded-full"
-      />
+      <span aria-hidden="true" aria-label="" role="img" class="w-6 h-6 shrink-0 rounded-full inline-block overflow-hidden leading-0 align-top relative transition-[background] duration-200 ease-in-out">
+        <Image
+          src={optimizedAvatar}
+          alt={`${getLabel(locale, 'author')}: ${authorName}`}
+          width={48}
+          height={48}
+          loading="eager"
+          decoding="async"
+          class="h-full w-full object-cover"
+        />
+        <span class="absolute inset-0 rounded-full border-(--border)"></span>
+      </span>
     )}
     <span class="text-label-13 md:text-label-14 text-(--fg-subtle)">
       {authorName}
