@@ -1,14 +1,14 @@
 /* src/styles/prose/code.css */
 
-/* ─── INLINE CODE ────────────────────────────────────────────────── */
+/* INLINE CODE */
 .prose-custom code:not(pre code) {
   font-family: var(--prose-font-mono);
-  font-size: 0.8125em;
+  font-size: 14px;
   font-weight: 500;
   background-color: var(--prose-surface);
   color: var(--prose-fg);
   padding: 0.15em 0.4em;
-  border-radius: var(--prose-radius-sm);
+  border-radius: var(--prose-radius-lg);
   border: 1px solid var(--prose-border);
   white-space: break-spaces;
   letter-spacing: -0.01em;
@@ -18,17 +18,18 @@
 .prose-custom h2 code,
 .prose-custom h3 code,
 .prose-custom summary code {
-  font-size: 0.875em;
+  font-size: 0.9em;
   background-color: var(--prose-surface-hover);
 }
 
-/* ─── CODE BLOCK ─────────────────────────────────────────────────── */
+/* CODE BLOCK */
 .prose-custom pre {
   font-family: var(--prose-font-mono);
-  background-color: var(--prose-surface) !important;
+  background-color: var(--prose-surface);
   border: 1px solid var(--prose-border);
   border-radius: var(--prose-radius-md);
-  padding: 1.25rem 1.5rem;
+ /* padding: 1.25rem 1.5rem; */
+  padding: 0 1.5rem;
   overflow-x: auto;
   margin: 2rem 0;
   position: relative;
@@ -43,13 +44,19 @@
   border-radius: 2px;
 }
 
-/* ─── COPY BUTTON ────────────────────────────────────────────────── */
+.prose-custom pre code {
+  font-size: 14px;
+  line-height: 22px;
+  letter-spacing: -0.01em;
+}
+
+/* COPY BUTTON */
 .prose-custom pre .copy-btn {
   position: absolute;
   top: 0.75rem;
   right: 0.75rem;
   font-family: var(--prose-font-sans);
-  font-size: 0.6875rem;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.03em;
   text-transform: uppercase;
@@ -71,7 +78,7 @@
   border-color: var(--prose-accent);
 }
 
-/* ─── CODE GROUP ─────────────────────────────────────────────────── */
+/* CODE GROUP */
 .prose-custom .code-group {
   margin: 2rem 0;
   overflow-x: auto;
@@ -100,7 +107,7 @@
   padding-block: 0.625rem;
   color: var(--prose-fg-subtle);
   font-weight: 500;
-  font-size: 0.8125rem;
+  font-size: 13px;
   letter-spacing: -0.005em;
   transition: color var(--prose-transition);
   cursor: pointer;
@@ -145,15 +152,15 @@
   border: none;
   margin: 0;
   border-radius: 0;
-  background-color: transparent !important;
+  background-color: transparent;
   overflow-x: auto;
-  white-space: pre !important;
-  word-break: normal !important;
-  word-wrap: normal !important;
+  white-space: pre;
+  word-break: normal;
+  word-wrap: normal;
 }
 
 .prose-custom .code-group pre code {
-  white-space: pre !important;
+  white-space: pre;
 }
 
 .prose-custom .code-group pre::-webkit-scrollbar { height: 4px; }
@@ -170,30 +177,28 @@
   background-color: transparent;
 }
 
-/* ══════════════════════════════════════════════════════════════════
-   MOBILE  ≤767px
-══════════════════════════════════════════════════════════════════ */
+/* MOBILE */
 @media (max-width: 767px) {
   .prose-custom code:not(pre code) {
-    font-size: 0.75rem !important;
+    font-size: 13px;
     padding: 0.1em 0.3em;
   }
 
   .prose-custom pre {
-    padding: 1rem;
+    padding: 0 1rem;
     margin: 1.5rem 0;
     border-radius: var(--prose-radius-sm);
   }
 
   .prose-custom pre code {
-    font-size: 0.8125rem !important;
-    line-height: 1.7;
+    font-size: 13px;
+    line-height: 20px;
   }
 
   .prose-custom pre .copy-btn {
     top: 0.5rem;
     right: 0.5rem;
-    font-size: 0.5625rem;
+    font-size: 10px;
     padding: 0.2rem 0.45rem;
   }
 
@@ -204,35 +209,34 @@
   }
 
   .prose-custom .code-group-title {
-    font-size: 0.75rem !important;
+    font-size: 12px;
   }
 }
 
-/* ══════════════════════════════════════════════════════════════════
-   DESKTOP  ≥768px
-══════════════════════════════════════════════════════════════════ */
+/* DESKTOP */
 @media (min-width: 768px) {
   .prose-custom code:not(pre code) {
-    font-size: 0.8125rem !important;
+    font-size: 14px;
   }
 
   .prose-custom pre {
-    padding: 1.25rem 1.5rem;
+    /* padding: 1.25rem 1.5rem; */
+    padding: 0 1.5rem;
     margin: 2rem 0;
   }
 
   .prose-custom pre code {
-    font-size: 0.875rem;
-    line-height: 1.75rem;
+    font-size: 14px;
+    line-height: 22px;
     letter-spacing: -0.01em;
   }
 
   .prose-custom .code-group-title {
-    font-size: 0.8125rem !important;
+    font-size: 13px;
   }
 }
 
-/* ─── DARK MODE (Shiki) ──────────────────────────────────────────── */
+/* DARK MODE (Shiki) */
 .dark .astro-code {
   background-color: var(--shiki-dark-bg, var(--prose-surface)) !important;
 }
