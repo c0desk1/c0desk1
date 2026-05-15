@@ -21,6 +21,7 @@ import PostNavigation from '@/components/blog/PostNavigation.astro';
 import BlogRelatedPosts from "@/components/blog/BlogRelatedPosts.astro";
 import BackToTop from "@/components/ui/BackToTop.astro";
 import SharePost from '@/components/blog/SharePost.astro';
+import CopyButton from '@/components/ui/CopyButton.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) =>!data.draft);
@@ -168,7 +169,10 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
             />
           </Section>
           <Section size="sm" class="section-divider">
-            <SharePost url={canonicalURL} title={post.data.title} description={post.data.description} tags={post.data.tags} />
+            <div class="flex justify-between items-center">
+        		<SharePost url={canonicalURL} title={title} description={description} />
+                <CopyButton />
+        	</div>
           </Section>
           <Section size="sm">
             <div id="article">
