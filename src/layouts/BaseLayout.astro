@@ -5,6 +5,8 @@ import "@/styles/global.css";
 import { siteConfig } from "@/config/site";
 import { getCurrentLocale, getLabel, type LocaleMap } from "@/utils/i18n"
 
+import ThemeScript from "@/components/scripts/ThemeScript.astro";
+
 import BaseHead from "@/components/layout/BaseHead.astro";
 import Header from "@/components/layout/Header.astro";
 import Footer from "@/components/layout/Footer.astro";
@@ -15,10 +17,6 @@ import Container from "@/components/ui/Container.astro";
 import MobileMenu from "@/components/layout/MobileMenu.astro";
 import Cookie from "@/components/layout/Cookie.astro";
 import Search from "@/components/layout/Search.astro";
-
-import Toast from "@/components/ui/Toast.astro";
-
-import ThemeScript from "@/components/scripts/ThemeScript.astro";
 
 import GtagScript from "@/components/scripts/GtagScript.astro";
 import AdsenseScript from "@/components/scripts/AdsenseScript.astro";
@@ -171,6 +169,5 @@ const GTAG_ID = siteConfig.googleAnalyticsId;
     <Cookie />
     <MobileMenu alternateSlugs={alternateSlugs} basePath={basePath} />
     <AnchorScrollScript />
-    <Toast />
   </body>
 </html>
