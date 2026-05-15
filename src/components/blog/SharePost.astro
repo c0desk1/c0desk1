@@ -1,15 +1,12 @@
 ---
 // src/components/blog/ShareArticle.astro
 import Icon from "@/components/ui/Icon";
-import { getShareUrls } from "@/lib/utils";
 import { getCurrentLocale, getLabel } from "@/utils/i18n";
 
 interface Props {
   url: string;
   title: string;
   description?: string;
-  tags?: string[];
-  via?: string;
   variant?: "row" | "card";
 }
 
@@ -19,37 +16,11 @@ const {
   url,
   title,
   description = "",
-  tags = [],
-  via = "",
   variant = "row",
 } = Astro.props;
 
 const shareLabel = getLabel(locale, 'share');
 const shareArticleLabel = getLabel(locale, 'shareArticle');
-const shareToLabel = getLabel(locale, 'shareTo');
-
-const baseUrls = getShareUrls(url, title);
-const enc = encodeURIComponent;
-
-const allUrls = {
-  ...baseUrls,
-  x: `https://x.com/intent/tweet?text=${enc(title)}&url=${enc(url)}${tags.length ? `&hashtags=${enc(tags.join(','))}` : ''}${via ? `&via=${enc(via)}` : ''}`,
-  whatsapp: `https://wa.me/?text=${enc(`${title} ${url}`)}`,
-  telegram: `https://t.me/share/url?url=${enc(url)}&text=${enc(title)}`,
-  threads: `https://www.threads.net/intent/post?text=${enc(`${title} ${url}`)}`,
-  reddit: `https://www.reddit.com/submit?url=${enc(url)}&title=${enc(title)}`,
-};
-
-const platforms = [
-  { id: "x", label: "X", href: allUrls.x, icon: "twitter" },
-  { id: "facebook", label: "Facebook", href: allUrls.facebook, icon: "facebook" },
-  { id: "linkedin", label: "LinkedIn", href: allUrls.linkedin, icon: "linkedin" },
-  { id: "whatsapp", label: "WhatsApp", href: allUrls.whatsapp, icon: "whatsapp" },
-  { id: "telegram", label: "Telegram", href: allUrls.telegram, icon: "telegram" },
-  { id: "threads", label: "Threads", href: allUrls.threads, icon: "threads" },
-  { id: "reddit", label: "Reddit", href: allUrls.reddit, icon: "reddit" },
-  { id: "email", label: "Email", href: allUrls.email, icon: "email" },
-];
 ---
 
 <div
@@ -59,39 +30,21 @@ const platforms = [
   data-description={description}
 >
   <button class="sa-native text-button-14" aria-label={shareArticleLabel} title={shareLabel} hidden>
-    <Icon name="share" class="w-4 h-4" />
+    <Icon name="share" className="w-4 h-4" />
     <span>{shareLabel}</span>
   </button>
 
   {variant === "card" && (
     <p class="sa-label text-label-13 font-semibold tracking-wide">{shareArticleLabel}</p>
   )}
-
-  <div class="sa-links" aria-label={shareArticleLabel}>
-    {platforms.map((platform) => (
-      <a
-        href={platform.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={`${shareToLabel} ${platform.label}`}
-        title={platform.label}
-        class="sa-link"
-        data-platform={platform.id}
-        key={platform.id}
-      >
-        <Icon name={platform.icon} class="w-4 h-4" />
-      </a>
-    ))}
-  </div>
 </div>
 
 <style>
   .sa-wrap {
     position: relative;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 0.75rem;
-    flex-wrap: wrap;
   }
 
   .sa-wrap--card {
@@ -101,6 +54,7 @@ const platforms = [
     border: 1px solid var(--border);
     border-radius: var(--radius-xl);
     background: var(--bg-muted);
+    width: 100%;
   }
 
   .sa-label {
@@ -121,46 +75,6 @@ const platforms = [
   }
   .sa-native:not([hidden]) { display: inline-flex; }
   .sa-native:hover { background: var(--bg-muted); border-color: var(--border-strong); }
-
-  .sa-links {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .sa-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2rem;
-    height: 2rem;
-    border-radius: 0.5rem;
-    border: 1px solid var(--border);
-    background: var(--bg);
-    color: var(--fg-muted);
-    cursor: pointer;
-    text-decoration: none;
-    transition: color 0.13s, background 0.13s, border-color 0.13s, transform 0.1s;
-    flex-shrink: 0;
-  }
-  .sa-link:hover {
-    color: var(--fg);
-    background: var(--bg-muted);
-    border-color: var(--border-strong);
-    transform: translateY(-1px);
-  }
-  .sa-link:active { transform: translateY(0) scale(0.95); }
-
-  .sa-link[data-platform="x"]:hover { color: #000; }
-  .sa-link[data-platform="whatsapp"]:hover { color: #25d366; }
-  .sa-link[data-platform="telegram"]:hover { color: #2aabee; }
-  .sa-link[data-platform="facebook"]:hover { color: #1877f2; }
-  .sa-link[data-platform="linkedin"]:hover { color: #0a66c2; }
-  .sa-link[data-platform="reddit"]:hover { color: #ff4500; }
-  @media (prefers-color-scheme: dark) {
-    .sa-link[data-platform="x"]:hover { color: #fff; }
-  }
 </style>
 
 <script>
