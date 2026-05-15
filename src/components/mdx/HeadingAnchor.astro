@@ -1,16 +1,16 @@
 ---
-// src/components/mdx/Heading.astro
+// src/components/mdx/HeadingAnchor.astro
 import Icon from "../ui/Icon";
 import { slugify } from "@/lib/utils";
 import { getCurrentLocale } from "@/utils/i18n";
 
 const locale = getCurrentLocale(Astro);
-const { as: Tag = 'h2', id: propId, ...props } = Astro.props;
+const { as: Tag = 'h2', id: _, ...props } = Astro.props;
 
 const raw = await Astro.slots.render('default');
 const text = raw.replace(/<[^>]+>/g, '').trim();
 
-const id = propId ?? slugify(text, 80);
+const id = slugify(text, 80);
 
 const anchorLabels: Record<string, string> = {
   id: "Tautan ke judul ini",
