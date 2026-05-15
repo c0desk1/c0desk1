@@ -1,39 +1,39 @@
 /* src/styles/prose/tokens.css */
 
 /* ══════════════════════════════════════════════════════════════════
-   LIGHT MODE
+   LIGHT MODE (Geist)
 ══════════════════════════════════════════════════════════════════ */
 :root {
-  /* ─── Accent ─────────────────────────────────────────────────── */
-  --prose-accent:       #0062ff;
-  --prose-accent-dim:   #2b7cff;
-  --prose-accent-soft:  #a8dfff;
-  --prose-accent-hover: #0051d4;
+  /* ─── Accent (Geist Blue) ────────────────────────────────────── */
+  --prose-accent:       #0070f3;
+  --prose-accent-dim:   #0761d1;
+  --prose-accent-soft:  #e1f0ff;
+  --prose-accent-hover: #0761d1;
 
-  /* ─── Highlight ──────────────────────────────────────────────── */
-  --prose-accent-yellow:      #FEF3C7;
-  --prose-accent-yellow-dim:  #FDE68A;
-  --prose-accent-yellow-soft: #78350F;
+  /* ─── Highlight (Geist Yellow) ───────────────────────────────── */
+  --prose-accent-yellow:      #fff9e6;
+  --prose-accent-yellow-dim:  #ffe4a3;
+  --prose-accent-yellow-soft: #663c00;
 
   /* ─── Foreground ─────────────────────────────────────────────── */
   --prose-black:      #000000;
   --prose-white:      #ffffff;
-  --prose-fg:         #111111;
-  --prose-fg-muted:   #444444;
-  --prose-fg-subtle:  #777777;
+  --prose-fg:         #000000;
+  --prose-fg-muted:   #666666;
+  --prose-fg-subtle:  #888888;
   --prose-fg-dim:     #aaaaaa;
 
-  /* ─── Surface ────────────────────────────────────────────────── */
-  --prose-border:        #e5e5e5;
-  --prose-surface:       #fafafa;
-  --prose-surface-hover: #f2f2f2;
+  /* ─── Surface & Borders ──────────────────────────────────────── */
+  --prose-border:        #eaeaea;
+  --prose-surface:       #ffffff;
+  --prose-surface-hover: #fafafa;
   --prose-surface-dim:   #f5f5f5;
-  --prose-bg-subtle:     #f7f7f7;
-  --prose-bg-muted:      #f4f4f4;
+  --prose-bg-subtle:     #fcfcfc;
+  --prose-bg-muted:      #f9f9f9;
 
-  /* ─── Typography ─────────────────────────────────────────────── */
-  --prose-font-sans: 'Geist';
-  --prose-font-mono: 'Geist Mono';
+  /* ─── Typography (Geist) ─────────────────────────────────────── */
+  --prose-font-sans: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --prose-font-mono: 'Geist Mono', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
 
   /* ─── Radius ─────────────────────────────────────────────────── */
   --prose-radius-sm: 4px;
@@ -44,87 +44,86 @@
   /* ─── Motion ─────────────────────────────────────────────────── */
   --prose-transition: 0.15s ease;
 
-  /* ─── Callouts ───────────────────────────────────────────────── */
-  --callout-note-bg:     #f4f4f5;
-  --callout-note-border: #d4d4d8;
-  --callout-note-text:   #27272a;
-  --callout-note-icon:   #71717a;
+  /* ─── Callouts (Geist-inspired) ──────────────────────────────── */
+  --callout-note-bg:     #f5f5f5;
+  --callout-note-border: #e0e0e0;
+  --callout-note-text:   #333333;
+  --callout-note-icon:   #888888;
 
-  --callout-info-bg:     #eff6ff;
-  --callout-info-border: #93c5fd;
-  --callout-info-text:   #1d4ed8;
-  --callout-info-icon:   #3b82f6;
+  --callout-info-bg:     #f0f7ff;
+  --callout-info-border: #cce4ff;
+  --callout-info-text:   #0056b3;
+  --callout-info-icon:   #0070f3;
 
   --callout-tip-bg:      #f0fdf4;
-  --callout-tip-border:  #86efac;
-  --callout-tip-text:    #15803d;
+  --callout-tip-border:  #bcf0c2;
+  --callout-tip-text:    #166534;
   --callout-tip-icon:    #22c55e;
 
-  --callout-warning-bg:     #fffbeb;
-  --callout-warning-border: #fcd34d;
-  --callout-warning-text:   #b45309;
+  --callout-warning-bg:     #fff9e6;
+  --callout-warning-border: #ffe5a3;
+  --callout-warning-text:   #994c00;
   --callout-warning-icon:   #f59e0b;
 
-  --callout-danger-bg:     #fff1f2;
-  --callout-danger-border: #fca5a5;
+  --callout-danger-bg:     #fff5f5;
+  --callout-danger-border: #ffcdcd;
   --callout-danger-text:   #b91c1c;
   --callout-danger-icon:   #ef4444;
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   DARK MODE
-   Background pure black (#000000) ala Vercel
+   DARK MODE (Geist Dark)
+   Background pure black (#000) atau near-black
 ══════════════════════════════════════════════════════════════════ */
 .dark {
   /* ─── Accent ─────────────────────────────────────────────────── */
-  --prose-accent:       #3b8bff;
-  --prose-accent-dim:   #5b9fff;
-  --prose-accent-soft:  #2a5ca8;
+  --prose-accent:       #3291ff;
+  --prose-accent-dim:   #0070f3;
+  --prose-accent-soft:  #1a2c3e;
   --prose-accent-hover: #60a5fa;
 
   /* ─── Highlight ──────────────────────────────────────────────── */
-  --prose-accent-yellow:      #78350F;
-  --prose-accent-yellow-dim:  #92400E;
-  --prose-accent-yellow-soft: #FEF3C7;
+  --prose-accent-yellow:      #332200;
+  --prose-accent-yellow-dim:  #664400;
+  --prose-accent-yellow-soft: #ffe6b3;
 
   /* ─── Foreground ─────────────────────────────────────────────── */
-  --prose-fg:        #ededed;
-  --prose-fg-muted:  #b4b4b4;
-  --prose-fg-subtle: #737373;
-  --prose-fg-dim:    #525252;
+  --prose-fg:        #ffffff;
+  --prose-fg-muted:  #888888;
+  --prose-fg-subtle: #666666;
+  --prose-fg-dim:    #444444;
 
-  /* ─── Surface ────────────────────────────────────────────────── */
-  --prose-border:        #333333;          /* lebih terang agar terlihat di atas hitam */
-  --prose-surface:       #000000;          /* pure black */
-  --prose-surface-hover: #0a0a0a;          /* sedikit lebih terang dari hitam */
+  /* ─── Surface & Borders ──────────────────────────────────────── */
+  --prose-border:        #333333;
+  --prose-surface:       #000000;
+  --prose-surface-hover: #111111;
   --prose-surface-dim:   #050505;
-  --prose-bg-subtle:     #080808;
-  --prose-bg-muted:      #0d0d0d;
+  --prose-bg-subtle:     #0a0a0a;
+  --prose-bg-muted:      #0f0f0f;
 
-  /* ─── Callouts ───────────────────────────────────────────────── */
-  /* Beri sedikit cahaya agar tidak tenggelam di hitam */
-  --callout-note-bg:     #111111;
+  /* ─── Callouts (Dark) ────────────────────────────────────────── */
+  --callout-note-bg:     #1a1a1a;
   --callout-note-border: #2a2a2a;
-  --callout-note-text:   #d4d4d8;
-  --callout-note-icon:   #71717a;
+  --callout-note-text:   #cccccc;
+  --callout-note-icon:   #666666;
 
-  --callout-info-bg:     rgba(59, 130, 246, 0.08);
-  --callout-info-border: rgba(59, 130, 246, 0.3);
-  --callout-info-text:   #93c5fd;
-  --callout-info-icon:   #3b82f6;
+  --callout-info-bg:     #0a1a2a;
+  --callout-info-border: #1a3a5a;
+  --callout-info-text:   #7ab7ff;
+  --callout-info-icon:   #3291ff;
 
-  --callout-tip-bg:      rgba(34, 197, 94, 0.07);
-  --callout-tip-border:  rgba(34, 197, 94, 0.3);
+  --callout-tip-bg:      #0a1f0a;
+  --callout-tip-border:  #1a3a1a;
   --callout-tip-text:    #86efac;
   --callout-tip-icon:    #22c55e;
 
-  --callout-warning-bg:     rgba(245, 158, 11, 0.08);
-  --callout-warning-border: rgba(245, 158, 11, 0.3);
+  --callout-warning-bg:     #1f1a0a;
+  --callout-warning-border: #3a2a1a;
   --callout-warning-text:   #fcd34d;
   --callout-warning-icon:   #f59e0b;
 
-  --callout-danger-bg:     rgba(239, 68, 68, 0.07);
-  --callout-danger-border: rgba(239, 68, 68, 0.3);
+  --callout-danger-bg:     #1f0a0a;
+  --callout-danger-border: #3a1a1a;
   --callout-danger-text:   #fca5a5;
   --callout-danger-icon:   #ef4444;
 }
