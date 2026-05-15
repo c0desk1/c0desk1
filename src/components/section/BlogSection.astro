@@ -20,23 +20,21 @@ const noPostsText = getLabel(locale, 'blog_noBlogPosts');
 const viewAllText = getLabel(locale, 'blog_viewAll');
 ---
 
-<div class="py-4 md:py-8">
+<div class="relative border border-(--border) py-4 md:py-8">
+  <C className="-top-3 -left-3" />
+  <C className="-bottom-3 -right-3" />
   <div class="mb-4 md:mb-8">
     <h2 class="text-heading-32 md:text-heading-40 text-(--fg)">
       {latestTitle}
     </h2>
   </div>
   {posts.length > 0 ? (
-    <div class="relative border border-(--border)">
-      <C className="-top-3 -left-3" />
-      <C className="-bottom-3 -right-3" />
-      <div class="grid grid-cols-1 md:grid-cols-3 divide-y divide-x-0 md:divide-x md:divide-y-0 divide-(--border) gap-x-4 md:gap-x-8">
-        {posts.map(post => (
-          <div class="p-0">
-            <PostCard post={post} />
-          </div>
-        ))}
-      </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4 md:gap-x-8">
+      {posts.map(post => (
+        <div class="p-0">
+          <PostCard post={post} />
+        </div>
+      ))}
     </div>
   ) : (
     <div class="py-12 text-center border border-dashed border-(--border) rounded-lg">
