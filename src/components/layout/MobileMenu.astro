@@ -16,19 +16,20 @@ const { alternateSlugs, basePath = '' } = Astro.props;
 const nav = siteConfig.mobileNavItems;
 const locale = getCurrentLocale(Astro);
 
-const mobileAria = locale === 'id'
-  ? 'Menu Navigasi'
+const mobileAria = locale === 'en'
+ ? 'Navigation menu'
   : locale === 'ru'
-  ? 'Меню навигации'
-  : locale === 'ja'
-  ? 'ナビゲーションメニュー'
-  : 'Navigation Menu';
+ ? 'Меню навигации'
+  : locale === 'jp'
+ ? 'ナビゲーションメニュー'
+  : 'Menu navigasi';
 ---
 
 <div
   id="mnav-backdrop"
   class="fixed inset-0 z-100 bg-(--bg)/60 backdrop-blur-sm"
   style="display: none; opacity: 0; transition: opacity 0.25s ease;"
+  aria-hidden="true"
 />
 
 <div
@@ -43,6 +44,7 @@ const mobileAria = locale === 'id'
          max-h-[75dvh]
          pb-[env(safe-area-inset-bottom)]"
   style="display: none; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);"
+  inert
 >
   <div id="mnav-handle" class="flex h-2 justify-center pt-4 pb-1">
     <div class="w-9 h-1 rounded-full bg-(--border)"></div>
@@ -57,7 +59,7 @@ const mobileAria = locale === 'id'
 
         {section.items.map((item) => {
           const href = item.isExternal
-          ? item.href
+           ? item.href
             : localizePath(item.href, locale);
 
           return (
@@ -93,22 +95,21 @@ const mobileAria = locale === 'id'
 
     let open = false;
     let startY = 0, currentY = 0, dragging = false;
-    let scrollY = 0;
 
     const openSheet = () => {
       if (open) return;
       open = true;
-      scrollY = window.scrollY;
 
       sheet.style.display = 'block';
       backdrop.style.display = 'block';
       sheet.offsetHeight;
       sheet.style.transform = 'translateY(0)';
       backdrop.style.opacity = '1';
+      sheet.removeAttribute('inert');
+      document.body.style.overflow = 'hidden';
 
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = '100%';
+      const btn = document.getElementById('mnav-btn');
+      if (btn) btn.setAttribute('aria-expanded', 'true');
     };
 
     const closeSheet = () => {
@@ -117,29 +118,32 @@ const mobileAria = locale === 'id'
 
       sheet.style.transform = 'translateY(100%)';
       backdrop.style.opacity = '0';
-
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      window.scrollTo(0, scrollY);
+      document.body.style.overflow = '';
 
       setTimeout(() => {
         if (!open) {
           sheet.style.display = 'none';
           backdrop.style.display = 'none';
+          sheet.setAttribute('inert', '');
         }
       }, 300);
+
+      const btn = document.getElementById('mnav-btn');
+      if (btn) btn.setAttribute('aria-expanded', 'false');
     };
 
     window.addEventListener('mnav:open', openSheet);
     backdrop.addEventListener('click', closeSheet);
 
+    document.querySelectorAll('.mnav-link').forEach(link => {
+      link.addEventListener('click', closeSheet);
+    });
+
     handle.addEventListener('touchstart', e => {
       startY = e.touches[0].clientY;
       dragging = true;
       sheet.style.transition = 'none';
-      e.preventDefault();
-    }, { passive: false });
+    }, { passive: true });
 
     handle.addEventListener('touchmove', e => {
       if (!dragging ||!open) return;
