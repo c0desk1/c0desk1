@@ -1,5 +1,6 @@
 import {type  ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { japaneseToLatinMap } from './japanese-map';
 import slug from 'limax';
 
 export function cn(...inputs: ClassValue[]) {
@@ -288,8 +289,14 @@ export function toggleTheme(): 'dark' | 'light' {
 }
 
 // ==================== SLUG UTILITIES ====================
+
 export function slugify(text: string, maxLength?: number): string {
-  let result = slug(text, { tone: false });
+  const transliterated = text
+    .split('')
+    .map(char => japaneseToLatinMap[char] || char)
+    .join('');
+
+  let result = slug(transliterated, { tone: false });
 
   if (maxLength && result.length > maxLength) {
     const truncated = result.substring(0, maxLength);
