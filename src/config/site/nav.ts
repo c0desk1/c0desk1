@@ -72,6 +72,10 @@ export const navConfig = {
         { href: "mailto:hallo@c0desk1.my.id", labelKey: "email" as LabelKey, isExternal: true },
         { href: "/contact", labelKey: "contactUs" as LabelKey, isExternal: false },
       ]
-    }
+    },
+   {
+    titleKey: "∅",
+    items: [{}]
+   }
   ],
 } as const;
