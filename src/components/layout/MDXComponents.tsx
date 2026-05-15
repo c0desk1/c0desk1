@@ -13,6 +13,9 @@ import InlineLink from '@/components/mdx/InlineLink.astro';
 import CallQuote from '@/components/mdx/CallQuote.astro';
 import Footnotes from '@/components/mdx/Footnotes.astro';
 import P from '@/components/mdx/P.astro';
+import LI from '@/components/mdx/LI.astro';
+import UL from '@/components/mdx/UL.astro';
+import OL from '@/components/mdx/OL.astro';
 
 export const components: MDXComponents = {
   h1: Heading,
@@ -31,4 +34,7 @@ export const components: MDXComponents = {
   Code,
   Footnotes,
   p: P,
+  ul: UL,
+  ol: OL,
+  li: LI,
 };
