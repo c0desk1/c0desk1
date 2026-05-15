@@ -1,193 +1,275 @@
 @reference '@/styles/utilities/index.css';
 
-.prose-custom .callout{display:flex;align-items:flex-start;margin:1.5rem 0;padding:1rem 1.25rem;border-radius:var(--prose-radius-md);border:1px solid;color:inherit;transition:background-color var(--prose-transition),border-color var(--prose-transition)}
-.prose-custom .callout-body{min-width:0;flex:1}
-
-.prose-custom .callout-header{display:flex;gap:.5rem;align-items:center;margin-bottom:.5rem}
-.prose-custom .callout-icon{display:flex;align-items:center;flex-shrink:0;line-height:0}
-.prose-custom .callout-icon svg{display:block;width:1rem;height:1rem}
-
-.prose-custom .callout-title{@apply text-label-12;margin:0!important;color:inherit;font-weight:600;letter-spacing:.08em;line-height:1.5rem}
-
-.prose-custom .callout-content{color:inherit}
-
-.prose-custom .callout-content p{
-  @apply text-copy-16;
-  line-height:1.75;
-  letter-spacing:-.008em;
-  color:inherit!important;
-  margin-bottom:1rem;
-  width:100%;
-  text-wrap:pretty;
-  font-feature-settings:"kern" 1,"liga" 1
+/* Callout container */
+.prose-custom .callout {
+  display: flex;
+  align-items: flex-start;
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  border-radius: var(--prose-radius-md);
+  border: 1px solid;
+  color: inherit;
+  transition: background-color var(--prose-transition), border-color var(--prose-transition);
 }
 
-.prose-custom .callout-content p:last-child{margin-bottom:0!important}
+.prose-custom .callout-body {
+  min-width: 0;
+  flex: 1;
+}
 
-.prose-custom .callout-content strong{font-weight:600;color:inherit;letter-spacing:-.008em}
+/* Header */
+.prose-custom .callout-header {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.prose-custom .callout-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.prose-custom .callout-icon svg {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Title – Geist label 12 (uppercase, weight 500, tracking 0.02em, line-height 16px) */
+.prose-custom .callout-title {
+  @apply text-label-12;
+  margin: 0 !important;
+  color: inherit;
+}
+
+/* Content wrapper */
+.prose-custom .callout-content {
+  color: inherit;
+}
+
+/* Paragraph – Geist copy 16 */
+.prose-custom .callout-content p {
+  @apply text-copy-16;
+  color: inherit !important;
+  margin-bottom: 1rem;
+  width: 100%;
+  text-wrap: pretty;
+}
+
+.prose-custom .callout-content p:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Strong & em – hanya atur weight, warna */
+.prose-custom .callout-content strong {
+  font-weight: 600;
+  color: inherit;
+}
+
 .prose-custom .callout-content em,
 .prose-custom .callout-content strong em,
-.prose-custom .callout-content em strong{
-  font-style:italic;
-  font-weight:500;
-  color:inherit
+.prose-custom .callout-content em strong {
+  font-style: italic;
+  font-weight: 500;
+  color: inherit;
 }
 
-.prose-custom .callout-content small{
-  display:inline-block;
-  font-size:.75rem;
-  line-height:1.25rem;
-  font-weight:400;
-  color:inherit;
-  opacity:.8
+/* Small – tidak ada utility Geist untuk 12px copy, gunakan manual minimal */
+.prose-custom .callout-content small {
+  display: inline-block;
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+  color: inherit;
+  opacity: 0.8;
 }
 
-.prose-custom .callout-content mark{
-  background-color:var(--prose-accent-yellow);
-  color:var(--prose-accent-yellow-soft);
-  padding:.1em .25em;
-  border-radius:2px;
-  font-weight:500;
-  box-shadow:inset 0 0 0 1px var(--prose-accent-yellow-dim);
-  box-decoration-break:clone;
-  -webkit-box-decoration-break:clone
+/* Mark */
+.prose-custom .callout-content mark {
+  background-color: var(--prose-accent-yellow);
+  color: var(--prose-accent-yellow-soft);
+  padding: 0.1em 0.25em;
+  border-radius: 2px;
+  font-weight: 500;
+  box-shadow: inset 0 0 0 1px var(--prose-accent-yellow-dim);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }
 
+/* Sup/sub */
 .prose-custom .callout-content sup,
-.prose-custom .callout-content sub{
-  position:relative;
-  font-size:.6rem;
-  line-height:1;
-  font-weight:500;
-  vertical-align:baseline;
-  color:inherit;
-  opacity:.8
+.prose-custom .callout-content sub {
+  position: relative;
+  font-size: 0.6rem;
+  line-height: 1;
+  font-weight: 500;
+  vertical-align: baseline;
+  color: inherit;
+  opacity: 0.8;
 }
 
-.prose-custom .callout-content sup{top:-.3em;margin-inline:.04em}
-.prose-custom .callout-content sub{bottom:-.2em}
-
-.prose-custom .callout-content sup a{
-  color:inherit;
-  text-decoration:none;
-  transition:color .15s ease
+.prose-custom .callout-content sup {
+  top: -0.3em;
+  margin-inline: 0.04em;
 }
 
-.prose-custom .callout-content sup a:hover{color:var(--prose-accent)!important}
-
-.prose-custom .callout-content a{
-  color:var(--prose-accent);
-  font-weight:500;
-  text-decoration:underline;
-  text-decoration-thickness:1px;
-  text-underline-offset:3px;
-  transition:color .15s ease
+.prose-custom .callout-content sub {
+  bottom: -0.2em;
 }
 
-.prose-custom .callout-content a:hover{color:var(--prose-accent-hover)}
-
-.prose-custom .callout-content .external-icon{
-  width:0!important;
-  height:0!important;
-  display:none!important
+.prose-custom .callout-content sup a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.15s ease;
 }
 
+.prose-custom .callout-content sup a:hover {
+  color: var(--prose-accent) !important;
+}
+
+/* Links */
+.prose-custom .callout-content a {
+  color: var(--prose-accent);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color 0.15s ease;
+}
+
+.prose-custom .callout-content a:hover {
+  color: var(--prose-accent-hover);
+}
+
+.prose-custom .callout-content .external-icon {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+}
+
+/* Lists – Geist copy 16 */
 .prose-custom .callout-content ul,
-.prose-custom .callout-content ol{
+.prose-custom .callout-content ol {
   @apply text-copy-16;
-  line-height:1.7;
-  padding-left:1.25rem;
-  margin-bottom:.75rem;
-  color:inherit
+  padding-left: 1.25rem;
+  margin-bottom: 0.75rem;
+  color: inherit;
 }
 
-.prose-custom .callout-content li{
-  margin-bottom:.25rem;
-  line-height:1.6;
-  font-size:inherit!important;
-  color:inherit
+.prose-custom .callout-content li {
+  margin-bottom: 0.25rem;
+  line-height: 1.5; /* sesuai Geist copy-16 (24px/16px = 1.5) */
+  font-size: inherit !important;
+  color: inherit;
 }
 
-.prose-custom .callout-content li:last-child{margin-bottom:0}
-.prose-custom .callout-content li::marker{color:currentColor;opacity:.5}
-
-.prose-custom [data-callout="note"]{
-  background-color:var(--callout-note-bg);
-  border-color:var(--callout-note-border);
-  color:var(--callout-note-text)
+.prose-custom .callout-content li:last-child {
+  margin-bottom: 0;
 }
-.prose-custom [data-callout="note"] .callout-icon{color:var(--callout-note-icon)}
 
-.prose-custom [data-callout="info"]{
-  background-color:var(--callout-info-bg);
-  border-color:var(--callout-info-border);
-  color:var(--callout-info-text)
+.prose-custom .callout-content li::marker {
+  color: currentColor;
+  opacity: 0.5;
 }
-.prose-custom [data-callout="info"] .callout-icon{color:var(--callout-info-icon)}
 
-.prose-custom [data-callout="tip"]{
-  background-color:var(--callout-tip-bg);
-  border-color:var(--callout-tip-border);
-  color:var(--callout-tip-text)
+/* Variasi warna (tidak berubah) */
+.prose-custom [data-callout="note"] {
+  background-color: var(--callout-note-bg);
+  border-color: var(--callout-note-border);
+  color: var(--callout-note-text);
 }
-.prose-custom [data-callout="tip"] .callout-icon{color:var(--callout-tip-icon)}
-
-.prose-custom [data-callout="warning"]{
-  background-color:var(--callout-warning-bg);
-  border-color:var(--callout-warning-border);
-  color:var(--callout-warning-text)
+.prose-custom [data-callout="note"] .callout-icon {
+  color: var(--callout-note-icon);
 }
-.prose-custom [data-callout="warning"] .callout-icon{color:var(--callout-warning-icon)}
 
-.prose-custom [data-callout="danger"]{
-  background-color:var(--callout-danger-bg);
-  border-color:var(--callout-danger-border);
-  color:var(--callout-danger-text)
+.prose-custom [data-callout="info"] {
+  background-color: var(--callout-info-bg);
+  border-color: var(--callout-info-border);
+  color: var(--callout-info-text);
 }
-.prose-custom [data-callout="danger"] .callout-icon{color:var(--callout-danger-icon)}
+.prose-custom [data-callout="info"] .callout-icon {
+  color: var(--callout-info-icon);
+}
 
-@media (max-width:767px){
-  .prose-custom .callout{margin:1.25rem 0;padding:.875rem 1rem}
-  .prose-custom .callout-header{gap:.4rem;margin-bottom:.4rem}
-  .prose-custom .callout-icon svg{width:.875rem;height:.875rem}
-  .prose-custom .callout-content{padding-left:calc(.875rem + .4rem)}
+.prose-custom [data-callout="tip"] {
+  background-color: var(--callout-tip-bg);
+  border-color: var(--callout-tip-border);
+  color: var(--callout-tip-text);
+}
+.prose-custom [data-callout="tip"] .callout-icon {
+  color: var(--callout-tip-icon);
+}
 
-  .prose-custom .callout-content p,
-  .prose-custom .callout-content ul,
-  .prose-custom .callout-content ol{
-    @apply text-copy-16;
-    line-height:1.7;
-    letter-spacing:-.006em;
-    margin-bottom:1rem
+.prose-custom [data-callout="warning"] {
+  background-color: var(--callout-warning-bg);
+  border-color: var(--callout-warning-border);
+  color: var(--callout-warning-text);
+}
+.prose-custom [data-callout="warning"] .callout-icon {
+  color: var(--callout-warning-icon);
+}
+
+.prose-custom [data-callout="danger"] {
+  background-color: var(--callout-danger-bg);
+  border-color: var(--callout-danger-border);
+  color: var(--callout-danger-text);
+}
+.prose-custom [data-callout="danger"] .callout-icon {
+  color: var(--callout-danger-icon);
+}
+
+/* Responsif – hanya sesuaikan padding, gap, ukuran ikon, typography tetap pakai utility */
+@media (max-width: 767px) {
+  .prose-custom .callout {
+    margin: 1.25rem 0;
+    padding: 0.875rem 1rem;
   }
-
-  .prose-custom .callout-content small{font-size:.6875rem}
+  .prose-custom .callout-header {
+    gap: 0.4rem;
+    margin-bottom: 0.4rem;
+  }
+  .prose-custom .callout-icon svg {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+  .prose-custom .callout-content {
+    padding-left: calc(0.875rem + 0.4rem);
+  }
+  .prose-custom .callout-content small {
+    font-size: 0.6875rem;
+  }
   .prose-custom .callout-content sup,
-  .prose-custom .callout-content sub{font-size:.575rem}
-
-  .prose-custom .callout-content mark{
-    padding:.1em .2em;
-    font-size:.875rem
+  .prose-custom .callout-content sub {
+    font-size: 0.575rem;
+  }
+  .prose-custom .callout-content mark {
+    padding: 0.1em 0.2em;
   }
 }
 
-@media (min-width:768px){
-  .prose-custom .callout{margin:2rem 0;padding:1rem 1.25rem}
-  .prose-custom .callout-header{gap:.5rem;margin-bottom:.5rem}
-  .prose-custom .callout-content{padding-left:calc(1rem + .5rem)}
-
-  .prose-custom .callout-content p,
-  .prose-custom .callout-content ul,
-  .prose-custom .callout-content ol{
-    @apply text-copy-16;
-    line-height:1.75;
-    letter-spacing:-.008em;
-    margin-bottom:1rem
+@media (min-width: 768px) {
+  .prose-custom .callout {
+    margin: 2rem 0;
+    padding: 1rem 1.25rem;
   }
-
-  .prose-custom .callout-content small{font-size:.75rem}
+  .prose-custom .callout-header {
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .prose-custom .callout-content {
+    padding-left: calc(1rem + 0.5rem);
+  }
+  .prose-custom .callout-content small {
+    font-size: 0.75rem;
+  }
   .prose-custom .callout-content sup,
-  .prose-custom .callout-content sub{font-size:.6rem}
-
-  .prose-custom .callout-content mark{padding:.1em .25em}
+  .prose-custom .callout-content sub {
+    font-size: 0.6rem;
+  }
+  .prose-custom .callout-content mark {
+    padding: 0.1em 0.25em;
+  }
 }
