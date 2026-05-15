@@ -146,9 +146,6 @@ const GTAG_ID = siteConfig.googleAnalyticsId;
       alternateSlugs={alternateSlugs}
       basePath={basePath}
     />
-    <GtagScript id={GTAG_ID} />
-    <AdsenseScript />
-    <YandexLoader />
   </head>
   <body>
     <BG />
@@ -168,14 +165,12 @@ const GTAG_ID = siteConfig.googleAnalyticsId;
         }
       </main>
       <Search />
-      <YandexAds />
       {footer && <Footer />}
     </div>
     <div id="modal-root"></div>
     <Cookie />
     <MobileMenu alternateSlugs={alternateSlugs} basePath={basePath} />
     <AnchorScrollScript />
-    <ServiceWorkerScript />
     <Toast />
   </body>
 </html>
