@@ -19,11 +19,11 @@ const nav = siteConfig.mobileNavItems;
 const locale = getCurrentLocale(Astro);
 
 const mobileAria = locale === 'en'
- ? 'Navigation menu'
+? 'Navigation menu'
   : locale === 'ru'
- ? 'Меню навигации'
-  : locale === 'jp'
- ? 'ナビゲーションメニュー'
+? 'Меню навигации'
+  : locale === 'ja'
+? 'ナビゲーションメニュー'
   : 'Menu navigasi';
 ---
 
@@ -52,7 +52,7 @@ const mobileAria = locale === 'en'
     <div class="w-9 h-1 rounded-full bg-(--border)"></div>
   </div>
 
-  <nav class="flex flex-col px-3 pt-2 pb-4 gap-3 overflow-y-auto">
+  <nav class="flex flex-col px-3 pt-2 pb-4 gap-3 overflow-y-auto max-h-[calc(75dvh-120px)]">
     {nav.map((section) => (
       <div class="flex flex-col gap-0.5">
         <div class="px-3 py-2 text-label-14 text-(--fg) uppercase">
@@ -61,7 +61,7 @@ const mobileAria = locale === 'en'
 
         {section.items.map((item) => {
           const href = item.isExternal
-           ? item.href
+          ? item.href
             : localizePath(item.href, locale);
 
           return (
@@ -181,7 +181,8 @@ const mobileAria = locale === 'en'
       startY = e.touches[0].clientY;
       dragging = true;
       sheet.style.transition = 'none';
-    }, { passive: true });
+      e.preventDefault();
+    }, { passive: false });
 
     handle.addEventListener('touchmove', e => {
       if (!dragging ||!open) return;
