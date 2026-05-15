@@ -7,7 +7,6 @@
 
 @custom-variant dark (&:where(.dark,.dark *));
 
-/* Font Geist */
 @font-face {
   font-family: "Geist";
   src: url("/fonts/Geist.woff2") format("woff2");
@@ -57,21 +56,21 @@
   --color-accent-soft: var(--color-blue-50);
 }
 
-/* Light mode – Geist */
+/* Light mode – Geist (background #fafafa) */
 :root {
   color-scheme: light;
 
-  --bg: #ffffff;
-  --bg-subtle: #fcfcfc;
-  --bg-muted: #f9f9f9;
+  --bg: #fafafa;
+  --bg-subtle: #ffffff;
+  --bg-muted: #f5f5f5;
 
-  --fg: #000000;
-  --fg-muted: #666666;
-  --fg-subtle: #888888;
-  --fg-dim: #aaaaaa;
-  --fg-disabled: #d4d4d4;
+  --fg: #111111;
+  --fg-muted: #444444;
+  --fg-subtle: #5c5c5c;   /* kontras 4.6:1 terhadap #fafafa -> AA */
+  --fg-dim: #7a7a7a;
+  --fg-disabled: #b0b0b0;
 
-  --border: #eaeaea;
+  --border: #e5e5e5;
   --border-strong: #d4d4d4;
 
   --accent: #0070f3;
@@ -95,7 +94,7 @@
   --scroll-padding: 5rem;
 }
 
-/* Dark mode – Geist */
+/* Dark mode – pure black #000 */
 .dark {
   color-scheme: dark;
 
@@ -219,7 +218,7 @@
   }
 }
 
-/* Utility tracking – opsional, karena Geist sudah punya letter-spacing di heading/copy/label */
+/* Utility classes opsional */
 @utility tracking-tighter {
   letter-spacing: -0.03em;
 }
