@@ -117,11 +117,6 @@ export function generateExcerpt(content: string, maxLength: number = 160): strin
 
 // ==================== READING TIME ====================
 
-/**
- * Hitung estimasi waktu baca.
- * Locale 'jp' menggunakan rata-rata 400–600 karakter/menit untuk teks Jepang.
- * Locale lain menggunakan 200 kata/menit.
- */
 export function getReadingTime(
   content?: string,
   locale: 'id' | 'en' | 'ru' | 'jp' = 'id'
@@ -134,12 +129,10 @@ export function getReadingTime(
 
   if (!content?.trim()) return `1 ${suffix}`;
 
-  // Strip markup tanpa memotong panjang
   const cleanText = generateExcerpt(content, Infinity);
 
   let minutes: number;
   if (locale === 'jp') {
-    // Teks Jepang: hitung karakter, bukan kata
     const charCount = cleanText.replace(/\s+/g, '').length;
     minutes = Math.max(1, Math.ceil(charCount / 500));
   } else {
@@ -299,76 +292,55 @@ export function toggleTheme(): 'dark' | 'light' {
 
 // ==================== SLUG UTILITIES ====================
 
-/**
- * Precompute lookup: urutkan key dari panjang ke pendek
- * agar longest-match selalu diperiksa lebih dulu.
- */
 const japaneseMapEntries = Object.entries(japaneseToLatinMap).sort(
   ([a], [b]) => b.length - a.length
 );
 
-/**
- * Sokuon (っ/ッ) → gandakan konsonan pertama dari suku kata berikutnya.
- * Contoh: きって → kitte, サッカー → sakka
- */
 function applySokuon(text: string): string {
-  // Karakter sokuon hiragana & katakana
   return text.replace(/[っッ](.)/gu, (_, nextChar) => {
-    // Ambil konsonan pertama dari karakter berikutnya setelah transliterasi
     const mapped = japaneseToLatinMap[nextChar];
     if (mapped && /^[a-z]/i.test(mapped)) {
       return mapped[0] + mapped;
     }
-    // Jika tidak dikenali, buang saja sokuon-nya
     return nextChar;
   });
 }
 
-/**
- * Transliterasi teks Jepang (hiragana, katakana, kanji) ke Latin
- * menggunakan longest-match lookup.
- *
- * Proses:
- * 1. Tangani sokuon (っ/ッ) terlebih dahulu
- * 2. Coba cocokkan substring terpanjang di map
- * 3. Jika tidak ada match, lewati karakter (akan diproses limax)
- */
 function transliterateJapanese(text: string): string {
-  // Tahap 1: tangani sokuon sebelum lookup karakter-per-karakter
-  const withSokuon = applySokuon(text);
+  const smallComboKeys = Object.keys(japaneseToLatinMap).filter(
+    (k) => k.length === 2 && /[ァ-ヴ][\u30A1-\u30FF]/.test(k) // hanya katakana 2‑karakter
+  );
+  let result = text;
 
-  const result: string[] = [];
+  smallComboKeys.sort((a, b) => b.length - a.length);
+  for (const key of smallComboKeys) {
+    const escapedKey = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(escapedKey, 'g');
+    result = result.replace(regex, japaneseToLatinMap[key]);
+  }
+
+  const withSokuon = applySokuon(result);
+
+  const out: string[] = [];
   let i = 0;
-
   while (i < withSokuon.length) {
     let matched = false;
-
-    // Coba dari entry terpanjang ke terpendek
     for (const [key, value] of japaneseMapEntries) {
       if (withSokuon.startsWith(key, i)) {
-        result.push(value);
+        out.push(value);
         i += key.length;
         matched = true;
         break;
       }
     }
-
     if (!matched) {
-      // Karakter bukan Jepang — biarkan limax yang memproses
-      result.push(withSokuon[i]);
+      out.push(withSokuon[i]);
       i++;
     }
   }
-
-  return result.join('');
+  return out.join('');
 }
 
-/**
- * Buat slug URL-friendly dari teks apa pun termasuk Jepang.
- *
- * @param text      Teks sumber (bisa mengandung hiragana/katakana/kanji)
- * @param maxLength Panjang maksimum slug (opsional); pemotongan dilakukan di batas '-'
- */
 export function slugify(text: string, maxLength?: number): string {
   const transliterated = transliterateJapanese(text);
   let result = slug(transliterated, { tone: false });
