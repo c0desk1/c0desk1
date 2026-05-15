@@ -3,7 +3,6 @@
 
 import { siteConfig } from "@/config/site";
 import { getCurrentLocale, localizePath, getLabel } from "@/utils/i18n";
-
 import Icon from "@/components/ui/Icon";
 import LanguageButton from "@/components/ui/LanguageButton.astro";
 import ThemeToggle from "@/components/ui/ThemeToggle.astro";
@@ -14,24 +13,22 @@ interface Props {
 }
 
 const { alternateSlugs, basePath = '' } = Astro.props;
-
 const nav = siteConfig.mobileNavItems;
 const locale = getCurrentLocale(Astro);
 
-const mobileAria = locale === 'en'
-? 'Navigation menu'
+const mobileAria = locale === 'id'
+  ? 'Menu Navigasi'
   : locale === 'ru'
-? 'Меню навигации'
+  ? 'Меню навигации'
   : locale === 'ja'
-? 'ナビゲーションメニュー'
-  : 'Menu navigasi';
+  ? 'ナビゲーションメニュー'
+  : 'Navigation Menu';
 ---
 
 <div
   id="mnav-backdrop"
   class="fixed inset-0 z-100 bg-(--bg)/60 backdrop-blur-sm"
   style="display: none; opacity: 0; transition: opacity 0.25s ease;"
-  aria-hidden="true"
 />
 
 <div
@@ -46,7 +43,6 @@ const mobileAria = locale === 'en'
          max-h-[75dvh]
          pb-[env(safe-area-inset-bottom)]"
   style="display: none; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);"
-  inert
 >
   <div id="mnav-handle" class="flex h-2 justify-center pt-4 pb-1">
     <div class="w-9 h-1 rounded-full bg-(--border)"></div>
@@ -73,7 +69,7 @@ const mobileAria = locale === 'en'
             >
               {getLabel(locale, item.labelKey)}
               {item.isExternal && (
-                <Icon name="external" className="w-3 h-3 shrink-0 opacity-80 transition-opacity group-hover:opacity-100" />
+                <Icon name="external" className="w-3 h-3 shrink-0 opacity-80" />
               )}
             </a>
           )
@@ -90,58 +86,29 @@ const mobileAria = locale === 'en'
 
 <script>
   (() => {
-    const sheet = document.getElementById('mnav-sheet') as HTMLElement;
-    const backdrop = document.getElementById('mnav-backdrop') as HTMLElement;
-    const handle = document.getElementById('mnav-handle') as HTMLElement;
-
+    const sheet = document.getElementById('mnav-sheet');
+    const backdrop = document.getElementById('mnav-backdrop');
+    const handle = document.getElementById('mnav-handle');
     if (!sheet ||!backdrop ||!handle) return;
 
     let open = false;
     let startY = 0, currentY = 0, dragging = false;
-    let focusableElements: HTMLElement[] = [];
-    let firstFocusable: HTMLElement | null = null;
-    let lastFocusable: HTMLElement | null = null;
-
-    const getFocusable = () => {
-      return Array.from(
-        sheet.querySelectorAll<HTMLElement>(
-          'a[href], button, [tabindex]:not([tabindex="-1"])'
-        )
-      ).filter(el =>!el.hasAttribute('disabled') &&!el.hasAttribute('inert'));
-    };
-
-    const trapFocus = (e: KeyboardEvent) => {
-      if (e.key!== 'Tab' ||!open) return;
-      if (!firstFocusable) return;
-
-      if (e.shiftKey && document.activeElement === firstFocusable) {
-        e.preventDefault();
-        lastFocusable?.focus();
-      } else if (!e.shiftKey && document.activeElement === lastFocusable) {
-        e.preventDefault();
-        firstFocusable.focus();
-      }
-    };
+    let scrollY = 0;
 
     const openSheet = () => {
       if (open) return;
       open = true;
+      scrollY = window.scrollY;
 
       sheet.style.display = 'block';
       backdrop.style.display = 'block';
       sheet.offsetHeight;
       sheet.style.transform = 'translateY(0)';
       backdrop.style.opacity = '1';
-      sheet.removeAttribute('inert');
-      document.body.style.overflow = 'hidden';
 
-      focusableElements = getFocusable();
-      firstFocusable = focusableElements[0]?? null;
-      lastFocusable = focusableElements[focusableElements.length - 1]?? null;
-      firstFocusable?.focus();
-
-      const btn = document.getElementById('mnav-btn');
-      if (btn) btn.setAttribute('aria-expanded', 'true');
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
     };
 
     const closeSheet = () => {
@@ -150,32 +117,22 @@ const mobileAria = locale === 'en'
 
       sheet.style.transform = 'translateY(100%)';
       backdrop.style.opacity = '0';
-      document.body.style.overflow = '';
+
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      window.scrollTo(0, scrollY);
 
       setTimeout(() => {
         if (!open) {
           sheet.style.display = 'none';
           backdrop.style.display = 'none';
-          sheet.setAttribute('inert', '');
         }
       }, 300);
-
-      const btn = document.getElementById('mnav-btn');
-      if (btn) btn.setAttribute('aria-expanded', 'false');
-
-      document.getElementById('mnav-btn')?.focus();
     };
 
     window.addEventListener('mnav:open', openSheet);
     backdrop.addEventListener('click', closeSheet);
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && open) closeSheet();
-      trapFocus(e);
-    });
-
-    document.querySelectorAll('.mnav-link').forEach(link => {
-      link.addEventListener('click', closeSheet);
-    });
 
     handle.addEventListener('touchstart', e => {
       startY = e.touches[0].clientY;
@@ -200,12 +157,6 @@ const mobileAria = locale === 'en'
         closeSheet();
       } else {
         sheet.style.transform = 'translateY(0)';
-      }
-    });
-
-    window.addEventListener('resize', () => {
-      if (window.innerWidth >= 768 && open) {
-        closeSheet();
       }
     });
   })();
