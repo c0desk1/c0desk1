@@ -1,4 +1,4 @@
-import {type  ClassValue, clsx } from "clsx";
+import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { japaneseToLatinMap } from './japanese-map';
 import slug from 'limax';
@@ -82,14 +82,22 @@ export function generateExcerpt(content: string, maxLength: number = 160): strin
 
   let text = content;
 
+  // Hapus frontmatter
   text = text.replace(/^\s*---[\s\S]*?---\s*/, '');
-  
+
+  // Hapus baris import dan komentar
   const lines = text.split('\n');
   const filteredLines = lines.filter(line => {
     const trimmed = line.trim();
-    return !trimmed.startsWith('import ') && !trimmed.startsWith('// ') && !trimmed.startsWith('/*');
+    return (
+      !trimmed.startsWith('import ') &&
+      !trimmed.startsWith('// ') &&
+      !trimmed.startsWith('/*')
+    );
   });
   text = filteredLines.join('\n');
+
+  // Hapus JSX comments, tag HTML, markup Markdown
   text = text.replace(/\{\/\*[\s\S]*?\*\/\}/g, '');
   text = text.replace(/<[^>]*>/g, ' ');
   text = text.replace(/<\/[^>]*>/g, ' ');
@@ -109,6 +117,11 @@ export function generateExcerpt(content: string, maxLength: number = 160): strin
 
 // ==================== READING TIME ====================
 
+/**
+ * Hitung estimasi waktu baca.
+ * Locale 'jp' menggunakan rata-rata 400–600 karakter/menit untuk teks Jepang.
+ * Locale lain menggunakan 200 kata/menit.
+ */
 export function getReadingTime(
   content?: string,
   locale: 'id' | 'en' | 'ru' | 'jp' = 'id'
@@ -121,13 +134,20 @@ export function getReadingTime(
 
   if (!content?.trim()) return `1 ${suffix}`;
 
-  const cleanText = generateExcerpt(content, 999999);
-  const words = cleanText.trim().split(/\s+/).length;
-  const minutes = Math.max(1, Math.ceil(words / 200));
+  // Strip markup tanpa memotong panjang
+  const cleanText = generateExcerpt(content, Infinity);
 
-  return minutes === 1
-    ? `1 ${suffix}`
-    : `${minutes} ${suffix}`;
+  let minutes: number;
+  if (locale === 'jp') {
+    // Teks Jepang: hitung karakter, bukan kata
+    const charCount = cleanText.replace(/\s+/g, '').length;
+    minutes = Math.max(1, Math.ceil(charCount / 500));
+  } else {
+    const words = cleanText.trim().split(/\s+/).length;
+    minutes = Math.max(1, Math.ceil(words / 200));
+  }
+
+  return `${minutes} ${suffix}`;
 }
 
 // ==================== TAG & TECH STACK ====================
@@ -199,7 +219,7 @@ export function filterByFeatured<T extends { data: { featured?: boolean } }>(ite
   return items.filter(item => item.data.featured);
 }
 
-// ==================== SORT & FILTER UTILITIES ====================
+// ==================== SORT UTILITIES ====================
 
 export function sortByDate<T extends { data: { updatedDate?: Date | string | number; date?: Date | string | number } }>(
   items: T[],
@@ -209,10 +229,7 @@ export function sortByDate<T extends { data: { updatedDate?: Date | string | num
     const dateA = a.data[dateField];
     const dateB = b.data[dateField];
     if (!dateA || !dateB) return 0;
-    
-    const dA = ensureDate(dateA);
-    const dB = ensureDate(dateB);
-    return dB.getTime() - dA.getTime();
+    return ensureDate(dateB).getTime() - ensureDate(dateA).getTime();
   });
 }
 
@@ -221,12 +238,12 @@ export function sortByDate<T extends { data: { updatedDate?: Date | string | num
 export function getShareUrls(url: string, title: string) {
   const encodedUrl = encodeURIComponent(url);
   const encodedTitle = encodeURIComponent(title);
-  
+
   return {
-    twitter: `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`,
+    twitter:  `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`,
     linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
-    email: `mailto:?subject=${encodedTitle}&body=${encodedUrl}`,
+    email:    `mailto:?subject=${encodedTitle}&body=${encodedUrl}`,
   };
 }
 
@@ -241,7 +258,7 @@ export async function copyToClipboard(text: string): Promise<boolean> {
   }
 }
 
-// ==================== UTILITIES ====================
+// ==================== VALIDATION ====================
 
 export function isValidEmail(email: string): boolean {
   const emailRegex = /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/;
@@ -263,39 +280,97 @@ export const isBrowser = typeof window !== 'undefined';
 
 export function getCurrentTheme(): 'dark' | 'light' {
   if (!isBrowser) return 'light';
-  
   const stored = localStorage.getItem('theme');
   if (stored === 'dark' || stored === 'light') return stored;
-  
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
 export function setTheme(theme: 'dark' | 'light'): void {
   if (!isBrowser) return;
-  
-  if (theme === 'dark') {
-    document.documentElement.classList.add('dark');
-  } else {
-    document.documentElement.classList.remove('dark');
-  }
+  document.documentElement.classList.toggle('dark', theme === 'dark');
   localStorage.setItem('theme', theme);
 }
 
 export function toggleTheme(): 'dark' | 'light' {
-  const current = getCurrentTheme();
-  const newTheme = current === 'dark' ? 'light' : 'dark';
+  const newTheme = getCurrentTheme() === 'dark' ? 'light' : 'dark';
   setTheme(newTheme);
   return newTheme;
 }
 
 // ==================== SLUG UTILITIES ====================
 
-export function slugify(text: string, maxLength?: number): string {
-  const transliterated = text
-    .split('')
-    .map(char => japaneseToLatinMap[char] || char)
-    .join('');
+/**
+ * Precompute lookup: urutkan key dari panjang ke pendek
+ * agar longest-match selalu diperiksa lebih dulu.
+ */
+const japaneseMapEntries = Object.entries(japaneseToLatinMap).sort(
+  ([a], [b]) => b.length - a.length
+);
 
+/**
+ * Sokuon (っ/ッ) → gandakan konsonan pertama dari suku kata berikutnya.
+ * Contoh: きって → kitte, サッカー → sakka
+ */
+function applySokuon(text: string): string {
+  // Karakter sokuon hiragana & katakana
+  return text.replace(/[っッ](.)/gu, (_, nextChar) => {
+    // Ambil konsonan pertama dari karakter berikutnya setelah transliterasi
+    const mapped = japaneseToLatinMap[nextChar];
+    if (mapped && /^[a-z]/i.test(mapped)) {
+      return mapped[0] + mapped;
+    }
+    // Jika tidak dikenali, buang saja sokuon-nya
+    return nextChar;
+  });
+}
+
+/**
+ * Transliterasi teks Jepang (hiragana, katakana, kanji) ke Latin
+ * menggunakan longest-match lookup.
+ *
+ * Proses:
+ * 1. Tangani sokuon (っ/ッ) terlebih dahulu
+ * 2. Coba cocokkan substring terpanjang di map
+ * 3. Jika tidak ada match, lewati karakter (akan diproses limax)
+ */
+function transliterateJapanese(text: string): string {
+  // Tahap 1: tangani sokuon sebelum lookup karakter-per-karakter
+  const withSokuon = applySokuon(text);
+
+  const result: string[] = [];
+  let i = 0;
+
+  while (i < withSokuon.length) {
+    let matched = false;
+
+    // Coba dari entry terpanjang ke terpendek
+    for (const [key, value] of japaneseMapEntries) {
+      if (withSokuon.startsWith(key, i)) {
+        result.push(value);
+        i += key.length;
+        matched = true;
+        break;
+      }
+    }
+
+    if (!matched) {
+      // Karakter bukan Jepang — biarkan limax yang memproses
+      result.push(withSokuon[i]);
+      i++;
+    }
+  }
+
+  return result.join('');
+}
+
+/**
+ * Buat slug URL-friendly dari teks apa pun termasuk Jepang.
+ *
+ * @param text      Teks sumber (bisa mengandung hiragana/katakana/kanji)
+ * @param maxLength Panjang maksimum slug (opsional); pemotongan dilakukan di batas '-'
+ */
+export function slugify(text: string, maxLength?: number): string {
+  const transliterated = transliterateJapanese(text);
   let result = slug(transliterated, { tone: false });
 
   if (maxLength && result.length > maxLength) {
