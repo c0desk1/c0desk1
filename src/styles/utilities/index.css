@@ -1,56 +1,56 @@
 /* src/styles/utilities/index.css */
 
 @utility text-heading-72 {
-  font-size: 72px;
+  font-size: 71px;
   line-height: 76px;
   letter-spacing: -0.04em;
   font-weight: 600;
 }
 
 @utility text-heading-64 {
-  font-size: 64px;
+  font-size: 63px;
   line-height: 68px;
   letter-spacing: -0.04em;
   font-weight: 600;
 }
 
 @utility text-heading-56 {
-  font-size: 56px;
+  font-size: 55px;
   line-height: 60px;
   letter-spacing: -0.03em;
   font-weight: 600;
 }
 
 @utility text-heading-48 {
-  font-size: 48px;
+  font-size: 47px;
   line-height: 52px;
   letter-spacing: -0.03em;
   font-weight: 600;
 }
 
 @utility text-heading-40 {
-  font-size: 40px;
+  font-size: 39px;
   line-height: 44px;
   letter-spacing: -0.03em;
   font-weight: 600;
 }
 
 @utility text-heading-32 {
-  font-size: 32px;
+  font-size: 31px;
   line-height: 36px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
 
 @utility text-heading-24 {
-  font-size: 24px;
+  font-size: 23px;
   line-height: 28px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
 
 @utility text-heading-20 {
-  font-size: 20px;
+  font-size: 19px;
   line-height: 24px;
   letter-spacing: -0.02em;
   font-weight: 500;
@@ -85,14 +85,14 @@
 }
 
 @utility text-copy-18 {
-  font-size: 18px;
+  font-size: 17px;
   line-height: 26px;
   letter-spacing: -0.01em;
   font-weight: 400;
 }
 
 @utility text-copy-16 {
-  font-size: 16px;
+  font-size: 15.5px;
   line-height: 24px;
   letter-spacing: -0.01em;
   font-weight: 400;
