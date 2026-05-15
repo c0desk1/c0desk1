@@ -138,21 +138,22 @@
   color:var(--prose-fg)
 }
 
-.prose-custom mark{
-  background-color:var(--prose-accent-yellow);
-  color:var(--prose-accent-yellow-soft);
-  padding:.1em .25em;
-  border-radius:2px
+.prose-custom mark {
+  background: none;
+  color: inherit;
+  padding: 0;
+  border-radius: 0;
+  border-bottom: 2px solid var(--prose-accent-yellow-dim);
+  font-weight: 500;
+}
+.prose-custom mark:hover {
+  border-bottom-color: var(--prose-accent);
 }
 
-.prose-custom mark:hover{
-  background-color:var(--prose-accent-yellow-dim)
-}
-
-.prose-custom mark.search-highlight{
-  background-color:var(--prose-accent-yellow);
-  color:var(--prose-accent-yellow-dim);
-  border-bottom:none
+.prose-custom mark.search-highlight {
+  background-color: var(--prose-accent-yellow);
+  color: var(--prose-accent-yellow-dim);
+  border-bottom: 1px solid var(--prose-accent-yellow-dim);
 }
 
 .prose-custom abbr[title]{
