@@ -13,61 +13,34 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Container from '@/components/ui/Container.astro';
 import Breadcrumb from '@/components/ui/Breadcrumb.astro';
 import Section from '@/components/ui/Section.astro';
-
-export async function getStaticPaths() {
-  const legalPages = await getCollection('legal');
-
-  return legalPages.map((page) => {
-    const pathParts = page.id.split('/');
-    const baseId = pathParts[0];
-    const lang = page.data.lang || 'id';
-    const alternates = legalPages.filter(p => p.id.startsWith(baseId + '/'));
-    const alternateSlugs = Object.fromEntries(
-      alternates.map(p => [
-        p.data.lang || 'id',
-        p.id.split('/')[0]
-      ])
-    );
-
-    return {
-      params: {
-        locale: lang === 'id' ? undefined : lang,
-        slug: baseId
-      },
-      props: { page, alternateSlugs },
-    };
-  });
-}
+import C from '@/components/ui/C.astro';
 
 const { page, alternateSlugs } = Astro.props;
 if (!page) return Astro.redirect('/404');
 
 const { Content } = await render(page);
 const locale = getCurrentLocale(Astro);
-
 const siteData = siteConfig;
-
 const siteURL = Astro.site?.toString() ?? siteData.siteUrl;
 const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
 const seoTitle = page.data.seo?.title || page.data.title;
-const seoDescription = page.data.seo?.description
-  || page.data.description
-  || siteData.defaultSeo[locale]?.description
-  || siteData.defaultSeo.id.description;
+const seoDescription =
+  page.data.seo?.description ||
+  page.data.description ||
+  siteData.defaultSeo[locale]?.description ||
+  siteData.defaultSeo.id.description;
 
 const homeLabel = getLabel(locale, 'home') || 'Home';
-
-const Breadcrumbs = [
+const breadcrumbs = [
   { name: homeLabel, href: localizePath('/', locale) },
-  { name: page.data.title, href: canonicalURL }
+  { name: page.data.title, href: canonicalURL },
 ];
 
-const dateLocale = 
-  locale === 'en' ? 'en-US' : 
+const dateLocale =
+  locale === 'en' ? 'en-US' :
   locale === 'ru' ? 'ru-RU' :
-  locale === 'jp' ? 'ja-JP' : 
-  'id-ID';
+  locale === 'jp' ? 'ja-JP' : 'id-ID';
 
 const formattedLastUpdated = page.data.lastUpdated
   ? formatDate(page.data.lastUpdated, dateLocale)
@@ -80,40 +53,53 @@ const formattedLastUpdated = page.data.lastUpdated
   type="website"
   canonicalURL={canonicalURL}
   alternateSlugs={alternateSlugs}
-  basePath="">
-  
+  basePath=""
+>
+  <!-- Wrapper utama dengan hairline kiri & kanan -->
   <div class="relative w-full max-w-[1040px] mx-auto min-h-screen border-x border-[var(--border)] overflow-hidden">
-    
-    <div 
-      class="pointer-events-none absolute inset-0 z-0
-             bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] 
-             bg-[size:100%_120px] md:bg-[size:50%_160px] lg:bg-[size:33.333%_160px] 
-             [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)] 
-             opacity-50 dark:opacity-100"
+
+    <!-- Grid background dot/line dekoratif -->
+    <div
       aria-hidden="true"
-    ></div>
+      class="
+        pointer-events-none absolute inset-0 z-0 opacity-50 dark:opacity-100
+        bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)]
+        bg-[size:100%_120px] md:bg-[size:50%_160px] lg:bg-[size:33.333%_160px]
+        [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)]
+      "
+    />
 
     <div class="relative z-10 flex flex-col">
-      
-      <Section size="md">
-        <Container size="md" class="flex flex-col items-center justify-center text-center bg-[var(--bg)] py-20 px-6 my-16 md:my-24 border border-[var(--border)] shadow-sm">
-          <Breadcrumb items={Breadcrumbs} />
-          
-          <h1 class="text-heading-32 md:text-heading-48 lg:text-heading-56 mt-8 max-w-[800px] text-balance tracking-tight">
+
+      <!-- ── HERO / HEADER ── -->
+      <Section size="md" class="relative bg-[var(--bg)] border-b border-[var(--border)] pt-24 pb-16 px-6">
+
+        <!-- Corner cross — kiri bawah -->
+        <C class="absolute -bottom-[7.5px] -left-[7.5px] z-20" />
+        <!-- Corner cross — kanan bawah -->
+        <C class="absolute -bottom-[7.5px] -right-[7.5px] z-20" />
+
+        <Container size="md" class="flex flex-col items-center justify-center text-center">
+          <Breadcrumb items={breadcrumbs} />
+
+          <h1 class="mt-8 max-w-[800px] text-balance tracking-tight text-heading-32 md:text-heading-48 lg:text-heading-56">
             {page.data.title}
           </h1>
-          
+
           {formattedLastUpdated && (
-            <p class="text-copy-14 lg:text-copy-16 mt-6 text-[var(--fg-muted)]">
-              {getLabel(locale, 'lastUpdated') || 'Terakhir diperbarui'}: 
-              <time datetime={page.data.lastUpdated?.toISOString()}>{formattedLastUpdated}</time>
+            <p class="mt-6 text-copy-14 lg:text-copy-16 text-[var(--fg-muted)]">
+              {getLabel(locale, 'lastUpdated') || 'Terakhir diperbarui'}:{' '}
+              <time datetime={page.data.lastUpdated?.toISOString()}>
+                {formattedLastUpdated}
+              </time>
             </p>
           )}
         </Container>
       </Section>
 
-      <Section size="lg" class="pt-0">
-        <Container size="md" class="bg-[var(--bg)] px-6 py-12 md:px-12 md:py-16 border border-[var(--border)] shadow-sm">
+      <!-- ── KONTEN MDX ── -->
+      <Section size="lg" class="relative bg-[var(--bg)] px-6 py-12 md:px-12 md:py-16">
+        <Container size="md">
           <div id="article-content" class="prose-custom max-w-none">
             <Content components={components} />
           </div>
