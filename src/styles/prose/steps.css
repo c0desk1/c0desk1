@@ -1,5 +1,4 @@
 /* src/styles/prose/steps.css */
-
 @reference '@/styles/utilities/index.css';
 
 /* BASE */
@@ -49,8 +48,6 @@
   margin-bottom: 0.5rem !important;
   font-family: var(--prose-font-sans);
   font-weight: 600 !important;
-  line-height: 1.75rem !important;
-  letter-spacing: -0.02em !important;
   color: var(--prose-fg);
   overflow: visible;
 }
@@ -133,8 +130,6 @@
   .prose-custom .steps-container > h4 {
     @apply text-heading-16;
     font-weight: 600 !important;
-    line-height: 1.625rem !important;
-    letter-spacing: -0.015em !important;
     margin-bottom: 0.375rem !important;
   }
 
