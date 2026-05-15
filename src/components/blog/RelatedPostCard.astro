@@ -39,43 +39,41 @@ const autoSlug = slugify(title);
 const postUrl = localizePath(`/blog/${autoSlug}/`, locale);
 
 const avatarOfLabel = getLabel(locale, 'avatarOf');
-const authorLabel = getLabel(locale, 'author');
 ---
 
 <a
   href={postUrl}
-  class="group flex flex-col h-full rounded-(--radius-xl) p-4 my-4 border border-(--border) hover:border-(--border-strong) focus:outline-none focus:ring-2 focus:ring-(--border-strong)"
+  class="group flex flex-col h-full rounded-xl p-4 border border-(--border) hover:border-(--border-strong) focus:outline-none focus:ring-2 focus:ring-(--border-strong)"
   aria-label={`${getLabel(locale, 'readArticle')}: ${title}`}>
-  <div class="flex items-center justify-between text-label-13 text-(--fg-subtle) mb-2">
+  <div class="flex items-center justify-between text-label-13 text-(--fg-subtle) mb-4">
     <span>{categoryName}</span>
     <time datetime={pubDate.toISOString()}>{formattedDate}</time>
   </div>
-
-  <h3 class="text-heading-16 md:text-heading-20 text-(--fg) line-clamp-3">
-    {title}
-  </h3>
-
-  <p class="mt-3 text-copy-14 text-(--fg-muted) line-clamp-3 group-hover:text-(--fg)">
-    {excerpt}
-  </p>
-
-  <div class="mt-5 flex items-center gap-2">
-    {authorAvatar && (
-      <span aria-hidden="true" aria-label="" role="img" class="w-6 h-6 shrink-0 rounded-full inline-block overflow-hidden leading-0 align-top relative transition-[background] duration-200 ease-in-out">
-        <Image
-          src={optimizedAvatar}
-          alt={`${avatarOfLabel} ${authorName}`}
-          width={40}
-          height={40}
-          class="h-full w-full object-cover"
-          loading="eager"
-          decoding="async"
-        />
-        <span class="absolute inset-0 rounded-full border-(--border)"></span>
+  <div class="flex flex-col gap-3 flex-1">
+    <h3 class="text-heading-16 md:text-heading-20 text-(--fg) line-clamp-2">
+      {title}
+    </h3>
+    <p class="mt-3 text-copy-14 text-(--fg-muted) line-clamp-2 group-hover:text-(--fg)">
+      {excerpt}
+    </p>
+    <div class="mt-auto flex items-center gap-2 text-label-13 md:text-label-14 text-(--fg-subtle) group-hover:text-(--fg)">
+      {authorAvatar && (
+        <span aria-hidden="true" aria-label="" role="img" class="w-5 h-5 shrink-0 rounded-full inline-block overflow-hidden leading-0 align-top relative transition-[background] duration-200 ease-in-out">
+          <Image
+            src={optimizedAvatar}
+            alt={`${avatarOfLabel} ${authorName}`}
+            width={40}
+            height={40}
+            class="h-full w-full object-cover"
+            loading="lazy"
+            decoding="async"
+          />
+          <span class="absolute inset-0 rounded-full border-(--border)"></span>
+        </span>
+      )}
+      <span class="text-label-13 text-(--fg-subtle)">
+        {authorName}
       </span>
-    )}
-    <span class="text-label-13 text-(--fg-subtle)">
-      {authorName}
-    </span>
+    </div>
   </div>
 </a>
