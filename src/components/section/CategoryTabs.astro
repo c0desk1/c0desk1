@@ -81,18 +81,18 @@ const tabs = [
         aria-controls="ct-listbox"
         class="ct-trigger group flex w-full items-center justify-between gap-4
                px-4 py-3 rounded-xl border border-(--border) bg-(--fg)
-               text-[13px] font-medium text-(--bg) cursor-pointer
+               text-label-13 font-medium text-(--bg) cursor-pointer
                transition-colors duration-200
                hover:border-(--border-strong) hover:bg-(--fg-muted)
                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)"
       >
         <span class="flex items-center gap-2.5">
-          <span id="ct-trigger-label" class="tracking-tight">{allLabel}</span>
+          <span id="ct-trigger-label">{allLabel}</span>
         </span>
         <span class="flex items-center gap-2">
           <span id="ct-trigger-count"
-            class="text-[11px] font-medium text-(--fg-subtle) bg-(--bg-muted)
-                   border border-(--border) px-1.5 py-px rounded-full tabular-nums">
+            class="text-label-12 bg-(--bg-muted) text-(--fg-subtle)
+                   border border-(--border) px-1.5 py-px rounded-full">
             {posts.length}
           </span>
           <svg id="ct-trigger-chevron" class="text-(--fg-subtle) transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
@@ -122,7 +122,7 @@ const tabs = [
               tabindex="-1"
               class:list={[
                 "ct-option flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg",
-                "text-[13px] font-medium cursor-pointer select-none",
+                "text-label-13 font-medium cursor-pointer select-none",
                 "transition-colors duration-100",
                 i === 0
                  ? "bg-(--fg) text-(--bg) ct-option--active"
@@ -133,7 +133,7 @@ const tabs = [
                 <span>{tab.label}</span>
               </span>
               <span class:list={[
-                "text-[11px] font-medium px-1.5 py-px rounded-full tabular-nums border",
+                "text-label-12 px-1.5 py-px rounded-full border",
                 i === 0
                  ? "bg-(--bg)/20 text-(--bg) border-transparent"
                   : "bg-(--bg-muted) text-(--fg-subtle) border-(--border)",
@@ -162,7 +162,7 @@ const tabs = [
           id={`ct-tab-${tab.id}`}
           class:list={[
             "ct-tab inline-flex items-center gap-1.5 px-3.5 py-2",
-            "text-[13px] md:text-sm whitespace-nowrap cursor-pointer rounded-(--radius-xl) bg-transparent",
+            "text-label-13 md:text-label-14 whitespace-nowrap cursor-pointer rounded-(--radius-xl) bg-transparent",
             "text-(--fg-muted) hover:text-(--fg)",
             "transition-colors duration-150",
             i === 0? "font-semibold!" : "bg-(--fg)",
@@ -170,7 +170,7 @@ const tabs = [
         >
           {tab.label}
           <span class="inline-flex items-center justify-center min-w-[1rem] p-0.05
-                        text-[11px] font-medium rounded-full
+                        text-label-12 rounded-full
                         bg-(--bg-muted) text-(--fg-muted) border border-(--border)
                         transition-colors duration-150">
             {tab.count}
@@ -199,7 +199,7 @@ const tabs = [
         {...(i!== 0? { hidden: true } : {})}
       >
         {panelPosts.length === 0? (
-          <div class="flex items-center justify-center py-16 text-sm text-(--fg-subtle)">
+          <div class="flex items-center justify-center py-16 text-copy-14 text-(--fg-subtle)">
             {noPostsInCategory}
           </div>
         ) : (
@@ -234,7 +234,7 @@ const tabs = [
                     data-loadmore
                     aria-label={`${showMoreLabel} ${tab.label}`}
                     class="group inline-flex items-center gap-2 px-4 py-2
-                           text-[13px] font-medium text-(--fg-muted)
+                           text-button-14 font-medium text-(--fg-muted)
                            bg-(--bg-subtle) border border-(--border) rounded-full cursor-pointer
                            transition-all duration-150
                            hover:text-(--fg) hover:bg-(--bg-muted) hover:border-(--border-strong) hover:shadow-sm"
@@ -249,7 +249,7 @@ const tabs = [
                     href={categoryHref || blogHref}
                     hidden
                     class="group inline-flex items-center gap-1.5 px-4 py-2
-                           text-[13px] font-medium text-(--fg)
+                           text-button-14 font-medium text-(--fg)
                            bg-(--bg) border border-(--border-strong) rounded-full
                            transition-all duration-150
                            hover:bg-(--fg) hover:text-(--bg) hover:border-(--fg) hover:shadow-sm"
@@ -332,6 +332,7 @@ const tabs = [
 </style>
 
 <script>
+  // (Script tetap sama seperti sebelumnya, tidak ada perubahan)
   const tabs: { id: string; label: string; slug: string | null; count: number }[] =
     JSON.parse(document.getElementById("category-tabs")?.dataset.tabs?? "[]");
 
