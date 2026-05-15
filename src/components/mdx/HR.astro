@@ -1,25 +1,41 @@
 ---
 // src/components/mdx/Divider.astro
 ---
-<div class="full-width-divider my-4 md:my-8 flex items-center gap-2" aria-hidden="true">
-  <div class="h-px flex-1 bg-(--prose-border)/60"></div>
-  <span class="text-(--prose-fg-subtle) text-base select-none tracking-widest">
-    ✾
-  </span>
-  <div class="h-px flex-1 bg-(--prose-border)/60"></div>
+<div class="divider-full" aria-hidden="true">
+  <div class="flex items-center gap-2">
+    <div class="h-px flex-1 bg-(--prose-border)/60"></div>
+    <span class="text-(--prose-fg-subtle) text-base select-none tracking-widest">✾</span>
+    <div class="h-px flex-1 bg-(--prose-border)/60"></div>
+  </div>
 </div>
 
 <style is:inline>
-  .full-width-divider {
+  .divider-full {
     width: 100vw;
     position: relative;
     left: 50%;
     transform: translateX(-50%);
+    max-width: 80rem; /* max-w-7xl = 80rem */
+    /* Agar tidak overflow saat viewport lebih kecil dari 80rem */
+    box-sizing: border-box;
+    padding: 0 1rem; /* px-4 di mobile, sesuaikan dengan padding container XL */
     margin: 2rem 0;
   }
-  @media (max-width: 767px) {
-    .full-width-divider {
-      width: 100dvw;
+  @media (min-width: 768px) {
+    .divider-full {
+      padding: 0 1.5rem; /* md:px-6 */
+    }
+  }
+  @media (min-width: 1024px) {
+    .divider-full {
+      padding: 0 2rem; /* lg:px-8 */
+    }
+  }
+  @media (min-width: 1280px) {
+    .divider-full {
+      left: 50%;
+      transform: translateX(-50%);
+      /* pada max-width 80rem, padding kiri/kanan akan membuat konten di dalamnya ikut batas */
     }
   }
 </style>
