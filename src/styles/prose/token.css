@@ -1,50 +1,46 @@
 /* src/styles/prose/tokens.css */
 
-/* ══════════════════════════════════════════════════════════════════
-   LIGHT MODE (Geist)
-══════════════════════════════════════════════════════════════════ */
+/* Light Mode (Geist, bg #fafafa) */
 :root {
-  /* ─── Accent (Geist Blue) ────────────────────────────────────── */
+  /* Accent */
   --prose-accent:       #0070f3;
   --prose-accent-dim:   #0761d1;
   --prose-accent-soft:  #e1f0ff;
   --prose-accent-hover: #0761d1;
 
-  /* ─── Highlight (Geist Yellow) ───────────────────────────────── */
+  /* Highlight */
   --prose-accent-yellow:      #fff9e6;
   --prose-accent-yellow-dim:  #ffe4a3;
   --prose-accent-yellow-soft: #663c00;
 
-  /* ─── Foreground ─────────────────────────────────────────────── */
-  --prose-black:      #000000;
-  --prose-white:      #ffffff;
-  --prose-fg:         #000000;
-  --prose-fg-muted:   #666666;
-  --prose-fg-subtle:  #888888;
-  --prose-fg-dim:     #aaaaaa;
+  /* Foreground */
+  --prose-fg:         #111111;
+  --prose-fg-muted:   #444444;
+  --prose-fg-subtle:  #5c5c5c;   /* kontras AA terhadap #fafafa */
+  --prose-fg-dim:     #7a7a7a;
 
-  /* ─── Surface & Borders ──────────────────────────────────────── */
-  --prose-border:        #eaeaea;
+  /* Surface & borders */
+  --prose-border:        #e5e5e5;
   --prose-surface:       #ffffff;
   --prose-surface-hover: #fafafa;
   --prose-surface-dim:   #f5f5f5;
   --prose-bg-subtle:     #fcfcfc;
   --prose-bg-muted:      #f9f9f9;
 
-  /* ─── Typography (Geist) ─────────────────────────────────────── */
+  /* Typography */
   --prose-font-sans: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --prose-font-mono: 'Geist Mono', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
 
-  /* ─── Radius ─────────────────────────────────────────────────── */
+  /* Radius */
   --prose-radius-sm: 4px;
   --prose-radius:    6px;
   --prose-radius-md: 8px;
   --prose-radius-lg: 12px;
 
-  /* ─── Motion ─────────────────────────────────────────────────── */
+  /* Motion */
   --prose-transition: 0.15s ease;
 
-  /* ─── Callouts (Geist-inspired) ──────────────────────────────── */
+  /* Callouts – disesuaikan dengan latar #fafafa */
   --callout-note-bg:     #f5f5f5;
   --callout-note-border: #e0e0e0;
   --callout-note-text:   #333333;
@@ -71,29 +67,26 @@
   --callout-danger-icon:   #ef4444;
 }
 
-/* ══════════════════════════════════════════════════════════════════
-   DARK MODE (Geist Dark)
-   Background pure black (#000) atau near-black
-══════════════════════════════════════════════════════════════════ */
+/* Dark Mode (Geist, pure black #000) */
 .dark {
-  /* ─── Accent ─────────────────────────────────────────────────── */
+  /* Accent */
   --prose-accent:       #3291ff;
   --prose-accent-dim:   #0070f3;
   --prose-accent-soft:  #1a2c3e;
   --prose-accent-hover: #60a5fa;
 
-  /* ─── Highlight ──────────────────────────────────────────────── */
+  /* Highlight */
   --prose-accent-yellow:      #332200;
   --prose-accent-yellow-dim:  #664400;
   --prose-accent-yellow-soft: #ffe6b3;
 
-  /* ─── Foreground ─────────────────────────────────────────────── */
+  /* Foreground */
   --prose-fg:        #ffffff;
   --prose-fg-muted:  #888888;
   --prose-fg-subtle: #666666;
   --prose-fg-dim:    #444444;
 
-  /* ─── Surface & Borders ──────────────────────────────────────── */
+  /* Surface & borders */
   --prose-border:        #333333;
   --prose-surface:       #000000;
   --prose-surface-hover: #111111;
@@ -101,7 +94,7 @@
   --prose-bg-subtle:     #0a0a0a;
   --prose-bg-muted:      #0f0f0f;
 
-  /* ─── Callouts (Dark) ────────────────────────────────────────── */
+  /* Callouts dark */
   --callout-note-bg:     #1a1a1a;
   --callout-note-border: #2a2a2a;
   --callout-note-text:   #cccccc;
