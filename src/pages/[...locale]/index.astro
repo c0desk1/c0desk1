@@ -13,7 +13,6 @@ import Section from "@/components/ui/Section.astro";
 import Hero from "@/components/ui/Hero.astro";
 import BlogSection from "@/components/section/BlogSection.astro";
 import PortfolioSection from "@/components/section/PortfolioSection.astro";
-import C from "@/components/ui/C.astro";
 export function getStaticPaths() {
   return [
     { params: { locale: undefined } },
@@ -59,37 +58,25 @@ const seoData = {
 ---
 
 <BaseLayout {...seoData}>
-  <div class="relative border border-(--border)">
-    <C className="-top-3 -left-3" />
-    <C className="-bottom-3 -right-3" />
-    <Section id="hero" size="none" aria-label={hero_a}>
-      <Container size="full">
-        <Hero
-          title={hero_t}
-          highlight={hero_h}
-          description={hero_d}
-        />
-      </Container>
-    </Section>
-  </div>
-  <div class="relative border-b border-x border-(--border)">
-    <C className="-top-3 -left-3" />
-    <C className="-bottom-3 -right-3" />
-    <Section id="blog" size="md" aria-label={blog_s}>
-      <h2 class="sr-only">{blog_s}</h2>
-      <Container size="xl">
-        <BlogSection posts={blogPosts} />
-      </Container>
-    </Section>
-  </div>
-  <div class="relative border-b border-x border-(--border)">
-    <C className="-top-3 -left-3" />
-    <C className="-bottom-3 -right-3" />
-    <Section id="portfolio" size="md" aria-label={portfolio_s} class="section-divider">
-      <h2 class="sr-only">{portfolio_s}</h2>
-      <Container size="xl">
-        <PortfolioSection projects={portfolioProjects} />
-      </Container>
-    </Section>
-  </div>
+  <Section id="hero" size="none" aria-label={hero_a}>
+    <Container size="xl">
+      <Hero
+        title={hero_t}
+        highlight={hero_h}
+        description={hero_d}
+      />
+    </Container>
+  </Section>
+  <Section id="blog" size="md" aria-label={blog_s}>
+    <h2 class="sr-only">{blog_s}</h2>
+    <Container size="xl">
+      <BlogSection posts={blogPosts} />
+    </Container>
+  </Section>
+  <Section id="portfolio" size="md" aria-label={portfolio_s} class="section-divider">
+    <h2 class="sr-only">{portfolio_s}</h2>
+    <Container size="xl">
+      <PortfolioSection projects={portfolioProjects} />
+    </Container>
+  </Section>
 </BaseLayout>
