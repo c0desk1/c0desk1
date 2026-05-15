@@ -204,9 +204,9 @@ export function filterByFeatured<T extends { data: { featured?: boolean } }>(ite
 
 // ==================== SORT & FILTER UTILITIES ====================
 
-export function sortByDate<T extends { data: { pubDate?: Date | string | number; date?: Date | string | number } }>(
+export function sortByDate<T extends { data: { updatedDate?: Date | string | number; date?: Date | string | number } }>(
   items: T[],
-  dateField: 'pubDate' | 'date' = 'pubDate'
+  dateField: 'updatedDate' | 'date' = 'updatedDate'
 ): T[] {
   return [...items].sort((a, b) => {
     const dateA = a.data[dateField];
