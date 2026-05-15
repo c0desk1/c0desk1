@@ -1,11 +1,8 @@
 // src/lib/japanese-map.ts
 
-/**
- * Pemetaan karakter Jepang (Hiragana, Katakana, Kanji dasar) ke Romaji.
- * Gunakan untuk transliterasi sebelum diproses slug lebih lanjut.
- */
 export const japaneseToLatinMap: Record<string, string> = {
-  // Hiragana
+  // ==================== HIRAGANA ====================
+  // Dasar
   'あ': 'a', 'い': 'i', 'う': 'u', 'え': 'e', 'お': 'o',
   'か': 'ka', 'き': 'ki', 'く': 'ku', 'け': 'ke', 'こ': 'ko',
   'さ': 'sa', 'し': 'shi', 'す': 'su', 'せ': 'se', 'そ': 'so',
@@ -16,14 +13,25 @@ export const japaneseToLatinMap: Record<string, string> = {
   'や': 'ya', 'ゆ': 'yu', 'よ': 'yo',
   'ら': 'ra', 'り': 'ri', 'る': 'ru', 'れ': 're', 'ろ': 'ro',
   'わ': 'wa', 'を': 'wo', 'ん': 'n',
+
+  // Dakuten (tenten)
   'が': 'ga', 'ぎ': 'gi', 'ぐ': 'gu', 'げ': 'ge', 'ご': 'go',
   'ざ': 'za', 'じ': 'ji', 'ず': 'zu', 'ぜ': 'ze', 'ぞ': 'zo',
   'だ': 'da', 'ぢ': 'ji', 'づ': 'zu', 'で': 'de', 'ど': 'do',
   'ば': 'ba', 'び': 'bi', 'ぶ': 'bu', 'べ': 'be', 'ぼ': 'bo',
-  'ぱ': 'pa', 'ぴ': 'pi', 'ぷ': 'pu', 'ぺ': 'pe', 'ぽ': 'po',
-  'ゃ': 'ya', 'ゅ': 'yu', 'ょ': 'yo', 'っ': 'tsu',
 
-  // Katakana
+  // Handakuten (maru)
+  'ぱ': 'pa', 'ぴ': 'pi', 'ぷ': 'pu', 'ぺ': 'pe', 'ぽ': 'po',
+
+  // Yoon (kana kecil)
+  'ゃ': 'ya', 'ゅ': 'yu', 'ょ': 'yo',
+  'っ': 'tsu',
+
+  // Kana kecil vokal
+  'ぁ': 'a', 'ぃ': 'i', 'ぅ': 'u', 'ぇ': 'e', 'ぉ': 'o',
+
+  // ==================== KATAKANA ====================
+  // Dasar
   'ア': 'a', 'イ': 'i', 'ウ': 'u', 'エ': 'e', 'オ': 'o',
   'カ': 'ka', 'キ': 'ki', 'ク': 'ku', 'ケ': 'ke', 'コ': 'ko',
   'サ': 'sa', 'シ': 'shi', 'ス': 'su', 'セ': 'se', 'ソ': 'so',
@@ -34,31 +42,105 @@ export const japaneseToLatinMap: Record<string, string> = {
   'ヤ': 'ya', 'ユ': 'yu', 'ヨ': 'yo',
   'ラ': 'ra', 'リ': 'ri', 'ル': 'ru', 'レ': 're', 'ロ': 'ro',
   'ワ': 'wa', 'ヲ': 'wo', 'ン': 'n',
+
+  // Dakuten (tenten)
   'ガ': 'ga', 'ギ': 'gi', 'グ': 'gu', 'ゲ': 'ge', 'ゴ': 'go',
   'ザ': 'za', 'ジ': 'ji', 'ズ': 'zu', 'ゼ': 'ze', 'ゾ': 'zo',
   'ダ': 'da', 'ヂ': 'ji', 'ヅ': 'zu', 'デ': 'de', 'ド': 'do',
   'バ': 'ba', 'ビ': 'bi', 'ブ': 'bu', 'ベ': 'be', 'ボ': 'bo',
+
+  // Handakuten (maru)
   'パ': 'pa', 'ピ': 'pi', 'プ': 'pu', 'ペ': 'pe', 'ポ': 'po',
-  'ャ': 'ya', 'ュ': 'yu', 'ョ': 'yo', 'ッ': 'tsu',
 
-  // Kanji dasar (tambahkan sesuai kebutuhan artikel)
-  '一': 'ichi', '二': 'ni', '三': 'san', '人': 'hito', '日': 'nichi',
-  '月': 'tsuki', '年': 'nen', '時': 'ji', '分': 'fun', '今': 'ima',
-  '前': 'mae', '後': 'ato', '上': 'ue', '下': 'shita', '中': 'naka',
-  '大': 'dai', '小': 'shou', '本': 'hon', '語': 'go', '学': 'gaku',
-  '生': 'sei', '会': 'kai', '社': 'sha', '者': 'sha', '的': 'teki',
-  '出': 'shutsu', '入': 'nyuu', '見': 'ken', '聞': 'bun', '書': 'sho',
-  '言': 'gen', '話': 'wa', '読': 'doku', '買': 'bai', '食': 'shoku',
-  '自': 'ji', '動': 'dou', '作': 'saku', '使': 'shi', '用': 'you',
-  '方': 'hou', '法': 'hou', '行': 'kou', '来': 'rai', '回': 'kai',
-  '新': 'shin', '古': 'ko', '長': 'chou', '短': 'tan', '高': 'kou',
-  '安': 'an', '多': 'ta', '少': 'shou', '全': 'zen', '最': 'sai',
-  '化': 'ka', '性': 'sei', '物': 'butsu', '理': 'ri', '数': 'suu',
-  '字': 'ji', '文': 'bun', '情': 'jou', '報': 'hou', '電': 'den',
+  // Yoon (kana kecil)
+  'ャ': 'ya', 'ュ': 'yu', 'ョ': 'yo',
+  'ッ': 'tsu',
 
-  // Tambahan dari artikel Resident Evil
-  '亡': 'bou', '霊': 'rei', '都': 'to', '市': 'shi', '街': 'gai',
-  '死': 'shi', '体': 'tai', '館': 'kan', '屋': 'ya', '敷': 'shiki',
-  '屋敷': 'yashiki', // contoh gabungan, bisa diatur sesuai kemunculan
-  // Silakan tambah kanji lain yang sering muncul
+  // Kana kecil vokal
+  'ァ': 'a', 'ィ': 'i', 'ゥ': 'u', 'ェ': 'e', 'ォ': 'o',
+
+  // Tanda vokal panjang (diabaikan agar tidak mengacaukan)
+  'ー': '',
+
+  // ==================== KANJI UMUM ====================
+  // Angka & waktu
+  '一': 'ichi', '二': 'ni', '三': 'san', '四': 'shi', '五': 'go',
+  '六': 'roku', '七': 'shichi', '八': 'hachi', '九': 'kyuu', '十': 'juu',
+  '百': 'hyaku', '千': 'sen', '万': 'man',
+  '日': 'nichi', '月': 'tsuki', '年': 'nen', '時': 'ji', '分': 'fun',
+  '秒': 'byou', '午前': 'gozen', '午後': 'gogo', '今': 'ima',
+  '前': 'mae', '後': 'ato',
+
+  // Alam & arah
+  '上': 'ue', '下': 'shita', '中': 'naka', '外': 'soto',
+  '左': 'hidari', '右': 'migi', '北': 'kita', '南': 'minami',
+  '東': 'higashi', '西': 'nishi',
+  '天': 'ten', '地': 'chi', '山': 'yama', '川': 'kawa',
+  '海': 'umi', '雨': 'ame', '雪': 'yuki',
+
+  // Orang & tubuh
+  '人': 'hito', '男': 'otoko', '女': 'onna', '子': 'ko',
+  '父': 'chichi', '母': 'haha', '兄': 'ani', '弟': 'otouto',
+  '姉': 'ane', '妹': 'imouto', '友': 'tomo',
+  '目': 'me', '耳': 'mimi', '口': 'kuchi', '手': 'te',
+  '足': 'ashi', '心': 'kokoro',
+
+  // Makanan
+  '食': 'shoku', '飲': 'in', '水': 'mizu', '米': 'kome',
+  '肉': 'niku', '野菜': 'yasai', '果物': 'kudamono',
+
+  // Tempat
+  '学校': 'gakkou', '大学': 'daigaku', '病院': 'byouin',
+  '駅': 'eki', '店': 'mise', '家': 'ie', '部屋': 'heya',
+  '建物': 'tatemono', '図書館': 'toshokan',
+  '町': 'machi', '村': 'mura', '都': 'to', '市': 'shi',
+
+  // Transportasi
+  '車': 'kuruma', '電車': 'densha', '自転車': 'jitensha',
+  '飛行機': 'hikouki', '船': 'fune',
+
+  // Teknologi
+  '電': 'den', '話': 'wa', '機': 'ki', '械': 'kai',
+  '情報': 'jouhou', '技術': 'gijutsu', '科学': 'kagaku',
+
+  // Game & entertainment
+  '遊': 'yuu', '戯': 'gi', '画': 'ga', '音': 'oto',
+  '楽': 'raku', '曲': 'kyoku', '映画': 'eiga',
+  '死': 'shi', '体': 'tai', '館': 'kan', '屋敷': 'yashiki',
+  '亡': 'bou', '霊': 'rei', '幽': 'yuu', '怖': 'fu',
+
+  // Kata kerja umum
+  '見': 'mi', '聞': 'ki', '読': 'yo', '書': 'ka',
+  '話': 'hana', '買': 'ka', '食': 'ta', '飲': 'no',
+  '行': 'i', '来': 'ku', '帰': 'kae', '出': 'de',
+  '入': 'ire', '始': 'haji', '終': 'owa', '開': 'hira',
+  '閉': 'to', '作': 'tsuku', '使': 'tsuka', '使う': 'tsukau',
+
+  // Sifat
+  '大': 'dai', '小': 'shou', '新': 'shin', '古': 'ko',
+  '長': 'chou', '短': 'tan', '高': 'kou', '安': 'an',
+  '多': 'ta', '少': 'shou', '全': 'zen', '最': 'sai',
+  '良': 'ryou', '悪': 'aku', '早': 'haya', '遅': 'oso',
+
+  // Lainnya
+  '語': 'go', '学': 'gaku', '生': 'sei', '会': 'kai',
+  '社': 'sha', '者': 'sha', '的': 'teki', '性': 'sei',
+  '物': 'butsu', '理': 'ri', '数': 'suu',
+  '字': 'ji', '文': 'bun', '化': 'ka',
+  '自': 'ji', '動': 'dou', '用': 'you', '方': 'hou',
+  '法': 'hou', '回': 'kai', '度': 'do', '場': 'ba',
+  '合': 'gou', '間': 'kan', '先': 'saki', '度': 'tabi',
+  '通': 'toori', '道': 'michi', '路': 'ro',
+  '名': 'na', '前': 'mae', '後': 'ato', '横': 'yoko',
+  '近': 'chika', '遠': 'too',
+  '多': 'ta', '少': 'shou', '別': 'betsu',
+  '色': 'iro', '形': 'katachi', '音': 'oto',
+  '力': 'chikara', '気': 'ki', '運': 'un',
+  '命': 'inochi', '死': 'shi', '世界': 'sekai',
+  '戦': 'ikusa', '闘': 'tatakai', '忍': 'nin',
+  '愛': 'ai', '恋': 'koi', '夢': 'yume',
+
+  // Frasa pendek (gabungan)
+  '今日': 'kyou', '明日': 'ashita', '昨日': 'kinou',
+  '毎日': 'mainichi', '今年': 'kotoshi', '去年': 'kyonen',
 };
