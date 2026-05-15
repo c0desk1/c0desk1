@@ -18,11 +18,11 @@ const p_a = getLabel(locale, "p_AllProjects") || "Semua Proyek";
 
 <div class="py-4 md:py-8">
   <div class="mb-4 md:mb-8">
-    <h2 class="text-(--fg) text-3xl md:text-4xl font-semibold tracking-tighter">
+    <h2 class="text-heading-32 md:text-heading-40 text-(--fg)">
       {p_l}
     </h2>
   </div>
-  {projects.length > 0? (
+  {projects.length > 0 ? (
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 divide-y md:divide-y-0 divide-(--border)">
       {projects.map((project) => (
         <ProjectCard project={project} />
@@ -30,7 +30,7 @@ const p_a = getLabel(locale, "p_AllProjects") || "Semua Proyek";
     </div>
   ) : (
     <div class="py-12 text-center border border-dashed border-(--border) rounded-lg">
-      <p class="text-(--fg-subtle) text-sm md:text-lg">
+      <p class="text-copy-16 md:text-copy-18 text-(--fg-subtle)">
         {p_e}
       </p>
     </div>
