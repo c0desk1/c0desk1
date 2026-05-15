@@ -24,12 +24,6 @@ export const navConfig = {
       ]
     },
     {
-      titleKey: "tools" as LabelKey,
-      items: [
-        { href: "https://dev-adogen.bimasaktiakbarr.workers.dev", labelKey: "adogen" as LabelKey, isExternal: true }
-      ]
-    },
-    {
       titleKey: "legal" as LabelKey,
       items: [
         { href: "/privacy-policy", labelKey: "privacyPolicy" as LabelKey, isExternal: false },
@@ -42,7 +36,6 @@ export const navConfig = {
     {
       titleKey: "contact" as LabelKey,
       items: [
-        { href: "mailto:hallo@c0desk1.my.id", labelKey: "email" as LabelKey, isExternal: true },
         { href: "/contact", labelKey: "contactUs" as LabelKey, isExternal: false },
       ]
     }
