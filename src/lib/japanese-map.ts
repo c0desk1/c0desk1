@@ -1,33 +1,61 @@
 // src/lib/japanese-map.ts
-//
-// PENTING: Urutan key tidak relevan di sini karena lookup dilakukan
-// oleh slugify() dengan pendekatan longest-match (multi-char dulu, lalu single-char).
-// Kanji multi-karakter (misal '今日', '学校') HARUS ada di sini agar bisa dikenali.
 
 export const japaneseToLatinMap: Record<string, string> = {
 
-  // ==================== FRASA & KANJI MULTI-KARAKTER ====================
-  // (harus dicek lebih dulu sebelum single-char — ditangani di slugify)
-
   // Waktu
-  '今日': 'kyou',   '明日': 'ashita', '昨日': 'kinou',
-  '毎日': 'mainichi','今年': 'kotoshi','去年':  'kyonen',
-  '午前': 'gozen',  '午後': 'gogo',
+  '今日': 'kyou',    '明日': 'ashita',  '昨日': 'kinou',
+  '毎日': 'mainichi','今年': 'kotoshi', '去年': 'kyonen',
+  '午前': 'gozen',   '午後': 'gogo',
 
   // Tempat
-  '学校': 'gakkou', '大学': 'daigaku','病院': 'byouin',
-  '部屋': 'heya',   '建物': 'tatemono','図書館':'toshokan',
+  '学校': 'gakkou',  '大学': 'daigaku', '病院': 'byouin',
+  '部屋': 'heya',    '建物': 'tatemono','図書館': 'toshokan',
   '世界': 'sekai',
 
   // Makanan & alam
-  '野菜': 'yasai',  '果物': 'kudamono',
+  '野菜': 'yasai',   '果物': 'kudamono',
 
   // Transportasi
-  '電車': 'densha', '自転車':'jitensha','飛行機':'hikouki',
+  '電車': 'densha',  '自転車': 'jitensha','飛行機': 'hikouki',
 
-  // Lainnya
-  '情報': 'jouhou', '技術': 'gijutsu', '科学': 'kagaku',
-  '映画': 'eiga',   '屋敷': 'yashiki', '使う': 'tsukau',
+  // Teknologi & ilmu
+  '情報': 'jouhou',  '技術': 'gijutsu',  '科学': 'kagaku',
+
+  // Hiburan
+  '映画': 'eiga',    '屋敷': 'yashiki',  '使う': 'tsukau',
+
+  // ---- Horror / game (ditambahkan) ----
+  '恐怖': 'kyoufu',
+  '潜入': 'sennyuu',
+  '亡霊': 'bourei',
+  '幽霊': 'yuurei',
+  '廃墟': 'haikyo',   // ruins
+  '生存': 'seizon',   // survival
+  '感染': 'kansen',   // infection
+  '変異': 'heni',     // mutation
+  '脅威': 'kyoui',    // threat
+  '悪夢': 'akumu',    // nightmare
+  '暗闇': 'kurayami', // darkness
+  '怪物': 'kaibutsu', // monster
+  '武器': 'buki',
+  '謎': 'nazo',
+  '探索': 'tansaku',
+  '逃亡': 'toubou',
+  '生き残り': 'ikinokori',
+
+  // ---- Kata majemuk umum lainnya (ditambahkan) ----
+  '日本語': 'nihongo',
+  '東京': 'toukyou',
+  '大阪': 'oosaka',
+  '名前': 'namae',
+  '言葉': 'kotoba',
+  '物語': 'monogatari',
+  '冒険': 'bouken',    // adventure
+  '戦闘': 'sentou',    // battle/combat
+  '勝利': 'shouri',    // victory
+  '敗北': 'haiboku',   // defeat
+  '仲間': 'nakama',    // companion
+  '敵': 'teki',        // enemy (single char, tapi penting)
 
   // ==================== HIRAGANA DASAR ====================
   'あ': 'a',  'い': 'i',   'う': 'u',   'え': 'e',  'お': 'o',
@@ -50,7 +78,7 @@ export const japaneseToLatinMap: Record<string, string> = {
   // Hiragana — handakuten
   'ぱ': 'pa', 'ぴ': 'pi',  'ぷ': 'pu',  'ぺ': 'pe', 'ぽ': 'po',
 
-  // Hiragana — yoon (kombinasi; standalone → romanisasi minimal)
+  // Hiragana — yoon (kombinasi dua karakter)
   'きゃ': 'kya', 'きゅ': 'kyu', 'きょ': 'kyo',
   'しゃ': 'sha', 'しゅ': 'shu', 'しょ': 'sho',
   'ちゃ': 'cha', 'ちゅ': 'chu', 'ちょ': 'cho',
@@ -63,11 +91,11 @@ export const japaneseToLatinMap: Record<string, string> = {
   'びゃ': 'bya', 'びゅ': 'byu', 'びょ': 'byo',
   'ぴゃ': 'pya', 'ぴゅ': 'pyu', 'ぴょ': 'pyo',
 
-  // Hiragana — kana kecil (standalone, fallback)
+  // Hiragana — kana kecil standalone (fallback)
   'ゃ': 'ya', 'ゅ': 'yu', 'ょ': 'yo',
   'ぁ': 'a',  'ぃ': 'i',  'ぅ': 'u',  'ぇ': 'e', 'ぉ': 'o',
 
-  // っ — sokuon: ditangani khusus di slugify(); fallback ke string kosong
+  // っ — sokuon: ditangani khusus di slugify(); fallback string kosong
   'っ': '',
 
   // ==================== KATAKANA DASAR ====================
@@ -104,11 +132,11 @@ export const japaneseToLatinMap: Record<string, string> = {
   'ビャ': 'bya', 'ビュ': 'byu', 'ビョ': 'byo',
   'ピャ': 'pya', 'ピュ': 'pyu', 'ピョ': 'pyo',
 
-  // Katakana — kana kecil (standalone, fallback)
+  // Katakana — kana kecil standalone (fallback)
   'ャ': 'ya', 'ュ': 'yu', 'ョ': 'yo',
   'ァ': 'a',  'ィ': 'i',  'ゥ': 'u',  'ェ': 'e', 'ォ': 'o',
 
-  // ッ — sokuon: ditangani khusus di slugify(); fallback ke string kosong
+  // ッ — sokuon: ditangani khusus di slugify(); fallback string kosong
   'ッ': '',
 
   // Tanda vokal panjang katakana — abaikan
@@ -159,13 +187,24 @@ export const japaneseToLatinMap: Record<string, string> = {
   // Teknologi (single)
   '電': 'den',    '話': 'wa',     '機': 'ki',     '械': 'kai',
 
-  // Hiburan & game
+  // Horror / game (single — ditambahkan)
+  '恐': 'kyou',   '怖': 'fu',
+  '深': 'fuka',   '潜': 'sen',
+  '廃': 'hai',    '墟': 'kyo',
+  '変': 'hen',    '異': 'i',
+  '暗': 'an',     '闇': 'yami',
+  '怪': 'kai',    '物': 'butsu',
+  '謎': 'nazo',   '索': 'saku',
+  '逃': 'to',     '亡': 'bou',
+  '霊': 'rei',    '幽': 'yuu',
+
+  // Hiburan & game (single)
   '遊': 'yuu',    '戯': 'gi',     '画': 'ga',     '音': 'oto',
   '楽': 'raku',   '曲': 'kyoku',
   '死': 'shi',    '体': 'tai',
-  '亡': 'bou',    '霊': 'rei',    '幽': 'yuu',    '怖': 'fu',
+  '威': 'i',      '脅': 'kyou',
 
-  // Kata kerja (bentuk dasar/stem)
+  // Kata kerja (stem)
   '見': 'mi',     '聞': 'ki',     '読': 'yo',     '書': 'ka',
   '買': 'ka',
   '行': 'i',      '来': 'ku',     '帰': 'kae',    '出': 'de',
@@ -181,7 +220,7 @@ export const japaneseToLatinMap: Record<string, string> = {
   // Kata umum / sufiks
   '語': 'go',     '学': 'gaku',   '生': 'sei',    '会': 'kai',
   '社': 'sha',    '者': 'sha',    '的': 'teki',   '性': 'sei',
-  '物': 'butsu',  '理': 'ri',     '数': 'suu',
+  '理': 'ri',     '数': 'suu',
   '字': 'ji',     '文': 'bun',    '化': 'ka',
   '自': 'ji',     '動': 'dou',    '用': 'you',    '方': 'hou',
   '法': 'hou',    '回': 'kai',    '度': 'do',     '場': 'ba',
