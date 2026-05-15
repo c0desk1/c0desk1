@@ -15,6 +15,32 @@ import Breadcrumb from '@/components/ui/Breadcrumb.astro';
 import Section from '@/components/ui/Section.astro';
 import C from '@/components/ui/C.astro';
 
+export async function getStaticPaths() {
+  const legalPages = await getCollection('legal');
+
+  return legalPages.map((page) => {
+    const pathParts = page.id.split('/');
+    const baseId = pathParts[0];
+    const lang = page.data.lang || 'id';
+    const alternates = legalPages.filter(p => p.id.startsWith(baseId + '/'));
+    const alternateSlugs = Object.fromEntries(
+      alternates.map(p => [
+        p.data.lang || 'id',
+        p.id.split('/')[0]
+      ])
+    );
+
+    return {
+      params: {
+        locale: lang === 'id' ? undefined : lang,
+        slug: baseId
+      },
+      props: { page, alternateSlugs },
+    };
+  });
+}
+
+
 const { page, alternateSlugs } = Astro.props;
 if (!page) return Astro.redirect('/404');
 
