@@ -20,7 +20,6 @@ import TOC from "@/components/ui/TOC.astro";
 import PostNavigation from '@/components/blog/PostNavigation.astro';
 import BlogRelatedPosts from "@/components/blog/BlogRelatedPosts.astro";
 import BackToTop from "@/components/ui/BackToTop.astro";
-import ReadingProgress from "@/components/ui/ReadingProgress.astro";
 import SharePost from '@/components/blog/SharePost.astro';
 
 export async function getStaticPaths() {
@@ -168,6 +167,9 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
               image={image}
             />
           </Section>
+          <Section size="sm" class="section-divider">
+            <SharePost url={canonicalURL} title={post.data.title} description={post.data.description} tags={post.data.tags} />
+          </Section>
           <Section size="sm">
             <div id="article">
               <div id="article-toc" class="hidden sticky top-15 z-50 my-6">
@@ -180,30 +182,27 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
               </div>
             </div>
 	        </Section>
-          <Section size="sm" class="section-divider">
-            <SharePost url={canonicalURL} title={post.data.title} description={post.data.description} tags={post.data.tags} variant='card' />
-          </Section>
-	    </article>
-	  </Container>
-	</Section>
-	<Section size="sm">
-	  <h2 class="sr-only">{getLabel(locale, 'backToTop')}</h2>
-	  <Container size="lg">
-	    <BackToTop align="center" />
-	  </Container>
-	</Section>
-    <Section size="md" class="section-divider">
-      <h2 class="sr-only">{getLabel(locale, 'b_relatedPosts')}</h2>
-      <Container size="xl">
-        <BlogRelatedPosts posts={relatedPosts} />
+	      </article>
+	    </Container>
+	  </Section>
+    <Section size="sm">
+      <h2 class="sr-only">{getLabel(locale, 'backToTop')}</h2>
+      <Container size="lg">
+        <BackToTop align="center" />
       </Container>
     </Section>
-    <Section size="sm" class="section-divider">
-	  <h2 class="sr-only">{getLabel(locale, 'b_articleNavigation')}</h2>
-	  <Container size="xl">
-        <PostNavigation prevPost={prevPost} nextPost={nextPost} />
-      </Container>
+      <Section size="md" class="section-divider">
+        <h2 class="sr-only">{getLabel(locale, 'b_relatedPosts')}</h2>
+        <Container size="xl">
+          <BlogRelatedPosts posts={relatedPosts} />
+        </Container>
+      </Section>
+      <Section size="sm" class="section-divider">
+      <h2 class="sr-only">{getLabel(locale, 'b_articleNavigation')}</h2>
+      <Container size="xl">
+          <PostNavigation prevPost={prevPost} nextPost={nextPost} />
+        </Container>
+      </Section>
     </Section>
   </Section>
-  <ReadingProgress />
 </BaseLayout>
