@@ -1,4 +1,5 @@
 ---
+// src/components/layout/Nav.astro
 import { siteConfig } from "@/config/site";
 import { getCurrentLocale, localizePath, getLabel } from '@/utils/i18n';
 
@@ -23,7 +24,7 @@ const navAria = getLabel(locale, "navAria");
     const activePath = normalize(currentPath);
     const targetPath = normalize(localizedHref);
 
-    const isActive = activePath === targetPath || (targetPath!== "/" && activePath.startsWith(targetPath));
+    const isActive = activePath === targetPath || (targetPath !== "/" && activePath.startsWith(targetPath));
 
     return (
       <NavLink
