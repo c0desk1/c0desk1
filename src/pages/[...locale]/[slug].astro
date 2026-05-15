@@ -31,7 +31,7 @@ export async function getStaticPaths() {
 
     return {
       params: {
-        locale: lang === 'id'? undefined : lang,
+        locale: lang === 'id' ? undefined : lang,
         slug: baseId
       },
       props: { page, alternateSlugs },
@@ -47,7 +47,7 @@ const locale = getCurrentLocale(Astro);
 
 const siteData = siteConfig;
 
-const siteURL = Astro.site?.toString()?? siteData.siteUrl;
+const siteURL = Astro.site?.toString() ?? siteData.siteUrl;
 const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
 const seoTitle = page.data.seo?.title || page.data.title;
@@ -64,13 +64,13 @@ const Breadcrumbs = [
 ];
 
 const dateLocale = 
-  locale === 'en'? 'en-Us' : 
-  locale === 'ru'? 'ru-RU' :
-  locale === 'jp'? 'ja-JP' : 
+  locale === 'en' ? 'en-US' : 
+  locale === 'ru' ? 'ru-RU' :
+  locale === 'jp' ? 'ja-JP' : 
   'id-ID';
 
 const formattedLastUpdated = page.data.lastUpdated
-? formatDate(page.data.lastUpdated, dateLocale)
+  ? formatDate(page.data.lastUpdated, dateLocale)
   : null;
 ---
 
@@ -81,29 +81,45 @@ const formattedLastUpdated = page.data.lastUpdated
   canonicalURL={canonicalURL}
   alternateSlugs={alternateSlugs}
   basePath="">
-  <Section size="md" class="border-y border-dashed border-(--border)">
-    <Container size="md">
-      <div class="flex items-center justify-center">
-        <Breadcrumb items={Breadcrumbs} />
-      </div>
-      <div class="mt-8 items-center text-center justify-center">
-        <div class="prose-custom">
-          <h1 class="text-heading-24 md:text-heading-32 lg:text-heading-56 justify-center">{page.data.title}</h1>
-        </div>
-        {formattedLastUpdated && (
-          <p class="text-copy-14 lg:text-copy-16 mt-4 text-(--fg-muted) text-center justify-center">
-            {getLabel(locale, 'lastUpdated') || 'Terakhir diperbarui'}: 
-            <time datetime={page.data.lastUpdated?.toISOString()}>{formattedLastUpdated}</time>
-          </p>
-        )}
-      </div>
-    </Container>
-  </Section>
-  <Section size="lg">
-    <Container size="md">
-      <div id="article-content" class="prose-custom">
-        <Content components={components} />
-      </div>
-    </Container>
-  </Section>
+  
+  <div class="relative w-full max-w-[1040px] mx-auto min-h-screen border-x border-[var(--border)] overflow-hidden">
+    
+    <div 
+      class="pointer-events-none absolute inset-0 z-0
+             bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] 
+             bg-[size:100%_120px] md:bg-[size:50%_160px] lg:bg-[size:33.333%_160px] 
+             [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)] 
+             opacity-50 dark:opacity-100"
+      aria-hidden="true"
+    ></div>
+
+    <div class="relative z-10 flex flex-col">
+      
+      <Section size="md">
+        <Container size="md" class="flex flex-col items-center justify-center text-center bg-[var(--bg)] py-20 px-6 my-16 md:my-24 border border-[var(--border)] shadow-sm">
+          <Breadcrumb items={Breadcrumbs} />
+          
+          <h1 class="text-heading-32 md:text-heading-48 lg:text-heading-56 mt-8 max-w-[800px] text-balance tracking-tight">
+            {page.data.title}
+          </h1>
+          
+          {formattedLastUpdated && (
+            <p class="text-copy-14 lg:text-copy-16 mt-6 text-[var(--fg-muted)]">
+              {getLabel(locale, 'lastUpdated') || 'Terakhir diperbarui'}: 
+              <time datetime={page.data.lastUpdated?.toISOString()}>{formattedLastUpdated}</time>
+            </p>
+          )}
+        </Container>
+      </Section>
+
+      <Section size="lg" class="pt-0">
+        <Container size="md" class="bg-[var(--bg)] px-6 py-12 md:px-12 md:py-16 border border-[var(--border)] shadow-sm">
+          <div id="article-content" class="prose-custom max-w-none">
+            <Content components={components} />
+          </div>
+        </Container>
+      </Section>
+
+    </div>
+  </div>
 </BaseLayout>
