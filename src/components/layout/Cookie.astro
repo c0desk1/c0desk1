@@ -141,9 +141,7 @@ const cookieLabels = {
       }
 
       const host = document.createElement('div');
-
       host.id = 'ck-host';
-
       host.setAttribute('role', 'dialog');
       host.setAttribute('aria-modal', 'false');
       host.setAttribute('aria-label', cookieLabels.preferenceTitle);
@@ -158,8 +156,8 @@ const cookieLabels = {
                 </svg>
               </div>
               <div>
-                <p class="ck-title">${cookieLabels.valuePrivacy}</p>
-                <p class="ck-sub">${cookieLabels.selectCookie}</p>
+                <p class="ck-title text-heading-16">${cookieLabels.valuePrivacy}</p>
+                <p class="ck-sub text-copy-14">${cookieLabels.selectCookie}</p>
               </div>
              </div>
              <button id="ck-close-btn" class="ck-close-btn" aria-label="${cookieLabels.close}">
@@ -172,8 +170,8 @@ const cookieLabels = {
           <div class="ck-toggles">
             <div class="ck-toggle-row ck-toggle-row--disabled">
               <div class="ck-toggle-info">
-                <span class="ck-toggle-name">${cookieLabels.functional}</span>
-                <span class="ck-toggle-desc">${cookieLabels.functionalDesc}</span>
+                <span class="ck-toggle-name text-label-14">${cookieLabels.functional}</span>
+                <span class="ck-toggle-desc text-copy-13">${cookieLabels.functionalDesc}</span>
               </div>
               <div class="ck-pill ck-pill--on" aria-hidden="true">
                 <span class="ck-pill-thumb"></span>
@@ -181,8 +179,8 @@ const cookieLabels = {
             </div>
             <div class="ck-toggle-row" id="ck-analytics-row">
               <div class="ck-toggle-info">
-                <span class="ck-toggle-name">${cookieLabels.analytics}</span>
-                <span class="ck-toggle-desc">${cookieLabels.analyticsDesc}</span>
+                <span class="ck-toggle-name text-label-14">${cookieLabels.analytics}</span>
+                <span class="ck-toggle-desc text-copy-13">${cookieLabels.analyticsDesc}</span>
               </div>
               <button
                 id="ck-analytics-toggle"
@@ -196,8 +194,8 @@ const cookieLabels = {
             </div>
             <div class="ck-toggle-row" id="ck-ads-row">
               <div class="ck-toggle-info">
-                <span class="ck-toggle-name">${cookieLabels.ads}</span>
-                <span class="ck-toggle-desc">${cookieLabels.adsDesc}</span>
+                <span class="ck-toggle-name text-label-14">${cookieLabels.ads}</span>
+                <span class="ck-toggle-desc text-copy-13">${cookieLabels.adsDesc}</span>
               </div>
               <button
                 id="ck-ads-toggle"
@@ -210,9 +208,9 @@ const cookieLabels = {
             </div>
           </div>
           <div class="ck-actions">
-            <button id="ck-reject-all" class="ck-btn ck-btn--ghost">${cookieLabels.rejectAll}</button>
-            <button id="ck-save" class="ck-btn ck-btn--outline">${cookieLabels.saveChoice}</button>
-            <button id="ck-accept-all" class="ck-btn ck-btn--primary">${cookieLabels.acceptAll}</button>
+            <button id="ck-reject-all" class="ck-btn ck-btn--ghost text-button-14">${cookieLabels.rejectAll}</button>
+            <button id="ck-save" class="ck-btn ck-btn--outline text-button-14">${cookieLabels.saveChoice}</button>
+            <button id="ck-accept-all" class="ck-btn ck-btn--primary text-button-14">${cookieLabels.acceptAll}</button>
           </div>
         </div>
       `;
@@ -436,18 +434,13 @@ const cookieLabels = {
           height: 1rem; 
         }
             
-        .ck-title { 
-          font-size: 1rem; 
-          font-weight: 600; 
-          color: var(--fg); 
-          margin: 0 0 0.2rem; 
-          letter-spacing: -0.01em; 
-        }
-            
-        .ck-sub { 
-          font-size: 0.8375rem;
-          color: var(--fg-muted); 
-          margin: 0; 
+        /* Typography handled by Geist utilities, only structural styles remain */
+        .ck-title,
+        .ck-sub,
+        .ck-toggle-name,
+        .ck-toggle-desc,
+        .ck-btn {
+          /* remove manual font styles */
         }
             
         .ck-toggles { 
@@ -491,17 +484,6 @@ const cookieLabels = {
           flex-direction: column; 
           gap: 0.15rem; 
           min-width: 0; 
-        }
-            
-        .ck-toggle-name { 
-          font-size: 1rem; 
-          color: var(--fg); 
-        }
-            
-        .ck-toggle-desc { 
-          font-size: 0.8375rem;
-          color: var(--fg-muted); 
-          line-height: 1.65; 
         }
             
         .ck-pill { 
@@ -560,8 +542,6 @@ const cookieLabels = {
           flex: 0 0 auto; 
           width: auto; 
           padding: 0.5rem 1rem; 
-          font-size: 0.9375rem; 
-          font-weight: 500; 
           border-radius: 0.5rem; 
           text-align: center; 
           white-space: nowrap; 
@@ -658,11 +638,6 @@ const cookieLabels = {
             bottom: 4.5rem; 
           }
 
-          .ck-title,
-          .ck-toggle-name { 
-            font-size: 0.9375rem; 
-          }
-              
           .ck-actions { 
             flex-direction: column;
             gap: 0.5rem; 
@@ -672,7 +647,6 @@ const cookieLabels = {
             width: 100%; 
             justify-content: center; 
             white-space: normal;
-            font-size: 0.8375rem;
           }
   
           .ck-btn--ghost   { order: 1; }
