@@ -57,28 +57,28 @@
 }
 
 @utility text-heading-16 {
-  font-size: 16px;
+  font-size: 15px;
   line-height: 20px;
   letter-spacing: -0.01em;
   font-weight: 500;
 }
 
 @utility text-heading-14 {
-  font-size: 14px;
+  font-size: 13px;
   line-height: 18px;
   letter-spacing: -0.01em;
   font-weight: 500;
 }
 
 @utility text-copy-24 {
-  font-size: 24px;
+  font-size: 23px;
   line-height: 32px;
   letter-spacing: -0.02em;
   font-weight: 400;
 }
 
 @utility text-copy-20 {
-  font-size: 20px;
+  font-size: 19px;
   line-height: 28px;
   letter-spacing: -0.02em;
   font-weight: 400;
@@ -92,56 +92,56 @@
 }
 
 @utility text-copy-16 {
-  font-size: 15.5px;
+  font-size: 15px;
   line-height: 24px;
   letter-spacing: -0.01em;
   font-weight: 400;
 }
 
 @utility text-copy-14 {
-  font-size: 14px;
+  font-size: 13px;
   line-height: 20px;
   letter-spacing: 0;
   font-weight: 400;
 }
 
 @utility text-copy-13 {
-  font-size: 13px;
+  font-size: 12px;
   line-height: 18px;
   letter-spacing: 0;
   font-weight: 400;
 }
 
 @utility text-label-20 {
-  font-size: 20px;
+  font-size: 19px;
   line-height: 28px;
   letter-spacing: -0.02em;
   font-weight: 400;
 }
 
 @utility text-label-18 {
-  font-size: 18px;
+  font-size: 17px;
   line-height: 26px;
   letter-spacing: -0.01em;
   font-weight: 400;
 }
 
 @utility text-label-16 {
-  font-size: 16px;
+  font-size: 15px;
   line-height: 24px;
   letter-spacing: -0.01em;
   font-weight: 500;
 }
 
 @utility text-label-14 {
-  font-size: 14px;
+  font-size: 13px;
   line-height: 20px;
   letter-spacing: 0;
   font-weight: 500;
 }
 
 @utility text-label-13 {
-  font-size: 13px;
+  font-size: 12px;
   line-height: 18px;
   letter-spacing: 0;
   font-weight: 500;
@@ -149,7 +149,7 @@
 }
 
 @utility text-label-12 {
-  font-size: 12px;
+  font-size: 11px;
   line-height: 16px;
   letter-spacing: 0.02em;
   font-weight: 500;
@@ -157,28 +157,28 @@
 }
 
 @utility text-button-16 {
-  font-size: 16px;
+  font-size: 15px;
   line-height: 20px;
   letter-spacing: -0.01em;
   font-weight: 500;
 }
 
 @utility text-button-14 {
-  font-size: 14px;
+  font-size: 13px;
   line-height: 18px;
   letter-spacing: -0.01em;
   font-weight: 500;
 }
 
 @utility text-button-12 {
-  font-size: 12px;
+  font-size: 11px;
   line-height: 16px;
   letter-spacing: 0;
   font-weight: 500;
 }
 
 @utility text-label-14-mono {
-  font-size: 14px;
+  font-size: 13px;
   line-height: 20px;
   letter-spacing: 0;
   font-weight: 500;
@@ -193,7 +193,7 @@
 }
 
 @utility text-label-13-mono {
-  font-size: 13px;
+  font-size: 12px;
   line-height: 18px;
   letter-spacing: 0;
   font-weight: 500;
@@ -208,7 +208,7 @@
 }
 
 @utility text-label-12-mono {
-  font-size: 12px;
+  font-size: 11px;
   line-height: 16px;
   letter-spacing: 0;
   font-weight: 500;
@@ -223,7 +223,7 @@
 }
 
 @utility text-copy-13-mono {
-  font-size: 13px;
+  font-size: 12px;
   line-height: 18px;
   letter-spacing: 0;
   font-weight: 400;
