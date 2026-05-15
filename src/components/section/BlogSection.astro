@@ -1,9 +1,11 @@
 ---
 // src/components/blog/BlogLatest.astro
-import PostCard from '@/components/blog/PostCard.astro';
-import Button from '@/components/ui/Button.astro';
 import type { CollectionEntry } from 'astro:content';
 import { getCurrentLocale, getLabel, localizePath } from "@/utils/i18n";
+
+import C from "@/components/ui/C.astro";
+import PostCard from '@/components/blog/PostCard.astro';
+import Button from '@/components/ui/Button.astro';
 
 interface Props {
   posts: CollectionEntry<'blog'>[];
@@ -11,11 +13,11 @@ interface Props {
 
 const { posts } = Astro.props;
 const locale = getCurrentLocale(Astro);
+const blogPath = localizePath('/blog', locale);
 
 const latestTitle = getLabel(locale, 'home_BlogSection');
 const noPostsText = getLabel(locale, 'blog_noBlogPosts');
 const viewAllText = getLabel(locale, 'blog_viewAll');
-const blogPath = localizePath('/blog', locale);
 ---
 
 <div class="py-4 md:py-8">
@@ -25,12 +27,16 @@ const blogPath = localizePath('/blog', locale);
     </h2>
   </div>
   {posts.length > 0 ? (
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4 md:gap-x-8">
-      {posts.map(post => (
-        <div class="p-0">
-          <PostCard post={post} />
-        </div>
-      ))}
+    <div class="relative border border-(--border)">
+      <C className="-top-3 -left-3" />
+      <C className="-bottom-3 -right-3" />
+      <div class="grid grid-cols-1 md:grid-cols-3 divide-y divide-x-0 md:divide-x md:divide-y-0 divide-(--border) gap-x-4 md:gap-x-8">
+        {posts.map(post => (
+          <div class="p-0">
+            <PostCard post={post} />
+          </div>
+        ))}
+      </div>
     </div>
   ) : (
     <div class="py-12 text-center border border-dashed border-(--border) rounded-lg">
