@@ -26,8 +26,6 @@ const {
 
 const shareLabel = getLabel(locale, 'share');
 const shareArticleLabel = getLabel(locale, 'shareArticle');
-const otherPlatformsLabel = getLabel(locale, 'otherPlatforms');
-const moreLabel = getLabel(locale, 'more');
 const shareToLabel = getLabel(locale, 'shareTo');
 
 const baseUrls = getShareUrls(url, title);
@@ -42,18 +40,15 @@ const allUrls = {
   reddit: `https://www.reddit.com/submit?url=${enc(url)}&title=${enc(title)}`,
 };
 
-const primary = [
-  { id: "x", label: "X / Twitter", href: allUrls.x },
-  { id: "whatsapp", label: "WhatsApp", href: allUrls.whatsapp },
-  { id: "telegram", label: "Telegram", href: allUrls.telegram },
-  { id: "facebook", label: "Facebook", href: allUrls.facebook },
-  { id: "linkedin", label: "LinkedIn", href: allUrls.linkedin },
-  { id: "threads", label: "Threads", href: allUrls.threads },
-];
-
-const overflow = [
-  { id: "reddit", label: "Reddit", href: allUrls.reddit },
-  { id: "email", label: "Email", href: allUrls.email },
+const platforms = [
+  { id: "x", label: "X", href: allUrls.x, icon: "twitter" },
+  { id: "facebook", label: "Facebook", href: allUrls.facebook, icon: "facebook" },
+  { id: "linkedin", label: "LinkedIn", href: allUrls.linkedin, icon: "linkedin" },
+  { id: "whatsapp", label: "WhatsApp", href: allUrls.whatsapp, icon: "whatsapp" },
+  { id: "telegram", label: "Telegram", href: allUrls.telegram, icon: "telegram" },
+  { id: "threads", label: "Threads", href: allUrls.threads, icon: "threads" },
+  { id: "reddit", label: "Reddit", href: allUrls.reddit, icon: "reddit" },
+  { id: "email", label: "Email", href: allUrls.email, icon: "email" },
 ];
 ---
 
@@ -72,56 +67,21 @@ const overflow = [
     <p class="sa-label text-label-13 font-semibold tracking-wide">{shareArticleLabel}</p>
   )}
 
-  <div class="sa-links" aria-label={otherPlatformsLabel}>
-    {primary.map((link) => (
+  <div class="sa-links" aria-label={shareArticleLabel}>
+    {platforms.map((platform) => (
       <a
-        href={link.href}
+        href={platform.href}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={`${shareToLabel} ${link.label}`}
-        title={link.label}
+        aria-label={`${shareToLabel} ${platform.label}`}
+        title={platform.label}
         class="sa-link"
-        data-platform={link.id}
-        key={link.id}
+        data-platform={platform.id}
+        key={platform.id}
       >
-        {link.id === "x" && <Icon name="twitter" class="w-4 h-4" />}
-        {link.id === "facebook" && <Icon name="facebook" class="w-4 h-4" />}
-        {link.id === "linkedin" && <Icon name="linkedin" class="w-4 h-4" />}
-        {link.id === "whatsapp" && <Icon name="whatsapp" class="w-4 h-4" />}
-        {link.id === "telegram" && <Icon name="telegram" class="w-4 h-4" />}
-        {link.id === "threads" && <Icon name="threads" class="w-4 h-4" />}
+        <Icon name={platform.icon} class="w-4 h-4" />
       </a>
     ))}
-
-    <div class="sa-overflow-wrap">
-      <button
-        class="sa-link sa-overflow-trigger"
-        aria-label={otherPlatformsLabel}
-        title={moreLabel}
-        aria-expanded="false"
-        aria-haspopup="menu"
-      >
-        <Icon name="more" class="w-4 h-4" />
-      </button>
-
-      <div class="sa-overflow-menu" role="menu" hidden>
-        {overflow.map((link) => (
-          <a
-            href={link.href}
-            target={link.id !== "email" ? "_blank" : undefined}
-            rel={link.id !== "email" ? "noopener noreferrer" : undefined}
-            role="menuitem"
-            class="sa-overflow-item text-button-12"
-            data-platform={link.id}
-            key={link.id}
-          >
-            {link.id === "email" && <Icon name="email" class="w-4 h-4 shrink-0" />}
-            {link.id === "reddit" && <Icon name="reddit" class="w-4 h-4" />}
-            <span>{link.label}</span>
-          </a>
-        ))}
-      </div>
-    </div>
   </div>
 </div>
 
@@ -167,7 +127,6 @@ const overflow = [
     flex-wrap: wrap;
     align-items: center;
     gap: 0.5rem;
-    overflow: visible;
   }
 
   .sa-link {
@@ -193,7 +152,6 @@ const overflow = [
   }
   .sa-link:active { transform: translateY(0) scale(0.95); }
 
-  /* Warna hover spesifik platform (opsional) */
   .sa-link[data-platform="x"]:hover { color: #000; }
   .sa-link[data-platform="whatsapp"]:hover { color: #25d366; }
   .sa-link[data-platform="telegram"]:hover { color: #2aabee; }
@@ -203,52 +161,9 @@ const overflow = [
   @media (prefers-color-scheme: dark) {
     .sa-link[data-platform="x"]:hover { color: #fff; }
   }
-
-  .sa-overflow-wrap {
-    position: relative;
-    display: inline-flex;
-  }
-
-  .sa-overflow-menu {
-    position: absolute;
-    bottom: calc(100% + 0.5rem);
-    right: 0;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-    padding: 0.375rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.125rem;
-    min-width: 8rem;
-    z-index: 100;
-    animation: sa-menu-in 0.15s cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-  .sa-overflow-menu[hidden] { display: none; }
-
-  @keyframes sa-menu-in {
-    from { opacity: 0; transform: translateY(4px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .sa-overflow-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 0.625rem;
-    border-radius: 0.5rem;
-    color: var(--fg-muted);
-    text-decoration: none;
-    white-space: nowrap;
-    transition: background 0.1s, color 0.1s;
-    cursor: pointer;
-  }
-  .sa-overflow-item:hover { background: var(--bg-muted); color: var(--fg); }
 </style>
 
 <script>
-  // Sama seperti script sebelumnya
   document.querySelectorAll<HTMLElement>(".sa-wrap").forEach((wrap) => {
     const btn = wrap.querySelector<HTMLButtonElement>(".sa-native");
     if (!btn || !navigator.share) return;
@@ -262,32 +177,5 @@ const overflow = [
         });
       } catch {}
     });
-  });
-
-  document.querySelectorAll<HTMLButtonElement>(".sa-overflow-trigger").forEach((trigger) => {
-    const menu = trigger.nextElementSibling as HTMLElement;
-    if (!menu) return;
-    trigger.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const isOpen = !menu.hasAttribute("hidden");
-      menu.toggleAttribute("hidden", isOpen);
-      trigger.setAttribute("aria-expanded", String(!isOpen));
-    });
-  });
-
-  document.addEventListener("click", () => {
-    document.querySelectorAll<HTMLElement>(".sa-overflow-menu").forEach((m) =>
-      m.setAttribute("hidden", "")
-    );
-    document.querySelectorAll<HTMLButtonElement>(".sa-overflow-trigger").forEach((b) =>
-      b.setAttribute("aria-expanded", "false")
-    );
-  });
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key !== "Escape") return;
-    document.querySelectorAll<HTMLElement>(".sa-overflow-menu").forEach((m) =>
-      m.setAttribute("hidden", "")
-    );
   });
 </script>
