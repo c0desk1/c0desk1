@@ -12,6 +12,7 @@ import Code from '@/components/mdx/Code.astro';
 import InlineLink from '@/components/mdx/InlineLink.astro';
 import CallQuote from '@/components/mdx/CallQuote.astro';
 import Footnotes from '@/components/mdx/Footnotes.astro';
+import P from '@/components/mdx/P.astro';
 
 export const components: MDXComponents = {
   h1: Heading,
@@ -29,4 +30,5 @@ export const components: MDXComponents = {
   Steps,
   Code,
   Footnotes,
+  p: P,
 };
