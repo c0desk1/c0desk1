@@ -109,7 +109,7 @@ const blog = defineCollection({
       src: z.string(),
       alt: z.string(),
       caption: z.string().optional(),
-    }),
+    }).optional(),
     author: reference("authors"),
     category: reference("categories"),
     tags: z.array(z.string()).default([]),
