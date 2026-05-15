@@ -2,141 +2,138 @@
 @reference '@/styles/utilities/index.css';
 
 .prose-custom .footnotes,
-.prose-custom section[data-footnotes]{
+.prose-custom section[data-footnotes] {
   @apply text-copy-16;
-  margin:2.5rem 0;
-  padding-top:2rem;
-  border-top:1px solid var(--prose-border);
-  overflow:clip
+  margin: 2.5rem 0;
+  padding-top: 2rem;
+  border-top: 1px solid var(--prose-border);
+  overflow: clip;
 }
 
 .prose-custom section[data-footnotes] h2,
-.prose-custom section[data-footnotes] h2.sr-only{
-  display:none!important
+.prose-custom section[data-footnotes] h2.sr-only {
+  display: none !important;
 }
 
-.prose-custom section[data-footnotes] h2.sr-only{
-  white-space:normal;
-  max-width:0;
-  overflow:hidden
+.prose-custom section[data-footnotes] h2.sr-only {
+  white-space: normal;
+  max-width: 0;
+  overflow: hidden;
 }
 
-.prose-custom section[data-footnotes] ol{
-  list-style:none;
-  padding-left:0;
-  margin:0;
-  display:flex;
-  flex-direction:column;
-  gap:.625rem
+.prose-custom section[data-footnotes] ol {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
 }
 
-.prose-custom section[data-footnotes] li{
-  display:flex;
-  gap:.75rem;
-  color:var(--prose-fg-subtle);
-  scroll-margin-top:80px;
-  margin-bottom:0;
-  padding-left:0;
-  line-height:1.6;
-  position:relative
+.prose-custom section[data-footnotes] li {
+  display: flex;
+  gap: 0.75rem;
+  color: var(--prose-fg-subtle);
+  scroll-margin-top: 80px;
+  margin-bottom: 0;
+  padding-left: 0;
+  position: relative;
 }
 
-.prose-custom section[data-footnotes] li::marker{
-  content:none
+.prose-custom section[data-footnotes] li::marker {
+  content: none;
 }
 
-.prose-custom section[data-footnotes] li::before{
-  content:counter(list-item);
-  counter-increment:list-item;
-  flex-shrink:0;
-  font-weight:500;
-  font-family:var(--prose-font-mono);
-  color:var(--prose-fg-subtle);
-  min-width:1rem;
-  padding-top:.2rem;
-  line-height:1.6
+/* Nomor footnote menggunakan font mono dan weight 500, line-height mengikuti Geist */
+.prose-custom section[data-footnotes] li::before {
+  content: counter(list-item);
+  counter-increment: list-item;
+  flex-shrink: 0;
+  font-weight: 500;
+  font-family: var(--prose-font-mono);
+  color: var(--prose-fg-subtle);
+  min-width: 1rem;
+  padding-top: 0.2rem;
 }
 
-.prose-custom section[data-footnotes] p{
-  display:inline;
-  margin:0;
-  color:var(--prose-fg-subtle)
+.prose-custom section[data-footnotes] p {
+  display: inline;
+  margin: 0;
+  color: var(--prose-fg-subtle);
 }
 
-.prose-custom section[data-footnotes] .data-footnote-backref{
-  margin-left:.25rem;
-  text-decoration:none;
-  opacity:0;
-  transition:opacity var(--prose-transition);
-  color:var(--prose-accent-dim);
-  font-size:.95rem;
-  vertical-align:middle
+.prose-custom section[data-footnotes] .data-footnote-backref {
+  margin-left: 0.25rem;
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity var(--prose-transition);
+  color: var(--prose-accent-dim);
+  vertical-align: middle;
 }
 
-.prose-custom section[data-footnotes] li:hover .data-footnote-backref{
-  opacity:1
+.prose-custom section[data-footnotes] li:hover .data-footnote-backref {
+  opacity: 1;
 }
 
-.prose-custom section[data-footnotes] .external-icon{
-  width:0!important;
-  height:0!important;
-  display:none!important
+.prose-custom section[data-footnotes] .external-icon {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
 }
 
-.prose-custom section[data-footnotes] li:target{
-  background-color:var(--prose-bg-subtle);
-  border-radius:4px
+.prose-custom section[data-footnotes] li:target {
+  background-color: var(--prose-bg-subtle);
+  border-radius: 4px;
 }
 
-.prose-custom a[href^="#fn"]{
-  scroll-margin-top:80px;
-  text-decoration:none;
-  transition:color var(--prose-transition)
+.prose-custom a[href^="#fn"] {
+  scroll-margin-top: 80px;
+  text-decoration: none;
+  transition: color var(--prose-transition);
 }
 
-.prose-custom a[href^="#fn"]:hover{
-  color:var(--prose-accent);
-  text-decoration:underline;
-  text-underline-offset:4px
+.prose-custom a[href^="#fn"]:hover {
+  color: var(--prose-accent);
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
-@media (max-width:767px){
+/* Mobile */
+@media (max-width: 767px) {
   .prose-custom .footnotes,
-  .prose-custom section[data-footnotes]{
+  .prose-custom section[data-footnotes] {
     @apply text-copy-16;
-    margin:2rem 0;
-    padding-top:1.5rem
+    margin: 2rem 0;
+    padding-top: 1.5rem;
   }
 
-  .prose-custom section[data-footnotes] ol{
-    gap:.5rem
+  .prose-custom section[data-footnotes] ol {
+    gap: 0.5rem;
   }
 
-  .prose-custom section[data-footnotes] li{
-    gap:.5rem;
-    line-height:1.55
+  .prose-custom section[data-footnotes] li {
+    gap: 0.5rem;
   }
 
-  .prose-custom section[data-footnotes] .data-footnote-backref{
-    margin-left:.15rem;
-    font-size:1rem
+  .prose-custom section[data-footnotes] .data-footnote-backref {
+    margin-left: 0.15rem;
   }
 }
 
-@media (min-width:768px){
+/* Desktop */
+@media (min-width: 768px) {
   .prose-custom .footnotes,
-  .prose-custom section[data-footnotes]{
+  .prose-custom section[data-footnotes] {
     @apply text-copy-16;
-    margin:2.5rem 0;
-    padding-top:2rem
+    margin: 2.5rem 0;
+    padding-top: 2rem;
   }
 
-  .prose-custom section[data-footnotes] ol{
-    gap:.625rem
+  .prose-custom section[data-footnotes] ol {
+    gap: 0.625rem;
   }
 
-  .prose-custom section[data-footnotes] li{
-    gap:.75rem;
-    line-height:1.6
+  .prose-custom section[data-footnotes] li {
+    gap: 0.75rem;
   }
 }
