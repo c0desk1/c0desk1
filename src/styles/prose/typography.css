@@ -96,7 +96,7 @@
 
 .prose-custom sub{
   bottom:-.2em;
-  color:var(--prose-fg-accent)
+  color:var(--prose-accent) /* perbaiki: sebelumnya --prose-fg-accent tidak ada */
 }
 
 .prose-custom sup a{
