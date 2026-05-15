@@ -2,10 +2,6 @@ import { defineCollection, reference } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from 'astro/zod';
 
-// ==========================================
-// 1. SHARED UTILITIES
-// ==========================================
-
 const seoSchema = z.object({
   title: z.string().max(100).optional(),
   description: z.string().min(10).max(200).optional(),
@@ -25,10 +21,6 @@ const socialSchema = z.array(z.object({
     href: z.string(),
     label: z.string(),
 })).optional();
-
-// ==========================================
-// 2. CORE ENTITIES
-// ==========================================
 
 const settings = defineCollection({
   loader: glob({ pattern: "**/site.json", base: "./src/content/settings" }),
@@ -95,10 +87,6 @@ const organizations = defineCollection({
   }),
 });
 
-// ==========================================
-// 3. CONTENT COLLECTIONS
-// ==========================================
-
 const blog = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/blog" }),
   schema: z.object({
@@ -154,7 +142,7 @@ const legal = defineCollection({
     lang: z.enum(['id', 'en', 'ru', 'jp']).default('id').optional(),
     title: z.string(),
     description: z.string().optional(),
-    lastUpdated: z.coerce.date(),
+    lastUpdated: z.coerce.date().optional(),
     seo: seoSchema.optional(),
   }),
 });
