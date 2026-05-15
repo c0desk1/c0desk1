@@ -83,17 +83,17 @@ const formattedLastUpdated = page.data.lastUpdated
   basePath="">
   <Section size="md" class="border-y border-dashed border-(--border)">
     <Container size="md">
-      <div class="flex items-center justify-start">
+      <div class="flex items-center justify-center">
         <Breadcrumb items={Breadcrumbs} />
       </div>
-      <div class="mt-8 text-start">
+      <div class="mt-8 items-center text-center justify-center">
         <div class="prose-custom">
-          <h1 class="text-heading-24 md:text-heading-32 lg:text-heading-56 justify-start">{page.data.title}</h1>
+          <h1 class="text-heading-24 md:text-heading-32 lg:text-heading-56 justify-center">{page.data.title}</h1>
         </div>
         {formattedLastUpdated && (
-          <p class="text-copy-14 lg:text-copy-16 mt-4 text-(--fg-muted)">
+          <p class="text-copy-14 lg:text-copy-16 mt-4 text-(--fg-muted) text-center justify-center">
             {getLabel(locale, 'lastUpdated') || 'Terakhir diperbarui'}: 
-            <time datetime={page.data.lastUpdated.toISOString()}>{formattedLastUpdated}</time>
+            <time datetime={page.data.lastUpdated?.toISOString()}>{formattedLastUpdated}</time>
           </p>
         )}
       </div>
