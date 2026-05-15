@@ -1,11 +1,25 @@
 ---
 // src/components/mdx/Divider.astro
 ---
-
-<div class="my-4 md:my-8 flex items-center gap-2" aria-hidden="true">
+<div class="full-width-divider my-4 md:my-8 flex items-center gap-2" aria-hidden="true">
   <div class="h-px flex-1 bg-(--prose-border)/60"></div>
   <span class="text-(--prose-fg-subtle) text-base select-none tracking-widest">
     ✾
   </span>
   <div class="h-px flex-1 bg-(--prose-border)/60"></div>
 </div>
+
+<style is:inline>
+  .full-width-divider {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 2rem 0;
+  }
+  @media (max-width: 767px) {
+    .full-width-divider {
+      width: 100dvw;
+    }
+  }
+</style>
