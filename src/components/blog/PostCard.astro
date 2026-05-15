@@ -1,77 +1,181 @@
 ---
-// src/components/blog/PostCard.astro
-import type { CollectionEntry } from 'astro:content';
-import { getEntry } from 'astro:content';
-import { Image } from 'astro:assets';
-import { siteConfig } from '@/config/site';
-import { getCurrentLocale, localizePath } from '@/utils/i18n';
-import { generateExcerpt, formatDateCompact, cdnImage, isCdnUrl, slugify } from '@/lib/utils';
+// src/components/blog/ShareArticle.astro
+import Icon from "@/components/ui/Icon";
+import { getShareUrls } from "@/lib/utils";
+import { getCurrentLocale, getLabel } from "@/utils/i18n";
 
 interface Props {
-  post?: CollectionEntry<'blog'>;
+  url: string;
+  title: string;
+  description?: string;
+  tags?: string[];
+  via?: string;
+  variant?: "row" | "card";
 }
 
-const { post } = Astro.props;
 const locale = getCurrentLocale(Astro);
 
-let title = '', excerpt = '', categoryName = '', pubDateISO = '', pubDateDisplay = '';
-let authorName = '', authorAvatar = '', optimizedAvatar = '', postUrl = '';
+const {
+  url,
+  title,
+  description = "",
+  tags = [],
+  via = "",
+  variant = "row",
+} = Astro.props;
 
-if (post) {
-  const { data } = post;
-  const { title: t, pubDate, category, author } = data;
-  const dateLocale =
-    locale === 'en' ? 'en-US' :
-    locale === 'ru' ? 'ru-RU' :
-    locale === 'jp' ? 'ja-JP' :
-    'id-ID';
+const shareLabel = getLabel(locale, 'share');
+const shareArticleLabel = getLabel(locale, 'shareArticle');
+const shareToLabel = getLabel(locale, 'shareTo');
 
-  const categoryEntry = await getEntry(category);
-  const authorEntry   = author ? await getEntry(author) : null;
-  const autoSlug = slugify(t);
+const baseUrls = getShareUrls(url, title);
+const enc = encodeURIComponent;
 
-  title = t;
-  excerpt = generateExcerpt(post.body || '', 140);
-  categoryName = categoryEntry?.data.name[locale] || categoryEntry?.data.name.id;
-  pubDateISO      = pubDate.toISOString();
-  pubDateDisplay  = formatDateCompact(pubDate, dateLocale);
-  authorName      = authorEntry?.data.name   || siteConfig.author.name;
-  authorAvatar    = authorEntry?.data.avatar || siteConfig.author.avatar;
-  optimizedAvatar = isCdnUrl(authorAvatar)
-    ? cdnImage(authorAvatar, { w: 48, h: 48, q: 80 })
-    : authorAvatar;
-  postUrl = localizePath(`/blog/${autoSlug}/`, locale);
-}
+const allUrls = {
+  ...baseUrls,
+  x: `https://x.com/intent/tweet?text=${enc(title)}&url=${enc(url)}${tags.length ? `&hashtags=${enc(tags.join(','))}` : ''}${via ? `&via=${enc(via)}` : ''}`,
+  whatsapp: `https://wa.me/?text=${enc(`${title} ${url}`)}`,
+  telegram: `https://t.me/share/url?url=${enc(url)}&text=${enc(title)}`,
+  threads: `https://www.threads.net/intent/post?text=${enc(`${title} ${url}`)}`,
+  reddit: `https://www.reddit.com/submit?url=${enc(url)}&title=${enc(title)}`,
+};
+
+const platforms = [
+  { id: "x", label: "X", href: allUrls.x, icon: "twitter" },
+  { id: "facebook", label: "Facebook", href: allUrls.facebook, icon: "facebook" },
+  { id: "linkedin", label: "LinkedIn", href: allUrls.linkedin, icon: "linkedin" },
+  { id: "whatsapp", label: "WhatsApp", href: allUrls.whatsapp, icon: "whatsapp" },
+  { id: "telegram", label: "Telegram", href: allUrls.telegram, icon: "telegram" },
+  { id: "threads", label: "Threads", href: allUrls.threads, icon: "threads" },
+  { id: "reddit", label: "Reddit", href: allUrls.reddit, icon: "reddit" },
+  { id: "email", label: "Email", href: allUrls.email, icon: "email" },
+];
 ---
 
-<a href={postUrl} class="group flex flex-col h-full w-full py-8">
-  <div class="flex items-center justify-between mb-4 text-label-13 md:text-label-14 text-(--fg-subtle) group-hover:text-(--fg)">
-    <span>{categoryName}</span>
-    <time datetime={pubDateISO}>{pubDateDisplay}</time>
+<div
+  class:list={["sa-wrap not-prose", variant === "card" ? "sa-wrap--card" : "sa-wrap--row"]}
+  data-url={url}
+  data-title={title}
+  data-description={description}
+>
+  <button class="sa-native text-button-14" aria-label={shareArticleLabel} title={shareLabel} hidden>
+    <Icon name="share" class="w-4 h-4" />
+    <span>{shareLabel}</span>
+  </button>
+
+  {variant === "card" && (
+    <p class="sa-label text-label-13 font-semibold tracking-wide">{shareArticleLabel}</p>
+  )}
+
+  <div class="sa-links" aria-label={shareArticleLabel}>
+    {platforms.map((platform) => (
+      <a
+        href={platform.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`${shareToLabel} ${platform.label}`}
+        title={platform.label}
+        class="sa-link"
+        data-platform={platform.id}
+        key={platform.id}
+      >
+        <Icon name={platform.icon} class="w-4 h-4" />
+      </a>
+    ))}
   </div>
-  <div class="flex flex-col gap-4 flex-1">
-    <h2 class="text-heading-16 md:text-heading-20 lg:text-heading-24 text-(--fg) font-semibold line-clamp-3">
-      {title}
-    </h2>
-    <p class="text-copy-13 md:text-copy-14 font-medium text-(--fg-muted) line-clamp-3 group-hover:text-(--fg)">
-      {excerpt}
-    </p>
-    <div class="mt-auto flex items-center gap-2 text-label-13 md:text-label-14 text-(--fg-subtle) group-hover:text-(--fg)">
-      {authorAvatar && (
-        <span aria-hidden="true" aria-label="" role="img" class="w-5 h-5 shrink-0 rounded-full inline-block overflow-hidden leading-0 align-top relative transition-[background] duration-200 ease-in-out">
-          <Image
-            src={optimizedAvatar}
-            alt={`Author ${authorName}`}
-            width={48}
-            height={48}
-            loading='eager'
-            decoding='async'
-            class="h-full w-full object-cover"
-          />
-          <span class="absolute inset-0 rounded-full border-(--border)"></span>
-        </span>
-      )}
-      <span>{authorName}</span>
-    </div>
-  </div>
-</a>
+</div>
+
+<style>
+  .sa-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .sa-wrap--card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--bg-muted);
+  }
+
+  .sa-label {
+    margin: 0;
+  }
+
+  .sa-native {
+    display: none;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.875rem 0.4rem 0.625rem;
+    color: var(--fg);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .sa-native:not([hidden]) { display: inline-flex; }
+  .sa-native:hover { background: var(--bg-muted); border-color: var(--border-strong); }
+
+  .sa-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .sa-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--fg-muted);
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.13s, background 0.13s, border-color 0.13s, transform 0.1s;
+    flex-shrink: 0;
+  }
+  .sa-link:hover {
+    color: var(--fg);
+    background: var(--bg-muted);
+    border-color: var(--border-strong);
+    transform: translateY(-1px);
+  }
+  .sa-link:active { transform: translateY(0) scale(0.95); }
+
+  .sa-link[data-platform="x"]:hover { color: #000; }
+  .sa-link[data-platform="whatsapp"]:hover { color: #25d366; }
+  .sa-link[data-platform="telegram"]:hover { color: #2aabee; }
+  .sa-link[data-platform="facebook"]:hover { color: #1877f2; }
+  .sa-link[data-platform="linkedin"]:hover { color: #0a66c2; }
+  .sa-link[data-platform="reddit"]:hover { color: #ff4500; }
+  @media (prefers-color-scheme: dark) {
+    .sa-link[data-platform="x"]:hover { color: #fff; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>(".sa-wrap").forEach((wrap) => {
+    const btn = wrap.querySelector<HTMLButtonElement>(".sa-native");
+    if (!btn || !navigator.share) return;
+    btn.removeAttribute("hidden");
+    btn.addEventListener("click", async () => {
+      try {
+        await navigator.share({
+          title: wrap.dataset.title || document.title,
+          text: wrap.dataset.description || "",
+          url: wrap.dataset.url || location.href,
+        });
+      } catch {}
+    });
+  });
+</script>
