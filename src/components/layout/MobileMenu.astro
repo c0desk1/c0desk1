@@ -9,30 +9,21 @@ import LanguageButton from "@/components/ui/LanguageButton.astro";
 import ThemeToggle from "@/components/ui/ThemeToggle.astro";
 
 interface Props {
-  alternateSlugs?: 
-    Record<string, string>
-  ;
-  
-  basePath?: 
-    'blog' | 
-    'portfolio' | 
-    'legal' | 
-    ''
-  ;
+  alternateSlugs?: Record<string, string>;
+  basePath?: 'blog' | 'portfolio' | 'legal' | '';
 }
 
-const { 
-  alternateSlugs, 
-  basePath = '' 
-} = Astro.props;
+const { alternateSlugs, basePath = '' } = Astro.props;
 
 const nav = siteConfig.mobileNavItems;
 const locale = getCurrentLocale(Astro);
 
-const mobileAria = locale === 'en' 
-  ? 'Navigation menu' 
-  : locale === 'ru' 
-  ? 'Меню навигации' 
+const mobileAria = locale === 'en'
+ ? 'Navigation menu'
+  : locale === 'ru'
+ ? 'Меню навигации'
+  : locale === 'jp'
+ ? 'ナビゲーションメニュー'
   : 'Menu navigasi';
 ---
 
@@ -41,7 +32,7 @@ const mobileAria = locale === 'en'
   class="fixed inset-0 z-100 bg-(--bg)/60 backdrop-blur-sm"
   style="display: none; opacity: 0; transition: opacity 0.25s ease;"
   aria-hidden="true"
-></div>
+/>
 
 <div
   id="mnav-sheet"
@@ -52,16 +43,16 @@ const mobileAria = locale === 'en'
          bg-(--bg) border-t border-(--border)
          rounded-t-(--radius-xl)
          shadow-[0_-8px_40px_rgba(0,0,0,0.12)]
-         max-h-[75dvh] overflow-y-auto
+         max-h-[75dvh]
          pb-[env(safe-area-inset-bottom)]"
   style="display: none; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);"
-  inert>
-  
+  inert
+>
   <div id="mnav-handle" class="flex h-2 justify-center pt-4 pb-1">
     <div class="w-9 h-1 rounded-full bg-(--border)"></div>
   </div>
 
-  <nav class="flex flex-col px-3 pt-2 pb-4 gap-3">
+  <nav class="flex flex-col px-3 pt-2 pb-4 gap-3 overflow-y-auto">
     {nav.map((section) => (
       <div class="flex flex-col gap-0.5">
         <div class="px-3 py-2 text-label-14 text-(--fg) uppercase">
@@ -74,8 +65,12 @@ const mobileAria = locale === 'en'
             : localizePath(item.href, locale);
 
           return (
-            <a href={href} target={item.isExternal? "_blank" : undefined} rel={item.isExternal? "noopener noreferrer" : undefined}
-              class="mnav-link flex items-center gap-2 px-3 py-1.5 text-copy-16 text-(--fg-muted) transition-colors">
+            <a
+              href={href}
+              target={item.isExternal? "_blank" : undefined}
+              rel={item.isExternal? "noopener noreferrer" : undefined}
+              class="mnav-link flex items-center gap-2 px-3 py-1.5 text-copy-16 text-(--fg-muted) transition-colors"
+            >
               {getLabel(locale, item.labelKey)}
               {item.isExternal && (
                 <Icon name="external" className="w-3 h-3 shrink-0 opacity-80 transition-opacity group-hover:opacity-100" />
@@ -86,7 +81,7 @@ const mobileAria = locale === 'en'
       </div>
     ))}
   </nav>
-  
+
   <div class="flex items-center p-6 justify-between border-t border-dashed border-(--border) gap-4">
     <ThemeToggle />
     <LanguageButton alternateSlugs={alternateSlugs} basePath={basePath} />
@@ -95,19 +90,43 @@ const mobileAria = locale === 'en'
 
 <script>
   (() => {
-    const sheet    = document.getElementById('mnav-sheet');
-    const backdrop = document.getElementById('mnav-backdrop');
-    const handle = document.getElementById('mnav-handle');
-    
+    const sheet = document.getElementById('mnav-sheet') as HTMLElement;
+    const backdrop = document.getElementById('mnav-backdrop') as HTMLElement;
+    const handle = document.getElementById('mnav-handle') as HTMLElement;
+
     if (!sheet ||!backdrop ||!handle) return;
 
     let open = false;
     let startY = 0, currentY = 0, dragging = false;
+    let focusableElements: HTMLElement[] = [];
+    let firstFocusable: HTMLElement | null = null;
+    let lastFocusable: HTMLElement | null = null;
+
+    const getFocusable = () => {
+      return Array.from(
+        sheet.querySelectorAll<HTMLElement>(
+          'a[href], button, [tabindex]:not([tabindex="-1"])'
+        )
+      ).filter(el =>!el.hasAttribute('disabled') &&!el.hasAttribute('inert'));
+    };
+
+    const trapFocus = (e: KeyboardEvent) => {
+      if (e.key!== 'Tab' ||!open) return;
+      if (!firstFocusable) return;
+
+      if (e.shiftKey && document.activeElement === firstFocusable) {
+        e.preventDefault();
+        lastFocusable?.focus();
+      } else if (!e.shiftKey && document.activeElement === lastFocusable) {
+        e.preventDefault();
+        firstFocusable.focus();
+      }
+    };
 
     const openSheet = () => {
       if (open) return;
       open = true;
-      
+
       sheet.style.display = 'block';
       backdrop.style.display = 'block';
       sheet.offsetHeight;
@@ -115,7 +134,12 @@ const mobileAria = locale === 'en'
       backdrop.style.opacity = '1';
       sheet.removeAttribute('inert');
       document.body.style.overflow = 'hidden';
-      
+
+      focusableElements = getFocusable();
+      firstFocusable = focusableElements[0]?? null;
+      lastFocusable = focusableElements[focusableElements.length - 1]?? null;
+      firstFocusable?.focus();
+
       const btn = document.getElementById('mnav-btn');
       if (btn) btn.setAttribute('aria-expanded', 'true');
     };
@@ -123,11 +147,11 @@ const mobileAria = locale === 'en'
     const closeSheet = () => {
       if (!open) return;
       open = false;
-      
+
       sheet.style.transform = 'translateY(100%)';
       backdrop.style.opacity = '0';
       document.body.style.overflow = '';
-      
+
       setTimeout(() => {
         if (!open) {
           sheet.style.display = 'none';
@@ -135,40 +159,53 @@ const mobileAria = locale === 'en'
           sheet.setAttribute('inert', '');
         }
       }, 300);
-      
+
       const btn = document.getElementById('mnav-btn');
       if (btn) btn.setAttribute('aria-expanded', 'false');
+
+      document.getElementById('mnav-btn')?.focus();
     };
 
     window.addEventListener('mnav:open', openSheet);
     backdrop.addEventListener('click', closeSheet);
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape' && open) closeSheet();
+      trapFocus(e);
     });
 
     document.querySelectorAll('.mnav-link').forEach(link => {
       link.addEventListener('click', closeSheet);
     });
 
-    handle.addEventListener('touchstart', e => {     
+    handle.addEventListener('touchstart', e => {
       startY = e.touches[0].clientY;
       dragging = true;
       sheet.style.transition = 'none';
     }, { passive: true });
 
     handle.addEventListener('touchmove', e => {
-      if (!dragging || !open) return;
+      if (!dragging ||!open) return;
       currentY = e.touches[0].clientY;
-      const delta = Math.max(0, currentY - startY);  
+      const delta = Math.max(0, currentY - startY);
       sheet.style.transform = `translateY(${delta}px)`;
     }, { passive: true });
 
     handle.addEventListener('touchend', () => {
       dragging = false;
-      sheet.style.transition = '';
       const delta = currentY - startY;
-      sheet.style.transform = '';
-      if (delta > 80) closeSheet();
+      sheet.style.transition = 'transform 0.3s cubic-bezier(0.32, 0.72, 0, 1)';
+
+      if (delta > 80) {
+        closeSheet();
+      } else {
+        sheet.style.transform = 'translateY(0)';
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768 && open) {
+        closeSheet();
+      }
     });
   })();
 </script>
