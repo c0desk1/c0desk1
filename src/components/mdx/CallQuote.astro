@@ -107,7 +107,7 @@ if (activeToken) {
     />
     {(finalAuthor || finalRole) && (
       <div class="flex flex-col md:flex-row items-end md:items-center justify-end gap-2 md:gap-3 flex-initial">
-        <div class="w-6 h-6 shrink-0 rounded-full overflow-hidden flex items-center justify-center border border-(--border)">
+        <div class="w-6 h-6 shrink-0 overflow-hidden flex items-center justify-center">
           {finalAvatar && (
             <Image
               src={optimizedAvatar}
@@ -116,7 +116,7 @@ if (activeToken) {
               height={48}
               loading='lazy'
               decoding='async'
-              class="block h-full w-full object-cover"
+              class="block h-full w-full object-cover rounded-full border border-(--border)"
             />
           )}
         </div>
