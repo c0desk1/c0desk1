@@ -2,15 +2,15 @@
 @reference '@/styles/utilities/index.css';
 
 .prose-custom img {
-  max-width: 100%;
   height: auto;
   display: block;
   margin-inline: auto;
-  border-radius: var(--prose-radius-md);
+  border-radius: var(--prose-radius-lg);
+  position: relative;
 }
 
 .prose-custom figure {
-  margin: 2rem 0;
+  margin: 2.5rem 0;
   text-align: center;
 }
 
@@ -19,17 +19,17 @@
 }
 
 .prose-custom figure img {
-  max-width: 100%;
   height: auto;
   display: block;
   margin-inline: auto;
+  position: relative;
 }
 
 .prose-custom figcaption {
   text-align: center;
-  @apply text-copy-13;
-  color: var(--prose-fg-subtle);
-  margin-top: 0.75rem;
+  color: var(--prose-fg-muted);
+  margin-top: 0.5rem;
+  font-weight: 400;
 }
 
 .prose-custom video {
@@ -42,19 +42,13 @@
   border: 1px solid var(--prose-border);
 }
 
-/* Mobile */
 @media (max-width: 767px) {
-  .prose-custom img {
+  .prose-custom figure {
     margin: 1.5rem 0;
   }
 
-  .prose-custom figure {
-    margin: 1rem 0;
-  }
-
   .prose-custom figcaption {
-    @apply text-label-12;
-    text-transform: none; /* override uppercase dari label-12 */
+    text-transform: none;
     font-weight: 400;
     margin-top: 0.5rem;
   }
@@ -65,22 +59,16 @@
   }
 }
 
-/* Desktop */
 @media (width >= 48rem) {
-  .prose-custom img {
-    margin: 1.5rem 0;
-  }
-
   .prose-custom figure {
-    margin: 1rem 0;
+    margin: 2.5rem 0;
   }
 
   .prose-custom figcaption {
-    @apply text-copy-13;
-    margin-top: 0.75rem;
+    margin-top: 0.5rem;
   }
 
   .prose-custom video {
-    margin: 2rem 0;
+    margin: 2.5rem 0;
   }
 }
