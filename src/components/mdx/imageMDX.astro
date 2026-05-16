@@ -23,13 +23,13 @@ const caption = title || alt;
       alt={alt}
       loading="lazy"
       decoding="async"
-      width={1280}
-      height={720}
-      class="relative h-full w-full object-cover transition duration-500 opacity-0 rounded-none"
+      width={1200}
+      height={630}
+      class="relative h-full w-full object-cover transition duration-500 opacity-0"
       onload="this.classList.remove('opacity-0')"
     />
   </div>
-  {caption && ( <figcaption class="text-copy-13 md:text-copy-14 text-center mt-2 text-(--fg-muted)">{caption}</figcaption> )}
+  {caption && ( <figcaption class="text-copy-13 md:text-copy-14">{caption}</figcaption> )}
 </figure>
 
 <style is:inline>
