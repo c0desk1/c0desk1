@@ -1,12 +1,13 @@
 ---
 // src/components/mdx/CallQuote.astro
-import Icon from '@/components/ui/Icon';
-import { getCurrentLocale } from '@/utils/i18n';
 
-const locale = getCurrentLocale(Astro);
+import Icon from '@/components/ui/Icon';
 
 const raw = await Astro.slots.render('default');
-const cleanRaw = raw.replace(/^<p>/, '').replace(/<\/p>$/, '').trim();
+const cleanRaw = raw
+  .replace(/^<p>/, '')
+  .replace(/<\/p>$/, '')
+  .trim();
 
 const alertTypes = {
   '[!NOTE]': { type: 'note', icon: 'note' },
@@ -16,38 +17,44 @@ const alertTypes = {
   '[!DANGER]': { type: 'danger', icon: 'danger' },
 } as const;
 
-const plainText = cleanRaw.replace(/<[^>]+>/g, '').trim();
-const activeToken = Object.keys(alertTypes).find(token => plainText.startsWith(token));
+const plainText = cleanRaw
+  .replace(/<[^>]+>/g, '')
+  .trim();
+
+const activeToken = Object.keys(alertTypes).find(token =>
+  plainText.startsWith(token)
+);
 
 let isAlert = false;
 let alertConfig = null;
-let calloutTitle = '';
 let finalQuote = '';
+let finalContent = '';
 let finalCite = '';
 
 if (activeToken) {
   isAlert = true;
-  alertConfig = alertTypes[activeToken as keyof typeof alertTypes];
 
-  const tokenKey = activeToken.replace(/[\[\]!]/g, '').toLowerCase();
-  const translations: Record<string, Record<string, string>> = {
-    note:    { id: 'Catatan',      en: 'Note',         ru: 'Примечание',     jp: 'ノート' },
-    info:    { id: 'Info',         en: 'Info',         ru: 'Информация',     jp: '情報' },
-    tip:     { id: 'Tips',         en: 'Tip',          ru: 'Совет',          jp: 'ヒント' },
-    warning: { id: 'Peringatan',   en: 'Warning',      ru: 'Предупреждение', jp: '警告' },
-    danger:  { id: 'Bahaya',       en: 'Danger',       ru: 'Опасность',      jp: '危険' },
-  };
-  calloutTitle = translations[tokenKey]?.[locale] || translations[tokenKey]?.en || tokenKey.charAt(0).toUpperCase() + tokenKey.slice(1);
+  alertConfig =
+    alertTypes[activeToken as keyof typeof alertTypes];
 
-  finalQuote = cleanRaw.replace(activeToken, '').trim();
+  finalContent = cleanRaw
+    .replace(activeToken, '')
+    .trim();
 } else {
-  const slashRegex = /\/(?![^<]*>)/; 
+  const slashRegex = /\/(?![^<]*>)/;
+
   const hasSlash = slashRegex.test(cleanRaw);
 
   if (hasSlash) {
     const parts = cleanRaw.split(slashRegex);
+
     finalQuote = parts[0].trim();
-    finalCite = parts.slice(1).join('/').replace(/<\/?[^>]+(>|$)/g, "").trim();
+
+    finalCite = parts
+      .slice(1)
+      .join('/')
+      .replace(/<\/?[^>]+(>|$)/g, '')
+      .trim();
   } else {
     finalQuote = cleanRaw;
   }
@@ -57,14 +64,12 @@ if (activeToken) {
 {isAlert ? (
   <aside class="callout" data-callout={alertConfig?.type}>
     <div class="callout-body">
-      <div class="callout-header">
-        <div class="callout-icon">
-          <Icon name={alertConfig?.icon as any} />
-        </div>
-        {calloutTitle && <p class="callout-title text-label-14 md:text-label-16 font-semibold">{calloutTitle}</p>}
+      <div class="callout-icon">
+        <Icon name={alertConfig?.icon as any} />
       </div>
-      <div class="callout-content">
-        <div set:html={finalQuote} />
+
+      <div class="text-copy-13 md:text-copy-14 callout-content">
+        <div set:html={finalContent} />
       </div>
     </div>
   </aside>
@@ -73,10 +78,13 @@ if (activeToken) {
     <div class="quote-body">
       <div set:html={finalQuote} />
     </div>
-    <div class="flex flex-col md:flex-row items-end md:items-center justify-end gap-2 md:gap-3 flex-initial">
-      {finalCite && (
-        <span class="quote-cite text-label-14">{finalCite}</span>
-      )}
-    </div>
+
+    {finalCite && (
+      <div class="flex flex-col md:flex-row items-end md:items-center justify-end gap-2 md:gap-3 flex-initial">
+        <span class="quote-cite text-label-14">
+          {finalCite}
+        </span>
+      </div>
+    )}
   </blockquote>
 )}
