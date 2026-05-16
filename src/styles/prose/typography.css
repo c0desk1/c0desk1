@@ -171,7 +171,7 @@
   transition: none;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 40rem) {
   .prose-custom :where(h1, h2, h3, h4, h5, h6) {
     scroll-margin-top: 56px;
   }
@@ -235,7 +235,7 @@
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .prose-custom :where(h1, h2, h3, h4, h5, h6) {
     scroll-margin-top: 60px;
   }
@@ -298,7 +298,7 @@
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .prose-custom h1 {
     margin-top: 4rem;
     margin-bottom: 1.25rem;
