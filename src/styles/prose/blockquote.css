@@ -1,128 +1,65 @@
 /* src/styles/prose/blockquote.css */
-@reference '@/styles/utilities/index.css';
 
-.prose-custom .quote{
-  margin:2rem 0;
-  border:none;
-  background:none;
-  padding:0
+.prose-custom .quote {
+  margin: 2rem 0;
+  border: none;
+  background: none;
+  padding: 0;
 }
 
-.prose-custom .quote-body p{
-  @apply text-copy-20;
-  font-weight:500;
-  margin:0;
-  color:var(--prose-fg);
-  text-align:start;
-  text-wrap:pretty
+.prose-custom .quote-body {
+  color: var(--prose-fg);
 }
 
-.prose-custom .quote-body p+p{
-  margin-top:1rem
+.prose-custom .quote-body p {
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  font-weight: 400;
 }
 
-.prose-custom .quote-body p a{
-  color:var(--prose-accent)
+.prose-custom .quote-body p:last-child {
+  margin-bottom: 0;
 }
 
-.prose-custom .quote-body .external-icon{
-  width:0!important;
-  height:0!important;
-  display:none!important
-}
-
-.prose-custom .quote-body p:first-of-type::before{
+.prose-custom .quote-body p:first-of-type::before {
   content:"❝";
   margin-right:.2rem;
   font-style:normal
 }
 
-.prose-custom .quote-body p:last-of-type::after{
+.prose-custom .quote-body p:last-of-type::after {
   content:"❞";
   margin-left:.2rem;
   font-style:normal
 }
 
-.prose-custom .quote-cite{
-  display:flex;
-  align-items:center;
-  justify-content:flex-end;
-  gap:.5rem;
-  margin-top:1.25rem;
-  width:fit-content;
-  margin-left:auto;
-  font-style:normal;
-  color:var(--prose-fg-subtle);
-  @apply text-copy-14
+.prose-custom .quote-name {
+  font-weight: 500;
+  color: var(--prose-fg);
 }
 
-.prose-custom .quote-cite strong{
-  font-weight:600;
-  color:var(--prose-fg)
+.prose-custom .quote-name::after {
+  content:",";
+  color: var(--prose-fg);
+  font-weight: 500;
 }
 
-.prose-custom .quote-cite-avatar{
-  width:24px;
-  height:24px;
-  border-radius:50%;
-  object-fit:cover;
-  flex-shrink:0
+.prose-custom .quote-role {
+  color: var(--prose-fg-muted);
+  font-weight: 400;
 }
 
-@media (max-width:767px){
-  .prose-custom .quote{
-    margin:1.75rem 0
-  }
-
-  .prose-custom .quote-body p{
-    @apply text-copy-20;
-    font-weight:500
-  }
-
-  .prose-custom .quote-body p+p{
-    margin-top:.75rem
-  }
-
-  .prose-custom .quote-cite{
-    margin-top:.875rem;
-    @apply text-copy-14;
-    gap:.375rem
-  }
-
-  .prose-custom .quote-cite-avatar{
-    width:20px;
-    height:20px
+@media (max-width: 48rem) {
+  .prose-custom .quote {
+    margin: 2rem 0;
   }
 }
 
-@media (min-width:768px){
-  .prose-custom .quote{
-    margin:2.5rem 0
-  }
-
-  .prose-custom .quote-body p{
-    @apply text-copy-20;
-    font-weight:500
-  }
-
-  .prose-custom .quote-body p+p{
-    margin-top:1rem
-  }
-
-  .prose-custom .quote-cite{
-    margin-top:1.25rem;
-    @apply text-copy-14;
-    gap:.5rem
-  }
-}
-
-@media (min-width:1024px){
-  .prose-custom .quote-body p{
-    @apply text-copy-24;
-    font-weight:500
-  }
-
-  .prose-custom .quote-cite{
-    @apply text-copy-16
+@media (min-width: 64rem) {
+  .prose-custom .quote {
+    margin: 2.5rem 0;
   }
 }
