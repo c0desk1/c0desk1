@@ -1,5 +1,4 @@
-@reference '@/styles/utilities/index.css';
-
+/* src/styles/prose/callout.css */
 /* Callout container */
 .prose-custom .callout {
   display: flex;
@@ -38,9 +37,8 @@
   height: 1rem;
 }
 
-/* Title – Geist label 12 (uppercase, weight 500, tracking 0.02em, line-height 16px) */
+/* Title – tipografi diatur oleh utility di komponen */
 .prose-custom .callout-title {
-  @apply text-label-12;
   margin: 0 !important;
   color: inherit;
 }
@@ -50,44 +48,37 @@
   color: inherit;
 }
 
-/* Paragraph – Geist copy 16 */
-.prose-custom .callout-content p {
-  @apply text-copy-16;
-  color: inherit !important;
+/* Aturan untuk elemen di dalam callout (margin, padding, dll) */
+.prose-custom .callout-content p,
+.prose-custom .callout-content ul,
+.prose-custom .callout-content ol {
   margin-bottom: 1rem;
-  width: 100%;
-  text-wrap: pretty;
+}
+.prose-custom .callout-content p:last-child,
+.prose-custom .callout-content ul:last-child,
+.prose-custom .callout-content ol:last-child {
+  margin-bottom: 0;
 }
 
-.prose-custom .callout-content p:last-child {
-  margin-bottom: 0 !important;
+.prose-custom .callout-content li {
+  margin-bottom: 0.25rem;
 }
 
-/* Strong & em – hanya atur weight, warna */
+/* Strong, em, small, mark, sup, sub, a – hanya gaya dasar, warna diwarisi */
 .prose-custom .callout-content strong {
   font-weight: 600;
-  color: inherit;
 }
-
-.prose-custom .callout-content em,
-.prose-custom .callout-content strong em,
-.prose-custom .callout-content em strong {
+.prose-custom .callout-content em {
   font-style: italic;
   font-weight: 500;
-  color: inherit;
 }
-
-/* Small – tidak ada utility Geist untuk 12px copy, gunakan manual minimal */
 .prose-custom .callout-content small {
   display: inline-block;
   font-size: 0.75rem;
   line-height: 1.25rem;
   font-weight: 400;
-  color: inherit;
   opacity: 0.8;
 }
-
-/* Mark */
 .prose-custom .callout-content mark {
   background-color: var(--prose-accent-yellow);
   color: var(--prose-accent-yellow-soft);
@@ -96,10 +87,7 @@
   font-weight: 500;
   box-shadow: inset 0 0 0 1px var(--prose-accent-yellow-dim);
   box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
 }
-
-/* Sup/sub */
 .prose-custom .callout-content sup,
 .prose-custom .callout-content sub {
   position: relative;
@@ -107,30 +95,14 @@
   line-height: 1;
   font-weight: 500;
   vertical-align: baseline;
-  color: inherit;
   opacity: 0.8;
 }
-
 .prose-custom .callout-content sup {
   top: -0.3em;
-  margin-inline: 0.04em;
 }
-
 .prose-custom .callout-content sub {
   bottom: -0.2em;
 }
-
-.prose-custom .callout-content sup a {
-  color: inherit;
-  text-decoration: none;
-  transition: color 0.15s ease;
-}
-
-.prose-custom .callout-content sup a:hover {
-  color: var(--prose-accent) !important;
-}
-
-/* Links */
 .prose-custom .callout-content a {
   color: var(--prose-accent);
   font-weight: 500;
@@ -139,43 +111,14 @@
   text-underline-offset: 3px;
   transition: color 0.15s ease;
 }
-
 .prose-custom .callout-content a:hover {
   color: var(--prose-accent-hover);
 }
-
 .prose-custom .callout-content .external-icon {
-  width: 0 !important;
-  height: 0 !important;
-  display: none !important;
+  display: none;
 }
 
-/* Lists – Geist copy 16 */
-.prose-custom .callout-content ul,
-.prose-custom .callout-content ol {
-  @apply text-copy-16;
-  padding-left: 1.25rem;
-  margin-bottom: 0.75rem;
-  color: inherit;
-}
-
-.prose-custom .callout-content li {
-  margin-bottom: 0.25rem;
-  line-height: 1.5; /* sesuai Geist copy-16 (24px/16px = 1.5) */
-  font-size: inherit !important;
-  color: inherit;
-}
-
-.prose-custom .callout-content li:last-child {
-  margin-bottom: 0;
-}
-
-.prose-custom .callout-content li::marker {
-  color: currentColor;
-  opacity: 0.5;
-}
-
-/* Variasi warna (tidak berubah) */
+/* Variasi warna (token dari tokens.css) */
 .prose-custom [data-callout="note"] {
   background-color: var(--callout-note-bg);
   border-color: var(--callout-note-border);
@@ -221,8 +164,8 @@
   color: var(--callout-danger-icon);
 }
 
-/* Responsif – hanya sesuaikan padding, gap, ukuran ikon, typography tetap pakai utility */
-@media (max-width: 767px) {
+/* Responsif (mobile-first) */
+@media (max-width: 39.9375rem) {
   .prose-custom .callout {
     margin: 1.25rem 0;
     padding: 0.875rem 1rem;
@@ -245,12 +188,9 @@
   .prose-custom .callout-content sub {
     font-size: 0.575rem;
   }
-  .prose-custom .callout-content mark {
-    padding: 0.1em 0.2em;
-  }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 40rem) {
   .prose-custom .callout {
     margin: 2rem 0;
     padding: 1rem 1.25rem;
@@ -268,8 +208,5 @@
   .prose-custom .callout-content sup,
   .prose-custom .callout-content sub {
     font-size: 0.6rem;
-  }
-  .prose-custom .callout-content mark {
-    padding: 0.1em 0.25em;
   }
 }
