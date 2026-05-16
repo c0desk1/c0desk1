@@ -144,11 +144,9 @@
   border-bottom: 2px solid var(--prose-accent-yellow-dim);
   font-weight: 500;
 }
-
 .prose-custom mark:hover {
   border-bottom-color: var(--prose-accent);
 }
-
 .prose-custom mark.search-highlight {
   background-color: var(--prose-accent-yellow);
   color: var(--prose-accent-yellow-dim);
@@ -160,117 +158,94 @@
   border-bottom: 1px dashed var(--prose-border);
   cursor: help;
 }
-
 .prose-custom abbr[title]:hover {
   border-bottom-color: var(--prose-accent);
   color: var(--prose-accent);
 }
-
 .prose-custom abbr[title]:active {
   border-bottom-style: solid;
   transition: none;
 }
 
-@media (max-width: 40rem) {
-  .prose-custom :where(h1, h2, h3, h4, h5, h6) {
-    scroll-margin-top: 56px;
-  }
-
-  .prose-custom h1 {
-    margin-top: 2.5rem;
-    margin-bottom: 1rem;
-    text-align: center;
-  }
-
-  .prose-custom h2 {
-    margin-top: 2.25rem;
-    margin-bottom: 0.75rem;
-  }
-
-  .prose-custom h3 {
-    margin-top: 1.75rem;
-    margin-bottom: 0.625rem;
-  }
-
-  .prose-custom h4 {
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .prose-custom h5 {
-    margin-top: 1.25rem;
-    margin-bottom: 0.5rem;
-    color: var(--prose-fg-subtle);
-  }
-
-  .prose-custom h6 {
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
-    color: var(--prose-fg-dim);
-  }
-
-  .prose-custom .anchor-link.anchor-link-active,
-  .prose-custom .heading-group.has-anchor:active .anchor-link {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateX(0);
-    color: var(--prose-fg-subtle);
-  }
-
-  .prose-custom sup,
-  .prose-custom sub {
-    font-size: 0.55rem;
-  }
-
-  .prose-custom mark {
-    padding: 0.1em 0.2em;
-  }
-
-  .prose-custom small {
-    font-size: 0.75rem;
-  }
-
-  .prose-custom abbr[title] {
-    font-size: 0.875rem;
-  }
+/* ========== MOBILE (default) ========== */
+.prose-custom h1 {
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+.prose-custom h2 {
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+}
+.prose-custom h3 {
+  margin-top: 1.75rem;
+  margin-bottom: 0.625rem;
+}
+.prose-custom h4 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.prose-custom h5 {
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: var(--prose-fg-subtle);
+}
+.prose-custom h6 {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  color: var(--prose-fg-dim);
 }
 
-@media (min-width: 48rem) {
+.prose-custom .anchor-link.anchor-link-active,
+.prose-custom .heading-group.has-anchor:active .anchor-link {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+  color: var(--prose-fg-subtle);
+}
+
+.prose-custom sup,
+.prose-custom sub {
+  font-size: 0.55rem;
+}
+.prose-custom mark {
+  padding: 0.1em 0.2em;
+}
+.prose-custom small {
+  font-size: 0.75rem;
+}
+.prose-custom abbr[title] {
+  font-size: 0.875rem;
+}
+
+/* ========== TABLET (≥ 40rem / 640px) ========== */
+@media (min-width: 40rem) {
   .prose-custom :where(h1, h2, h3, h4, h5, h6) {
     scroll-margin-top: 60px;
   }
-
   .prose-custom h1 {
     margin-top: 4rem;
     margin-bottom: 1.25rem;
-    text-align: center;
   }
-
   .prose-custom h2 {
     margin-top: 3rem;
     margin-bottom: 0.875rem;
   }
-
   .prose-custom h3 {
     margin-top: 2rem;
     margin-bottom: 0.75rem;
   }
-
   .prose-custom h4 {
     margin-top: 2rem;
     margin-bottom: 0.625rem;
   }
-
   .prose-custom h5 {
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;
-    color: var(--prose-fg-subtle);
   }
-
   .prose-custom h6 {
     margin-top: 1.25rem;
     margin-bottom: 0.5rem;
-    color: var(--prose-fg-dim);
   }
 
   .prose-custom .heading-group.has-anchor:hover .anchor-link {
@@ -279,7 +254,6 @@
     transform: translateX(0);
     color: var(--prose-fg-subtle);
   }
-
   .prose-custom .anchor-link:hover {
     color: var(--prose-fg);
   }
@@ -288,38 +262,32 @@
   .prose-custom sub {
     font-size: 0.625rem;
   }
-
   .prose-custom mark {
     padding: 0.1em 0.25em;
   }
-
   .prose-custom small {
     font-size: 0.875rem;
   }
 }
 
+/* ========== DESKTOP (≥ 64rem / 1024px) ========== */
 @media (min-width: 64rem) {
   .prose-custom h1 {
     margin-top: 4rem;
     margin-bottom: 1.25rem;
-    text-align: center;
   }
-
   .prose-custom h2 {
     margin-top: 3.5rem;
     margin-bottom: 1rem;
   }
-
   .prose-custom h3 {
     margin-top: 2.25rem;
     margin-bottom: 0.75rem;
   }
-
   .prose-custom h4 {
     margin-top: 2rem;
     margin-bottom: 0.625rem;
   }
-
   .prose-custom p {
     margin-bottom: 1.5rem;
     width: 100%;
