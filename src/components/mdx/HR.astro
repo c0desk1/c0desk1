@@ -1,0 +1,25 @@
+---
+import Line from '@/components/ui/Line.astro';
+---
+
+<div class="divider-full" aria-hidden="true">
+  <div class="mx-auto max-w-6xl px-1 md:px-6 lg:px-8 w-full">
+    <div class="relative flex items-center justify-between h-6 w-full">
+      <div class="relative flex-1 h-full">
+        <Line type="h-full" class="border-(--prose-border)" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<style is:inline>
+  .divider-full {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    box-sizing: border-box;
+    margin: 2rem 0;
+    overflow: hidden;
+  }
+</style>

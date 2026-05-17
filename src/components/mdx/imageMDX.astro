@@ -1,0 +1,58 @@
+---
+import { cdnImage, isCdnUrl } from '@/lib/utils';
+import { Image } from 'astro:assets';
+
+interface Props {
+  src: string;
+  alt?: string;
+  title?: string;
+}
+
+const { src, alt = '', title } = Astro.props;
+
+const optimizedSrc = src && isCdnUrl(src)
+  ? cdnImage(src, { w: 1280, h: 720, q: 80 })
+  : src ?? '';
+const caption = title || alt;
+---
+
+<figure class="full-width-figure my-4">
+  <div class="relative overflow-hidden rounded-(--prose-radius-lg) border border-(--border) bg-(--bg-subtle) p-2 shadow-sm">
+    <Image
+      src={optimizedSrc}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      width={1200}
+      height={630}
+      class="relative h-full w-full object-cover transition duration-500 opacity-0"
+      onload="this.classList.remove('opacity-0')"
+    />
+  </div>
+  {caption && ( <figcaption class="text-copy-13 md:text-copy-14">{caption}</figcaption> )}
+</figure>
+
+<style is:inline>
+  .full-width-figure {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 2rem 0;
+    max-width: 56rem;
+    padding: 0 1rem;
+  }
+  @media (min-width: 768px) {
+    .full-width-figure {
+      padding: 0 1.5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .full-width-figure {
+      padding: 0 2rem;
+    }
+  }
+  .full-width-figure .relative {
+    width: 100%;
+  }
+</style>
