@@ -2,7 +2,7 @@
 
 import type { MDXComponents } from 'mdx/types';
 
-import Heading from '@/components/mdx/HeadingAnchor.astro';
+import Heading from '@/components/mdx/Heading.astro';
 import P from '@/components/mdx/P.astro';
 import LI from '@/components/mdx/LI.astro';
 import UL from '@/components/mdx/UL.astro';
