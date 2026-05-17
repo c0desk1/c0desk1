@@ -1,6 +1,7 @@
 ---
 // src/components/ui/Newsletter.astro
-import { getCurrentLocale, getLabel } from '@/utils/i18n';
+
+import { siteConfig } from '@/config/site';
 
 interface Props {
   heading?    : string;
@@ -11,23 +12,23 @@ interface Props {
   note?       : string;
 }
 
-const locale = getCurrentLocale(Astro);
+const siteData = siteConfig
 
 const {
-  heading = getLabel(locale, 'newsletterHeading'),
-  subheading = getLabel(locale, 'newsletterSub'),
-  placeholder = getLabel(locale, 'newsletterPlaceholder'),
-  btnLabel = getLabel(locale, 'newsletterBtn'),
-  message = getLabel(locale, 'newsletterSuccess'),
-  note = getLabel(locale, 'newsletterNote'),
+  heading = siteData.newsletterHeading,
+  subheading = siteData.newsletterSub,
+  placeholder = siteData.newsletterPlaceholder,
+  btnLabel = siteData.newsletterBtn,
+  message = siteData.newsletterSuccess,
+  note = siteData.newsletterNote,
 } = Astro.props;
 
 const toastMessages = {
-  invalid: getLabel(locale, 'newsletterInvalid'),
-  exists: getLabel(locale, 'newsletterExists'),
-  error: getLabel(locale, 'newsletterError'),
-  success: getLabel(locale, 'newsletterToastSuccess'),
-  network: getLabel(locale, 'newsletterNetwork'),
+  invalid: siteData.newsletterInvalid,
+  exists: siteData.newsletterExists,
+  error: siteData.newsletterError,
+  success: siteData.newsletterToastSuccess,
+  network: siteData.newsletterNetwork,
 };
 ---
 
