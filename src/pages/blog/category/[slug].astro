@@ -15,50 +15,56 @@ import { slugify } from "@/lib/utils";
 export async function getStaticPaths() {
   const categories = await getCollection("categories");
 
-  return categories.map((locale) =>
-    categories.map((category) => {
-      const categoryName = category.data.name;
-      const slug = slugify(categoryName);
+  return categories.map((category) => {
+    const name =
+      typeof category.data.name === "string"
+        ? category.data.name
+        : String(category.data.name);
 
-      return {
-        params: {
-          slug,
-        },
-        props: { category, },
-      };
-    })
-  );
+    return {
+      params: {
+        slug: slugify(name),
+      },
+      props: { category },
+    };
+  });
 }
 
-const siteData = siteConfig
-
+const siteData = siteConfig;
 const { category } = Astro.props;
 
-const allPosts = await getCollection("blog", ({ data }) => {
-  return !data.draft
-});
+const allPosts = await getCollection("blog", (post) => !post.data.draft);
+
+const categoryName =
+  typeof category.data.name === "string"
+    ? category.data.name
+    : String(category.data.name);
+
+const categoryDesc = category.data.description ?? "";
+
+const categorySlug = slugify(categoryName);
 
 const categoryPosts = allPosts
   .filter((post) => post.data.category?.id === category.id)
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
-const categoryName = category.data.name;
-const categoryDesc = category.data.description || '';
-const categorySlug = slugify(categoryName);
+const canonicalURL = new URL(
+  `/blog/category/${categorySlug}/`,
+  siteConfig.siteUrl
+).toString();
 
-const canonicalURL = new URL(`/blog/category/${categorySlug}`).toString();
+const seoData = {
+  title: categoryName,
+  description:
+    categoryDesc || `${siteData.blog} - ${categoryName}`,
+  type: "website" as const,
+  canonicalURL,
+};
 
 const t_home = siteData.home;
 const t_blog = siteData.blog;
 const t_empty = siteData.noPostsInCategory;
 const t_articles = siteData.articles;
-
-const seoData = {
-  title: categoryName,
-  description: categoryDesc || `${t_blog} - ${categoryName}`,
-  type: "website" as const,
-  canonicalURL,
-};
 
 const blogCategory = {
   name: t_blog,
@@ -67,9 +73,12 @@ const blogCategory = {
 };
 
 const breadcrumbItems = [
-  { name: t_home, href: '/' },
-  { name: t_blog, href: '/blog'},
-  { name: categoryName, href: `/blog/category/${categorySlug}` }
+  { name: t_home, href: "/" },
+  { name: siteData.blog, href: "/blog/" },
+  {
+    name: categoryName,
+    href: `/blog/category/${categorySlug}/`,
+  },
 ];
 ---
 
