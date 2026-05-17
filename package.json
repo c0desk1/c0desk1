@@ -28,6 +28,7 @@
     "react-dom": "^19.2.5",
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.2",
+    "unist-util-visit": "^5.1.0",
     "wrangler": "^4.90.0"
   },
   "devDependencies": {

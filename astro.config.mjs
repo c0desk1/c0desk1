@@ -3,9 +3,11 @@ import { defineConfig } from 'astro/config';
 import { siteConfig } from './src/config/site';
 
 import tailwindcss from '@tailwindcss/vite';
-import mdx from '@astrojs/mdx';
-import react from '@astrojs/react';
 import cloudflare from '@astrojs/cloudflare';
+import react from '@astrojs/react';
+import mdx from '@astrojs/mdx';;
+import remarkCallout from './src/lib/mdx/remark-callout.ts';
+import remarkBlockquoteAuthor from './src/lib/mdx/remark-blockquote-author';
 
 // https://astro.build/config
 export default defineConfig({
@@ -13,16 +15,6 @@ export default defineConfig({
   trailingSlash: "always",
   output: 'server',
   adapter: cloudflare(),
-  i18n: {
-    defaultLocale: "id",
-    locales: ["id", "en", "ru", "jp"],
-    routing: {
-      prefixDefaultLocale: false,
-    },
-  },
-  experimental: {
-    advancedRouting: false,
-  },
   vite: {
     plugins: [tailwindcss()]
   },
@@ -31,6 +23,7 @@ export default defineConfig({
   },
   integrations: [mdx(), react()],
   markdown: {
+    remarkPlugins: [remarkCallout, remarkBlockquoteAuthor],
     shikiConfig: {
       themes: {
         light: 'github-light',

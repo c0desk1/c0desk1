@@ -1,0 +1,66 @@
+---
+// src/pages/portfolio/index.astro
+export const prerender = true;
+
+import { getCollection } from "astro:content";
+import { siteConfig } from "@/config/site";
+
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import PortfolioCard from "@/components/portfolio/PortfolioCard.astro";
+
+import { sortByDate, filterByFeatured, filterByDraft } from "@/lib/utils";
+
+
+const allProjects = await getCollection("portfolio", ({ data }) => !data.draft);
+
+const projects = sortByDate(filterByDraft(allProjects));
+
+const featuredProjects = filterByFeatured(projects);
+const featuredProject = featuredProjects?.[0];
+const regularProjects = projects.filter((p) => p.id!== featuredProject?.id);
+
+const siteData = siteConfig
+
+const siteURL = Astro.site?.toString()?? siteData.siteUrl;
+const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
+
+const seoData = {
+  title: siteData.p_PageTitle,
+  description: siteData.p_PageDesc,
+  type: "website" as const,
+  canonicalURL,
+};
+
+const title = siteData.p_HeroTitle;
+const p_c   = siteData.p_AllProjects;
+---
+
+<BaseLayout {...seoData}>
+  <Section id="browse-portfolio" size="lg" aria-label={p_c}>
+    <Container size="xl">
+      <div class="relative grid grid-cols-1 lg:grid-cols-[300px_1fr] border border-(--border) bg-(--bg)">
+        <aside class="p-4 lg:p-6 border-b lg:border-b-0 border-(--border) lg:sticky lg:top-16 self-start">
+          <h1 class="text-heading-24 md:text-heading-32 lg:text-heading-40 font-semibold text-(--fg) text-center md:text-start wrap-break-word">
+            {title}
+          </h1>
+        </aside>
+        <div class="flex flex-col min-w-0 border-0 lg:border-l border-(--border)">
+          <div class="flex flex-col divide-y divide-(--border)">
+            {featuredProject && (
+              <div class="p-4 lg:p-6 transition-colors hover:bg-(--bg-muted)">
+                <PortfolioCard project={featuredProject} />
+              </div>
+            )}
+            {regularProjects.map((project) => (
+              <div class="p-4 lg:p-6 transition-colors hover:bg-(--bg-muted)">
+                <PortfolioCard project={project} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </Container>
+  </Section>
+</BaseLayout>

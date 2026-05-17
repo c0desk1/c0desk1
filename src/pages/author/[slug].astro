@@ -1,0 +1,159 @@
+---
+// src/pages/[...locale]/author/[slug].astro
+export const prerender = true;
+
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import PostCard from "@/components/blog/PostCard.astro";
+import Breadcrumb from "@/components/ui/Breadcrumb.astro";
+import BackToTop from "@/components/ui/BackToTop.astro";
+import SocialLinks from "@/components/ui/SocialLinks.astro";
+
+import { getCollection } from "astro:content";
+import { Image } from 'astro:assets';
+import { siteConfig } from "@/config/site";
+import { cdnImage, isCdnUrl } from "@/lib/utils";
+
+export async function getStaticPaths() {
+  const authors = await getCollection("authors");
+
+  return  authors.map((author) => ({
+      params: {
+        slug: author.id,
+      },
+      props: { author },
+    }));
+}
+
+const { author } = Astro.props;
+
+const siteData = siteConfig
+const siteURL = Astro.site?.toString() ?? siteConfig.siteUrl;
+const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
+
+const seoData = {
+  title: `${siteData.authorPage} | ${author.data.name}`,
+  description: author.data.bio,
+  type: "profile" as const,
+  canonicalURL,
+  author: {
+    name: author.data.name,
+    role: author.data.role,
+    avatar: author.data.avatar,
+    bio: author.data.bio,
+    slug: author.id,
+  },
+};
+
+const allPosts = await getCollection("blog", ({ data }) => {
+  return !data.draft;
+});
+
+const authorPosts = allPosts
+  .filter((post) => post.data.author?.id === author.id)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const social = author.data.social || siteData.author.social;
+
+const authorCategory = {
+  name: seoData.title,
+  slug: seoData.canonicalURL,
+  description: seoData.description,
+};
+
+const homeLabel = siteData.home;
+const authorsLabel = siteData.authorPage;
+
+const t_latestArticles = siteConfig.blog_latestPosts;
+const t_articles = siteConfig.articles;
+const t_noArticles = siteConfig.blog_noBlogPosts
+
+const SeoBreadcrumbItems = [
+  { name: homeLabel, href: '/'},
+  { name: authorsLabel, href: '/authors/'},
+  { name: authorCategory.name, href: authorCategory.slug },
+];
+
+const Breadcrumbs = SeoBreadcrumbItems.filter(
+  (item) => 
+    item.name === homeLabel || 
+    item.name === authorsLabel
+);
+
+const optimizedAvatar = isCdnUrl(author.data.avatar)
+  ? cdnImage(author.data.avatar, { w: 112, h: 112, q: 85 })
+  : author.data.avatar;
+---
+
+<BaseLayout {...seoData} category={authorCategory}>
+  <Section id="author-profile" size="lg" aria-label={author.data.name}>
+    <Container size="xl">
+      <div class="relative grid grid-cols-1 lg:grid-cols-[320px_1fr] border border-(--border) bg-(--bg)">
+        <aside class="border-b lg:border-b-0 border-(--border) lg:sticky lg:top-16 self-start p-4 lg:p-6 z-10 flex flex-col gap-5">
+          <Breadcrumb items={Breadcrumbs} />
+          <div class="relative overflow-hidden rounded-3xl border border-(--border) bg-(--bg-subtle) p-1.5 shadow-sm w-full lg:max-w-none">
+            <Image
+              src={optimizedAvatar}
+              alt={author.data.name}
+              width={224}
+              height={224}
+              loading="eager"
+              decoding="async"
+              class="h-auto w-full rounded-[18px] object-cover"
+            />
+          </div>
+          <div class="space-y-1.5 text-center w-full">
+            <h1 id="author-heading" class="text-heading-24 lg:text-heading-28 font-bold tracking-tight text-(--fg) wrap-break-word">
+              {author.data.name}
+            </h1>
+            <p class="text-xs font-mono tracking-wider text-(--fg-subtle) uppercase">
+              {author.data.role}
+            </p>
+          </div>
+          <p class="text-sm leading-6 text-(--fg-muted) tracking-tight">
+            {author.data.bio}
+          </p>
+          <div class="flex items-center justify-center gap-2 pt-4 flex-wrap w-full border-t border-dashed border-(--border)">
+            <SocialLinks items={social} />
+          </div>
+        </aside>
+        <div class="flex flex-col min-w-0 border-0 lg:border-l border-(--border)">
+          <div class="flex flex-col divide-y divide-(--border)">
+            <div class="flex items-center justify-between p-4 lg:p-6 bg-(--bg)">
+              <h2 class="text-heading-20 lg:text-heading-24 text-(--fg) font-semibold">
+                {t_latestArticles}
+              </h2>
+              <span class="text-xs font-mono text-(--fg-muted) bg-(--bg-muted) px-2.5 py-1 border border-(--border) rounded-md">
+                {authorPosts.length} {t_articles}
+              </span>
+            </div>
+            {authorPosts.length > 0 ? (
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                {authorPosts.map((post) => (
+                  <div class="transition-colors hover:bg-(--bg-muted) 
+                    border-t border-(--border) first:border-t-0
+                    md:nth-2:border-t-0
+                    md:even:border-l md:border-(--border)
+                    lg:nth-2:border-t-0 lg:nth-3:border-t-0
+                    lg:nth-[3n+1]:border-l-0
+                    lg:border-l lg:border-(--border)
+                  ">
+                    <PostCard post={post} />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div class="py-24 text-center">
+                <p class="text-sm text-(--fg-muted)">{t_noArticles}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </Container>
+    <div class="mt-12">
+      <BackToTop align="center" />
+    </div>
+  </Section>
+</BaseLayout>

@@ -1,0 +1,183 @@
+---
+// src/pages/[...locale]/blog/[...slug].astro
+export const prerender = true;
+
+import '@/styles/prose/index.css';
+
+import { getCollection, render, getEntry } from "astro:content";
+import { siteConfig } from "@/config/site";
+import { slugify } from "@/lib/utils";
+import { components } from '@/components/layout/MDXComponents';
+
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import Breadcrumb from "@/components/ui/Breadcrumb.astro";
+import PostHeader from "@/components/layout/PostHeader.astro";
+import PostNavigation from '@/components/blog/PostNavigation.astro';
+import BackToTop from "@/components/ui/BackToTop.astro";
+import BG from "@/components/ui/BG.astro";
+import Line from '@/components/ui/Line.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: slugify(post.data.title) },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const sortedPosts = allPosts.sort(
+  (a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+);
+
+const currentIndex = sortedPosts.findIndex(p => p.id === post.id);
+const prevPost = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
+const nextPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
+
+const siteData = siteConfig;
+
+const authorEntry = await getEntry(post.data.author);
+const categoryEntry = await getEntry(post.data.category);
+
+const { Content } = await render(post);
+
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  tags,
+  image,
+  seo
+} = post.data;
+
+const seoImage = {
+  src: seo?.ogImage || image?.src || siteConfig.ogImage,
+  alt: image?.alt || title
+};
+
+const categorySlug =
+  categoryEntry?.id ||
+  slugify(categoryEntry?.data?.name || siteData.general);
+
+const seoCategory = {
+  name: categoryEntry?.data?.name || siteData.general,
+  description: categoryEntry?.data?.description || "",
+  slug: categorySlug,
+};
+
+const seoTitle = seo?.title || title;
+const seoDescription = seo?.description || description;
+
+const siteURL = Astro.site?.toString() ?? siteConfig.siteUrl;
+const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
+
+const homeLabel = siteData.home;
+const blogLabel = siteData.blog;
+
+const SeoBreadcrumbItems = [
+  { name: homeLabel, href: '/'},
+  { name: blogLabel, href: '/blog/'},
+  { name: seoCategory.name, href: `/blog/category/${seoCategory.slug}`},
+  { name: title, href: canonicalURL }
+];
+
+const Breadcrumbs = SeoBreadcrumbItems.filter(
+  (item) =>
+    item.name === blogLabel ||
+    item.name === seoCategory.name
+);
+---
+
+<BaseLayout
+  title={seoTitle}
+  description={seoDescription}
+  image={seoImage}
+  type="article"
+  publishedTime={pubDate}
+  modifiedTime={updatedDate}
+  tags={tags}
+  category={seoCategory}
+  author={{
+    name: authorEntry?.data.name,
+    role: authorEntry?.data.role,
+    avatar: authorEntry?.data.avatar,
+    bio: authorEntry?.data.bio,
+    slug: authorEntry?.id
+  }}
+  canonicalURL={canonicalURL}>
+  <div class="relative min-w-0 z-0">
+    <BG />
+  </div>
+  <Section size="lg">
+    <Section size="sm">
+      <Container size="md">
+        <h2 class="sr-only">{title}</h2>
+        <Section size="none">
+          <h2 class="sr-only">{siteData.b_breadcrumb}</h2>
+          <Breadcrumb items={Breadcrumbs} />
+        </Section>
+        <article id="post-article" class="p-4 lg:p-6">
+          <Section size="sm">
+            <h2 class="sr-only">{siteData.b_articleHeader}</h2>
+            <PostHeader
+              title={title}
+              description={description}
+              pubDate={pubDate}
+              content={post.body}
+              authorName={authorEntry?.data.name}
+              authorAvatar={authorEntry?.data.avatar}
+              authorTitle={authorEntry?.data.role}
+              authorSlug={authorEntry?.id}
+              image={image}
+            />
+          </Section>
+          <Section size="sm">
+            <div id="article">
+              <div id="article-content" class="prose-custom">
+                <Content components={components} />
+              </div>
+            </div>
+	        </Section>
+	      </article>
+	    </Container>
+	  </Section>
+    <Section size="none" class="relative z-10">
+      <h2 class="sr-only">{siteData.backToTop}</h2>
+      <div class="absolute top-0 inset-x-0 pointer-events-none">
+        <div class="mx-auto max-w-6xl px-1 md:px-6 lg:px-8">
+          <div class="relative w-full">
+            <Line type="h" variant="solid" class="absolute top-0 left-0 w-full" />
+          </div>
+        </div>
+      </div>
+      <Container size="lg">
+        <BackToTop align="center" />
+      </Container>
+    </Section>
+    <Section size="none" class="relative z-10">
+      <div class="absolute top-0 inset-x-0 pointer-events-none">
+        <div class="mx-auto max-w-6xl px-1 md:px-6 lg:px-8">
+          <div class="relative w-full">
+            <Line type="h" variant="solid" class="absolute top-0 left-0 w-full" />
+          </div>
+        </div>
+      </div>
+      <h2 class="sr-only">{siteData.b_articleNavigation}</h2>
+      <Container size="lg">
+        <PostNavigation prevPost={prevPost} nextPost={nextPost} />
+      </Container>
+      <div class="absolute bottom-0 inset-x-0 pointer-events-none">
+        <div class="mx-auto max-w-6xl px-1 md:px-6 lg:px-8">
+          <div class="relative w-full">
+            <Line type="h" variant="solid" class="absolute top-0 left-0 w-full" />
+          </div>
+        </div>
+      </div>
+    </Section>
+  </Section>
+</BaseLayout>

@@ -1,0 +1,352 @@
+/* src/styles/prose/typography.css */
+@reference '@/styles/utilities/index.css';
+
+.prose-custom :where(h1,h2,h3,h4,h5,h6,p,ul,ol,blockquote,pre,hr,table){
+  margin-top:0;
+  width:100%
+}
+
+.prose-custom :where(h1,h2,h3,h4,h5,h6){
+  font-family:var(--prose-font-sans);
+  color:var(--prose-fg);
+  margin-bottom:0;
+  scroll-margin-top:56px;
+  font-feature-settings:"kern" 1,"liga" 1,"calt" 1;
+  text-rendering:optimizeLegibility;
+  -webkit-font-smoothing:antialiased
+}
+
+.prose-custom .heading-group.has-anchor{
+  display:block;
+  width:100%;
+  max-width:100%;
+  cursor:pointer;
+  text-decoration:none;
+  line-height:1.2
+}
+
+.prose-custom .heading-text-content{
+  display:inline;
+  word-break:break-word
+}
+
+.prose-custom .anchor-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  width:1.125rem;
+  height:1.125rem;
+  margin-left:.375rem;
+  color:var(--prose-fg-subtle);
+  text-decoration:none;
+  opacity:0;
+  pointer-events:none;
+  transform:translateX(-6px);
+  transition:opacity .15s ease,transform .15s ease,color .15s ease;
+  vertical-align:baseline;
+  position:relative
+}
+
+.prose-custom .anchor-link svg{
+  width:1rem;
+  height:1rem
+}
+
+.prose-custom p{
+  @apply text-copy-16;
+  margin-bottom:1.25rem
+}
+
+.prose-custom strong{
+  font-weight:600;
+  color:var(--prose-fg);
+  letter-spacing:-.015em
+}
+
+.prose-custom em{
+  font-weight:500;
+  font-style:italic;
+  color:var(--prose-fg-muted)
+}
+
+.prose-custom strong em,
+.prose-custom em strong{
+  font-style:italic;
+  font-weight:600
+}
+
+.prose-custom sup,
+.prose-custom sub{
+  font-size:10px;
+  line-height:1;
+  font-weight:500;
+  vertical-align:baseline;
+  position:relative;
+  transition:color .15s ease;
+  font-feature-settings:"sups" 1
+}
+
+.prose-custom sup{
+  top:-.35em;
+  margin-left:.04em;
+  margin-right:.04em;
+  color:var(--prose-fg-subtle)
+}
+
+.prose-custom sub{
+  bottom:-.2em;
+  color:var(--prose-accent) /* perbaiki: sebelumnya --prose-fg-accent tidak ada */
+}
+
+.prose-custom sup a{
+  text-decoration:none;
+  color:inherit;
+  transition:color .15s ease
+}
+
+.prose-custom sup a:hover{
+  color:var(--prose-accent)
+}
+
+.prose-custom sup:has(a[href^="#fn"]){
+  cursor:pointer
+}
+
+.prose-custom h1 sup,
+.prose-custom h2 sup,
+.prose-custom h3 sup{
+  font-size:9px;
+  top:-.35em
+}
+
+.prose-custom small{
+  @apply text-copy-14;
+  line-height:1.5;
+  color:var(--prose-fg-subtle);
+  display:inline-block;
+  transition:color .15s ease
+}
+
+.prose-custom figcaption small,
+.prose-custom aside small,
+.prose-custom footer small{
+  color:var(--prose-fg-dim)
+}
+
+.prose-custom small:hover{
+  color:var(--prose-fg)
+}
+
+.prose-custom mark {
+  background: none;
+  color: inherit;
+  padding: 0;
+  border-radius: 0;
+  border-bottom: 2px solid var(--prose-accent-yellow-dim);
+  font-weight: 500;
+}
+.prose-custom mark:hover {
+  border-bottom-color: var(--prose-accent);
+}
+
+.prose-custom mark.search-highlight {
+  background-color: var(--prose-accent-yellow);
+  color: var(--prose-accent-yellow-dim);
+  border-bottom: 1px solid var(--prose-accent-yellow-dim);
+}
+
+.prose-custom abbr[title]{
+  text-decoration:none;
+  border-bottom:1px dashed var(--prose-border);
+  cursor:help;
+  font-feature-settings:"calt" 1;
+  transition:border-color .15s ease,color .15s ease
+}
+
+.prose-custom abbr[title]:hover{
+  border-bottom-color:var(--prose-accent);
+  color:var(--prose-accent)
+}
+
+.prose-custom abbr[title]:active{
+  border-bottom-style:solid;
+  transition:none
+}
+
+@media (max-width: 767px){
+  .prose-custom :where(h1,h2,h3,h4,h5,h6){
+    scroll-margin-top:56px
+  }
+
+  .prose-custom h1{
+    @apply text-heading-24;
+    margin-top:2.5rem;
+    margin-bottom:1rem;
+    text-align:center
+  }
+
+  .prose-custom h2{
+    @apply text-heading-24;
+    margin-top:2.25rem;
+    margin-bottom:.75rem
+  }
+
+  .prose-custom h3{
+    @apply text-heading-20;
+    margin-top:1.75rem;
+    margin-bottom:.625rem
+  }
+
+  .prose-custom h4{
+    @apply text-heading-16;
+    margin-top:1.5rem;
+    margin-bottom:.5rem
+  }
+
+  .prose-custom h5{
+    @apply text-label-12;
+    margin-top:1.25rem;
+    margin-bottom:.5rem;
+    color:var(--prose-fg-subtle)
+  }
+
+  .prose-custom h6{
+    @apply text-label-12;
+    margin-top:1rem;
+    margin-bottom:.5rem;
+    color:var(--prose-fg-dim)
+  }
+
+  .prose-custom .anchor-link.anchor-link-active,
+  .prose-custom .heading-group.has-anchor:active .anchor-link{
+    opacity:1;
+    pointer-events:auto;
+    transform:translateX(0);
+    color:var(--prose-fg-subtle)
+  }
+
+  .prose-custom sup,
+  .prose-custom sub{
+    font-size:9px
+  }
+
+  .prose-custom mark{
+    padding:.1em .2em;
+    font-size:14px
+  }
+
+  .prose-custom small{
+    font-size:12px
+  }
+
+  .prose-custom abbr[title]{
+    font-size:14px
+  }
+}
+
+@media (min-width: 768px){
+  .prose-custom :where(h1,h2,h3,h4,h5,h6){
+    scroll-margin-top:60px
+  }
+
+  .prose-custom h1{
+    @apply text-heading-32;
+    margin-top:4rem;
+    margin-bottom:1.25rem;
+    text-align:center
+  }
+
+  .prose-custom h2{
+    @apply text-heading-32;
+    margin-top:3rem;
+    margin-bottom:.875rem
+  }
+
+  .prose-custom h3{
+    @apply text-heading-20;
+    margin-top:2rem;
+    margin-bottom:.75rem
+  }
+
+  .prose-custom h4{
+    @apply text-heading-16;
+    margin-top:2rem;
+    margin-bottom:.625rem
+  }
+
+  .prose-custom h5{
+    @apply text-label-12;
+    margin-top:1.5rem;
+    margin-bottom:.5rem;
+    color:var(--prose-fg-subtle)
+  }
+
+  .prose-custom h6{
+    @apply text-label-12;
+    margin-top:1.25rem;
+    margin-bottom:.5rem;
+    color:var(--prose-fg-dim)
+  }
+
+  .prose-custom .heading-group.has-anchor:hover .anchor-link{
+    opacity:1;
+    pointer-events:auto;
+    transform:translateX(0);
+    color:var(--prose-fg-subtle)
+  }
+
+  .prose-custom .anchor-link:hover{
+    color:var(--prose-fg)
+  }
+
+  .prose-custom sup,
+  .prose-custom sub{
+    font-size:10px
+  }
+
+  .prose-custom mark{
+    padding:.1em .25em;
+    font-size:14px
+  }
+
+  .prose-custom small{
+    font-size:14px
+  }
+}
+
+@media (min-width: 1024px){
+  .prose-custom h1{
+    @apply text-heading-56;
+    margin-top:4rem;
+    margin-bottom:1.25rem;
+    text-align:center
+  }
+
+  .prose-custom h2{
+    @apply text-heading-32;
+    margin-top:3.5rem;
+    margin-bottom:1rem
+  }
+
+  .prose-custom h3{
+    @apply text-heading-24;
+    margin-top:2.25rem;
+    margin-bottom:.75rem
+  }
+
+  .prose-custom h4{
+    @apply text-heading-16;
+    margin-top:2rem;
+    margin-bottom:.625rem
+  }
+
+  .prose-custom p{
+    @apply text-copy-18;
+    margin-bottom:1.5rem;
+    width:100%;
+    text-wrap:pretty;
+    font-feature-settings:"kern" 1,"liga" 1;
+    color:color-mix(in srgb,var(--prose-fg) 90%,transparent)
+  }
+}
