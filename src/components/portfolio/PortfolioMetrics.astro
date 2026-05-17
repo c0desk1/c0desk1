@@ -1,0 +1,155 @@
+---
+// src/components/portfolio/PortfolioMetrics.astro
+import Container from "../ui/Container.astro";
+import { siteConfig } from "@/config/site";
+
+interface Metric {
+  label: string;
+  value: number;
+}
+
+interface Props {
+  metrics?: {
+    performance?  : number;
+    accessibility?: number;
+    seo?          : number;
+  };
+}
+const siteData = siteConfig
+
+const { metrics } = Astro.props;
+
+const rawItems = [
+  {
+    label: siteData.p_performance,
+    value: metrics?.performance,
+  },
+  {
+    label: siteData.p_accessibility,
+    value: metrics?.accessibility,
+  },
+  {
+    label: siteData.p_seo,
+    value: metrics?.seo,
+  },
+];
+
+const items: Metric[] = rawItems.flatMap((item) =>
+  typeof item.value === "number"
+    ? [{ label: item.label, value: item.value }]
+    : []
+);
+
+const scoreColor = (v: number) =>
+  v >= 90 ? "var(--color-success, #10b981)" :
+  v >= 50 ? "var(--color-warning, #f59e0b)" :
+            "var(--color-danger,  #ef4444)";
+---
+
+{items.length > 0 && (
+  <div class="pm-band">
+    <Container size="md">
+      <div class="pm-grid">
+        {items.map((item) => (
+          <div class="pm-item">
+            <div class="pm-value-row">
+              <span class="pm-value" style={`color: ${scoreColor(item.value)}`}>
+                {item.value}
+              </span>
+              <span class="pm-unit">%</span>
+            </div>
+            <div class="pm-label-row">
+              <span class="pm-dot" style={`background: ${scoreColor(item.value)}`}></span>
+              <span class="pm-label">{item.label}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </Container>
+  </div>
+)}
+
+<style>
+  .pm-band {
+    padding-block: 2rem;
+  }
+
+  .pm-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .pm-grid { gap: 2.5rem; }
+  }
+
+  .pm-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s var(--ease, ease);
+  }
+
+  .pm-item:hover {
+    transform: translateY(-2px);
+  }
+
+  .pm-value-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.125rem;
+  }
+
+  .pm-value {
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    transition: color 0.2s ease;
+  }
+
+  @media (min-width: 768px) {
+    .pm-value { font-size: 2.5rem; }
+  }
+
+  .pm-unit {
+    font-size: 0.75rem;
+    font-weight: 500;
+    font-family: var(--font-mono);
+    color: var(--fg-subtle);
+    margin-left: 0.125rem;
+  }
+
+  /* LABEL ROW */
+  .pm-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+  }
+
+  .pm-dot {
+    width: 0.25rem;
+    height: 0.25rem;
+    border-radius: var(--radius-full);
+    flex-shrink: 0;
+    animation: pm-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pm-pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.4; }
+  }
+
+  .pm-label {
+    font-size: 0.8125rem;
+    color: var(--fg-muted);
+    letter-spacing: -0.005em;
+  }
+</style>

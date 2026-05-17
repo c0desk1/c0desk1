@@ -1,0 +1,43 @@
+---
+// src/components/layout/Nav.astro
+import { siteConfig } from "@/config/site";
+import { normalizePath } from "@/lib/utils";
+import NavLink from "@/components/ui/NavLink.astro";
+import Icon from "@/components/ui/Icon";
+
+const currentPath = Astro.url.pathname;
+const navItems = siteConfig.navItems;
+
+---
+
+<nav
+  class="hidden md:flex items-center justify-center gap-2 ml-2"
+  aria-label="Primary navigation">
+  {navItems.map((item) => {
+    const localizedHref = item.isExternal ? item.href : item.href;
+    const label = item.label;
+
+    const activePath = normalizePath(currentPath);
+    const targetPath = normalizePath(localizedHref);
+    
+    const isActive = activePath === targetPath || (targetPath !== "/" && activePath.startsWith(targetPath));
+
+    return (
+      <NavLink
+        href={localizedHref}
+        current={isActive}
+        target={item.isExternal ? "_blank" : undefined}
+        rel={item.isExternal ? "noopener noreferrer" : undefined}
+      >
+        {label}
+
+        {item.isExternal && (
+          <Icon
+            name="external"
+            className="size-3 shrink-0 opacity-0 transition-opacity group-hover:opacity-100"
+          />
+        )}
+      </NavLink>
+    );
+  })}
+</nav>

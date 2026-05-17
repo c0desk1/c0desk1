@@ -1,0 +1,71 @@
+---
+// src/components/layout/PostAuthor.astro
+import { siteConfig } from '@/config/site';
+import { Image } from 'astro:assets';
+import { cdnImage, isCdnUrl } from '@/lib/utils';
+import Listen from '../ui/ListenButton.astro';
+
+interface Props {
+  name?: string;
+  avatar?: string;
+  title?: string;
+  slug?: string;
+}
+
+const { name, avatar, title, slug } = Astro.props;
+
+const siteData = siteConfig
+
+const authorLabel = siteData.author;
+const avatarOfLabel = siteData.avatarOf;
+
+const authorName = name || siteConfig.author?.name || siteConfig.siteName;
+const authorAvatar = avatar || siteConfig.author?.avatar || siteConfig.siteLogo;
+
+const authorTitle =
+  title ||
+  siteConfig.author.title ||
+  authorLabel;
+
+const authorSlug = slug || siteConfig.author?.slug || "author";
+const authorPath = `/author/${authorSlug}/`;
+
+const optimizedAvatar = isCdnUrl(authorAvatar)? cdnImage(authorAvatar, { w: 40, h: 40, q: 80 }) : authorAvatar;
+---
+
+<div class="flex w-full justify-center gap-2">
+  <a
+    href={authorPath}
+    rel="author"
+    aria-label={`${authorLabel}: ${authorName}`}
+    class="inline-flex items-center gap-2 no-underline"
+  >
+    <div class="inline-flex cursor-pointer flex-[0_1_auto] overflow-hidden">
+      {authorAvatar && (
+        <span aria-hidden="true" aria-label="" role="img" class="w-6 h-6 shrink-0 rounded-full inline-block overflow-hidden leading-0 align-top relative transition-[background] duration-200 ease-in-out">
+          <Image
+            src={optimizedAvatar}
+            alt={`${avatarOfLabel} ${authorName}`}
+            width={40}
+            height={40}
+            class="h-full w-full object-cover"
+            loading="eager"
+            decoding="async"
+          />
+          <span class="absolute inset-0 rounded-full border-(--border)"></span>
+        </span>
+      )}
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="text-[14px] leading-5 font-medium text-(--fg)">
+        {authorName}
+      </span>
+      {authorTitle && (
+        <span class="text-copy-14 text-(--fg-muted)">
+          {authorTitle}
+        </span>
+      )}
+    </div>
+  </a>
+  <Listen />
+</div>

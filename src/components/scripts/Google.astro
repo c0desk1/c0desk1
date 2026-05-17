@@ -1,0 +1,103 @@
+---
+// src/components/scripts/AnalyticsScript.astro
+import { siteConfig } from "@/config/site";
+
+const GTAG_ID = siteConfig.googleAnalyticsId || "";
+const ADSENSE_ID = siteConfig.googleAdsenseId || "";
+const ADSENSE_ENABLED = siteConfig.googleAdsenseEnabled ?? true;
+---
+
+<script
+  is:inline
+  define:vars={{
+    GTAG_ID,
+    ADSENSE_ID,
+    ADSENSE_ENABLED,
+  }}
+>
+  (() => {
+    const CONSENT_KEY = "cookie-consent-v2";
+
+    const GTAG_SCRIPT_ID = "gtag-script";
+    const ADSENSE_SCRIPT_ID = "adsense-script";
+
+    const isAccepted = () => {
+      try {
+        const c = JSON.parse(
+          localStorage.getItem(CONSENT_KEY) || "null"
+        );
+
+        return c?.accepted === true;
+      } catch {
+        return false;
+      }
+    };
+
+    const loadGtag = () => {
+      if (!document.getElementById(GTAG_SCRIPT_ID)) {
+        const script = document.createElement("script");
+
+        script.id = GTAG_SCRIPT_ID;
+        script.async = true;
+
+        script.src =
+          `https://www.googletagmanager.com/gtag/js?id=${GTAG_ID}`;
+
+        document.head.appendChild(script);
+
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+          window.dataLayer.push(arguments);
+        }
+
+        gtag("js", new Date());
+
+        gtag("config", GTAG_ID, {
+          anonymize_ip: true,
+        });
+      }
+    };
+
+    const loadAdsense = () => {
+      if (!document.getElementById(ADSENSE_SCRIPT_ID)) {
+        const script = document.createElement("script");
+
+        script.id = ADSENSE_SCRIPT_ID;
+        script.async = true;
+        script.crossOrigin = "anonymous";
+
+        script.src =
+          `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}`;
+
+        document.head.appendChild(script);
+      }
+    };
+
+    const init = () => {
+      if (isAccepted()) {
+        if (GTAG_ID) loadGtag();
+
+        if (ADSENSE_ENABLED && ADSENSE_ID) {
+          loadAdsense();
+        }
+      } else {
+        document.addEventListener(
+          "cookie-consent-changed",
+          () => {
+            if (isAccepted()) {
+              if (GTAG_ID) loadGtag();
+
+              if (ADSENSE_ENABLED && ADSENSE_ID) {
+                loadAdsense();
+              }
+            }
+          },
+          { once: true }
+        );
+      }
+    };
+
+    init();
+  })();
+</script>

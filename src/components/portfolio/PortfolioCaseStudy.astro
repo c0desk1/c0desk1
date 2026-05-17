@@ -1,0 +1,169 @@
+---
+// src/components/portfolio/CaseStudyAccordion.astro
+import Icon from "@/components/ui/Icon";
+import { siteConfig } from "@/config/site";
+
+interface Props {
+  challenge?    : string;
+  solution?     : string;
+  result?       : string;
+  allowMultiple?: boolean;
+}
+
+const {
+  challenge,
+  solution,
+  result,
+  allowMultiple = true,
+} = Astro.props;
+
+interface Item { question: string; answer: string; }
+
+const items: Item[] = [
+  challenge && { question: siteConfig.p_challenge, answer: challenge },
+  solution  && { question: siteConfig.p_solution,  answer: solution  },
+  result    && { question: siteConfig.p_result,    answer: result    },
+].filter(Boolean) as Item[];
+---
+
+{items.length > 0 && (
+  <div
+    class="csa-root not-prose"
+    data-allow-multiple={allowMultiple ? "true" : "false"}
+  >
+    {items.map((item, i) => (
+      <div class="csa-item">
+        <button
+          class="csa-trigger"
+          aria-expanded="false"
+          aria-controls={`csa-panel-${i}`}
+          id={`csa-btn-${i}`}
+        >
+          <span class="csa-question text-label-14 md:text-label-16 font-semibold">{item.question}</span>
+          <Icon name="chevron-down" className="csa-chevron w-6 h-6" />
+        </button>
+
+        <div
+          class="csa-panel"
+          id={`csa-panel-${i}`}
+          aria-labelledby={`csa-btn-${i}`}
+          hidden
+        >
+          <div class="csa-body">
+            <p class="text-copy-14 md:text-copy-16" set:html={item.answer} />
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+)}
+
+<style>
+  .csa-root {
+    margin-block: 2rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .csa-item {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .csa-item:last-child {
+    border-bottom: none;
+  }
+
+  .csa-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.875rem 1.125rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.15s ease;
+  }
+
+  .csa-trigger:hover {
+    background-color: var(--bg-subtle);
+  }
+
+  .csa-trigger:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+
+  .csa-question {
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+    color: var(--fg);
+  }
+
+  /* CHEVRON */
+  :global(.csa-chevron) {
+    flex-shrink: 0;
+    color: var(--fg-subtle);
+    transition: transform 0.2s ease;
+  }
+
+  .csa-trigger[aria-expanded="true"] :global(.csa-chevron) {
+    transform: rotate(180deg);
+  }
+
+  /* PANEL */
+  .csa-panel {
+    overflow: hidden;
+  }
+
+  .csa-panel[hidden] {
+    display: none;
+  }
+
+  /* BODY */
+  .csa-body {
+    padding: 0 1.125rem 1rem;
+  }
+
+  .csa-body p {
+    margin: 0;
+    padding-top: 0.5rem;
+    color: var(--fg-muted);
+    text-wrap: pretty;
+  }
+</style>
+
+<script>
+  const initAccordion = () => {
+    document.querySelectorAll<HTMLElement>(".csa-root").forEach((root) => {
+      const allowMultiple = root.dataset.allowMultiple === "true";
+      const triggers = root.querySelectorAll<HTMLButtonElement>(".csa-trigger");
+
+      const open = (btn: HTMLButtonElement) => {
+        const panel = document.getElementById(btn.getAttribute("aria-controls")!);
+        btn.setAttribute("aria-expanded", "true");
+        panel?.removeAttribute("hidden");
+      };
+
+      const close = (btn: HTMLButtonElement) => {
+        const panel = document.getElementById(btn.getAttribute("aria-controls")!);
+        btn.setAttribute("aria-expanded", "false");
+        panel?.setAttribute("hidden", "");
+      };
+
+      triggers.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const isOpen = btn.getAttribute("aria-expanded") === "true";
+          if (!allowMultiple) triggers.forEach((t) => { if (t !== btn) close(t); });
+          isOpen ? close(btn) : open(btn);
+        });
+      });
+    });
+  };
+
+  initAccordion();
+  document.addEventListener("astro:page-load", initAccordion);
+</script>

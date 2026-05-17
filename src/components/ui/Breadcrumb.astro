@@ -1,0 +1,48 @@
+---
+// src/components/ui/Breadcrumb.astro
+import { siteConfig } from '@/config/site';
+import Icon from './Icon';
+
+interface Props {
+  items: Array<{ 
+    name?: string; 
+    href?: string 
+  }>;
+}
+
+const siteData = siteConfig
+
+const { items = [] } = Astro.props;
+if (!items.length) return;
+
+const ariaLabel = siteData.breadcrumbAria;
+---
+
+<nav aria-label={ariaLabel} class="flex justify-center">
+  <ol class="flex items-center gap-1 text-copy-14">
+    {items.map((item, i) => (
+      <li class="flex items-center gap-1">
+        {i > 0 && (
+          <Icon
+            name="chevron-right"
+            className="w-4 h-4 text-(--fg-muted) opacity-50"
+            aria-hidden="true"
+          />
+        )}
+
+        {i === items.length - 1? (
+          <span aria-current="page" class="text-(--fg) truncate max-w-[16rem]">
+            {item.name}
+          </span>
+        ) : (
+          <a
+            href={item.href}
+            class="text-(--fg-muted) hover:text-(--fg) no-underline whitespace-nowrap transition-colors"
+          >
+            {item.name}
+          </a>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>

@@ -1,0 +1,25 @@
+---
+interface Props {
+  title: string;
+  highlight?: string;
+  description: string;
+}
+
+const { title, highlight, description } = Astro.props;
+---
+
+<div class="w-full h-full justify-center flex flex-col items-center text-center py-16" aria-labelledby="hero-title">
+  <div class="space-y-4">
+    <h1 id="hero-title" class="text-heading-40 md:text-heading-56 lg:text-heading-64 text-(--fg)">
+      {title}
+      {highlight && (
+        <span class="text-(--accent-dim)">
+          {highlight}
+        </span>
+      )}
+    </h1>
+    <p class="text-copy-16 md:text-copy-20 text-(--fg-muted) max-w-3xl">
+      {description}
+    </p>
+  </div>
+</div>

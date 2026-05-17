@@ -1,0 +1,21 @@
+---
+// src/components/ui/BG.astro
+---
+
+<div class="fixed inset-0 pointer-events-none z-0 opacity-100">
+  <div class="mx-auto h-full max-w-6xl px-1 md:px-6 lg:px-8">
+    <div class="relative h-full">
+      <div class="absolute inset-y-0 left-0 border-l border-solid border-(--border)"></div>
+      <div class="md:hidden absolute inset-y-0 left-1/2 -translate-x-1/2 border-l border-dashed border-(--border)/90"></div>
+      <div class="absolute inset-y-0 right-0 border-r border-solid border-(--border)"></div>
+    </div>
+  </div>
+</div>
+<div class="fixed hidden md:block inset-0 pointer-events-none z-0 opacity-40">
+  <div class="mx-auto h-full max-w-md px-4 md:px-6 lg:px-8">
+    <div class="relative h-full">
+      <div class="absolute inset-y-0 left-0 border-l border-dashed border-(--border)"></div>
+      <div class="absolute inset-y-0 right-0 border-r border-dashed border-(--border)"></div>
+    </div>
+  </div>
+</div>

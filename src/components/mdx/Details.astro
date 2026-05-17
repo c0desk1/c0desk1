@@ -1,0 +1,33 @@
+p---
+import Icon from '@/components/ui/Icon';
+
+const { summary: propSummary } = Astro.props;
+const rawHtml = await Astro.slots.render('default');
+
+const normalized = rawHtml
+ .replace(/<\/p>\s*<p>/g, '\n\n')
+ .replace(/<br\s*\/?>/g, '\n')
+ .replace(/<[^>]+>/g, '')
+ .trim();
+
+const paragraphs = normalized.split(/\n\s*\n/).filter(Boolean);
+
+let summary = propSummary || paragraphs[0] || 'Details';
+let contentHtml = rawHtml;
+
+if (!propSummary && paragraphs.length > 1) {
+  contentHtml = rawHtml.replace(/<p[^>]*>[\s\S]*?<\/p>/, '').trim();
+} else if (!propSummary && paragraphs.length === 1) {
+  contentHtml = '';
+}
+---
+
+<details class="details">
+  <summary class="details-summary">
+    <Icon name="chevron-right" className="details-icon" />
+    {summary}
+  </summary>
+  {contentHtml && (
+    <div class="details-content" set:html={contentHtml} />
+  )}
+</details>

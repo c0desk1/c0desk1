@@ -1,0 +1,34 @@
+---
+// src/components/ui/SocialLinks.astro
+import Icon from "./Icon";
+
+interface SocialItem {
+  href: string;
+  label: string;
+}
+
+interface Props {
+  items: readonly SocialItem[];
+  class?: string;
+  iconClass?: string;
+}
+
+const { items, class: className = "", iconClass = "w-4 h-4" } = Astro.props;
+---
+
+<ul class={`flex items-center gap-2 ${className}`} role="list">
+  {items.map((item) => (
+    <li>
+      <a
+        href={item.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={item.label}
+        title={item.label}
+        class="inline-flex items-center justify-center rounded-full p-1.5 text-(--fg-muted) hover:text-(--fg) hover:bg-(--bg-muted) transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)"
+      >
+        <Icon name={item.label as any} className={iconClass} aria-hidden="true" />
+      </a>
+    </li>
+  ))}
+</ul>

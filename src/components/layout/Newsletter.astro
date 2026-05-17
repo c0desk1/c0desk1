@@ -1,0 +1,334 @@
+---
+// src/components/ui/Newsletter.astro
+import { getCurrentLocale, getLabel } from '@/utils/i18n';
+
+interface Props {
+  heading?    : string;
+  subheading? : string;
+  placeholder?: string;
+  btnLabel?   : string;
+  message?    : string;
+  note?       : string;
+}
+
+const locale = getCurrentLocale(Astro);
+
+const {
+  heading = getLabel(locale, 'newsletterHeading'),
+  subheading = getLabel(locale, 'newsletterSub'),
+  placeholder = getLabel(locale, 'newsletterPlaceholder'),
+  btnLabel = getLabel(locale, 'newsletterBtn'),
+  message = getLabel(locale, 'newsletterSuccess'),
+  note = getLabel(locale, 'newsletterNote'),
+} = Astro.props;
+
+const toastMessages = {
+  invalid: getLabel(locale, 'newsletterInvalid'),
+  exists: getLabel(locale, 'newsletterExists'),
+  error: getLabel(locale, 'newsletterError'),
+  success: getLabel(locale, 'newsletterToastSuccess'),
+  network: getLabel(locale, 'newsletterNetwork'),
+};
+---
+
+<div class="nls-root">
+  <div class="nls-header">
+    <h2 class="text-heading-24 md:text-heading-32 lg:text-heading-48 nls-heading">{heading}</h2>
+    <p class="text-label-14 lg:text-label-18 nls-sub">{subheading}</p>
+  </div>
+
+  <div id="nls-form-state">
+    <form id="nls-form" novalidate>
+      <div class="nls-row" id="nls-field">
+        <input
+          id="nls-email"
+          type="email"
+          required
+          placeholder={placeholder}
+          autocomplete="email"
+          class="nls-input text-copy-14"
+          aria-label="Alamat email"
+        />
+        <button id="nls-submit" type="submit" class="nls-btn text-label-13 font-semibold" aria-label={btnLabel}>
+          <span class="nls-btn-label">{btnLabel}</span>
+          <svg
+            class="nls-spinner"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="9" stroke-opacity="0.25" />
+            <path d="M12 3a9 9 0 0 1 9 9" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div id="nls-success" class="nls-success text-label-14" hidden aria-live="polite">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+      stroke-linejoin="round" aria-hidden="true">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+    <span>{message}</span>
+  </div>
+
+  <p class="text-copy-13 nls-note">{note}</p>
+</div>
+
+<style>
+  .nls-root {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: 22rem;
+  }
+
+  .nls-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .nls-heading {
+    color: var(--fg);
+    margin: 0;
+  }
+
+  .nls-sub {
+    color: var(--fg-muted);
+    margin: 0;
+  }
+
+  .nls-row {
+    display: flex;
+    height: 2.375rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md, 8px);
+    overflow: hidden;
+    background: var(--bg);
+    transition: box-shadow 0.15s ease;
+  }
+
+  .nls-row:focus-within {
+    border-color: var(--border-strong);
+    box-shadow: 0 0 0 3px var(--accent-ring);
+  }
+
+  .nls-row.nls-shake {
+    animation: nls-shake 0.25s ease;
+    border-color: #e5484d;
+    box-shadow: 0 0 0 3px rgba(229, 72, 77, 0.15);
+  }
+
+  @keyframes nls-shake {
+    0%, 100% { transform: translateX(0); }
+    25%       { transform: translateX(-4px); }
+    75%       { transform: translateX(4px); }
+  }
+
+  .nls-input {
+    flex: 1;
+    min-width: 0;
+    padding: 0 0.75rem;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--fg);
+  }
+
+  .nls-input::placeholder {
+    color: var(--fg-dim, var(--fg-subtle));
+  }
+
+  .nls-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    padding: 0 0.875rem;
+    background: var(--fg);
+    color: var(--bg);
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: opacity 0.15s ease, transform 0.1s ease;
+  }
+
+  .nls-btn:hover  { opacity: 0.85; }
+  .nls-btn:active { transform: scale(0.97); }
+
+  .nls-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .nls-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .nls-spinner {
+    width: 0.9375rem;
+    height: 0.9375rem;
+    display: none;
+    animation: nls-spin 0.65s linear infinite;
+  }
+
+  @keyframes nls-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .nls-btn.is-loading .nls-btn-label { display: none; }
+  .nls-btn.is-loading .nls-spinner   { display: block; }
+
+  .nls-success {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--fg-muted);
+    animation: nls-fade 0.2s ease;
+  }
+
+  .nls-success svg {
+    flex-shrink: 0;
+    color: var(--color-success, #10b981);
+  }
+
+  @keyframes nls-fade {
+    from { opacity: 0; transform: translateY(2px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .nls-note {
+    color: var(--fg-subtle);
+    margin: 0;
+  }
+
+  @media (max-width: 40rem) {
+    .nls-root {
+      gap: 0.875rem;
+    }
+
+    .nls-row {
+      flex-direction: column;
+      height: auto;
+      gap: 0.5rem;
+      border: none;
+      background: transparent;
+      box-shadow: none !important;
+    }
+
+    .nls-row:focus-within {
+      border-color: transparent;
+      box-shadow: none;
+    }
+
+    .nls-input {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md, 8px);
+      padding: 0.6875rem 0.875rem;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .nls-input:focus {
+      border-color: var(--border-strong);
+      box-shadow: 0 0 0 3px var(--accent-ring);
+      outline: none;
+    }
+
+    .nls-row.nls-shake .nls-input {
+      border-color: #e5484d;
+      box-shadow: 0 0 0 3px rgba(229, 72, 77, 0.15);
+    }
+
+    .nls-btn {
+      width: 100%;
+      padding: 0.6875rem 1rem;
+      border-radius: var(--radius-md, 8px);
+    }
+  }
+</style>
+
+<script define:vars={{ toastMessages }}>
+  (() => {
+    const form = document.getElementById('nls-form');
+    const emailEl = document.getElementById('nls-email');
+    const submitBtn = document.getElementById('nls-submit');
+    const field = document.getElementById('nls-field');
+    const formState = document.getElementById('nls-form-state');
+    const successEl = document.getElementById('nls-success');
+
+    if (!form ||!emailEl ||!submitBtn) return;
+
+    const isValidEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+
+    const setLoading = (on) => {
+      submitBtn.disabled = on;
+      submitBtn.classList.toggle('is-loading', on);
+    };
+
+    const shake = () => {
+      if (!field) return;
+      field.classList.add('nls-shake');
+      field.addEventListener('animationend', () => field.classList.remove('nls-shake'), { once: true });
+    };
+
+    emailEl.addEventListener('input', () => field?.classList.remove('nls-shake'));
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = emailEl.value.trim();
+      const toast = window.toast;
+
+      if (!email ||!isValidEmail(email)) {
+        shake();
+        emailEl.focus();
+        toast?.show?.(toastMessages.invalid, { type: 'error' });
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const res = await fetch('https://api.c0desk1.my.id/api/newsletter', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
+
+        if (!res.ok) {
+          shake();
+          const msg = res.status === 409
+           ? toastMessages.exists
+            : toastMessages.error;
+          toast?.show?.(msg, { type: 'error' });
+          return;
+        }
+
+        emailEl.value = '';
+        if (formState) formState.hidden = true;
+        if (successEl) successEl.hidden = false;
+
+        setTimeout(() => {
+          if (successEl) successEl.hidden = true;
+          if (formState) formState.hidden = false;
+        }, 3500);
+
+        toast?.show?.(toastMessages.success, { type: 'success' });
+
+      } catch {
+        shake();
+        toast?.show?.(toastMessages.network, { type: 'error' });
+      } finally {
+        setLoading(false);
+      }
+    });
+  })();
+</script>

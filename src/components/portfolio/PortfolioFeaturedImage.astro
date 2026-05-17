@@ -1,0 +1,43 @@
+---
+// src/components/portfolio/PortfolioHeroImage.astro
+import Container from "../ui/Container.astro";
+import { Image } from 'astro:assets';
+import { cdnImage, isCdnUrl } from '@/lib/utils';
+
+interface Props {
+  src: any;
+  alt?: string;
+  caption?: string;
+}
+
+const { src, alt, caption } = Astro.props;
+
+const finalSrc = typeof src === "object" && src !== null ? (src.src || src) : src;
+const optimizedSrc = isCdnUrl(finalSrc) ? cdnImage(finalSrc, { w: 1280, h: 720, q: 85 }) : finalSrc;
+const finalCaption = caption || alt;
+---
+
+  <Container size="lg" class="py-4 md:py-8">
+    <figure class="group relative overflow-hidden border border-(--border) bg-(--bg-muted)">
+      <div class="relative aspect-video overflow-hidden">
+        <div class="absolute aspect-video inset-0 bg-(--bg) animate-pulse" aria-hidden="true"></div>
+        <Image
+          src={optimizedSrc}
+          alt={alt || "Portfolio hero image"}
+          width={1280}
+          height={720}
+          loading="lazy"
+          decoding="async"
+          class="relative z-10 h-full w-full object-cover aspect-video rounded-none transition duration-500 opacity-0"
+          onload="this.classList.remove('opacity-0')"
+        />
+      </div>
+      {finalCaption && (
+        <figcaption class="flex items-center text-center gap-2 border-t border-(--border) px-3 py-2 text-xs md:text-[13px] text-(--fg-subtle)">
+          <span class="line-clamp-2">
+            {finalCaption}
+          </span>
+        </figcaption>
+      )}
+    </figure>
+  </Container>
