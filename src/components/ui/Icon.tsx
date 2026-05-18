@@ -21,8 +21,9 @@ export default function Icon({ name, className = 'w-5 h-5' }: IconProps) {
   switch (name) {
     case 'logo':
       return ( 
-        <svg {...s} viewBox="0 0 24 24" width={24} height={24} fill="none">
-          <polygon points="2,7 22,7 12,22" fill="currentColor" />
+        <svg {...s} viewBox="0 0 32 32" width={32} height={32} fill="none" strokeWidth="4" strokeLinecap="butt" strokeLinejoin= "round" stroke="currentColor">
+          <circle cx="16" cy="16" r="10"/>
+          <line x1="5" y1="27" x2="27" y2="5"/>
         </svg>
       );
 
@@ -311,8 +312,11 @@ export default function Icon({ name, className = 'w-5 h-5' }: IconProps) {
 
     case 'rss':
       return (
-        <svg {...s} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M4 11a9 9 0 019 9M4 4a16 16 0 0116 16M5 19a1 1 0 11-2 0 1 1 0 012 0z" />
+        <svg {...s} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M4 19a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+          <path d="M4 4a16 16 0 0 1 16 16" />
+          <path d="M4 11a9 9 0 0 1 9 9" />
         </svg>
       );
     

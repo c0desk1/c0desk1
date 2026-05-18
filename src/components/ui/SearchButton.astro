@@ -2,27 +2,22 @@
 // src/components/ui/SearchButton.astro
 import { siteConfig } from "@/config/site";
 import Icon from "./Icon";
+import KBD from "../mdx/KBD.astro";
 
-const siteData = siteConfig
+const siteData = siteConfig;
 
 const searchLabel = siteData.search;
 const searchPlaceholder = siteData.searchPlaceholder;
 ---
 
-<button
-  id="search-trigger"
-  type="button"
-  aria-label={searchLabel}
-  title={searchLabel}
-  class="group flex items-center justify-center sm:justify-between gap-2 w-auto sm:w-70 md:w-70 p-2 sm:px-3 sm:py-2 rounded-full border border-(--border) sm:rounded-xl sm:border-(--border-strong)/50 sm:hover:bg-(--bg-muted) transition-colors duration-200">
+<button id="search-trigger" type="button" aria-label={searchLabel} title={searchLabel} class="group flex items-center justify-center gap-2 w-auto sm:w-70 md:w-70 p-2 sm:px-3 sm:py-2 rounded-full border border-(--border) sm:justify-between sm:rounded-xl sm:border-(--border-strong)/50 sm:hover:bg-(--bg-muted) transition-colors duration-200">
   <div class="flex items-center gap-2 text-(--fg) sm:text-(--fg-muted)">
-    <Icon name="search" className="w-5 h-5" />
-    <span class="hidden sm:inline text-sm">{searchPlaceholder}</span>
+    <Icon name="search" className="h-5 w-5" />
+    <span class="hidden text-sm sm:inline">{searchPlaceholder}</span>
   </div>
-
-  <kbd class="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 text-[13px] font-mono text-(--fg) bg-(--bg-muted) border border-(--border-strong) rounded-md">
-    ⌘K
-  </kbd>
+  <div class="hidden sm:inline-flex items-center">
+    <KBD class="text-label-14-mono text-(--fg-subtle)">/</KBD>
+  </div>
 </button>
 
 <script>
@@ -30,11 +25,24 @@ const searchPlaceholder = siteData.searchPlaceholder;
     document.dispatchEvent(new CustomEvent("open-search"));
   };
 
-  const btn = document.getElementById("search-trigger");
-  btn?.addEventListener("click", openSearch);
+  const initSearchButton = () => {
+    const btn = document.getElementById("search-trigger");
+    if (!btn) return;
+    btn.onclick = openSearch;
+  };
 
+  initSearchButton();
+
+  document.addEventListener("astro:page-load", initSearchButton);
   document.addEventListener("keydown", (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+    const active = document.activeElement;
+    const isTyping =
+      active instanceof HTMLInputElement ||
+      active instanceof HTMLTextAreaElement ||
+      active?.getAttribute("contenteditable") === "true";
+
+    if (isTyping) return;
+    if (e.key === "/") {
       e.preventDefault();
       openSearch();
     }

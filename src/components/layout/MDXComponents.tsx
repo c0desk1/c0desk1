@@ -17,6 +17,8 @@ import InlineLink from '@/components/mdx/InlineLink.astro';
 import Blockquote from '@/components/mdx/Blockquote.astro';
 import Footnotes from '@/components/mdx/Footnotes.astro';
 import Callout from '../mdx/Callout.astro';
+import Accordion from '../mdx/Accordion.astro';
+import Timeline from '../mdx/Timeline.astro';
 
 export const components: MDXComponents = {
   h1: Heading,
@@ -36,7 +38,9 @@ export const components: MDXComponents = {
   table: Table,
   Details,
   Steps,
+  Timeline,
   Code,
   Footnotes,
   Callout,
+  Accordion,
 };

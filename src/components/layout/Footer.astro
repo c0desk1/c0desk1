@@ -10,33 +10,25 @@ import SocialLinks from "../ui/SocialLinks.astro";
 
 const siteData = siteConfig;
 const social = siteConfig.social;
-const year = new Date().getFullYear();
 
 const footerSections = siteConfig.footerSections;
 ---
 
-<footer class="ft-root">
+<footer class="relative border-t border-(--border) bg-(--bg)">
   <Section size="sm">
-    <div class="ft-top">
+    <Section size="sm">
       <Container size="xl">
-        <div class="ft-top-inner">
-          <nav class="ft-nav" aria-label={siteData.footerNav}>
+        <div class="flex flex-col items-start gap-8 md:flex-row md:justify-between">
+          <nav aria-label={siteData.footerNav} class="grid w-full grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-4 md:gap-x-8 md:gap-y-6">
             {footerSections.map((section) => (
-              <div class="ft-col">
-                <p class="text-label-13-mono ft-col-title">{section.title}</p>
-                <ul class="ft-col-list">
+              <div class="min-w-0">
+                <p class="text-label-13-mono mb-2 uppercase text-(--fg)">{section.title}</p>
+                <ul class="flex flex-col gap-2">
                   {section.items.map((link) => (
                     <li>
-                      <a
-                        href={link.isExternal ? link.href : link.href}
-                        target={link.isExternal ? "_blank" : undefined}
-                        rel={link.isExternal ? "noopener noreferrer" : undefined}
-                        class="text-copy-14 ft-link"
-                      >
+                      <a href={link.href} target={link.isExternal ? "_blank" : undefined} rel={link.isExternal ? "noopener noreferrer" : undefined} class="text-copy-14 inline-flex items-center gap-1 py-1 text-(--fg-muted) transition-colors duration-150 hover:text-(--fg)">
                         {link.label}
-                        {link.isExternal && (
-                          <Icon name="external" className="ft-external-icon" />
-                        )}
+                        {link.isExternal && (<Icon name="external" className="h-3 w-3 shrink-0 opacity-50 transition-opacity duration-150 group-hover:opacity-100"/>)}
                       </a>
                     </li>
                   ))}
@@ -45,160 +37,15 @@ const footerSections = siteConfig.footerSections;
             ))}
           </nav>
         </div>
-      </Container>
-    </div>
-    <Container size="xl">
-      <div class="ft-bottom">
-        <div class="ft-bottom-row">
-          <SocialLinks items={social} class="ft-social" iconClass="ft-social-icon" />
+      </Container> 
+    </Section>
+    <Section size="sm">
+      <Container size="xl">
+        <div class="flex items-center justify-between gap-4">
+          <SocialLinks items={social} class="flex items-center gap-0.5" iconClass="h-4 w-4 block"/>
           <ThemeToggle />
         </div>
-      </div>
-    </Container>
+      </Container>
+    </Section>
   </Section>
 </footer>
-
-<style>
-  .ft-root {
-    position: relative;
-    border-top: 1px solid var(--border);
-    background-color: var(--bg);
-  }
-
-  .ft-top {
-    border-bottom: 1px dashed var(--border);
-    padding-block: 2.5rem;
-  }
-
-  .ft-top-inner {
-    display: flex;
-    flex-direction: column;
-    gap: 2.5rem;
-    align-items: flex-start;
-  }
-
-  @media (min-width: 768px) {
-    .ft-top-inner {
-      flex-direction: row;
-      align-items: flex-start;
-      justify-content: space-between;
-    }
-  }
-
-  .ft-nav {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1.5rem 2rem;
-    flex: 1;
-  }
-
-  .ft-col-title {
-    margin: 0 0 0.75rem;
-    text-transform: uppercase;
-    color: var(--fg);
-  }
-
-  .ft-col-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.125rem;
-  }
-
-  .ft-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    color: var(--fg-muted);
-    padding-block: 0.25rem;
-    transition: color 0.15s ease;
-  }
-
-  .ft-link:hover { color: var(--fg); }
-
-  :global(.ft-external-icon) {
-    width: 0.75rem;
-    height: 0.75rem;
-    flex-shrink: 0;
-    opacity: 0.5;
-    transition: opacity 0.15s ease;
-  }
-
-  .ft-link:hover :global(.ft-external-icon) { opacity: 1; }
-
-  .ft-newsletter {
-    flex-shrink: 0;
-  }
-
-  .ft-bottom {
-    display: flex;
-    flex-direction: column;
-    gap: 0.625rem;
-    padding-block: 1rem;
-  }
-
-  .ft-bottom-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-
-  .ft-social {
-    display: flex;
-    align-items: center;
-    gap: 0.125rem;
-  }
-
-  .ft-social-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2rem;
-    height: 2rem;
-    border-radius: var(--radius-full);
-    color: var(--fg-muted);
-    transition: color 0.15s ease, background-color 0.15s ease;
-  }
-
-  .ft-social-link:hover {
-    color: var(--fg);
-    background-color: var(--bg-muted);
-  }
-
-  :global(.ft-social-icon) {
-    width: 1rem;
-    height: 1rem;
-    display: block;
-  }
-
-  @media (max-width: 480px) {
-    .ft-top {
-      padding-block: 1.5rem;
-    }
-
-    .ft-top-inner {
-      gap: 2rem;
-    }
-
-    .ft-nav {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 2rem 1.5rem;
-      width: 100%;
-    }
-
-    .ft-col-list {
-      gap: 0.5rem;
-    }
-
-    .ft-col-title {
-      margin-bottom: 0.5rem;
-    }
-
-    .ft-newsletter {
-      width: 100%;
-    }
-  }
-</style>
