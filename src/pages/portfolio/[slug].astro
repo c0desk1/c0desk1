@@ -133,7 +133,7 @@ const Breadcrumbs = [
           </div>
         </Container>
         {image && (
-          <Section size="none" class="hidden p-4 lg:p-6">
+          <Section size="sm" class="hidden p-4 lg:p-6">
             <Container size="md">
               <h2 class="sr-only">{srPortfolioImage}</h2>
               <PortfolioFeaturedImage
@@ -161,6 +161,10 @@ const Breadcrumbs = [
             <div id="article-content" class="prose-custom">
               <Content components={components} />
             </div>
+          </Container>
+        </Section>
+        <Section size="sm" class="p-4 lg:p-6">
+          <Container size="md">
             <h2 class="sr-only">{srPortfolioContent}</h2>
             {displayGallery.length > 0 && (
               <div class="prose-custom mb-6">
