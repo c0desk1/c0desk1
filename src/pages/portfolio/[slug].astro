@@ -132,47 +132,47 @@ const Breadcrumbs = [
             />
           </div>
         </Container>
-      </Section>
-      {image && (
-        <Section size="none" class="hidden p-4 lg:p-6">
+        {image && (
+          <Section size="none" class="hidden p-4 lg:p-6">
+            <Container size="md">
+              <h2 class="sr-only">{srPortfolioImage}</h2>
+              <PortfolioFeaturedImage
+                src={image.src}
+                alt={image.alt || title}
+                caption={(image as any).caption || title}
+              />
+            </Container>
+          </Section>
+        )}
+        <Section size="sm" class="p-4 lg:p-6">
           <Container size="md">
-            <h2 class="sr-only">{srPortfolioImage}</h2>
-            <PortfolioFeaturedImage
-              src={image.src}
-              alt={image.alt || title}
-              caption={(image as any).caption || title}
+            <h2 class="sr-only">{srPortfolioMetrics}</h2>
+            <PortfolioCaseStudy
+              challenge={challenge}
+              solution={solution}
+              result={result}
+              allowMultiple={true}
             />
+            <PortfolioMetrics metrics={metrics} />
           </Container>
         </Section>
-      )}
-      <Section size="sm" class="p-4 lg:p-6">
-        <Container size="md">
-          <h2 class="sr-only">{srPortfolioMetrics}</h2>
-          <PortfolioCaseStudy
-            challenge={challenge}
-            solution={solution}
-            result={result}
-            allowMultiple={true}
-          />
-          <PortfolioMetrics metrics={metrics} />
-        </Container>
-      </Section>
-      <Section size="sm" class="p-4 lg:p-6">
-        <Container size="md">
-          <div id="article-content" class="prose-custom">
-            <Content components={components} />
-          </div>
-          <h2 class="sr-only">{srPortfolioContent}</h2>
-          {displayGallery.length > 0 && (
-            <div class="prose-custom mb-6">
-              <h2 class="sr-only">{galleryLabel}</h2>
-              <PortfolioGallery
-                images={displayGallery}
-                title={title}
-              />
+        <Section size="sm" class="p-4 lg:p-6">
+          <Container size="md">
+            <div id="article-content" class="prose-custom">
+              <Content components={components} />
             </div>
-          )}
-        </Container>
+            <h2 class="sr-only">{srPortfolioContent}</h2>
+            {displayGallery.length > 0 && (
+              <div class="prose-custom mb-6">
+                <h2 class="sr-only">{galleryLabel}</h2>
+                <PortfolioGallery
+                  images={displayGallery}
+                  title={title}
+                />
+              </div>
+            )}
+          </Container>
+        </Section>
       </Section>
     </div>
     <Section size="sm" class="relative z-10">
