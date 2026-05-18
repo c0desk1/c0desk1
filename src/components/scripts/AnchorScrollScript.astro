@@ -1,53 +1,34 @@
 <script is:inline>
   (() => {
     const root = document.getElementById("main-content");
-
     if (!root) return;
-
     root.addEventListener("click", (e) => {
       const target = e.target;
-
       if (!(target instanceof HTMLElement)) return;
-
       const link = target.closest(".anchor-link");
-
       if (link instanceof HTMLAnchorElement) {
         const href = link.getAttribute("href");
-
         if (href?.startsWith("#") && href.length > 1) {
           const section = document.querySelector(href);
-
           if (!(section instanceof HTMLElement)) return;
-
           e.preventDefault();
-
           section.scrollIntoView({
             behavior: "smooth",
             block: "start",
           });
-
           history.replaceState(null, "", href);
         }
       }
-
       if (window.innerWidth >= 768) return;
-
       const heading = target.closest(".heading-group.has-anchor");
-
       if (!(heading instanceof HTMLElement)) return;
-
       if (target.closest(".anchor-link")) return;
-
       document.querySelectorAll(".anchor-link-active").forEach((el) => {
         el.classList.remove("anchor-link-active");
       });
-
       const anchor = heading.querySelector(".anchor-link");
-
       if (!(anchor instanceof HTMLElement)) return;
-
       anchor.classList.add("anchor-link-active");
-
       setTimeout(() => {
         anchor.classList.remove("anchor-link-active");
       }, 2000);

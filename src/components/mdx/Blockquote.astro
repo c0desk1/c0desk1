@@ -6,19 +6,26 @@ import { cdnImage, isCdnUrl } from '@/lib/utils';
 
 interface Props {
   author?: string;
+  cite?: string;
+  citeLabel?: string;
 }
 
-const { author: authorSlug } = Astro.props;
+const { author: authorSlug, cite, citeLabel } = Astro.props;
+
+let isAuthorMode = false;
+let isPlainSource = false;
+let isCiteMode = !!cite;
 
 let finalAuthor = '';
 let finalRole = '';
 let finalAvatar = '';
 let optimizedAvatar = '';
 
-if (authorSlug) {
+if (!isCiteMode && authorSlug) {
   try {
     const authorEntry = await getEntry('authors', authorSlug);
     if (authorEntry) {
+      isAuthorMode = true;
       finalAuthor = authorEntry.data.name;
       finalRole = authorEntry.data.role ?? '';
       finalAvatar = authorEntry.data.avatar ?? '';
@@ -28,20 +35,27 @@ if (authorSlug) {
           ? cdnImage(finalAvatar, { w: 48, h: 48, q: 80 })
           : finalAvatar;
       }
+    } else {
+      isPlainSource = true;
+      finalAuthor = authorSlug;
     }
   } catch {
-    // fallback
+    isPlainSource = true;
+    finalAuthor = authorSlug;
   }
 }
 ---
 
-<blockquote class="quote flex flex-col items-stretch justify-start gap-6 lg:gap-8 flex-initial">
+<blockquote
+  class="quote flex flex-col items-stretch justify-start gap-6 lg:gap-8 flex-initial"
+  cite={cite}
+>
   <div class="quote-body text-heading-20 md:text-heading-24">
     <slot />
   </div>
 
-  {(finalAuthor || finalRole) && (
-    <div class="flex flex-col md:flex-row items-end md:items-center justify-end gap-2 md:gap-3 flex-initial">
+  {isAuthorMode && (finalAuthor || finalRole) && (
+    <div class="author-info flex flex-col md:flex-row items-end md:items-center justify-end gap-2 md:gap-3 flex-initial">
       <div class="w-6 h-6 shrink-0 overflow-hidden flex items-center justify-center">
         {finalAvatar && (
           <Image
@@ -55,18 +69,26 @@ if (authorSlug) {
           />
         )}
       </div>
-
-      {finalAuthor && (
-        <span class="quote-name text-label-14 md:text-label-16">
-          {finalAuthor}
-        </span>
-      )}
-
+      <span class="quote-name text-label-14 md:text-label-16">{finalAuthor}</span>
       {finalRole && (
-        <span class="quote-role text-copy-14 md:text-copy-16">
-          {finalRole}
-        </span>
+        <span class="quote-role text-copy-14 md:text-copy-16">{finalRole}</span>
       )}
+    </div>
+  )}
+
+  {isPlainSource && finalAuthor && (
+    <div class="quote-role text-copy-14 md:text-copy-16 self-end">
+      — {finalAuthor}
+    </div>
+  )}
+  {isCiteMode && cite && (
+    <div class="quote-role text-label-14 md:text-label-16 self-end">
+      <a href={cite} target="_blank" rel="noopener noreferrer" class="flex items-center">
+        {citeLabel || 'Source'}
+        <svg class="external-icon" aria-hidden="true" focusable="false" fill="currentColor" viewBox="0 0 24 24" width="14" height="14">
+          <path d="M16.0037 9.41421L7.39712 18.0208L5.98291 16.6066L14.5895 8H7.00373V6H18.0037V17H16.0037V9.41421Z"></path>
+        </svg>
+      </a>
     </div>
   )}
 </blockquote>

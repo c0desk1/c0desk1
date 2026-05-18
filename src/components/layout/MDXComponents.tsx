@@ -32,7 +32,6 @@ export const components: MDXComponents = {
   a: InlineLink,
   img: Image,
   hr: HR,
-  blockquote: Blockquote,
   Blockquote,
   table: Table,
   Details,

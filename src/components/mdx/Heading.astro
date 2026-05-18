@@ -25,11 +25,19 @@ const headingClasses: Record<string, string> = {
 const classes = headingClasses[`h${level}`] || "text-heading-20";
 ---
 
-<Tag id={id} class:list={["heading-group has-anchor", classes, className]}>
+<Tag
+  id={id}
+  class:list={[
+    "heading-group has-anchor",
+    "inline-flex items-baseline flex-wrap gap-x-1",
+    classes,
+    className
+  ]}
+>
   <span class="heading-text-content"><slot /></span>
   {id && (
-    <a href={`#${id}`} class="anchor-link" aria-label={anchorLabel}>
-      <Icon name="link" className="w-4 h-4" />
+    <a href={`#${id}`} class="anchor-link mt-auto mb-auto w-8 h-8 rounded-full" aria-label={anchorLabel}>
+      <Icon name="link" />
     </a>
   )}
 </Tag>
