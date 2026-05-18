@@ -1,4 +1,5 @@
 ---
+// src/components/blog/BlogOverview.astro
 interface Props {
   items?: string[];
 }
@@ -9,14 +10,11 @@ const { items } = Astro.props;
 {items && items.length > 0 && (
   <aside class="overview">
     <div class="overview-header">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-      </svg>
-      <span>Overview</span>
+      <h3 class="text-heading-20 lg:text-heading-24 font-semibold">Key Takeaways</h3>
     </div>
     <ul class="overview-list">
       {items.map((item) => (
-        <li>{item}</li>
+        <li class="text-copy-16 lg:text-copy-18">{item}</li>
       ))}
     </ul>
   </aside>
@@ -25,24 +23,17 @@ const { items } = Astro.props;
 <style>
   .overview {
     margin: 1.5rem 0;
-    padding: 1.25rem 1.5rem;
-    border-left: 4px solid var(--prose-accent);
-    background: var(--prose-bg-muted);
-    border-radius: 0.5rem;
   }
   .overview-header {
     display: flex;
-    align-items: center;
+    align-items: start;
     gap: 0.5rem;
-    margin-bottom: 0.75rem;
-    font-weight: 600;
-    font-size: 0.875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--prose-fg-subtle);
+    margin-bottom: 1rem;
+    color: var(--prose-fg);
   }
   .overview-list {
     list-style: none;
+    align-items: start;
     margin: 0;
     padding: 0;
     display: flex;
@@ -52,15 +43,12 @@ const { items } = Astro.props;
   .overview-list li {
     position: relative;
     padding-left: 1.5rem;
-    line-height: 1.5;
-    color: var(--prose-fg);
   }
   .overview-list li::before {
-    content: "✓";
+    content: "—";
     position: absolute;
     left: 0;
     top: 0;
-    color: var(--prose-accent);
-    font-weight: 700;
+    color: var(--prose-fg-subtle);
   }
 </style>
