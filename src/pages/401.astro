@@ -18,7 +18,7 @@ const seoData = {
   description: unauthorizedDesc,
   noIndex: true,
   type: "website" as const,
-  canonicalURL: new URL(Astro.url.pathname).toString(),
+  canonicalURL: new URL(Astro.url.pathname, siteURL).toString(),
 };
 ---
 
