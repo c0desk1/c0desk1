@@ -17,7 +17,6 @@ const escapeXml = (str: string) =>
 
 export async function GET(context: APIContext) {
   const siteData = siteConfig;
-
   const site = new URL(context.site ?? siteData.siteUrl);
 
   const allPosts = await getCollection("blog", ({ data }) => !data.draft);
@@ -43,7 +42,8 @@ export async function GET(context: APIContext) {
       const autoSlug = slugify(post.data.title);
       const url = new URL(`blog/${autoSlug}/`, site).toString();
 
-      let authorName: string = siteData.siteName;
+      let authorName = siteData.siteName;
+
       if (post.data.author) {
         try {
           const authorEntry = await getEntry(post.data.author);
@@ -54,16 +54,17 @@ export async function GET(context: APIContext) {
       }
 
       let categoryName = "Uncategorized";
+
       if (post.data.category) {
         try {
           const categoryEntry = await getEntry(post.data.category);
-          if (categoryEntry?.data?.name && typeof categoryEntry.data.name === "string") {
+          if (categoryEntry?.data?.name) {
             categoryName = categoryEntry.data.name;
           }
         } catch {}
       }
 
-      const tags = (post.data.tags ?? []).filter((tag): tag is string => Boolean(tag));
+      const tags = (post.data.tags ?? []).filter(Boolean);
 
       const imageUrl = post.data.image?.src
         ? new URL(post.data.image.src, site).toString()
@@ -89,13 +90,15 @@ export async function GET(context: APIContext) {
     description: siteData.defaultSeo?.description ?? "",
     site: site.toString(),
     items,
-    stylesheet: "./src/assets/styles/rss-style.xsl",
     customData: `
       <language>en-US</language>
-      <lastBuildDate>${sorted[0]?.data.pubDate.toUTCString() ?? new Date().toUTCString()}</lastBuildDate>
+      <lastBuildDate>${
+        sorted[0]?.data.pubDate.toUTCString() ?? new Date().toUTCString()
+      }</lastBuildDate>
       <generator>Astro Content Engine</generator>
       <atom:link href="${new URL("rss.xml", site).toString()}" rel="self" type="application/rss+xml" />
     `,
+
     xmlns: {
       dc: "http://purl.org/dc/elements/1.1/",
       atom: "http://www.w3.org/2005/Atom",
@@ -103,8 +106,13 @@ export async function GET(context: APIContext) {
     },
   });
 
-  rssResponse.headers.set("Cache-Control", "public, max-age=3600, s-maxage=3600");
-  rssResponse.headers.set("Content-Type", "application/xml");
+  rssResponse.headers.set(
+    "Cache-Control",
+    "public, max-age=3600, s-maxage=3600"
+  );
+
+  // optional tapi lebih “clean”
+  rssResponse.headers.set("Content-Type", "application/xml; charset=utf-8");
 
   return rssResponse;
 }
