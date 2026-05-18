@@ -9,13 +9,16 @@ import mdx from '@astrojs/mdx';
 import remarkCallout from './src/lib/mdx/remark-callout.ts';
 import remarkBlockquoteAuthor from './src/lib/mdx/remark-blockquote.ts';
 import remarkHeading from './src/lib/mdx/remark-heading.ts';
+import remarkDetails from './src/lib/mdx/remark-details.ts';
+import remarkSteps from './src/lib/mdx/remark-steps.ts';
+import remarkTimeline from './src/lib/mdx/remark-timeline.ts';
 
 // https://astro.build/config
 export default defineConfig({
   site: siteConfig.siteUrl,
   trailingSlash: "always",
-  output: 'server',
-  adapter: cloudflare(),
+  output: 'static',
+
   vite: {
     plugins: [tailwindcss()]
   },
@@ -27,7 +30,10 @@ export default defineConfig({
     remarkPlugins: [
       remarkHeading,
       remarkCallout, 
-      remarkBlockquoteAuthor
+      remarkBlockquoteAuthor,
+      remarkDetails,
+      remarkSteps,
+      remarkTimeline
     ],
     shikiConfig: {
       themes: {
