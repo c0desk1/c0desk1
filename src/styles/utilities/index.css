@@ -1,15 +1,6 @@
-/* =============================================================================
-   GEIST TYPOGRAPHY SYSTEM
-   Based on Vercel's Geist Design System
-   ============================================================================= */
+/* src/styles/utilities/index.css */
 
-/* -----------------------------------------------------------------------------
-   DISPLAY HEADINGS (Hero/Marketing)
-   - Extra tight tracking for large display text
-   - Line height ratio: ~1.1
-   ----------------------------------------------------------------------------- */
-
-@utility text-display-72 {
+@utility text-heading-72 {
   font-size: 72px;
   line-height: 80px;
   letter-spacing: -0.04em;
@@ -17,7 +8,7 @@
   font-feature-settings: "ss01" on, "ss02" on;
 }
 
-@utility text-display-64 {
+@utility text-heading-64 {
   font-size: 64px;
   line-height: 72px;
   letter-spacing: -0.04em;
@@ -25,7 +16,7 @@
   font-feature-settings: "ss01" on, "ss02" on;
 }
 
-@utility text-display-56 {
+@utility text-heading-56 {
   font-size: 56px;
   line-height: 64px;
   letter-spacing: -0.035em;
@@ -33,19 +24,13 @@
   font-feature-settings: "ss01" on, "ss02" on;
 }
 
-@utility text-display-48 {
+@utility text-heading-48 {
   font-size: 48px;
   line-height: 56px;
   letter-spacing: -0.03em;
   font-weight: 700;
   font-feature-settings: "ss01" on, "ss02" on;
 }
-
-/* -----------------------------------------------------------------------------
-   HEADINGS (Content/UI)
-   - Tight tracking for headings
-   - Line height ratio: ~1.2-1.25
-   ----------------------------------------------------------------------------- */
 
 @utility text-heading-40 {
   font-size: 40px;
@@ -96,66 +81,68 @@
   font-weight: 600;
 }
 
-/* -----------------------------------------------------------------------------
-   BODY/COPY (Reading Text)
-   - Comfortable tracking for readability
-   - Line height ratio: ~1.5-1.6 for optimal reading
-   ----------------------------------------------------------------------------- */
-
-@utility text-body-24 {
+@utility text-copy-24 {
   font-size: 24px;
   line-height: 36px;
   letter-spacing: -0.01em;
   font-weight: 400;
 }
 
-@utility text-body-20 {
+@utility text-copy-20 {
   font-size: 20px;
   line-height: 32px;
   letter-spacing: -0.01em;
   font-weight: 400;
 }
 
-@utility text-body-18 {
+@utility text-copy-18 {
   font-size: 18px;
   line-height: 28px;
   letter-spacing: -0.006em;
   font-weight: 400;
 }
 
-@utility text-body-16 {
+@utility text-copy-16 {
   font-size: 16px;
   line-height: 26px;
   letter-spacing: 0;
   font-weight: 400;
 }
 
-@utility text-body-14 {
+@utility text-copy-14 {
   font-size: 14px;
   line-height: 22px;
   letter-spacing: 0;
   font-weight: 400;
 }
 
-@utility text-body-13 {
+@utility text-copy-13 {
   font-size: 13px;
   line-height: 20px;
   letter-spacing: 0;
   font-weight: 400;
 }
 
-@utility text-body-12 {
+@utility text-copy-12 {
   font-size: 12px;
   line-height: 18px;
   letter-spacing: 0;
   font-weight: 400;
 }
 
-/* -----------------------------------------------------------------------------
-   LABELS (UI Elements)
-   - Medium weight for UI clarity
-   - Tighter line height for compact UI
-   ----------------------------------------------------------------------------- */
+@utility text-label-20 {
+  font-size: 19px;
+  line-height: 28px;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+}
+
+@utility text-label-18 {
+  font-size: 17px;
+  line-height: 26px;
+  letter-spacing: -0.01em;
+  font-weight: 400;
+}
 
 @utility text-label-16 {
   font-size: 16px;
@@ -192,12 +179,6 @@
   letter-spacing: 0.01em;
   font-weight: 500;
 }
-
-/* -----------------------------------------------------------------------------
-   OVERLINE/CAPTION (Small UI Text)
-   - Uppercase with positive tracking
-   - Used for categories, metadata, timestamps
-   ----------------------------------------------------------------------------- */
 
 @utility text-overline-12 {
   font-size: 12px;
@@ -237,12 +218,6 @@
   font-weight: 400;
 }
 
-/* -----------------------------------------------------------------------------
-   BUTTONS
-   - Medium weight for clickable elements
-   - Compact line height
-   ----------------------------------------------------------------------------- */
-
 @utility text-button-16 {
   font-size: 16px;
   line-height: 24px;
@@ -270,12 +245,6 @@
   letter-spacing: 0;
   font-weight: 500;
 }
-
-/* -----------------------------------------------------------------------------
-   MONOSPACE (Code/Technical)
-   - Using Geist Mono
-   - Slightly smaller to visually match sans text
-   ----------------------------------------------------------------------------- */
 
 @utility text-code-16 {
   font-size: 15px;
@@ -340,11 +309,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* -----------------------------------------------------------------------------
-   NUMERIC (Tables/Data)
-   - Tabular figures for alignment
-   ----------------------------------------------------------------------------- */
-
 @utility text-numeric-16 {
   font-size: 16px;
   line-height: 24px;
@@ -379,17 +343,16 @@
 
 /* -----------------------------------------------------------------------------
    STRONG/EMPHASIS RULES
-   - Consistent weight bumps across categories
    ----------------------------------------------------------------------------- */
 
 /* Body text: regular (400) -> semibold (600) */
-.text-body-24 strong,
-.text-body-20 strong,
-.text-body-18 strong,
-.text-body-16 strong,
-.text-body-14 strong,
-.text-body-13 strong,
-.text-body-12 strong {
+.text-copy-24 strong,
+.text-copy-20 strong,
+.text-copy-18 strong,
+.text-copy-16 strong,
+.text-copy-14 strong,
+.text-copy-13 strong,
+.text-copy-12 strong {
   font-weight: 600;
 }
 
@@ -427,9 +390,6 @@
   font-weight: 600;
 }
 
-/* -----------------------------------------------------------------------------
-   LINK STYLES (Optional utility classes)
-   ----------------------------------------------------------------------------- */
 
 @utility text-link {
   text-decoration: underline;
@@ -443,9 +403,6 @@
   transition: color 150ms ease;
 }
 
-/* -----------------------------------------------------------------------------
-   TEXT BALANCE & WRAP UTILITIES
-   ----------------------------------------------------------------------------- */
 
 @utility text-balance {
   text-wrap: balance;
@@ -454,19 +411,3 @@
 @utility text-pretty {
   text-wrap: pretty;
 }
-
-/* -----------------------------------------------------------------------------
-   RESPONSIVE MODIFIERS
-   Use with responsive prefixes: sm:text-heading-32, md:text-display-48, etc.
-   ----------------------------------------------------------------------------- */
-
-/* Mobile-first responsive typography scale example:
-   
-   <h1 class="text-heading-24 sm:text-heading-32 md:text-display-48 lg:text-display-64">
-     Responsive Heading
-   </h1>
-   
-   <p class="text-body-14 sm:text-body-16 lg:text-body-18">
-     Responsive body text
-   </p>
-*/
