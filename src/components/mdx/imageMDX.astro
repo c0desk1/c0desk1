@@ -1,6 +1,7 @@
 ---
 import { cdnImage, isCdnUrl } from '@/lib/utils';
 import { Image } from 'astro:assets';
+import Icon from '@/components/ui/Icon';
 
 interface Props {
   src: string;
@@ -35,19 +36,41 @@ const caption = title || alt;
   )}
 </figure>
 
-<!-- Lightbox overlay -->
 <div class="lightbox-overlay" id="lightbox-overlay">
-  <button class="lightbox-close" id="lightbox-close">✕</button>
+  <button class="lightbox-close" id="lightbox-close">
+    <Icon name="close" className="w-6 h-6" />
+  </button>
   <img src="" alt="" class="lightbox-image" id="lightbox-image" />
 </div>
 
 <style is:inline>
-  /* Efek zoom saat hover */
+  .full-width-figure {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 2rem 0;
+    max-width: 56rem;
+    padding: 0 1rem;
+  }
+  @media (min-width: 768px) {
+    .full-width-figure {
+      padding: 0 1.5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .full-width-figure {
+      padding: 0 2rem;
+    }
+  }
+  .full-width-figure .relative {
+    width: 100%;
+  }
+  
   .zoomable-image:hover {
     transform: scale(1.05);
   }
 
-  /* Lightbox */
   .lightbox-overlay {
     display: none;
     position: fixed;
@@ -90,7 +113,6 @@ const caption = title || alt;
 
     if (!overlay || !lightboxImg || !closeBtn) return;
 
-    // Buka lightbox saat klik gambar dengan class zoomable-image
     document.querySelectorAll('.zoomable-image').forEach(img => {
       img.addEventListener('click', () => {
         lightboxImg.src = (img as HTMLImageElement).src;
@@ -99,7 +121,6 @@ const caption = title || alt;
       });
     });
 
-    // Tutup lightbox
     const closeLightbox = () => {
       overlay.classList.remove('active');
       document.body.style.overflow = '';
@@ -110,7 +131,6 @@ const caption = title || alt;
       if (e.target === overlay) closeLightbox();
     });
 
-    // Tutup dengan ESC
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && overlay.classList.contains('active')) {
         closeLightbox();
@@ -118,7 +138,6 @@ const caption = title || alt;
     });
   }
 
-  // Jalankan saat halaman siap
   document.addEventListener('astro:page-load', initLightbox);
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initLightbox);
