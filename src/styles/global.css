@@ -7,26 +7,9 @@
 
 @custom-variant dark (&:where(.dark,.dark *));
 
-@font-face {
-  font-family: "Geist";
-  src: url("/fonts/Geist.woff2") format("woff2");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Geist Mono";
-  src: url("/fonts/GeistMono.woff2") format("woff2");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@theme {
-  --font-sans: "Geist";
-  --font-mono: "Geist Mono";
-  --font-main: var(--font-sans);
+@theme inline {
+  --font-mono: var(--font-GeistMono);
+  --font-sans: var(--font-GeistSans);
 
   --color-neutral-0: #fff;
   --color-neutral-50: #fafafa;
@@ -138,6 +121,7 @@
   }
 
   body {
+    font-family: var(--font-sans);
     min-height: 100svh;
     overflow-x: hidden;
     background: var(--bg);
@@ -148,6 +132,7 @@
   }
 
   main {
+    font-family: var(--font-sans);
     min-height: 100svh;
   }
 

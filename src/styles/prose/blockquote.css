@@ -6,9 +6,25 @@
   background: none;
   padding: 0;
 }
+
 .prose-custom .quote-body {
   color: var(--prose-fg);
 }
+
+.prose-custom .quote .quote-source {
+  display: block;
+  width: 100%;
+  margin-top: 0.75rem;
+  padding: 0;
+  font-style: italic;
+  color: var(--prose-fg-subtle);
+  text-align: right;
+  border: none !important;
+  background: none !important;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
 .prose-custom .quote-body p {
   margin: 0;
   color: inherit;

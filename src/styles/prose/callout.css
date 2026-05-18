@@ -5,7 +5,7 @@
   align-items: flex-start;
   gap: 0.75rem;
   margin: 1.5rem 0;
-  padding: 0.8rem 1rem;
+  padding: 1rem;
   border-radius: var(--prose-radius-lg);
   border: 1px solid;
   color: inherit;
@@ -37,7 +37,7 @@
   flex: 1;
   color: inherit;
 }
-
+.prose-custom .callout-content > *:last-child,
 .prose-custom .callout-content > *:first-child {
   margin-top: 0 !important;
   padding-top: 0 !important;
@@ -54,7 +54,6 @@
   color: inherit;
 }
 
-/* Margin untuk elemen dalam callout */
 .prose-custom .callout-content p,
 .prose-custom .callout-content ul,
 .prose-custom .callout-content ol {
@@ -171,7 +170,6 @@
 @media (min-width: 48rem) {
   .prose-custom .callout {
     margin: 2.5rem 0;
-    padding: 1rem 1.25rem;
   }
 
   .prose-custom .callout-icon svg {
