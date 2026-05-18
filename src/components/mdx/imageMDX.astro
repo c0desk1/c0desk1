@@ -82,6 +82,8 @@ const caption = title || alt;
     z-index: 999;
     align-items: center;
     justify-content: center;
+    /* ☝️ opsional: cegah scroll di belakang */
+    overscroll-behavior: contain;
   }
   .lightbox-overlay.active {
     display: flex;
@@ -91,6 +93,8 @@ const caption = title || alt;
     max-height: 90vh;
     object-fit: contain;
     border-radius: 0.5rem;
+    /* ✅ Agar pinch zoom hanya pada gambar */
+    touch-action: none;
   }
   .lightbox-close {
     position: absolute;
@@ -136,6 +140,16 @@ const caption = title || alt;
         closeLightbox();
       }
     });
+
+    // ✅ Cegah sentuhan di dalam overlay bocor ke halaman
+    overlay.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+    }, { passive: false });
+
+    // ✅ Izinkan pinch zoom pada gambar lightbox
+    lightboxImg.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+    }, { passive: false });
   }
 
   document.addEventListener('astro:page-load', initLightbox);
