@@ -108,30 +108,28 @@ const Breadcrumbs = [
   demoUrl={demoUrl}
   repoUrl={repoUrl}
   canonicalURL={canonicalURL}>
-  <div class="relative min-w-0 z-0 overflow-hidden">
-    <BG />
-  </div>
-  <article class="relative">
-    <div class="relative w-full">
-      <Section size="md">
-        <Container size="md">
-          <h2 class="sr-only">{srPortfolioHeader}</h2>
-          <div class="flex flex-col justify-center items-center p-4 lg:p-6">
+  <article>
+    <Section size="lg">
+      <Container size="md">
+        <Section size="md">
+          <div class="flex flex-col justify-center items-center">
             <Breadcrumb items={Breadcrumbs} />
-            <PortfolioHeader
-              title={title}
-              date={pubDate}
-              updatedDate={updatedDate}
-              featured={featured}
-              client={client}
-              role={role}
-              duration={duration}
-              techStack={techStack}
-              demoUrl={demoUrl}
-              repoUrl={repoUrl}
-            />
           </div>
-        </Container>
+        </Section>
+        <h2 class="sr-only">{srPortfolioHeader}</h2>            
+        <PortfolioHeader
+          title={title}
+          date={pubDate}
+          updatedDate={updatedDate}
+          featured={featured}
+          client={client}
+          role={role}
+          duration={duration}
+          techStack={techStack}
+          demoUrl={demoUrl}
+          repoUrl={repoUrl}
+        />
+      </Container>
         {image && (
           <Section size="sm" class="hidden p-4 lg:p-6">
             <Container size="md">
@@ -178,15 +176,7 @@ const Breadcrumbs = [
           </Container>
         </Section>
       </Section>
-    </div>
     <Section size="sm" class="relative z-10">
-      <div class="absolute top-0 inset-x-0 pointer-events-none">
-        <div class="mx-auto max-w-6xl px-1 md:px-6 lg:px-8">
-          <div class="relative w-full">
-            <Line type="h" class="border-(--border) w-full" />
-          </div>
-        </div>
-      </div>
       <Container size="lg" class="pt-8">
         <h2 class="sr-only">{srPortfolioRelated}</h2>
         <PortfolioRelated projects={relatedProjects} />
