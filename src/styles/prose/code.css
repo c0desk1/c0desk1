@@ -16,16 +16,15 @@
 .prose-custom h2 code,
 .prose-custom h3 code,
 .prose-custom summary code {
-  font-size: 0.9em; /* relative to heading, tetap manual */
+  font-size: 0.9em;
   background-color: var(--prose-surface-hover);
 }
 
-/* Pre block */
 .prose-custom pre {
   font-family: var(--prose-font-mono);
-  background-color: var(--prose-surface) !important;
+  background: var(--prose-surface) !important;
   border: 1px solid var(--prose-border);
-  border-radius: var(--prose-radius-md);
+  border-radius: var(--prose-radius-lg);
   padding: 1.25rem 1.5rem;
   overflow-x: auto;
   margin: 2rem 0;
@@ -55,14 +54,13 @@
   top: 0.75rem;
   right: 0.75rem;
   font-family: var(--prose-font-sans);
-  font-size: 11px; /* no utility for 11px, keep manual */
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.03em;
   text-transform: uppercase;
   padding: 0.25rem 0.625rem;
   border-radius: var(--prose-radius-sm);
   border: 1px solid var(--prose-border);
-  background: var(--prose-surface-hover);
   color: var(--prose-fg-subtle);
   cursor: pointer;
   transition: all var(--prose-transition);
@@ -72,18 +70,18 @@
   opacity: 1;
 }
 .prose-custom pre .copy-btn:hover {
-  background: var(--prose-accent);
-  color: #fff;
-  border-color: var(--prose-accent);
+  background: var(--prose-surface-hover);
+  color: var(--prose-fg);
+  border-color: var(--prose-border);
 }
 
 /* Code group */
 .prose-custom .code-group {
   margin: 2.5rem 0;
   overflow-x: auto;
-  border-radius: var(--prose-radius-md);
+  border-radius: var(--prose-radius-lg);
   border: 1px solid var(--prose-border);
-  background: var(--prose-surface);
+  background: var(--prose-surface) !important;
 }
 .prose-custom .code-group-wrapper {
   display: flex;
@@ -91,6 +89,7 @@
   justify-content: space-between;
   border-bottom: 1px solid var(--prose-border);
   padding-inline: 0.5rem;
+  background: var(--prose-surface) !important;
 }
 .prose-custom .code-group-header {
   display: flex;
@@ -105,7 +104,6 @@
   font-weight: 500;
   transition: color var(--prose-transition);
   cursor: pointer;
-  /* typography: Geist label */
   @apply text-label-14;
 }
 .prose-custom .code-group-title:hover {
@@ -142,6 +140,12 @@
   width: 1.125rem;
   height: 1.125rem;
 }
+.prose-custom .code-group-content {
+  margin: 0;
+  border-radius: 0;
+  border-style: none;
+  background: var(--prose-suface) !important;
+}
 .prose-custom .code-group pre {
   border: none;
   margin: 0;
@@ -164,12 +168,6 @@
 .prose-custom .code-group pre::-webkit-scrollbar-thumb {
   background: var(--prose-border);
   border-radius: 2px;
-}
-.prose-custom .code-group-content {
-  margin: 0;
-  border-radius: 0;
-  border-style: none;
-  background-color: transparent;
 }
 
 /* Mobile */
@@ -198,7 +196,7 @@
     height: 1rem;
   }
   .prose-custom .code-group-title {
-    @apply text-label-12; /* 12px untuk mobile */
+    @apply text-label-12;
   }
 }
 
@@ -211,15 +209,18 @@
     @apply text-label-14-mono;
   }
   .prose-custom .code-group-title {
-    @apply text-label-13; /* 13px untuk tablet/desktop */
+    @apply text-label-13;
   }
 }
 
-/* Dark mode */
 .dark .astro-code {
-  background-color: var(--shiki-dark-bg, var(--prose-surface)) !important;
+  background-color: var(--prose-surface) !important;
+  overflow-x: auto;
 }
 .dark .astro-code span {
   background-color: transparent !important;
   color: var(--shiki-dark) !important;
+  white-space: pre;
+  word-break: normal;
+  word-wrap: normal;
 }
