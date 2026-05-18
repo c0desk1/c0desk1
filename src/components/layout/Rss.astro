@@ -14,9 +14,9 @@ const siteURL = (Astro.site?.toString() ?? siteConfig.siteUrl).replace(/\/$/, ""
 const rssURL = `${siteURL}/rss.xml`;
 ---
 
-<div class:list={["border border-(--border) rounded-lg bg-(--bg) overflow-hidden", className]}>
+<div class:list={["border border-(--border) rounded-xl bg-(--bg) overflow-hidden", className]}>
   <div class="flex items-center gap-3 p-4 flex-wrap">
-    <div class="flex items-center justify-center w-8 h-8 rounded-full border border-(--border) text-(--fg-muted) shrink-0">
+    <div class="flex items-center justify-center p-1 rounded-full border border-(--border) text-(--fg-muted) shrink-0">
       <Icon name="rss" className="w-5 h-5" />
     </div>
     <div class="flex-1 min-w-0">
