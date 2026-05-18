@@ -17,7 +17,6 @@ import remarkTimeline from './src/lib/mdx/remark-timeline.ts';
 export default defineConfig({
   site: siteConfig.siteUrl,
   trailingSlash: "always",
-  output: 'static',
 
   vite: {
     plugins: [tailwindcss()]
