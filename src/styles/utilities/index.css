@@ -1,147 +1,178 @@
-/* src/styles/utilities/index.css */
+/* =============================================================================
+   GEIST TYPOGRAPHY SYSTEM
+   Based on Vercel's Geist Design System
+   ============================================================================= */
 
-@utility text-heading-72 {
-  font-size: 71px;
-  line-height: 76px;
+/* -----------------------------------------------------------------------------
+   DISPLAY HEADINGS (Hero/Marketing)
+   - Extra tight tracking for large display text
+   - Line height ratio: ~1.1
+   ----------------------------------------------------------------------------- */
+
+@utility text-display-72 {
+  font-size: 72px;
+  line-height: 80px;
   letter-spacing: -0.04em;
-  font-weight: 600;
+  font-weight: 700;
+  font-feature-settings: "ss01" on, "ss02" on;
 }
 
-@utility text-heading-64 {
-  font-size: 63px;
-  line-height: 68px;
+@utility text-display-64 {
+  font-size: 64px;
+  line-height: 72px;
   letter-spacing: -0.04em;
-  font-weight: 600;
+  font-weight: 700;
+  font-feature-settings: "ss01" on, "ss02" on;
 }
 
-@utility text-heading-56 {
-  font-size: 55px;
-  line-height: 60px;
-  letter-spacing: -0.03em;
-  font-weight: 600;
+@utility text-display-56 {
+  font-size: 56px;
+  line-height: 64px;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+  font-feature-settings: "ss01" on, "ss02" on;
 }
 
-@utility text-heading-48 {
-  font-size: 47px;
-  line-height: 52px;
+@utility text-display-48 {
+  font-size: 48px;
+  line-height: 56px;
   letter-spacing: -0.03em;
-  font-weight: 600;
+  font-weight: 700;
+  font-feature-settings: "ss01" on, "ss02" on;
 }
+
+/* -----------------------------------------------------------------------------
+   HEADINGS (Content/UI)
+   - Tight tracking for headings
+   - Line height ratio: ~1.2-1.25
+   ----------------------------------------------------------------------------- */
 
 @utility text-heading-40 {
-  font-size: 39px;
-  line-height: 44px;
-  letter-spacing: -0.03em;
+  font-size: 40px;
+  line-height: 48px;
+  letter-spacing: -0.025em;
   font-weight: 600;
 }
 
 @utility text-heading-32 {
-  font-size: 31px;
-  line-height: 36px;
+  font-size: 32px;
+  line-height: 40px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
 
 @utility text-heading-24 {
-  font-size: 23px;
-  line-height: 28px;
-  letter-spacing: -0.02em;
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: -0.015em;
   font-weight: 600;
 }
 
 @utility text-heading-20 {
-  font-size: 19px;
-  line-height: 24px;
-  letter-spacing: -0.02em;
-  font-weight: 500;
+  font-size: 20px;
+  line-height: 28px;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+
+@utility text-heading-18 {
+  font-size: 18px;
+  line-height: 26px;
+  letter-spacing: -0.01em;
+  font-weight: 600;
 }
 
 @utility text-heading-16 {
-  font-size: 15px;
-  line-height: 20px;
+  font-size: 16px;
+  line-height: 24px;
   letter-spacing: -0.01em;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 @utility text-heading-14 {
-  font-size: 13px;
-  line-height: 18px;
-  letter-spacing: -0.01em;
-  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -0.006em;
+  font-weight: 600;
 }
 
-@utility text-copy-24 {
-  font-size: 23px;
+/* -----------------------------------------------------------------------------
+   BODY/COPY (Reading Text)
+   - Comfortable tracking for readability
+   - Line height ratio: ~1.5-1.6 for optimal reading
+   ----------------------------------------------------------------------------- */
+
+@utility text-body-24 {
+  font-size: 24px;
+  line-height: 36px;
+  letter-spacing: -0.01em;
+  font-weight: 400;
+}
+
+@utility text-body-20 {
+  font-size: 20px;
   line-height: 32px;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
   font-weight: 400;
 }
 
-@utility text-copy-20 {
-  font-size: 19px;
+@utility text-body-18 {
+  font-size: 18px;
   line-height: 28px;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.006em;
   font-weight: 400;
 }
 
-@utility text-copy-18 {
-  font-size: 17px;
+@utility text-body-16 {
+  font-size: 16px;
   line-height: 26px;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   font-weight: 400;
 }
 
-@utility text-copy-16 {
-  font-size: 15px;
-  line-height: 24px;
-  letter-spacing: -0.01em;
+@utility text-body-14 {
+  font-size: 14px;
+  line-height: 22px;
+  letter-spacing: 0;
   font-weight: 400;
 }
 
-@utility text-copy-14 {
+@utility text-body-13 {
   font-size: 13px;
   line-height: 20px;
   letter-spacing: 0;
   font-weight: 400;
 }
 
-@utility text-copy-13 {
+@utility text-body-12 {
   font-size: 12px;
   line-height: 18px;
   letter-spacing: 0;
   font-weight: 400;
 }
 
-@utility text-label-20 {
-  font-size: 19px;
-  line-height: 28px;
-  letter-spacing: -0.02em;
-  font-weight: 400;
-}
-
-@utility text-label-18 {
-  font-size: 17px;
-  line-height: 26px;
-  letter-spacing: -0.01em;
-  font-weight: 400;
-}
+/* -----------------------------------------------------------------------------
+   LABELS (UI Elements)
+   - Medium weight for UI clarity
+   - Tighter line height for compact UI
+   ----------------------------------------------------------------------------- */
 
 @utility text-label-16 {
-  font-size: 15px;
+  font-size: 16px;
   line-height: 24px;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   font-weight: 500;
 }
 
 @utility text-label-14 {
-  font-size: 13px;
+  font-size: 14px;
   line-height: 20px;
   letter-spacing: 0;
   font-weight: 500;
 }
 
 @utility text-label-13 {
-  font-size: 12px;
+  font-size: 13px;
   line-height: 18px;
   letter-spacing: 0;
   font-weight: 500;
@@ -149,112 +180,293 @@
 }
 
 @utility text-label-12 {
-  font-size: 11px;
+  font-size: 12px;
   line-height: 16px;
-  letter-spacing: 0.02em;
+  letter-spacing: 0;
+  font-weight: 500;
+}
+
+@utility text-label-11 {
+  font-size: 11px;
+  line-height: 14px;
+  letter-spacing: 0.01em;
+  font-weight: 500;
+}
+
+/* -----------------------------------------------------------------------------
+   OVERLINE/CAPTION (Small UI Text)
+   - Uppercase with positive tracking
+   - Used for categories, metadata, timestamps
+   ----------------------------------------------------------------------------- */
+
+@utility text-overline-12 {
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.06em;
   font-weight: 500;
   text-transform: uppercase;
 }
 
+@utility text-overline-11 {
+  font-size: 11px;
+  line-height: 14px;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+@utility text-overline-10 {
+  font-size: 10px;
+  line-height: 12px;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+@utility text-caption-12 {
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+
+@utility text-caption-11 {
+  font-size: 11px;
+  line-height: 14px;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+
+/* -----------------------------------------------------------------------------
+   BUTTONS
+   - Medium weight for clickable elements
+   - Compact line height
+   ----------------------------------------------------------------------------- */
+
 @utility text-button-16 {
-  font-size: 15px;
-  line-height: 20px;
+  font-size: 16px;
+  line-height: 24px;
   letter-spacing: -0.01em;
   font-weight: 500;
 }
 
 @utility text-button-14 {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -0.006em;
+  font-weight: 500;
+}
+
+@utility text-button-13 {
   font-size: 13px;
   line-height: 18px;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   font-weight: 500;
 }
 
 @utility text-button-12 {
-  font-size: 11px;
+  font-size: 12px;
   line-height: 16px;
   letter-spacing: 0;
   font-weight: 500;
 }
 
-@utility text-label-14-mono {
+/* -----------------------------------------------------------------------------
+   MONOSPACE (Code/Technical)
+   - Using Geist Mono
+   - Slightly smaller to visually match sans text
+   ----------------------------------------------------------------------------- */
+
+@utility text-code-16 {
+  font-size: 15px;
+  line-height: 24px;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-feature-settings: "ss01" on, "ss02" on, "liga" on;
+}
+
+@utility text-code-14 {
+  font-size: 13px;
+  line-height: 20px;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-feature-settings: "ss01" on, "ss02" on, "liga" on;
+}
+
+@utility text-code-13 {
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-feature-settings: "ss01" on, "ss02" on, "liga" on;
+}
+
+@utility text-code-12 {
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-feature-settings: "ss01" on, "ss02" on, "liga" on;
+}
+
+@utility text-label-mono-14 {
   font-size: 13px;
   line-height: 20px;
   letter-spacing: 0;
   font-weight: 500;
-  font-family:
-    var(--font-mono),
-    ui-monospace,
-    SFMono-Regular,
-    Menlo,
-    Monaco,
-    Consolas,
-    monospace;
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-variant-numeric: tabular-nums;
 }
 
-@utility text-label-13-mono {
+@utility text-label-mono-13 {
   font-size: 12px;
   line-height: 18px;
   letter-spacing: 0;
   font-weight: 500;
-  font-family:
-    var(--font-mono),
-    ui-monospace,
-    SFMono-Regular,
-    Menlo,
-    Monaco,
-    Consolas,
-    monospace;
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-variant-numeric: tabular-nums;
 }
 
-@utility text-label-12-mono {
+@utility text-label-mono-12 {
   font-size: 11px;
   line-height: 16px;
   letter-spacing: 0;
   font-weight: 500;
-  font-family:
-    var(--font-mono),
-    ui-monospace,
-    SFMono-Regular,
-    Menlo,
-    Monaco,
-    Consolas,
-    monospace;
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-variant-numeric: tabular-nums;
 }
 
-@utility text-copy-13-mono {
-  font-size: 12px;
+/* -----------------------------------------------------------------------------
+   NUMERIC (Tables/Data)
+   - Tabular figures for alignment
+   ----------------------------------------------------------------------------- */
+
+@utility text-numeric-16 {
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+@utility text-numeric-14 {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+@utility text-numeric-13 {
+  font-size: 13px;
   line-height: 18px;
   letter-spacing: 0;
-  font-weight: 400;
-  font-family:
-    var(--font-mono),
-    ui-monospace,
-    SFMono-Regular,
-    Menlo,
-    Monaco,
-    Consolas,
-    monospace;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
 }
 
-.text-copy-24 strong,
-.text-copy-20 strong,
-.text-copy-18 strong,
-.text-copy-16 strong,
-.text-copy-14 strong {
+@utility text-numeric-12 {
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+/* -----------------------------------------------------------------------------
+   STRONG/EMPHASIS RULES
+   - Consistent weight bumps across categories
+   ----------------------------------------------------------------------------- */
+
+/* Body text: regular (400) -> semibold (600) */
+.text-body-24 strong,
+.text-body-20 strong,
+.text-body-18 strong,
+.text-body-16 strong,
+.text-body-14 strong,
+.text-body-13 strong,
+.text-body-12 strong {
   font-weight: 600;
 }
 
+/* Labels: medium (500) -> semibold (600) */
 .text-label-16 strong,
 .text-label-14 strong,
 .text-label-13 strong,
-.text-label-12 strong {
+.text-label-12 strong,
+.text-label-11 strong {
   font-weight: 600;
 }
 
+/* Captions: regular (400) -> medium (500) */
+.text-caption-12 strong,
+.text-caption-11 strong {
+  font-weight: 500;
+}
+
+/* Headings: semibold (600) -> bold (700) for extra emphasis */
+.text-heading-40 strong,
 .text-heading-32 strong,
 .text-heading-24 strong,
 .text-heading-20 strong,
-.text-heading-16 strong {
-  font-weight: 400;
+.text-heading-18 strong,
+.text-heading-16 strong,
+.text-heading-14 strong {
+  font-weight: 700;
 }
+
+/* Code/Mono text */
+.text-code-16 strong,
+.text-code-14 strong,
+.text-code-13 strong,
+.text-code-12 strong {
+  font-weight: 600;
+}
+
+/* -----------------------------------------------------------------------------
+   LINK STYLES (Optional utility classes)
+   ----------------------------------------------------------------------------- */
+
+@utility text-link {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color 150ms ease;
+}
+
+@utility text-link-subtle {
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+/* -----------------------------------------------------------------------------
+   TEXT BALANCE & WRAP UTILITIES
+   ----------------------------------------------------------------------------- */
+
+@utility text-balance {
+  text-wrap: balance;
+}
+
+@utility text-pretty {
+  text-wrap: pretty;
+}
+
+/* -----------------------------------------------------------------------------
+   RESPONSIVE MODIFIERS
+   Use with responsive prefixes: sm:text-heading-32, md:text-display-48, etc.
+   ----------------------------------------------------------------------------- */
+
+/* Mobile-first responsive typography scale example:
+   
+   <h1 class="text-heading-24 sm:text-heading-32 md:text-display-48 lg:text-display-64">
+     Responsive Heading
+   </h1>
+   
+   <p class="text-body-14 sm:text-body-16 lg:text-body-18">
+     Responsive body text
+   </p>
+*/
