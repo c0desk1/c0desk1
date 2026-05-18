@@ -46,11 +46,9 @@ const formattedUpdate = updatedDate ? formatDate(updatedDate) : null;
 
 <header class="ph-root">
   <div class="ph-top">
-    <h1 class="ph-title">{title}</h1>
-
-    <div class="ph-meta">
+    <h1 class="text-heading-24 md:text-heading-32 lg:text-heading-56 font-semibold justify-center">{title}</h1>
+    <div class="flex items-center text-copy-14 flex-wrap">
       <time datetime={date.toISOString()}>{formattedDate}</time>
-
       {formattedUpdate && (
         <>
           <span class="ph-dot" aria-hidden="true"></span>
@@ -125,10 +123,8 @@ const formattedUpdate = updatedDate ? formatDate(updatedDate) : null;
   /* ─── ROOT ────────────────────────────────────────────────────── */
   .ph-root {
     width: 100%;
-    max-width: 48rem;
-    margin-inline: auto;
-    padding-top: 5rem;
-    padding-bottom: 4rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
     text-align: center;
     display: flex;
     flex-direction: column;
