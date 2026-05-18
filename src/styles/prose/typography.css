@@ -60,7 +60,7 @@
 .prose-custom strong{
   font-weight:600;
   color:var(--prose-fg);
-  letter-spacing:-.015em
+  letter-spacing:-0.015em
 }
 
 .prose-custom em{
@@ -82,19 +82,19 @@
   font-weight:500;
   vertical-align:baseline;
   position:relative;
-  transition:color .15s ease;
+  transition:color 0.15s ease;
   font-feature-settings:"sups" 1
 }
 
 .prose-custom sup{
-  top:-.35em;
-  margin-left:.04em;
-  margin-right:.04em;
+  top:-0.35em;
+  margin-left:0.04em;
+  margin-right:0.04em;
   color:var(--prose-fg-subtle)
 }
 
 .prose-custom sub{
-  bottom:-.2em;
+  bottom:-0.2em;
   color:var(--prose-accent)
 }
 
@@ -120,7 +120,6 @@
 }
 
 .prose-custom small{
-  @apply text-copy-14;
   line-height:1.5;
   color:var(--prose-fg-subtle);
   display:inline-block;
@@ -209,6 +208,16 @@
     margin-top:1rem;
     margin-bottom:.5rem;
     color:var(--prose-fg-dim)
+  }
+  
+  .prose-custom .anchor-link{
+    width: 1rem;
+    height: 1rem;
+  }
+  
+  .prose-custom .anchor-link svg{
+    width:1rem;
+    height:1rem;
   }
 
   .prose-custom .anchor-link.anchor-link-active,
