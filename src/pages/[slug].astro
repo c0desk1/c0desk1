@@ -62,13 +62,13 @@ const formattedLastUpdated = page.data.lastUpdated
   type="website"
   canonicalURL={canonicalURL}>
   <Section size="xl">
-    <div class="relative grid grid-cols-1 border border-(--border) max-w-5xl mx-auto">
+    <div class="relative grid grid-cols-1 border border-(--border) max-w-6xl mx-auto">
       <Section size="sm">
         <Container size="md">
-          <div class="flex items-center justify-center p-4 lg:p-6">
+          <div class="flex items-center justify-center">
             <Breadcrumb items={Breadcrumbs} />
           </div>
-          <div class="mt-8 items-center text-center justify-center p-4 lg:p-6">
+          <div class="mt-8 items-center text-center justify-center">
             <div class="prose-custom">
               <h1 class="text-heading-24 md:text-heading-32 lg:text-heading-56 justify-center">{page.data.title}</h1>
             </div>
@@ -83,7 +83,7 @@ const formattedLastUpdated = page.data.lastUpdated
       </Section>
       <Section size="sm">
         <Container size="md">
-          <div id="article-content" class="prose-custom p-4 lg:p-6">
+          <div id="article-content" class="prose-custom">
             <Content components={components} />
           </div>
         </Container>

@@ -2,12 +2,7 @@
 @reference '@/styles/utilities/index.css';
 
 .prose-custom .table-wrapper {
-  overflow-x: auto;
-  overflow-y: hidden;
   margin: 2rem 0;
-  border: 1px solid var(--prose-border);
-  border-radius: var(--prose-radius-md);
-  background: var(--prose-surface);
 }
 
 .prose-custom .table-wrapper table {
@@ -18,10 +13,10 @@
 
 .prose-custom thead th {
   @apply text-label-12;
-  font-weight: 600; /* override Geist weight 500 agar lebih tebal */
+  font-weight: 600;
   padding: 0.75rem 1rem;
-  color: var(--prose-fg-subtle);
-  background: var(--prose-surface-hover);
+  color: var(--prose-fg);
+  background: var(--prose-surface);
   border-bottom: 1px solid var(--prose-border);
   text-align: left;
   white-space: nowrap;
@@ -42,7 +37,7 @@
 
 .prose-custom tbody td small {
   @apply text-label-12;
-  font-weight: 400; /* override weight 500 menjadi normal */
+  font-weight: 400;
   color: var(--prose-fg-subtle);
 }
 

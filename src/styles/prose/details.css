@@ -11,13 +11,11 @@
 }
 
 .prose-custom .details:hover {
-  border-color: var(--prose-surface-hover);
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
+ 
 }
 
 .prose-custom .details-summary {
-  @apply text-copy-16;
-  font-weight: 600; /* Geist copy weight 400, but summary needs 600 */
   display: flex;
   align-items: center;
   gap: 0.625rem;
@@ -25,6 +23,10 @@
   user-select: none;
   list-style: none;
   padding: 12px 14px;
+}
+
+.prose-custom .details-summary:hover {
+  background-color: var(--prose-surface-hover);
 }
 
 .prose-custom .details-summary::-webkit-details-marker {
@@ -56,6 +58,7 @@
 .prose-custom .details-content {
   padding: 0 14px 12px;
   border-top: 1px solid var(--prose-border);
+  color: var(--prose-fg-muted);
 }
 
 .prose-custom .details-content > *:first-child {
@@ -67,20 +70,16 @@
   margin-bottom: 0 !important;
 }
 
-/* Mobile: konten menggunakan text-copy-14 */
 @media (max-width: 767px) {
   .prose-custom .details {
     margin: 1.25rem 0;
   }
 
   .prose-custom .details-summary {
-    @apply text-copy-16;
-    font-weight: 600;
     padding: 10px 12px;
   }
 
   .prose-custom .details-content {
-    @apply text-copy-14;
     padding: 0 12px 10px;
   }
 
@@ -89,15 +88,12 @@
   }
 }
 
-/* Desktop: tidak ada override khusus untuk konten, biarkan mengikuti teks default */
 @media (min-width: 768px) {
   .prose-custom .details {
     margin: 1.5rem 0;
   }
 
   .prose-custom .details-summary {
-    @apply text-copy-16;
-    font-weight: 600;
     padding: 12px 14px;
   }
 }

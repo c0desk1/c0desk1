@@ -4,70 +4,60 @@
   font-size: 72px;
   line-height: 76px;
   letter-spacing: -0.01em;
-  word-spacing: 0.02em;
   font-weight: 600;
 }
 @utility text-heading-64 {
   font-size: 64px;
   line-height: 68px;
   letter-spacing: -0.01em;
-  word-spacing: 0.02em;
   font-weight: 600;
 }
 @utility text-heading-56 {
   font-size: 56px;
   line-height: 60px;
   letter-spacing: -0.005em;
-  word-spacing: 0.02em;
   font-weight: 600;
 }
 @utility text-heading-48 {
   font-size: 48px;
   line-height: 52px;
   letter-spacing: -0.005em;
-  word-spacing: 0.02em;
   font-weight: 600;
 }
 @utility text-heading-40 {
   font-size: 40px;
   line-height: 44px;
   letter-spacing: 0;
-  word-spacing: 0.025em;
   font-weight: 600;
 }
 @utility text-heading-32 {
   font-size: 32px;
   line-height: 36px;
   letter-spacing: 0;
-  word-spacing: 0.025em;
   font-weight: 600;
 }
 @utility text-heading-24 {
   font-size: 24px;
   line-height: 28px;
   letter-spacing: 0.01em;
-  word-spacing: 0.03em;
   font-weight: 600;
 }
 @utility text-heading-20 {
   font-size: 20px;
   line-height: 24px;
   letter-spacing: 0.01em;
-  word-spacing: 0.03em;
   font-weight: 500;
 }
 @utility text-heading-16 {
   font-size: 16px;
   line-height: 20px;
   letter-spacing: 0.015em;
-  word-spacing: 0.035em;
   font-weight: 500;
 }
 @utility text-heading-14 {
   font-size: 14px;
   line-height: 18px;
   letter-spacing: 0.02em;
-  word-spacing: 0.04em;
   font-weight: 500;
 }
 
@@ -75,42 +65,36 @@
   font-size: 24px;
   line-height: 32px;
   letter-spacing: 0.005em;
-  word-spacing: 0.025em;
   font-weight: 400;
 }
 @utility text-copy-20 {
   font-size: 20px;
   line-height: 28px;
   letter-spacing: 0.01em;
-  word-spacing: 0.03em;
   font-weight: 400;
 }
 @utility text-copy-18 {
   font-size: 18px;
   line-height: 26px;
   letter-spacing: 0.01em;
-  word-spacing: 0.03em;
   font-weight: 400;
 }
 @utility text-copy-16 {
   font-size: 16px;
   line-height: 24px;
   letter-spacing: 0.01em;
-  word-spacing: 0.03em;
   font-weight: 400;
 }
 @utility text-copy-14 {
   font-size: 14px;
   line-height: 20px;
   letter-spacing: 0.015em;
-  word-spacing: 0.035em;
   font-weight: 400;
 }
 @utility text-copy-13 {
   font-size: 13px;
   line-height: 18px;
   letter-spacing: 0.02em;
-  word-spacing: 0.04em;
   font-weight: 400;
 }
 
@@ -118,35 +102,30 @@
   font-size: 20px;
   line-height: 28px;
   letter-spacing: 0.005em;
-  word-spacing: 0.025em;
   font-weight: 400;
 }
 @utility text-label-18 {
   font-size: 18px;
   line-height: 26px;
   letter-spacing: 0.01em;
-  word-spacing: 0.03em;
   font-weight: 400;
 }
 @utility text-label-16 {
   font-size: 16px;
   line-height: 24px;
   letter-spacing: 0.01em;
-  word-spacing: 0.03em;
   font-weight: 500;
 }
 @utility text-label-14 {
   font-size: 14px;
   line-height: 20px;
   letter-spacing: 0.015em;
-  word-spacing: 0.035em;
   font-weight: 500;
 }
 @utility text-label-13 {
   font-size: 13px;
   line-height: 18px;
   letter-spacing: 0.02em;
-  word-spacing: 0.04em;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
@@ -154,7 +133,6 @@
   font-size: 12px;
   line-height: 16px;
   letter-spacing: 0.03em;
-  word-spacing: 0.05em;
   font-weight: 500;
   text-transform: uppercase;
 }
@@ -163,21 +141,18 @@
   font-size: 16px;
   line-height: 20px;
   letter-spacing: 0.01em;
-  word-spacing: 0.03em;
   font-weight: 500;
 }
 @utility text-button-14 {
   font-size: 14px;
   line-height: 18px;
   letter-spacing: 0.015em;
-  word-spacing: 0.035em;
   font-weight: 500;
 }
 @utility text-button-12 {
   font-size: 12px;
   line-height: 16px;
   letter-spacing: 0.02em;
-  word-spacing: 0.04em;
   font-weight: 500;
 }
 
@@ -185,7 +160,6 @@
   font-size: 14px;
   line-height: 20px;
   letter-spacing: 0.015em;
-  word-spacing: 0.035em;
   font-weight: 500;
   font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
@@ -193,7 +167,6 @@
   font-size: 13px;
   line-height: 18px;
   letter-spacing: 0.02em;
-  word-spacing: 0.04em;
   font-weight: 500;
   font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
@@ -201,7 +174,6 @@
   font-size: 12px;
   line-height: 16px;
   letter-spacing: 0.03em;
-  word-spacing: 0.05em;
   font-weight: 500;
   font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
@@ -209,7 +181,6 @@
   font-size: 13px;
   line-height: 18px;
   letter-spacing: 0.02em;
-  word-spacing: 0.04em;
   font-weight: 400;
   font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
