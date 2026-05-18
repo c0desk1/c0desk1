@@ -18,7 +18,7 @@ import PostNavigation from '@/components/blog/PostNavigation.astro';
 import BackToTop from "@/components/ui/BackToTop.astro";
 import BG from "@/components/ui/BG.astro";
 import Line from '@/components/ui/Line.astro';
-import Rss from '@/components/layout/Rss.astro';
+import RssFeed from '@/components/layout/Rss.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -135,6 +135,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
               authorRole={authorEntry?.data.role}
               authorSlug={authorEntry?.id}
               image={image}
+              overviewItems={post.data.overview}
             />
           </Section>
           <Section size="sm">
@@ -145,7 +146,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
             </div>
 	        </Section>
 	      </article>
-        <Rss />
+        <RssFeed />
 	    </Container>
 	  </Section>
     <Section size="none" class="relative z-10">
