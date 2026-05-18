@@ -3,7 +3,7 @@
 
 /* KBD – pakai Geist mono, line-height/letter-spacing sudah diatur utility */
 .prose-custom kbd {
-  @apply text-label-14-mono;
+  @apply text-label-mono-14;
   background-color: var(--prose-surface);
   color: var(--prose-fg);
   padding: 0.15em 0.45em;
