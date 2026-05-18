@@ -38,7 +38,7 @@ interface Props {
   demoUrl?: string;
   repoUrl?: string;
   siteData?: any;
-  basePath?: 'blog' | 'portfolio' | 'legal' | 'blog/category' | '';
+  basePath?: 'blog' | 'portfolio' | 'legal' | 'blog/category' | 'author' | '';
 }
 
 const {
@@ -60,12 +60,10 @@ const {
   basePath = '',
 } = Astro.props;
 
-// ─── Helpers ────────────────────────────────────
+// ─── Helpers
 
 const rawSiteURL = Astro.site?.toString() ?? siteConfig.siteUrl;
 const siteURL = rawSiteURL.endsWith("/") ? rawSiteURL : `${rawSiteURL}/`;
-
-// Resolve SEO data
 const seoResolved = {
   title:
     seo?.title ??
@@ -97,19 +95,21 @@ const ogImageURL: string = !rawImage
   ? rawImage
   : new URL(rawImage, siteURL).toString();
 
-const authorConfig = siteConfig.author
+const authorConfig = siteConfig.author;
 const activeAuthor = {
   name: author?.name ?? authorConfig.name,
-  role: author?.role ?? authorConfig.title,
+  role: author?.role ?? authorConfig.role,
   avatar: author?.avatar ?? authorConfig.avatar,
   bio: author?.bio ?? authorConfig.bio,
   slug: author?.slug ?? authorConfig.slug,
 };
 
 const isHomepage = Astro.url.pathname === "/";
-
-const datePublished = publishedTime?.toISOString();
-const dateModified = modifiedTime?.toISOString() ?? datePublished;
+const isTimedContent = type === "article" || type === "creativeWork";
+const datePublished = isTimedContent ? publishedTime?.toISOString() : undefined;
+const dateModified = isTimedContent
+  ? (modifiedTime?.toISOString() ?? datePublished)
+  : undefined;
 
 const twitterHandle = "@c0desk1";
 
@@ -189,7 +189,7 @@ if (!isHomepage) {
     { "@type": "ListItem", position: 1, name: "Home", item: siteURL },
   ];
 
-  if (basePath === "blog") {
+  if (basePath === "blog" || basePath === "blog/category") {
     breadcrumbItems.push({
       "@type": "ListItem",
       position: breadcrumbItems.length + 1,
@@ -198,7 +198,7 @@ if (!isHomepage) {
     });
   }
 
-  if (type === "creativeWork" && basePath === "portfolio") {
+  if (basePath === "portfolio") {
     breadcrumbItems.push({
       "@type": "ListItem",
       position: breadcrumbItems.length + 1,
@@ -207,12 +207,21 @@ if (!isHomepage) {
     });
   }
 
-  if (category?.name) {
+  if (basePath === "author") {
+    breadcrumbItems.push({
+      "@type": "ListItem",
+      position: breadcrumbItems.length + 1,
+      name: "Authors",
+      item: new URL("author/", siteURL).toString(),
+    });
+  }
+
+  if (basePath === "blog" && category?.name) {
     breadcrumbItems.push({
       "@type": "ListItem",
       position: breadcrumbItems.length + 1,
       name: category.name,
-      item: new URL(`category/${category.slug}/`, siteURL).toString(),
+      item: new URL(`blog/category/${category.slug}/`, siteURL).toString(),
     });
   }
 
@@ -302,6 +311,7 @@ if (type === "creativeWork") {
 <link rel="dns-prefetch" href="https://an.yandex.ru" />
 
 <meta name="generator" content={Astro.generator} />
+
 <title>{formattedTitle}</title>
 <meta name="description" content={seoResolved.description} />
 <meta name="author" content={activeAuthor.name} />
@@ -316,10 +326,11 @@ if (type === "creativeWork") {
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
 <link rel="sitemap" href="/sitemap-index.xml" />
+<link rel="alternate" type="application/rss+xml" title={formattedTitle} href={new URL("rss.xml", Astro.site)}/>
 <link rel="manifest" href="/site.webmanifest" />
 <link rel="canonical" href={seoResolved.canonical.toString()} />
 
-<meta name="robots" content={seoResolved.noIndex? "noindex,nofollow" : "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"}/>
+<meta name="robots" content={seoResolved.noIndex ? "noindex,nofollow" : "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"} />
 
 <meta property="og:type" content={type === "article" ? "article" : "website"} />
 <meta property="og:title" content={formattedTitle} />
@@ -328,7 +339,6 @@ if (type === "creativeWork") {
 <meta property="og:site_name" content={siteConfig.siteName} />
 <meta property="og:image" content={ogImageURL} />
 <meta property="og:image:alt" content={propsImage?.alt ?? formattedTitle} />
-<meta property="og:image:secure_url" content={ogImageURL} />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:locale" content="en_US" />
@@ -349,4 +359,4 @@ if (type === "creativeWork") {
 {siteConfig.googleAdsenseId && (<meta name="google-adsense-account" content={siteConfig.googleAdsenseId} />)}
 {siteConfig.yandexVerification && (<meta name="yandex-verification" content={siteConfig.yandexVerification} />)}
 
-<script type="application/ld+json" set:html={JSON.stringify({ "@context": "https://schema.org", "@graph": schemaGraph })}/>
+<script type="application/ld+json" set:html={JSON.stringify({ "@context": "https://schema.org", "@graph": schemaGraph })} />

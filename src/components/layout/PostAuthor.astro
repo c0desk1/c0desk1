@@ -8,11 +8,11 @@ import Listen from '../ui/ListenButton.astro';
 interface Props {
   name?: string;
   avatar?: string;
-  title?: string;
+  role?: string;
   slug?: string;
 }
 
-const { name, avatar, title, slug } = Astro.props;
+const { name, avatar, role, slug } = Astro.props;
 
 const siteData = siteConfig
 
@@ -21,16 +21,11 @@ const avatarOfLabel = siteData.avatarOf;
 
 const authorName = name || siteConfig.author?.name || siteConfig.siteName;
 const authorAvatar = avatar || siteConfig.author?.avatar || siteConfig.siteLogo;
-
-const authorTitle =
-  title ||
-  siteConfig.author.title ||
-  authorLabel;
-
+const authorTitle = role || siteConfig.author.role || authorLabel;
 const authorSlug = slug || siteConfig.author?.slug || "author";
-const authorPath = `/author/${authorSlug}/`;
 
 const optimizedAvatar = isCdnUrl(authorAvatar)? cdnImage(authorAvatar, { w: 40, h: 40, q: 80 }) : authorAvatar;
+const authorPath = `/author/${authorSlug}/`;
 ---
 
 <div class="flex w-full justify-center gap-2">

@@ -31,9 +31,7 @@ export async function getStaticPaths() {
   return projects.map((project) => {
     const urlSlug = slugify(project.data.title);
     return {
-      params: {
-        slug: urlSlug
-      },
+      params: { slug: urlSlug },
       props: { project }
     };
   });
@@ -64,7 +62,7 @@ const {
 } = data;
 
 const { Content } = await render(project);
-const siteData = siteConfig
+const siteData = siteConfig;
 
 const seoTitle = seo?.title || title;
 const seoDescription = seo?.description || description;
@@ -74,40 +72,26 @@ const seoImage = {
 };
 
 const allProjects = await getCollection("portfolio", ({ data }) => !data.draft);
-
 const relatedProjects = getSmartRelatedProjects(project, allProjects, 2);
 const displayGallery = Array.isArray(gallery) ? gallery : [];
-
 
 const siteURL = Astro.site?.toString() ?? siteData.siteUrl;
 const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
-const homeLabel = siteData.home;
+const homeLabel      = siteData.home;
 const portfolioLabel = siteData.p_PageTitle;
-const portfolioDesc = siteData.p_PageDesc;
-const galleryLabel = siteData.p_Gallery;
+const galleryLabel   = siteData.p_Gallery;
 
-const srPortfolioHeader = siteData.p_Header;
-const srPortfolioImage = siteData.p_ImageContent;
+const srPortfolioHeader  = siteData.p_Header;
+const srPortfolioImage   = siteData.p_ImageContent;
 const srPortfolioMetrics = siteData.p_MetricsCase;
 const srPortfolioContent = siteData.p_Content;
 const srPortfolioRelated = siteData.p_RelatedContent;
 
-const portfolioCategory = {
-  name: portfolioLabel,
-  slug: "portfolio",
-  description: portfolioDesc
-};
-
-const seoBreadcrumbItems = [
-  { name: homeLabel, href: '/'},
+const Breadcrumbs = [
+  { name: homeLabel,      href: '/' },
   { name: portfolioLabel, href: '/portfolio/' },
-  { name: title, href: canonicalURL }
 ];
-
-const Breadcrumbs = seoBreadcrumbItems.filter(item =>
-  item.name === homeLabel || item.name === portfolioLabel
-);
 ---
 
 <BaseLayout
@@ -118,7 +102,6 @@ const Breadcrumbs = seoBreadcrumbItems.filter(item =>
   publishedTime={pubDate}
   modifiedTime={updatedDate || pubDate}
   tags={techStack}
-  category={portfolioCategory}
   client={client}
   role={role}
   duration={duration}

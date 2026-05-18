@@ -18,6 +18,7 @@ import PostNavigation from '@/components/blog/PostNavigation.astro';
 import BackToTop from "@/components/ui/BackToTop.astro";
 import BG from "@/components/ui/BG.astro";
 import Line from '@/components/ui/Line.astro';
+import Rss from '@/components/layout/Rss.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -103,11 +104,11 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
   tags={tags}
   category={seoCategory}
   author={{
-    name: authorEntry?.data.name,
-    role: authorEntry?.data.role,
-    avatar: authorEntry?.data.avatar,
-    bio: authorEntry?.data.bio,
-    slug: authorEntry?.id
+    name: authorEntry?.data.name ?? siteConfig.author.name,
+    role: authorEntry?.data.role ?? siteConfig.author.role,
+    avatar: authorEntry?.data.avatar ?? siteConfig.author.avatar,
+    bio: authorEntry?.data.bio ?? siteConfig.author.bio,
+    slug: authorEntry?.id ?? siteConfig.author.slug,
   }}
   canonicalURL={canonicalURL}>
   <div class="relative min-w-0 z-0">
@@ -131,7 +132,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
               content={post.body}
               authorName={authorEntry?.data.name}
               authorAvatar={authorEntry?.data.avatar}
-              authorTitle={authorEntry?.data.role}
+              authorRole={authorEntry?.data.role}
               authorSlug={authorEntry?.id}
               image={image}
             />
@@ -144,21 +145,9 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
             </div>
 	        </Section>
 	      </article>
+        <Rss />
 	    </Container>
 	  </Section>
-    <Section size="none" class="relative z-10">
-      <h2 class="sr-only">{siteData.backToTop}</h2>
-      <div class="absolute top-0 inset-x-0 pointer-events-none">
-        <div class="mx-auto max-w-6xl px-1 md:px-6 lg:px-8">
-          <div class="relative w-full">
-            <Line type="h" variant="solid" class="absolute top-0 left-0 w-full" />
-          </div>
-        </div>
-      </div>
-      <Container size="lg">
-        <BackToTop align="center" />
-      </Container>
-    </Section>
     <Section size="none" class="relative z-10">
       <div class="absolute top-0 inset-x-0 pointer-events-none">
         <div class="mx-auto max-w-6xl px-1 md:px-6 lg:px-8">
@@ -178,6 +167,19 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
           </div>
         </div>
       </div>
+    </Section>
+     <Section size="sm" class="relative z-10">
+      <h2 class="sr-only">{siteData.backToTop}</h2>
+      <div class="absolute top-0 inset-x-0 pointer-events-none">
+        <div class="mx-auto max-w-6xl px-1 md:px-6 lg:px-8">
+          <div class="relative w-full">
+            <Line type="h" variant="solid" class="absolute top-0 left-0 w-full" />
+          </div>
+        </div>
+      </div>
+      <Container size="lg">
+        <BackToTop align="center" />
+      </Container>
     </Section>
   </Section>
 </BaseLayout>

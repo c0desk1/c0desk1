@@ -1,3 +1,4 @@
+// src/pages/sitemap-category.xml.ts
 import { getCollection } from "astro:content";
 import type { APIRoute } from "astro";
 import { siteConfig } from "@/config/site";
@@ -9,12 +10,8 @@ export const GET: APIRoute = async ({ site }) => {
   const categories = await getCollection("categories");
 
   const sorted = categories.sort((a, b) => {
-    const aName =
-      typeof a.data.name === "string" ? a.data.name : String(a.data.name);
-
-    const bName =
-      typeof b.data.name === "string" ? b.data.name : String(b.data.name);
-
+    const aName = typeof a.data.name === "string" ? a.data.name : String(a.data.name);
+    const bName = typeof b.data.name === "string" ? b.data.name : String(b.data.name);
     return aName.localeCompare(bName);
   });
 
@@ -22,16 +19,12 @@ export const GET: APIRoute = async ({ site }) => {
 
   const urls = sorted
     .map((cat) => {
-      const rawName =
-        typeof cat.data.name === "string"
-          ? cat.data.name
-          : String(cat.data.name);
-
+      const rawName = typeof cat.data.name === "string" ? cat.data.name : String(cat.data.name);
       const slug = slugify(rawName) || cat.id;
 
       return `
   <url>
-    <loc>${new URL(`category/${slug}/`, siteUrl).toString()}</loc>
+    <loc>${new URL(`blog/category/${slug}/`, siteUrl).toString()}</loc>
     <lastmod>${now}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>

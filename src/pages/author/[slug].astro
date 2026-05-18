@@ -18,37 +18,41 @@ import { cdnImage, isCdnUrl } from "@/lib/utils";
 export async function getStaticPaths() {
   const authors = await getCollection("authors");
 
-  return  authors.map((author) => ({
-      params: {
-        slug: author.id,
-      },
-      props: { author },
-    }));
+  return authors.map((author) => ({
+    params: {
+      slug: author.id,
+    },
+    props: { author },
+  }));
 }
 
 const { author } = Astro.props;
 
-const siteData = siteConfig
+const siteData = siteConfig;
 const siteURL = Astro.site?.toString() ?? siteConfig.siteUrl;
 const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
+const authorName   = author.data.name ?? siteConfig.author.name;
+const authorRole   = author.data.role   ?? siteConfig.author.role;
+const authorAvatar = author.data.avatar ?? siteConfig.author.avatar;
+const authorBio    = author.data.bio    ?? siteConfig.author.bio;
+const authorSlug   = author.id;
+
 const seoData = {
-  title: `${siteData.authorPage} | ${author.data.name}`,
-  description: author.data.bio,
+  title: `${siteData.authorPage} | ${authorName}`,
+  description: authorBio,
   type: "profile" as const,
   canonicalURL,
   author: {
-    name: author.data.name,
-    role: author.data.role,
-    avatar: author.data.avatar,
-    bio: author.data.bio,
-    slug: author.id,
+    name: authorName,
+    role: authorRole,
+    avatar: authorAvatar,
+    bio: authorBio,
+    slug: authorSlug,
   },
 };
 
-const allPosts = await getCollection("blog", ({ data }) => {
-  return !data.draft;
-});
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 
 const authorPosts = allPosts
   .filter((post) => post.data.author?.id === author.id)
@@ -56,38 +60,25 @@ const authorPosts = allPosts
 
 const social = author.data.social || siteData.author.social;
 
-const authorCategory = {
-  name: seoData.title,
-  slug: seoData.canonicalURL,
-  description: seoData.description,
-};
-
-const homeLabel = siteData.home;
+const homeLabel    = siteData.home;
 const authorsLabel = siteData.authorPage;
 
 const t_latestArticles = siteConfig.blog_latestPosts;
-const t_articles = siteConfig.articles;
-const t_noArticles = siteConfig.blog_noBlogPosts
+const t_articles       = siteConfig.articles;
+const t_noArticles     = siteConfig.blog_noBlogPosts;
 
-const SeoBreadcrumbItems = [
-  { name: homeLabel, href: '/'},
-  { name: authorsLabel, href: '/authors/'},
-  { name: authorCategory.name, href: authorCategory.slug },
+const Breadcrumbs = [
+  { name: homeLabel,    href: '/' },
+  { name: authorsLabel, href: '/author/' },
 ];
 
-const Breadcrumbs = SeoBreadcrumbItems.filter(
-  (item) => 
-    item.name === homeLabel || 
-    item.name === authorsLabel
-);
-
-const optimizedAvatar = isCdnUrl(author.data.avatar)
-  ? cdnImage(author.data.avatar, { w: 112, h: 112, q: 85 })
-  : author.data.avatar;
+const optimizedAvatar = isCdnUrl(authorAvatar)
+  ? cdnImage(authorAvatar, { w: 112, h: 112, q: 85 })
+  : authorAvatar;
 ---
 
-<BaseLayout {...seoData} category={authorCategory}>
-  <Section id="author-profile" size="lg" aria-label={author.data.name}>
+<BaseLayout {...seoData}>
+  <Section id="author-profile" size="lg" aria-label={authorName}>
     <Container size="xl">
       <div class="relative grid grid-cols-1 lg:grid-cols-[320px_1fr] border border-(--border) bg-(--bg)">
         <aside class="border-b lg:border-b-0 border-(--border) lg:sticky lg:top-16 self-start p-4 lg:p-6 z-10 flex flex-col gap-5">
@@ -95,7 +86,7 @@ const optimizedAvatar = isCdnUrl(author.data.avatar)
           <div class="relative overflow-hidden rounded-3xl border border-(--border) bg-(--bg-subtle) p-1.5 shadow-sm w-full lg:max-w-none">
             <Image
               src={optimizedAvatar}
-              alt={author.data.name}
+              alt={authorName}
               width={224}
               height={224}
               loading="eager"
@@ -105,14 +96,14 @@ const optimizedAvatar = isCdnUrl(author.data.avatar)
           </div>
           <div class="space-y-1.5 text-center w-full">
             <h1 id="author-heading" class="text-heading-24 lg:text-heading-28 font-bold tracking-tight text-(--fg) wrap-break-word">
-              {author.data.name}
+              {authorName}
             </h1>
             <p class="text-xs font-mono tracking-wider text-(--fg-subtle) uppercase">
-              {author.data.role}
+              {authorRole}
             </p>
           </div>
           <p class="text-sm leading-6 text-(--fg-muted) tracking-tight">
-            {author.data.bio}
+            {authorBio}
           </p>
           <div class="flex items-center justify-center gap-2 pt-4 flex-wrap w-full border-t border-dashed border-(--border)">
             <SocialLinks items={social} />

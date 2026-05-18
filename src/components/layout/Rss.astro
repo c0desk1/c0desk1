@@ -1,0 +1,83 @@
+---
+// src/components/blog/RSSSubscribe.astro
+
+import { siteConfig } from "@/config/site";
+import Icon from "../ui/Icon";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+const siteURL = (Astro.site?.toString() ?? siteConfig.siteUrl).replace(/\/$/, "");
+const rssURL = `${siteURL}/rss.xml`;
+---
+
+<div class:list={["border border-(--border) rounded-lg bg-(--bg) overflow-hidden", className]}>
+  <div class="flex items-center gap-3 p-4 flex-wrap">
+    <div class="flex items-center justify-center w-9 h-9 rounded-full bg-(--bg-muted) border border-(--border) text-(--fg-muted) shrink-0">
+      <Icon name="rss" className="w-5 h-5" />
+    </div>
+    <div class="flex-1 min-w-0">
+      <h4 class="text-heading-16 font-semibold text-(--fg)">
+        Subscribe via RSS
+      </h4>
+      <p class="text-copy-14 text-(--fg-muted) mt-0.5">
+        Get new posts delivered to your reader automatically.
+      </p>
+    </div>
+    <div class="flex items-center gap-2 shrink-0">
+      <button
+        class="rss-copy flex items-center justify-center w-8 h-8 rounded-md border border-(--border) bg-(--bg) text-(--fg-subtle) transition-colors hover:text-(--fg) hover:bg-(--bg-subtle)"
+        data-rss-url={rssURL}
+        aria-label="Copy RSS feed URL"
+        title="Copy feed URL">
+        <Icon name="copy" className="icon-copy w-4 h-4" />
+        <Icon name="check" className="icon-check w-4 h-4 hidden text-(--accent)" />
+      </button>
+      <a href={rssURL} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-button-14 font-medium px-3 py-1.5 rounded-md border border-(--border) bg-(--bg) text-(--fg) hover:bg-(--bg-subtle) transition-colors whitespace-nowrap" aria-label="Open RSS feed">
+        Open feed
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>(".rss-copy").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const url = btn.dataset.rssUrl;
+      if (!url) return;
+
+      try {
+        await navigator.clipboard.writeText(url);
+      } catch {
+        const el = document.createElement("textarea");
+        el.value = url;
+        el.style.position = "fixed";
+        el.style.opacity = "0";
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand("copy");
+        document.body.removeChild(el);
+      }
+
+      const iconCopy = btn.querySelector(".icon-copy");
+      const iconCheck = btn.querySelector(".icon-check");
+
+      iconCopy?.classList.add("hidden");
+      iconCheck?.classList.remove("hidden");
+
+      btn.classList.add("text-(--accent)", "border-(--accent)/30", "bg-(--accent-dim)/10");
+      btn.setAttribute("aria-label", "Copied!");
+
+      setTimeout(() => {
+        iconCopy?.classList.remove("hidden");
+        iconCheck?.classList.add("hidden");
+
+        btn.classList.remove("text-(--accent)", "border-(--accent)/30", "bg-(--accent-dim)/10");
+        btn.setAttribute("aria-label", "Copy RSS feed URL");
+      }, 2000);
+    });
+  });
+</script>

@@ -54,6 +54,7 @@ const blog = defineCollection({
     author: reference("authors"),
     category: reference("categories"),
     tags: z.array(z.string()).default([]),
+    overview: z.array(z.string()).optional(),
     ...metadataSchema.shape,
     seo: seoSchema.optional(),
   }),

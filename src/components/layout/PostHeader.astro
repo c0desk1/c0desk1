@@ -1,6 +1,7 @@
 ---
 // src/components/blog/postHeader.astro
 import PostMeta from './PostMeta.astro';
+import Overview from '../blog/BlogOverview.astro';
 import PostAuthor from './PostAuthor.astro';
 import BlogFeaturedImage from '../blog/BlogFeaturedImage.astro';
 import SharePost from '../blog/SharePost.astro';
@@ -14,9 +15,10 @@ interface Props {
   content?: string;
   authorName?: string;
   authorAvatar?: string;
-  authorTitle?: string;
+  authorRole?: string;
   authorSlug: string;
   image?: any;
+  overviewItems?: string[];
 }
 
 const {
@@ -26,9 +28,10 @@ const {
   content = '',
   authorName,
   authorAvatar,
-  authorTitle,
+  authorRole,
   authorSlug,
-  image
+  image,
+  overviewItems
 } = Astro.props;
 
 const siteData = siteConfig;
@@ -45,7 +48,7 @@ const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
       <PostAuthor
         name={authorName}
         avatar={authorAvatar}
-        title={authorTitle}
+        role={authorRole}
         slug={authorSlug}
       />
     )}
@@ -62,6 +65,9 @@ const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
       <div class="w-full mt-4">
         <PostMeta pubDate={pubDate} content={content} />
       </div>
+    )}
+    {overviewItems && overviewItems.length > 0 && (
+      <Overview items={overviewItems} />
     )}
     <div class="flex justify-between items-center w-full">
       <SharePost url={canonicalURL} title={title} description={description} />

@@ -18,14 +18,9 @@ const escapeXml = (str: string) =>
 export async function GET(context: APIContext) {
   const siteData = siteConfig;
 
-  const site = new URL(
-    context.site ?? siteData.siteUrl
-  );
+  const site = new URL(context.site ?? siteData.siteUrl);
 
-  const allPosts = await getCollection(
-    "blog",
-    ({ data }) => !data.draft
-  );
+  const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 
   const validPosts = allPosts.filter(
     (post: CollectionEntry<"blog">) =>
@@ -36,115 +31,54 @@ export async function GET(context: APIContext) {
   );
 
   const sorted = [...validPosts]
-    .sort(
-      (a, b) =>
-        b.data.pubDate.getTime() -
-        a.data.pubDate.getTime()
-    )
+    .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
     .slice(0, 30);
 
   if (sorted.length === 0) {
-    throw new Error(
-      "No valid blog posts found for RSS feed"
-    );
+    throw new Error("No valid blog posts found for RSS feed");
   }
 
   const items = await Promise.all(
     sorted.map(async (post) => {
-      const autoSlug = slugify(
-        post.data.title
-      );
+      const autoSlug = slugify(post.data.title);
+      const url = new URL(`blog/${autoSlug}/`, site).toString();
 
-      const url = new URL(
-        `blog/${autoSlug}/`,
-        site
-      ).toString();
-
-      let authorName: string =
-        siteData.siteName;
-
+      let authorName: string = siteData.siteName;
       if (post.data.author) {
         try {
-          const authorEntry =
-            await getEntry(
-              post.data.author
-            );
-
-          if (
-            authorEntry?.data?.name
-          ) {
-            authorName =
-              authorEntry.data.name;
+          const authorEntry = await getEntry(post.data.author);
+          if (authorEntry?.data?.name) {
+            authorName = authorEntry.data.name;
           }
         } catch {}
       }
 
-      let categoryName =
-        "Uncategorized";
-
+      let categoryName = "Uncategorized";
       if (post.data.category) {
         try {
-          const categoryEntry =
-            await getEntry(
-              post.data.category
-            );
-
-          if (
-            categoryEntry?.data
-              ?.name &&
-            typeof categoryEntry.data
-              .name === "string"
-          ) {
-            categoryName =
-              categoryEntry.data.name;
+          const categoryEntry = await getEntry(post.data.category);
+          if (categoryEntry?.data?.name && typeof categoryEntry.data.name === "string") {
+            categoryName = categoryEntry.data.name;
           }
         } catch {}
       }
 
-      const tags = (
-        post.data.tags ?? []
-      ).filter(
-        (
-          tag
-        ): tag is string =>
-          Boolean(tag)
-      );
+      const tags = (post.data.tags ?? []).filter((tag): tag is string => Boolean(tag));
 
-      const imageUrl =
-        post.data.image?.src
-          ? new URL(
-              post.data.image.src,
-              site
-            ).toString()
-          : null;
+      const imageUrl = post.data.image?.src
+        ? new URL(post.data.image.src, site).toString()
+        : null;
 
       return {
         title: post.data.title,
-
         link: url,
-
-        pubDate:
-          post.data.pubDate,
-
-        description:
-          post.data.description,
-
-        categories: [
-          categoryName,
-          ...tags,
-        ],
-
+        pubDate: post.data.pubDate,
+        description: post.data.description,
+        categories: [categoryName, ...tags],
         guid: url,
-
         customData: `
-          <dc:creator>${escapeXml(
-            authorName
-          )}</dc:creator>
-          ${
-            imageUrl
-              ? `<media:content url="${imageUrl}" medium="image" />`
-              : ""
-          }
+          <dc:creator>${escapeXml(authorName)}</dc:creator>
+          ${imageUrl ? `<media:content url="${imageUrl}" medium="image" />` : ""}
         `,
       };
     })
@@ -152,56 +86,25 @@ export async function GET(context: APIContext) {
 
   const rssResponse = await rss({
     title: siteData.siteName,
-
-    description:
-      siteData.defaultSeo
-        ?.description ?? "",
-
+    description: siteData.defaultSeo?.description ?? "",
     site: site.toString(),
-
     items,
-
+    stylesheet: "./src/assets/styles/rss-style.xsl",
     customData: `
       <language>en-US</language>
-      <lastBuildDate>
-        ${
-          sorted[0]?.data.pubDate.toUTCString() ??
-          new Date().toUTCString()
-        }
-      </lastBuildDate>
-
-      <generator>
-        Astro Content Engine
-      </generator>
-
-      <atom:link
-        href="${new URL(
-          "rss.xml",
-          site
-        ).toString()}"
-        rel="self"
-        type="application/rss+xml"
-      />
+      <lastBuildDate>${sorted[0]?.data.pubDate.toUTCString() ?? new Date().toUTCString()}</lastBuildDate>
+      <generator>Astro Content Engine</generator>
+      <atom:link href="${new URL("rss.xml", site).toString()}" rel="self" type="application/rss+xml" />
     `,
-
     xmlns: {
       dc: "http://purl.org/dc/elements/1.1/",
-      atom:
-        "http://www.w3.org/2005/Atom",
-      media:
-        "http://search.yahoo.com/mrss/",
+      atom: "http://www.w3.org/2005/Atom",
+      media: "http://search.yahoo.com/mrss/",
     },
   });
 
-  rssResponse.headers.set(
-    "Cache-Control",
-    "public, max-age=3600, s-maxage=3600"
-  );
-
-  rssResponse.headers.set(
-    "Content-Type",
-    "application/xml"
-  );
+  rssResponse.headers.set("Cache-Control", "public, max-age=3600, s-maxage=3600");
+  rssResponse.headers.set("Content-Type", "application/xml");
 
   return rssResponse;
 }
