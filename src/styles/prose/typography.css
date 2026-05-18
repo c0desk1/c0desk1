@@ -54,7 +54,6 @@
 }
 
 .prose-custom p{
-  @apply text-copy-16;
   margin-bottom:1.25rem
 }
 
@@ -180,39 +179,33 @@
   }
 
   .prose-custom h1{
-    @apply text-heading-24;
     margin-top:2.5rem;
     margin-bottom:1rem;
     text-align:center
   }
 
   .prose-custom h2{
-    @apply text-heading-24;
     margin-top:2.25rem;
     margin-bottom:.75rem
   }
 
   .prose-custom h3{
-    @apply text-heading-20;
     margin-top:1.75rem;
     margin-bottom:.625rem
   }
 
   .prose-custom h4{
-    @apply text-heading-16;
     margin-top:1.5rem;
     margin-bottom:.5rem
   }
 
   .prose-custom h5{
-    @apply text-label-12;
     margin-top:1.25rem;
     margin-bottom:.5rem;
     color:var(--prose-fg-subtle)
   }
 
   .prose-custom h6{
-    @apply text-label-12;
     margin-top:1rem;
     margin-bottom:.5rem;
     color:var(--prose-fg-dim)
@@ -251,39 +244,33 @@
   }
 
   .prose-custom h1{
-    @apply text-heading-32;
     margin-top:4rem;
     margin-bottom:1.25rem;
     text-align:center
   }
 
   .prose-custom h2{
-    @apply text-heading-32;
     margin-top:3rem;
     margin-bottom:.875rem
   }
 
   .prose-custom h3{
-    @apply text-heading-20;
     margin-top:2rem;
     margin-bottom:.75rem
   }
 
   .prose-custom h4{
-    @apply text-heading-16;
     margin-top:2rem;
     margin-bottom:.625rem
   }
 
   .prose-custom h5{
-    @apply text-label-12;
     margin-top:1.5rem;
     margin-bottom:.5rem;
     color:var(--prose-fg-subtle)
   }
 
   .prose-custom h6{
-    @apply text-label-12;
     margin-top:1.25rem;
     margin-bottom:.5rem;
     color:var(--prose-fg-dim)
@@ -317,32 +304,27 @@
 
 @media (min-width: 1024px){
   .prose-custom h1{
-    @apply text-heading-56;
     margin-top:4rem;
     margin-bottom:1.25rem;
     text-align:center
   }
 
   .prose-custom h2{
-    @apply text-heading-32;
     margin-top:3.5rem;
     margin-bottom:1rem
   }
 
   .prose-custom h3{
-    @apply text-heading-24;
     margin-top:2.25rem;
     margin-bottom:.75rem
   }
 
   .prose-custom h4{
-    @apply text-heading-16;
     margin-top:2rem;
     margin-bottom:.625rem
   }
 
   .prose-custom p{
-    @apply text-copy-18;
     margin-bottom:1.5rem;
     width:100%;
     text-wrap:pretty;
