@@ -22,26 +22,31 @@ let finalAvatar = '';
 let optimizedAvatar = '';
 
 if (!isCiteMode && authorSlug) {
-  try {
-    const authorEntry = await getEntry('authors', authorSlug);
-    if (authorEntry) {
-      isAuthorMode = true;
-      finalAuthor = authorEntry.data.name;
-      finalRole = authorEntry.data.role ?? '';
-      finalAvatar = authorEntry.data.avatar ?? '';
+  if (authorSlug.includes(' ')) {
+    isPlainSource = true;
+    finalAuthor = authorSlug;
+  } else {
+    try {
+      const authorEntry = await getEntry('authors', authorSlug);
+      if (authorEntry) {
+        isAuthorMode = true;
+        finalAuthor = authorEntry.data.name;
+        finalRole = authorEntry.data.role ?? '';
+        finalAvatar = authorEntry.data.avatar ?? '';
 
-      if (finalAvatar) {
-        optimizedAvatar = isCdnUrl(finalAvatar)
-          ? cdnImage(finalAvatar, { w: 48, h: 48, q: 80 })
-          : finalAvatar;
+        if (finalAvatar) {
+          optimizedAvatar = isCdnUrl(finalAvatar)
+            ? cdnImage(finalAvatar, { w: 48, h: 48, q: 80 })
+            : finalAvatar;
+        }
+      } else {
+        isPlainSource = true;
+        finalAuthor = authorSlug;
       }
-    } else {
+    } catch {
       isPlainSource = true;
       finalAuthor = authorSlug;
     }
-  } catch {
-    isPlainSource = true;
-    finalAuthor = authorSlug;
   }
 }
 ---
