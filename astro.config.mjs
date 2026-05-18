@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, fontProviders } from 'astro/config';
 import { siteConfig } from './src/config/site';
 
 import tailwindcss from '@tailwindcss/vite';
@@ -37,6 +37,32 @@ export default defineConfig({
       wrap: true,
     }
   },
+  fonts: [
+    {
+      name: "Geist",
+      cssVariable: "--font-GeistSans",
+      provider: fontProviders.local(),
+      options: {
+        variants: [{
+          src: ['./src/assets/fonts/Geist.woff2'],
+          weight: '100 900',
+          style: 'normal'
+        }]
+      }
+    },
+    {
+      name: "Geist Mono",
+      cssVariable: "--font-GeistMono",
+      provider: fontProviders.local(),
+      options: {
+        variants: [{
+          src: ['./src/assets/fonts/GeistMono.woff2'],
+          weight: '100 900',
+          style: 'normal'
+        }]
+      }
+    }
+  ],
   image: {
     remotePatterns: [
       { protocol: 'https', hostname: 'cdn.c0desk1.my.id' }
