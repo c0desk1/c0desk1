@@ -123,7 +123,7 @@
   }
 
   .prose-custom kbd {
-    @apply text-label-13-mono;
+    @apply text-code-13;
     padding: 0.1em 0.35em;
     margin: 0 0.1rem;
   }
@@ -157,7 +157,7 @@
 /* Desktop */
 @media (min-width: 768px) {
   .prose-custom kbd {
-    @apply text-label-14-mono;
+    @apply text-code-14;
     padding: 0.15em 0.45em;
   }
 
