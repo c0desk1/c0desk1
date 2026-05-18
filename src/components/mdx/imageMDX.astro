@@ -13,6 +13,7 @@ const { src, alt = '', title } = Astro.props;
 const optimizedSrc = src && isCdnUrl(src)
   ? cdnImage(src, { w: 1280, h: 720, q: 80 })
   : src ?? '';
+
 const caption = title || alt;
 ---
 
@@ -25,34 +26,103 @@ const caption = title || alt;
       decoding="async"
       width={1200}
       height={630}
-      class="relative h-full w-full object-cover transition duration-500 opacity-0"
+      class="zoomable-image relative h-full w-full object-cover transition duration-500 opacity-0 cursor-zoom-in"
       onload="this.classList.remove('opacity-0')"
     />
   </div>
-  {caption && ( <figcaption class="text-copy-13 md:text-copy-14">{caption}</figcaption> )}
+  {caption && (
+    <figcaption class="text-copy-13 md:text-copy-14">{caption}</figcaption>
+  )}
 </figure>
 
+<!-- Lightbox overlay -->
+<div class="lightbox-overlay" id="lightbox-overlay">
+  <button class="lightbox-close" id="lightbox-close">✕</button>
+  <img src="" alt="" class="lightbox-image" id="lightbox-image" />
+</div>
+
 <style is:inline>
-  .full-width-figure {
-    width: 100vw;
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
-    margin: 2rem 0;
-    max-width: 56rem;
-    padding: 0 1rem;
+  /* Efek zoom saat hover */
+  .zoomable-image:hover {
+    transform: scale(1.05);
   }
-  @media (min-width: 768px) {
-    .full-width-figure {
-      padding: 0 1.5rem;
-    }
-  }
-  @media (min-width: 1024px) {
-    .full-width-figure {
-      padding: 0 2rem;
-    }
-  }
-  .full-width-figure .relative {
+
+  /* Lightbox */
+  .lightbox-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+  }
+  .lightbox-overlay.active {
+    display: flex;
+  }
+  .lightbox-image {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: 0.5rem;
+  }
+  .lightbox-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 1000;
   }
 </style>
+
+<script>
+  function initLightbox() {
+    const overlay = document.getElementById('lightbox-overlay');
+    const lightboxImg = document.getElementById('lightbox-image') as HTMLImageElement;
+    const closeBtn = document.getElementById('lightbox-close');
+
+    if (!overlay || !lightboxImg || !closeBtn) return;
+
+    // Buka lightbox saat klik gambar dengan class zoomable-image
+    document.querySelectorAll('.zoomable-image').forEach(img => {
+      img.addEventListener('click', () => {
+        lightboxImg.src = (img as HTMLImageElement).src;
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    // Tutup lightbox
+    const closeLightbox = () => {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    };
+
+    closeBtn.addEventListener('click', closeLightbox);
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeLightbox();
+    });
+
+    // Tutup dengan ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.classList.contains('active')) {
+        closeLightbox();
+      }
+    });
+  }
+
+  // Jalankan saat halaman siap
+  document.addEventListener('astro:page-load', initLightbox);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLightbox);
+  } else {
+    initLightbox();
+  }
+</script>
