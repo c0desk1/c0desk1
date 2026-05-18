@@ -27,49 +27,46 @@ const a11yLabel = siteData.p_a11y;
 const seoLabel = siteData.p_seo;
 ---
 
-<a 
-  href={postUrl}
-  class="group block relative w-full h-full p-4 lg:p-6"
->
+<a href={postUrl} class="group block relative w-full h-full p-4 lg:p-6">
   <div class="space-y-3">
-    <div class="flex items-center justify-between text-[13px] text-(--fg-muted)">
-      {metrics && (
+    <div class="flex items-center text-label-14">
+      <time datetime={pubDate.toISOString()} class="text-(--fg-muted)">
+        {formattedDate}
+      </time>
+    </div>
+    <h2 class="text-heading-16 md:text-heading-20 lg:text-heading-24 text-(--fg) font-semibold line-clamp-3">
+      {title}
+    </h3>
+    <p class="text-copy-14 md:text-copy-16 font-medium text-(--fg-muted) line-clamp-3 group-hover:text-(--fg)">
+      {excerpt}
+    </p>
+    {metrics && (
       <div class="flex gap-3 pt-2">
         {metrics.performance && (
-          <div class="flex items-center gap-1">
-            <span class="text-[13px] text-(--fg-subtle)">{perfLabel}</span>
-            <span class="text-[13px] font-semibold text-(--accent)">
+          <div class="flex items-center text-label-13 gap-1">
+            <span class="text-(--fg-subtle)">{perfLabel}</span>
+            <span class="font-semibold text-(--accent-dim)">
               {metrics.performance}
             </span>
           </div>
         )}
         {metrics.accessibility && (
-          <div class="flex items-center gap-1">
-            <span class="text-[13px] text-(--fg-subtle)">{a11yLabel}</span>
-            <span class="text-[13px] font-semibold text-(--accent)">
+          <div class="flex items-center text-label-13 gap-1">
+            <span class="text-(--fg-subtle)">{a11yLabel}</span>
+            <span class="font-semibold text-(--accent-dim)">
               {metrics.accessibility}
             </span>
           </div>
         )}
         {metrics.seo && (
-          <div class="flex items-center gap-1">
-            <span class="text-[13px] text-(--fg-subtle)">{seoLabel}</span>
-            <span class="text-[13px] font-semibold text-(--accent)">
+          <div class="flex items-center text-label-13 gap-1">
+            <span class="text-(--fg-subtle)">{seoLabel}</span>
+            <span class="font-semibold text-(--accent-dim)">
               {metrics.seo}
             </span>
           </div>
         )}
       </div>
-    )}
-      <time datetime={pubDate.toISOString()}>
-        {formattedDate}
-      </time>
-    </div>
-    <h3 class="text-lg md:text-xl font-semibold tracking-tight text-(--fg) leading-tight">
-      {title}
-    </h3>
-    <p class="text-[13px] md:text-sm leading-relaxed line-clamp-3">
-      {excerpt}
-    </p>
+      )}
   </div>
 </a>
