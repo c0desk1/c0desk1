@@ -112,7 +112,6 @@ const Breadcrumbs = [
     <BG />
   </div>
   <article class="relative">
-    <h1 class="sr-only">{title}</h1>
     <div class="relative w-full">
       <Section size="md">
         <Container size="md">
@@ -135,7 +134,7 @@ const Breadcrumbs = [
         </Container>
       </Section>
       {image && (
-        <Section size="none" class="p-4 lg:p-6">
+        <Section size="none" class="hidden p-4 lg:p-6">
           <Container size="md">
             <h2 class="sr-only">{srPortfolioImage}</h2>
             <PortfolioFeaturedImage
@@ -149,17 +148,20 @@ const Breadcrumbs = [
       <Section size="sm" class="p-4 lg:p-6">
         <Container size="md">
           <h2 class="sr-only">{srPortfolioMetrics}</h2>
-          <PortfolioMetrics metrics={metrics} />
           <PortfolioCaseStudy
             challenge={challenge}
             solution={solution}
             result={result}
             allowMultiple={true}
           />
+          <PortfolioMetrics metrics={metrics} />
         </Container>
       </Section>
       <Section size="sm" class="p-4 lg:p-6">
         <Container size="md">
+          <div id="article-content" class="prose-custom">
+            <Content components={components} />
+          </div>
           <h2 class="sr-only">{srPortfolioContent}</h2>
           {displayGallery.length > 0 && (
             <div class="prose-custom mb-6">
@@ -170,9 +172,6 @@ const Breadcrumbs = [
               />
             </div>
           )}
-          <div id="article-content" class="prose-custom">
-            <Content components={components} />
-          </div>
         </Container>
       </Section>
     </div>
