@@ -3,7 +3,7 @@
 export const authorConfig = {
   author: {
     name: "Bima Akbar",
-    title: "Author",
+    role: "Author",
     avatar: "/org/author.jpg",
     bio: "Music producer, Adobe Stock contributor, and developer.",
     slug: "bima-akbar",
