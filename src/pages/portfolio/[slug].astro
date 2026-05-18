@@ -131,7 +131,7 @@ const Breadcrumbs = [
         />
       </Container>
         {image && (
-          <Section size="sm" class="hidden p-4 lg:p-6">
+          <Section size="sm">
             <Container size="md">
               <h2 class="sr-only">{srPortfolioImage}</h2>
               <PortfolioFeaturedImage
@@ -142,7 +142,7 @@ const Breadcrumbs = [
             </Container>
           </Section>
         )}
-        <Section size="sm" class="p-4 lg:p-6">
+        <Section size="sm">
           <Container size="md">
             <h2 class="sr-only">{srPortfolioMetrics}</h2>
             <PortfolioCaseStudy
@@ -154,14 +154,14 @@ const Breadcrumbs = [
             <PortfolioMetrics metrics={metrics} />
           </Container>
         </Section>
-        <Section size="sm" class="p-4 lg:p-6">
+        <Section size="sm">
           <Container size="md">
             <div id="article-content" class="prose-custom">
               <Content components={components} />
             </div>
           </Container>
         </Section>
-        <Section size="sm" class="p-4 lg:p-6">
+        <Section size="sm">
           <Container size="md">
             <h2 class="sr-only">{srPortfolioContent}</h2>
             {displayGallery.length > 0 && (
@@ -176,7 +176,7 @@ const Breadcrumbs = [
           </Container>
         </Section>
       </Section>
-    <Section size="sm" class="relative z-10">
+    <Section size="sm">
       <Container size="lg" class="pt-8">
         <h2 class="sr-only">{srPortfolioRelated}</h2>
         <PortfolioRelated projects={relatedProjects} />
