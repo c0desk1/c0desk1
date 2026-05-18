@@ -51,65 +51,54 @@ const infoItems = [
 ].filter((item) => item.value);
 ---
 
-<header class="relative w-full">
-
-  <!-- Top -->
-  <div class="mx-auto flex max-w-5xl flex-col items-center text-center">
-
-    <!-- Eyebrow -->
+<header class="relative w-full py-12 md:py-16">
+  <div class="flex flex-col items-center text-center">
     <div class="mb-5 flex flex-wrap items-center justify-center gap-2 text-label-12 text-(--fg-subtle)">
-
       <time datetime={date.toISOString()}>
         {formattedDate}
       </time>
-
       {formattedUpdate && (
         <>
-          <span class="h-[3px] w-[3px] rounded-full bg-(--fg-subtle)" aria-hidden="true" />
-          <span>{t.updated} {formattedUpdate}</span>
+          <span
+            aria-hidden="true"
+            class="h-[3px] w-[3px] rounded-full bg-(--fg-subtle)"
+          />
+          <span>
+            {t.updated} {formattedUpdate}
+          </span>
         </>
       )}
-
       {featured && (
         <>
-          <span class="h-[3px] w-[3px] rounded-full bg-(--fg-subtle)" aria-hidden="true" />
+          <span
+            aria-hidden="true"
+            class="h-[3px] w-[3px] rounded-full bg-(--fg-subtle)"
+          />
           <span class="text-(--accent)">
             {t.featured}
           </span>
         </>
       )}
     </div>
-
-    <!-- Title -->
-    <h1 class="max-w-4xl text-heading-32 md:text-heading-48 lg:text-heading-64 text-balance text-(--fg)">
+    <h1 class="text-heading-32 md:text-heading-48 lg:text-heading-64 text-balance text-(--fg)">
       {title}
     </h1>
-
-    <!-- Meta Grid -->
     {infoItems.length > 0 && (
-      <div class="mt-10 grid w-full max-w-3xl grid-cols-1 gap-px overflow-hidden rounded-2xl border border-(--border) bg-(--border) sm:grid-cols-3">
-
+      <div class="mt-10 grid w-full grid-cols-1 gap-px overflow-hidden rounded-2xl border border-(--border) bg-(--border) sm:grid-cols-3">
         {infoItems.map(({ label, value }) => (
           <div class="flex flex-col gap-2 bg-(--bg) px-6 py-5 text-left">
-
             <span class="text-label-12-mono uppercase text-(--fg-subtle)">
               {label}
             </span>
-
             <span class="text-label-16 text-(--fg)">
               {value}
             </span>
-
           </div>
         ))}
-
       </div>
     )}
-
-    <!-- Actions -->
     {(demoUrl || repoUrl) && (
       <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
-
         {demoUrl && (
           <a
             href={demoUrl}
@@ -139,7 +128,7 @@ const infoItems = [
             href={repoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 rounded-full border border-(--border) bg-(--bg-muted) px-4 py-2 text-button-14 text-(--fg) transition-colors hover:border-(--border-strong) hover:bg-(--bg-subtle)"
+            class="inline-flex items-center gap-2 rounded-full border border-(--border) bg-(--bg) px-4 py-2 text-button-14 text-(--fg-muted) transition-colors hover:border-(--border-strong) hover:bg-(--bg-subtle) hover:text-(--fg)"
           >
             <svg
               width="14"
@@ -155,33 +144,24 @@ const infoItems = [
               <line x1="8" y1="8" x2="8" y2="12"/>
               <line x1="6" y1="10" x2="10" y2="10"/>
             </svg>
-
             <span>{t.sourceCode}</span>
           </a>
         )}
-
       </div>
     )}
-
-    <!-- Tech Stack -->
     {techStack.length > 0 && (
-      <div class="mt-12 flex max-w-4xl flex-col items-center gap-4">
-
+      <div class="mt-12 flex w-full flex-col items-center gap-4">
         <span class="text-label-12-mono uppercase text-(--fg-subtle)">
           {t.techStack}
         </span>
-
-        <div class="flex flex-wrap items-center justify-center gap-2">
-
+        <div class="grid w-full grid-cols-1 gap-2 sm:grid-cols-2">
           {techStack.map((tech) => (
-            <span class="inline-flex items-center rounded-full border border-(--border) bg-(--bg-muted) px-3 py-1.5 text-label-13-mono text-(--fg-muted)">
+            <span class="inline-flex w-full items-center justify-center rounded-full border border-(--border) bg-(--bg-muted) px-3 py-2 text-label-13-mono text-(--fg-muted)">
               {tech}
             </span>
           ))}
-
         </div>
       </div>
     )}
-
   </div>
 </header>
