@@ -67,7 +67,9 @@ const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
       </div>
     )}
     {overviewItems && overviewItems.length > 0 && (
-      <Overview items={overviewItems} />
+      <div class="w-full">
+        <Overview items={overviewItems} />
+      </div>
     )}
     <div class="flex justify-between items-center w-full">
       <SharePost url={canonicalURL} title={title} description={description} />
