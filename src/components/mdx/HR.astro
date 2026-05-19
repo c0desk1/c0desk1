@@ -12,7 +12,7 @@ const { variant = 'grain', class: className } = Astro.props;
 
 <style>
   .hr-bn {
-    margin: 3rem 0;
+    margin: 2rem 0;
     border: none;
     overflow: visible;
   }
@@ -27,8 +27,8 @@ const { variant = 'grain', class: className } = Astro.props;
     background: linear-gradient(
       to right,
       transparent,
-      rgba(255, 255, 255, 0.04) 20%,
-      rgba(255, 255, 255, 0.04) 80%,
+      var(--prose-hr) 20%,
+      var(--prose-hr) 80%,
       transparent
     );
   }
@@ -38,8 +38,8 @@ const { variant = 'grain', class: className } = Astro.props;
     background: linear-gradient(
       to right,
       transparent,
-      rgba(255, 255, 255, 0.05) 10%,
-      rgba(255, 255, 255, 0.05) 90%,
+      var(--prose-hr-strong) 10%,
+      var(--prose-hr-strong) 90%,
       transparent
     );
     position: relative;

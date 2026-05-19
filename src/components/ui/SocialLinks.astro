@@ -25,7 +25,7 @@ const { items, class: className = "", iconClass = "w-4 h-4" } = Astro.props;
         rel="noopener noreferrer"
         aria-label={item.label}
         title={item.label}
-        class="inline-flex items-center justify-center rounded-full p-1.5 text-(--fg-muted) hover:text-(--fg) hover:bg-(--bg-muted) transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)"
+        class="inline-flex items-center justify-center rounded-full p-1.5 text-muted hover:text-(--fg) hover:bg-muted transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)"
       >
         <Icon name={item.label as any} className={iconClass} aria-hidden="true" />
       </a>

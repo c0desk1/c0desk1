@@ -22,11 +22,11 @@ const footerSections = siteConfig.footerSections;
           <nav aria-label={siteData.footerNav} class="grid w-full grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-4 md:gap-x-8 md:gap-y-6">
             {footerSections.map((section) => (
               <div class="min-w-0">
-                <p class="text-label-13-mono mb-2 uppercase text-(--fg)">{section.title}</p>
+                <p class="text-label-mono-13 mb-2 uppercase text-(--fg)">{section.title}</p>
                 <ul class="flex flex-col gap-2">
                   {section.items.map((link) => (
                     <li>
-                      <a href={link.href} target={link.isExternal ? "_blank" : undefined} rel={link.isExternal ? "noopener noreferrer" : undefined} class="text-copy-14 inline-flex items-center gap-1 py-1 text-(--fg-muted) transition-colors duration-150 hover:text-(--fg)">
+                      <a href={link.href} target={link.isExternal ? "_blank" : undefined} rel={link.isExternal ? "noopener noreferrer" : undefined} class="text-copy-14 inline-flex items-center gap-1 text-muted transition-colors duration-150 hover:text-(--fg)">
                         {link.label}
                         {link.isExternal && (<Icon name="external" className="h-3 w-3 shrink-0 opacity-50 transition-opacity duration-150 group-hover:opacity-100"/>)}
                       </a>

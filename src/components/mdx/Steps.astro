@@ -20,15 +20,15 @@ if (steps.length === 0) steps.push({ heading: '', content: html });
       const isLast = idx === steps.length - 1;
       return (
         <div class="relative step-item">
-          <div class="absolute -left-10 sm:-left-12 top-0.5 w-7 h-7 rounded-full bg-(--prose-surface) border border-(--prose-border) flex items-center justify-center text-label-13-mono md:text-label-14-mono font-semibold z-10">
+          <div class="absolute -left-10 sm:-left-12 top-0.5 w-7 h-7 rounded-full bg-(--prose-bg-muted) border border-(--prose-border) flex items-center justify-center text-label-13-mono md:text-label-14-mono font-semibold z-10">
             {isLast ? (
-              <Icon name="check" className="w-4 h-4 text-(--prose-accent)" />
+              <Icon name="check" className="w-4 h-4 text-(--prose-accent-active)" />
             ) : (
-              <span class="text-(--prose-fg)">{idx + 1}</span>
+              <span class="text-label-mono-14 text-(--prose-fg-nuted)">{idx + 1}</span>
             )}
           </div>
-          {step.heading ? (<div class="text-heading-16 mb-1" set:html={step.heading} />) : null}
-          {step.content ? (<div class="text-copy-16" set:html={step.content} />) : null}
+          {step.heading ? (<div class="text-heading-16 font-semibold mb-1" set:html={step.heading} />) : null}
+          {step.content ? (<div class="text-copy-14 lg:text-copy-16 text-(--prose-fg-muted) space-y-1" set:html={step.content} />) : null}
         </div>
       );
     })}
