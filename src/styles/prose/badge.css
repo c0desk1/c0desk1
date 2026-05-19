@@ -1,0 +1,14 @@
+@reference '@/styles/utilities/index.css';
+
+.prose-custom .badge {
+    @apply text-label-14;
+    display: inline-block;
+    text-transform: uppercase;
+    padding: 0.2em 0.4em;
+    border-radius: var(--prose-radius-lg);
+    border: 1px solid var(--prose-border-subtle);
+    background: var(--prose-bg-elevated);
+    color: var(--prose-fg-strong);
+    white-space: nowrap;
+    vertical-align: middle;
+}
