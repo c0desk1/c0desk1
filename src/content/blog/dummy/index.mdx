@@ -43,9 +43,11 @@ Ini paragraf kedua dengan **teks tebal**, *teks miring*, dan ***teks tebal mirin
 
 ## Blockquote
 
+> Ini Blockquote
+
 > Ini adalah blockquote.
 > Bisa lebih dari satu baris.
-> 
+ 
 > > Dan bisa juga bersarang (nested blockquote).
 
 > Ini Admonition Quote dengan Author / author:bima-akbar
@@ -92,7 +94,6 @@ function testMarkdown() {
 ```
 
 <Code titles={["Javascript"]}>
-
 ```js
 // Contoh kode JavaScript
 function testMarkdown() {
@@ -136,15 +137,6 @@ Ini adalah contoh footnote[^1]. Dan footnote lainnya[^2].
 ## HTML inline (boleh untuk test)
 
 <p style="color: red;">Ini paragraf dengan HTML langsung</p>
-
-## Definisi list (beberapa parser support)
-
-Term
-: Definisi dari term tersebut.
-
-## Abbreviation
-
-*[HTML]: HyperText Markup Language
 
 ## Emoji (opsional, tergantung parser)
 
@@ -207,3 +199,11 @@ ini isi timeline 2
 ### Ini Judul Details
 ini isi Details.
 :::
+
+## Code inline
+
+`ini code inline`
+
+## Mark
+
+<mark>Ini Paragraph dengan mark</mark>
