@@ -87,21 +87,6 @@
   transition:none
 }
 
-.prose-custom kbd {
-  @apply text-label-mono-14;
-  background-color: var(--prose-surface);
-  color: var(--prose-fg);
-  padding: 0.15em 0.45em;
-  border-radius: var(--prose-radius-sm);
-  border: 1px solid var(--prose-border);
-  border-bottom-width: 2px;
-  box-shadow: 0 1px 0 var(--prose-border);
-  margin: 0 0.125rem;
-  vertical-align: middle;
-  white-space: nowrap;
-  display: inline-block;
-}
-
 .prose-custom cite {
   font-style: italic;
   color: var(--prose-accent);
@@ -232,17 +217,6 @@
     margin: 2rem 0;
   }
 
-  .prose-custom kbd {
-    @apply text-code-13;
-    padding: 0.1em 0.35em;
-    margin: 0 0.1rem;
-  }
-
-  .prose-custom .badge {
-    font-size: 0.5625rem;
-    padding: 0.15em 0.45em;
-  }
-
   .prose-custom dl {
     @apply text-copy-14;
     margin: 1.25rem 0;
@@ -281,16 +255,6 @@
 
   .prose-custom small{
     font-size:14px
-  }
-
-  .prose-custom kbd {
-    @apply text-code-14;
-    padding: 0.15em 0.45em;
-  }
-
-  .prose-custom .badge {
-    font-size: 0.625rem;
-    padding: 0.2em 0.55em;
   }
 
   .prose-custom dl {

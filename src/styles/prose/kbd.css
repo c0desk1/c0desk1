@@ -1,0 +1,63 @@
+@reference '@/styles/utilities/index.css';
+
+.prose-custom .kbd-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    vertical-align: middle;
+  }
+.prose-custom .kbd-key,
+.prose-custom kbd {
+    @apply text-label-mono-13;
+    padding: 0.15em 0.45em;
+    color: var(--prose-kbd-text);
+    border-radius: var(--prose-radius-md);
+    border: 1px solid var(--prose-kbd-border);
+    background: var(--prose-kbd-bg);
+    border-bottom-width: 2px;
+    box-shadow: 0 2px 0 var(--prose-kbd-shadow);
+    margin: 0 0.125rem;
+    vertical-align: middle;
+    white-space: nowrap;
+    display: inline-block;
+    transition: all 0.1s ease;
+    position: relative;
+    top: 0;
+    user-select: none;
+}
+
+.prose-custom .kbd-key:hover,
+.prose-custom kbd:hover {
+    background: var(--prose-surface-hover);
+    border-bottom-width: 2px;
+    box-shadow: 0 3px 0 var(--prose-kbd-shadow);
+    top: -1px;
+    cursor: pointer;
+}
+
+.prose-custom kbd:active,
+.prose-custom .kbd-key:active {
+  background: var(--prose-surface-active);
+  border-bottom-width: 1px;
+  box-shadow: 0 1px 0 var(--prose-kbd-shadow);
+  top: 1px;
+}
+
+.prose-custom .kbd-separator {
+    color: var(--prose-fg);
+    user-select: none;
+  }
+
+@media (max-width: 767px) {
+    .prose-custom kbd {
+        padding: 0.1em 0.35em;
+        margin: 0 0.1rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .prose-custom kbd {
+         @apply text-label-mono-14;
+        padding: 0.15em 0.45em;
+    }
+}

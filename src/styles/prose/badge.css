@@ -1,8 +1,7 @@
 @reference '@/styles/utilities/index.css';
 
-.badge,
+
 .prose-custom .badge {
-    @apply text-label-14;
     display: inline-block;
     text-transform: uppercase;
     padding: 0.2em 0.4em;
@@ -12,4 +11,16 @@
     color: var(--prose-fg-strong);
     white-space: nowrap;
     vertical-align: middle;
+}
+
+@media (max-width: 767px) {
+    .prose-custom .badge {
+        padding: 0.15em 0.45em;
+    }
+}
+
+@media (min-width: 768px) {
+    .prose-custom .badge {
+        padding: 0.2em 0.55em;
+    }
 }

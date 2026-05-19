@@ -1,15 +1,16 @@
-// src/plugins/remark-badge.ts
+// src/plugins/remark-kbd.ts
 import type { Root } from 'mdast';
 import type { Plugin } from 'unified';
 import { visit } from 'unist-util-visit';
 
-const remarkBadge: Plugin<[], Root> = () => {
+const remarkKbd: Plugin<[], Root> = () => {
   return (tree) => {
-    visit(tree, 'text', (node, index, parent) => {
+    visit(tree, 'text', (node: any, index, parent) => {
       if (!parent || index === undefined) return;
 
-      const value = (node as any).value as string;
-      const regex = /(?<!\!)\[([^\]]+)\]/g;
+      const value: string = node.value;
+      // Regex: || (spasi opsional) teks (spasi opsional) ||
+      const regex = /\|\|\s*(.+?)\s*\|\|/g;
       const newNodes: any[] = [];
       let lastIndex = 0;
       let match;
@@ -22,11 +23,12 @@ const remarkBadge: Plugin<[], Root> = () => {
           });
         }
 
+        // Sisipkan komponen <Kbd keys="...">
         newNodes.push({
           type: 'mdxJsxTextElement',
-          name: 'Badge',
+          name: 'kbd',
           attributes: [
-            { type: 'mdxJsxAttribute', name: 'text', value: match[1] },
+            { type: 'mdxJsxAttribute', name: 'keys', value: match[1].trim() },
           ],
           children: [],
         });
@@ -48,4 +50,4 @@ const remarkBadge: Plugin<[], Root> = () => {
   };
 };
 
-export default remarkBadge;
+export default remarkKbd;
