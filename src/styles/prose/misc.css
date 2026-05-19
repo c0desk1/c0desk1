@@ -1,7 +1,6 @@
 /* src/styles/prose/components/misc.css */
 @reference '@/styles/utilities/index.css';
 
-/* KBD – pakai Geist mono, line-height/letter-spacing sudah diatur utility */
 .prose-custom kbd {
   @apply text-label-mono-14;
   background-color: var(--prose-surface);
@@ -17,40 +16,19 @@
   display: inline-block;
 }
 
-/* Badge – tidak ada utility Geist untuk ukuran sekecil ini, tetap manual */
-.prose-custom .badge {
-  display: inline-flex;
-  align-items: center;
-  font-family: var(--prose-font-sans);
-  font-size: 0.625rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 0.2em 0.55em;
-  border-radius: var(--prose-radius-sm);
-  border: 1px solid currentColor;
-  vertical-align: middle;
+.prose-custom cite {
+  font-style: italic;
+  color: var(--prose-accent);
 }
 
-.prose-custom .badge-default {
-  color: var(--prose-fg-subtle);
-  border-color: var(--prose-border);
-  background: var(--prose-surface);
+.prose-custom del {
+  color: var(--prose-fg-disabled);
 }
 
-.prose-custom .badge-accent {
-  color: #047857;
-  border-color: #a7f3d0;
-  background: #f0fdf4;
+.prose-custom ins {
+  color: var(--prose-fg-strong);
 }
 
-.prose-custom .badge-red {
-  color: #dc2626;
-  border-color: #fecaca;
-  background: #fff1f2;
-}
-
-/* Definition list – pakai Geist copy-14 */
 .prose-custom dl {
   @apply text-copy-14;
   margin: 1.5rem 0;
@@ -83,7 +61,6 @@
   border-left-color: var(--prose-accent);
 }
 
-/* Address – pakai Geist copy-14 */
 .prose-custom address {
   @apply text-copy-14;
   font-style: normal;
@@ -116,7 +93,32 @@
   color: var(--prose-fg);
 }
 
-/* Mobile */
+.prose-custom q {
+  @apply text-copy-16;
+  quotes: "“" "”" "‘" "’";
+}
+
+.prose-custom q::before {
+  content: open-quote;
+  margin-left: 0.125rem;
+}
+
+.prose-custom q::after {
+  content: close-quote;
+  margin-right: 0.125rem;
+}
+
+.prose-custom samp {
+  @apply text-code-14;
+  background-color: var(--prose-code-bg);
+  color: var(--prose-code-text);
+  padding: 0.2em 0.4em;
+  border-radius: var(--prose-radius);
+  border: 1px solid var(--prose-code-border);
+  font-family: var(--prose-font-mono);
+  display: inline-block;
+}
+
 @media (max-width: 767px) {
   .prose-custom hr {
     margin: 2rem 0;
@@ -152,6 +154,9 @@
     padding: 0.625rem 0.875rem;
     margin: 1.25rem 0;
   }
+  .prose-custom samp {
+    @apply text-code-13;
+  }
 }
 
 /* Desktop */
@@ -180,5 +185,14 @@
     @apply text-copy-14;
     padding: 0.75rem 1rem;
     margin: 1.5rem 0;
+  }
+  .prose-custom samp {
+    @apply text-code-14;
+  }
+}
+
+@media (min-width: 1024px){
+  .prose-custom samp {
+    @apply text-code-16;
   }
 }

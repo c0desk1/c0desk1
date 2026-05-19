@@ -3,16 +3,11 @@
 
 .prose-custom .details {
   margin: 2.5rem 0;
-  border: 1px solid var(--prose-border);
+  border: 1px solid var(--prose-details-border);
   border-radius: var(--prose-radius-md);
-  background-color: var(--prose-surface);
+  background-color: var(--prose-details-bg);
   overflow: hidden;
-  transition: border-color var(--prose-transition), box-shadow var(--prose-transition);
-}
-
-.prose-custom .details:hover {
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
- 
+  transition: box-shadow var(--prose-transition);
 }
 
 .prose-custom .details-summary {
@@ -23,10 +18,7 @@
   user-select: none;
   list-style: none;
   padding: 12px 14px;
-}
-
-.prose-custom .details-summary:hover {
-  background-color: var(--prose-surface-hover);
+  color: var(--prose-details-summary);
 }
 
 .prose-custom .details-summary::-webkit-details-marker {
@@ -35,7 +27,7 @@
 
 .prose-custom .details-icon {
   opacity: 0.8;
-  color: var(--prose-fg-subtle);
+  color: var(--prose-details-marker);
   width: 1rem;
   height: 1rem;
   flex-shrink: 0;
@@ -58,7 +50,7 @@
 .prose-custom .details-content {
   padding: 0 14px 12px;
   border-top: 1px solid var(--prose-border);
-  color: var(--prose-fg-muted);
+  color: var(--prose-details-summary);
 }
 
 .prose-custom .details-content > *:first-child {

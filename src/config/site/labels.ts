@@ -121,7 +121,7 @@ export const labels = {
   blog_browsePosts: "Filter Articles by Category",
   b_relatedPosts: "Related Articles",
   blog_noBlogPosts: "No blog posts yet.",
-  blog_viewAll: "View all",
+  blog_viewAll: "View all articles",
   b_breadcrumb: "Page Navigation",
   b_articleHeader: "Article Title",
   b_contentCreator: "Content Creator",

@@ -2,7 +2,8 @@
 @reference '@/styles/utilities/index.css';
 
 .prose-custom .table-wrapper {
-  margin: 2rem 0;
+  margin: 2.5rem 0;
+  border-radius: var(--prose-radius-md);
 }
 
 .prose-custom .table-wrapper table {
@@ -12,22 +13,22 @@
 }
 
 .prose-custom thead th {
-  @apply text-label-12;
-  font-weight: 600;
+  @apply text-numeric-14;
+  font-weight: 500;
   padding: 0.75rem 1rem;
-  color: var(--prose-fg);
-  background: var(--prose-surface);
-  border-bottom: 1px solid var(--prose-border);
+  color: var(--prose-table-header-text);
+  background: var(--prose-table-header-bg);
+  border-bottom: 1px solid var(--prose-table-border);
   text-align: left;
   white-space: nowrap;
 }
 
 .prose-custom tbody td {
-  @apply text-copy-14;
+  @apply text-numeric-14;
   padding: 0.75rem 1rem;
-  color: var(--prose-fg-muted);
-  background: var(--prose-surface);
-  border-bottom: 1px solid var(--prose-border);
+  color: var(--prose-table-text);
+  background: var(--prose-table-row-bg);
+  border-bottom: 1px solid var(--prose-table-border);
 }
 
 .prose-custom tbody td strong {
@@ -46,7 +47,7 @@
 }
 
 .prose-custom tbody tr:hover td {
-  background: var(--prose-surface-hover);
+  background: var(--prose-table-row-hover);
 }
 
 .prose-custom th,
@@ -56,24 +57,23 @@
 
 .prose-custom th:not(:last-child),
 .prose-custom td:not(:last-child) {
-  border-right: 1px solid var(--prose-border);
+  border-right: 1px solid var(--prose-table-border);
 }
 
 /* Mobile */
 @media (max-width: 767px) {
   .prose-custom .table-wrapper {
     margin: 1.5rem 0;
-    border-radius: var(--prose-radius-sm);
   }
 
   .prose-custom thead th {
-    @apply text-label-12;
-    font-weight: 600;
+    @apply text-numeric-13;
+    font-weight: 500;
     padding: 0.625rem 0.875rem;
   }
 
   .prose-custom tbody td {
-    @apply text-copy-13;
+    @apply text-numeric-13;
     padding: 0.625rem 0.875rem;
   }
 
@@ -85,18 +85,14 @@
 
 /* Desktop */
 @media (min-width: 768px) {
-  .prose-custom .table-wrapper {
-    margin: 2.5rem 0;
-  }
-
   .prose-custom thead th {
-    @apply text-label-12;
-    font-weight: 600;
+    @apply text-numeric-14;
+    font-weight: 500;
     padding: 0.875rem 1.25rem;
   }
 
   .prose-custom tbody td {
-    @apply text-copy-14;
+    @apply text-numeric-14;
     padding: 0.875rem 1.25rem;
   }
 

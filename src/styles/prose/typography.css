@@ -59,12 +59,10 @@
 
 .prose-custom strong{
   font-weight:600;
-  color:var(--prose-fg);
-  letter-spacing:-0.015em
+  color:var(--prose-fg-strong);
 }
 
 .prose-custom em{
-  font-weight:500;
   font-style:italic;
   color:var(--prose-fg-muted)
 }
@@ -77,9 +75,7 @@
 
 .prose-custom sup,
 .prose-custom sub{
-  font-size:10px;
-  line-height:1;
-  font-weight:500;
+  @apply text-numeric-14;
   vertical-align:baseline;
   position:relative;
   transition:color 0.15s ease;
@@ -88,9 +84,10 @@
 
 .prose-custom sup{
   top:-0.35em;
-  margin-left:0.04em;
-  margin-right:0.04em;
-  color:var(--prose-fg-subtle)
+  left: 0.125em;
+  margin-left:0.05em;
+  margin-right:0.05em;
+  color:var(--prose-accent)
 }
 
 .prose-custom sub{
@@ -115,15 +112,18 @@
 .prose-custom h1 sup,
 .prose-custom h2 sup,
 .prose-custom h3 sup{
-  font-size:9px;
+  @apply text-numeric-14;
   top:-0.35em
 }
 
 .prose-custom small{
-  line-height:1.5;
+  @apply text-label-16;
   color:var(--prose-fg-subtle);
   display:inline-block;
-  transition:color 0.15s ease
+}
+
+.prose-custom small:hover{
+  color:var(--prose-fg)
 }
 
 .prose-custom figcaption small,
@@ -132,22 +132,18 @@
   color:var(--prose-fg-dim)
 }
 
-.prose-custom small:hover{
-  color:var(--prose-fg)
-}
-
 .prose-custom mark {
   background: none;
-  color: inherit;
+  color: var(--prose-highlight-text);
   padding: 0;
   border-radius: 0;
-  border-bottom: 2px solid var(--prose-accent-yellow-dim);
+  border-bottom: 2px solid var(--prose-highlight-border);
 }
 
 .prose-custom mark.search-highlight {
-  background-color: var(--prose-accent-yellow);
-  color: var(--prose-accent-yellow-dim);
-  border-bottom: 1px solid var(--prose-accent-yellow-dim);
+  background-color: var(--prose-highlight-bg);
+  color: var(--prose-highlight-text);
+  border-bottom: 2px solid var(--prose-highlight-border);
 }
 
 .prose-custom abbr[title]{
@@ -221,7 +217,7 @@
 
   .prose-custom sup,
   .prose-custom sub{
-    font-size:9px
+    @apply text-numeric-14;
   }
 
   .prose-custom mark{
@@ -289,7 +285,7 @@
 
   .prose-custom sup,
   .prose-custom sub{
-    font-size:10px
+    @apply text-numeric-14;
   }
 
   .prose-custom mark{

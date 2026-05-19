@@ -27,7 +27,7 @@
 
 .prose-custom figcaption {
   text-align: center;
-  color: var(--prose-fg-muted);
+  color: var(--prose-figure-caption);
   margin-top: 0.5rem;
   font-weight: 400;
 }

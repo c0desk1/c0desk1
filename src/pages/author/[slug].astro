@@ -83,7 +83,7 @@ const optimizedAvatar = isCdnUrl(authorAvatar)
       <div class="relative grid grid-cols-1 lg:grid-cols-[320px_1fr] border border-(--border) bg-(--bg)">
         <aside class="border-b lg:border-b-0 border-(--border) lg:sticky lg:top-16 self-start p-4 lg:p-6 z-10 flex flex-col gap-5">
           <Breadcrumb items={Breadcrumbs} />
-          <div class="relative overflow-hidden rounded-3xl border border-(--border) bg-(--bg-subtle) p-1.5 shadow-sm w-full lg:max-w-none">
+          <div class="relative overflow-hidden rounded-3xl border border-(--border) bg-subtle p-1.5 shadow-sm w-full lg:max-w-none">
             <Image
               src={optimizedAvatar}
               alt={authorName}
@@ -98,11 +98,11 @@ const optimizedAvatar = isCdnUrl(authorAvatar)
             <h1 id="author-heading" class="text-heading-24 lg:text-heading-28 font-bold tracking-tight text-(--fg) wrap-break-word">
               {authorName}
             </h1>
-            <p class="text-xs font-mono tracking-wider text-(--fg-subtle) uppercase">
+            <p class="text-xs font-mono tracking-wider text-subtle uppercase">
               {authorRole}
             </p>
           </div>
-          <p class="text-sm leading-6 text-(--fg-muted) tracking-tight">
+          <p class="text-sm leading-6 text-muted tracking-tight">
             {authorBio}
           </p>
           <div class="flex items-center justify-center gap-2 pt-4 flex-wrap w-full border-t border-dashed border-(--border)">
@@ -115,14 +115,14 @@ const optimizedAvatar = isCdnUrl(authorAvatar)
               <h2 class="text-heading-20 lg:text-heading-24 text-(--fg) font-semibold">
                 {t_latestArticles}
               </h2>
-              <span class="text-xs font-mono text-(--fg-muted) bg-(--bg-muted) px-2.5 py-1 border border-(--border) rounded-md">
+              <span class="text-xs font-mono text-muted bg-muted px-2.5 py-1 border border-(--border) rounded-md">
                 {authorPosts.length} {t_articles}
               </span>
             </div>
             {authorPosts.length > 0 ? (
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                 {authorPosts.map((post) => (
-                  <div class="transition-colors hover:bg-(--bg-muted) 
+                  <div class="transition-colors hover:bg-muted
                     border-t border-(--border) first:border-t-0
                     md:nth-2:border-t-0
                     md:even:border-l md:border-(--border)
@@ -136,7 +136,7 @@ const optimizedAvatar = isCdnUrl(authorAvatar)
               </div>
             ) : (
               <div class="py-24 text-center">
-                <p class="text-sm text-(--fg-muted)">{t_noArticles}</p>
+                <p class="text-sm text-muted">{t_noArticles}</p>
               </div>
             )}
           </div>

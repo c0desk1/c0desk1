@@ -31,23 +31,16 @@ seo:
 ##### Heading level 5
 ###### Heading level 6
 
-## Paragraf biasa. Ini untuk test teks normal.
-
+## Paragraf biasa.
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
 Ini paragraf kedua dengan **teks tebal**, *teks miring*, dan ***teks tebal miring***. Juga ada ~~coret~~ dan `inline code`.
 
 ## Blockquote
-
-> Ini Blockquote
-
-> Ini adalah blockquote.
-> Bisa lebih dari satu baris.
- 
-> > Dan bisa juga bersarang (nested blockquote).
-
 > Ini Admonition Quote dengan Author / author:bima-akbar
+
 > Ini Admonition Quote dengan Source / source:[c0desk1](https://c0desk1.my.id/)
+
 > Ini Admonition Quote dengan Hidden Author / Seseorang
 
 ## Daftar (List)
@@ -72,7 +65,6 @@ Ini paragraf kedua dengan **teks tebal**, *teks miring*, dan ***teks tebal mirin
 - [ ] Sedang dikerjakan
 
 ## Tabel
-
 | Header 1 | Header 2 | Header 3 |
 |----------|----------|----------|
 | Baris 1 kolom 1 | Baris 1 kolom 2 | Baris 1 kolom 3 |
@@ -80,8 +72,7 @@ Ini paragraf kedua dengan **teks tebal**, *teks miring*, dan ***teks tebal mirin
 | Baris 3 kolom 1 | Baris 3 kolom 2 | Baris 3 kolom 3 |
 
 ## Kode
-
-```javascript
+```js
 // Contoh kode JavaScript
 function testMarkdown() {
   console.log("Semua sintaks markdown siap diuji");
@@ -100,43 +91,85 @@ function testMarkdown() {
 </Code>
 
 ## Gambar
-
 ![](/org/c0desk1-og.webp)
 
 ## Gambar dengan caption
-
 ![Ini OG c0desk1](/org/c0desk1-og.webp)
 
 ## Horizontal Rule
-
 ---
 
-## Footnote (Github Markdown)
-
+## Footnote
 Ini adalah contoh footnote[^1]. Dan footnote lainnya[^2].
 
 [^1]: Isi footnote pertama.
 [^2]: Isi footnote kedua.
 
 ## Strikethrough
-
 ~~Teks ini dicoret~~
 
 ## Highlight
+<mark>Ini Paragraph dengan mark</mark>
 
-==Teks yang di-highlight==
+<mark>Teks yang di-highlight dengan HTML</mark>
 
 ## Escaping karakter
-
 \*Ini tidak miring\* karena backslash.
 
-## HTML inline (boleh untuk test)
-
+## HTML inline
 <p style="color: red;">Ini paragraf dengan HTML langsung</p>
 
-## Emoji
+## Abbreviation
+<abbr title="World Health Organization">WHO</abbr> adalah organisasi kesehatan.
 
-:smile: :rocket: :heart:
+<abbr title="Cascading Style Sheets">CSS</abbr> digunakan untuk styling.
+
+## Sample Output
+<samp>Error: file not found (404)</samp>
+
+## Time element
+<time datetime="2026-05-19">19 Mei 2026</time>
+
+## Meter
+<meter value="0.6">60%</meter>
+
+## Progress
+<progress value="70" max="100">70%</progress>
+
+## Inline quote
+<q>Ini kutipan pendek</q> di dalam paragraf.
+
+## Variable
+Rumus luas persegi: <var>s</var><sup>2</sup>
+
+## Small text
+<small>Hak cipta, disclaimer, atau catatan kaki.</small>
+
+## Insert dan Delete
+Ini <ins>teks ditambahkan</ins> dan ini <del>teks dihapus</del>.
+
+## Citation
+<cite>Judul Buku atau Karya</cite>
+
+## Keyboard Input
+Tekan <kbd>Ctrl</kbd> + <kbd>C</kbd> untuk menyalin.
+
+## Superscript dan Subscript
+H<sub>2</sub>O dan E = mc<sup>2</sup>
+
+## Definition List
+<dl>
+  <dt>Term 1</dt>
+  <dd>Definisi term 1.</dd>
+  <dt>Term 2</dt>
+  <dd>Definisi term 2.</dd>
+</dl>
+
+## Bidirectional text
+<bdo dir="rtl">Teks ini terbaca dari kanan ke kiri</bdo>
+
+## Ruby annotation
+<ruby>漢字<rt>かんじ</rt></ruby>
 
 ## Callout
 
@@ -156,16 +189,16 @@ ini contoh callout tip
 ini contoh callout warning
 :::
 
-:::[!danger]
-ini contoh callout danger
-:::
-
 :::[!caution]
 ini contoh callout caution
 :::
 
 :::[!important]
 ini contoh callout important
+:::
+
+:::[!danger]
+ini contoh callout danger
 :::
 
 ## STEPS
@@ -192,15 +225,6 @@ ini isi timeline 2
 
 ## Details
 
-:::details
-### Ini Judul Details
+:::details Ini Judul Details
 ini isi Details.
 :::
-
-## Code inline
-
-`ini code inline`
-
-## Mark
-
-<mark>Ini Paragraph dengan mark</mark>

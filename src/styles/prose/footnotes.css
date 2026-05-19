@@ -3,10 +3,10 @@
 
 .prose-custom .footnotes,
 .prose-custom section[data-footnotes] {
-  @apply text-copy-16;
+  @apply text-copy-14;
   margin: 2.5rem 0;
   padding-top: 2rem;
-  border-top: 1px solid var(--prose-border);
+  border-top: 1px solid var(--prose-footnote-border);
   overflow: clip;
 }
 
@@ -31,9 +31,10 @@
 }
 
 .prose-custom section[data-footnotes] li {
+  @apply text-copy-14;
   display: flex;
   gap: 0.75rem;
-  color: var(--prose-fg-subtle);
+  color: var(--prose-footnote-text);
   scroll-margin-top: 80px;
   margin-bottom: 0;
   padding-left: 0;
@@ -44,21 +45,16 @@
   content: none;
 }
 
-/* Nomor footnote menggunakan font mono dan weight 500, line-height mengikuti Geist */
 .prose-custom section[data-footnotes] li::before {
+  @apply text-label-mono-14;
   content: counter(list-item);
   counter-increment: list-item;
-  flex-shrink: 0;
-  font-weight: 500;
-  font-family: var(--prose-font-mono);
   color: var(--prose-fg-subtle);
-  min-width: 1rem;
-  padding-top: 0.2rem;
+  top: 0.125rem;
 }
 
 .prose-custom section[data-footnotes] p {
-  display: inline;
-  margin: 0;
+  @apply text-label-14;
   color: var(--prose-fg-subtle);
 }
 
@@ -102,7 +98,7 @@
 @media (max-width: 767px) {
   .prose-custom .footnotes,
   .prose-custom section[data-footnotes] {
-    @apply text-copy-16;
+    @apply text-copy-14;
     margin: 2rem 0;
     padding-top: 1.5rem;
   }
@@ -124,7 +120,7 @@
 @media (min-width: 768px) {
   .prose-custom .footnotes,
   .prose-custom section[data-footnotes] {
-    @apply text-copy-16;
+    @apply text-copy-14;
     margin: 2.5rem 0;
     padding-top: 2rem;
   }
