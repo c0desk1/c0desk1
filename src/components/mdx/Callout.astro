@@ -4,7 +4,7 @@
 import Icon from '@/components/ui/Icon';
 
 interface Props {
-  type?: 'note' | 'info' | 'tip' | 'warning' | 'danger';
+  type?: 'note' | 'info' | 'tip' | 'warning' | 'danger' | 'important' | 'caution';
 }
 
 const { type = 'note' } = Astro.props;
@@ -15,6 +15,8 @@ const types = {
   tip: { icon: 'tip' },
   warning: { icon: 'warning' },
   danger: { icon: 'danger' },
+  important: {icon: 'warning'},
+  caution: {icon: 'warning'}
 } as const;
 
 const current = types[type];
