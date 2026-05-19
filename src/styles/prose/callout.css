@@ -165,14 +165,26 @@
   color: var(--callout-tip-icon);
 }
 
+/* WARNING */
+
 .prose-custom [data-callout="warning"] {
+  background: var(--callout-warning-bg);
   border-color: var(--callout-warning-border);
+}
+
+.prose-custom [data-callout="warning"] .callout-content {
   color: var(--callout-warning-text);
+}
+
+.prose-custom [data-callout="warning"] .callout-title {
+  color: var(--callout-warning-title);
 }
 
 .prose-custom [data-callout="warning"] .callout-icon {
   color: var(--callout-warning-icon);
 }
+
+/* DANGER */
 
 .prose-custom [data-callout="danger"] {
   border-color: var(--callout-danger-border);
