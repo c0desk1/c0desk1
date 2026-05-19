@@ -40,7 +40,6 @@ export const components: MDXComponents = {
   Steps,
   Timeline,
   Code,
-  Footnotes,
   footnotes: Footnotes,
   Callout,
   Accordion,

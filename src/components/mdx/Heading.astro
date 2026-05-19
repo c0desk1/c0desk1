@@ -37,7 +37,7 @@ const classes = headingClasses[`h${level}`] || "text-heading-20";
   <span class="heading-text-content"><slot /></span>
   {id && (
     <a href={`#${id}`} class="anchor-link mt-auto mb-auto w-8 h-8 rounded-full" aria-label={anchorLabel}>
-      <Icon name="link" />
+      <Icon name="link" className="w-4 h-4 sm:w-5 sm:h-5" />
     </a>
   )}
 </Tag>
