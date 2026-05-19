@@ -13,6 +13,8 @@ import remarkDetails from './src/lib/mdx/remark-details.ts';
 import remarkSteps from './src/lib/mdx/remark-steps.ts';
 import remarkTimeline from './src/lib/mdx/remark-timeline.ts';
 import remarkBadge from './src/lib/mdx/remark-badge.ts';
+import remarkKbd from './src/lib/mdx/remark-kbd.ts';
+import remarkChangelog from './src/lib/mdx/remark-changelog.ts';
 
 // https://astro.build/config
 export default defineConfig({
@@ -35,7 +37,9 @@ export default defineConfig({
       remarkDetails,
       remarkSteps,
       remarkTimeline,
-      remarkBadge
+      remarkChangelog,
+      remarkBadge,
+      remarkKbd,
     ],
     shikiConfig: {
       themes: {
