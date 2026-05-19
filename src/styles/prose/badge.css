@@ -6,7 +6,7 @@
     text-transform: uppercase;
     padding: 0.2em 0.4em;
     border-radius: var(--prose-radius-lg);
-    border: 1px solid var(--prose-border-subtle);
+    border: 1px solid var(--prose-border-strong);
     background: var(--prose-bg-elevated);
     color: var(--prose-fg-strong);
     white-space: nowrap;
