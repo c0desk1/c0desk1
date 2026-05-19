@@ -1,17 +1,18 @@
 ---
-// src/components/mdx/KBD.astro
+// src/components/mdx/Kbd.astro
+interface Props {
+  keys: string; // e.g. "Ctrl+K" or "Ctrl+Shift+P"
+}
+
+const { keys } = Astro.props;
+const keyList = keys.split('+').map(k => k.trim()).filter(Boolean);
 ---
 
-<kbd class="
-  mx-0.5 inline-flex items-center justify-center align-middle
-  rounded-(--prose-radius-sm)
-  border border-(--prose-kbd-border)
-  bg-(--prose-kbd-bg)
-  px-1.5 py-0.5'
-  text-label-mono-13
-  md:text-label-mono-14
-  text-(--prose-kbd-text)
-  shadows-(--prose-kbd-shadow)
-">
-  <slot />
-</kbd>
+<span class="kbd-group">
+  {keyList.map((key, i) => (
+    <>
+      {i > 0 && <span class="kbd-separator text-copy-16 lg:text-copy-18">+</span>}
+      <kbd class="kbd-key text-label-mono-13 sm:text-label-mono-14 text-(--prose-kbd-text)">{key}</kbd>
+    </>
+  ))}
+</span>

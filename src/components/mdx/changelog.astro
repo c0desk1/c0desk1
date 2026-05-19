@@ -1,0 +1,73 @@
+---
+// src/components/mdx/Changelog.astro
+
+const html = await Astro.slots.render('default');
+const releaseRegex = /(<h[234][^>]*>[\s\S]*?<\/h[234]>)\s*([\s\S]*?)(?=<h[234][^>]*>[\s\S]*?<\/h[234]>|$)/gi;
+const releases: { heading: string; content: string }[] = [];
+let match;
+while ((match = releaseRegex.exec(html)) !== null) {
+  releases.push({
+    heading: match[1].trim(),
+    content: match[2].trim(),
+  });
+}
+
+if (releases.length === 0) {
+  releases.push({ heading: '', content: html });
+}
+---
+
+<div class="relative my-6 md:my-8 pl-10 sm:pl-12" id="changelog-wrapper">
+  <div id="changelog-line" class="absolute left-5 border-l border-dashed border-(--prose-border)" style="top:0; bottom:0;"></div>
+  <div class="space-y-8">
+    {releases.map((release) => (
+      <div class="relative changelog-item">
+        <div class="absolute -left-6 sm:-left-8 top-2 w-2.5 h-2.5 rounded-full bg-(--prose-link-visited) border border-(--prose-border) z-10"></div>
+        
+        {release.heading && (
+          <div class="text-heading-18 changelog-version font-medium text-(--prose-fg) mb-1" set:html={release.heading} />
+        )}
+        {release.content && (
+          <div class="text-copy-14 changelog-items space-y-1" set:html={release.content} />
+        )}
+      </div>
+    ))}
+  </div>
+</div>
+
+<script>
+  function adjustLine() {
+    const wrapper = document.getElementById('changelog-wrapper');
+    const line = document.getElementById('changelog-line');
+    if (!wrapper || !line) return;
+
+    const items = wrapper.querySelectorAll('.changelog-item');
+    if (items.length === 0) return;
+
+    const firstItem = items[0];
+    const lastItem = items[items.length - 1];
+
+    const firstBullet = firstItem.querySelector('.rounded-full') as HTMLElement;
+    const lastBullet = lastItem.querySelector('.rounded-full') as HTMLElement;
+
+    if (!firstBullet || !lastBullet) return;
+
+    const wrapperRect = wrapper.getBoundingClientRect();
+    const firstBulletRect = firstBullet.getBoundingClientRect();
+    const lastBulletRect = lastBullet.getBoundingClientRect();
+
+    const top = firstBulletRect.top - wrapperRect.top + firstBullet.offsetHeight / 2;
+    const bottom = wrapperRect.bottom - (lastBulletRect.bottom - lastBullet.offsetHeight / 2);
+
+    line.style.top = `${top}px`;
+    line.style.bottom = `${bottom}px`;
+  }
+
+  document.addEventListener('astro:page-load', adjustLine);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', adjustLine);
+  } else {
+    adjustLine();
+  }
+  window.addEventListener('resize', adjustLine);
+</script>

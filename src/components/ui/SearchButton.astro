@@ -9,7 +9,7 @@ const searchLabel = siteData.search;
 const searchPlaceholder = siteData.searchPlaceholder;
 ---
 
-<button id="search-trigger" type="button" aria-label={searchLabel} title={searchLabel} class="group flex items-center justify-center gap-2 w-auto sm:w-70 md:w-70 p-2 sm:px-3 sm:py-2 rounded-full border border-(--border) sm:justify-between sm:rounded-xl sm:border-(--border-strong)/50 sm:hover:bg-(--bg-muted) transition-colors duration-200">
+<button id="search-trigger" type="button" aria-label={searchLabel} title={searchLabel} class="group flex items-center justify-center gap-2 w-auto sm:w-70 md:w-70 p-2 sm:px-3 sm:py-2 rounded-full border border-(--border) sm:justify-between sm:rounded-xl sm:border-(--border-strong)/50 sm:hover:bg-muted transition-colors duration-200">
   <div class="flex items-center gap-2">
     <Icon name="search" className="h-5 w-5 text-muted sm:text-dim" />
     <span class="hidden text-label-14 sm:inline text-muted">{searchPlaceholder}</span>
