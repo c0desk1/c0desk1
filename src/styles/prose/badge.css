@@ -1,5 +1,6 @@
 @reference '@/styles/utilities/index.css';
 
+.badge,
 .prose-custom .badge {
     @apply text-label-14;
     display: inline-block;
