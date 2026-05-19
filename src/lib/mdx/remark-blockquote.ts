@@ -1,4 +1,4 @@
-import type { Root, Text, Link, Paragraph } from 'mdast';
+import type { Root, Blockquote, Paragraph, Text, Link } from 'mdast';
 import type { Plugin } from 'unified';
 import { visit } from 'unist-util-visit';
 
@@ -7,11 +7,21 @@ const remarkBlockquoteAuthor: Plugin<[], Root> = () => {
     visit(tree, 'blockquote', (node, index, parent) => {
       if (!parent || index === undefined) return;
 
-      const children = node.children;
+      const blockquote = node as Blockquote;
+      const children = blockquote.children;
       if (!children || children.length === 0) return;
 
       const lastChild = children[children.length - 1];
-      if (lastChild.type !== 'paragraph') return;
+      if (lastChild.type !== 'paragraph') {
+        const mdxNode: any = {
+          type: 'mdxJsxFlowElement',
+          name: 'Blockquote',
+          attributes: [],
+          children: [...children],
+        };
+        parent.children.splice(index, 1, mdxNode);
+        return;
+      }
 
       const para = lastChild as Paragraph;
       const paraChildren = [...para.children];
@@ -19,7 +29,8 @@ const remarkBlockquoteAuthor: Plugin<[], Root> = () => {
       let fullTextForSource = '';
       for (const child of paraChildren) {
         if (child.type === 'text') fullTextForSource += (child as Text).value;
-        else if (child.type === 'link') fullTextForSource += `[${(child as Link).children.map(c => (c as Text).value).join('')}](${(child as Link).url})`;
+        else if (child.type === 'link')
+          fullTextForSource += `[${(child as Link).children.map(c => (c as Text).value).join('')}](${(child as Link).url})`;
         else fullTextForSource += '';
       }
 
@@ -34,12 +45,10 @@ const remarkBlockquoteAuthor: Plugin<[], Root> = () => {
 
         for (let i = paraChildren.length - 1; i >= 0; i--) {
           const child = paraChildren[i];
-
           let childText = '';
           if (child.type === 'text') childText = (child as Text).value;
           else if (child.type === 'link') {
             const link = child as Link;
-            
             childText = `[${link.children.map(c => (c as Text).value).join('')}](${link.url})`;
           } else continue;
 
@@ -96,62 +105,71 @@ const remarkBlockquoteAuthor: Plugin<[], Root> = () => {
       }
 
       const match = fullText.match(/\s+\/\s+(.+?)\s*$/);
-      if (!match) return;
+      if (match) {
+        const value = match[1].trim();
+        const suffix = match[0];
 
-      const value = match[1].trim();
-      const suffix = match[0];
+        let remainingLength = suffix.length;
+        const newLastChildren: typeof paraChildren = [];
 
-      let remainingLength = suffix.length;
-      const newLastChildren: typeof paraChildren = [];
+        for (let i = parts.length - 1; i >= 0; i--) {
+          const part = parts[i];
+          let partText = '';
+          if (part.type === 'text') partText = (part as Text).value;
+          else if (part.type === 'link') partText = (part as Link).url;
 
-      for (let i = parts.length - 1; i >= 0; i--) {
-        const part = parts[i];
-        let partText = '';
-        if (part.type === 'text') partText = (part as Text).value;
-        else if (part.type === 'link') partText = (part as Link).url;
-
-        if (remainingLength > 0 && partText.length > 0) {
-          if (partText.length <= remainingLength) {
-            remainingLength -= partText.length;
-            continue;
-          } else {
-            if (part.type === 'text') {
-              (part as Text).value = partText.substring(0, partText.length - remainingLength);
+          if (remainingLength > 0 && partText.length > 0) {
+            if (partText.length <= remainingLength) {
+              remainingLength -= partText.length;
+              continue;
+            } else {
+              if (part.type === 'text') {
+                (part as Text).value = partText.substring(0, partText.length - remainingLength);
+              }
+              remainingLength = 0;
             }
-            remainingLength = 0;
           }
+          newLastChildren.unshift(part);
         }
-        newLastChildren.unshift(part);
-      }
 
-      const newBlockquoteChildren = [...children];
-      if (newLastChildren.length === 0) {
-        newBlockquoteChildren.pop();
-      } else {
-        newBlockquoteChildren[newBlockquoteChildren.length - 1] = {
-          ...para,
-          children: newLastChildren,
+        const newBlockquoteChildren = [...children];
+        if (newLastChildren.length === 0) {
+          newBlockquoteChildren.pop();
+        } else {
+          newBlockquoteChildren[newBlockquoteChildren.length - 1] = {
+            ...para,
+            children: newLastChildren,
+          };
+        }
+
+        const mdxNode: any = {
+          type: 'mdxJsxFlowElement',
+          name: 'Blockquote',
+          attributes: [],
+          children: newBlockquoteChildren,
         };
+
+        if (value.startsWith('author:')) {
+          const slug = value.slice('author:'.length).trim();
+          if (slug) {
+            mdxNode.attributes.push({ type: 'mdxJsxAttribute', name: 'author', value: slug });
+          }
+        } else if (/^https?:\/\//.test(value)) {
+          mdxNode.attributes.push({ type: 'mdxJsxAttribute', name: 'cite', value });
+        } else {
+          mdxNode.attributes.push({ type: 'mdxJsxAttribute', name: 'author', value });
+        }
+
+        parent.children.splice(index, 1, mdxNode);
+        return;
       }
 
       const mdxNode: any = {
         type: 'mdxJsxFlowElement',
         name: 'Blockquote',
         attributes: [],
-        children: newBlockquoteChildren,
+        children: [...children],
       };
-
-      if (value.startsWith('author:')) {
-        const slug = value.slice('author:'.length).trim();
-        if (slug) {
-          mdxNode.attributes.push({ type: 'mdxJsxAttribute', name: 'author', value: slug });
-        }
-      } else if (/^https?:\/\//.test(value)) {
-        mdxNode.attributes.push({ type: 'mdxJsxAttribute', name: 'cite', value });
-      } else {
-        mdxNode.attributes.push({ type: 'mdxJsxAttribute', name: 'author', value });
-      }
-
       parent.children.splice(index, 1, mdxNode);
     });
   };

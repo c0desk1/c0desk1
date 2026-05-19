@@ -8,21 +8,7 @@
 }
 
 .prose-custom .quote-body {
-  color: var(--prose-fg);
-}
-
-.prose-custom .quote .quote-source {
-  display: block;
-  width: 100%;
-  margin-top: 0.75rem;
-  padding: 0;
-  font-style: italic;
-  color: var(--prose-fg-subtle);
-  text-align: right;
-  border: none !important;
-  background: none !important;
-  font-size: 0.875rem;
-  line-height: 1.4;
+  color: var(--prose-quote-text);
 }
 
 .prose-custom .quote-body p {
@@ -31,7 +17,6 @@
   font: inherit;
   letter-spacing: inherit;
   line-height: inherit;
-  font-weight: 400;
 }
 
 .prose-custom .quote-body p:last-child {
@@ -40,30 +25,27 @@
 
 .prose-custom .quote-body p:first-of-type::before {
   content:"❝";
-  margin-right:0.1rem;
+  margin-right:-0.05rem;
   font-style:normal
 }
 
 .prose-custom .quote-body p:last-of-type::after {
   content:"❞";
-  margin-left:0.1rem;
+  margin-left:-0.1rem;
   font-style:normal
 }
 
 .prose-custom .quote-name {
-  font-weight: 500;
   color: var(--prose-fg);
 }
 
 .prose-custom .quote-name::after {
   content:",";
   color: var(--prose-fg);
-  font-weight: 500;
 }
 
 .prose-custom .quote-role {
-  color: var(--prose-fg-muted);
-  font-weight: 400;
+  color: var(--prose-quote-cite);
 }
 
 @media (max-width: 48rem) {

@@ -37,6 +37,10 @@
   gap: 0.75rem;
 }
 
+.prose-custom dl :last-child {
+  margin-bottom: 0;
+}
+
 .prose-custom dt {
   font-weight: 600;
   color: var(--prose-fg);
