@@ -397,7 +397,7 @@ export default function Icon({ name, className = 'w-5 h-5' }: IconProps) {
         </svg>
       );
 
-    case 'arrow-right':
+    case 'arrow-left':
       return (
         <svg {...s} width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth}>
           <path d="M19 12H5" />
@@ -405,7 +405,7 @@ export default function Icon({ name, className = 'w-5 h-5' }: IconProps) {
         </svg>
       );
 
-    case 'arrow-left':
+    case 'arrow-right':
       return (
         <svg {...s} width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth}>
           <path d="M5 12h14" />
