@@ -19,6 +19,7 @@ import Footnotes from '@/components/mdx/Footnotes.astro';
 import Callout from '../mdx/Callout.astro';
 import Accordion from '../mdx/Accordion.astro';
 import Timeline from '../mdx/Timeline.astro';
+import Badge from '../mdx/Badge.astro';
 
 export const components: MDXComponents = {
   h1: Heading,
@@ -43,4 +44,5 @@ export const components: MDXComponents = {
   footnotes: Footnotes,
   Callout,
   Accordion,
+  Badge,
 };
