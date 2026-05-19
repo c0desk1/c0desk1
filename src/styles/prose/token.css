@@ -1,122 +1,335 @@
 /* src/styles/prose/tokens.css */
 
-/* Light Mode (Geist, bg #fafafa) */
+/* Light Mode */
 :root {
-  /* Accent */
-  --prose-accent:       #0070f3;
-  --prose-accent-dim:   #0761d1;
-  --prose-accent-soft:  #e1f0ff;
-  --prose-accent-hover: #0761d1;
+   /* Typography Settings */
+  --prose-font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --prose-font-mono: var(--font-mono), ui-monospace, monospace;
+  --prose-font-serif: ui-serif, Georgia, serif;
 
-  /* Highlight */
-  --prose-accent-yellow:      #fff9e6;
-  --prose-accent-yellow-dim:  #ffe4a3;
-  --prose-accent-yellow-soft: #663c00;
+  --prose-leading: 1.75;
+  --prose-leading-tight: 1.4;
+  --prose-leading-relaxed: 1.875;
 
-  /* Foreground */
-  --prose-fg:         #111111;
-  --prose-fg-muted:   #444444;
-  --prose-fg-subtle:  #5c5c5c;   /* kontras AA terhadap #fafafa */
-  --prose-fg-dim:     #7a7a7a;
-
-  /* Surface & borders */
-  --prose-border:        #e5e5e5;
-  --prose-surface:       #ffffff;
-  --prose-surface-hover: #fafafa;
-  --prose-surface-dim:   #f5f5f5;
-  --prose-bg-subtle:     #fcfcfc;
-  --prose-bg-muted:      #f9f9f9;
-
-  /* Typography */
-  --prose-font-sans: var(--font-GeistSans);
-  --prose-font-mono: var(--font-GeistMono);
+  /* Spacing */
+  --prose-space-xs: 0.25rem;
+  --prose-space-sm: 0.5rem;
+  --prose-space-md: 1rem;
+  --prose-space-lg: 1.5rem;
+  --prose-space-xl: 2rem;
+  --prose-space-2xl: 3rem;
 
   /* Radius */
   --prose-radius-sm: 4px;
-  --prose-radius:    6px;
+  --prose-radius: 6px;
   --prose-radius-md: 8px;
   --prose-radius-lg: 12px;
 
   /* Motion */
-  --prose-transition: 0.15s ease;
+  --prose-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --prose-duration: 150ms;
+  --prose-duration-md: 250ms;
 
-  /* Callouts – disesuaikan dengan latar #fafafa */
-  --callout-note-bg:     #f5f5f5;
-  --callout-note-border: #e0e0e0;
-  --callout-note-text:   #333333;
-  --callout-note-icon:   #888888;
+  /* Accent Colors */
+  --prose-accent: #0070f3;
+  --prose-accent-hover: #0761d1;
+  --prose-accent-active: #0451b0;
+  --prose-accent-dim: #0761d1;
+  --prose-accent-soft: rgba(0, 112, 243, 0.08);
+  --prose-accent-softer: rgba(0, 112, 243, 0.04);
 
-  --callout-info-bg:     #f0f7ff;
-  --callout-info-border: #cce4ff;
-  --callout-info-text:   #0056b3;
-  --callout-info-icon:   #0070f3;
+  /* Highlight / Mark */
+  --prose-highlight-bg: rgba(255, 214, 0, 0.2);
+  --prose-highlight-border: rgba(255, 214, 0, 0.4);
+  --prose-highlight-text: #664d00;
 
-  --callout-tip-bg:      #f0fdf4;
-  --callout-tip-border:  #bcf0c2;
-  --callout-tip-text:    #166534;
-  --callout-tip-icon:    #22c55e;
+  /* Foreground Hierarchy */
+  --prose-fg: #171717;
+  --prose-fg-strong: #000000;
+  --prose-fg-muted: #525252;
+  --prose-fg-subtle: #737373;
+  --prose-fg-dim: #a3a3a3;
+  --prose-fg-disabled: #d4d4d4;
 
-  --callout-warning-bg:     #fff9e6;
-  --callout-warning-border: #ffe5a3;
-  --callout-warning-text:   #994c00;
-  --callout-warning-icon:   #f59e0b;
+  /* Surfaces & Backgrounds */
+  --prose-bg: #ffffff;
+  --prose-bg-subtle: #fafafa;
+  --prose-bg-muted: #f5f5f5;
+  --prose-bg-elevated: #ffffff;
 
-  --callout-danger-bg:     #fff5f5;
-  --callout-danger-border: #ffcdcd;
-  --callout-danger-text:   #b91c1c;
-  --callout-danger-icon:   #ef4444;
+  --prose-surface: #ffffff;
+  --prose-surface-hover: #fafafa;
+  --prose-surface-active: #f5f5f5;
+  --prose-surface-elevated: #ffffff;
+
+  /* Borders */
+  --prose-border: #e5e5e5;
+  --prose-border-strong: #d4d4d4;
+  --prose-border-subtle: #f5f5f5;
+  --prose-border-muted: #fafafa;
+
+  /* Code & Pre */
+  --prose-code-bg: #f5f5f5;
+  --prose-code-border: #e5e5e5;
+  --prose-code-text: #171717;
+  --prose-code-keyword: #d73a49;
+  --prose-code-string: #032f62;
+  --prose-code-comment: #6a737d;
+  --prose-code-function: #6f42c1;
+  --prose-code-number: #005cc5;
+  --prose-code-operator: #d73a49;
+  --prose-code-punctuation: #6a737d;
+
+  /* Blockquote */
+  --prose-quote-border: #e5e5e5;
+  --prose-quote-bg: transparent;
+  --prose-quote-text: #525252;
+  --prose-quote-cite: #737373;
+
+  /* Tables */
+  --prose-table-header-bg: #fafafa;
+  --prose-table-header-text: #171717;
+  --prose-table-row-bg: transparent;
+  --prose-table-row-hover: #fafafa;
+  --prose-table-border: #e5e5e5;
+  --prose-table-text: #525252;
+
+  /* Horizontal Rule */
+  --prose-hr: #e5e5e5;
+  --prose-hr-strong: #d4d4d4;
+
+  /* Lists */
+  --prose-list-marker: #a3a3a3;
+  --prose-list-marker-hover: #737373;
+
+  /* Links */
+  --prose-link: #0070f3;
+  --prose-link-hover: #0761d1;
+  --prose-link-visited: #7c3aed;
+  --prose-link-underline: rgba(0, 112, 243, 0.3);
+  --prose-link-underline-hover: rgba(0, 112, 243, 0.6);
+
+  /* Callouts - Note (Neutral) */
+  --callout-note-bg: #f5f5f5;
+  --callout-note-border: #e5e5e5;
+  --callout-note-text: #525252;
+  --callout-note-icon: #737373;
+  --callout-note-title: #171717;
+
+  /* Callouts - Info (Blue) */
+  --callout-info-bg: rgba(0, 112, 243, 0.06);
+  --callout-info-border: rgba(0, 112, 243, 0.15);
+  --callout-info-text: #525252;
+  --callout-info-icon: #0070f3;
+  --callout-info-title: #0761d1;
+
+  /* Callouts - Tip (Green) */
+  --callout-tip-bg: rgba(34, 197, 94, 0.06);
+  --callout-tip-border: rgba(34, 197, 94, 0.15);
+  --callout-tip-text: #525252;
+  --callout-tip-icon: #22c55e;
+  --callout-tip-title: #16a34a;
+
+  /* Callouts - Warning (Amber) */
+  --callout-warning-bg: rgba(245, 158, 11, 0.08);
+  --callout-warning-border: rgba(245, 158, 11, 0.2);
+  --callout-warning-text: #525252;
+  --callout-warning-icon: #f59e0b;
+  --callout-warning-title: #d97706;
+
+  /* Callouts - Danger (Red) */
+  --callout-danger-bg: rgba(239, 68, 68, 0.06);
+  --callout-danger-border: rgba(239, 68, 68, 0.15);
+  --callout-danger-text: #525252;
+  --callout-danger-icon: #ef4444;
+  --callout-danger-title: #dc2626;
+
+  /* Callouts - Important (Purple) */
+  --callout-important-bg: rgba(168, 85, 247, 0.06);
+  --callout-important-border: rgba(168, 85, 247, 0.15);
+  --callout-important-text: #525252;
+  --callout-important-icon: #a855f7;
+  --callout-important-title: #9333ea;
+
+  /* Callouts - Caution (Orange) */
+  --callout-caution-bg: rgba(249, 115, 22, 0.06);
+  --callout-caution-border: rgba(249, 115, 22, 0.15);
+  --callout-caution-text: #525252;
+  --callout-caution-icon: #f97316;
+  --callout-caution-title: #ea580c;
+
+  /* Details / Accordion */
+  --prose-details-bg: #fafafa;
+  --prose-details-border: #e5e5e5;
+  --prose-details-summary: #171717;
+  --prose-details-marker: #737373;
+
+  /* Kbd / Keyboard */
+  --prose-kbd-bg: #f5f5f5;
+  --prose-kbd-border: #d4d4d4;
+  --prose-kbd-text: #171717;
+  --prose-kbd-shadow: #e5e5e5;
+
+  /* Footnotes */
+  --prose-footnote-text: #737373;
+  --prose-footnote-hover: #525252;
+  --prose-footnote-border: #e5e5e5;
+
+  /* Image & Figure */
+  --prose-figure-caption: #737373;
+  --prose-image-border: #e5e5e5;
+  --prose-image-bg: #fafafa;
 }
 
-/* Dark Mode (Geist, pure black #000) */
+/* Dark Mode */
 .dark {
-  /* Accent */
-  --prose-accent:       #3291ff;
-  --prose-accent-dim:   #0070f3;
-  --prose-accent-soft:  #1a2c3e;
-  --prose-accent-hover: #60a5fa;
+  /* Accent Colors */
+  --prose-accent: #3291ff;
+  --prose-accent-hover: #52a8ff;
+  --prose-accent-active: #0070f3;
+  --prose-accent-dim: #0070f3;
+  --prose-accent-soft: rgba(50, 145, 255, 0.1);
+  --prose-accent-softer: rgba(50, 145, 255, 0.05);
 
-  /* Highlight */
-  --prose-accent-yellow:      #332200;
-  --prose-accent-yellow-dim:  #664400;
-  --prose-accent-yellow-soft: #ffe6b3;
+  /* Highlight / Mark */
+  --prose-highlight-bg: rgba(255, 214, 0, 0.15);
+  --prose-highlight-border: rgba(255, 214, 0, 0.3);
+  --prose-highlight-text: #ffd600;
 
-  /* Foreground */
-  --prose-fg:        #ffffff;
-  --prose-fg-muted:  #888888;
-  --prose-fg-subtle: #666666;
-  --prose-fg-dim:    #444444;
+  /* Foreground Hierarchy */
+  --prose-fg: #ededed;
+  --prose-fg-strong: #ffffff;
+  --prose-fg-muted: #a1a1a1;
+  --prose-fg-subtle: #888888;
+  --prose-fg-dim: #666666;
+  --prose-fg-disabled: #444444;
 
-  /* Surface & borders */
-  --prose-border:        #333333;
-  --prose-surface:       #000000;
+  /* Surfaces & Backgrounds */
+  --prose-bg: #000000;
+  --prose-bg-subtle: #0a0a0a;
+  --prose-bg-muted: #111111;
+  --prose-bg-elevated: #171717;
+
+  --prose-surface: #0a0a0a;
   --prose-surface-hover: #111111;
-  --prose-surface-dim:   #050505;
-  --prose-bg-subtle:     #0a0a0a;
-  --prose-bg-muted:      #0f0f0f;
+  --prose-surface-active: #171717;
+  --prose-surface-elevated: #1a1a1a;
 
-  /* Callouts dark */
-  --callout-note-bg:     #1a1a1a;
-  --callout-note-border: #2a2a2a;
-  --callout-note-text:   #cccccc;
-  --callout-note-icon:   #666666;
+  /* Borders */
+  --prose-border: #262626;
+  --prose-border-strong: #333333;
+  --prose-border-subtle: #1a1a1a;
+  --prose-border-muted: #171717;
 
-  --callout-info-bg:     #0a1a2a;
-  --callout-info-border: #1a3a5a;
-  --callout-info-text:   #7ab7ff;
-  --callout-info-icon:   #3291ff;
+  /* Code & Pre */
+  --prose-code-bg: #171717;
+  --prose-code-border: #262626;
+  --prose-code-text: #e5e5e5;
+  --prose-code-keyword: #ff7b72;
+  --prose-code-string: #a5d6ff;
+  --prose-code-comment: #8b949e;
+  --prose-code-function: #d2a8ff;
+  --prose-code-number: #79c0ff;
+  --prose-code-operator: #ff7b72;
+  --prose-code-punctuation: #8b949e;
 
-  --callout-tip-bg:      #0a1f0a;
-  --callout-tip-border:  #1a3a1a;
-  --callout-tip-text:    #86efac;
-  --callout-tip-icon:    #22c55e;
+  /* Blockquote */
+  --prose-quote-border: #333333;
+  --prose-quote-bg: transparent;
+  --prose-quote-text: #a1a1a1;
+  --prose-quote-cite: #666666;
 
-  --callout-warning-bg:     #1f1a0a;
-  --callout-warning-border: #3a2a1a;
-  --callout-warning-text:   #fcd34d;
-  --callout-warning-icon:   #f59e0b;
+  /* Tables */
+  --prose-table-header-bg: #111111;
+  --prose-table-header-text: #ededed;
+  --prose-table-row-bg: transparent;
+  --prose-table-row-hover: #0a0a0a;
+  --prose-table-border: #262626;
+  --prose-table-text: #a1a1a1;
 
-  --callout-danger-bg:     #1f0a0a;
-  --callout-danger-border: #3a1a1a;
-  --callout-danger-text:   #fca5a5;
-  --callout-danger-icon:   #ef4444;
+  /* Horizontal Rule */
+  --prose-hr: #262626;
+  --prose-hr-strong: #333333;
+
+  /* Lists */
+  --prose-list-marker: #666666;
+  --prose-list-marker-hover: #888888;
+
+  /* Links */
+  --prose-link: #3291ff;
+  --prose-link-hover: #52a8ff;
+  --prose-link-visited: #a78bfa;
+  --prose-link-underline: rgba(50, 145, 255, 0.4);
+  --prose-link-underline-hover: rgba(50, 145, 255, 0.8);  
+
+  /* Callouts - Note (Neutral) */
+  --callout-note-bg: #171717;
+  --callout-note-border: #262626;
+  --callout-note-text: #a1a1a1;
+  --callout-note-icon: #666666;
+  --callout-note-title: #ededed;
+
+  /* Callouts - Info (Blue) */
+  --callout-info-bg: rgba(50, 145, 255, 0.08);
+  --callout-info-border: rgba(50, 145, 255, 0.2);
+  --callout-info-text: #a1a1a1;
+  --callout-info-icon: #3291ff;
+  --callout-info-title: #52a8ff;
+
+  /* Callouts - Tip (Green) */
+  --callout-tip-bg: rgba(34, 197, 94, 0.08);
+  --callout-tip-border: rgba(34, 197, 94, 0.2);
+  --callout-tip-text: #a1a1a1;
+  --callout-tip-icon: #22c55e;
+  --callout-tip-title: #4ade80;
+
+  /* Callouts - Warning (Amber) */
+  --callout-warning-bg: rgba(245, 158, 11, 0.08);
+  --callout-warning-border: rgba(245, 158, 11, 0.2);
+  --callout-warning-text: #a1a1a1;
+  --callout-warning-icon: #f59e0b;
+  --callout-warning-title: #fbbf24;
+
+  /* Callouts - Danger (Red) */
+  --callout-danger-bg: rgba(239, 68, 68, 0.08);
+  --callout-danger-border: rgba(239, 68, 68, 0.2);
+  --callout-danger-text: #a1a1a1;
+  --callout-danger-icon: #ef4444;
+  --callout-danger-title: #f87171;
+
+  /* Callouts - Important (Purple) */
+  --callout-important-bg: rgba(168, 85, 247, 0.08);
+  --callout-important-border: rgba(168, 85, 247, 0.2);
+  --callout-important-text: #a1a1a1;
+  --callout-important-icon: #a855f7;
+  --callout-important-title: #c084fc;
+
+  /* Callouts - Caution (Orange) */
+  --callout-caution-bg: rgba(249, 115, 22, 0.08);
+  --callout-caution-border: rgba(249, 115, 22, 0.2);
+  --callout-caution-text: #a1a1a1;
+  --callout-caution-icon: #f97316;
+  --callout-caution-title: #fb923c;
+
+  /* Details / Accordion */
+  --prose-details-bg: #0a0a0a;
+  --prose-details-border: #262626;
+  --prose-details-summary: #ededed;
+  --prose-details-marker: #666666;
+
+  /* Kbd / Keyboard */
+  --prose-kbd-bg: #171717;
+  --prose-kbd-border: #333333;
+  --prose-kbd-text: #ededed;
+  --prose-kbd-shadow: #000000;
+
+  /* Footnotes */
+  --prose-footnote-text: #666666;
+  --prose-footnote-hover: #888888;
+  --prose-footnote-border: #262626;
+
+  /* Image & Figure */
+  --prose-figure-caption: #666666;
+  --prose-image-border: #262626;
+  --prose-image-bg: #0a0a0a;
 }
