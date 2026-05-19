@@ -5,20 +5,13 @@
 .prose-custom section[data-footnotes] {
   @apply text-copy-14;
   margin: 2.5rem 0;
-  padding-top: 2rem;
+  padding-top: 1rem;
   border-top: 1px solid var(--prose-footnote-border);
-  overflow: clip;
 }
 
 .prose-custom section[data-footnotes] h2,
 .prose-custom section[data-footnotes] h2.sr-only {
   display: none !important;
-}
-
-.prose-custom section[data-footnotes] h2.sr-only {
-  white-space: normal;
-  max-width: 0;
-  overflow: hidden;
 }
 
 .prose-custom section[data-footnotes] ol {
@@ -28,6 +21,8 @@
   display: flex;
   flex-direction: column;
   gap: 0.625rem;
+  content: counter(footnotes);
+  counter-reset: footnotes;
 }
 
 .prose-custom section[data-footnotes] li {
@@ -47,15 +42,25 @@
 
 .prose-custom section[data-footnotes] li::before {
   @apply text-label-mono-14;
-  content: counter(list-item);
-  counter-increment: list-item;
-  color: var(--prose-fg-subtle);
+  content: counter(footnotes) ".";
+  counter-increment: footnotes;
+  color: var(--prose-list-marker);
   top: 0.125rem;
+}
+
+.prose-custom section[data-footnotes] li:hover {
+  color: var(--prose-footnote-hover);
+}
+
+.prose-custom section[data-footnotes] li:target {
+  background-color: var(--prose-bg-muted);
+  border-radius: 4px;
+  scroll-margin-top: 80px;
 }
 
 .prose-custom section[data-footnotes] p {
   @apply text-label-14;
-  color: var(--prose-fg-subtle);
+  color: var(--prose-footnote-text);
 }
 
 .prose-custom section[data-footnotes] .data-footnote-backref {
@@ -75,11 +80,6 @@
   width: 0 !important;
   height: 0 !important;
   display: none !important;
-}
-
-.prose-custom section[data-footnotes] li:target {
-  background-color: var(--prose-bg-subtle);
-  border-radius: 4px;
 }
 
 .prose-custom a[href^="#fn"] {
@@ -122,7 +122,6 @@
   .prose-custom section[data-footnotes] {
     @apply text-copy-14;
     margin: 2.5rem 0;
-    padding-top: 2rem;
   }
 
   .prose-custom section[data-footnotes] ol {

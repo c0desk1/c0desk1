@@ -2,7 +2,6 @@
 // src/components/ui/SearchButton.astro
 import { siteConfig } from "@/config/site";
 import Icon from "./Icon";
-import KBD from "../mdx/KBD.astro";
 
 const siteData = siteConfig;
 
@@ -11,12 +10,23 @@ const searchPlaceholder = siteData.searchPlaceholder;
 ---
 
 <button id="search-trigger" type="button" aria-label={searchLabel} title={searchLabel} class="group flex items-center justify-center gap-2 w-auto sm:w-70 md:w-70 p-2 sm:px-3 sm:py-2 rounded-full border border-(--border) sm:justify-between sm:rounded-xl sm:border-(--border-strong)/50 sm:hover:bg-(--bg-muted) transition-colors duration-200">
-  <div class="flex items-center gap-2 text-(--fg) sm:text-(--fg-muted)">
-    <Icon name="search" className="h-5 w-5" />
-    <span class="hidden text-sm sm:inline">{searchPlaceholder}</span>
+  <div class="flex items-center gap-2">
+    <Icon name="search" className="h-5 w-5 text-muted sm:text-dim" />
+    <span class="hidden text-label-14 sm:inline text-muted">{searchPlaceholder}</span>
   </div>
   <div class="hidden sm:inline-flex items-center">
-    <KBD class="text-label-14-mono text-(--fg-subtle)">/</KBD>
+    <kbd 
+      class="mx-0.5 md:inline-flex items-center justify-center align-middle
+            rounded-md
+            border border-(--prose-kbd-border)
+            bg-(--prose-kbd-bg)
+            px-1.5 py-0.5'
+            text-label-mono-13
+            md:text-label-mono-14
+            text-(--prose-kbd-text)
+            shadows-(--prose-kbd-shadow)">
+        /
+      </kbd>
   </div>
 </button>
 

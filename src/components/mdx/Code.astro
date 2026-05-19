@@ -10,15 +10,16 @@ const { titles = ["Code"] } = Astro.props;
 
 <div class="code-group">
   <div class="code-group-wrapper">
-    <div class="code-group-header" role="tablist">
+    <div class="code-group-header gap-1.5" role="tablist">
       {titles.map((title, index) => (
+        <Icon name="code" className="copy-icon w-4 h-4 m-0.5" />
         <button
           data-code-tab={index}
           role="tab"
           aria-selected={index === 0 ? "true" : "false"}
-          class="code-group-title">
+          class="code-group-title text-label-14">
           {title}
-          <span class="underline-indicator" />
+          <span class="underline-indicator top-0" />
         </button>
       ))}
     </div>
@@ -29,7 +30,7 @@ const { titles = ["Code"] } = Astro.props;
       <Icon name="check" className="check-icon w-4 h-4 hidden text-(--prose-accent)" />
     </button>
   </div>
-  <div class="code-group-content" role="tabpanel">
+  <div class="code-group-content text-code-16" role="tabpanel">
     <slot />
   </div>
 </div>

@@ -1,7 +1,7 @@
 // src/components/ui/Icon.tsx
 
 export type IconName =
-  | 'logo' | 'sun' | 'moon' | 'search' | 'menu' | 'close' | 'plus' | 'minus'
+  | 'logo' | 'sun' | 'moon' | 'search' | 'menu' | 'close' | 'plus' | 'minus' | 'code'
   | 'check' | 'clock' | 'calender' | 'trash' | 'note' | 'tip' | 'info' | 'danger' | 'warning' | 'caution' | 'important'
   | 'github' | 'x' | 'twitter' | 'linkedin' | 'instagram' | 'youtube' | 'facebook' | 'tiktok' | 'telegram' | 'threads' | 'whatsapp' | 'reddit'
   | 'dribbble' | 'behance' | 'adobestock' | 'wirestock' | 'spotify' | 'soundcloud'
@@ -18,7 +18,7 @@ interface IconProps {
 export default function Icon({ name, className = 'w-5 h-5' }: IconProps) {
   const s = { className, 'aria-hidden': true as const, 'focusable': false as const };
   const size = '24';
-  const strokeWidth = '1.5';
+  const strokeWidth = '2';
 
   switch (name) {
     case 'logo':
@@ -53,8 +53,17 @@ export default function Icon({ name, className = 'w-5 h-5' }: IconProps) {
 
     case 'search':
       return (
-        <svg {...s} fill="currentColor" viewBox="0 0 24 24">
-          <path d="M11 2C15.968 2 20 6.032 20 11C20 15.968 15.968 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2ZM11 18C14.8675 18 18 14.8675 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18ZM19.4853 18.0711L22.3137 20.8995L20.8995 22.3137L18.0711 19.4853L19.4853 18.0711Z" />
+        <svg {...s} width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth}>
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.3-4.3" />
+        </svg>
+      );
+
+    case 'code':
+      return (
+        <svg {...s} width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth}>
+          <polyline points="16 18 22 12 16 6" />
+          <polyline points="8 6 2 12 8 18" />
         </svg>
       );
 
@@ -67,8 +76,9 @@ export default function Icon({ name, className = 'w-5 h-5' }: IconProps) {
 
     case 'close':
       return (
-        <svg {...s} fill="currentColor" viewBox="0 0 24 24">
-          <path d="M11.9997 10.5865L16.9495 5.63672L18.3637 7.05093L13.4139 12.0007L18.3637 16.9504L16.9495 18.3646L11.9997 13.4149L7.04996 18.3646L5.63574 16.9504L10.5855 12.0007L5.63574 7.05093L7.04996 5.63672L11.9997 10.5865Z" />
+        <svg {...s} width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth}>
+          <path d="M18 6 6 18" />
+          <path d="m6 6 12 12" />
         </svg>
       );
 
@@ -308,8 +318,17 @@ export default function Icon({ name, className = 'w-5 h-5' }: IconProps) {
 
     case 'copy':
       return (
-        <svg {...s} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184" />
+        <svg {...s} 
+          width={size} 
+          height={size} 
+          fill="none" 
+          viewBox="0 0 24 24" 
+          stroke="currentColor" 
+          strokeLinecap="round" 
+          strokeLinejoin="round" 
+          strokeWidth={strokeWidth}>
+          <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+          <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
         </svg>
       );
 

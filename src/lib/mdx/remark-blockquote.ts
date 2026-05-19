@@ -34,10 +34,12 @@ const remarkBlockquoteAuthor: Plugin<[], Root> = () => {
 
         for (let i = paraChildren.length - 1; i >= 0; i--) {
           const child = paraChildren[i];
+
           let childText = '';
           if (child.type === 'text') childText = (child as Text).value;
           else if (child.type === 'link') {
             const link = child as Link;
+            
             childText = `[${link.children.map(c => (c as Text).value).join('')}](${link.url})`;
           } else continue;
 
@@ -49,7 +51,6 @@ const remarkBlockquoteAuthor: Plugin<[], Root> = () => {
               if (child.type === 'text') {
                 (child as Text).value = childText.substring(0, childText.length - remaining);
               } else if (child.type === 'link') {
-                // Hapus link sepenuhnya jika tidak bisa dipotong
                 continue;
               }
               remaining = 0;

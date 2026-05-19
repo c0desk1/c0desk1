@@ -1,8 +1,8 @@
 ---
 // src/components/layout/Search.astro
 import { getCollection, getEntry } from "astro:content";
-import { slugify } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
+import { slugify } from "@/lib/utils";
 import Icon from "@/components/ui/Icon";
 
 
@@ -57,21 +57,12 @@ const scriptLabels = {
 };
 ---
 
-<div id="search-modal" role="dialog" aria-modal="true" aria-label={searchModalLabel} inert
-  class="fixed inset-0 z-50 hidden">
-  <!-- Backdrop -->
-  <div id="search-backdrop"
-    class="absolute inset-0 bg-[color-mix(in_srgb,var(--bg)_50%,transparent)] backdrop-blur-sm opacity-0 transition-opacity duration-200"></div>
-
-  <!-- Positioner -->
-  <div class="relative flex min-h-full items-start justify-center p-3 sm:pt-20">
-    <div id="search-panel"
-      class="w-full max-w-3xl overflow-hidden rounded-(--radius-xl) border border-(--border) bg-(--bg) opacity-0 shadow-(--shadow-lg) scale-96 transition-all duration-200">
-      <!-- Input row -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label={searchModalLabel} inert class="fixed inset-0 z-50 hidden">
+  <div id="search-backdrop" class="absolute inset-0 bg-[color-mix(in_srgb,var(--bg)_50%,transparent)] backdrop-blur-sm opacity-0 transition-opacity duration-200"></div>
+  <div class="relative flex min-h-full items-start justify-center p-4 sm:pt-20">
+    <div id="search-panel" class="w-full max-w-3xl overflow-hidden rounded-xl border border-(--border) bg-(--bg) opacity-0 shadow-(--shadow-lg) scale-96 transition-all duration-200">
       <div class="flex items-center gap-2 border-b border-(--border) px-3.5">
-        <Icon name="search"
-          className="h-4 w-4 shrink-0 text-(--fg-subtle)"/>
-
+        <Icon name="search" className="h-5 w-5 shrink-0 text-dim"/>
         <input
           id="search-input"
           type="text"
@@ -79,42 +70,86 @@ const scriptLabels = {
           aria-label={searchModalLabel}
           autocomplete="off"
           spellcheck="false"
-          class="flex-1 min-w-0 border-none bg-transparent py-3.5 text-sm tracking-[-0.005em] text-(--fg) outline-none placeholder:text-(--fg-subtle)"
+          class="flex-1 min-w-0 border-none bg-transparent py-3.5 text-copy-14 lg:text-copy-16 text-muted outline-none placeholder:text-dim"
         />
-
-        <button id="search-clear" class="hidden h-7 w-7 shrink-0 items-center justify-center rounded-full border border-(--border) text-(--fg-subtle) transition-colors duration-150 hover:bg-(--bg-muted) hover:text-(--fg) focus-visible:outline-2 focus-visible:outline-(--accent) focus-visible:outline-offset-2" aria-label={clearSearchLabel} tabindex="-1">
-          <Icon name="trash" className="h-3.5 w-3.5 block" />
+        <button 
+          id="search-clear"
+         class="flex h-7 w-7 shrink-0 items-center justify-center 
+                rounded-full
+                text-muted hover:bg-muted hover:text-(--fg)
+                transition-colors duration-150 
+                focus-visible:outline-2 
+                focus-visible:outline-(--accent) 
+                focus-visible:outline-offset-2" 
+          aria-label={clearSearchLabel} 
+          tabindex="-1">
+          <Icon name="trash" className="h-5 w-5 block" />
         </button>
-
-        <button id="search-close-mobile" class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-(--border) text-(--fg-subtle) transition-colors duration-150 hover:bg-(--bg-muted) hover:text-(--fg) focus-visible:outline-2 focus-visible:outline-(--accent) focus-visible:outline-offset-2 sm:hidden" aria-label={closeSearchLabel}>
-          <Icon name="close" className="h-3.5 w-3.5 block" />
+        <button 
+          id="search-close-mobile" 
+          class="flex h-7 w-7 shrink-0 items-center justify-center 
+                rounded-full 
+                text-muted
+                hover:bg-muted hover:text-(--fg) 
+                transition-colors duration-150 
+                focus-visible:outline-2 
+                focus-visible:outline-(--accent) 
+                focus-visible:outline-offset-2 
+                sm:hidden" 
+          aria-label={closeSearchLabel}>
+          <Icon name="close" className="h-5 w-5 block" />
         </button>
-
-        <kbd class="hidden shrink-0 pointer-events-none items-center rounded-(--radius-sm) border border-(--border) bg-(--bg-muted) px-1.5 py-0.5 font-mono text-[11px] font-medium text-(--fg-subtle) sm:inline-flex">
+        <kbd class="
+            mx-0.5 md:inline-flex items-center justify-center align-middle
+            rounded-md
+            border border-(--prose-kbd-border)
+            bg-(--prose-kbd-bg)
+            px-1.5 py-0.5'
+            text-label-mono-13
+            md:text-label-mono-14
+            text-(--prose-kbd-text)
+            shadows-(--prose-kbd-shadow)
+            hidden">
           ESC
         </kbd>
       </div>
-
-      <!-- Results -->
       <div id="search-results" class="max-h-[55dvh] overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-(--border)"></div>
-
-      <!-- Footer -->
-      <div class="hidden items-center justify-between border-t border-(--border) bg-(--bg-subtle) px-3.5 py-2 sm:flex">
-        <div class="flex items-center gap-3 text-[11px] text-(--fg-subtle)">
-          <span class="inline-flex items-center gap-1.5">
-            <kbd class="rounded-(--radius-sm) border border-(--border) bg-(--bg) px-1.5 py-0.5 font-mono text-[10px] text-(--fg-subtle)">
+      <div class="hidden items-center justify-between border-t border-(--border) bg-subtle px-3.5 py-2 sm:flex">
+        <div class="flex items-center gap-3">
+          <span class="inline-flex items-center gap-1.5 text-label-14">
+            <kbd class="
+              mx-0.5 md:inline-flex items-center justify-center align-middle
+              rounded-md
+              border border-(--prose-kbd-border)
+              bg-(--prose-kbd-bg)
+              px-1.5 py-0.5'
+              text-label-mono-13
+              md:text-label-mono-14
+              text-(--prose-kbd-text)
+              shadows-(--prose-kbd-shadow)
+              hidden">
               ↑↓
             </kbd>
             {navigateLabel}
           </span>
-          <span class="inline-flex items-center gap-1.5">
-            <kbd class="rounded-(--radius-sm) border border-(--border) bg-(--bg) px-1.5 py-0.5 font-mono text-[10px] text-(--fg-subtle)">
+          <span class="inline-flex items-center gap-1.5 text-label-14">
+            <kbd class="
+              mx-0.5 md:inline-flex items-center justify-center align-middle
+              rounded-md
+              border border-(--prose-kbd-border)
+              bg-(--prose-kbd-bg)
+              px-1.5 py-0.5'
+              text-label-mono-13
+              md:text-label-mono-14
+              text-(--prose-kbd-text)
+              shadows-(--prose-kbd-shadow)
+              hidden">
               ↵
             </kbd>
             {openLabel}
           </span>
         </div>
-        <span id="search-count" class="text-[11px] tracking-normal text-(--fg-subtle)"></span>
+        <span id="search-count" class="text-overline-11 text-subtle"></span>
       </div>
     </div>
   </div>
@@ -122,19 +157,17 @@ const scriptLabels = {
 
 <style is:global>
   .sm-hl {
-    background: color-mix(in srgb, var(--fg) 12%, transparent);
-    border-radius: 2px;
-    padding: 0 1px;
-    color: var(--fg);
+    background: var(--prose-highlight-bg);
+    border-radius: var(--radius-xs);
+    padding: 0.5px 1px;
+    color: var(--prose-highlight-text);
   }
-
   .sritem {
     display: flex;
     align-items: flex-start;
     gap: 0.75rem;
     padding: 0.75rem 0.875rem;
     text-decoration: none;
-    transition: background-color 0.1s ease;
   }
 
   .sritem:hover,
@@ -144,36 +177,44 @@ const scriptLabels = {
 
   .sritem-icon {
     margin-top: 0.125rem;
-    width: 1rem;
-    height: 1rem;
+    width: 1.125rem;
+    height: 1.125rem;
     flex-shrink: 0;
-    color: var(--fg-subtle);
+    color: var(--fg-dim);
   }
 
   .sritem-title {
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+    color: var(--fg);
+
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 0.875rem;
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    color: var(--fg);
   }
 
   .sritem-desc {
+    font-size: 14px;
+    line-height: 22px;
+    letter-spacing: 0;
+    font-weight: 400;
+    color: var(--fg-muted);
     margin-top: 0.125rem;
+
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
-    font-size: 0.75rem;
-    color: var(--fg-muted);
   }
 
   .sritem-cat {
-    margin-top: 0.25rem;
-    font-size: 0.6875rem;
+    font-size: 14px;
+    line-height: 20px;
     letter-spacing: 0;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
     color: var(--fg-subtle);
   }
 
@@ -187,29 +228,38 @@ const scriptLabels = {
   }
 
   .sm-empty-icon {
-    width: 1.75rem;
-    height: 1.75rem;
-    color: var(--fg-subtle);
+    width: 48px;
+    height: 48px;
+    color: var(--fg-dim);
   }
 
   .sm-empty-title {
     margin: 0;
-    font-size: 0.9375rem;
-    font-weight: 500;
+    font-size: 20px;
+    line-height: 28px;
     letter-spacing: -0.01em;
+    font-weight: 600;
     color: var(--fg);
   }
 
   .sm-empty-sub {
     margin: 0;
-    font-size: 0.8125rem;
+    font-size: 16px;
+    line-height: 26px;
+    letter-spacing: 0;
+    font-weight: 400;
     color: var(--fg-subtle);
+  }
+
+  @media (max-width: 767px){
+    .sritem-icon {
+      display: hidden;
+    }
   }
 </style>
 
 <script define:vars={{ searchData, labels: scriptLabels }}>
   (() => {
-    /* ── Guard */
     if (!Array.isArray(searchData) ||!searchData.length) {
       console.warn("[Search] No data available.");
       const results = document.getElementById("search-results");
@@ -266,11 +316,19 @@ const scriptLabels = {
 
     function emptyHTML(title, sub, isError = false) {
       const icon = isError
-      ? `<svg class="sm-empty-icon" style="color:#ef4444" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M11 2C15.968 2 20 6.032 20 11C20 15.968 15.968 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2ZM11 18C14.8675 18 18 14.8675 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18ZM19.4853 18.0711L22.3137 20.8995L20.8995 22.3137L18.0711 19.4853L19.4853 18.0711Z" />
+      ? `<svg class="sm-empty-icon" style="color:#ef4444" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="24" height="24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" x2="12" y1="2" y2="6" />
+            <line x1="12" x2="12" y1="18" y2="22" />
+            <line x1="4.93" x2="7.76" y1="4.93" y2="7.76" />
+            <line x1="16.24" x2="19.07" y1="16.24" y2="19.07" />
+            <line x1="2" x2="6" y1="12" y2="12" />
+            <line x1="18" x2="22" y1="12" y2="12" />
+            <line x1="4.93" x2="7.76" y1="19.07" y2="16.24" />
+            <line x1="16.24" x2="19.07" y1="7.76" y2="4.93" />
            </svg>`
-        : `<svg class="sm-empty-icon" fill="currentColor" viewBox="0 0 24 24">
-             <path d="M11 2C15.968 2 20 6.032 20 11C20 15.968 15.968 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2ZM11 18C14.8675 18 18 14.8675 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18ZM19.4853 18.0711L22.3137 20.8995L20.8995 22.3137L18.0711 19.4853L19.4853 18.0711Z" />
+        : `<svg class="sm-empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="24" height="24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.3-4.3" />
            </svg>`;
       return `<div class="sm-empty">${icon}
         <p class="sm-empty-title">${title}</p>
@@ -278,7 +336,6 @@ const scriptLabels = {
       </div>`;
     }
 
-    /* ── Render */
     const setActive = (items) =>
       items.forEach((el, i) =>
         el.classList.toggle("is-active", i === activeIdx)
@@ -294,20 +351,18 @@ const scriptLabels = {
       if (countEl) countEl.textContent = `${items.length} ${labels.resultsLabel}`;
 
       results.innerHTML = items.map((p, i) => `
-        <a
-          href="${esc(p.url)}"
-          data-idx="${i}"
-          class="sritem${i === activeIdx? " is-active" : ""}"
-        >
-          <svg class="sritem-icon" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-            <polyline points="14 2 14 8 20 8"/>
+        <a href="${esc(p.url)}" data-idx="${i}" class="sritem${i === activeIdx? " is-active" : ""}">
+          <svg class="sritem-icon" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="24" height="24">
+            <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+            <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+            <path d="M10 9H8" />
+            <path d="M16 13H8" />
+            <path d="M16 17H8" />
           </svg>
           <div style="min-width:0;flex:1">
+            <div class="sritem-cat">${esc(p.category)}</div>
             <div class="sritem-title">${highlight(p.title, q)}</div>
             <div class="sritem-desc">${highlight(p.desc, q)}</div>
-            <div class="sritem-cat">${esc(p.category)}</div>
           </div>
         </a>
       `).join("");
