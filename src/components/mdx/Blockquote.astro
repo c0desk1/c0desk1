@@ -23,7 +23,7 @@ let finalAvatar = '';
 let optimizedAvatar = '';
 
 if (!isCiteMode && authorSlug) {
-  if (authorSlug.includes(' ')) {
+  if (authorSlug.includes(' ') || !/^[a-z0-9-]+$/.test(authorSlug)) {
     isPlainSource = true;
     finalAuthor = authorSlug;
   } else {
