@@ -52,10 +52,20 @@
   color: var(--prose-footnote-hover);
 }
 
-.prose-custom section[data-footnotes] li:target {
-  background-color: var(--prose-bg-muted);
+.prose-custom .footnote-highlight {
+  background-color: var(--prose-bg-subtle) !important;
   border-radius: 4px;
-  scroll-margin-top: 80px;
+  outline: 1px solid var(--prose-accent-active);
+  outline-offset: 2px;
+  transition: background-color 0.5s, outline 0.5s;
+}
+
+.prose-custom section[data-footnotes] li:target {
+  background-color: transparent !important;
+  border-radius: var(--prose-radius);
+  outline: 1px solid var(--prose-accent-active);
+  outline-offset: 2px;
+  transition: background-color 0.5s, outline 0.5s;
 }
 
 .prose-custom section[data-footnotes] p {

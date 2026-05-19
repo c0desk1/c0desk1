@@ -48,11 +48,6 @@
   position:relative;
 }
 
-.prose-custom .anchor-link svg{
-  width:1rem;
-  height:1rem;
-}
-
 .prose-custom p{
   margin-bottom:1.25rem;
 }
@@ -73,92 +68,6 @@
   font-weight:600;
 }
 
-.prose-custom sup,
-.prose-custom sub{
-  @apply text-numeric-14;
-  vertical-align:baseline;
-  position:relative;
-  transition:color 0.15s ease;
-  font-feature-settings:"sups" 1;
-}
-
-.prose-custom sup{
-  top:-0.35em;
-  left: 0.125em;
-  margin-left:0.05em;
-  margin-right:0.05em;
-  color:var(--prose-accent);
-}
-
-.prose-custom sub{
-  bottom:-0.2em;
-  color:var(--prose-accent);
-}
-
-.prose-custom sup a{
-  text-decoration:none;
-  color:inherit;
-  transition:color 0.15s ease
-}
-
-.prose-custom sup a:hover{
-  color:var(--prose-accent)
-}
-
-.prose-custom sup:has(a[href^="#fn"]){
-  cursor:pointer;
-  scroll-margin-top: 80px;
-}
-
-.prose-custom h1 sup,
-.prose-custom h2 sup,
-.prose-custom h3 sup{
-  @apply text-numeric-14;
-  top:-0.35em
-}
-
-.prose-custom small{
-  @apply text-label-16;
-  color:var(--prose-fg-subtle);
-  display:inline-block;
-}
-
-.prose-custom small:hover{
-  color:var(--prose-fg)
-}
-
-.prose-custom figcaption small,
-.prose-custom aside small,
-.prose-custom footer small{
-  color:var(--prose-fg-dim)
-}
-
-.prose-custom mark {
-  background: none;
-  color: var(--prose-highlight-text);
-  padding: 0;
-  border-radius: 0;
-  border-bottom: 2px solid var(--prose-highlight-border);
-}
-
-.prose-custom abbr[title]{
-  text-decoration:none;
-  border-bottom:1px dashed var(--prose-border);
-  cursor:help;
-  font-feature-settings:"calt" 1;
-  transition:border-color 0.15s ease,color 0.15s ease
-}
-
-.prose-custom abbr[title]:hover{
-  border-bottom-color:var(--prose-accent);
-  color:var(--prose-accent)
-}
-
-.prose-custom abbr[title]:active{
-  border-bottom-style:solid;
-  transition:none
-}
-
 @media (max-width: 767px){
   .prose-custom :where(h1,h2,h3,h4,h5,h6){
     scroll-margin-top:56px
@@ -167,7 +76,6 @@
   .prose-custom h1{
     margin-top:2.5rem;
     margin-bottom:1rem;
-    text-align:center
   }
 
   .prose-custom h2{
@@ -208,24 +116,6 @@
     pointer-events:auto;
     transform:translateX(0);
     color:var(--prose-fg-subtle)
-  }
-
-  .prose-custom sup,
-  .prose-custom sub{
-    @apply text-numeric-14;
-  }
-
-  .prose-custom mark{
-    padding:.1em 0.2em;
-    font-size:14px
-  }
-
-  .prose-custom small{
-    font-size:12px
-  }
-
-  .prose-custom abbr[title]{
-    font-size:14px
   }
 }
 
@@ -274,20 +164,6 @@
 
   .prose-custom .anchor-link:hover{
     color:var(--prose-fg)
-  }
-
-  .prose-custom sup,
-  .prose-custom sub{
-    @apply text-numeric-14;
-  }
-
-  .prose-custom mark{
-    padding:.1em 0.25em;
-    font-size:14px
-  }
-
-  .prose-custom small{
-    font-size:14px
   }
 }
 
