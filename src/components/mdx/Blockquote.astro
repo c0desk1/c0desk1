@@ -75,9 +75,9 @@ if (!isCiteMode && authorSlug) {
       {finalRole && (<span class="quote-role text-copy-14 md:text-copy-16">{finalRole}</span>)}
     </div>
   )}
-  {isPlainSource && finalAuthor && (<div class="quote-role text-copy-14 md:text-copy-16 self-end">{finalAuthor}</div>)}
+  {isPlainSource && finalAuthor && (<div class="quote-role text-copy-14 md:text-copy-16 self-end text-end">{finalAuthor}</div>)}
   {isCiteMode && cite && (
-    <div class="quote-role text-label-14 md:text-label-16 self-end">
+    <div class="quote-role text-label-14 md:text-label-16 self-end text-end">
       <a href={cite} target="_blank" rel="noopener noreferrer" class="flex items-center">
         {citeLabel || 'Source'}
         <Icon name="external" className="external-icon w-3 h-3"/>
