@@ -1,7 +1,6 @@
 ---
 // src/components/layout/Footer.astro
 import { siteConfig } from "@/config/site";
-
 import Container from "../ui/Container.astro";
 import Section from "../ui/Section.astro";
 import Icon from "@/components/ui/Icon";
@@ -10,42 +9,59 @@ import SocialLinks from "../ui/SocialLinks.astro";
 
 const siteData = siteConfig;
 const social = siteConfig.social;
-
 const footerSections = siteConfig.footerSections;
 ---
 
 <footer class="relative border-t border-(--border) bg-(--bg)">
   <Section size="sm">
-    <Section size="sm">
+    <!-- Navigasi Footer -->
+    <Container size="xl">
+      <nav aria-label={siteData.footerNav} class="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-12">
+        {footerSections.map((section) => (
+          <div class="min-w-0">
+            <p class="text-label-mono-13 font-medium uppercase tracking-wider text-(--fg-muted) mb-3">
+              {section.title}
+            </p>
+            <ul class="flex flex-col gap-2">
+              {section.items.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    target={link.isExternal ? "_blank" : undefined}
+                    rel={link.isExternal ? "noopener noreferrer" : undefined}
+                    class="group inline-flex items-center gap-1 text-label-14 text-(--fg-subtle) transition-colors duration-150 hover:text-(--fg)"
+                  >
+                    {link.label}
+                    {link.isExternal && (
+                      <Icon
+                        name="external"
+                        class="h-3 w-3 shrink-0 opacity-40 transition-opacity duration-150 group-hover:opacity-100"
+                      />
+                    )}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </nav>
+    </Container>
+    <div class="mt-8 border-t border-(--border)">
       <Container size="xl">
-        <div class="flex flex-col items-start gap-8 md:flex-row md:justify-between">
-          <nav aria-label={siteData.footerNav} class="grid w-full grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-4 md:gap-x-8 md:gap-y-6">
-            {footerSections.map((section) => (
-              <div class="min-w-0">
-                <p class="text-label-mono-13 mb-2 uppercase text-(--fg)">{section.title}</p>
-                <ul class="flex flex-col gap-2">
-                  {section.items.map((link) => (
-                    <li>
-                      <a href={link.href} target={link.isExternal ? "_blank" : undefined} rel={link.isExternal ? "noopener noreferrer" : undefined} class="text-copy-14 inline-flex items-center gap-1 text-muted transition-colors duration-150 hover:text-(--fg)">
-                        {link.label}
-                        {link.isExternal && (<Icon name="external" className="h-3 w-3 shrink-0 opacity-50 transition-opacity duration-150 group-hover:opacity-100"/>)}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </nav>
-        </div>
-      </Container> 
-    </Section>
-    <Section size="sm">
-      <Container size="xl">
-        <div class="flex items-center justify-between gap-4">
-          <SocialLinks items={social} class="flex items-center gap-0.5" iconClass="h-4 w-4 block"/>
-          <ThemeToggle />
+        <div class="flex flex-col items-center justify-between gap-4 py-4 md:flex-row">
+          <p class="text-label-13 text-(--fg-dim) order-2 md:order-1">
+            &copy; {new Date().getFullYear()} {siteData.title}
+          </p>
+          <div class="flex items-center gap-4 order-1 md:order-2">
+            <SocialLinks
+              items={social}
+              class="flex items-center gap-1"
+              iconClass="h-4 w-4 text-(--fg-dim) hover:text-(--fg) transition-colors duration-150"
+            />
+            <ThemeToggle />
+          </div>
         </div>
       </Container>
-    </Section>
+    </div>
   </Section>
 </footer>
