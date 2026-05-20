@@ -1,20 +1,22 @@
 ---
 // src/components/hero/HeroDiagonal.astro
-import type { ImageMetadata } from 'astro';
+import { siteConfig } from "@/config/site";
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
 import Container from './Container.astro';
 import Button from './Button.astro';
 
 export interface Props {
-  bgImage: string | ImageMetadata;
-  title: string;
-  title2?: string;
+  bgImage: ImageMetadata;
+  title?: string;
+  subTitle?: string;
   description: string;
   overlayOpacity?: number;
   cta?: { label: string; href: string };
   cta2?: { label: string; href: string };
 }
 
-const {  bgImage, title, title2, description, overlayOpacity = 0.5, cta, cta2 } = Astro.props;
+const {  bgImage, title, subTitle, description, overlayOpacity = 0.5, cta, cta2 } = Astro.props;
 const overlayStyle = `background-color: rgba(0,0,0,${overlayOpacity})`;
 
 let bgImageUrl: string;
@@ -26,10 +28,20 @@ if (typeof bgImage === 'string') {
 }
 ---
 
-<section class="relative w-full min-h-125 md:min-h-150 bg-cover bg-center" style={`background-image: url(${bgImageUrl})`}>
+<section class="relative w-full overflow-hidden">
+  <Image
+    src={bgImage}
+    alt={title || siteConfig.siteName}
+    loading="eager"
+    decoding="async"
+    quality={80}
+    widths={[768, 1280, 1920, 2560]}
+    sizes="100vw"
+    class="absolute inset-0 h-full w-full object-cover"
+  />
   <div class="absolute inset-0" style={overlayStyle}></div>
   <Container size="xl">
-    <div class="relative z-10 flex flex-col justify-between min-h-125 md:min-h-150 p-4 md:p-10 lg:p-12">
+    <div class="relative z-10 flex flex-col justify-between min-h-125 md:min-h-150 py-4 md:py-10 lg:py-12">
       <div class="self-center sm:self-start">
         <h1 class="text-heading-32 lg:text-heading-56 font-medium text-zinc-50 drop-shadow-lg max-w-xl">
           {title}
@@ -37,9 +49,14 @@ if (typeof bgImage === 'string') {
       </div>
       <div class="flex flex-wrap justify-between items-end gap-6">
         <div class="flex flex-col gap-8 self-center md:justify-end">
-          <h2 class="text-heading-24 lg:text-heading-32 font-normal text-zinc-100 drop-shadow-lg max-w-xl">
-            {title2}
+          <h2 class="text-heading-24 lg:text-heading-32 font-normal mt-0! text-zinc-100 drop-shadow-lg max-w-xl">
+            {subTitle}
           </h2>
+        </div>
+        <div class="max-w-md">
+          <p class="text-zinc-100 text-copy-12 sm:text-copy-14 drop-shadow mt-0!">
+            {description}
+          </p>
           <div class="flex items-center gap-4">
             {cta && (
               <Button 
@@ -58,11 +75,6 @@ if (typeof bgImage === 'string') {
               </Button>
             )}
           </div>
-        </div>
-        <div class="max-w-md">
-          <p class="text-zinc-100 text-copy-12 sm:text-copy-14 drop-shadow">
-            {description}
-          </p>
         </div>
       </div>
     </div>

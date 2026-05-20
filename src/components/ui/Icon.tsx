@@ -328,8 +328,9 @@ export default function Icon({ name, className = 'w-5 h-5' }: IconProps) {
           strokeLinecap="round" 
           strokeLinejoin="round" 
           strokeWidth={strokeWidth}>
-          <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
-          <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
+          <path d="M9 5a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2" />
         </svg>
       );
 

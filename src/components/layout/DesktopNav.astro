@@ -29,6 +29,7 @@ const navItems = siteConfig.navItems;
                 return (
                   <a
                     href={child.href}
+                    aria-label={child.label}
                     target={isExternal ? "_blank" : undefined}
                     rel={isExternal ? "noopener noreferrer" : undefined}
                     class:list={[

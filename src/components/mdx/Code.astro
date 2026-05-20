@@ -1,78 +1,203 @@
 ---
 import Icon from '@/components/ui/Icon';
+import { codeIcons } from '@/assets/icons/code';
 ---
 
-<div class="code-block-wrapper relative rounded-(--prose-radius-lg) border border-(--prose-code-border) bg-(--prose-code-bg) overflow-hidden my-4">
-  <div class="code-block-header  flex items-center justify-between px-4 py-2 bg-(--prose-code-bg) border-b border-(--prose-code-border)">
+<div class="code-block-wrapper relative my-4 overflow-hidden rounded-(--prose-radius-lg) border border-(--prose-code-border) bg-(--prose-code-bg)">
+  <div class="code-block-header flex items-center justify-between border-b border-(--prose-code-border) bg-(--prose-code-bg) px-4 py-2">
     <div class="flex items-center gap-2">
-      <div class="flex items-center p-2">
-        <Icon name="code" className="w-4 h-4 text-(--fg)" />
-      </div>
-      <span class="code-language code-block-title text-label-mono-14">plain</span>
+      <span data-icon-placeholder class="code-icon flex items-center justify-center text-(--fg) p-1">
+        <Fragment class="w-5 h-5" set:html={codeIcons.default} />
+      </span>
+      <span class="code-language code-block-title text-label-mono-14">
+        plain
+      </span>
     </div>
-    <button class="copy-button p-2 rounded-full hover:bg-(--prose-bg-muted) transition-colors" aria-label="Copy code">
-      <Icon name="copy" className="copy-icon w-4 h-4" />
-      <Icon name="check" className="check-icon w-4 h-4 hidden text-accent" />
+    <button
+      aria-label="Copy code"
+      type="button"
+      class="copy-button rounded-full p-2 transition-colors hover:bg-(--prose-bg-muted)">
+      <Icon name="copy" className="copy-icon size-4" />
+      <Icon name="check" className="check-icon hidden size-4 text-accent"
+      />
     </button>
   </div>
-  <div class="text-code-14 md:text-code-16 code-content overflow-x-auto">
+  <div class="code-content overflow-x-auto text-code-14 md:text-code-16">
     <slot />
   </div>
 </div>
 
-<script>
-  (function() {
-    document.querySelectorAll('.code-block-wrapper').forEach(wrapper => {
-      const preElement = wrapper.querySelector('.code-content pre');
-      const codeElement = wrapper.querySelector('.code-content pre code');
-      
-      let language = 'plain';
-      if (preElement) {
-        const langAttr = preElement.getAttribute('data-language');
-        if (langAttr) language = langAttr;
+<script define:vars={{ codeIcons }}>
+  // @ts-nocheck
+  (() => {
+    const languageNames = {
+      js: "JavaScript",
+      ts: "TypeScript",
+      py: "Python",
+      html: "HTML",
+      css: "CSS",
+      json: "JSON",
+      bash: "Bash",
+      sql: "SQL",
+    };
+
+    const aliases = {
+      javascript: "js",
+      typescript: "ts",
+      python: "py",
+    };
+
+    function normalizeLanguage(
+      language = "",
+    ) {
+      const normalized =
+        language.toLowerCase();
+
+      return (
+        aliases[normalized] ||
+        normalized
+      );
+    }
+
+    function getLanguage(pre) {
+      if (!pre) {
+        return "plain";
       }
-      if (language === 'plain' && codeElement) {
-        const classNames = codeElement.className;
-        const match = classNames.match(/language-([a-zA-Z0-9+#-]+)/);
-        if (match && match[1]) language = match[1];
+
+      const dataLanguage =
+        pre.getAttribute(
+          "data-language",
+        );
+
+      if (dataLanguage) {
+        return normalizeLanguage(
+          dataLanguage,
+        );
       }
-      
-      const langMap: Record<string, string> = {
-        js: 'JavaScript', ts: 'TypeScript', jsx: 'React JSX', tsx: 'React TSX',
-        py: 'Python', rb: 'Ruby', go: 'Go', rs: 'Rust', html: 'HTML', css: 'CSS',
-        json: 'JSON', yaml: 'YAML', md: 'Markdown', bash: 'Bash', sh: 'Shell',
-        sql: 'SQL', java: 'Java', cpp: 'C++', c: 'C', php: 'PHP'
-      };
-      
-      const displayLang = langMap[language] || language.toUpperCase();
-      const langSpan = wrapper.querySelector('.code-language');
-      if (langSpan) langSpan.textContent = displayLang;
-      
-      const btn = wrapper.querySelector('.copy-button');
-      if (!btn) return;
-      
-      const getCodeText = (): string => {
-        const codeElem = wrapper.querySelector('.code-content pre code');
-        return codeElem ? codeElem.textContent || '' : '';
-      };
-      
-      btn.addEventListener('click', async () => {
-        const code = getCodeText();
-        if (!code) return;
-        try {
-          await navigator.clipboard.writeText(code);
-          const copyIcon = btn.querySelector('.copy-icon');
-          const checkIcon = btn.querySelector('.check-icon');
-          copyIcon?.classList.add('hidden');
-          checkIcon?.classList.remove('hidden');
-          setTimeout(() => {
-            copyIcon?.classList.remove('hidden');
-            checkIcon?.classList.add('hidden');
-          }, 2000);
-        } catch (err) {
-          console.error('Copy gagal', err);
-        }
+
+      const match =
+        pre.className.match(
+          /language-([a-zA-Z0-9+#-]+)/,
+        );
+
+      return normalizeLanguage(
+        match?.[1] || "plain",
+      );
+    }
+
+    function updateCodeBlock(
+      wrapper,
+      language,
+    ) {
+      const label =
+        wrapper.querySelector(
+          ".code-language",
+        );
+
+      if (label) {
+        label.textContent =
+          languageNames[language] ||
+          language.toUpperCase();
+      }
+
+      const icon =
+        wrapper.querySelector(
+          "[data-icon-placeholder]",
+        );
+
+      if (icon) {
+        icon.innerHTML =
+          codeIcons[language] ||
+          codeIcons.default;
+      }
+    }
+
+    function setupCopyButton(
+      wrapper,
+    ) {
+      const button =
+        wrapper.querySelector(
+          ".copy-button",
+        );
+
+      if (!button) {
+        return;
+      }
+
+      const codeElement =
+        wrapper.querySelector(
+          ".code-content pre code",
+        );
+
+      button.addEventListener(
+        "click",
+        async () => {
+          const code =
+            codeElement?.textContent ||
+            "";
+
+          if (!code) {
+            return;
+          }
+
+          try {
+            await navigator.clipboard.writeText(
+              code,
+            );
+
+            const copyIcon =
+              button.querySelector(
+                ".copy-icon",
+              );
+
+            const checkIcon =
+              button.querySelector(
+                ".check-icon",
+              );
+
+            copyIcon?.classList.add(
+              "hidden",
+            );
+
+            checkIcon?.classList.remove(
+              "hidden",
+            );
+
+            setTimeout(() => {
+              copyIcon?.classList.remove(
+                "hidden",
+              );
+
+              checkIcon?.classList.add(
+                "hidden",
+              );
+            }, 2000);
+          } catch (error) {
+            console.error(error);
+          }
+        },
+      );
+    }
+
+    document
+      .querySelectorAll(
+        ".code-block-wrapper",
+      )
+      .forEach((wrapper) => {
+        const pre =
+          wrapper.querySelector(
+            ".code-content pre",
+          );
+
+        const language =
+          getLanguage(pre);
+
+        updateCodeBlock(
+          wrapper,
+          language,
+        );
+
+        setupCopyButton(wrapper);
       });
-    });
   })();
 </script>

@@ -25,22 +25,24 @@ const getAlt = (img: string | ImageItem, i: number) =>
 ---
 
 {images.length > 0 && (
-  <div class="pg-grid">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
     {images.map((img, idx) => {
       const src = getSrc(img);
       if (!src) return null;
 
-      const alt          = getAlt(img, idx);
-      const isPrimary    = idx === 0;
+      const alt = getAlt(img, idx);
+      const isPrimary = idx === 0;
       const optimizedSrc = isCdnUrl(src) ? cdnImage(src, { q: 85 }) : src;
 
       return (
-        <figure class:list={["pg-figure", isPrimary && "pg-figure--primary"]}>
-          <span class="pg-badge" aria-hidden="true">
-            {String(idx + 1).padStart(2, "0")}
-          </span>
-          <div class="pg-skeleton" aria-hidden="true"></div>
-          <div class="pg-img-wrap">
+        <figure class={[
+          "relative group overflow-hidden",
+          isPrimary && "md:col-span-2"
+          ].join(' ')}>
+            <span class="absolute top-3 left-3 z-10 px-2 py-0.5 rounded-sm bg-(--bg)/60 backdrop-blur-sm text-(--fg)/80 text-overline-10 pointer-events-none">
+              {String(idx + 1).padStart(2, "0")}
+            </span>
+            <div class="absolute inset-0 bg-(--prose-image-bg) animate-pulse rounded-xl"></div>
             <Image
               src={optimizedSrc}
               alt={alt}
@@ -48,95 +50,10 @@ const getAlt = (img: string | ImageItem, i: number) =>
               height={630}
               loading={idx === 0 ? "eager" : "lazy"}
               decoding="async"
-              class="pg-img"
+              class="w-full h-full object-cover border border-(--prose-image-border)"
             />
-          </div>
         </figure>
       );
     })}
   </div>
 )}
-
-<style>
-  .pg-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
-    overflow: hidden;
-  }
-
-  @media (min-width: 768px) {
-    .pg-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  }
-
-  .pg-figure {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border);
-    background-color: var(--bg-subtle);
-    aspect-ratio: 16 / 9;
-    transition: border-color 0.2s ease;
-  }
-
-  .pg-figure:hover {
-    border-color: var(--border-strong);
-  }
-
-  @media (min-width: 768px) {
-    .pg-figure--primary {
-      grid-column: span 2;
-    }
-  }
-
-  .pg-skeleton {
-    position: absolute;
-    inset: 0;
-    background-color: var(--bg-muted);
-    animation: pg-shimmer 1.5s ease-in-out infinite;
-    z-index: 0;
-  }
-
-  @keyframes pg-shimmer {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 0.5; }
-  }
-
-  .pg-img-wrap {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    transition: transform 0.5s var(--ease, cubic-bezier(0.16, 1, 0.3, 1));
-    will-change: transform;
-  }
-
-  .pg-figure:hover .pg-img-wrap {
-    transform: scale(1.02);
-  }
-
-  .pg-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .pg-badge {
-    position: absolute;
-    top: 0.5rem;
-    left: 0.5rem;
-    z-index: 2;
-    padding: 0.125rem 0.375rem;
-    border-radius: var(--radius-sm);
-    background: rgb(0 0 0 / 0.45);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    font-size: 0.5625rem;
-    font-weight: 600;
-    font-family: var(--font-mono);
-    color: rgb(255 255 255 / 0.75);
-    letter-spacing: 0.05em;
-    pointer-events: none;
-  }
-</style>

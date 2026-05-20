@@ -1,43 +1,36 @@
 ---
-// src/components/portfolio/PortfolioHeroImage.astro
-import Container from "../ui/Container.astro";
+// src/components/blog/BlogFeaturedImage.astro
 import { Image } from 'astro:assets';
 import { cdnImage, isCdnUrl } from '@/lib/utils';
 
 interface Props {
-  src: any;
+  image?: string;
   alt?: string;
   caption?: string;
+  loading?: boolean;
 }
 
-const { src, alt, caption } = Astro.props;
+const { image, alt = '', caption } = Astro.props;
 
-const finalSrc = typeof src === "object" && src !== null ? (src.src || src) : src;
-const optimizedSrc = isCdnUrl(finalSrc) ? cdnImage(finalSrc, { w: 1280, h: 720, q: 85 }) : finalSrc;
-const finalCaption = caption || alt;
+const optimizedSrc  = image && isCdnUrl(image)
+  ? cdnImage(image, { w: 1280, h: 720, q: 85 })
+  : image ?? '';
+const finalCaption  = caption || '';
 ---
 
-  <Container size="lg" class="py-4 md:py-8">
-    <figure class="group relative overflow-hidden border border-(--border) bg-(--bg-muted)">
-      <div class="relative aspect-video overflow-hidden">
-        <div class="absolute aspect-video inset-0 bg-(--bg) animate-pulse" aria-hidden="true"></div>
-        <Image
-          src={optimizedSrc}
-          alt={alt || "Portfolio hero image"}
-          width={1280}
-          height={720}
-          loading="lazy"
-          decoding="async"
-          class="relative z-10 h-full w-full object-cover aspect-video rounded-none transition duration-500 opacity-0"
-          onload="this.classList.remove('opacity-0')"
-        />
-      </div>
-      {finalCaption && (
-        <figcaption class="flex items-center text-center gap-2 border-t border-(--border) px-3 py-2 text-xs md:text-[13px] text-(--fg-subtle)">
-          <span class="line-clamp-2">
-            {finalCaption}
-          </span>
-        </figcaption>
-      )}
-    </figure>
-  </Container>
+<figure>
+  <div class="relative overflow-hidden">
+    <div class="absolute aspect-video inset-0 bg-(--bg) animate-pulse" aria-hidden="true"></div>
+    <Image
+      src={optimizedSrc}
+      alt={alt}
+      width={1200}
+      height={630}
+      loading="eager"
+      decoding="async"
+      class="relative z-10 h-full w-full object-cover aspect-video rounded-none transition duration-500 opacity-0"
+      onload="this.classList.remove('opacity-0')"
+    />
+  </div>
+  {finalCaption && <figcaption class="text-copy-14 text-(--prose-fg-subtle) mt-4!">{finalCaption}</figcaption>}
+</figure>
