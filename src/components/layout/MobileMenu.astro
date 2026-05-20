@@ -40,7 +40,7 @@ const navItems = siteConfig.MobileNavItems;
           <div class="accordion-item" data-accordion>
             <button aria-expanded="false" class="accordion-trigger flex items-center justify-between w-full px-3 py-2 text-copy-14 font-medium text-(--fg) rounded-lg active:bg-subtle hover:bg-subtle transition-colors">
               <span>{item.label}</span>
-              <Icon name="chevron-down" className="chevron-icon w-4 h-4 transition-transform duration-200" />
+              <Icon name="chevron-right" className="chevron-icon w-4 h-4 transition-transform duration-200" />
             </button>
             <div class="accordion-content">
               <div class="overflow-hidden">
@@ -89,7 +89,7 @@ const navItems = siteConfig.MobileNavItems;
     transition: transform 0.2s ease;
   }
   .accordion-trigger[aria-expanded="true"] .chevron-icon {
-    transform: rotate(180deg);
+    transform: rotate(90deg);
   }
   
   .accordion-content {
