@@ -111,23 +111,17 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
     slug: authorEntry?.id ?? siteConfig.author.slug,
   }}
   canonicalURL={canonicalURL}>
-  <div class="relative min-w-0 z-0">
-    <BG />
-  </div>
   <Section size="lg">
     <Section size="sm">
       <Container size="md">
-        <h2 class="sr-only">{title}</h2>
-        <Section size="none">
-          <h2 class="sr-only">{siteData.b_breadcrumb}</h2>
-          <Breadcrumb items={Breadcrumbs} />
-        </Section>
+        <Breadcrumb items={Breadcrumbs} />
         <article id="post-article">
           <Section size="sm">
             <h2 class="sr-only">{siteData.b_articleHeader}</h2>
             <PostHeader
               title={title}
               description={description}
+              overviewItems={post.data.overview}
               pubDate={pubDate}
               content={post.body}
               authorName={authorEntry?.data.name}
@@ -135,51 +129,23 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
               authorRole={authorEntry?.data.role}
               authorSlug={authorEntry?.id}
               image={image}
-              overviewItems={post.data.overview}
             />
           </Section>
           <Section size="sm">
-            <div id="article">
-              <div id="article-content" class="prose-custom">
-                <Content components={components} />
-              </div>
+            <div id="article-content" class="prose-custom">
+              <Content components={components} />
             </div>
-	        </Section>
-	      </article>
-        <RssFeed />
-	    </Container>
-	  </Section>
-    <Section size="none" class="relative z-10">
-      <div class="absolute top-0 inset-x-0 pointer-events-none">
-        <div class="mx-auto max-w-6xl px-1 md:px-6 lg:px-8">
-          <div class="relative w-full">
-            <Line type="h" variant="solid" class="absolute top-0 left-0 w-full" />
-          </div>
-        </div>
-      </div>
+	      </Section>
+	    </article>
+	    <Section size="sm">
+          <RssFeed />
+        </Section>
+	  </Container>
+	</Section>
+    <Section size="sm">
       <h2 class="sr-only">{siteData.b_articleNavigation}</h2>
       <Container size="lg">
         <PostNavigation prevPost={prevPost} nextPost={nextPost} />
-      </Container>
-      <div class="absolute bottom-0 inset-x-0 pointer-events-none">
-        <div class="mx-auto max-w-6xl px-1 md:px-6 lg:px-8">
-          <div class="relative w-full">
-            <Line type="h" variant="solid" class="absolute top-0 left-0 w-full" />
-          </div>
-        </div>
-      </div>
-    </Section>
-     <Section size="sm" class="relative z-10">
-      <h2 class="sr-only">{siteData.backToTop}</h2>
-      <div class="absolute top-0 inset-x-0 pointer-events-none">
-        <div class="mx-auto max-w-6xl px-1 md:px-6 lg:px-8">
-          <div class="relative w-full">
-            <Line type="h" variant="solid" class="absolute top-0 left-0 w-full" />
-          </div>
-        </div>
-      </div>
-      <Container size="lg">
-        <BackToTop align="center" />
       </Container>
     </Section>
   </Section>
