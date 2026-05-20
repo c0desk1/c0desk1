@@ -25,22 +25,16 @@ seo:
 ---
 
 # Heading level 1
-Paragraf tambahan untuk membantu testing spacing setelah heading level 1, termasuk margin top/bottom, scroll margin, serta konsistensi typography pada prose custom ketika heading berada di bagian paling atas halaman.
 
 ## Heading level 2
-Paragraf tambahan untuk membantu testing struktur section level 2, termasuk hierarchy visual, jarak antar section, serta bagaimana heading berinteraksi dengan anchor link dan navigasi dalam halaman panjang.
 
 ### Heading level 3
-Paragraf tambahan untuk menguji keseimbangan antara heading dan konten, termasuk wrapping text, line-height, serta konsistensi spacing antar elemen markdown di dalam satu section.
 
 #### Heading level 4
-Paragraf tambahan untuk memastikan heading level menengah tetap terbaca jelas, tidak terlalu dominan, dan tetap memiliki hierarchy yang konsisten saat digunakan dalam dokumentasi panjang atau artikel teknis.
 
 ##### Heading level 5
-Paragraf tambahan untuk menguji heading minor yang biasanya dipakai sebagai sub-kategori, termasuk kontras warna, ukuran font, dan jarak dengan paragraf di bawahnya.
 
 ###### Heading level 6
-Paragraf tambahan untuk memastikan heading level paling kecil tetap memiliki keterbacaan yang baik, tidak terlalu kecil secara visual, serta tetap konsisten dengan sistem typografi keseluruhan.
 
 ## Paragraf biasa.
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Integer facilisis, nisl sed tincidunt varius, ligula erat fermentum nisi, non pretium velit magna nec lectus. Curabitur ut sem vel augue pulvinar volutpat sit amet sed risus.
@@ -84,6 +78,7 @@ Ini paragraf kedua dengan **teks tebal**, *teks miring*, dan ***teks tebal mirin
 | Baris 3 kolom 1 digunakan untuk testing kombinasi teks panjang dengan responsive table wrapper | Baris 3 kolom 2 membantu memeriksa alignment vertikal antar cell dan konsistensi ukuran typography | Baris 3 kolom 3 dipakai untuk validasi overflow, scroll horizontal, dan rendering akhir pada prose custom |
 
 ## Kode
+:::code
 ```js
 // JavaScript example
 function testMarkdown() {
@@ -97,7 +92,9 @@ function testMarkdown() {
   }));
 }
 ```
+:::
 
+:::code
 ```ts
 // TypeScript example
 type User = {
@@ -116,7 +113,9 @@ export function getUser(): User {
   return user;
 }
 ```
+:::
 
+:::code
 ```tsx
 // React TSX example
 type ButtonProps = {
@@ -131,7 +130,9 @@ export function Button({ label }: ButtonProps) {
   );
 }
 ```
+:::
 
+:::code
 ```astro
 ---
 // Astro component example
@@ -146,7 +147,9 @@ const title = "Markdown Testing";
   </p>
 </section>
 ```
+:::
 
+:::code
 ```html
 <!-- HTML example -->
 <section class="card">
@@ -157,7 +160,9 @@ const title = "Markdown Testing";
   </p>
 </section>
 ```
+:::
 
+:::code
 ```css
 /* CSS example */
 .prose-custom code {
@@ -166,7 +171,9 @@ const title = "Markdown Testing";
   padding: 0.2rem 0.4rem;
 }
 ```
+:::
 
+:::code
 ```json
 {
   "name": "markdown-test",
@@ -177,7 +184,9 @@ const title = "Markdown Testing";
   }
 }
 ```
+:::
 
+:::code
 ```yaml
 name: markdown-testing
 
@@ -190,14 +199,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
 ```
+:::
 
+:::code
 ```bash
 # Bash example
 npm install
 npm run dev
 git status
 ```
+:::
 
+:::code
 ```python
 # Python example
 def test_markdown():
@@ -207,7 +220,9 @@ def test_markdown():
         "success": True
     }
 ```
+:::
 
+:::code
 ```php
 <?php
 
@@ -217,7 +232,9 @@ function testMarkdown() {
 
 echo testMarkdown();
 ```
+:::
 
+:::code
 ```sql
 -- SQL example
 SELECT
@@ -227,191 +244,16 @@ SELECT
 FROM posts
 ORDER BY published_at DESC;
 ```
+:::
 
-```md
-# Markdown example
-- Item pertama
-- Item kedua
-- Item ketiga
-
-```
-
-<Code titles={["Javascript"]}>
-```js
-// JavaScript example
-function testMarkdown() {
-  console.log("Semua sintaks markdown siap diuji");
-
-  const items = ["markdown", "syntax", "testing"];
-
-  return items.map((item) => ({
-    name: item,
-    active: true,
-  }));
-}
-```
-</Code>
-
-<Code titles={["TypeScript"]}>
-```ts
-// TypeScript example
-type User = {
-  id: number;
-  name: string;
-  active: boolean;
-};
-
-const user: User = {
-  id: 1,
-  name: "Bima Akbar",
-  active: true,
-};
-
-export function getUser(): User {
-  return user;
-}
-```
-</Code>
-
-<Code titles={["React"]}>
-```tsx
-// React TSX example
-type ButtonProps = {
-  label: string;
-};
-
-export function Button({ label }: ButtonProps) {
-  return (
-    <button className="rounded-lg border px-4 py-2">
-      {label}
-    </button>
-  );
-}
-```
-</Code>
-
-<Code titles={["Astro"]}>
-```astro
----
-// Astro component example
-const title = "Markdown Testing";
----
-
-<section class="space-y-4">
-  <h2>{title}</h2>
-
-  <p>
-    Semua syntax markdown dan prose sedang diuji.
-  </p>
-</section>
-```
-</Code>
-
-<Code titles={["HTML"]}>
-```html
-<!-- HTML example -->
-<section class="card">
-  <h2>Testing HTML</h2>
-
-  <p>
-    Contoh HTML untuk menguji styling prose custom.
-  </p>
-</section>
-```
-</Code>
-
-<Code titles={["CSS"]}>
-```css
-/* CSS example */
-.prose-custom code {
-  font-size: 14px;
-  border-radius: 6px;
-  padding: 0.2rem 0.4rem;
-}
-```
-</Code>
-
-<Code titles={["JSON"]}>
-```json
-{
-  "name": "markdown-test",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "dev": "astro dev"
-  }
-}
-```
-</Code>
-
-<Code titles={["YAML"]}>
-```yaml
-name: markdown-testing
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-```
-</Code>
-
-<Code titles={["Bash"]}>
-```bash
-# Bash example
-npm install
-npm run dev
-git status
-```
-</Code>
-
-<Code titles={["Python"]}>
-```python
-# Python example
-def test_markdown():
-    print("Markdown syntax siap diuji")
-
-    return {
-        "success": True
-    }
-```
-</Code>
-
-<Code titles={["PHP"]}>
-```php
-<?php
-
-function testMarkdown() {
-    return "Semua syntax markdown siap diuji";
-}
-
-echo testMarkdown();
-```
-</Code>
-
-<Code titles={["SQL"]}>
-```sql
--- SQL example
-SELECT
-  id,
-  title,
-  published_at
-FROM posts
-ORDER BY published_at DESC;
-```
-</Code>
-
-<Code titles={["Markdown"]}>
+:::code
 ```md
 # Markdown example
 - Item pertama
 - Item kedua
 - Item ketiga
 ```
-</Code>
+:::
 
 ## Gambar
 ![](/org/c0desk1-og.webp)

@@ -62,15 +62,15 @@ To handle the rate limits from free AI providers, I built a queue system with Sa
 
 AI data often contains illegal characters or messy formatting. I built a custom utility using TypeScript to sanitize trailing newlines `\n`, remove forbidden symbols `©`, `™`, and ensure the 50-keyword limit is met.
 
-<Code titles={["Typescript"]}>
-```typescript
+:::code
+```ts
 // Example of the sanitization logic I use
 const clean = (str: string) => { 
-return str 
-.replace(/\r?\n|\r/g, " ") 
-.replace(/[™®©]/g, "") 
-.replace(/"/g, '""') 
-.trim();
+  return str 
+  .replace(/\r?\n|\r/g, " ") 
+  .replace(/[™®©]/g, "") 
+  .replace(/"/g, '""') 
+  .trim();
 };
 ```
-</Code>
+:::

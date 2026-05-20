@@ -41,8 +41,7 @@ Let's say you have a folder with camera photos named `DSC001`, `DSC002`, etc. An
 
 Smash this code:
 
-<Code titles={["Powershell"]}>
-
+:::code
 ```powershell
 # Change this path to your target folder!
 $folderPath = "C:\Users\You\Documents\Project_Assets"
@@ -53,7 +52,7 @@ Get-ChildItem -Path $folderPath | ForEach-Object {
     Rename-Item -Path $_.FullName -NewName $newName
 }
 ```
-</Code>
+:::
 
 Why this works:
 
@@ -66,8 +65,7 @@ I'm sure your Temp or Downloads folder is a ghost town. Well, we can create a sc
 
 Copy-Paste this code:
 
-<Code titles={["Powershell"]}>
-
+:::code
 ```powershell
 # Your junk folder path
 $trashPath = "D:\Downloads\Trash"
@@ -78,7 +76,7 @@ Get-ChildItem -Path $trashPath -Recurse | Where-Object {
     $_.LastWriteTime -lt (Get-Date).AddDays(-$daysLimit)
 } | Remove-Item -Force
 ```
-</Code>
+:::
 
 If you're afraid of deleting the wrong thing, add `-WhatIf` at the end of the `Remove-Item` line. PowerShell will then just show, "Here are the files I WOULD delete," without actually deleting anything. So you can double-check first.
 
