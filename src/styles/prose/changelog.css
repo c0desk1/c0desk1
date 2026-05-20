@@ -3,9 +3,7 @@
 .prose-custom .changelog-version h2,
 .prose-custom .changelog-version h3,
 .prose-custom .changelog-version h4 {
-    @apply text-heading-18;
-    margin-top: 0 !important;
-    padding-top: 0 !important;
+    @apply text-heading-16;
 }
 
 .prose-custom .changelog-item :first-child {
@@ -23,11 +21,6 @@
     text-transform: uppercase;
 }
 
-.prose-custom .changelog-item p {
-    margin-top: 0 !important;
-    margin-bottom: 0.5rem !important;
-}
-
 .prose-custom .changelog-items ul {
     list-style: none;
     padding-left: 0;
@@ -35,10 +28,10 @@
 }
 
 .prose-custom .changelog-items li {
-    @apply text-copy-16;
+    @apply text-copy-14;
     position: relative;
     padding-left: 1rem;
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.5rem;
     color: var(--prose-fg-muted);
 }
 
@@ -47,4 +40,16 @@
     position: absolute;
     left: 0;
     color: var(--prose-list-marker);
+}
+
+@media (min-width: 1024px) {
+  .prose-custom .changelog-version h2,
+  .prose-custom .changelog-version h3,
+  .prose-custom .changelog-version h4 {
+    @apply text-heading-18;
+  }
+  .prose-custom .changelog-items li {
+    @apply text-copy-16;
+    margin-bottom: 1rem;
+  }
 }
