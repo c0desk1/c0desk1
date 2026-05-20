@@ -29,6 +29,12 @@ export const navConfig = {
         { label: "Contact Us", href: "/contact/", isExternal: false },
       ]
     },
+    { 
+      label: "Tools", 
+      children: [ 
+        { label: "Adogen", href: "https://dev-adogen.bimasaktiakbarr.workers.dev", isExternal: true }
+      ]
+    },
     {
       label: "Legal",
       children: [
@@ -39,12 +45,6 @@ export const navConfig = {
         { label: "DMCA", href: "/dmca/", isExternal: false }
       ]
     },
-    { 
-      label: "Tools", 
-      children: [ 
-        { label: "Adogen", href: "https://dev-adogen.bimasaktiakbarr.workers.dev", isExternal: true }
-      ]
-    }
   ] as NavItem[],
 
   MobileNavItems: [
@@ -57,6 +57,11 @@ export const navConfig = {
         { label: "Contact Us", href: "/contact/", isExternal: false },
       ]
     },
+    { label: "Tools",
+      children: [ 
+        { label: "Adogen", href: "https://dev-adogen.bimasaktiakbarr.workers.dev", isExternal: true }
+      ]
+    },
     { label: "Legal",
       children: [
         { label: "Privacy Policy", href: "/privacy-policy/", isExternal: false },
@@ -64,11 +69,6 @@ export const navConfig = {
         { label: "Disclaimer", href: "/disclaimer/", isExternal: false },
         { label: "Cookie Policy", href: "/cookie-policy/", isExternal: false },
         { label: "DMCA", href: "/dmca/", isExternal: false }
-      ]
-    },
-    { label: "Tools",
-      children: [ 
-        { label: "Adogen", href: "https://dev-adogen.bimasaktiakbarr.workers.dev", isExternal: true }
       ]
     }
   ] as MobileNavItem[],
