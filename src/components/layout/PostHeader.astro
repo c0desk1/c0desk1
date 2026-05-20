@@ -1,37 +1,39 @@
 ---
 // src/components/blog/postHeader.astro
+import { siteConfig } from '@/config/site';
+
 import PostMeta from './PostMeta.astro';
 import Overview from '../blog/BlogOverview.astro';
 import PostAuthor from './PostAuthor.astro';
 import BlogFeaturedImage from '../blog/BlogFeaturedImage.astro';
 import SharePost from '../blog/SharePost.astro';
-import CopyButton from '../ui/CopyButton.astro';
-import { siteConfig } from '@/config/site';
+
 
 interface Props {
   title: string;
   description: string;
   pubDate: Date;
+  overviewItems?: string[];
   content?: string;
   authorName?: string;
   authorAvatar?: string;
   authorRole?: string;
   authorSlug: string;
   image?: any;
-  overviewItems?: string[];
+  
 }
 
 const {
   title,
   description,
   pubDate,
+  overviewItems,
   content = '',
   authorName,
   authorAvatar,
   authorRole,
   authorSlug,
-  image,
-  overviewItems
+  image
 } = Astro.props;
 
 const siteData = siteConfig;
@@ -52,15 +54,6 @@ const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
         slug={authorSlug}
       />
     )}
-    {image && (
-      <div class="prose-custom w-full mt-4">
-        <BlogFeaturedImage
-          image={image.src}
-          alt={image.alt || title}
-          caption={(image as any).caption}
-        />
-      </div>
-    )}
     {content && (
       <div class="w-full mt-4">
         <PostMeta pubDate={pubDate} content={content} />
@@ -71,9 +64,17 @@ const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
         <Overview items={overviewItems} />
       </div>
     )}
-    <div class="flex justify-between items-center w-full">
+    {image && (
+      <div class="prose-custom w-full mt-4">
+        <BlogFeaturedImage
+          image={image.src}
+          alt={image.alt || title}
+          caption={(image as any).caption}
+        />
+      </div>
+    )}
+    <div class="flex justify-start items-center self-start">
       <SharePost url={canonicalURL} title={title} description={description} />
-      <CopyButton />
     </div>
   </div>
 </header>
