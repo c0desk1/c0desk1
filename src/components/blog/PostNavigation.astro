@@ -2,7 +2,6 @@
 import { siteConfig } from '@/config/site';
 import { slugify } from '@/lib/utils';
 import Icon from '@/components/ui/Icon';
-import Line from '@/components/ui/Line.astro';
 
 interface Props {
   prevPost?: any;
@@ -16,37 +15,46 @@ const nextUrl = nextPost ? `/blog/${slugify(nextPost.data.title)}/` : null;
 ---
 
 {(prevPost || nextPost) && (
-  <div class="relative grid grid-cols-1 md:grid-cols-2 w-full">
-    <div class="w-full">
-      {prevPost ? (
-        <a href={prevUrl} class="group flex w-full flex-col transition-colors">
-          <div class="flex items-center gap-2 text-label-14 text-(--fg) mb-2">
-            <Icon name="arrow-left" className="w-4 h-4" />
-            <span>{siteConfig.b_prevPosts}</span>
-          </div>
-          <span class="text-heading-14 md:text-heading-16 font-medium text-(--fg-muted) group-hover:text-(--fg) line-clamp-2 text-left">
-            {prevPost.data.title}
-          </span>
-        </a>
-      ) : (
-        <div class="hidden md:block w-full h-full min-h-25" />
-      )}
+  <div class="flex flex-col w-full border-t border-(--border) pt-6 mt-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 w-full gap-4 md:gap-6">
+      <div class="w-full">
+        {prevPost ? (
+          <a
+            href={prevUrl}
+            rel="prev"
+            aria-label="Previous post"
+            class="group flex w-full flex-col transition-colors"
+          >
+            <div class="flex items-center gap-2 text-label-14 text-(--fg) mb-2">
+              <Icon name="arrow-left" class="w-4 h-4" />
+              <span>{siteConfig.b_prevPosts || 'Previous'}</span>
+            </div>
+            <span class="text-heading-14 md:text-heading-16 font-medium text-(--fg-muted) group-hover:text-(--fg) line-clamp-2 text-left">
+              {prevPost.data.title}
+            </span>
+          </a>
+        ) : (
+          <div class="hidden md:block w-full h-full min-h-25" />
+        )}
+      </div>
+      <div class="w-full mt-6 md:mt-0">
+        {nextPost && (
+          <a
+            href={nextUrl}
+            rel="next"
+            aria-label="Next post"
+            class="group flex w-full flex-col transition-colors"
+          >
+            <div class="flex items-center justify-end gap-2 text-label-14 text-(--fg) mb-2">
+              <span>{siteConfig.b_nextPosts || 'Next'}</span>
+              <Icon name="arrow-right" class="w-4 h-4" />
+            </div>
+            <span class="text-heading-14 md:text-heading-16 font-medium text-(--fg-muted) group-hover:text-(--fg) line-clamp-2 text-right">
+              {nextPost.data.title}
+            </span>
+          </a>
+        )}
+      </div>
     </div>
-    <Line type="h" variant="solid" class="absolute top-0 left-0 md:hidden" />
-    <Line type="v" variant="solid" class="absolute inset-y-0 left-1/2 hidden md:block" />
-    <div class="w-full">
-      {nextPost && (
-        <a href={nextUrl} class="group flex w-full flex-col transition-colors">
-          <div class="flex items-center justify-end gap-2 text-label-14 text-(--fg) mb-2">
-            <span>{siteConfig.b_nextPosts}</span>
-            <Icon name="arrow-right" className="w-4 h-4" />
-          </div>
-          <span class="text-heading-14 md:text-heading-16 font-medium text-(--fg-muted) group-hover:text-(--fg) line-clamp-2 text-right">
-            {nextPost.data.title}
-          </span>
-        </a>
-      )}
-    </div>
-    
   </div>
 )}
