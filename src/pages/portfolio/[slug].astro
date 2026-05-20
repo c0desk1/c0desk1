@@ -106,42 +106,26 @@ const Breadcrumbs = [
   demoUrl={demoUrl}
   repoUrl={repoUrl}
   canonicalURL={canonicalURL}>
-  <article>
-    <Section size="lg">
-      <Container size="md">
-        <Section size="md">
-          <div class="flex flex-col justify-center items-center">
-            <Breadcrumb items={Breadcrumbs} />
-          </div>
-        </Section>
-        <h2 class="sr-only">{srPortfolioHeader}</h2>            
-        <PortfolioHeader
-          title={title}
-          date={pubDate}
-          updatedDate={updatedDate}
-          featured={featured}
-          client={client}
-          role={role}
-          duration={duration}
-          techStack={techStack}
-          demoUrl={demoUrl}
-          repoUrl={repoUrl}
-        />
-      </Container>
-        {image && (
+  <Section size="lg">
+    <Section size="sm">
+      <Container size="lg">
+        <div class="flex flex-col justify-center items-center">
+          <Breadcrumb items={Breadcrumbs} />
+        </div>    
+        <article class="px-4 lg:px-6">
+          <PortfolioHeader
+            title={title}
+            date={pubDate}
+            updatedDate={updatedDate}
+            featured={featured}
+            client={client}
+            role={role}
+            duration={duration}
+            techStack={techStack}
+            demoUrl={demoUrl}
+            repoUrl={repoUrl}
+          />
           <Section size="sm">
-            <Container size="md">
-              <h2 class="sr-only">{srPortfolioImage}</h2>
-              <PortfolioFeaturedImage
-                src={image.src}
-                alt={image.alt || title}
-                caption={(image as any).caption || title}
-              />
-            </Container>
-          </Section>
-        )}
-        <Section size="sm">
-          <Container size="md">
             <h2 class="sr-only">{srPortfolioMetrics}</h2>
             <PortfolioCaseStudy
               challenge={challenge}
@@ -149,37 +133,38 @@ const Breadcrumbs = [
               result={result}
               allowMultiple={true}
             />
+          </Section>
+          <Section size="sm">
             <PortfolioMetrics metrics={metrics} />
-          </Container>
-        </Section>
-        <Section size="sm">
-          <Container size="md">
-            <div id="article-content" class="prose-custom">
+          </Section>
+          <Section size="sm">
+            <div id="article-content" class="prose-custom max-w-3xl">
+              {image && (
+                <PortfolioFeaturedImage
+                  image={image.src}
+                  alt={image.alt || title}
+                  caption={(image as any).caption || title}
+                />
+              )}
               <Content components={components} />
             </div>
-          </Container>
-        </Section>
-        <Section size="sm">
-          <Container size="md">
-            <h2 class="sr-only">{srPortfolioContent}</h2>
             {displayGallery.length > 0 && (
-              <div class="prose-custom mb-6">
-                <h2 class="sr-only">{galleryLabel}</h2>
-                <PortfolioGallery
-                  images={displayGallery}
-                  title={title}
-                />
+              <div class="prose-custom">
+                <h2 class="text-heading-24 lg:text-heading-32 text-(--fg) font-semibold">{galleryLabel}</h2>
+                <PortfolioGallery title={title} images={displayGallery} />
               </div>
             )}
-          </Container>
-        </Section>
-      </Section>
+            </Section>
+        </article>
+      </Container>
+    </Section>
+    </article>
     <Section size="sm">
       <Container size="lg" class="pt-8">
         <h2 class="sr-only">{srPortfolioRelated}</h2>
         <PortfolioRelated projects={relatedProjects} />
-        <BackToTop showBorder={false} align="center" />
       </Container>
     </Section>
-  </article>
+  </Section>
+  <BackToTop />
 </BaseLayout>

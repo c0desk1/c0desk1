@@ -68,7 +68,7 @@ const blog_c   = siteData.blog_latestPosts;
   <Section size="none">
     <Hero
       title={siteData.blog_PageTitle}
-      title2={title}
+      subTitle={title}
       description={siteData.blog_PageDescription}
       bgImage={HERO}
       overlayOpacity={0.4}
@@ -106,7 +106,7 @@ const blog_c   = siteData.blog_latestPosts;
         </div>
       )}
       {page.lastPage > 1 && (
-        <div class="flex items-center justify-between gap-2 p-8 mt-4">
+        <div class="flex items-center justify-between gap-2 py-8 mt-4">
           <Button href={prevUrl} disabled={!prevUrl} variant="secondary" size="sm" class="gap-1.5" aria-label={prevLabel}>
             <Icon name="arrow-left" className="w-4 h-4" />
             <span class="hidden sm:inline text-button-14">{prevLabel}</span>

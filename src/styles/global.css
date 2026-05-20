@@ -106,6 +106,7 @@
   --error: #dc2626;
   --error-soft: #fee2e2;
   --error-fg: #ffffff;
+  --error-dim: #dc2626;
 
   --warning: #d97706;
   --warning-soft: #fef3c7;
@@ -172,6 +173,7 @@
   --error: #e5484d;
   --error-soft: #3c1618;
   --error-fg: #ffffff;
+  --error-dim: #e5484d;
 
   --warning: #f5a623;
   --warning-soft: #3d2e0a;

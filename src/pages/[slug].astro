@@ -13,6 +13,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Container from '@/components/ui/Container.astro';
 import Breadcrumb from '@/components/ui/Breadcrumb.astro';
 import Section from '@/components/ui/Section.astro';
+import BackToTop from '@/components/ui/BackToTop.astro';
 
 export async function getStaticPaths() {
   const legalPages = await getCollection('legal');
@@ -48,6 +49,7 @@ const homeLabel = siteData.home;
 
 const Breadcrumbs = [
   { name: homeLabel, href: '/'},
+  { name: 'Legal'},
   { name: page.data.title, href: canonicalURL }
 ];
 
@@ -61,33 +63,36 @@ const formattedLastUpdated = page.data.lastUpdated
   description={seoDescription}
   type="website"
   canonicalURL={canonicalURL}>
-  <Section size="xl">
-    <div class="relative grid grid-cols-1 border border-(--border) max-w-6xl mx-auto">
-      <Section size="sm">
-        <Container size="md">
+  <div class="relative grid grid-cols-1 rounded-xl border border-(--border) max-w-4xl mx-auto">
+    <Section size="sm">
+      <Container size="md">
+        <Section size="sm">
           <div class="flex items-center justify-center">
             <Breadcrumb items={Breadcrumbs} />
           </div>
-          <div class="mt-8 items-center text-center justify-center">
-            <div class="prose-custom">
-              <h1 class="text-heading-24 md:text-heading-32 lg:text-heading-56 justify-center">{page.data.title}</h1>
+        </Section>
+        <article id="article" class="px-4 lg:px-6">
+          <Section size="sm">
+            <div class="mt-8 items-center text-center justify-center">
+              <div class="prose-custom">
+                <h1 class="text-heading-24 md:text-heading-32 lg:text-heading-56 justify-center">{page.data.title}</h1>
+              </div>
+              {formattedLastUpdated && (
+                <p class="text-copy-14 mt-4 text-muted text-center justify-center">
+                  {siteData.lastUpdated}: 
+                  <time datetime={page.data.lastUpdated?.toISOString()}>{formattedLastUpdated}</time>
+                </p>
+              )}
             </div>
-            {formattedLastUpdated && (
-              <p class="text-copy-14 lg:text-copy-16 mt-4 text-(--fg-muted) text-center justify-center">
-                {siteData.lastUpdated}: 
-                <time datetime={page.data.lastUpdated?.toISOString()}>{formattedLastUpdated}</time>
-              </p>
-            )}
-          </div>
-        </Container>
-      </Section>
-      <Section size="sm">
-        <Container size="md">
-          <div id="article-content" class="prose-custom">
-            <Content components={components} />
-          </div>
-        </Container>
-      </Section>
-    </div>
-  </Section>
+          </Section>
+          <Section size="sm">
+            <div id="article-content" class="prose-custom">
+              <Content components={components} />
+            </div>
+          </Section>
+        </article>
+      </Container>
+    </Section>
+  </div>
+  <BackToTop />
 </BaseLayout>
