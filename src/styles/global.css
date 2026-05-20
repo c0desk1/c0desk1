@@ -472,24 +472,6 @@
   );
 }
 
-@utility glass-noise {
-  background: color-mix(in srgb, var(--bg-elevated) 80%, transparent);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid var(--border-subtle);
-  position: relative;
-  overflow: hidden;
-}
-
-@utility glass-noise::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  opacity: 0.04;
-  pointer-events: none;
-  background: var(--noise-pattern, radial-gradient(circle, #fff 1px, transparent 1px));
-}
-
 /* Border Utilities */
 @utility border-subtle {
   border-color: var(--border-subtle);
