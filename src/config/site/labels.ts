@@ -60,9 +60,6 @@ export const labels = {
   dataNotReady: "Data is not ready",
   refreshPage: "Please refresh the page",
 
-  //____Language Switcher
-  languageSwitcherLabel: "Select Language",
-
   //____Newsletter
   newsletterHeading: "Stay connected",
   newsletterSub: "Get the latest posts delivered to your inbox.",
@@ -75,27 +72,6 @@ export const labels = {
   newsletterError: "An error occurred. Please try again.",
   newsletterToastSuccess: "Already subscribed! Check your inbox.",
   newsletterNetwork: "Failed to connect. Please try again later.",
-
-  //____Status Panel
-  s_label: "Status System",
-  s_LoadingSystem: "Loading System...",
-  s_WaitingSync: "Waiting for sync...",
-  s_JustNow: "Just now",
-  s_Ago: "ago",
-  s_AllSystemsNormal: "All Systems Normal.",
-  s_Updated: "Updated",
-  s_LastChecks: "last check",
-  s_Offline: "Offline",
-  s_Uptime: "Uptime",
-  s_Average: "average",
-  s_IdentifyingNode: "Identifying...",
-  s_Calculating: "Calculating...",
-  s_SystemStatus: "System Status",
-  s_ClosePanel: "Close panel",
-  s_Node: "Node",
-  s_LastCheck: "Last Check",
-  s_SomeTimeAgo: "Some time ago",
-  s_GlobalEdge: "Global Edge",
 
   //____Author______//
   authorPage: "Author",
@@ -111,14 +87,13 @@ export const labels = {
 
   //____Blogpage______//
   blog_PageTitle: "Blog",
-  blog_PageDescription:
-    "Behind-the-scenes notes on systems, creativity, and exploring the modern digital world.",
+  blog_PageDescription: "Behind-the-scenes notes on systems, creativity, and exploring the modern digital world.",
+  
   b_p_n: "Page",
   blog_HeroAria: "Blog Introduction",
   blog_HeroTitle: "Explore our Blog posts and updates",
-  blog_featuredPosts: "Featured Articles",
+  blog_featuredPosts: "Featured.",
   blog_latestPosts: "Latest.",
-  blog_browsePosts: "Filter Articles by Category",
   b_relatedPosts: "Related Articles",
   blog_noBlogPosts: "No blog posts yet.",
   blog_viewAll: "View all articles",
@@ -134,8 +109,8 @@ export const labels = {
   p_PageDesc: "A collection of digital works, ranging from web applications and design systems to modern technology and UI/UX experiments.",
   p_HeroAria: "Portfolio Introduction",
   p_HeroTitle: "Crafting & experiences of web development projects and some visual experiments.",
-  p_FeaturedPosts: "Featured Project",
-  p_latestPost: "Latest Project",
+  p_FeaturedPosts: "Featured.",
+  p_latestPost: "Latest.",
   p_AllProjects: "View all Projects",
   p_relatedProjects: "Related Projects",
   p_Empty: "No projects published yet.",

@@ -222,7 +222,7 @@
   --prose-border-muted: #171717;
 
   /* Code & Pre */
-  --prose-code-bg: #171717;
+  --prose-code-bg: #000000;
   --prose-code-border: #262626;
   --prose-code-text: #e5e5e5;
   --prose-code-keyword: #ff7b72;

@@ -18,9 +18,3 @@
 .prose-custom>:last-child{
   margin-bottom:0!important
 }
-
-@media (max-width: 767px) {
-  .prose-custom {
-    pading: 0 0.5rem;
-  }
-}

@@ -115,13 +115,11 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
     <Section size="sm">
       <Container size="md">
         <Breadcrumb items={Breadcrumbs} />
-        <article id="post-article">
+        <article id="article" class="px-4 lg:px-6">
           <Section size="sm">
-            <h2 class="sr-only">{siteData.b_articleHeader}</h2>
             <PostHeader
               title={title}
               description={description}
-              overviewItems={post.data.overview}
               pubDate={pubDate}
               content={post.body}
               authorName={authorEntry?.data.name}
@@ -129,24 +127,26 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
               authorRole={authorEntry?.data.role}
               authorSlug={authorEntry?.id}
               image={image}
+              overviewItems={post.data.overview}
             />
           </Section>
           <Section size="sm">
-            <div id="article-content" class="prose-custom">
+            <div id="article" class="prose-custom">
               <Content components={components} />
             </div>
-	      </Section>
-	    </article>
-	    <Section size="sm">
+	        </Section>
+	      </article>
+        <Section size="sm">
           <RssFeed />
         </Section>
-	  </Container>
-	</Section>
-    <Section size="sm">
+	    </Container>
+	  </Section>
+    <Section size="none">
       <h2 class="sr-only">{siteData.b_articleNavigation}</h2>
       <Container size="lg">
         <PostNavigation prevPost={prevPost} nextPost={nextPost} />
       </Container>
     </Section>
   </Section>
+  <BackToTop />
 </BaseLayout>

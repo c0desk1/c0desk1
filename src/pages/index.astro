@@ -5,6 +5,7 @@ export const prerender = true;
 import { getCollection } from "astro:content";
 import { sortByDate } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
+import HERO from '@/assets/images/c0desk1-hero.jpeg';
 
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/ui/Container.astro";
@@ -12,6 +13,7 @@ import Section from "@/components/ui/Section.astro";
 import PostCard from "@/components/blog/PostCard.astro";
 import PortfolioCard from '@/components/portfolio/PortfolioCard.astro';
 import Button from "@/components/ui/Button.astro";
+import Hero from "@/components/ui/Hero.astro";
 
 const allPosts = await getCollection("blog", ({ data }) =>
  !data.draft
@@ -56,92 +58,63 @@ const portfolioPath = '/portfolio/';
 ---
 
 <BaseLayout {...seoData}>
-  <Section id="browse-portfolio" size="sm" aria-label={h_c}>
-    <Container size="full">
-      <div class="relative grid grid-cols-1 lg:grid-cols-[250px_1fr_250px] border border-(--border) rounded-xl">
-        <aside class="border-b lg:border-b-0 border-(--border) lg:sticky lg:top-16 self-start">
-          <h1 class="text-heading-24 md:text-heading-32 lg:text-heading-40 font-semibold text-(--fg) text-center md:text-start wrap-break-word p-4 lg:p-6">
-            {title}
-          </h1>
-        </aside>
-        <div class="flex flex-col min-w-0 border-0 lg:border-x border-(--border)">
-          <div class="flex flex-col divide-y divide-(--border)">
-            <Section id="blog" size="none" aria-label={blog_s}>
-              <div class="flex items-center border-b border-(--border)">
-                <h2 class="text-heading-20 lg:text-heading-24 text-(--fg) font-semibold p-4 lg:p-6">
-                  {latestTitle}
-                </h2>
-              </div>
-              {blogPosts.length > 0 ? (
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-b border-(--border)">
-                  {blogPosts.map((post) => (
-                    <div class="transition-colors hover:bg-muted
-                      border-t border-(--border) first:border-t-0
-                      md:nth-2:border-t-0
-                      md:even:border-l md:border-(--border)
-                      lg:nth-2:border-t-0 lg:nth-3:border-t-0
-                      lg:nth-[3n+1]:border-l-0
-                      lg:border-l lg:border-(--border)
-                    ">
-                      <PostCard post={post} />
-                    </div>
-                  ))}
-                </div>
-                ) : (
-                <div class="py-12 text-center">
-                  <p class="text-copy-16 md:text-copy-18 text-subtle">
-                    {noPostsText}
-                  </p>
-                </div>
-              )}
-              <div class="flex justify-center py-8">
-                <Button href={blogPath} variant="secondary" size="md">
-                  {viewAllText}
-                </Button>
-              </div>
-            </Section>
-            <Section id="portfolio" size="none" aria-label={portfolio_s}>
-              <div class="flex items-center border-b border-(--border) p-4 lg:p-6">
-                <h2 class="text-heading-20 lg:text-heading-24 text-(--fg) font-semibold">
-                  {p_l}
-                </h2>
-              </div>
-              {portfolioProjects.length > 0 ? (
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-b border-(--border)">
-                  {portfolioProjects.map((project) => (
-                    <div class="transition-colors hover:bg-muted 
-                      border-t border-(--border) first:border-t-0
-                      md:nth-2:border-t-0
-                      md:even:border-l md:border-(--border)
-                      lg:nth-2:border-t-0 lg:nth-3:border-t-0
-                      lg:nth-[3n+1]:border-l-0
-                      lg:border-l lg:border-(--border)
-                    ">
-                      <PortfolioCard project={project} />
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div class="py-12 text-center">
-                  <p class="text-copy-16 md:text-copy-18 text-subtle">
-                    {p_e}
-                  </p>
-                </div>
-              )}
-              <div class="flex justify-center py-8">
-                <Button href={portfolioPath} variant="secondary" size="md">
-                  {p_a}
-                </Button>
-              </div>
-            </Section>
+  <Section size="none">
+    <Hero
+      title={seo.title}
+      title2={title}
+      description={seo.description}
+      bgImage={HERO}
+      overlayOpacity={0.4}
+    />
+  </Section>
+  <Section size="sm" aria-label={h_c}>
+    <Container size="xl">
+      <Section id="blog" size="sm" aria-label={blog_s}>
+        <h2 class="text-heading-24 lg:text-heading-32 text-(--fg) font-semibold py-4 lg:py-6">
+          {latestTitle}
+        </h2>
+        {blogPosts.length > 0 ? (
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            {blogPosts.map((post) => (
+              <PostCard post={post} />
+            ))}
           </div>
+          ) : (
+          <div class="py-12 text-center">
+            <p class="text-copy-16 md:text-copy-18 text-subtle">
+              {noPostsText}
+            </p>
+          </div>
+        )}
+        <div class="flex justify-center py-8">
+          <Button href={blogPath} variant="secondary" size="md">
+            {viewAllText}
+          </Button>
         </div>
-        <aside class="border-b lg:border-b-0 border-(--border) lg:sticky lg:top-16 self-start">
-          <h1 class="text-heading-24 md:text-heading-32 lg:text-heading-40 font-semibold text-(--fg) text-center md:text-start wrap-break-word p-4 lg:p-6">
-            {title}
-          </h1>
-        </aside>
-      </div>
+      </Section>
+      <Section id="portfolio" size="sm" aria-label={portfolio_s}>
+       <h2 class="text-heading-24 lg:text-heading-32 text-(--fg) font-semibold py-4 lg:py-6">
+          {p_l}
+        </h2>
+        {portfolioProjects.length > 0 ? (
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            {portfolioProjects.map((project) => (
+              <PortfolioCard project={project} />
+            ))}
+          </div>
+          ) : (
+          <div class="py-12 text-center">
+            <p class="text-copy-16 md:text-copy-18 text-subtle">
+              {p_e}
+            </p>
+          </div>
+        )}
+        <div class="flex justify-center py-8">
+          <Button href={portfolioPath} variant="secondary" size="md">
+            {p_a}
+          </Button>
+        </div>
+      </Section>
     </Container>
   </Section>
 </BaseLayout>
