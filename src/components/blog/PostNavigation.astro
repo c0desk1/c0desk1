@@ -23,13 +23,12 @@ const nextUrl = nextPost ? `/blog/${slugify(nextPost.data.title)}/` : null;
             href={prevUrl}
             rel="prev"
             aria-label="Previous post"
-            class="group flex w-full flex-col transition-colors"
-          >
+            class="group flex w-full flex-col transition-colors">
             <div class="flex items-center gap-2 text-label-14 text-(--fg) mb-2">
               <Icon name="arrow-left" class="w-4 h-4" />
               <span>{siteConfig.b_prevPosts || 'Previous'}</span>
             </div>
-            <span class="text-heading-14 md:text-heading-16 font-medium text-(--fg-muted) group-hover:text-(--fg) line-clamp-2 text-left">
+            <span class="text-heading-14 md:text-heading-16 font-medium text-muted group-hover:text-(--fg) active:text-(--fg) line-clamp-2 text-left">
               {prevPost.data.title}
             </span>
           </a>
@@ -49,7 +48,7 @@ const nextUrl = nextPost ? `/blog/${slugify(nextPost.data.title)}/` : null;
               <span>{siteConfig.b_nextPosts || 'Next'}</span>
               <Icon name="arrow-right" class="w-4 h-4" />
             </div>
-            <span class="text-heading-14 md:text-heading-16 font-medium text-(--fg-muted) group-hover:text-(--fg) line-clamp-2 text-right">
+            <span class="text-heading-14 md:text-heading-16 font-medium text-muted group-hover:text-(--fg) active:text-(--fg) line-clamp-2 text-right">
               {nextPost.data.title}
             </span>
           </a>
