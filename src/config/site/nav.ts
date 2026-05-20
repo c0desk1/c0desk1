@@ -18,10 +18,25 @@ type FooterSection = {
 
 export const navConfig = {
   navItems: [
-    { href: "/blog/", label: "Blog", isExternal: false },
-    { href: "/portfolio/", label: "Portfolio", isExternal: false },
-    { href: "/about/", label: "About", isExternal: false },
-    { href: "https://dev-adogen.bimasaktiakbarr.workers.dev", label: "Adogen", isExternal: true },
+    { label: "Blog", href: "/blog/", isExternal: false },
+    { label: "Portfolio", href: "/portfolio/", isExternal: false },
+    { label: "About", href: "/about/", isExternal: false },
+    {
+      label: "Legal",
+      children: [
+        { label: "Privacy Policy", href: "/privacy-policy/", isExternal: false },
+        { label: "Terms of Service", href: "/terms-of-service/", isExternal: false },
+        { label: "Disclaimer", href: "/disclaimer/", isExternal: false },
+        { label: "Cookie Policy", href: "/cookie-policy/", isExternal: false },
+        { label: "DMCA", href: "/dmca/", isExternal: false }
+      ]
+    },
+    { 
+      label: "Tools", 
+      children: [ 
+        { label: "Adogen", href: "https://dev-adogen.bimasaktiakbarr.workers.dev", isExternal: true }
+      ]
+    }
   ] as NavItem[],
 
   mobileNavItems: [
