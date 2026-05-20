@@ -1,16 +1,17 @@
 //config/site/nav.ts
 
 type NavItem = {
-  href: string;
   label: string;
+  href: string;
   isExternal?: boolean;
   children?: NavItem[];
 };
 
-type MobileNavSection = {
-  title: string;
-  items: NavItem[];
-  children?: NavItem[];
+type MobileNavItem = {
+  label: string;
+  href?: string;
+  isExternal?: boolean;
+  children?: MobileNavItem[];
 };
 
 type FooterSection = {
@@ -46,33 +47,31 @@ export const navConfig = {
     }
   ] as NavItem[],
 
-  mobileNavItems: [
-    {
-      title: "Navigation",
-      items: [
-        { label: "Home", href: "/", isExternal: false },
-        { label: "Blog", href: "/blog/", isExternal: false },
-        { label: "Portfolio", href: "/portfolio/", isExternal: false }
-      ]
-    },
-    {
-      title: "Legal",
-      items: [
-        { href: "/privacy-policy/", label: "Privacy Policy", isExternal: false },
-        { href: "/terms-of-service/", label: "Terms of Service", isExternal: false },
-        { href: "/disclaimer/", label: "Disclaimer", isExternal: false },
-        { href: "/cookie-policy/", label: "Cookie Policy", isExternal: false },
-        { href: "/dmca/", label: "DMCA", isExternal: false },
-      ]
-    },
-    {
-      title: "Community",
-      items: [
+  MobileNavItems: [
+    { label: "Home", href: "/", isExternal: false },
+    { label: "Blog", href: "/blog/", isExternal: false },
+    { label: "Portfolio", href: "/portfolio/", isExternal: false },
+    { label: "Community", 
+      children: [
         { label: "About", href: "/about/", isExternal: false },
         { label: "Contact Us", href: "/contact/", isExternal: false },
       ]
+    },
+    { label: "Legal",
+      children: [
+        { label: "Privacy Policy", href: "/privacy-policy/", isExternal: false },
+        { label: "Terms of Service", href: "/terms-of-service/", isExternal: false },
+        { label: "Disclaimer", href: "/disclaimer/", isExternal: false },
+        { label: "Cookie Policy", href: "/cookie-policy/", isExternal: false },
+        { label: "DMCA", href: "/dmca/", isExternal: false }
+      ]
+    },
+    { label: "Tools",
+      children: [ 
+        { label: "Adogen", href: "https://dev-adogen.bimasaktiakbarr.workers.dev", isExternal: true }
+      ]
     }
-  ] as MobileNavSection[],
+  ] as MobileNavItem[],
 
   footerSections: [
     {
