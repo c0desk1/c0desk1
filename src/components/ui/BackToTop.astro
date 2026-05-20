@@ -37,25 +37,21 @@ const backToTop = siteConfig.backToTop || "Back to Top";
     />
     <circle
       id="progress-ring"
-      class="stroke-accent"
+      class="stroke-accent-dim"
       stroke-width="4"
       fill="none"
       cx="50"
       cy="50"
-      r="46"
+      r="50"
       stroke-dasharray="0 289"
       stroke-linecap="round"
       style="transition: stroke-dasharray 0.15s ease-out;"
     />
   </svg>
-
-  <!-- Noise texture -->
   <div class="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
     <div class="absolute inset-0 bg-noise opacity-20 mix-blend-overlay"></div>
   </div>
-
-  <!-- Icon dan teks -->
-  <span class="relative z-10 transition-transform duration-300 group-hover:-translate-y-1 flex items-center">
+  <span class="relative z-10 transition-transform duration-300 group-hover:-translate-y-1 active:-translate-y-1 flex items-center">
     <Icon name="arrow-up" className="w-5 h-5" />
   </span>
 </button>
