@@ -19,8 +19,8 @@
   margin-bottom:0!important
 }
 
-@media (min-width: 767px) {
-  .prose-custom{
-    padding: 0 1rem;
+@media (max-width: 767px) {
+  .prose-custom {
+    pading: 0 0.5rem;
   }
 }
