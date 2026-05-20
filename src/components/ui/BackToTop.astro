@@ -1,35 +1,131 @@
 ---
 // src/components/ui/BackToTop.astro
 import { siteConfig } from '@/config/site';
-import Button from './Button.astro';
 import Icon from './Icon';
 
-interface Props {
-  showBorder?: boolean;
-  align?: 'left' | 'center' | 'right';
-}
-
-const { showBorder = true, align = 'left' } = Astro.props;
-
-const backToTop = siteConfig.backToTop;
-
-const alignClasses = {
-  left: 'text-left',
-  center: 'text-center',
-  right: 'text-right'
-};
+const backToTop = siteConfig.backToTop || "Back to Top";
 ---
 
-<div class:list={[
-  showBorder? 'py-4 md:py-6 text-(--fg-muted) hover:text-(--fg)' : '',
-  alignClasses[align]
-]}>
-  <Button href="#top" variant='secondary' aria-label={backToTop} title={backToTop}>
-    <span class="group-hover:-translate-y-0.5">
-      <Icon name="arrow-up" className="w-5 h-5" />
-    </span>
-    <span>
-      {backToTop}
-    </span>
-  </Button>
-</div>
+<button
+  id="back-to-top"
+  aria-label={backToTop}
+  title={backToTop}
+  class="fixed mb-[env(safe-area-inset-bottom)] bottom-8 right-8 z-50 group
+         flex items-center justify-center
+         w-12 h-12 p-2
+         rounded-full bg-(--bg) backdrop-blur-sm
+         border border-(--border) shadow-lg
+         text-muted text-label-12
+         hover:bg-muted hover:text-(--fg) active:text-(--fg)
+         transition-all duration-300
+         opacity-0 invisible translate-y-4
+         focus-visible:opacity-100 focus-visible:visible
+         focus-visible:translate-y-0">
+  <svg 
+    id="progress-svg"
+    class="absolute top-0 left-0 w-full h-full pointer-events-none -rotate-90"
+    viewBox="0 0 100 100"
+  >
+    <circle
+      id="progress-ring-bg"
+      class="stroke-(--border)/10"
+      stroke-width="4"
+      fill="none"
+      cx="50"
+      cy="50"
+      r="46"
+    />
+    <circle
+      id="progress-ring"
+      class="stroke-accent"
+      stroke-width="4"
+      fill="none"
+      cx="50"
+      cy="50"
+      r="46"
+      stroke-dasharray="0 289"
+      stroke-linecap="round"
+      style="transition: stroke-dasharray 0.15s ease-out;"
+    />
+  </svg>
+
+  <!-- Noise texture -->
+  <div class="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
+    <div class="absolute inset-0 bg-noise opacity-20 mix-blend-overlay"></div>
+  </div>
+
+  <!-- Icon dan teks -->
+  <span class="relative z-10 transition-transform duration-300 group-hover:-translate-y-1 flex items-center">
+    <Icon name="arrow-up" className="w-5 h-5" />
+  </span>
+</button>
+
+<style is:global>
+  .bg-noise {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.5'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 80px;
+  }
+  
+  .scroll-show {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+  }
+</style>
+
+<script>
+  //@ts-nocheck
+  (function() {
+    const btn = document.getElementById('back-to-top');
+    if (!btn) return;
+
+    let ticking = false;
+
+    const checkScroll = () => {
+      const scrolled = window.scrollY > 300;
+      if (scrolled) {
+        btn.classList.add('scroll-show');
+      } else {
+        btn.classList.remove('scroll-show');
+      }
+    };
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          checkScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+    checkScroll();
+
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    const ring = document.getElementById('progress-ring');
+    const svg = document.getElementById('progress-svg');
+    if (!ring) return;
+
+    const circumference = 2 * Math.PI * 46;
+    ring.style.strokeDasharray = `0 ${circumference}`;
+
+    function updateProgress() {
+      const winScroll = document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - window.innerHeight;
+      if (height <= 0) return;
+      const scrolled = winScroll / height;
+      const dash = scrolled * circumference;
+      ring.style.strokeDasharray = `${dash} ${circumference}`;
+    }
+
+    window.addEventListener('scroll', () => {
+      requestAnimationFrame(updateProgress);
+    });
+    updateProgress();
+  })();
+</script>

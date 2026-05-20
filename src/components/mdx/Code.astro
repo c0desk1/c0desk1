@@ -1,105 +1,78 @@
 ---
 import Icon from '@/components/ui/Icon';
-
-interface Props {
-  titles?: string[];
-}
-
-const { titles = ["Code"] } = Astro.props;
 ---
 
-<div class="code-group">
-  <div class="code-group-wrapper">
-    <div class="code-group-header gap-1.5" role="tablist">
-      {titles.map((title, index) => (
-        <Icon name="code" className="copy-icon w-4 h-4 m-0.5" />
-        <button
-          data-code-tab={index}
-          role="tab"
-          aria-selected={index === 0 ? "true" : "false"}
-          class="code-group-title text-label-14">
-          {title}
-          <span class="underline-indicator top-0" />
-        </button>
-      ))}
+<div class="code-block-wrapper relative rounded-(--prose-radius-lg) border border-(--prose-code-border) bg-(--prose-code-bg) overflow-hidden my-4">
+  <div class="code-block-header  flex items-center justify-between px-4 py-2 bg-(--prose-code-bg) border-b border-(--prose-code-border)">
+    <div class="flex items-center gap-2">
+      <div class="flex items-center p-2">
+        <Icon name="code" className="w-4 h-4 text-(--fg)" />
+      </div>
+      <span class="code-language code-block-title text-label-mono-14">plain</span>
     </div>
-    <button
-      class="copy-button"
-      aria-label="Copy code">
+    <button class="copy-button p-2 rounded-full hover:bg-(--prose-bg-muted) transition-colors" aria-label="Copy code">
       <Icon name="copy" className="copy-icon w-4 h-4" />
-      <Icon name="check" className="check-icon w-4 h-4 hidden text-(--prose-accent)" />
+      <Icon name="check" className="check-icon w-4 h-4 hidden text-accent" />
     </button>
   </div>
-  <div class="code-group-content text-code-16" role="tabpanel">
+  <div class="text-code-14 md:text-code-16 code-content overflow-x-auto">
     <slot />
   </div>
 </div>
 
 <script>
-  const initCodeGroup = () => {
-    document.querySelectorAll<HTMLElement>('.code-group').forEach(group => {
-      const tabs = group.querySelectorAll<HTMLButtonElement>('[data-code-tab]');
-      const contents = group.querySelector('.code-group-content')?.children;
-      const copyBtn = group.querySelector<HTMLButtonElement>('.copy-button');
-
-      if (!tabs.length || !contents) return;
-
-      const activate = (index: number) => {
-        tabs.forEach((tab, i) => {
-          const isActive = i === index;
-          tab.setAttribute('data-active', String(isActive));
-          tab.setAttribute('aria-selected', String(isActive));
-          if (contents[i]) {
-            (contents[i] as HTMLElement).style.display = isActive ? 'block' : 'none';
-          }
-        });
+  (function() {
+    document.querySelectorAll('.code-block-wrapper').forEach(wrapper => {
+      const preElement = wrapper.querySelector('.code-content pre');
+      const codeElement = wrapper.querySelector('.code-content pre code');
+      
+      let language = 'plain';
+      if (preElement) {
+        const langAttr = preElement.getAttribute('data-language');
+        if (langAttr) language = langAttr;
+      }
+      if (language === 'plain' && codeElement) {
+        const classNames = codeElement.className;
+        const match = classNames.match(/language-([a-zA-Z0-9+#-]+)/);
+        if (match && match[1]) language = match[1];
+      }
+      
+      const langMap: Record<string, string> = {
+        js: 'JavaScript', ts: 'TypeScript', jsx: 'React JSX', tsx: 'React TSX',
+        py: 'Python', rb: 'Ruby', go: 'Go', rs: 'Rust', html: 'HTML', css: 'CSS',
+        json: 'JSON', yaml: 'YAML', md: 'Markdown', bash: 'Bash', sh: 'Shell',
+        sql: 'SQL', java: 'Java', cpp: 'C++', c: 'C', php: 'PHP'
       };
-
-      tabs.forEach((tab, i) => tab.addEventListener('click', () => activate(i)));
-
-      copyBtn?.addEventListener('click', async () => {
-        const active = Array.from(contents).find(c => (c as HTMLElement).style.display !== 'none');
-        const code = active?.querySelector('code')?.textContent;
-
-        if (!code) {
-          alert('Tidak ada kode untuk disalin');
-          return;
-        }
-
+      
+      const displayLang = langMap[language] || language.toUpperCase();
+      const langSpan = wrapper.querySelector('.code-language');
+      if (langSpan) langSpan.textContent = displayLang;
+      
+      const btn = wrapper.querySelector('.copy-button');
+      if (!btn) return;
+      
+      const getCodeText = (): string => {
+        const codeElem = wrapper.querySelector('.code-content pre code');
+        return codeElem ? codeElem.textContent || '' : '';
+      };
+      
+      btn.addEventListener('click', async () => {
+        const code = getCodeText();
+        if (!code) return;
         try {
           await navigator.clipboard.writeText(code);
-
-          const toast = (window as any).toast;
-          if (toast && typeof toast.show === 'function') {
-            toast.show('Berhasil disalin!', { type: 'success', duration: 2000 });
-          } else {
-            alert('Berhasil disalin!');
-          }
-
-          const copyIcon = copyBtn.querySelector('.copy-icon');
-          const checkIcon = copyBtn.querySelector('.check-icon');
+          const copyIcon = btn.querySelector('.copy-icon');
+          const checkIcon = btn.querySelector('.check-icon');
           copyIcon?.classList.add('hidden');
           checkIcon?.classList.remove('hidden');
-
           setTimeout(() => {
             copyIcon?.classList.remove('hidden');
             checkIcon?.classList.add('hidden');
           }, 2000);
         } catch (err) {
-          console.error('Gagal copy:', err);
-          const toast = (window as any).toast;
-          if (toast && typeof toast.show === 'function') {
-            toast.show('Gagal menyalin kode', { type: 'error', duration: 2500 });
-          } else {
-            alert('Gagal menyalin kode. Silakan coba manual.');
-          }
+          console.error('Copy gagal', err);
         }
       });
-
-      activate(0);
     });
-  };
-
-  initCodeGroup();
-  document.addEventListener('astro:after-swap', initCodeGroup);
+  })();
 </script>

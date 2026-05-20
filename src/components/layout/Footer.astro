@@ -3,64 +3,29 @@
 import { siteConfig } from "@/config/site";
 import Container from "../ui/Container.astro";
 import Section from "../ui/Section.astro";
-import Icon from "@/components/ui/Icon";
 import ThemeToggle from "../ui/ThemeToggle.astro";
 import SocialLinks from "../ui/SocialLinks.astro";
 
 const siteData = siteConfig;
 const social = siteConfig.social;
-const footerSections = siteConfig.footerSections;
 ---
 
 <footer class="relative border-t border-(--border) bg-(--bg)">
   <Section size="sm">
     <Container size="xl">
-      <nav aria-label={siteData.footerNav} class="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-12">
-        {footerSections.map((section) => (
-          <div class="min-w-0">
-            <p class="text-label-mono-13 font-medium uppercase tracking-wider text-(--fg-strong) mb-3">
-              {section.title}
-            </p>
-            <ul class="flex flex-col gap-2">
-              {section.items.map((link) => (
-                <li>
-                  <a
-                    href={link.href}
-                    target={link.isExternal ? "_blank" : undefined}
-                    rel={link.isExternal ? "noopener noreferrer" : undefined}
-                    class="group inline-flex items-center gap-1 text-label-14 text-subtle transition-colors duration-150 hover:text-(--fg)"
-                  >
-                    {link.label}
-                    {link.isExternal && (
-                      <Icon
-                        name="external"
-                        className="h-3 w-3 shrink-0 opacity-40 transition-opacity duration-150 group-hover:opacity-100"
-                      />
-                    )}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </nav>
-    </Container>
-    <div class="mt-8 border-t border-(--border)">
-      <Container size="xl">
-        <div class="flex flex-col items-center justify-between gap-4 py-4 md:flex-row">
-          <p class="text-overline-12 lowercase text-dim order-2 md:order-1">
-            &copy; {new Date().getFullYear()} {siteData.siteName}
-          </p>
-          <div class="flex items-center gap-4 order-1 md:order-2">
-            <SocialLinks
-              items={social}
-              class="flex items-center gap-1"
-              iconClass="h-4 w-4 text-(--fg-dim) hover:text-(--fg) transition-colors duration-150"
-            />
-            <ThemeToggle />
-          </div>
+      <div class="flex flex-col items-center justify-between gap-4 py-4 md:flex-row">
+        <p class="text-overline-12 lowercase text-dim order-2 md:order-1">
+          &copy; {new Date().getFullYear()} {siteData.siteName}
+        </p>
+        <div class="flex items-center gap-4 order-1 md:order-2">
+          <SocialLinks
+            items={social}
+            class="flex items-center gap-1"
+            iconClass="h-4 w-4 text-(--fg-dim) hover:text-(--fg) transition-colors duration-150"
+          />
+          <ThemeToggle />
         </div>
-      </Container>
-    </div>
+      </div>
+    </Container>
   </Section>
 </footer>

@@ -1,25 +1,105 @@
 ---
-interface Props {
+// src/components/hero/HeroDiagonal.astro
+import type { ImageMetadata } from 'astro';
+import Container from './Container.astro';
+import Button from './Button.astro';
+
+export interface Props {
+  bgImage: string | ImageMetadata;
   title: string;
-  highlight?: string;
+  title2?: string;
   description: string;
+  overlayOpacity?: number;
+  cta?: { label: string; href: string };
+  cta2?: { label: string; href: string };
 }
 
-const { title, highlight, description } = Astro.props;
+const {  bgImage, title, title2, description, overlayOpacity = 0.5, cta, cta2 } = Astro.props;
+const overlayStyle = `background-color: rgba(0,0,0,${overlayOpacity})`;
+
+let bgImageUrl: string;
+
+if (typeof bgImage === 'string') {
+  bgImageUrl = bgImage;
+} else {
+  bgImageUrl = bgImage.src;
+}
 ---
 
-<div class="w-full h-full justify-center flex flex-col items-center text-center py-16" aria-labelledby="hero-title">
-  <div class="space-y-4">
-    <h1 id="hero-title" class="text-heading-40 md:text-heading-56 lg:text-heading-64 text-(--fg)">
-      {title}
-      {highlight && (
-        <span class="text-(--accent-dim)">
-          {highlight}
-        </span>
-      )}
-    </h1>
-    <p class="text-copy-16 md:text-copy-20 text-(--fg-muted) max-w-3xl">
-      {description}
-    </p>
-  </div>
-</div>
+<section class="relative w-full min-h-125 md:min-h-150 bg-cover bg-center" style={`background-image: url(${bgImageUrl})`}>
+  <div class="absolute inset-0" style={overlayStyle}></div>
+  <Container size="xl">
+    <div class="relative z-10 flex flex-col justify-between min-h-125 md:min-h-150 p-4 md:p-10 lg:p-12">
+      <div class="self-center sm:self-start">
+        <h1 class="text-heading-32 lg:text-heading-56 font-medium text-zinc-50 drop-shadow-lg max-w-xl">
+          {title}
+        </h1>
+      </div>
+      <div class="flex flex-wrap justify-between items-end gap-6">
+        <div class="flex flex-col gap-8 self-center md:justify-end">
+          <h2 class="text-heading-24 lg:text-heading-32 font-normal text-zinc-100 drop-shadow-lg max-w-xl">
+            {title2}
+          </h2>
+          <div class="flex items-center gap-4">
+            {cta && (
+              <Button 
+                variant='primary'
+                size='sm'
+                class="text-button-14">
+                <a href={cta.href}>{cta.label}</a>
+              </Button>
+            )}
+            {cta2 && (
+              <Button 
+                variant='secondary'
+                size='sm'
+                class="text-button-14">
+                <a href={cta2.href}>{cta2.label}</a>
+              </Button>
+            )}
+          </div>
+        </div>
+        <div class="max-w-md">
+          <p class="text-zinc-100 text-copy-12 sm:text-copy-14 drop-shadow">
+            {description}
+          </p>
+        </div>
+      </div>
+    </div>
+  </Container>
+</section>
+
+<style is:global>
+  .inline-flex.items-center.gap-2.px-3.py-1.5.rounded-full {
+    position: relative;
+    overflow: hidden;
+  }
+  .inline-flex.items-center.gap-2.px-3.py-1.5.rounded-full::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.4'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 100px;
+    opacity: 0.15;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .inline-flex.items-center.gap-2.px-3.py-1.5.rounded-full::before {
+      animation: grain 8s steps(10) infinite;
+    }
+  }
+  @keyframes grain {
+    0%, 100% { transform: translate(0, 0); }
+    10% { transform: translate(-2%, -1%); }
+    20% { transform: translate(1%, -2%); }
+    30% { transform: translate(-1%, 2%); }
+    40% { transform: translate(2%, 1%); }
+    50% { transform: translate(-2%, -1%); }
+    60% { transform: translate(1%, 1%); }
+    70% { transform: translate(-1%, -2%); }
+    80% { transform: translate(2%, -1%); }
+    90% { transform: translate(-2%, 2%); }
+  }
+</style>

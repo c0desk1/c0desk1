@@ -28,10 +28,12 @@ const authorPath = `/author/${authorSlug}/`;
 ---
 
 <div class="flex w-full justify-center gap-2">
-  <aaria-label={`${authorLabel}: ${authorName}`}
+  <a
     href={authorPath}
     rel="author"
-    class="inline-flex items-center gap-2 no-underline">
+    aria-label={`${authorLabel}: ${authorName}`}
+    class="inline-flex items-center gap-2 no-underline"
+  >
     <div class="inline-flex cursor-pointer flex-[0_1_auto] overflow-hidden">
       {authorAvatar && (
         <span aria-hidden="true" aria-label="" role="img" class="w-6 h-6 shrink-0 rounded-full inline-block overflow-hidden leading-0 align-top relative transition-[background] duration-200 ease-in-out">

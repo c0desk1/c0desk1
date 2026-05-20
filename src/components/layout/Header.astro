@@ -13,7 +13,7 @@ import MenuButton from "@/components/ui/MenuButton.astro";
       <div class="flex items-center shrink-0">
         <Logo />
       </div>
-       <div class="absolute left-1/2 -translate-x-1/2 hidden sm:inline-flex">
+       <div class="absolute left-1/2 -translate-x-1/2 hidden sm:flex">
         <DesktopNav />
       </div>
       <div class="ml-auto flex items-center gap-2 lg:gap-3">
@@ -40,6 +40,7 @@ import MenuButton from "@/components/ui/MenuButton.astro";
   
   #main-header.scrolled #header-border {
     opacity: 1;
+    z-index: 0;
   }
 </style>
 

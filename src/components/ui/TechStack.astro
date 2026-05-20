@@ -1,0 +1,39 @@
+---
+// src/components/ui/TechStack.astro
+import Icon from './Icon';
+import type { IconName } from './Icon';
+
+export interface TechItem {
+  name: string;
+  icon: IconName;     // pastikan nama icon ada di Icon.tsx
+  url?: string;
+}
+
+export interface Props {
+  title?: string;
+  items: TechItem[];
+}
+
+const { title, items } = Astro.props;
+---
+<div class="container mx-auto px-4">
+    {title && (
+        <h2 class="text-sm font-mono uppercase tracking-wider text-muted text-center mb-6">
+            {title}
+        </h2>
+    )}
+    <div class="flex flex-wrap justify-center gap-3">
+      {items.map((item) => (
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-subtle border border-(--border) text-muted hover:text-(--fg) hover:border-strong transition-all">
+          <Icon name={item.icon} className="w-4 h-4" />
+          {item.url ? (
+            <a href={item.url} target="_blank" rel="noopener noreferrer" class="text-xs font-medium">
+              {item.name}
+            </a>
+          ) : (
+            <span class="text-xs font-medium">{item.name}</span>
+          )}
+        </div>
+      ))}
+    </div>
+</div>
