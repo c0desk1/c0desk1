@@ -20,15 +20,21 @@ if (steps.length === 0) steps.push({ heading: '', content: html });
       const isLast = idx === steps.length - 1;
       return (
         <div class="relative step-item">
-          <div class="absolute -left-10 sm:-left-12 top-0 w-7 h-7 rounded-full bg-(--prose-bg-muted) border border-(--prose-border) flex items-center justify-center text-label-13-mono md:text-label-14-mono font-semibold z-10">
-            {isLast ? (
-              <Icon name="check" className="w-4 h-4 text-(--prose-accent-active)" />
-            ) : (
-              <span class="text-label-mono-14 text-(--prose-fg-nuted)">{idx + 1}</span>
-            )}
-          </div>
-          {step.heading ? (<div class="steps-content text-heading-20 font-semibold mb-1" set:html={step.heading} />) : null}
-          {step.content ? (<div class="steps-content text-copy-14 lg:text-copy-16 text-(--prose-fg-muted) space-y-1" set:html={step.content} />) : null}
+          {step.heading ? (
+            <div class="relative flex items-start">
+              <div class="absolute -left-10 sm:-left-12 top-0 w-7 h-7 rounded-full bg-(--prose-bg-muted) border border-(--prose-border) flex items-center justify-center text-label-13-mono md:text-label-14-mono font-semibold z-10">
+                {isLast ? (
+                  <Icon name="check" className="w-4 h-4 text-(--prose-accent-active)" />
+                ) : (
+                  <span class="text-label-mono-14 text-(--prose-fg-nuted)">{idx + 1}</span>
+                )}
+              </div>
+              <div class="steps-content text-heading-20 font-semibold mb-1" set:html={step.heading} />
+            </div>
+          ) : null}
+          {step.content ? (
+            <div class="steps-content text-copy-14 lg:text-copy-16 text-(--prose-fg-muted) space-y-1 mt-1" set:html={step.content} />
+          ) : null}
         </div>
       );
     })}
@@ -49,16 +55,11 @@ if (steps.length === 0) steps.push({ heading: '', content: html });
     const line = document.getElementById('steps-line');
     if (!wrapper || !line) return;
 
-    const items = wrapper.querySelectorAll('.step-item');
-    if (items.length === 0) return;
+    const bullets = wrapper.querySelectorAll('.step-item .rounded-full');
+    if (bullets.length === 0) return;
 
-    const firstItem = items[0];
-    const lastItem = items[items.length - 1];
-
-    const firstBullet = firstItem.querySelector('.rounded-full') as HTMLElement;
-    const lastBullet = lastItem.querySelector('.rounded-full') as HTMLElement;
-
-    if (!firstBullet || !lastBullet) return;
+    const firstBullet = bullets[0] as HTMLElement;
+    const lastBullet = bullets[bullets.length - 1] as HTMLElement;
 
     const wrapperRect = wrapper.getBoundingClientRect();
     const firstBulletRect = firstBullet.getBoundingClientRect();
@@ -77,6 +78,5 @@ if (steps.length === 0) steps.push({ heading: '', content: html });
   } else {
     adjustLine();
   }
-
   window.addEventListener('resize', adjustLine);
 </script>

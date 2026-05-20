@@ -19,21 +19,41 @@ if (releases.length === 0) {
 
 <div class="relative my-6 md:my-8 pl-10 sm:pl-12" id="changelog-wrapper">
   <div id="changelog-line" class="absolute left-5 border-l border-dashed border-(--prose-border)" style="top:0; bottom:0;"></div>
+
   <div class="space-y-8">
     {releases.map((release) => (
       <div class="relative changelog-item">
-        <div class="absolute -left-6 sm:-left-8 top-2 w-2.5 h-2.5 rounded-full bg-(--prose-link-visited) border border-(--prose-border) z-10"></div>
-        
         {release.heading && (
-          <div class="text-heading-18 changelog-version font-medium text-(--prose-fg) mb-1" set:html={release.heading} />
+          <div class="relative flex items-start">
+            <div class="absolute -left-6 sm:-left-8 top-2.5 w-2.5 h-2.5 rounded-full bg-(--prose-link-visited) border border-(--prose-border) z-10"></div>
+            <div class="changelog-version text-heading-18 font-medium text-(--prose-fg) mb-2" set:html={release.heading} />
+          </div>
         )}
         {release.content && (
-          <div class="text-copy-14 changelog-items space-y-1" set:html={release.content} />
+          <div class="text-copy-14 changelog-items space-y-1 mt-1" set:html={release.content} />
         )}
       </div>
     ))}
   </div>
 </div>
+
+<style>
+  .changelog-item :global(h2),
+  .changelog-item :global(h3),
+  .changelog-item :global(h4) {
+    margin-top: 0 !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .changelog-item :global(p) {
+    margin-top: 0 !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .changelog-item :global(ul) {
+    margin-top: 0 !important;
+    margin-bottom: 0.5rem !important;
+  }
+</style>
 
 <script>
   function adjustLine() {
@@ -41,16 +61,11 @@ if (releases.length === 0) {
     const line = document.getElementById('changelog-line');
     if (!wrapper || !line) return;
 
-    const items = wrapper.querySelectorAll('.changelog-item');
-    if (items.length === 0) return;
+    const bullets = wrapper.querySelectorAll('.changelog-item .rounded-full');
+    if (bullets.length === 0) return;
 
-    const firstItem = items[0];
-    const lastItem = items[items.length - 1];
-
-    const firstBullet = firstItem.querySelector('.rounded-full') as HTMLElement;
-    const lastBullet = lastItem.querySelector('.rounded-full') as HTMLElement;
-
-    if (!firstBullet || !lastBullet) return;
+    const firstBullet = bullets[0] as HTMLElement;
+    const lastBullet = bullets[bullets.length - 1] as HTMLElement;
 
     const wrapperRect = wrapper.getBoundingClientRect();
     const firstBulletRect = firstBullet.getBoundingClientRect();

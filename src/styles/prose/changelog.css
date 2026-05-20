@@ -1,24 +1,20 @@
 @reference '@/styles/utilities/index.css';
 
+.prose-custom .changelog-item :first-child {
+    margin-top: 0 !important;
+}
+.prose-custom .changelog-item :last-child {
+    margin-bottom: 0 !important;
+}
+
 .prose-custom .changelog-version h2,
 .prose-custom .changelog-version h3,
 .prose-custom .changelog-version h4 {
     @apply text-heading-16;
 }
 
-.prose-custom .changelog-item :first-child {
-    margin-top: 0 !important;
-}
-
-.prose-custom .changelog-item :last-child {
-    margin-bottom: 0 !important;
-}
-
-.prose-custom .changelog-item h2,
-.prose-custom .changelog-item h3,
-.prose-custom .changelog-item h4 {
-    margin-top: 0 !important;
-    text-transform: uppercase;
+.prose-custom .changelog-items p {
+    @apply text-copy-14;
 }
 
 .prose-custom .changelog-items ul {
@@ -40,16 +36,4 @@
     position: absolute;
     left: 0;
     color: var(--prose-list-marker);
-}
-
-@media (min-width: 1024px) {
-  .prose-custom .changelog-version h2,
-  .prose-custom .changelog-version h3,
-  .prose-custom .changelog-version h4 {
-    @apply text-heading-18;
-  }
-  .prose-custom .changelog-items li {
-    @apply text-copy-16;
-    margin-bottom: 1rem;
-  }
 }

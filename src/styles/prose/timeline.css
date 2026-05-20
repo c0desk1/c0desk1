@@ -1,24 +1,28 @@
 /* src/styles/prose/steps.css */
 @reference '@/styles/utilities/index.css';
+
+.prose-custom .timeline-content :first-child {
+  margin-top: 0 !important;
+}
+.prose-custom .timeline-content :last-child {
+  margin-bottom: 0 !important;
+}
+
 .prose-custom .timeline-content h2,
 .prose-custom .timeline-content h3,
 .prose-custom .timeline-content h4 {
   @apply text-heading-16;
 }
-
 .prose-custom .timeline-content ul,
 .prose-custom .timeline-content p {
   @apply text-copy-14;
 }
-
-/* DESKTOP */
 @media (min-width: 1024px) {
   .prose-custom .timeline-content h2,
   .prose-custom .timeline-content h3,
   .prose-custom .timeline-content h4 {
     @apply text-heading-20;
   }
-
   .prose-custom .timeline-content ul,
   .prose-custom .timeline-content p {
     @apply text-copy-16;

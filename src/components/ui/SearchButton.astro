@@ -4,30 +4,22 @@ import { siteConfig } from "@/config/site";
 import Icon from "./Icon";
 
 const siteData = siteConfig;
-
 const searchLabel = siteData.search;
 const searchPlaceholder = siteData.searchPlaceholder;
 ---
 
-<button id="search-trigger" type="button" aria-label={searchLabel} title={searchLabel} class="group flex items-center justify-center gap-2 w-auto sm:w-70 md:w-70 p-2 sm:px-3 sm:py-2 rounded-full border border-(--border) sm:justify-between sm:rounded-xl sm:border-(--border-strong)/50 sm:hover:bg-muted transition-colors duration-200">
-  <div class="flex items-center gap-2">
-    <Icon name="search" className="h-5 w-5 text-muted sm:text-dim" />
-    <span class="hidden text-label-14 sm:inline text-muted">{searchPlaceholder}</span>
-  </div>
-  <div class="hidden sm:inline-flex items-center">
-    <kbd 
-      class="mx-0.5 md:inline-flex items-center justify-center align-middle
-            rounded-md
-            border border-(--prose-kbd-border)
-            bg-(--prose-kbd-bg)
-            px-1.5 py-0.5'
-            text-label-mono-13
-            md:text-label-mono-14
-            text-(--prose-kbd-text)
-            shadows-(--prose-kbd-shadow)">
-        /
-      </kbd>
-  </div>
+<button
+  id="search-trigger"
+  type="button"
+  aria-label={searchLabel}
+  title={searchLabel}
+  class="group flex items-center gap-2 p-2 sm:px-3 sm:py-1.5 rounded-full sm:rounded-lg border border-(--border) bg-transparent hover:bg-muted transition-colors duration-200"
+>
+  <Icon name="search" className="h-5 w-5 text-subtle active:text-(--fg)" />
+  <span class="hidden sm:inline text-label-13 text-muted">{searchPlaceholder}</span>
+  <kbd class="hidden sm:inline-flex items-center justify-center rounded px-1.5 py-0.5 text-code-12 text-subtle bg-subtle border border-strong ml-auto">
+    /
+  </kbd>
 </button>
 
 <script>
@@ -42,7 +34,6 @@ const searchPlaceholder = siteData.searchPlaceholder;
   };
 
   initSearchButton();
-
   document.addEventListener("astro:page-load", initSearchButton);
   document.addEventListener("keydown", (e) => {
     const active = document.activeElement;
