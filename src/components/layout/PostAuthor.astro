@@ -3,7 +3,6 @@
 import { siteConfig } from '@/config/site';
 import { Image } from 'astro:assets';
 import { cdnImage, isCdnUrl } from '@/lib/utils';
-import Listen from '../ui/ListenButton.astro';
 
 interface Props {
   name?: string;
@@ -29,12 +28,10 @@ const authorPath = `/author/${authorSlug}/`;
 ---
 
 <div class="flex w-full justify-center gap-2">
-  <a
+  <aaria-label={`${authorLabel}: ${authorName}`}
     href={authorPath}
     rel="author"
-    aria-label={`${authorLabel}: ${authorName}`}
-    class="inline-flex items-center gap-2 no-underline"
-  >
+    class="inline-flex items-center gap-2 no-underline">
     <div class="inline-flex cursor-pointer flex-[0_1_auto] overflow-hidden">
       {authorAvatar && (
         <span aria-hidden="true" aria-label="" role="img" class="w-6 h-6 shrink-0 rounded-full inline-block overflow-hidden leading-0 align-top relative transition-[background] duration-200 ease-in-out">
@@ -52,15 +49,14 @@ const authorPath = `/author/${authorSlug}/`;
       )}
     </div>
     <div class="flex items-center gap-2">
-      <span class="text-[14px] leading-5 font-medium text-(--fg)">
+      <span class="text-copy-14 leading-5 font-medium text-(--fg)">
         {authorName}
       </span>
       {authorTitle && (
-        <span class="text-copy-14 text-(--fg-muted)">
+        <span class="text-copy-14 text-muted">
           {authorTitle}
         </span>
       )}
     </div>
   </a>
-  <Listen />
 </div>
