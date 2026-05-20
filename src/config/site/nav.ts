@@ -4,11 +4,13 @@ type NavItem = {
   href: string;
   label: string;
   isExternal?: boolean;
+  children?: NavItem[];
 };
 
 type MobileNavSection = {
   title: string;
   items: NavItem[];
+  children?: NavItem[];
 };
 
 type FooterSection = {
@@ -20,7 +22,12 @@ export const navConfig = {
   navItems: [
     { label: "Blog", href: "/blog/", isExternal: false },
     { label: "Portfolio", href: "/portfolio/", isExternal: false },
-    { label: "About", href: "/about/", isExternal: false },
+    { label: "Community", 
+      children: [
+        { label: "About", href: "/about/", isExternal: false },
+        { label: "Contact Us", href: "/contact/", isExternal: false },
+      ]
+    },
     {
       label: "Legal",
       children: [
