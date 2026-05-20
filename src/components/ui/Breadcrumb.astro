@@ -1,7 +1,6 @@
 ---
 // src/components/ui/Breadcrumb.astro
 import { siteConfig } from '@/config/site';
-import Icon from './Icon';
 
 interface Props {
   items: Array<{ 
@@ -21,13 +20,11 @@ const ariaLabel = siteData.breadcrumbAria;
 <nav aria-label={ariaLabel} class="flex justify-center">
   <ol class="flex items-center gap-1 text-copy-14">
     {items.map((item, i) => (
-      <li class="flex items-center gap-1">
+      <li class="flex items-center gap-0.5">
         {i > 0 && (
-          <Icon
-            name="chevron-right"
-            className="w-4 h-4 text-(--fg-muted) opacity-50"
-            aria-hidden="true"
-          />
+          <span class="text-subtle">
+            /
+          </span>
         )}
 
         {i === items.length - 1? (
@@ -37,7 +34,7 @@ const ariaLabel = siteData.breadcrumbAria;
         ) : (
           <a
             href={item.href}
-            class="text-(--fg-muted) hover:text-(--fg) no-underline whitespace-nowrap transition-colors"
+            class="text-muted hover:text-(--fg) active:text-(--fg) no-underline whitespace-nowrap transition-colors"
           >
             {item.name}
           </a>
