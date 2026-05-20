@@ -43,9 +43,9 @@ export const navConfig = {
     {
       title: "Navigation",
       items: [
-        { href: "/blog/", label: "Blog", isExternal: false },
-        { href: "/portfolio/", label: "Portfolio", isExternal: false },
-        { href: "/about/", label: "About", isExternal: false },
+        { label: "Home", href: "/", isExternal: false },
+        { label: "Blog", href: "/blog/", isExternal: false },
+        { label: "Portfolio", href: "/portfolio/", isExternal: false }
       ]
     },
     {
@@ -59,9 +59,10 @@ export const navConfig = {
       ]
     },
     {
-      title: "Contact",
+      title: "Community",
       items: [
-        { href: "/contact/", label: "Contact Us", isExternal: false },
+        { label: "About", href: "/about/", isExternal: false },
+        { label: "Contact Us", href: "/contact/", isExternal: false },
       ]
     }
   ] as MobileNavSection[],
