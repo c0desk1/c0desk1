@@ -24,7 +24,7 @@ import remarkCodeBlock from './src/lib/mdx/remark-code-block.ts';
 export default defineConfig({
   site: siteConfig.siteUrl,
   trailingSlash: "always",
-  output: 'server',
+  output: 'static',
   adapter: cloudflare(),
   vite: {
     plugins: [tailwindcss()]
@@ -102,8 +102,7 @@ export default defineConfig({
     }
   ],
   image: {
-    remotePatterns: [
-      { protocol: 'https', hostname: 'cdn.c0desk1.my.id' }
-    ],
+    domains: ["cdn.c0desk1.my.id"],
+    remotePatterns: [{ protocol: "https" }],
   },
 });
