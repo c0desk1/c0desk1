@@ -105,17 +105,22 @@ const backToTop = siteConfig.backToTop || "Back to Top";
 
     const ring = document.getElementById('progress-ring');
     const svg = document.getElementById('progress-svg');
+    const content = document.querySelector('article') || document.querySelector('main');
     if (!ring) return;
 
-    const circumference = 2 * Math.PI * 46;
+    const circumference = 2 * Math.PI * 23;
     ring.style.strokeDasharray = `0 ${circumference}`;
 
     function updateProgress() {
-      const winScroll = document.documentElement.scrollTop;
-      const height = document.documentElement.scrollHeight - window.innerHeight;
-      if (height <= 0) return;
-      const scrolled = winScroll / height;
-      const dash = scrolled * circumference;
+      if (!content) return;
+      
+      const rect = content.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      const scrolled = windowHeight - rect.top;
+      const total = content.offsetHeight;    
+      const progress = Math.min(Math.max(scrolled / total, 0), 1);
+      const dash = progress * circumference;
+      
       ring.style.strokeDasharray = `${dash} ${circumference}`;
     }
 
