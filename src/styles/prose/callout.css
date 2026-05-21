@@ -7,7 +7,7 @@
   margin: 1.5rem 0;
   padding: 1rem;
   border-radius: var(--prose-radius-lg);
-  border: 1px solid;
+  border: 1.5px solid;
   color: inherit;
 }
 
@@ -61,7 +61,7 @@
 
 .prose-custom .callout-content strong {
   font-weight: 600;
-  color: var(--prose-fg);
+  color: var(--prose-fg-strong);
 }
 
 .prose-custom .callout-content em {
@@ -86,13 +86,12 @@
 }
 
 .prose-custom .callout-content mark {
-  background-color: var(--prose-accent-yellow);
-  color: var(--prose-accent-yellow-soft);
+  background-color: var(--prose-highlight-bg);
+  color: var(--prose-highlight-text);
+  border: 1px solid var(--prose-highlight-border);
   padding: 0.1em 0.25em;
   border-radius: 2px;
   font-weight: 500;
-  box-shadow: inset 0 0 0 1px var(--prose-accent-yellow-dim);
-  box-decoration-break: clone;
 }
 
 .prose-custom .callout-content sup,
