@@ -45,7 +45,7 @@ const base = [
 ].join(' ');
 
 const variants: Record<Variant, string> = {
-  primary: "bg-(--accent-fg) text-(--accent) hover:bg-(--fg-muted) active:bg-(--fg-muted) shadow-sm",
+  primary: "bg-(--accent-fg) text-(--fg) dark:text-(--fg-inverted) hover:bg-(--fg-muted) active:bg-(--fg-muted) shadow-sm",
   secondary: "bg-(--bg) text-(--fg) border border-(--border) hover:bg-(--bg-muted) active:bg-(-bg-muted) shadow-sm",
   tertiary: "text-(--fg-muted) hover:bg-(--bg-muted) active:bg-(--bg-muted)",
   danger: "bg-(--error) text-(--error-fg) hover:bg-(--error-dim) active:bg-(--error-soft) shadow-sm",
