@@ -1,6 +1,9 @@
 name = "c0desk1"
 compatibility_date = "2026-05-08"
 
+[assets]
+directory = "./dist"
+
 [vars]
 API_URL = "https://api.c0desk1.my.id/"
 ADMIN_TOKEN = "awokawok_atmin"
