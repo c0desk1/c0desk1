@@ -43,6 +43,7 @@ if (typeof bgImage === 'string') {
     onload="this.style.opacity='1'"
   />
   <div class="absolute inset-0" style={overlayStyle}></div>
+  <div class="absolute inset-0 z-10 bg-linear-to-b from-(--bg)/10 via-(--bg)/40 to-(--bg)" />
   <Container size="xl">
     <div class="relative z-10 flex flex-col justify-between min-h-125 md:min-h-150 py-4 md:py-10 lg:py-12">
       <div class="self-center sm:self-start">
@@ -52,12 +53,12 @@ if (typeof bgImage === 'string') {
       </div>
       <div class="flex flex-wrap justify-between items-end gap-6">
         <div class="flex flex-col gap-8 self-center md:justify-end">
-          <h2 class="text-heading-24 lg:text-heading-32 font-normal mt-0! text-zinc-100 drop-shadow-lg max-w-xl">
+          <h2 class="text-heading-24 lg:text-heading-32 font-normal mt-0! text-(--fg) drop-shadow-lg max-w-xl">
             {subTitle}
           </h2>
         </div>
         <div class="max-w-md">
-          <p class="text-zinc-100 text-copy-12 sm:text-copy-14 drop-shadow mt-0!">
+          <p class="text-(--fg) text-copy-12 sm:text-copy-14 drop-shadow mt-0!">
             {description}
           </p>
           <div class="flex items-center gap-4">
