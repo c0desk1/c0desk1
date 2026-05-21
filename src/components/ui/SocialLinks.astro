@@ -21,12 +21,11 @@ const { items, class: className = "", iconClass = "w-4 h-4" } = Astro.props;
     <li>
       <a
         href={item.href}
+        aria-label={item.label}
+        title={item.label.toLocaleUpperCase()}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={item.label}
-        title={item.label}
-        class="inline-flex items-center justify-center rounded-full p-1.5 text-muted hover:text-(--fg) hover:bg-muted transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)"
-      >
+        class="inline-flex items-center justify-center rounded-full p-1.5 text-muted hover:text-(--fg) active:text-(--fg) hover:bg-muted transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)">
         <Icon name={item.label as any} className={iconClass} aria-hidden="true" />
       </a>
     </li>
