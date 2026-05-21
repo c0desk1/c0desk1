@@ -322,41 +322,14 @@ content:
       - name: social
         label: Sosial Media
         type: object
+        list: true
         fields:
-          - name: github
-            label: Github
+          - name: label
+            label: Nama
             type: string
             
-          - name: facebook
-            label: Facebook
-            type: string
-
-          - name: instagram
-            label: Instagram
-            type: string
-            
-          - name: youtube
-            label: YouTube
-            type: string
-            
-          - name: twitter
-            label: X
-            type: string
-
-          - name: telegram
-            label: Telegram
-            type: string
-
-          - name: whatsapp
-            label: WhatsApp
-            type: string
-
-          - name: tiktok
-            label: TikTok
-            type: string
-            
-          - name: linkedIn
-            label: LinkedIn
+          - name: href
+            label: Url
             type: string
             
   # --- CATEGORIES ---
