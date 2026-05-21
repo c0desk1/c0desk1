@@ -3,7 +3,6 @@
 import PostMeta from './PostMeta.astro';
 import Overview from '../blog/BlogOverview.astro';
 import PostAuthor from './PostAuthor.astro';
-import BlogFeaturedImage from '../blog/BlogFeaturedImage.astro';
 import SharePost from '../blog/SharePost.astro';
 import { siteConfig } from '@/config/site';
 
@@ -16,7 +15,6 @@ interface Props {
   authorAvatar?: string;
   authorRole?: string;
   authorSlug: string;
-  image?: any;
   overviewItems?: string[];
 }
 
@@ -29,7 +27,6 @@ const {
   authorAvatar,
   authorRole,
   authorSlug,
-  image,
   overviewItems
 } = Astro.props;
 
@@ -59,15 +56,6 @@ const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
     {overviewItems && overviewItems.length > 0 && (
       <div class="w-full">
         <Overview items={overviewItems} />
-      </div>
-    )}
-    {image && (
-      <div class="prose-custom w-full mt-4">
-        <BlogFeaturedImage
-          image={image.src}
-          alt={image.alt || title}
-          caption={(image as any).caption}
-        />
       </div>
     )}
     <div class="flex justify-between items-center w-full">
