@@ -1,9 +1,6 @@
 import rss from "@astrojs/rss";
-import { getCollection, getEntry } from "astro:content";
-
-import type { CollectionEntry } from "astro:content";
 import type { APIContext } from "astro";
-
+import { getCollection, getEntry, type CollectionEntry } from "astro:content";
 import { siteConfig } from "@/config/site";
 import { slugify } from "@/lib/utils";
 
@@ -20,7 +17,7 @@ export async function GET(context: APIContext) {
 
   const site = new URL(context.site ?? siteData.siteUrl);
 
-  const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+  const allPosts = await getCollection("blog", ({ data }: CollectionEntry<"blog">) => !data.draft);
 
   const validPosts = allPosts.filter(
     (post: CollectionEntry<"blog">) =>
@@ -63,7 +60,7 @@ export async function GET(context: APIContext) {
         } catch {}
       }
 
-      const tags = (post.data.tags ?? []).filter((tag): tag is string => Boolean(tag));
+      const tags = (post.data.tags ?? []).filter((tag: unknown): tag is string => typeof tag === 'string' && Boolean(tag));
 
       const imageUrl = post.data.image?.src
         ? new URL(post.data.image.src, site).toString()
