@@ -83,14 +83,14 @@ const blogLabel = siteData.blog;
 const SeoBreadcrumbItems = [
   { name: homeLabel, href: '/'},
   { name: blogLabel, href: '/blog/'},
-  { name: seoCategory.name, href: `/blog/category/${seoCategory.slug}`},
+  { name: seoCategory.name, href: `/blog/category/${seoCategory.slug}/`},
   { name: title, href: canonicalURL }
 ];
 
 const Breadcrumbs = SeoBreadcrumbItems.filter(
   (item) =>
-    item.name === blogLabel ||
-    item.name === seoCategory.name
+    item.name === homeLabel ||
+    item.name === blogLabel
 );
 ---
 
@@ -126,7 +126,6 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
               authorAvatar={authorEntry?.data.avatar}
               authorRole={authorEntry?.data.role}
               authorSlug={authorEntry?.id}
-              image={image}
               overviewItems={post.data.overview}
             />
           </Section>
