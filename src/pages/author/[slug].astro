@@ -1,5 +1,5 @@
 ---
-// src/pages/[...locale]/author/[slug].astro
+// src/pages/author/[slug].astro
 export const prerender = true;
 
 import BaseLayout from "@/layouts/BaseLayout.astro";
@@ -7,7 +7,6 @@ import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import PostCard from "@/components/blog/PostCard.astro";
 import Breadcrumb from "@/components/ui/Breadcrumb.astro";
-import BackToTop from "@/components/ui/BackToTop.astro";
 import SocialLinks from "@/components/ui/SocialLinks.astro";
 
 import { getCollection } from "astro:content";
@@ -79,72 +78,75 @@ const optimizedAvatar = isCdnUrl(authorAvatar)
 
 <BaseLayout {...seoData}>
   <Section id="author-profile" size="lg" aria-label={authorName}>
-    <Container size="xl">
-      <div class="relative grid grid-cols-1 lg:grid-cols-[320px_1fr] border border-(--border) bg-(--bg)">
-        <aside class="border-b lg:border-b-0 border-(--border) lg:sticky lg:top-16 self-start p-4 lg:p-6 z-10 flex flex-col gap-5">
-          <Breadcrumb items={Breadcrumbs} />
-          <div class="relative overflow-hidden rounded-3xl border border-(--border) bg-subtle p-1.5 shadow-sm w-full lg:max-w-none">
+    <Section size="sm">
+      <Container size="xl">
+        <Breadcrumb items={Breadcrumbs} />
+      </Container>
+    </Section>
+    <Section size="sm">
+      <Container size="xl">
+        <div class="flex flex-col sm:flex-row items-center p-4 lg:p-6 gap-4 border border-(--border) rounded-xl bg-(--bg-overlay) backdrop-blur-md shadow-(--shadow-md)">
+          <div class="relative overflow-hidden rounded-3xl border border-(--border) bg-subtle p-1.5 shadow-sm aspect-auto mb-4 md:mb-0">
             <Image
-              src={optimizedAvatar}
-              alt={authorName}
-              width={224}
-              height={224}
+              src={optimizedAvatar || siteConfig.author.avatar}
+              alt={authorName || siteConfig.author.name}
+              width={320}
+              height={320}
               loading="eager"
               decoding="async"
+              fetchpriority="low"
               class="h-auto w-full rounded-[18px] object-cover"
             />
           </div>
-          <div class="space-y-1.5 text-center w-full">
-            <h1 id="author-heading" class="text-heading-24 lg:text-heading-28 font-bold tracking-tight text-(--fg) wrap-break-word">
-              {authorName}
-            </h1>
-            <p class="text-xs font-mono tracking-wider text-subtle uppercase">
-              {authorRole}
-            </p>
-          </div>
-          <p class="text-sm leading-6 text-muted tracking-tight">
-            {authorBio}
-          </p>
-          <div class="flex items-center justify-center gap-2 pt-4 flex-wrap w-full border-t border-dashed border-(--border)">
-            <SocialLinks items={social} />
-          </div>
-        </aside>
-        <div class="flex flex-col min-w-0 border-0 lg:border-l border-(--border)">
-          <div class="flex flex-col divide-y divide-(--border)">
-            <div class="flex items-center justify-between p-4 lg:p-6 bg-(--bg)">
-              <h2 class="text-heading-20 lg:text-heading-24 text-(--fg) font-semibold">
-                {t_latestArticles}
-              </h2>
-              <span class="text-xs font-mono text-muted bg-muted px-2.5 py-1 border border-(--border) rounded-md">
-                {authorPosts.length} {t_articles}
-              </span>
+          <div class="flex flex-col self-end-safe">
+            <div class="flex flex-row items-center text-start justify-start gap-2 mb-4">
+              <h1 id="author-heading" class="text-heading-32 lg:text-heading-48 font-semibold text-(--fg)">
+                {authorName}
+              </h1>
+              <p class="text-heading-14 text-subtle self-end-safe">
+                {authorRole}
+              </p>
             </div>
-            {authorPosts.length > 0 ? (
-              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                {authorPosts.map((post) => (
-                  <div class="transition-colors hover:bg-muted
-                    border-t border-(--border) first:border-t-0
-                    md:nth-2:border-t-0
-                    md:even:border-l md:border-(--border)
-                    lg:nth-2:border-t-0 lg:nth-3:border-t-0
-                    lg:nth-[3n+1]:border-l-0
-                    lg:border-l lg:border-(--border)
-                  ">
-                    <PostCard post={post} />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div class="py-24 text-center">
-                <p class="text-sm text-muted">{t_noArticles}</p>
-              </div>
-            )}
+            <div class="flex items-center justify-start mb-4">
+              <p class="text-copy-14 text-muted">
+                {authorBio}
+              </p>
+            </div>
+            <div class="flex items-center justify-start gap-2">
+              <SocialLinks items={social} />
+            </div>
           </div>
         </div>
-      </div>
-    </Container>
-    <div class="mt-12">
-      <BackToTop align="center" />
-    </div>
+      </Container>
+    </Section>
+    <Section size="none">
+      <Container size="xl">
+        <Section size="sm">
+          <div class="flex items-center justify-between">
+            <h2 class="text-heading-20 lg:text-heading-32 text-(--fg) font-semibold">
+              {t_latestArticles}
+            </h2>
+            <span class="text-label-14 text-muted bg-(--bg) px-2.5 py-1 border border-(--border) rounded-full">
+              {authorPosts.length} {t_articles}
+            </span>
+          </div>
+        </Section>
+        <Section size="sm">
+          {authorPosts.length > 0 ? (
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+              {authorPosts.map((post) => (
+                <div class="transition-colors active:bg-muted">
+                  <PostCard post={post} />
+                </div>
+              ))}
+            </div>
+            ) : (
+            <div class="py-24 text-center">
+              <p class="text-copy-14 text-muted">{t_noArticles}</p>
+            </div>
+          )}
+        </Section>
+      </Container>
+    </Section>
   </Section>
 </BaseLayout>
