@@ -90,7 +90,8 @@ const SeoBreadcrumbItems = [
 const Breadcrumbs = SeoBreadcrumbItems.filter(
   (item) =>
     item.name === homeLabel ||
-    item.name === blogLabel
+    item.name === blogLabel ||
+    item.name === seoCategory.name
 );
 ---
 
@@ -115,7 +116,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
     <Section size="sm">
       <Container size="md">
         <Breadcrumb items={Breadcrumbs} />
-        <article id="article" class="px-4 lg:px-6">
+        <article id="article" class="mx-auto max-w-3xl">
           <Section size="sm">
             <PostHeader
               title={title}
