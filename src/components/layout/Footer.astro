@@ -49,14 +49,14 @@ const footerSections = siteConfig.footerSections;
   <Section size="sm">
     <Container size="xl">
       <div class="flex flex-col items-center justify-between gap-4 py-4 md:flex-row border-t border-(--border)">
-        <p class="text-overline-12 lowercase text-dim order-2 md:order-1">
+        <p class="text-overline-12 lowercase text-muted order-2 md:order-1">
           &copy; {new Date().getFullYear()} {siteData.siteName}
         </p>
         <div class="flex items-center gap-4 order-1 md:order-2">
           <SocialLinks
             items={social}
             class="flex items-center gap-1"
-            iconClass="h-4 w-4 text-(--fg-dim) hover:text-(--fg) active:text-(--fg) transition-colors duration-150"
+            iconClass="h-4 w-4 text-muted hover:text-(--fg) active:text-(--fg) transition-colors duration-150"
           />
           <ThemeToggle />
         </div>
