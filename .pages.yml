@@ -314,14 +314,6 @@ content:
         label: Bio
         type: text
         
-      - name: organization
-        label: Organisasi
-        type: reference
-        options:
-          collection: organizations
-          value: "{path}"
-          label: "{fields.name}"
-          
       - name: social
         label: Sosial Media
         type: object
