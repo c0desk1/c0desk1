@@ -431,4 +431,4 @@ content:
           - name: noIndex
             label: Jangan index halaman?
             type: boolean
-            default: false
+            default: true
