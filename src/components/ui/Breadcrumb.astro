@@ -9,16 +9,15 @@ interface Props {
   }>;
 }
 
-const siteData = siteConfig
-
 const { items = [] } = Astro.props;
 if (!items.length) return;
 
+const siteData = siteConfig
 const ariaLabel = siteData.breadcrumbAria;
 ---
 
 <nav aria-label={ariaLabel} class="flex justify-center">
-  <ol class="flex items-center gap-1 text-copy-14">
+  <ol class="flex items-center gap-1 text-copy-14 flex-wrap">
     {items.map((item, i) => (
       <li class="flex items-center gap-1">
         {i > 0 && (
