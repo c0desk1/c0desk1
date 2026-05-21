@@ -81,6 +81,11 @@ content:
         label: Tags
         type: string
         list: true
+
+      - name: overview
+        label: Overview
+        type: string
+        list: true
         
       - name: pubDate
         label: Tanggal Terbit
