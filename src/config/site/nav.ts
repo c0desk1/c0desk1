@@ -75,11 +75,10 @@ export const navConfig = {
 
   footerSections: [
     {
-      title: "Navigation",
+      title: "Resource",
       items: [
         { href: "/blog/", label: "Blog", isExternal: false },
         { href: "/portfolio/", label: "Portfolio", isExternal: false },
-        { href: "/about/", label: "About", isExternal: false },
       ]
     },
     {
@@ -99,10 +98,10 @@ export const navConfig = {
       ]
     },
     {
-      title: "Contact",
+      title: "Get in touch",
       items: [
-        { href: "mailto:hallo@c0desk1.my.id", label: "Email", isExternal: true },
-        { href: "/contact/", label: "Contact Us", isExternal: false },
+        { label: "About", href: "/about/", isExternal: false },
+        { label: "Contact Us", href: "/contact/", isExternal: false },
       ]
     }
   ] as FooterSection[],
