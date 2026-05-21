@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig, fontProviders } from 'astro/config';
+import { defineConfig, fontProviders, passthroughImageService } from 'astro/config';
 import { siteConfig } from './src/config/site';
 
 import tailwindcss from '@tailwindcss/vite';
@@ -104,5 +104,6 @@ export default defineConfig({
   image: {
     domains: ["cdn.c0desk1.my.id"],
     remotePatterns: [{ protocol: "https" }],
+    service: passthroughImageService()
   },
 });
