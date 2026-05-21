@@ -1,8 +1,9 @@
 ---
-// src/components/hero/HeroDiagonal.astro
+// src/components/ui/hero.astro
 import { siteConfig } from "@/config/site";
-import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
+
+import { Image } from "astro:assets";
 import Container from './Container.astro';
 import Button from './Button.astro';
 
@@ -16,7 +17,7 @@ export interface Props {
   cta2?: { label: string; href: string };
 }
 
-const {  bgImage, title, subTitle, description, overlayOpacity = 0.5, cta, cta2 } = Astro.props;
+const { bgImage, title, subTitle, description, overlayOpacity = 0.5, cta, cta2 } = Astro.props;
 const overlayStyle = `background-color: rgba(0,0,0,${overlayOpacity})`;
 
 let bgImageUrl: string;
@@ -28,7 +29,7 @@ if (typeof bgImage === 'string') {
 }
 ---
 
-<section class="relative w-full overflow-hidden">
+<section class="relative w-full overflow-hidden bg-muted">
   <Image
     src={bgImage}
     alt={title || siteConfig.siteName}
@@ -37,7 +38,9 @@ if (typeof bgImage === 'string') {
     quality={80}
     widths={[768, 1280, 1920, 2560]}
     sizes="100vw"
-    class="absolute inset-0 h-full w-full object-cover"
+    fetchpriority="high"
+    class="absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-out opacity-0"
+    onload="this.style.opacity='1'"
   />
   <div class="absolute inset-0" style={overlayStyle}></div>
   <Container size="xl">
