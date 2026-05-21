@@ -3,9 +3,12 @@ import { defineConfig, fontProviders } from 'astro/config';
 import { siteConfig } from './src/config/site';
 
 import tailwindcss from '@tailwindcss/vite';
+import sitemap, {ChangeFreqEnum } from '@astrojs/sitemap';
+import mdx from '@astrojs/mdx';
+
 import cloudflare from '@astrojs/cloudflare';
 import react from '@astrojs/react';
-import mdx from '@astrojs/mdx';
+
 import remarkCallout from './src/lib/mdx/remark-callout.ts';
 import remarkBlockquoteAuthor from './src/lib/mdx/remark-blockquote.ts';
 import remarkHeading from './src/lib/mdx/remark-heading.ts';
@@ -29,7 +32,28 @@ export default defineConfig({
   build: {
     inlineStylesheets: 'auto'
   },
-  integrations: [mdx(), react()],
+  integrations: [
+    sitemap({
+      filter: (page) =>
+        !page.includes('/401') &&
+        !page.includes('/403') &&
+        !page.includes('/404') &&
+        !page.includes('/500'),
+      serialize(item) {
+        if (/\/blog\//.test(item.url)) {
+          item.changefreq = ChangeFreqEnum.WEEKLY;
+          item.priority = 0.8;
+        }
+        if (item.url === 'https://c0desk1.my.id/') {
+          item.changefreq = ChangeFreqEnum.DAILY;
+          item.priority = 1.0;
+        }
+        return item;
+      },
+    }),
+    mdx(), 
+    react()
+  ],
   markdown: {
     remarkPlugins: [
       remarkHeading,
