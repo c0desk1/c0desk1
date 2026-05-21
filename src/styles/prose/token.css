@@ -113,50 +113,50 @@
   --callout-note-bg: #f5f5f5;
   --callout-note-border: #e5e5e5;
   --callout-note-text: #737373;
-  --callout-note-icon: #171717;
+  --callout-note-icon: #737373;
   --callout-note-title: #171717;
 
   /* Callouts - Info (Blue) */
   --callout-info-bg: rgba(0, 112, 243, 0.06);
   --callout-info-border: rgba(0, 112, 243, 0.15);
-  --callout-info-text: #0070f3;
+  --callout-info-text: #0761d1;
   --callout-info-icon: #0761d1;
-  --callout-info-title: #0761d1;
+  --callout-info-title: #0070f3;
 
   /* Callouts - Tip (Green) */
   --callout-tip-bg: rgba(34, 197, 94, 0.06);
   --callout-tip-border: rgba(34, 197, 94, 0.15);
-  --callout-tip-text: #22c55e;
+  --callout-tip-text: #16a34a;
   --callout-tip-icon: #16a34a;
-  --callout-tip-title: #16a34a;
+  --callout-tip-title: #22c55e;
 
   /* Callouts - Warning (Amber) */
   --callout-warning-bg: rgba(245, 158, 11, 0.08);
   --callout-warning-border: rgba(245, 158, 11, 0.2);
-  --callout-warning-text: #f59e0b;
+  --callout-warning-text: #d97706;
   --callout-warning-icon: #d97706;
-  --callout-warning-title: #d97706;
+  --callout-warning-title: #f59e0b;
 
   /* Callouts - Danger (Red) */
   --callout-danger-bg: rgba(239, 68, 68, 0.06);
   --callout-danger-border: rgba(239, 68, 68, 0.15);
-  --callout-danger-text: #ef4444;
+  --callout-danger-text: #dc2626;
   --callout-danger-icon: #dc2626;
-  --callout-danger-title: #dc2626;
+  --callout-danger-title: #ef4444;
 
   /* Callouts - Important (Purple) */
   --callout-important-bg: rgba(168, 85, 247, 0.06);
   --callout-important-border: rgba(168, 85, 247, 0.15);
-  --callout-important-text: #a855f7;
+  --callout-important-text: #9333ea;
   --callout-important-icon: #9333ea;
-  --callout-important-title: #9333ea;
+  --callout-important-title: #a855f7;
 
   /* Callouts - Caution (Orange) */
   --callout-caution-bg: rgba(249, 115, 22, 0.06);
   --callout-caution-border: rgba(249, 115, 22, 0.15);
-  --callout-caution-text: #f97316;
+  --callout-caution-text: #ea580c;
   --callout-caution-icon: #ea580c;
-  --callout-caution-title: #ea580c;
+  --callout-caution-title: #f97316;
 
   /* Details / Accordion */
   --prose-details-bg: #fafafa;
@@ -263,49 +263,56 @@
   --prose-link-underline-hover: rgba(50, 145, 255, 0.8);  
 
   /* Callouts - Note (Neutral) */
-  --callout-note-bg: #171717;
+  /*--callout-note-bg: #171717;*/
+  --callout-note-bg: none;
   --callout-note-border: #262626;
-  --callout-note-text: #ededed;
+  --callout-note-text: #666666;
   --callout-note-icon: #666666;
   --callout-note-title: #ededed;
 
   /* Callouts - Info (Blue) */
-  --callout-info-bg: rgba(50, 145, 255, 0.08);
+  /*--callout-info-bg: rgba(50, 145, 255, 0.08);*/
+  --callout-info-bg: none;
   --callout-info-border: rgba(50, 145, 255, 0.2);
   --callout-info-text: #52a8ff;
   --callout-info-icon: #3291ff;
   --callout-info-title: #52a8ff;
 
   /* Callouts - Tip (Green) */
-  --callout-tip-bg: rgba(34, 197, 94, 0.08);
+  /*--callout-tip-bg: rgba(34, 197, 94, 0.08);*/
+  --callout-tip-bg: none;
   --callout-tip-border: rgba(34, 197, 94, 0.2);
   --callout-tip-text: #4ade80;
   --callout-tip-icon: #22c55e;
   --callout-tip-title: #4ade80;
 
   /* Callouts - Warning (Amber) */
-  --callout-warning-bg: rgba(245, 158, 11, 0.08);
+  /*--callout-warning-bg: rgba(245, 158, 11, 0.08);*/
+  --callout-warning-bg: none;
   --callout-warning-border: rgba(245, 158, 11, 0.2);
   --callout-warning-text: #fbbf24;
   --callout-warning-icon: #f59e0b;
   --callout-warning-title: #fbbf24;
 
   /* Callouts - Danger (Red) */
-  --callout-danger-bg: rgba(239, 68, 68, 0.08);
+  /*--callout-danger-bg: rgba(239, 68, 68, 0.08);*/
+  --callout-danger-bg: none;
   --callout-danger-border: rgba(239, 68, 68, 0.2);
   --callout-danger-text: #f87171;
   --callout-danger-icon: #ef4444;
   --callout-danger-title: #f87171;
 
   /* Callouts - Important (Purple) */
-  --callout-important-bg: rgba(168, 85, 247, 0.08);
+  /*--callout-important-bg: rgba(168, 85, 247, 0.08);*/
+  --callout-important-bg: none;
   --callout-important-border: rgba(168, 85, 247, 0.2);
   --callout-important-text: #c084fc;
   --callout-important-icon: #a855f7;
   --callout-important-title: #c084fc;
 
   /* Callouts - Caution (Orange) */
-  --callout-caution-bg: rgba(249, 115, 22, 0.08);
+  /*--callout-caution-bg: rgba(249, 115, 22, 0.08);*/
+  --callout-caution-bg: none;
   --callout-caution-border: rgba(249, 115, 22, 0.2);
   --callout-caution-text: #fb923c;
   --callout-caution-icon: #f97316;
