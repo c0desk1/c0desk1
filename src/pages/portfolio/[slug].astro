@@ -9,6 +9,8 @@ import { siteConfig } from "@/config/site";
 import { getSmartRelatedProjects } from "@/lib/botEngine";
 import { slugify } from "@/lib/utils";
 
+import { components } from '@/components/layout/MDXComponents';
+
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
@@ -19,10 +21,7 @@ import PortfolioHeader from "@/components/portfolio/PortfolioHeader.astro";
 import PortfolioMetrics from "@/components/portfolio/PortfolioMetrics.astro";
 import PortfolioGallery from "@/components/portfolio/PortfolioGallery.astro";
 import PortfolioRelated from "@/components/portfolio/PortfolioRelated.astro";
-import PortfolioFeaturedImage from "@/components/portfolio/PortfolioFeaturedImage.astro";
 import PortfolioCaseStudy from "@/components/portfolio/PortfolioCaseStudy.astro";
-
-import { components } from '@/components/layout/MDXComponents';
 
 export async function getStaticPaths() {
   const projects = await getCollection("portfolio", ({ data }) => !data.draft);
@@ -79,11 +78,7 @@ const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 const homeLabel      = siteData.home;
 const portfolioLabel = siteData.p_PageTitle;
 const galleryLabel   = siteData.p_Gallery;
-
-const srPortfolioHeader  = siteData.p_Header;
-const srPortfolioImage   = siteData.p_ImageContent;
 const srPortfolioMetrics = siteData.p_MetricsCase;
-const srPortfolioContent = siteData.p_Content;
 const srPortfolioRelated = siteData.p_RelatedContent;
 
 const Breadcrumbs = [
@@ -112,19 +107,22 @@ const Breadcrumbs = [
         <div class="flex flex-col justify-center items-center">
           <Breadcrumb items={Breadcrumbs} />
         </div>    
-        <article class="px-4 lg:px-6">
-          <PortfolioHeader
-            title={title}
-            date={pubDate}
-            updatedDate={updatedDate}
-            featured={featured}
-            client={client}
-            role={role}
-            duration={duration}
-            techStack={techStack}
-            demoUrl={demoUrl}
-            repoUrl={repoUrl}
-          />
+        <article class="pt-4 px-4 lg:px-6">
+          <Section size="sm">
+            <PortfolioHeader
+              title={title}
+              date={pubDate}
+              updatedDate={updatedDate}
+              image={image}
+              featured={featured}
+              client={client}
+              role={role}
+              duration={duration}
+              techStack={techStack}
+              demoUrl={demoUrl}
+              repoUrl={repoUrl}
+            />
+          </Section>
           <Section size="sm">
             <h2 class="sr-only">{srPortfolioMetrics}</h2>
             <PortfolioCaseStudy
@@ -139,13 +137,6 @@ const Breadcrumbs = [
           </Section>
           <Section size="sm">
             <div id="article-content" class="prose-custom max-w-3xl">
-              {image && (
-                <PortfolioFeaturedImage
-                  image={image.src}
-                  alt={image.alt || title}
-                  caption={(image as any).caption || title}
-                />
-              )}
               <Content components={components} />
             </div>
             {displayGallery.length > 0 && (
@@ -154,7 +145,7 @@ const Breadcrumbs = [
                 <PortfolioGallery title={title} images={displayGallery} />
               </div>
             )}
-            </Section>
+          </Section>
         </article>
       </Container>
     </Section>
