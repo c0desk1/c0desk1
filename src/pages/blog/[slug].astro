@@ -19,6 +19,7 @@ import BackToTop from "@/components/ui/BackToTop.astro";
 import BG from "@/components/ui/BG.astro";
 import Line from '@/components/ui/Line.astro';
 import RssFeed from '@/components/layout/RssFeed.astro';
+import SharePost from '@/components/blog/SharePost.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -111,34 +112,44 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
     slug: authorEntry?.id ?? siteConfig.author.slug,
   }}
   canonicalURL={canonicalURL}>
-  <Section size="lg">
+  <Section size="none">
     <Section size="sm">
-      <Container size="md">
-        <Breadcrumb items={Breadcrumbs} />
-        <article id="article" class="mx-auto max-w-3xl">
+      <div class="relative grid grid-cols-1 rounded-xl border border-(--border) max-w-5xl mx-auto p-0">
+        <Container size="md">
           <Section size="sm">
-            <PostHeader
-              title={title}
-              description={description}
-              pubDate={pubDate}
-              content={post.body}
-              authorName={authorEntry?.data.name}
-              authorAvatar={authorEntry?.data.avatar}
-              authorRole={authorEntry?.data.role}
-              authorSlug={authorEntry?.id}
-              overviewItems={post.data.overview}
-            />
+            <Breadcrumb items={Breadcrumbs} />
+          </Section>
+          <article id="article" class="mx-auto max-w-3xl">
+            <Section size="sm">
+              <PostHeader
+                title={title}
+                description={description}
+                pubDate={pubDate}
+                content={post.body}
+                authorName={authorEntry?.data.name}
+                authorAvatar={authorEntry?.data.avatar}
+                authorRole={authorEntry?.data.role}
+                authorSlug={authorEntry?.id}
+                overviewItems={post.data.overview}
+              />
+            </Section>
+            <Section size="sm">
+              <div id="article" class="prose-custom">
+                <Content components={components} />
+              </div>
+            </Section>
+          </article>
+          <Section size="sm">
+            <RssFeed />
           </Section>
           <Section size="sm">
-            <div id="article" class="prose-custom">
-              <Content components={components} />
+            <div class="flex items-center gap-2 justify-center">
+              <h5 class="text-label-16 text-(--fg)">Share this article: </h2>
+              <SharePost url={canonicalURL} title={title} description={description} />
             </div>
-	        </Section>
-	      </article>
-        <Section size="sm">
-          <RssFeed />
-        </Section>
-	    </Container>
+          </Section>
+        </Container>
+      </div>
 	  </Section>
     <Section size="none">
       <h2 class="sr-only">{siteData.b_articleNavigation}</h2>
