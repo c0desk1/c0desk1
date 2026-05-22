@@ -16,8 +16,7 @@ import Breadcrumb from "@/components/ui/Breadcrumb.astro";
 import PostHeader from "@/components/layout/PostHeader.astro";
 import PostNavigation from '@/components/blog/PostNavigation.astro';
 import BackToTop from "@/components/ui/BackToTop.astro";
-import BG from "@/components/ui/BG.astro";
-import Line from '@/components/ui/Line.astro';
+import BG from "@/components/ui/BgDot.astro";
 import RssFeed from '@/components/layout/RssFeed.astro';
 import SharePost from '@/components/blog/SharePost.astro';
 
@@ -112,9 +111,11 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
     slug: authorEntry?.id ?? siteConfig.author.slug,
   }}
   canonicalURL={canonicalURL}>
-  <Section size="none">
-    <Section size="sm">
-      <div class="relative grid grid-cols-1 rounded-xl border border-(--border) max-w-5xl mx-auto p-0">
+  
+  <Section size="none" class="relative z-0">
+    <BG spacing={16} dotSize={0.8} opacity={0.1} />
+    <Section size="sm" class="relative z-10"></Section>
+      <div class="relative grid grid-cols-1 rounded-xl border border-(--border) max-w-5xl mx-auto p-0 bg-(--bg)/60">
         <Container size="md">
           <Section size="sm">
             <Breadcrumb items={Breadcrumbs} />
@@ -151,7 +152,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
         </Container>
       </div>
 	  </Section>
-    <Section size="none">
+    <Section size="none" class="border-t sm:border-none border-(--border)">
       <h2 class="sr-only">{siteData.b_articleNavigation}</h2>
       <Container size="lg">
         <PostNavigation prevPost={prevPost} nextPost={nextPost} />
