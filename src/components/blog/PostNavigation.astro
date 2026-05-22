@@ -2,7 +2,6 @@
 import { siteConfig } from '@/config/site';
 import { slugify } from '@/lib/utils';
 import Icon from '@/components/ui/Icon';
-import Line from '@/components/ui/Line.astro';
 
 interface Props {
   prevPost?: any;
@@ -32,7 +31,6 @@ const nextUrl = nextPost ? `/blog/${slugify(nextPost.data.title)}/` : null;
         <div class="hidden md:block w-full h-full min-h-25" />
       )}
     </div>
-    <Line type="h" variant="solid" class="absolute top-0 left-0 md:hidden" />
     <div class="w-full">
       {nextPost && (
         <a href={nextUrl} class="group flex w-full flex-col py-4 lg:py-6 transition-colors">
