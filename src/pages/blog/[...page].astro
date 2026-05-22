@@ -17,7 +17,8 @@ import Hero from "@/components/ui/Hero.astro";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   const allPosts = await getCollection("blog", ({ data }) => !data.draft);
-  const sortedPosts = sortByDate(allPosts, 'date');
+  const sortedPosts = sortByDate(allPosts);
+  
   const featuredPosts = sortedPosts.filter(post => post.data.featured === true);
   const otherPosts = featuredPosts.length 
     ? sortedPosts.filter(p => !p.data.featured) 
@@ -36,7 +37,7 @@ interface Props {
 const { page } = Astro.props as Props;
 
 const allPostsForFeatured = await getCollection("blog", ({ data }) => !data.draft);
-const sortedAllPosts = sortByDate(allPostsForFeatured, 'date');
+const sortedAllPosts = sortByDate(allPostsForFeatured);
 const featuredPosts = sortedAllPosts.filter(post => post.data.featured === true);
 
 const siteData = siteConfig;
