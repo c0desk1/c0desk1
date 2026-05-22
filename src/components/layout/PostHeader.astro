@@ -3,8 +3,6 @@
 import PostMeta from './PostMeta.astro';
 import Overview from '../blog/BlogOverview.astro';
 import PostAuthor from './PostAuthor.astro';
-import SharePost from '../blog/SharePost.astro';
-import { siteConfig } from '@/config/site';
 
 interface Props {
   title: string;
@@ -20,7 +18,6 @@ interface Props {
 
 const {
   title,
-  description,
   pubDate,
   content = '',
   authorName,
@@ -29,10 +26,6 @@ const {
   authorSlug,
   overviewItems
 } = Astro.props;
-
-const siteData = siteConfig;
-const siteURL = Astro.site?.toString() ?? siteData.siteUrl;
-const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 ---
 
 <header class="w-full">
@@ -58,8 +51,5 @@ const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
         <Overview items={overviewItems} />
       </div>
     )}
-    <div class="flex justify-between items-center w-full">
-      <SharePost url={canonicalURL} title={title} description={description} />
-    </div>
   </div>
 </header>
