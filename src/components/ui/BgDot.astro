@@ -1,0 +1,53 @@
+---
+// src/components/ui/BgDot.astro
+export interface Props {
+  opacity?: number;
+  dotSize?: number;
+  spacing?: number;
+}
+
+const { opacity = 0.03, dotSize = 1, spacing = 20 } = Astro.props;
+const uid = `ep-${Math.random().toString(36).substring(2, 8)}`;
+---
+
+<div
+  class="engineering-paper"
+  style={`--ep-opacity: ${opacity}; --ep-dot-size: ${dotSize}px; --ep-spacing: ${spacing}px;`}
+  aria-hidden="true"
+>
+  <svg class="ep-svg" width="100%" height="100%">
+    <pattern
+      id={uid}
+      x="0" y="0"
+      width={spacing}
+      height={spacing}
+      patternUnits="userSpaceOnUse"
+    >
+      <circle
+        cx={spacing / 2}
+        cy={spacing / 2}
+        r={dotSize}
+        fill="var(--fg)"
+        opacity="var(--ep-opacity)"
+      />
+    </pattern>
+    <rect width="100%" height="100%" fill={`url(#${uid})`} />
+  </svg>
+</div>
+
+<style is:global>
+  .engineering-paper {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .ep-svg {
+    width: 100%;
+    height: 100%;
+  }
+</style>
