@@ -5,8 +5,6 @@ import { siteConfig } from './src/config/site';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap, {ChangeFreqEnum } from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
-
-import cloudflare from '@astrojs/cloudflare';
 import react from '@astrojs/react';
 
 import remarkCallout from './src/lib/mdx/remark-callout.ts';
@@ -19,6 +17,7 @@ import remarkBadge from './src/lib/mdx/remark-badge.ts';
 import remarkKbd from './src/lib/mdx/remark-kbd.ts';
 import remarkChangelog from './src/lib/mdx/remark-changelog.ts';
 import remarkCodeBlock from './src/lib/mdx/remark-code-block.ts';
+import remarkBanner from './src/lib/mdx/remark-banner.ts';
 
 // https://astro.build/config
 export default defineConfig({
@@ -63,7 +62,8 @@ export default defineConfig({
       remarkChangelog,
       remarkBadge,
       remarkKbd,
-      remarkCodeBlock
+      remarkCodeBlock,
+      remarkBanner
     ],
     shikiConfig: {
       themes: {
@@ -100,7 +100,7 @@ export default defineConfig({
     }
   ],
   image: {
-    domains: ["cdn.c0desk1.my.id"],
+    domains: ["cdn.c0desk1.my.id", "play-lh.googleusercontent.com"],
     remotePatterns: [{ protocol: "https" }],
     service: passthroughImageService()
   },
