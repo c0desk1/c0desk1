@@ -12,6 +12,7 @@ export const seoConfig = {
   },
 
   social: [
+    { label: "facebook", href: "https://facebook.com/c0desk1Page" },
     { label: "github", href: "https://github.com/c0desk1" },
     { label: "sitemap", href: "https://c0desk1.my.id/sitemap-index.xml" },
     { label: "rss", href: "https://c0desk1.my.id/rss.xml" }
