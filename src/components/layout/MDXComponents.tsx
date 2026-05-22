@@ -22,6 +22,7 @@ import Timeline from '../mdx/Timeline.astro';
 import Badge from '../mdx/Badge.astro';
 import KBD from '../mdx/KBD.astro';
 import Changelog from '../mdx/changelog.astro';
+import Banner from '../mdx/Banner.astro';
 
 export const components: MDXComponents = {
   h1: Heading,
@@ -50,5 +51,6 @@ export const components: MDXComponents = {
   Accordion,
   Badge,
   kbd: KBD,
-  KBD
+  KBD,
+  Banner
 };
