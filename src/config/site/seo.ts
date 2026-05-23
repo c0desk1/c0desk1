@@ -1,11 +1,12 @@
 //config/site/seo.ts
+import Logo from '@/assets/images/c0desk1-logo.svg';
 
 export const seoConfig = {
   siteName: "c0desk1",
   siteUrl: "https://c0desk1.my.id/",
   siteMail: "hello@c0desk1.my.id",
-  siteLogo: "/org/c0desk1-logo.svg",
-  ogImage: "/org/c0desk1-og.webp",
+  siteLogo: Logo,
+  ogImage: "./src/assets/images/c0desk1-og.webp",
 
   defaultSeo: {
     title: "c0desk1",
@@ -14,8 +15,6 @@ export const seoConfig = {
 
   social: [
     { label: "facebook", href: "https://facebook.com/c0desk1Page" },
-    { label: "github", href: "https://github.com/c0desk1" },
-    { label: "sitemap", href: "https://c0desk1.my.id/sitemap-index.xml" },
-    { label: "rss", href: "https://c0desk1.my.id/rss.xml" }
+    { label: "github", href: "https://github.com/c0desk1" }
   ],
 } as const;
