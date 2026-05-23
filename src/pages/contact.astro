@@ -1,12 +1,12 @@
 ---
 // src/pages/contact/index.astro
-import { seoConfig } from "@/config/site/seo";
+import { siteConfig } from "@/config/site";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import ContactForm from "@/components/contact/ContactForm.astro";
 import Breadcrumb from "@/components/ui/Breadcrumb.astro";
-import { siteConfig } from "@/config/site";
+
 import Icon from "@/components/ui/Icon";
 import SocialLinks from "@/components/ui/SocialLinks.astro";
 
@@ -26,7 +26,7 @@ const Breadcrumbs = [
 <BaseLayout
   title="Contact"
   description="Have a project in mind? Get in touch."
-  image={{ src: seoConfig.ogImage, alt: "Contact c0desk1" }}
+  image={{ src: siteConfig.ogImage, alt: "Contact c0desk1" }}
   canonicalURL={new URL(Astro.url.pathname, Astro.site).href}
 >
   <Section size="lg">
