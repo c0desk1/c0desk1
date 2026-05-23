@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <style>
-    .bg { fill: #18181b; }
+    .bg { fill: none; }
     .icon { stroke: #ffffff; fill: none; stroke-width: 4; stroke-linecap: butt; stroke-linejoin: round; }
     
     @media (prefers-color-scheme: dark) {
-      .bg { fill: #ffffff; }
+      .bg { fill: none; }
       .icon { stroke: #18181b; fill: none; stroke-width: 4; stroke-linecap: butt; stroke-linejoin: round; }
     }
   </style>
