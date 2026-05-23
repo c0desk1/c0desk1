@@ -3,7 +3,6 @@
 
 .prose-custom sup,
 .prose-custom sub{
-  @apply text-numeric-14;
   vertical-align:baseline;
   position:relative;
   transition:color 0.15s ease;
@@ -19,7 +18,9 @@
 }
 
 .prose-custom sub{
-  bottom:-0.2em;
+  bottom:-0.1em;
+  margin-left:0.05em;
+  margin-right:0.05em;
   color:var(--prose-accent);
 }
 
@@ -245,7 +246,7 @@
 @media (min-width: 768px) {
   .prose-custom sup,
   .prose-custom sub{
-    @apply text-numeric-14;
+    @apply text-numeric-16;
   }
 
   .prose-custom mark{
