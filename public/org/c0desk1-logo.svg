@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <style>
     .bg { fill: none; }
-    .icon { stroke: #ffffff; fill: none; stroke-width: 4; stroke-linecap: butt; stroke-linejoin: round; }
+    .icon { stroke: #18181b; fill: none; stroke-width: 4; stroke-linecap: butt; stroke-linejoin: round; }
     
     @media (prefers-color-scheme: dark) {
       .bg { fill: none; }
-      .icon { stroke: #18181b; fill: none; stroke-width: 4; stroke-linecap: butt; stroke-linejoin: round; }
+      .icon { stroke: #ffffff; fill: none; stroke-width: 4; stroke-linecap: butt; stroke-linejoin: round; }
     }
   </style>
   <circle cx="16" cy="16" r="16" class="bg"/>
