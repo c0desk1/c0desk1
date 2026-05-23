@@ -1,5 +1,6 @@
 ---
 import { Image } from "astro:assets";
+import Button from "../ui/Button.astro";
 
 interface Props {
   title?: string;
@@ -20,7 +21,7 @@ const parsedLinks = links
   : [];
 ---
 
-<div class="rounded-2xl border border-(--border) bg-(--bg-muted)/60 p-4">
+<div class="rounded-2xl border border-(--border) bg-(--bg)/50 p-4 backdrop-blur-sm">
   <div class="flex items-start gap-3">
     {
       icon && (
@@ -30,6 +31,8 @@ const parsedLinks = links
             alt={title || ""}
             width={48}
             height={48}
+            loading="lazy"
+            fetchpriority="low"
             class="h-12 w-12 rounded-lg object-cover"
           />
         </div>
@@ -46,7 +49,7 @@ const parsedLinks = links
 
       {
         description && (
-          <p class="mt-1.5 text-copy-14 text-muted">
+          <p class="mt-1.5 text-copy-14 text-muted mb-0!">
             {description}
           </p>
         )
@@ -54,19 +57,20 @@ const parsedLinks = links
 
       {
         parsedLinks.length > 0 && (
-          <div class="mt-3 flex flex-wrap gap-2">
+          <div class="mt-4 flex flex-wrap gap-2">
             {parsedLinks.map((link: any) => (
+              <Button variant="secondary" size="md" title={link.label}>
               <a
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex items-center rounded-md border border-(--border) px-2.5 py-1.5 text-button-14 transition hover:bg-muted gap-2"
-              >
+                class="inline-flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="w-3.5 h-3.5" viewBox="0 0 16 16">
                     <path d="M14.222 9.374c1.037-.61 1.037-2.137 0-2.748L11.528 5.04 8.32 8l3.207 2.96zm-3.595 2.116L7.583 8.68 1.03 14.73c.201 1.029 1.36 1.61 2.303 1.055zM1 13.396V2.603L6.846 8zM1.03 1.27l6.553 6.05 3.044-2.81L3.333.215C2.39-.341 1.231.24 1.03 1.27"/>
                 </svg>
                 {link.label}
               </a>
+              </Button>
             ))}
           </div>
         )
