@@ -47,13 +47,8 @@
 }
 
 .prose-custom small{
-  @apply text-label-16;
   color:var(--prose-fg-subtle);
   display:inline-block;
-}
-
-.prose-custom small:hover{
-  color:var(--prose-fg)
 }
 
 .prose-custom figcaption small,
@@ -207,7 +202,7 @@
   }
 
   .prose-custom small{
-    font-size:12px
+    @apply text-overline-11;
   }
 
   .prose-custom abbr[title]{
@@ -255,7 +250,7 @@
   }
 
   .prose-custom small{
-    font-size:14px
+    @apply text-overline-12;
   }
 
   .prose-custom dl {
