@@ -115,8 +115,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
   
   <Section size="none" class="relative z-0">
     <BG spacing={16} dotSize={0.8} opacity={0.1} />
-
-    <Section size="sm" class="relative z-10"></Section>
+    <Section size="sm" class="relative z-10">
       <div class="relative grid grid-cols-1 rounded-xl border border-(--border) max-w-5xl mx-auto p-0 bg-(--bg)/60">
         <Container size="md">
           <Section size="sm">
@@ -137,6 +136,9 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
               />
             </Section>
             <Section size="sm">
+              <div id="ezoic-pub-ad-placeholder-101"></div>
+            </Section>
+            <Section size="sm">
               <div id="article" class="prose-custom">
                 <Content components={components} />
               </div>
@@ -147,21 +149,14 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
           </Section>
         </Container>
       </div>
-		<div id="ezoic-pub-ad-placeholder-101"></div>
-		<script>
-		    ezstandalone.cmd.push(function () {
-		        ezstandalone.showAds(101);
-		    });
-		</script>
       <Section size="sm">
-        <Container size="lg">
-          <div class="flex items-center gap-2 justify-center">
-            <h5 class="text-label-16 text-(--fg)">Share this article: </h2>
-            <SharePost url={canonicalURL} title={title} description={description} />
-          </div>
-        </Container>
-      </Section>
-	</Section>
+      <Container size="lg">
+        <div class="flex items-center gap-2 justify-center">
+          <h5 class="text-label-16 text-(--fg)">Share this article: </h2>
+          <SharePost url={canonicalURL} title={title} description={description} />
+        </div>
+      </Container>
+    </Section>
     <Section size="sm" class="border-t sm:border-none border-(--border)">
       <h2 class="sr-only">{siteData.b_articleNavigation}</h2>
       <Container size="lg">
@@ -170,4 +165,9 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
     </Section>
   </Section>
   <BackToTop />
+  <script is:inline>
+    ezstandalone.cmd.push(function () {
+      ezstandalone.showAds(101);
+    });
+  </script>
 </BaseLayout>
