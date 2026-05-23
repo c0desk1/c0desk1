@@ -1,5 +1,4 @@
 //config/site/seo.ts
-import Logo from '@/assets/images/c0desk1-logo.svg';
 
 export const seoConfig = {
   siteName: "c0desk1",
