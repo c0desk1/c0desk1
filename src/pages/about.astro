@@ -1,0 +1,201 @@
+---
+// src/pages/about/index.astro
+import { siteConfig } from "@/config/site";
+import { Image } from "astro:assets";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import Button from "@/components/ui/Button.astro";
+
+const stack = [
+  {
+    name: "Astro",
+    description: "Web framework",
+    icon: `<svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M81.504 19.998c1.88 2.16 2.832 5.01 4.737 10.712l19.952 61.148a75.021 75.021 0 0 0-21.629-7.362L71.432 41.78a7.664 7.664 0 0 0-14.864 0L43.436 84.496a75.02 75.02 0 0 0-21.629 7.362l19.952-61.148c1.905-5.702 2.857-8.552 4.737-10.712a16 16 0 0 1 6.478-4.704C55.108 14 58.072 14 64 14s8.892 0 11.026.994a16 16 0 0 1 6.478 4.704Z" fill="currentColor"/><path d="M66.614 86.443c-2.18 2.585-6.543 2.585-8.724 0L48.993 75.7C41.3 82.5 35.84 91.587 33.906 101.91a3.683 3.683 0 0 0 2.61 4.321c.428.11.87.136 1.308.076L37.9 106.3c17.476-2.39 31.8-14.22 36.895-30.07a3.686 3.686 0 0 0-2.59-4.635 3.683 3.683 0 0 0-3.116.638l-2.475 14.21Z" fill="currentColor" opacity=".7"/></svg>`,
+  },
+  {
+    name: "Tailwind CSS",
+    description: "Styling",
+    icon: `<svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M64 14c-17.067 0-27.733 8.533-32 25.6 6.4-8.533 13.867-11.733 22.4-9.6 4.871 1.218 8.352 4.74 12.204 8.635C72.757 44.93 79.788 52.133 96 52.133c17.067 0 27.733-8.533 32-25.6-6.4 8.533-13.867 11.733-22.4 9.6-4.871-1.217-8.352-4.74-12.204-8.635C87.243 21.203 80.212 14 64 14ZM32 52.133C14.933 52.133 4.267 60.667 0 77.733c6.4-8.533 13.867-11.733 22.4-9.6 4.871 1.218 8.352 4.74 12.204 8.635 6.153 6.296 13.184 13.499 29.396 13.499 17.067 0 27.733-8.533 32-25.6-6.4 8.533-13.867 11.733-22.4 9.6-4.871-1.217-8.352-4.74-12.204-8.635C55.243 59.336 48.212 52.133 32 52.133Z" fill="currentColor"/></svg>`,
+  },
+  {
+    name: "TypeScript",
+    description: "Language",
+    icon: `<svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="14" y="14" width="100" height="100" rx="8" fill="currentColor"/><path d="M57.333 64H42V56h42.667v8H70v36H57.333V64ZM90.667 89.333c2 1.334 5.333 2.667 8.666 2.667 3.334 0 5.334-1.334 5.334-3.334S103 85.333 99 84c-7.334-2.666-11.333-6.666-11.333-12 0-7.333 6.666-12 16-12 4 0 7.333.667 10 2l-2 7.333c-2-1.333-4.667-2-8-2-3.334 0-5.334 1.334-5.334 3.334 0 2 1.334 2.666 6 4.666 7.334 2.667 10.667 6.667 10.667 12.667 0 7.333-5.333 12-16.667 12C94 100 90 99.333 87.333 98l2.667-8Z" fill="white"/></svg>`,
+  },
+  {
+    name: "Cloudflare",
+    description: "Deploy & edge",
+    icon: `<svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M85.5 76.7c.6-2 .4-3.8-.6-5.2-1-1.3-2.6-2-4.5-2.1l-45.8-.6c-.3 0-.5-.1-.7-.4-.2-.2-.2-.5-.1-.8.2-.5.7-.8 1.3-.9l46.2-.6c5.5-.3 11.4-4.7 13.4-10l2.6-6.9c.1-.3.1-.6 0-.9-3-13.6-15.1-23.8-29.5-23.8-13.3 0-24.7 8.6-28.9 20.5-2.7-2-6-3-9.6-2.6-6.5.7-11.7 6-12.3 12.5-.2 1.8 0 3.5.4 5.1C9.5 62 4 68.2 4 75.7c0 .5 0 .9.1 1.4.1.4.4.6.8.6h79.4c.4 0 .8-.3.9-.7l.3-1.3ZM103.7 52.7c-.4 0-.8 0-1.2.1-.3 0-.5.2-.6.5l-1.7 5.9c-.6 2-.4 3.8.6 5.2 1 1.3 2.6 2 4.5 2.1l9.8.6c.3 0 .5.1.7.4.2.2.2.5.1.8-.2.5-.7.8-1.3.9l-10.2.6c-5.5.3-11.4 4.7-13.4 10l-.7 1.8c-.1.3.1.6.4.6H124c.4 0 .7-.2.8-.6.5-1.8.8-3.7.8-5.6 0-12.6-10.2-22.8-21.9-22.8Z" fill="currentColor"/></svg>`,
+  },
+];
+
+const topics = [
+  { icon: "ti-robot", label: "AI & automation", desc: "Tools that change how we work" },
+  { icon: "ti-layout-dashboard", label: "Digital workflows", desc: "Systems for modern creators" },
+  { icon: "ti-music", label: "Music & culture", desc: "Anime, games, and more" },
+];
+
+const social = siteConfig.social;
+const email = siteConfig.siteMail;
+---
+
+<BaseLayout
+  title= "About"
+  description={siteConfig.defaultSeo.description}
+  image={{ src: siteConfig.ogImage, alt: `About ${siteConfig.siteName}` }}
+  canonicalURL={new URL(Astro.url.pathname, Astro.site).href}
+>
+  <Section size="lg">
+    <Container size="md">
+      <div class="mb-12">
+        <p class="text-overline-12 text-subtle mb-3">About</p>
+        <div class="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-10 items-start">
+          <div>
+            <h1 class="text-heading-40 text-(--fg) mb-4 text-balance">
+              A creative portal for the age of automation.
+            </h1>
+            <p class="text-copy-16 text-muted mb-3 text-pretty max-w-xl">
+              {siteConfig.siteName} is a space for exploring how modern creators navigate digital workflows, AI tools, and the broader culture around building things on the web.
+            </p>
+            <p class="text-copy-16 text-muted text-pretty max-w-xl">
+              From productivity systems to music, anime, and games — this is where those worlds intersect.
+            </p>
+          </div>
+          <div class="hidden md:flex items-center justify-center">
+            <div
+              class="w-24 h-24 rounded-xl border border-(--border) flex items-center justify-center"
+              style="background: var(--bg-subtle);">
+              <Image
+                src={siteConfig.siteLogo}
+                alt={`${siteConfig.siteName} logo`}
+                width={48}
+                height={48}
+                loading="eager"
+                fetchpriority="low"
+                class="w-12 h-12 object-contain"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-(--border) pt-10 mb-10">
+        <p class="text-overline-12 text-subtle mb-5">What we cover</p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {topics.map(({ icon, label, desc }) => (
+            <div
+              class="rounded-xl border border-(--border) p-4"
+              style="background: var(--bg-subtle);">
+              <i class={`ti ${icon} text-muted mb-3 block`} aria-hidden="true" style="font-size: 20px;" />
+              <p class="text-label-14 text-(--fg) mb-1">{label}</p>
+              <p class="text-copy-13 text-muted">{desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div class="border-t border-(--border) pt-10 mb-10">
+        <p class="text-overline-12 text-subtle mb-5">Built with</p>
+        <div class="marquee-root">
+          <div class="marquee-track">
+            {[...stack, ...stack].map(({ name, description, icon }) => (
+              <div class="marquee-item rounded-xl border border-(--border)" style="background: var(--bg-subtle);">
+                <span class="marquee-icon text-muted" set:html={icon} />
+                <div>
+                  <p class="text-label-13 text-(--fg)">{name}</p>
+                  <p class="text-caption-11 text-subtle">{description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-(--border) pt-6 flex items-center justify-between gap-4 flex-wrap">
+        <a
+          href={`mailto:${email}`}
+          class="text-copy-13 text-subtle hover:text-(--fg) transition-colors duration-150">
+          {email}
+        </a>
+        <div class="flex items-center gap-3">
+          {social.map(({ label, href }) => (
+            <Button
+              href={href}
+              variant="tertiary"
+              size="sm"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {label === "github" && (
+                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                </svg>
+              )}
+              {label === "facebook" && (
+                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                </svg>
+              )}
+              <span class="capitalize">{label}</span>
+            </Button>
+          ))}
+          <Button href="/contact" variant="primary" size="sm">
+            Get in touch
+          </Button>
+        </div>
+      </div>
+
+    </Container>
+  </Section>
+</BaseLayout>
+
+<style>
+  .marquee-root {
+    overflow: hidden;
+    mask: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    -webkit-mask: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  }
+
+  .marquee-track {
+    display: flex;
+    gap: 12px;
+    width: max-content;
+    animation: marquee 20s linear infinite;
+  }
+
+  .marquee-track:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  .marquee-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .marquee-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+  }
+
+  .marquee-icon :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation: none;
+    }
+  }
+</style>
