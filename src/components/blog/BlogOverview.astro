@@ -14,7 +14,7 @@ const { items } = Astro.props;
     </div>
     <ul class="overview-list">
       {items.map((item) => (
-        <li class="text-copy-16 lg:text-copy-18">{item}</li>
+        <li class="text-copy-16 lg:text-copy-18 text-(--prose-fg)/90">{item}</li>
       ))}
     </ul>
   </aside>
@@ -50,6 +50,9 @@ const { items } = Astro.props;
     position: absolute;
     left: 0;
     top: 0;
-    color: var(--prose-fg-subtle);
+    color: var(--prose-list-marker);
+  }
+  .overview-list li::before:hover {
+    color: var(--prose-list-marker-hover);
   }
 </style>
