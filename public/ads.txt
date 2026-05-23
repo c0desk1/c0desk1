@@ -1,6 +1,15 @@
+#Ads.txt c0desk1.my.id
+#Ads.txt managed by AdsTxtManager.com - the free ads.txt management tool for publishers
+ownerdomain=c0desk1.my.id
+contact=directsales@ezoic.com
+managerdomain=ezoic.ai
+
+ezoic.ai, 94d98977a3ba7632ae722e7f61a85a9a, DIRECT
+# 35
+google.com, pub-6644558441501035, DIRECT, f08c47fec0942fa0
+google.com, pub-1175987143200523, RESELLER, f08c47fec0942fa0
 google.com, pub-4943136052113535, DIRECT, f08c47fec0942fa0
 yandex.com, 324262497, DIRECT
-https://srv.adstxtmanager.com/19390/c0desk1.my.id
 google.com, pub-5533854580432370, RESELLER, f08c47fec0942fa0
 improvedigital.com, 2031, RESELLER
 uis.mobfox.com, 165, RESELLER
