@@ -127,6 +127,10 @@ const lang = "en-US"
     <ThemeScript />
     <Google />
     <YandexLoader />
+    <script>
+      window.ezstandalone = window.ezstandalone || {};
+      window.ezstandalone.cmd = window.ezstandalone.cmd || [];
+    </script>
     <script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
     <script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
   </head>
@@ -138,14 +142,7 @@ const lang = "en-US"
     <main id="main-content">
       {withContainer? (
         <Container size={size}>
-          <slot />
-          <script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
-          <script>
-              window.ezstandalone = window.ezstandalone || {};
-              ezstandalone.cmd = ezstandalone.cmd || [];
-          </script>
-          <script is:inline src="//ezoicanalytics.com/analytics.js"></script>
-          <Yandex />
+          <slot />          
         </Container>
         ) : (
           <slot />
@@ -158,5 +155,8 @@ const lang = "en-US"
     <Cookie />
     <MobileMenu />
     <ScrollScript />
+    <script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
+    <script is:inline src="//ezoicanalytics.com/analytics.js"></script>
+    <Yandex />
   </body>
 </html>
