@@ -24,9 +24,9 @@ if (releases.length === 0) {
     {releases.map((release) => (
       <div class="relative changelog-item">
         {release.heading && (
-          <div class="relative flex items-start">
-            <div class="absolute -left-6 sm:-left-8 top-2.5 w-2.5 h-2.5 rounded-full bg-(--prose-link-visited) border border-(--prose-border) z-10"></div>
-            <div class="changelog-version text-heading-18 font-medium text-(--prose-fg) mb-2" set:html={release.heading} />
+          <div class="relative flex items-center mb-2">
+            <div class="absolute -left-6 sm:-left-8 w-2.5 h-2.5 rounded-full bg-(--prose-link-visited) border border-(--prose-border) z-10"></div>
+            <div class="changelog-version text-heading-16 font-medium text-(--prose-fg) mb-4 mt-0!" set:html={release.heading} />
           </div>
         )}
         {release.content && (
@@ -42,7 +42,6 @@ if (releases.length === 0) {
   .changelog-item :global(h3),
   .changelog-item :global(h4) {
     margin-top: 0 !important;
-    margin-bottom: 0.5rem !important;
   }
   .changelog-item :global(p) {
     margin-top: 0 !important;
