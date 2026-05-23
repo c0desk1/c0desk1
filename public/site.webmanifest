@@ -10,7 +10,7 @@
     },
     {
       "src": "/web-app-manifest-512x512.png",
-      "sizes": "512x512",
+      "sizes": "360x360",
       "type": "image/png",
       "purpose": "maskable"
     }
