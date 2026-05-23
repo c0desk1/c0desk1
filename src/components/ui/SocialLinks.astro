@@ -12,6 +12,7 @@ interface Props {
   class?: string;
   iconClass?: string;
   showLabel?: boolean;
+  direction?: "horizontal" | "vertical";
 }
 
 const {
@@ -19,10 +20,20 @@ const {
   class: className = "",
   iconClass = "h-4 w-4",
   showLabel = false,
+  direction = "horizontal",
 } = Astro.props;
 ---
 
-<ul class:list={["flex items-center gap-2", className]} role="list">
+<ul
+  class:list={[
+    "flex gap-2",
+    direction === "vertical"
+      ? "flex-col items-start"
+      : "items-center",
+    className,
+  ]}
+  role="list"
+>
   {items.map((item) => (
     <li>
       <a
@@ -31,7 +42,7 @@ const {
         title={item.label}
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-flex items-center gap-2 rounded-full px-1.5 py-1 text-muted transition-colors hover:bg-muted hover:text-(--fg) active:text-(--fg) focus:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)"
+        class="inline-flex items-center gap-1.5 text-muted transition-colors hover:text-(--fg) active:text-(--fg) focus:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)"
       >
         <Icon
           name={item.label as any}
@@ -40,7 +51,7 @@ const {
         />
 
         {showLabel && (
-          <span class="capitalize text-copy-13">
+          <span class="capitalize text-copy-14">
             {item.label}
           </span>
         )}
