@@ -4,7 +4,7 @@ import { seoConfig } from "@/config/site/seo";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
-import ContactForm from "@/components/contact/ContactForm";
+import ContactForm from "@/components/contact/ContactForm.astro";
 import Breadcrumb from "@/components/ui/Breadcrumb.astro";
 import { siteConfig } from "@/config/site";
 import Icon from "@/components/ui/Icon";
@@ -30,8 +30,8 @@ const Breadcrumbs = [
   canonicalURL={new URL(Astro.url.pathname, Astro.site).href}
 >
   <Section size="lg">
-    <div class="relative grid grid-cols-1 rounded-xl border border-(--border) max-w-3xl mx-auto">
-        <Container size="md">
+    <div class="relative grid grid-cols-1 rounded-xl border border-(--border) max-w-5xl mx-auto">
+        <Container size="lg">
             <Section size="sm">
                 <div class="flex items-center justify-start">
                     <Breadcrumb items={Breadcrumbs} />
@@ -47,12 +47,12 @@ const Breadcrumbs = [
             </Section>
             <div class="grid grid-cols-1 md:grid-cols-[1fr_200px] gap-12 items-start">
                 <Section size="sm">
-                    <ContactForm client:load />
+                    <ContactForm />
                 </Section>
                 <Section size="sm">
                     <aside class="flex flex-col gap-6">
                         <div>
-                            <p class="text-overline-11 text-subtle mb-2">Availability</p>
+                            <p class="text-overline-11 text-strong mb-4">Availability</p>
                             <div class="flex items-center gap-2">
                             <span
                                 class="w-1.5 h-1.5 rounded-full shrink-0"
@@ -62,7 +62,7 @@ const Breadcrumbs = [
                             </div>
                         </div>
                         <div>
-                            <p class="text-overline-11 text-subtle mb-3">Direct</p>
+                            <p class="text-overline-11 text-strong mb-4">Direct</p>
                             <a
                             href={`mailto:${email}`}
                             class="text-copy-14 text-(--fg) flex items-center gap-2 hover:text-(--accent) transition-colors duration-150">
@@ -71,12 +71,13 @@ const Breadcrumbs = [
                             </a>
                         </div>
                         <div>
-                            <p class="text-overline-11 text-subtle mb-3">Elsewhere</p>
+                            <p class="text-overline-11 text-strong mb-4">Elsewhere</p>
                             <div class="flex flex-col gap-2.5">
                                 <SocialLinks
                                     items={social}
-                                    class="flex items-center gap-1"
-                                    iconClass="h-4 w-4 text-muted hover:text-(--fg) active:text-(--fg) transition-colors duration-150"
+                                    direction="vertical"
+                                    showLabel
+                                    iconClass="h-4 w-4 text-muted transition-colors duration-150"
                                 />
                             </div>
                         </div>
