@@ -1,14 +1,18 @@
 ---
-// src/components/ui/Cookie.astro
 import { siteConfig } from "@/config/site";
 import Button from "@/components/ui/Button.astro";
 
-const siteData = siteConfig
+const siteData = siteConfig;
 const policyUrl = "/cookie-policy";
-const policyLabel = "Cookie Policy"
+const policyLabel = "Cookie Policy";
 ---
 
-<div id="cookie-consent" class="fixed bottom-4 left-4 right-4 z-50 max-w-sm mx-auto opacity-0 translate-y-4 transition-all duration-300 ease-out pointer-events-none" aria-hidden="true" role="dialog" aria-label={siteData.cookiePreference}>
+<div id="cookie-consent"
+     class="fixed bottom-4 left-4 right-4 z-50 max-w-sm mx-auto opacity-0 translate-y-4 transition-all duration-300 ease-out pointer-events-none"
+     aria-hidden="true"
+     inert
+     role="dialog"
+     aria-label={siteData.cookiePreference}>
   <div class="flex flex-col gap-3 p-4 bg-(--bg)/90 backdrop-blur-lg border border-(--border) rounded-2xl shadow-lg">
     <p class="text-copy-14 text-(--fg-muted) m-0 leading-relaxed">
       {siteData.cookieMessage}
@@ -33,10 +37,18 @@ const policyLabel = "Cookie Policy"
   const STORAGE_KEY = "cookie-consent-v2";
   const bar = document.getElementById("cookie-consent");
 
+  const moveFocusAway = () => {
+    if (document.activeElement && bar?.contains(document.activeElement)) {
+      (document.querySelector('a[href="#main-content"]') || document.body).focus();
+    }
+  };
+
   const hideBar = () => {
     if (bar) {
       bar.classList.add("opacity-0", "translate-y-4", "pointer-events-none");
       bar.setAttribute("aria-hidden", "true");
+      bar.setAttribute("inert", "");
+      moveFocusAway();
     }
   };
 
@@ -44,6 +56,7 @@ const policyLabel = "Cookie Policy"
     if (bar) {
       bar.classList.remove("opacity-0", "translate-y-4", "pointer-events-none");
       bar.setAttribute("aria-hidden", "false");
+      bar.removeAttribute("inert");
     }
   };
 
@@ -58,7 +71,7 @@ const policyLabel = "Cookie Policy"
     requestAnimationFrame(showBar);
   }
 
-  const saveConsent = (accepted: boolean) => {
+  const saveConsent = (accepted) => {
     localStorage.setItem(
       STORAGE_KEY,
       JSON.stringify({ done: true, accepted, ts: Date.now() })
