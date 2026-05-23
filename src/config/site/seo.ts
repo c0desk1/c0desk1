@@ -1,10 +1,12 @@
 //config/site/seo.ts
 
+import Logo from "@/assets/images/c0desk1-logo.svg";
+
 export const seoConfig = {
   siteName: "c0desk1",
   siteUrl: "https://c0desk1.my.id/",
   siteMail: "hello@c0desk1.my.id",
-  siteLogo: "./src/assets/images/c0desk1-logo.svg",
+  siteLogo: Logo,
   ogImage: "./src/assets/images/c0desk1-og.webp",
 
   defaultSeo: {
