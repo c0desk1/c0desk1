@@ -1,0 +1,125 @@
+---
+// src/components/contact/ContactForm.astro
+---
+
+<div id="contact-form-wrapper">
+  <form id="contact-form" class="space-y-5 bg-subtle border border-(--border) rounded-xl p-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="space-y-1.5">
+        <label for="name" class="text-overline-11 text-subtle">Name</label>
+        <input
+          id="name"
+          name="name"
+          type="text"
+          required
+          class="w-full px-3 py-2.5 text-copy-14 rounded-lg bg-subtle border border-(--border) text-(--fg) placeholder:text-dim focus:outline-none focus:border-(--accent) focus:ring-2 focus:ring-(--accent-ring) transition-colors"
+          placeholder="Alex Kim"
+        />
+      </div>
+      <div class="space-y-1.5">
+        <label for="email" class="text-overline-11 text-subtle">Email</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          required
+          class="w-full px-3 py-2.5 text-copy-14 rounded-lg bg-subtle border border-(--border) text-(--fg) placeholder:text-dim focus:outline-none focus:border-(--accent) focus:ring-2 focus:ring-(--accent-ring) transition-colors"
+          placeholder="you@example.com"
+        />
+      </div>
+    </div>
+    <div class="space-y-1.5">
+      <label for="subject" class="text-overline-11 text-subtle">Subject</label>
+      <input
+        id="subject"
+        name="subject"
+        type="text"
+        required
+        class="w-full px-3 py-2.5 text-copy-14 rounded-lg bg-subtle border border-(--border) text-(--fg) placeholder:text-dim focus:outline-none focus:border-(--accent) focus:ring-2 focus:ring-(--accent-ring) transition-colors"
+        placeholder="Project inquiry, collaboration, etc."
+      />
+    </div>
+    <div class="space-y-1.5">
+      <label for="message" class="text-overline-11 text-subtle">Message</label>
+      <textarea
+        id="message"
+        name="message"
+        required
+        rows="6"
+        class="w-full px-3 py-2.5 text-copy-14 rounded-lg bg-subtle border border-(--border) text-(--fg) placeholder:text-dim focus:outline-none focus:border-(--accent) focus:ring-2 focus:ring-(--accent-ring) transition-colors resize-none"
+        placeholder="Tell me about your project..."
+      ></textarea>
+    </div>
+    <div class="flex items-center justify-between">
+      <p class="text-copy-13 text-subtle">Usually replies within 24h</p>
+      <button
+        type="submit"
+        id="submit-btn"
+        class="inline-flex items-center justify-center gap-2 rounded-full bg-(--fg) text-(--bg) border border-strong h-9 px-4 text-button-14 hover:opacity-90 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+      >
+        <span id="btn-text">Send</span>
+        <span id="btn-spinner" class="hidden h-4 w-4 animate-spin border-2 border-current border-t-transparent rounded-full"></span>
+      </button>
+    </div>
+    <p id="error-msg" class="text-copy-13 text-error text-center hidden">Something went wrong. Please try again.</p>
+  </form>
+
+  <!-- Success Message (hidden) -->
+  <div id="success-msg" class="hidden bg-subtle border border-(--border) rounded-xl p-12 text-center">
+    <div class="w-11 h-11 mx-auto mb-4 rounded-full bg-(--success-soft) flex items-center justify-center">
+      <svg width="18" height="18" fill="none" stroke="var(--success)" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+      </svg>
+    </div>
+    <p class="text-heading-16 text-(--fg) mb-1">Message sent</p>
+    <p class="text-copy-14 text-muted">Thanks for reaching out — I'll get back to you within 24h.</p>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const successMsg = document.getElementById('success-msg') as HTMLDivElement;
+  const errorMsg = document.getElementById('error-msg') as HTMLParagraphElement;
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+  const btnText = document.getElementById('btn-text') as HTMLSpanElement;
+  const btnSpinner = document.getElementById('btn-spinner') as HTMLSpanElement;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // Tampilkan loading
+    submitBtn.disabled = true;
+    btnText.textContent = 'Sending...';
+    btnSpinner.classList.remove('hidden');
+    errorMsg.classList.add('hidden');
+
+    const formData = new FormData(form);
+    const data = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      subject: formData.get('subject'),
+      message: formData.get('message'),
+    };
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (res.ok) {
+        form.classList.add('hidden');
+        successMsg.classList.remove('hidden');
+      } else {
+        errorMsg.classList.remove('hidden');
+      }
+    } catch {
+      errorMsg.classList.remove('hidden');
+    } finally {
+      submitBtn.disabled = false;
+      btnText.textContent = 'Send';
+      btnSpinner.classList.add('hidden');
+    }
+  });
+</script>
