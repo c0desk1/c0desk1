@@ -1,7 +1,5 @@
 ---
-// src/pages/[...locale]/blog/[...slug].astro
-export const prerender = true;
-
+// src/pages/blog/[slug].astro
 import '@/styles/prose/index.css';
 
 import { getCollection, render, getEntry } from "astro:content";
@@ -30,6 +28,8 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
+
+const articleLang = post.data.lang || 'en';
 
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 const sortedPosts = allPosts.sort(
@@ -98,6 +98,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
 <BaseLayout
   title={seoTitle}
   description={seoDescription}
+  lang={articleLang}
   image={seoImage}
   type="article"
   publishedTime={pubDate}
