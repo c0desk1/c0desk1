@@ -10,9 +10,9 @@ interface Props {
 }
 
 const { class: className } = Astro.props;
-
 const siteURL = (Astro.site?.toString() ?? siteConfig.siteUrl).replace(/\/$/, "");
 const rssURL = `${siteURL}/rss.xml`;
+
 ---
 
 <div class:list={["border border-(--border) rounded-xl bg-(--bg-dim) overflow-hidden", className]}>
@@ -21,18 +21,12 @@ const rssURL = `${siteURL}/rss.xml`;
       <Icon name="rss" className="w-5 h-5" />
     </div>
     <div class="flex-1 min-w-0">
-      <span class="text-heading-14 font-semibold text-(--fg)">
-        Subscribe via RSS
-      </span>
-      <p class="text-copy-14 text-muted mt-0.5 hidden sm:inline">
-        Get new posts delivered to your reader automatically.
-      </p>
+      <span class="text-heading-16 font-semibold text-(--fg) text-balance">Subscribe via RSS</span>
+      <p class="text-copy-14 text-muted mt-0.5 hidden sm:inline text-pretty">Get new posts delivered to your reader automatically.</p>
     </div>
     <div class="flex items-center shrink-0">
       <Button variant="primary" class="text-button-14" size="md">
-        <a href={rssURL} target="_blank" rel="noopener noreferrer" class="whitespace-nowrap" aria-label="Open RSS feed">
-          Open
-        </a>
+        <a href={rssURL} target="_blank" rel="noopener noreferrer" class="whitespace-nowrap" aria-label="Open RSS feed">Open</a>
       </Button>
     </div>
   </div>
