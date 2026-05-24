@@ -183,7 +183,7 @@
   @apply text-code-14;
   background-color: var(--prose-code-bg);
   color: var(--prose-code-text);
-  padding: 0.2em 0.4em;
+  padding: 0.75rem;
   border-radius: var(--prose-radius);
   border: 1px solid var(--prose-code-border);
   font-family: var(--prose-font-mono);
