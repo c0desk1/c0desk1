@@ -4,15 +4,6 @@
 
 <script is:inline>
   (() => {
-    const hasConsent = () => {
-      if (window.ezConsent && typeof window.ezConsent.getConsentStatus === 'function') {
-        const ad = window.ezConsent.getConsentStatus('ad_storage');
-        const ana = window.ezConsent.getConsentStatus('analytics_storage');
-        return ad === 'granted' || ana === 'granted';
-      }
-      return false;
-    };
-
     const loadYandex = () => {
       if (document.getElementById('yandex-context-script')) return;
       window.yaContextCb = window.yaContextCb || [];
@@ -22,13 +13,6 @@
       script.async = true;
       document.head.appendChild(script);
     };
-
-    if (hasConsent()) {
-      loadYandex();
-    } else {
-      document.addEventListener('ezconsent', () => {
-        if (hasConsent()) loadYandex();
-      }, { once: true });
-    }
+    loadYandex();
   })();
 </script>
