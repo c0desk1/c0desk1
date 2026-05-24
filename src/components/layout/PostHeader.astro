@@ -7,6 +7,7 @@ import PostAuthor from './PostAuthor.astro';
 interface Props {
   title: string;
   description: string;
+  lang?: string;
   pubDate: Date;
   content?: string;
   authorName?: string;
@@ -20,6 +21,7 @@ const {
   title,
   pubDate,
   content = '',
+  lang,
   authorName,
   authorAvatar,
   authorRole,
@@ -43,7 +45,7 @@ const {
     )}
     {content && (
       <div class="w-full mt-4">
-        <PostMeta pubDate={pubDate} content={content} />
+        <PostMeta pubDate={pubDate} content={content} lang={lang} />
       </div>
     )}
     {overviewItems && overviewItems.length > 0 && (
