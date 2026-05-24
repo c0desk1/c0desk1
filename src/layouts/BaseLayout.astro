@@ -142,24 +142,32 @@ const lang = "en-US"
         )
       }
     </main>
+    <Search />
     <script is:inline>
       ezstandalone.cmd.push(function () {
         ezstandalone.showAds(101);
       });
     </script>
-    <Search />
     <YandexAds />
     {footer && <Footer />}
     <div id="modal-root"></div>
     <MobileMenu />
     <ScrollScript />
-    <!-- Yandex.RTB R-A-19179231-1 -->
     <script is:inline>
       window.yaContextCb.push(() => {
         Ya.Context.AdvManager.render({
           "blockId": "R-A-19179231-1",
           "type": "floorAd",
           "platform": "touch"
+        })
+      })
+    </script>
+    <script is:inline>
+      window.yaContextCb.push(() => {
+        Ya.Context.AdvManager.render({
+          "blockId": "R-A-19179231-7",
+          "renderTo": "yandex_rtb_R-A-19179231-7",
+          "type": "feed"
         })
       })
     </script>
