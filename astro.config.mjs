@@ -22,6 +22,8 @@ import remarkBanner from './src/lib/mdx/remark-banner.ts';
 // https://astro.build/config
 export default defineConfig({
   site: siteConfig.siteUrl,
+  base: '/',
+  trailingSlash: 'never',
   vite: {
     plugins: [tailwindcss()]
   },
