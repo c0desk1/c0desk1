@@ -11,14 +11,14 @@ import Container from "@/components/ui/Container.astro";
 import MobileMenu from "@/components/layout/MobileMenu.astro";
 import Search from "@/components/layout/Search.astro";
 import ScrollScript from "@/components/scripts/ScrollScript.astro";
-import Google from "@/components/scripts/Google.astro";
+
 import YandexLoader from "@/components/ads/YandexLoader.astro";
 import YandexAds from "@/components/ads/YandexAds.astro";
 
 interface Props {
   title?: string;
   description?: string;
-  
+  lang?: string;
   image?: { 
     src: string; 
     alt: string 
@@ -80,6 +80,7 @@ interface Props {
 }
 
 const {
+  lang = "en-US",
   header = true,
   footer = true,
   withContainer = false,
@@ -94,7 +95,6 @@ const {
 
 const siteData = siteConfig;
 
-const lang = "en-US"
 ---
 
 <!DOCTYPE html>
