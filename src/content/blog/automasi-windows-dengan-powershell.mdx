@@ -86,6 +86,7 @@ If you're afraid of deleting the wrong thing, add `-WhatIf` at the end of the `R
 The scripts above won't be useful if you have to open and run them manually every day. You need to use Windows' built-in Task Scheduler:
 
 :::steps
+
 ### Step 1
 Search for Task Scheduler in the Start Menu.
 
@@ -100,6 +101,7 @@ In Program/script, enter: `powershell.exe`.
 
 ### Step 5 
 In Add arguments, enter: `-ExecutionPolicy Bypass -File "C:\Path\To\Your\Script.ps1"`.
+
 :::
 
 Done! Now every morning when you turn on your PC, that script will run automatically in the background.
