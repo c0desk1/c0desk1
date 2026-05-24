@@ -40,6 +40,10 @@ content:
       - name: title
         label: Judul
         type: string
+
+      - name: slug
+        label: Slug
+        type: string
         
       - name: description
         label: Deskripsi
@@ -66,7 +70,7 @@ content:
         type: reference
         options:
           collection: authors
-          value: "{id}"
+          value: "{slug}"
           label: "{fields.name}"
         
       - name: category
@@ -74,7 +78,7 @@ content:
         type: reference
         options:
           collection: categories
-          value: "{id}"
+          value: "{slug}"
           label: "{fields.name}"
           
       - name: tags
@@ -156,6 +160,10 @@ content:
     fields:      
       - name: title
         label: Judul
+        type: string
+
+      - name: slug
+        label: Slug
         type: string
         
       - name: description
@@ -299,7 +307,7 @@ content:
     view:
       fields: [name, role, id]
     fields:
-      - name: id
+      - name: slug
         label: Username
         type: string
         
@@ -341,7 +349,7 @@ content:
     view:
       fields: [name, id]
     fields:
-      - name: id
+      - name: slug
         label: ID
         type: string
         
@@ -364,6 +372,10 @@ content:
     fields:
        - name: title
          label: Judul
+         type: string
+
+       - name: slug
+         label: Slug
          type: string
 
        - name: description
