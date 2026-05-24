@@ -1,8 +1,5 @@
 ---
-// src/components/ads/YandexAds.astro
-
 import { siteConfig } from "@/config/site";
-
 import Section from "@/components/ui/Section.astro";
 import Container from "@/components/ui/Container.astro";
 
@@ -34,7 +31,7 @@ const ADS_ENABLED = siteConfig.yandexAdsEnabled ?? true;
     const PUB_ID = el?.dataset.pubId || "";
     const METRICA_ID = el?.dataset.metricaId || "";
     const ADS_ON = el?.dataset.adsEnabled !== "false";
-    const CONSENT_KEY = "cookie-consent-v2";
+
     const DELAY = {
       floorAd: 3000,
       inImage: 3500,
@@ -43,35 +40,12 @@ const ADS_ENABLED = siteConfig.yandexAdsEnabled ?? true;
       banner: 2500,
       metrica: 1000,
     };
-    function isAccepted() {
-      try {
-        const c = JSON.parse(
-          localStorage.getItem(CONSENT_KEY) || "null"
-        );
-        return c?.accepted === true;
-      } catch {
-        return false;
-      }
-    }
-    function adsAllowed() {
-      return ADS_ON && isAccepted();
-    }
-
-    function analyticsAllowed() {
-      return isAccepted();
-    }
 
     function waitForYa(cb, retries = 20) {
-      if (
-        window.Ya?.Context?.AdvManager &&
-        window.yaContextCb
-      ) {
+      if (window.Ya?.Context?.AdvManager && window.yaContextCb) {
         cb();
       } else if (retries > 0) {
-        setTimeout(
-          () => waitForYa(cb, retries - 1),
-          300
-        );
+        setTimeout(() => waitForYa(cb, retries - 1), 300);
       }
     }
 
@@ -79,42 +53,24 @@ const ADS_ENABLED = siteConfig.yandexAdsEnabled ?? true;
       if (document.readyState === "complete") {
         setTimeout(fn, ms);
       } else {
-        window.addEventListener(
-          "load",
-          () => setTimeout(fn, ms),
-          { once: true }
-        );
+        window.addEventListener("load", () => setTimeout(fn, ms), { once: true });
       }
     }
 
     function isDesktop() {
       const ua = navigator.userAgent;
-
-      const mobileRegex =
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet|Kindle|Silk/i;
-
-      const isIPad =
-        /Macintosh/i.test(ua) &&
-        navigator.maxTouchPoints &&
-        navigator.maxTouchPoints > 1;
-
-      return (
-        !mobileRegex.test(ua) &&
-        !isIPad
-      );
+      const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet|Kindle|Silk/i;
+      const isIPad = /Macintosh/i.test(ua) && navigator.maxTouchPoints && navigator.maxTouchPoints > 1;
+      return !mobileRegex.test(ua) && !isIPad;
     }
 
     function isTouchDevice() {
       return !isDesktop();
     }
 
-    // ───────────────────────────────────────────
-    // Ads
-    // ───────────────────────────────────────────
-
+    // Ads functions
     function renderFloorTouch() {
       if (!isTouchDevice()) return;
-
       afterDelay(DELAY.floorAd, () => {
         waitForYa(() => {
           window.yaContextCb.push(() => {
@@ -140,52 +96,28 @@ const ADS_ENABLED = siteConfig.yandexAdsEnabled ?? true;
               });
             });
           };
-
           const tryImages = (images) => {
             if (!images.length) return;
-
             const image = images.shift();
-
-            const { width, height } =
-              image.getBoundingClientRect();
-
+            const { width, height } = image.getBoundingClientRect();
             if (width < 375 || height < 196) {
               return tryImages(images);
             }
-
-            image.id =
-              `yandex_rtb_${PUB_ID}-2-${Math.random()
-                .toString(16)
-                .slice(2)}`;
-
-            if (
-              image.tagName === "IMG" &&
-              !image.complete
-            ) {
-              image.addEventListener(
-                "load",
-                () => render(image.id),
-                { once: true }
-              );
+            image.id = `yandex_rtb_${PUB_ID}-2-${Math.random().toString(16).slice(2)}`;
+            if (image.tagName === "IMG" && !image.complete) {
+              image.addEventListener("load", () => render(image.id), { once: true });
             } else {
               render(image.id);
             }
-
             tryImages(images);
           };
-
-          tryImages(
-            Array.from(
-              document.querySelectorAll("img")
-            )
-          );
+          tryImages(Array.from(document.querySelectorAll("img")));
         });
       });
     }
 
     function renderFullscreen() {
       if (!isTouchDevice()) return;
-
       afterDelay(DELAY.fullscreen, () => {
         waitForYa(() => {
           window.yaContextCb.push(() => {
@@ -201,7 +133,6 @@ const ADS_ENABLED = siteConfig.yandexAdsEnabled ?? true;
 
     function renderTopAd() {
       if (!isTouchDevice()) return;
-
       afterDelay(DELAY.topAd, () => {
         waitForYa(() => {
           window.yaContextCb.push(() => {
@@ -216,7 +147,6 @@ const ADS_ENABLED = siteConfig.yandexAdsEnabled ?? true;
 
     function renderFloorDesktop() {
       if (!isDesktop()) return;
-
       afterDelay(DELAY.floorAd, () => {
         waitForYa(() => {
           window.yaContextCb.push(() => {
@@ -243,180 +173,65 @@ const ADS_ENABLED = siteConfig.yandexAdsEnabled ?? true;
       });
     }
 
-    // ───────────────────────────────────────────
     // Yandex Metrica
-    // ───────────────────────────────────────────
-
     function initMetrica() {
       if (!METRICA_ID) return;
-
       afterDelay(DELAY.metrica, () => {
-        (function (
-          m,
-          e,
-          t,
-          r,
-          i,
-          k,
-          a
-        ) {
-          m[i] =
-            m[i] ||
-            function () {
-              (m[i].a = m[i].a || []).push(
-                arguments
-              );
-            };
-
+        (function (m, e, t, r, i, k, a) {
+          m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments); };
           m[i].l = 1 * new Date();
-
-          for (
-            let j = 0;
-            j < document.scripts.length;
-            j++
-          ) {
-            if (
-              document.scripts[j].src === r
-            ) {
-              return;
-            }
+          for (let j = 0; j < document.scripts.length; j++) {
+            if (document.scripts[j].src === r) return;
           }
-
           k = e.createElement(t);
           a = e.getElementsByTagName(t)[0];
-
           k.async = 1;
           k.src = r;
-
           a.parentNode.insertBefore(k, a);
-        })(
-          window,
-          document,
-          "script",
-          "https://mc.yandex.ru/metrika/tag.js",
-          "ym"
-        );
-
+        })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
         ym(Number(METRICA_ID), "init", {
           clickmap: true,
           trackLinks: true,
           accurateTrackBounce: true,
           webvisor: false,
         });
-
-        if (
-          !document.getElementById(
-            "ya-metrica-ns"
-          )
-        ) {
-          const ns =
-            document.createElement("noscript");
-
+        if (!document.getElementById("ya-metrica-ns")) {
+          const ns = document.createElement("noscript");
           ns.id = "ya-metrica-ns";
-
-          const img =
-            document.createElement("img");
-
-          img.src =
-            `https://mc.yandex.ru/watch/${METRICA_ID}`;
-
-          img.style.cssText =
-            "position:absolute;left:-9999px";
-
+          const img = document.createElement("img");
+          img.src = `https://mc.yandex.ru/watch/${METRICA_ID}`;
+          img.style.cssText = "position:absolute;left:-9999px";
           img.alt = "";
-
           ns.appendChild(img);
-
           document.body.appendChild(ns);
         }
       });
     }
 
-    // ───────────────────────────────────────────
-    // Init
-    // ───────────────────────────────────────────
-
     function initAll() {
-      if (
-        adsAllowed() &&
-        !window.__yandexAdsInitialized
-      ) {
+      if (ADS_ON && !window.__yandexAdsInitialized) {
         window.__yandexAdsInitialized = true;
-
-        renderFloorTouch();
         renderFullscreen();
         renderTopAd();
         renderFloorDesktop();
         renderBanner();
       }
-
-      if (
-        analyticsAllowed() &&
-        !window.__yandexMetricaInitialized
-      ) {
+      if (METRICA_ID && !window.__yandexMetricaInitialized) {
         window.__yandexMetricaInitialized = true;
-
         initMetrica();
       }
     }
 
-    function waitForConsent() {
-      let attempts = 0;
-
-      const max = 60;
-
-      const timer = setInterval(() => {
-        attempts++;
-
-        if (
-          localStorage.getItem(
-            CONSENT_KEY
-          ) !== null ||
-          attempts >= max
-        ) {
-          clearInterval(timer);
-
-          initAll();
-        }
-      }, 1000);
-    }
-
-    function boot() {
-      const consent =
-        localStorage.getItem(CONSENT_KEY);
-
-      if (consent !== null) {
-        initAll();
-      } else {
-        waitForConsent();
-      }
-    }
-
-    document.addEventListener(
-      "cookie-consent-changed",
-      () => {
-        initAll();
-      }
-    );
-
     if (document.readyState === "loading") {
-      document.addEventListener(
-        "DOMContentLoaded",
-        boot
-      );
+      document.addEventListener("DOMContentLoaded", initAll);
     } else {
-      boot();
+      initAll();
     }
 
-    document.addEventListener(
-      "astro:page-load",
-      () => {
-        window.__yandexAdsInitialized = false;
-
-        window.__yandexMetricaInitialized = false;
-
-        boot();
-      }
-    );
+    document.addEventListener("astro:page-load", () => {
+      window.__yandexAdsInitialized = false;
+      window.__yandexMetricaInitialized = false;
+      initAll();
+    });
   })();
 </script>
