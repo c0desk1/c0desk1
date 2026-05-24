@@ -183,10 +183,9 @@
   @apply text-code-14;
   background-color: var(--prose-code-bg);
   color: var(--prose-code-text);
-  padding: 0.75rem;
+  padding: 0.15rem 0.35rem;
   border-radius: var(--prose-radius);
   border: 1px solid var(--prose-code-border);
-  font-family: var(--prose-font-mono);
   display: inline-block;
 }
 
@@ -268,13 +267,10 @@
     padding: 0.75rem 1rem;
     margin: 1.5rem 0;
   }
-  .prose-custom samp {
-    @apply text-code-14;
-  }
 }
 
 @media (min-width: 1024px){
   .prose-custom samp {
-    @apply text-code-16;
+    @apply text-code-14;
   }
 }
