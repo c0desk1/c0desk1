@@ -5,7 +5,6 @@ import { siteConfig } from './src/config/site';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap, {ChangeFreqEnum } from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
-import react from '@astrojs/react';
 
 import remarkCallout from './src/lib/mdx/remark-callout.ts';
 import remarkBlockquoteAuthor from './src/lib/mdx/remark-blockquote.ts';
@@ -100,7 +99,7 @@ export default defineConfig({
     }
   ],
   image: {
-    domains: ["cdn.c0desk1.my.id", "play-lh.googleusercontent.com"],
+    domains: ["cdn.c0desk1.my.id", "play-lh.googleusercontent.com", "avatars.githubusercontent.com"],
     remotePatterns: [{ protocol: "https" }],
     service: passthroughImageService()
   },
