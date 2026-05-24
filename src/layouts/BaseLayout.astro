@@ -163,5 +163,16 @@ const siteData = siteConfig;
     <div id="modal-root"></div>
     <MobileMenu />
     <ScrollScript />
+    <script async type="application/javascript" src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
+<script is:inline>
+  (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
+    basicSubscriptions.init({
+      type: "NewsArticle",
+      isPartOfType: ["Product"],
+      isPartOfProductId: "CAow3NjGDA:openaccess",
+      clientOptions: { theme: "dark", lang: "en" },
+    });
+  });
+</script>
   </body>
 </html>
