@@ -143,16 +143,8 @@ const lang = "en-US"
       }
     </main>
     <Search />
-    <script is:inline>
-      ezstandalone.cmd.push(function () {
-        ezstandalone.showAds(101);
-      });
-    </script>
     <YandexAds />
     {footer && <Footer />}
-    <div id="modal-root"></div>
-    <MobileMenu />
-    <ScrollScript />
     <script is:inline>
       window.yaContextCb.push(() => {
         Ya.Context.AdvManager.render({
@@ -163,13 +155,12 @@ const lang = "en-US"
       })
     </script>
     <script is:inline>
-      window.yaContextCb.push(() => {
-        Ya.Context.AdvManager.render({
-          "blockId": "R-A-19179231-7",
-          "renderTo": "yandex_rtb_R-A-19179231-7",
-          "type": "feed"
-        })
-      })
+      ezstandalone.cmd.push(function () {
+        ezstandalone.showAds(101);
+      });
     </script>
+    <div id="modal-root"></div>
+    <MobileMenu />
+    <ScrollScript />
   </body>
 </html>
