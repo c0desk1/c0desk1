@@ -22,7 +22,6 @@ import remarkBanner from './src/lib/mdx/remark-banner.ts';
 // https://astro.build/config
 export default defineConfig({
   site: siteConfig.siteUrl,
-  trailingSlash: "always",
   vite: {
     plugins: [tailwindcss()]
   },
@@ -41,7 +40,7 @@ export default defineConfig({
           item.changefreq = ChangeFreqEnum.WEEKLY;
           item.priority = 0.8;
         }
-        if (item.url === 'https://c0desk1.my.id/') {
+        if (item.url === 'https://c0desk1.my.id') {
           item.changefreq = ChangeFreqEnum.DAILY;
           item.priority = 1.0;
         }
@@ -51,7 +50,7 @@ export default defineConfig({
     mdx(), 
     react()
   ],
-   markdown: {
+  markdown: {
     remarkPlugins: [
       remarkHeading,
       remarkCallout,
@@ -100,7 +99,7 @@ export default defineConfig({
     }
   ],
   image: {
-    domains: ["cdn.c0desk1.my.id", "play-lh.googleusercontent.com", "avatars.githubusercontent.com"],
+    domains: ["cdn.c0desk1.my.id", "play-lh.googleusercontent.com", "avatars.githubusercontent.com", "next.nexusmods.com"],
     remotePatterns: [{ protocol: "https" }],
     service: passthroughImageService()
   },
