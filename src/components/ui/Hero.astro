@@ -86,11 +86,16 @@ if (typeof bgImage === 'string') {
 </section>
 
 <style is:global>
-  .inline-flex.items-center.gap-2.px-3.py-1.5.rounded-full {
+  .noise-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 9999px;
     position: relative;
     overflow: hidden;
   }
-  .inline-flex.items-center.gap-2.px-3.py-1.5.rounded-full::before {
+  .noise-pill::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -102,7 +107,7 @@ if (typeof bgImage === 'string') {
     mix-blend-mode: overlay;
   }
   @media (prefers-reduced-motion: no-preference) {
-    .inline-flex.items-center.gap-2.px-3.py-1.5.rounded-full::before {
+    .noise-pill::before {
       animation: grain 8s steps(10) infinite;
     }
   }
