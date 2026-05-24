@@ -2,7 +2,6 @@
 
 .prose-custom .callout {
   display: flex;
-  align-items: flex-start;
   gap: 0.75rem;
   margin: 1.5rem 0;
   padding: 1rem;
@@ -13,41 +12,27 @@
 
 .prose-custom .callout-body {
   display: flex;
-  gap: 0.75rem;
-  flex: 1;
-  min-width: 0;
   align-items: flex-start;
+  gap: 0.75rem;
+  justify-content: center;
 }
 
 .prose-custom .callout-icon {
-  display: flex;
+  position: relative;
   flex-shrink: 0;
-  line-height: 1;
-  
-}
-
-.prose-custom .callout-icon svg {
-  display: block;
-  width: 1rem;
-  height: 1rem;
-  transform: translateY(4px);
 }
 
 .prose-custom .callout-content {
   flex: 1;
-  color: inherit;
+  min-width: 0;
 }
 
-.prose-custom .callout-content > *:last-child,
 .prose-custom .callout-content > *:first-child {
   margin-top: 0 !important;
-  padding-top: 0 !important;
 }
 
-.prose-custom .callout-content p:last-child,
-.prose-custom .callout-content ul:last-child,
-.prose-custom .callout-content ol:last-child {
-  margin-bottom: 0;
+.prose-custom .callout-content > *:last-child {
+  margin-bottom: 0 !important;
 }
 
 .prose-custom .callout-content p,
@@ -56,11 +41,11 @@
 .prose-custom .callout-content li,
 .prose-custom .callout-content small,
 .prose-custom .callout-content mark {
+  margin-top: 0 !important;
   color: inherit;
 }
 
 .prose-custom .callout-content strong {
-  font-weight: 600;
   color: var(--prose-fg-strong);
 }
 
@@ -231,11 +216,5 @@
 @media (min-width: 48rem) {
   .prose-custom .callout {
     margin: 2.5rem 0;
-  }
-
-  .prose-custom .callout-icon svg {
-    width: 1.125rem;
-    height: 1.125rem;
-    transform: translateY(4px);
   }
 }
