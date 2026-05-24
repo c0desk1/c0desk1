@@ -10,6 +10,7 @@ interface Props {
 }
 
 const { class: className } = Astro.props;
+
 const siteURL = (Astro.site?.toString() ?? siteConfig.siteUrl).replace(/\/$/, "");
 const rssURL = `${siteURL}/rss.xml`;
 ---
@@ -20,23 +21,19 @@ const rssURL = `${siteURL}/rss.xml`;
       <Icon name="rss" className="w-5 h-5" />
     </div>
     <div class="flex-1 min-w-0">
-      <span class="text-heading-16 font-semibold text-(--fg) text-balance">Subscribe via RSS</span>
-      <p class="text-copy-14 text-muted mt-0.5 hidden sm:inline text-pretty">Get new posts delivered to your reader automatically.</p>
+      <h4 class="text-heading-16 font-semibold text-(--fg)">
+        Subscribe via RSS
+      </h4>
+      <p class="text-copy-14 text-muted mt-0.5 hidden sm:inline">
+        Get new posts delivered to your reader automatically.
+      </p>
     </div>
     <div class="flex items-center shrink-0">
-      <a
-        href={rssURL}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Open RSS feed"
-        class="inline-block">
-        <Button
-          variant="primary"
-          size="md"
-          class="text-button-14 whitespace-nowrap">
-          Open
-        </Button>
-      </a>
+      <Button variant="primary" class="text-button-14" size="sm">
+        <a href={rssURL} target="_blank" rel="noopener noreferrer" class="whitespace-nowrap" aria-label="Open RSS feed">
+          Open feed
+        </a>
+      </Button>
     </div>
   </div>
 </div>

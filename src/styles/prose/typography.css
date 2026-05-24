@@ -49,12 +49,12 @@
   position:relative;
 }
 
-.prose-custom p{
+.prose-custom p {
   @apply text-pretty;
   margin-bottom:1.25rem;
 }
 
-.prose-custom strong{
+.prose-custom strong {
   font-weight:600;
   color:var(--prose-fg-strong);
 }

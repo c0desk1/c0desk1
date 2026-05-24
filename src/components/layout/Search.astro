@@ -32,8 +32,8 @@ const searchData = await Promise.all(
     const nameObj = categoryEntry?.data?.name as Record<string, string> | undefined;
     const categoryName = nameObj;
 
-    const autoSlug = slugify(post.data.title);
-    const url = `/blog/${autoSlug}/`;
+    const autoSlug = post.data.slug || slugify(post.data.title);
+    const url = `/blog/${autoSlug}`;
 
     return {
       id: post.id,
@@ -375,7 +375,6 @@ const scriptLabels = {
       if (countEl) countEl.textContent = "";
     };
 
-    /* ── Open / close */
     const openModal = () => {
       prevFocus = document.activeElement;
       modal.style.display = "block";
@@ -405,7 +404,6 @@ const scriptLabels = {
       }, 200);
     };
 
-    /* ── Events */
     document.addEventListener("open-search", openModal);
     backdrop.addEventListener("click", closeModal);
     closeMobile?.addEventListener("click", closeModal);
@@ -468,7 +466,6 @@ const scriptLabels = {
       items[activeIdx]?.scrollIntoView({ block: "nearest" });
     });
 
-    /* ── URL param */
     document.addEventListener("DOMContentLoaded", () => {
       const q = new URLSearchParams(window.location.search).get("q");
       if (!q) return;

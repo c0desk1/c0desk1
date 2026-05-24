@@ -22,7 +22,7 @@ if (post) {
 
   const categoryEntry = await getEntry(category);
   const authorEntry   = author ? await getEntry(author) : null;
-  const autoSlug = slugify(t);
+  const autoSlug = post.data.slug || slugify(t);
 
   title = t;
   excerpt = generateExcerpt(post.body || '', 140);
@@ -34,7 +34,7 @@ if (post) {
   optimizedAvatar = isCdnUrl(authorAvatar)
     ? cdnImage(authorAvatar, { w: 48, h: 48, q: 80 })
     : authorAvatar;
-  postUrl = `/blog/${autoSlug}/`;
+  postUrl = `/blog/${autoSlug}`;
 }
 ---
 

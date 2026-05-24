@@ -179,7 +179,7 @@ const stack = [
   }
 </style>
 
-<script>
+<script is:inline>
   document.addEventListener('DOMContentLoaded', () => {
     const ccpaLink = document.getElementById('ezoic-ccpa-optout');
     if (ccpaLink) {
@@ -191,7 +191,7 @@ const stack = [
           window.__cmpUi.show();
         } else {
           console.warn('Ezoic CMP not ready yet');
-          window.location.href = '/privacy-policy/';
+          window.location.href = '/privacy-policy';
         }
       });
     }

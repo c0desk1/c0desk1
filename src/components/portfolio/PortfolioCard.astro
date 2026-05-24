@@ -18,8 +18,8 @@ const {
 
 const excerpt = generateExcerpt(project.body || '', 140);
 const formattedDate = formatDateCompact(pubDate);
-const autoSlug = slugify(title);
-const postUrl = `/portfolio/${autoSlug}/`;
+const autoSlug = project.data.slug || slugify(title);
+const postUrl = `/portfolio/${autoSlug}`;
 const siteData = siteConfig
 
 const perfLabel = siteData.p_perf;

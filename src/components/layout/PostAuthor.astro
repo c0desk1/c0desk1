@@ -24,7 +24,7 @@ const authorTitle = role || siteConfig.author.role || authorLabel;
 const authorSlug = slug || siteConfig.author?.slug || "author";
 
 const optimizedAvatar = isCdnUrl(authorAvatar)? cdnImage(authorAvatar, { w: 40, h: 40, q: 80 }) : authorAvatar;
-const authorPath = `/author/${authorSlug}/`;
+const authorPath = `/author/${authorSlug}`;
 ---
 
 <div class="flex w-full justify-center gap-2">

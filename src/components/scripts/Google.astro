@@ -46,24 +46,8 @@ const ADSENSE_ENABLED = siteConfig.googleAdsenseEnabled ?? true;
       document.head.appendChild(script);
     };
 
-    const startLoading = () => {
-      loadGtag();
-      loadAdsense();
-    };
-    const hasConsent = () => {
-      if (window.ezConsent && typeof window.ezConsent.getConsentStatus === 'function') {
-        const ad = window.ezConsent.getConsentStatus('ad_storage');
-        const ana = window.ezConsent.getConsentStatus('analytics_storage');
-        return ad === 'granted' || ana === 'granted';
-      }
-      return false;
-    };
-    if (hasConsent()) {
-      startLoading();
-    } else {
-      document.addEventListener('ezconsent', () => {
-        if (hasConsent()) startLoading();
-      }, { once: true });
-    }
+    // Langsung muat tanpa menunggu consent (Ezoic CMP yang akan memblokir jika perlu)
+    loadGtag();
+    loadAdsense();
   })();
 </script>

@@ -63,7 +63,7 @@ const {
 // ─── Helpers
 
 const rawSiteURL = Astro.site?.toString() ?? siteConfig.siteUrl;
-const siteURL = rawSiteURL.endsWith("/") ? rawSiteURL : `${rawSiteURL}/`;
+const siteURL = rawSiteURL.endsWith("/") ? rawSiteURL.slice(0, -1) : rawSiteURL;
 const seoResolved = {
   title:
     seo?.title ??
@@ -118,12 +118,12 @@ const schemaGraph: any[] = [];
 // 1. Organization
 schemaGraph.push({
   "@type": "Organization",
-  "@id": `${siteURL}#organization`,
+  "@id": `${siteURL}/#organization`,
   name: siteConfig.siteName,
   url: siteURL,
   logo: {
     "@type": "ImageObject",
-    "@id": `${siteURL}#logo`,
+    "@id": `${siteURL}/#logo`,
     url: new URL(siteConfig.siteLogo, siteURL).toString(),
     width: 512,
     height: 512,
@@ -133,16 +133,16 @@ schemaGraph.push({
 // 2. WebSite
 schemaGraph.push({
   "@type": "WebSite",
-  "@id": `${siteURL}#website`,
+  "@id": `${siteURL}/#website`,
   url: siteURL,
   name: siteConfig.siteName,
-  publisher: { "@id": `${siteURL}#organization` },
+  publisher: { "@id": `${siteURL}/#organization` },
   potentialAction: [
     {
       "@type": "SearchAction",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: `${siteURL}search?q={search_term_string}`,
+        urlTemplate: `${siteURL}/search?q={search_term_string}`,
       },
       "query-input": "required name=search_term_string",
     },
@@ -152,7 +152,7 @@ schemaGraph.push({
 // 3. Person
 schemaGraph.push({
   "@type": "Person",
-  "@id": `${siteURL}#person`,
+  "@id": `${siteURL}/#person`,
   name: activeAuthor.name,
   jobTitle: activeAuthor.role,
   description: activeAuthor.bio,
@@ -164,8 +164,8 @@ schemaGraph.push({
     width: 400,
     height: 400,
   },
-  url: new URL(`author/${activeAuthor.slug}/`, siteURL).toString(),
-  worksFor: { "@id": `${siteURL}#organization` },
+  url: new URL(`author/${activeAuthor.slug}`, siteURL).toString(),
+  worksFor: { "@id": `${siteURL}/#organization` },
 });
 
 // 4. WebPage
@@ -175,7 +175,7 @@ schemaGraph.push({
   url: seoResolved.canonical.toString(),
   name: formattedTitle,
   description: seoResolved.description,
-  isPartOf: { "@id": `${siteURL}#website` },
+  isPartOf: { "@id": `${siteURL}/#website` },
   ...(!isHomepage && { breadcrumb: { "@id": `${seoResolved.canonical}#breadcrumb` } }),
   inLanguage: "en-US",
   ...(datePublished && { datePublished }),
@@ -194,7 +194,7 @@ if (!isHomepage) {
       "@type": "ListItem",
       position: breadcrumbItems.length + 1,
       name: "Blog",
-      item: new URL("blog/", siteURL).toString(),
+      item: new URL("blog", siteURL).toString(),
     });
   }
 
@@ -203,7 +203,7 @@ if (!isHomepage) {
       "@type": "ListItem",
       position: breadcrumbItems.length + 1,
       name: "Portfolio",
-      item: new URL("portfolio/", siteURL).toString(),
+      item: new URL("portfolio", siteURL).toString(),
     });
   }
 
@@ -212,7 +212,7 @@ if (!isHomepage) {
       "@type": "ListItem",
       position: breadcrumbItems.length + 1,
       name: "Authors",
-      item: new URL("author/", siteURL).toString(),
+      item: new URL("author", siteURL).toString(),
     });
   }
 
@@ -221,7 +221,7 @@ if (!isHomepage) {
       "@type": "ListItem",
       position: breadcrumbItems.length + 1,
       name: category.name,
-      item: new URL(`blog/category/${category.slug}/`, siteURL).toString(),
+      item: new URL(`blog/category/${category.slug}`, siteURL).toString(),
     });
   }
 
@@ -246,8 +246,8 @@ if (type === "article") {
     "@id": `${seoResolved.canonical}#article`,
     headline: seoResolved.title,
     description: seoResolved.description,
-    author: { "@id": `${siteURL}#person` },
-    publisher: { "@id": `${siteURL}#organization` },
+    author: { "@id": `${siteURL}/#person` },
+    publisher: { "@id": `${siteURL}/#organization` },
     datePublished,
     dateModified,
     image: {
@@ -274,11 +274,11 @@ if (type === "creativeWork") {
     image: { "@type": "ImageObject", url: ogImageURL },
     ...(datePublished && { dateCreated: datePublished }),
     ...(dateModified && { dateModified }),
-    author: { "@id": `${siteURL}#person` },
-    creator: { "@id": `${siteURL}#person` },
-    publisher: { "@id": `${siteURL}#organization` },
+    author: { "@id": `${siteURL}/#person` },
+    creator: { "@id": `${siteURL}/#person` },
+    publisher: { "@id": `${siteURL}/#organization` },
     keywords: tags.join(", "),
-    isPartOf: { "@id": `${siteURL}#website` },
+    isPartOf: { "@id": `${siteURL}/#website` },
     mainEntityOfPage: { "@id": `${seoResolved.canonical}#webpage` },
     inLanguage: "en-US",
     ...(client && { provider: { "@type": "Organization", name: client } }),
@@ -286,7 +286,7 @@ if (type === "creativeWork") {
       contributor: {
         "@type": "Role",
         roleName: creativeWorkRole,
-        person: { "@id": `${siteURL}#person` },
+        person: { "@id": `${siteURL}/#person` },
       },
     }),
     ...(duration && { timeRequired: duration }),

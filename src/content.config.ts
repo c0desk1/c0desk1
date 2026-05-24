@@ -26,6 +26,7 @@ const authors = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{json,md}", base: "./src/content/authors" }),
   schema: z.object({
     name: z.string(),
+    slug: z.string().optional(),
     role: z.string().optional(),
     avatar: z.string().optional(),
     bio: z.string().optional(),
@@ -37,6 +38,7 @@ const categories = defineCollection({
   loader: glob({ pattern: '**/[^_]*.json', base: './src/content/categories' }),
   schema: z.object({
     name: z.string(),
+    slug: z.string().optional(),
     description: z.string(),
   }),
 });
@@ -45,6 +47,7 @@ const blog = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/blog" }),
   schema: z.object({
     title: z.string(),
+    slug: z.string().optional(),
     description: z.string(),
     image: z.object({
       src: z.string(),
@@ -64,6 +67,7 @@ const portfolio = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/portfolio" }),
   schema: z.object({
     title: z.string(),
+    slug: z.string().optional(),
     description: z.string(),
     image: z.object({
       src: z.string(),
@@ -93,6 +97,7 @@ const legal = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/legal" }),
   schema: z.object({
     title: z.string(),
+    slug: z.string().optional(),
     description: z.string().optional(),
     lastUpdated: z.coerce.date().optional(),
     seo: seoSchema.optional(),

@@ -10,8 +10,8 @@ interface Props {
 
 const { prevPost, nextPost } = Astro.props;
 
-const prevUrl = prevPost ? `/blog/${slugify(prevPost.data.title)}/` : null;
-const nextUrl = nextPost ? `/blog/${slugify(nextPost.data.title)}/` : null;
+const prevUrl = prevPost ? `/blog/${prevPost.data.slug || slugify(prevPost.data.title)}` : null;
+const nextUrl = nextPost ? `/blog/${nextPost.data.slug || slugify(nextPost.data.title)}` : null;
 ---
 
 {(prevPost || nextPost) && (
