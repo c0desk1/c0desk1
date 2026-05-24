@@ -226,36 +226,18 @@ const ADS_ENABLED = siteConfig.yandexAdsEnabled ?? true;
       }
     }
 
-    const hasConsent = () => {
-      if (window.ezConsent && typeof window.ezConsent.getConsentStatus === 'function') {
-        const ad = window.ezConsent.getConsentStatus('ad_storage');
-        const ana = window.ezConsent.getConsentStatus('analytics_storage');
-        return ad === 'granted' || ana === 'granted';
-      }
-      return false;
-    };
-
-    const start = () => {
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", initAll);
-      } else {
-        initAll();
-      }
-    };
-
-    if (hasConsent()) {
-      start();
+    // Langsung inisialisasi ketika DOM sudah siap
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initAll);
     } else {
-      document.addEventListener('ezconsent', () => {
-        if (hasConsent()) start();
-      }, { once: true });
+      initAll();
     }
 
     document.addEventListener("astro:page-load", () => {
       window.__yandexAdsInitialized = false;
       window.__yandexMetricaInitialized = false;
       initialized = false;
-      if (hasConsent()) start();
+      initAll();
     });
   })();
 </script>
