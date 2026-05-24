@@ -23,61 +23,38 @@ const remarkSteps: Plugin<[], Root> = () => {
 
         let j = i + 1;
         let closeIndex = -1;
-        let keepCloseNode = false;
 
         while (j < children.length) {
           const closeNode = children[j];
-          if (closeNode.type !== 'paragraph') {
-            j++;
-            continue;
-          }
-
-          const textNodes = closeNode.children.filter(
-            (c): c is { type: 'text'; value: string } => c.type === 'text'
-          );
-          const lastTextNode = textNodes[textNodes.length - 1] as any;
-          if (!lastTextNode) {
-            j++;
-            continue;
-          }
-
-          const val: string = lastTextNode.value.replace(/\r/g, '');
-          if (textNodes.length === 1 && /^:::\s*$/.test(val)) {
-            closeIndex = j;
-            keepCloseNode = false;
-            break;
-          }
-
-          const suffixMatch = val.match(/\n:::\s*$/);
-          if (suffixMatch) {
-            const beforeSuffix = val.substring(0, suffixMatch.index!);
-            if (beforeSuffix.trim().length > 0) {
-              lastTextNode.value = beforeSuffix;
+          if (
+            closeNode.type === 'paragraph' &&
+            closeNode.children.length === 1 &&
+            closeNode.children[0].type === 'text'
+          ) {
+            const val = (closeNode.children[0] as any).value.replace(/\r/g, '');
+            if (/^:::\s*$/.test(val)) {
               closeIndex = j;
-              keepCloseNode = true;
-            } else {
-              closeIndex = j;
-              keepCloseNode = false;
+              break;
             }
-            break;
           }
-
           j++;
         }
+
         if (closeIndex === -1) {
           i++;
           continue;
         }
-        const end = keepCloseNode ? closeIndex + 1 : closeIndex;
-        const innerNodes = children.slice(i + 1, end);
-        const deleteCount = end - i;
+
+        const innerNodes = children.slice(i + 1, closeIndex);
+
         const mdxNode: any = {
           type: 'mdxJsxFlowElement',
           name: 'Steps',
           attributes: [],
           children: innerNodes,
         };
-        children.splice(i, deleteCount, mdxNode);
+
+        children.splice(i, closeIndex - i + 1, mdxNode);
         i += 1;
         continue;
       }
