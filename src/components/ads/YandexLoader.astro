@@ -1,9 +1,34 @@
 ---
 // src/components/ads/YandexLoader.astro
 ---
-{import.meta.env.PROD && (
-    <>
-        <script>window.yaContextCb=window.yaContextCb||[]</script>
-        <script src="https://yandex.ru/ads/system/context.js" async></script>
-    </>
-)}
+
+<script is:inline>
+  (() => {
+    const hasConsent = () => {
+      if (window.ezConsent && typeof window.ezConsent.getConsentStatus === 'function') {
+        const ad = window.ezConsent.getConsentStatus('ad_storage');
+        const ana = window.ezConsent.getConsentStatus('analytics_storage');
+        return ad === 'granted' || ana === 'granted';
+      }
+      return false;
+    };
+
+    const loadYandex = () => {
+      if (document.getElementById('yandex-context-script')) return;
+      window.yaContextCb = window.yaContextCb || [];
+      const script = document.createElement('script');
+      script.id = 'yandex-context-script';
+      script.src = 'https://yandex.ru/ads/system/context.js';
+      script.async = true;
+      document.head.appendChild(script);
+    };
+
+    if (hasConsent()) {
+      loadYandex();
+    } else {
+      document.addEventListener('ezconsent', () => {
+        if (hasConsent()) loadYandex();
+      }, { once: true });
+    }
+  })();
+</script>
