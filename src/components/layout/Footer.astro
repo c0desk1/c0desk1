@@ -114,10 +114,9 @@ const stack = [
             &copy; {new Date().getFullYear()} {siteData.siteName}
           </p>
           <a
-            href="#"
+            href="/privacy-policy"
             id="ezoic-ccpa-optout"
-            class="text-copy-13 text-muted hover:text-(--fg) transition-colors"
-          >
+            class="text-copy-13 text-muted hover:text-(--fg) transition-colors">
             Do Not Sell or Share My Personal Information
           </a>
         </div>
@@ -190,7 +189,6 @@ const stack = [
         } else if (window.__cmpUi && typeof window.__cmpUi.show === 'function') {
           window.__cmpUi.show();
         } else {
-          console.warn('Ezoic CMP not ready yet');
           window.location.href = '/privacy-policy';
         }
       });
