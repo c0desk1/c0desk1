@@ -15,8 +15,12 @@
   @apply text-heading-16;
 }
 .prose-custom .steps-content ul,
+.prose-custom .steps-content ol,
 .prose-custom .steps-content p {
   @apply text-copy-14;
+}
+.prose-custom .steps-content .full-width-figure {
+  width: auto;
 }
 @media (min-width: 1024px) {
   .prose-custom .steps-content h2,
@@ -25,7 +29,12 @@
     @apply text-heading-20;
   }
   .prose-custom .steps-content ul,
+  .prose-custom .steps-content ol,
   .prose-custom .steps-content p {
     @apply text-copy-16;
+  }
+
+  .prose-custom .steps-content .full-width-figure {
+    width: auto;
   }
 }
