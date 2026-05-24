@@ -131,8 +131,9 @@ const siteData = siteConfig;
   <body>
     <a href="#main-content" class="sr-only text-copy-16 md:text-copy-18 focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:bg-(--bg) focus:text-(--fg) focus:px-4 focus:py-2 focus:border focus:border-(--border)">
       {siteConfig.skipToContent}
-    </a>
+    </a>   
     {header && <Header />}
+    <YandexAds />
     <main id="main-content">
       {withContainer? (
         <Container size={size}>
@@ -144,7 +145,6 @@ const siteData = siteConfig;
       }
     </main>
     <Search />
-    <YandexAds />
     {footer && <Footer />}
     <script is:inline>
       window.yaContextCb.push(() => {
