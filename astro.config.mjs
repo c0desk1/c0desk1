@@ -51,15 +51,15 @@ export default defineConfig({
     mdx(), 
     react()
   ],
-  markdown: {
+   markdown: {
     remarkPlugins: [
       remarkHeading,
-      remarkCallout, 
-      remarkBlockquoteAuthor,
+      remarkCallout,
       remarkDetails,
-      remarkSteps,
       remarkTimeline,
       remarkChangelog,
+      remarkSteps,
+      remarkBlockquoteAuthor,
       remarkBadge,
       remarkKbd,
       remarkCodeBlock,
