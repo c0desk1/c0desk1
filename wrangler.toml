@@ -3,6 +3,7 @@ compatibility_date = "2026-05-08"
 
 [assets]
 directory = "./dist"
+html_handling = "drop-trailing-slash"
 
 [vars]
 API_URL = "https://api.c0desk1.my.id/"
