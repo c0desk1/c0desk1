@@ -208,9 +208,13 @@ const ADS_ENABLED = siteConfig.yandexAdsEnabled ?? true;
       });
     }
 
+    let initialized = false;
     function initAll() {
+      if (initialized) return;
+      initialized = true;
       if (ADS_ON && !window.__yandexAdsInitialized) {
         window.__yandexAdsInitialized = true;
+        renderFloorTouch();
         renderFullscreen();
         renderTopAd();
         renderFloorDesktop();
@@ -222,16 +226,36 @@ const ADS_ENABLED = siteConfig.yandexAdsEnabled ?? true;
       }
     }
 
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initAll);
+    const hasConsent = () => {
+      if (window.ezConsent && typeof window.ezConsent.getConsentStatus === 'function') {
+        const ad = window.ezConsent.getConsentStatus('ad_storage');
+        const ana = window.ezConsent.getConsentStatus('analytics_storage');
+        return ad === 'granted' || ana === 'granted';
+      }
+      return false;
+    };
+
+    const start = () => {
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initAll);
+      } else {
+        initAll();
+      }
+    };
+
+    if (hasConsent()) {
+      start();
     } else {
-      initAll();
+      document.addEventListener('ezconsent', () => {
+        if (hasConsent()) start();
+      }, { once: true });
     }
 
     document.addEventListener("astro:page-load", () => {
       window.__yandexAdsInitialized = false;
       window.__yandexMetricaInitialized = false;
-      initAll();
+      initialized = false;
+      if (hasConsent()) start();
     });
   })();
 </script>
