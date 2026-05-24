@@ -1,7 +1,5 @@
 ---
-// src/pages/[...locale]/portfolio/[...slug].astro
-export const prerender = true;
-
+// src/pages/portfolio/[slug].astro
 import "@/styles/prose/index.css";
 
 import { getCollection, render } from "astro:content";
@@ -36,6 +34,8 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const data = project.data;
+
+const articleLang = data.lang || 'en';
 
 const {
   title,
@@ -88,6 +88,7 @@ const Breadcrumbs = [
 ---
 
 <BaseLayout
+  lang={articleLang}
   title={seoTitle}
   description={seoDescription}
   image={seoImage}
