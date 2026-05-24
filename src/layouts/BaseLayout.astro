@@ -12,6 +12,9 @@ import MobileMenu from "@/components/layout/MobileMenu.astro";
 import Search from "@/components/layout/Search.astro";
 import ScrollScript from "@/components/scripts/ScrollScript.astro";
 
+import YandexLoader from "@/components/ads/YandexLoader.astro";
+import YandexAds from "@/components/ads/YandexAds.astro";
+
 interface Props {
   title?: string;
   description?: string;
@@ -122,6 +125,7 @@ const lang = "en-US"
     <script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
     <script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
     <script is:inline src="//ezoicanalytics.com/analytics.js"></script>
+    <YandexLoader />
   </head>
   <body>
     <a href="#main-content" class="sr-only text-copy-16 md:text-copy-18 focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:bg-(--bg) focus:text-(--fg) focus:px-4 focus:py-2 focus:border focus:border-(--border)">
@@ -144,6 +148,7 @@ const lang = "en-US"
       });
     </script>
     <Search />
+    <YandexAds />
     {footer && <Footer />}
     <div id="modal-root"></div>
     <MobileMenu />
