@@ -13,8 +13,7 @@ const ADS_ENABLED = siteConfig.yandexAdsEnabled ?? true;
   style="display:none"
   data-pub-id={YA_PUB_ID}
   data-metrica-id={YA_METRICA_ID}
-  data-ads-enabled={String(ADS_ENABLED)}
-></div>
+  data-ads-enabled={String(ADS_ENABLED)}></div>
 
 <script is:inline>
   (() => {
@@ -25,7 +24,6 @@ const ADS_ENABLED = siteConfig.yandexAdsEnabled ?? true;
 
     const DELAY = {
       floorAd: 3000,
-      inImage: 3500,
       fullscreen: 8000,
       topAd: 1500,
       banner: 2500,
@@ -60,53 +58,6 @@ const ADS_ENABLED = siteConfig.yandexAdsEnabled ?? true;
     }
 
     // Ads functions
-    function renderFloorTouch() {
-      if (!isTouchDevice()) return;
-      afterDelay(DELAY.floorAd, () => {
-        waitForYa(() => {
-          window.yaContextCb.push(() => {
-            Ya.Context.AdvManager.render({
-              blockId: `${PUB_ID}-1`,
-              type: "floorAd",
-              platform: "touch",
-            });
-          });
-        });
-      });
-    }
-
-    function renderInImage() {
-      afterDelay(DELAY.inImage, () => {
-        waitForYa(() => {
-          const render = (imageId) => {
-            window.yaContextCb.push(() => {
-              Ya.Context.AdvManager.render({
-                renderTo: imageId,
-                blockId: `${PUB_ID}-2`,
-                type: "inImage",
-              });
-            });
-          };
-          const tryImages = (images) => {
-            if (!images.length) return;
-            const image = images.shift();
-            const { width, height } = image.getBoundingClientRect();
-            if (width < 375 || height < 196) {
-              return tryImages(images);
-            }
-            image.id = `yandex_rtb_${PUB_ID}-2-${Math.random().toString(16).slice(2)}`;
-            if (image.tagName === "IMG" && !image.complete) {
-              image.addEventListener("load", () => render(image.id), { once: true });
-            } else {
-              render(image.id);
-            }
-            tryImages(images);
-          };
-          tryImages(Array.from(document.querySelectorAll("img")));
-        });
-      });
-    }
-
     function renderFullscreen() {
       if (!isTouchDevice()) return;
       afterDelay(DELAY.fullscreen, () => {
@@ -205,7 +156,6 @@ const ADS_ENABLED = siteConfig.yandexAdsEnabled ?? true;
       initialized = true;
       if (ADS_ON && !window.__yandexAdsInitialized) {
         window.__yandexAdsInitialized = true;
-        //renderFloorTouch();
         renderFullscreen();
         renderTopAd();
         renderFloorDesktop();
