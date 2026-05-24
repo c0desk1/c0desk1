@@ -111,8 +111,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
     bio: authorEntry?.data.bio ?? siteConfig.author.bio,
     slug: authorEntry?.id ?? siteConfig.author.slug,
   }}
-  canonicalURL={canonicalURL}>
-  
+  canonicalURL={canonicalURL}>  
   <Section size="none" class="relative z-0">
     <BG spacing={16} dotSize={0.8} opacity={0.1} />
     <Section size="sm" class="relative z-10">
@@ -152,7 +151,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
       <Section size="sm">
       <Container size="lg">
         <div class="flex items-center gap-2 justify-center">
-          <h5 class="text-label-16 text-(--fg)">Share this article: </h2>
+          <span class="text-label-16 text-(--fg)">Share this article: </span>
           <SharePost url={canonicalURL} title={title} description={description} />
         </div>
       </Container>
@@ -165,9 +164,4 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
     </Section>
   </Section>
   <BackToTop />
-  <script is:inline>
-    ezstandalone.cmd.push(function () {
-      ezstandalone.showAds(101);
-    });
-  </script>
 </BaseLayout>
