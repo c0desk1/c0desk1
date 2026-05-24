@@ -1,6 +1,10 @@
 /* src/styles/prose/components/misc.css */
 @reference '@/styles/utilities/index.css';
 
+time {
+  @apply text-numeric-16;
+}
+
 .prose-custom sup,
 .prose-custom sub{
   vertical-align:baseline;
@@ -190,6 +194,10 @@
 }
 
 @media (max-width: 767px) {
+  time {
+    @apply text-numeric-14;
+  }
+
   .prose-custom sup,
   .prose-custom sub{
     @apply text-numeric-14;
@@ -273,4 +281,5 @@
   .prose-custom samp {
     @apply text-code-14;
   }
+
 }
