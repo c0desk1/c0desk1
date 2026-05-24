@@ -1,7 +1,5 @@
 ---
 // src/pages/[slug].astro
-export const prerender = true;
-
 import '@/styles/prose/index.css';
 
 import { getCollection, render } from 'astro:content';
@@ -32,9 +30,12 @@ export async function getStaticPaths() {
 }
 
 const { page } = Astro.props;
+
 if (!page) return Astro.redirect('/404');
 
 const { Content } = await render(page);
+
+const articleLang = page.data.lang || 'en';
 
 const siteData = siteConfig;
 const siteURL = Astro.site?.toString()?? siteData.siteUrl;
@@ -58,11 +59,12 @@ const formattedLastUpdated = page.data.lastUpdated
 ---
 
 <BaseLayout
+  lang={articleLang}
   title={seoTitle}
   description={seoDescription}
   type="website"
   canonicalURL={canonicalURL}>
-  <div class="relative grid grid-cols-1 rounded-xl border border-(--border) max-w-4xl mx-auto">
+  <div class="relative grid grid-cols-1 rounded-xl border border-(--border) max-w-4xl mx-auto z-20">
     <Section size="sm">
       <Container size="md">
         <Section size="sm">
