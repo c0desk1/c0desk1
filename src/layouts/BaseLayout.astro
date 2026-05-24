@@ -11,7 +11,7 @@ import Container from "@/components/ui/Container.astro";
 import MobileMenu from "@/components/layout/MobileMenu.astro";
 import Search from "@/components/layout/Search.astro";
 import ScrollScript from "@/components/scripts/ScrollScript.astro";
-
+import Google from "@/components/scripts/Google.astro";
 import YandexLoader from "@/components/ads/YandexLoader.astro";
 import YandexAds from "@/components/ads/YandexAds.astro";
 
@@ -125,6 +125,7 @@ const lang = "en-US"
     <script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
     <script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
     <script is:inline src="//ezoicanalytics.com/analytics.js"></script>
+    <Google />
     <YandexLoader />
   </head>
   <body>
