@@ -1,9 +1,9 @@
 ---
 // src/components/blog/PostCard.astro
 import { getEntry, type CollectionEntry  } from 'astro:content';
-import { siteConfig } from '@/config/site';
 import { generateExcerpt, formatDateCompact, cdnImage, isCdnUrl, slugify } from '@/lib/utils';
 import { Image } from 'astro:assets';
+import { siteConfig } from '@/config/site';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -58,8 +58,9 @@ if (post) {
             alt={`${siteData.avatarOf} ${authorName}`}
             width={48}
             height={48}
-            loading='eager'
+            loading='lazy'
             decoding='async'
+            fetchpriority='low'
             class="h-full w-full object-cover"
           />
         </div>
