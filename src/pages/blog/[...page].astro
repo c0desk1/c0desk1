@@ -1,7 +1,5 @@
 ---
 //src/pages/blog/[...page].astro
-export const prerender = true;
-
 import type { GetStaticPathsOptions, Page } from "astro";
 import { getCollection, type CollectionEntry } from "astro:content";
 import { getPageNums, getPageUrl, sortByDate } from "@/lib/utils";
