@@ -1,5 +1,5 @@
 // src/plugins/remark-callout.ts
-import type { Root } from 'mdast';
+import type { Root, Paragraph, Text } from 'mdast';
 import type { Plugin } from 'unified';
 
 const remarkCallout: Plugin<[], Root> = () => {
@@ -14,29 +14,35 @@ const remarkCallout: Plugin<[], Root> = () => {
         continue;
       }
 
-      const textNodes = node.children.filter(
-        (c): c is { type: 'text'; value: string } => c.type === 'text'
+      const para = node as Paragraph;
+      const textNodes = para.children.filter(
+        (c): c is Text => c.type === 'text'
       );
       if (textNodes.length === 0) {
         i++;
         continue;
       }
 
-      const fullText = textNodes.map(t => t.value).join('').replace(/\r/g, '');
+      let fullText = '';
+      const allTextNodes: Text[] = [];
+      for (const child of para.children) {
+        if (child.type === 'text') {
+          fullText += child.value;
+          allTextNodes.push(child as Text);
+        } else {
+          fullText += '\0';
+        }
+      }
+      fullText = fullText.replace(/\r/g, '');
 
-      // Cek apakah paragraf dimulai dengan :::[!type]
       const calloutMatch = fullText.match(/^:::\s*\[!([^\]]+)\]/);
       if (!calloutMatch) {
         i++;
         continue;
       }
-
       const calloutType = calloutMatch[1];
-      let restText = '';
 
-      // Kasus 1: Paragraf hanya berisi :::[!type] (pembuka mandiri)
       if (/^:::\s*\[!([^\]]+)\]\s*$/.test(fullText)) {
-        // Cari penutup ::: mulai dari i+1
         let j = i + 1;
         let closeIndex = -1;
         let keepCloseNode = false;
@@ -49,9 +55,9 @@ const remarkCallout: Plugin<[], Root> = () => {
           }
 
           const closeTextNodes = closeNode.children.filter(
-            (c): c is { type: 'text'; value: string } => c.type === 'text'
-          );
-          const lastTextNode = closeTextNodes[closeTextNodes.length - 1] as any;
+            (c): c is Text => c.type === 'text'
+          ) as Text[];
+          const lastTextNode = closeTextNodes[closeTextNodes.length - 1];
           if (!lastTextNode) {
             j++;
             continue;
@@ -99,112 +105,70 @@ const remarkCallout: Plugin<[], Root> = () => {
         continue;
       }
 
-      // Kasus 2: Single paragraph callout
-      const singleMatch = fullText.match(
-        /^:::\s*\[!([^\]]+)\]\s*\n([\s\S]*?)\n:::\s*$/
-      );
-      if (singleMatch) {
-        const innerText = singleMatch[2].trim();
-        const innerParagraph = {
-          type: 'paragraph',
-          children: [{ type: 'text', value: innerText }],
-        };
+      let combinedText = para.children
+        .map(c => (c.type === 'text' ? (c as Text).value : ''))
+        .join('')
+        .replace(/\r/g, '');
 
-        const mdxNode: any = {
-          type: 'mdxJsxFlowElement',
-          name: 'Callout',
-          attributes: [{ type: 'mdxJsxAttribute', name: 'type', value: calloutType }],
-          children: [innerParagraph],
-        };
-        children.splice(i, 1, mdxNode);
+      if (!combinedText.startsWith(`:::[!${calloutType}]`)) {
         i++;
         continue;
       }
 
-      // Kasus 3: Pembuka + teks di paragraf yang sama
-      const openOnlyMatch = fullText.match(/^:::\s*\[!([^\]]+)\]\s*\n?(.*)/s);
-      if (openOnlyMatch) {
-        restText = openOnlyMatch[2].trim();
-
-        // Ubah paragraf ini menjadi hanya :::[!type]
-        textNodes[0].value = `:::[!${calloutType}]`;
-
-        // Jika ada teks setelahnya, sisipkan sebagai paragraf konten
-        if (restText) {
-          const contentParagraph = {
-            type: 'paragraph',
-            children: [{ type: 'text', value: restText }],
-          };
-          children.splice(i + 1, 0, contentParagraph as any); // ✅ as any
-        }
-
-        // Cari penutup ::: mulai dari i+1
-        let j = i + 1;
-        let closeIndex = -1;
-        let keepCloseNode = false;
-
-        while (j < children.length) {
-          const closeNode = children[j];
-          if (closeNode.type !== 'paragraph') {
-            j++;
-            continue;
-          }
-
-          const closeTextNodes = closeNode.children.filter(
-            (c): c is { type: 'text'; value: string } => c.type === 'text'
-          );
-          const lastTextNode = closeTextNodes[closeTextNodes.length - 1] as any;
-          if (!lastTextNode) {
-            j++;
-            continue;
-          }
-
-          const val = lastTextNode.value.replace(/\r/g, '');
-          if (closeTextNodes.length === 1 && /^:::\s*$/.test(val)) {
-            closeIndex = j;
-            keepCloseNode = false;
-            break;
-          }
-          const suffixMatch = val.match(/\n:::\s*$/);
-          if (suffixMatch) {
-            const beforeSuffix = val.substring(0, suffixMatch.index!);
-            if (beforeSuffix.trim().length > 0) {
-              lastTextNode.value = beforeSuffix;
-              closeIndex = j;
-              keepCloseNode = true;
-            } else {
-              closeIndex = j;
-              keepCloseNode = false;
-            }
-            break;
-          }
-          j++;
-        }
-
-        if (closeIndex === -1) {
-          // Gagal, rollback perubahan
-          textNodes[0].value = fullText;
-          if (restText) children.splice(i + 1, 1);
-          i++;
-          continue;
-        }
-
-        const end = keepCloseNode ? closeIndex + 1 : closeIndex;
-        const innerNodes = children.slice(i + 1, end);
-        const deleteCount = end - i;
-
-        const mdxNode: any = {
-          type: 'mdxJsxFlowElement',
-          name: 'Callout',
-          attributes: [{ type: 'mdxJsxAttribute', name: 'type', value: calloutType }],
-          children: innerNodes,
-        };
-        children.splice(i, deleteCount, mdxNode);
-        i += 1;
+      const closePos = combinedText.indexOf('\n:::');
+      if (closePos === -1) {
+        i++;
         continue;
       }
 
+      combinedText = combinedText.substring(0, closePos);
+
+      const openLen = `:::[!${calloutType}]`.length;
+      if (combinedText[openLen] === '\n') {
+        combinedText = combinedText.substring(openLen + 1);
+      } else {
+        combinedText = combinedText.substring(openLen);
+      }
+
+      const firstTextNode = allTextNodes[0];
+      const lastTextNode = allTextNodes[allTextNodes.length - 1];
+
+      const openSuffix = `:::[!${calloutType}]\n`;
+      if (firstTextNode.value.startsWith(openSuffix)) {
+        firstTextNode.value = firstTextNode.value.substring(openSuffix.length);
+      } else if (firstTextNode.value.startsWith(`:::[!${calloutType}]`)) {
+        firstTextNode.value = firstTextNode.value.substring(`:::[!${calloutType}]`.length);
+      }
+
+      const closeSuffix = `\n:::`;
+      if (lastTextNode.value.endsWith(closeSuffix)) {
+        lastTextNode.value = lastTextNode.value.substring(0, lastTextNode.value.length - closeSuffix.length);
+      } else if (lastTextNode.value.endsWith(':::')) {
+        lastTextNode.value = lastTextNode.value.substring(0, lastTextNode.value.length - 3);
+      }
+
+      const cleanedChildren = para.children.filter(child => {
+        if (child.type === 'text') {
+          return (child as Text).value.trim() !== '';
+        }
+        return true;
+      });
+
+      const innerParagraph: any = {
+        type: 'paragraph',
+        children: cleanedChildren,
+      };
+
+      const mdxNode: any = {
+        type: 'mdxJsxFlowElement',
+        name: 'Callout',
+        attributes: [{ type: 'mdxJsxAttribute', name: 'type', value: calloutType }],
+        children: [innerParagraph],
+      };
+
+      children.splice(i, 1, mdxNode);
       i++;
+      continue;
     }
   };
 };
