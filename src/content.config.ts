@@ -46,6 +46,7 @@ const categories = defineCollection({
 const blog = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/blog" }),
   schema: z.object({
+    lang: z.string().optional(),
     title: z.string(),
     slug: z.string().optional(),
     description: z.string(),
@@ -66,6 +67,7 @@ const blog = defineCollection({
 const portfolio = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/portfolio" }),
   schema: z.object({
+    lang: z.string().optional(),
     title: z.string(),
     slug: z.string().optional(),
     description: z.string(),
@@ -96,6 +98,7 @@ const portfolio = defineCollection({
 const legal = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/legal" }),
   schema: z.object({
+    lang: z.string().optional(),
     title: z.string(),
     slug: z.string().optional(),
     description: z.string().optional(),
