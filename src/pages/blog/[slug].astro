@@ -24,7 +24,7 @@ import SharePost from '@/components/blog/SharePost.astro';
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
   return posts.map((post) => ({
-    params: { slug: slugify(post.data.title) },
+    params: {  slug: post.data.slug || slugify(post.data.title)  },
     props: { post },
   }));
 }
@@ -83,8 +83,8 @@ const blogLabel = siteData.blog;
 
 const SeoBreadcrumbItems = [
   { name: homeLabel, href: '/'},
-  { name: blogLabel, href: '/blog/'},
-  { name: seoCategory.name, href: `/blog/category/${seoCategory.slug}/`},
+  { name: blogLabel, href: '/blog'},
+  { name: seoCategory.name, href: `/blog/category/${seoCategory.slug}`},
   { name: title, href: canonicalURL }
 ];
 

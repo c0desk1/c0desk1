@@ -37,8 +37,8 @@ export async function GET(context: APIContext) {
 
   const items = await Promise.all(
     sorted.map(async (post) => {
-      const autoSlug = slugify(post.data.title);
-      const url = new URL(`blog/${autoSlug}/`, site).toString();
+      const autoSlug = post.data.slug || slugify(post.data.title);
+      const url = new URL(`blog/${autoSlug}`, site).toString();
 
       let authorName: string = siteData.siteName;
       if (post.data.author) {

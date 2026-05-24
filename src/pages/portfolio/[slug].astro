@@ -26,7 +26,7 @@ import PortfolioCaseStudy from "@/components/portfolio/PortfolioCaseStudy.astro"
 export async function getStaticPaths() {
   const projects = await getCollection("portfolio", ({ data }) => !data.draft);
   return projects.map((project) => {
-    const urlSlug = slugify(project.data.title);
+    const urlSlug = project.data.slug || slugify(project.data.title);
     return {
       params: { slug: urlSlug },
       props: { project }
@@ -83,7 +83,7 @@ const srPortfolioRelated = siteData.p_RelatedContent;
 
 const Breadcrumbs = [
   { name: homeLabel,      href: '/' },
-  { name: portfolioLabel, href: '/portfolio/' },
+  { name: portfolioLabel, href: '/portfolio' },
 ];
 ---
 
@@ -107,7 +107,7 @@ const Breadcrumbs = [
         <div class="flex flex-col justify-center items-center">
           <Breadcrumb items={Breadcrumbs} />
         </div>    
-        <article class="pt-4">
+        <article class="pt-4 px-4 lg:px-6">
           <Section size="sm">
             <PortfolioHeader
               title={title}
@@ -150,7 +150,7 @@ const Breadcrumbs = [
       </Container>
     </Section>
     <Section size="sm">
-      <Container size="lg">
+      <Container size="xl">
         <div id="yandex_rtb_R-A-19179231-6"></div>
       </Container>
     </Section>

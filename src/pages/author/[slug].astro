@@ -19,7 +19,7 @@ export async function getStaticPaths() {
 
   return authors.map((author) => ({
     params: {
-      slug: author.id,
+      slug: author.data.slug || author.id,
     },
     props: { author },
   }));
@@ -68,7 +68,7 @@ const t_noArticles     = siteConfig.blog_noBlogPosts;
 
 const Breadcrumbs = [
   { name: homeLabel,    href: '/' },
-  { name: authorsLabel, href: '/author/' },
+  { name: authorsLabel, href: '/author' },
 ];
 
 const optimizedAvatar = isCdnUrl(authorAvatar)

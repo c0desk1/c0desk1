@@ -305,16 +305,11 @@ export function slugify(text: string, maxLength = 50): string {
 
 export function normalizePath(path: string): string {
   if (!path || path === '/') return '/';
-
-  return path
-    .replace(/\/+$/, '')
-    .concat('/');
+  return path.replace(/\/+$/, '');
 }
 
 export function getPageUrl(num: number): string {
-  return num <= 1
-    ? '/blog/'
-    : `/blog/${num}/`;
+  return num <= 1 ? '/blog' : `/blog/${num}`;
 }
 
 export function getPageNums(cur: number, last: number): (number | '…')[] {

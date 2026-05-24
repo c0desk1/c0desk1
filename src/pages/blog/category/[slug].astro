@@ -1,5 +1,5 @@
 ---
-// src/pages/blog/category/[slug].astro
+// src/pages/[...locale]/blog/category/[slug].astro
 export const prerender = true;
 
 import BaseLayout from "@/layouts/BaseLayout.astro";
@@ -23,7 +23,7 @@ export async function getStaticPaths() {
 
     return {
       params: {
-        slug: slugify(name),
+        slug: category.data.slug || slugify(name),
       },
       props: { category },
     };
@@ -49,7 +49,7 @@ const categoryPosts = allPosts
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
 const canonicalURL = new URL(
-  `/blog/category/${categorySlug}/`,
+  `/blog/category/${categorySlug}`,
   siteConfig.siteUrl
 ).toString();
 
@@ -74,10 +74,10 @@ const blogCategory = {
 
 const breadcrumbItems = [
   { name: t_home, href: "/" },
-  { name: siteData.blog, href: "/blog/" },
+  { name: siteData.blog, href: "/blog" },
   {
     name: categoryName,
-    href: `/blog/category/${categorySlug}/`,
+    href: `/blog/category/${categorySlug}`,
   },
 ];
 ---
@@ -126,9 +126,6 @@ const breadcrumbItems = [
               {categoryPosts.length} {t_articles}
             </span>
           </div>
-        </Section>
-        <Section size="sm">
-          <div id="yandex_rtb_R-A-19179231-6"></div>
         </Section>
         <Section size="sm">
           {categoryPosts.length > 0 ? (

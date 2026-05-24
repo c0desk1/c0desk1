@@ -2,7 +2,7 @@
 
 export const seoConfig = {
   siteName: "c0desk1",
-  siteUrl: "https://c0desk1.my.id/",
+  siteUrl: "https://c0desk1.my.id",
   siteMail: "hello@c0desk1.my.id",
   siteLogo: "/org/c0desk1-logo.svg",
   ogImage: "./src/assets/images/c0desk1-og.webp",

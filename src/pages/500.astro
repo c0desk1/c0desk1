@@ -3,20 +3,12 @@ import { siteConfig } from '@/config/site';
 import ErrorLayout from '@/layouts/ErrorLayout.astro';
 import Container from '@/components/ui/Container.astro';
 
-
-const siteData = siteConfig
+const siteData = siteConfig;
 const siteURL = Astro.site?.toString() ?? siteData.siteUrl;
 
-const serverErrorTitle = siteData.serverErrorTitle;
-const serverErrorDesc = siteData.serverErrorDesc;
-const serverErrorHeading = siteData.serverErrorHeading;
-const serverErrorMessage = siteData.serverErrorMessage;
-const tryAgainLabel = siteData.tryAgain;
-const returnHomeLabel = siteData.returnHome;
-
 const seoData = {
-  title: serverErrorTitle,
-  description: serverErrorDesc,
+  title: siteData.serverErrorTitle,
+  description: siteData.serverErrorDesc,
   noIndex: true,
   type: "website" as const,
   canonicalURL: new URL(Astro.url.pathname, siteURL).toString(),
@@ -27,31 +19,31 @@ const seoData = {
   <Container size="md">
     <div class="flex flex-col items-center justify-center min-h-[80vh] text-center px-4">
       
-      <div class="inline-flex items-center gap-2 px-2.5 py-1 mb-8 rounded-md bg-(--bg-subtle) border border-(--border) font-mono text-xs md:text-[13px] uppercase tracking-widest text-(--fg-muted) backdrop-blur-sm">
-        <span class="w-1.5 h-1.5 rounded-sm bg-red-500"></span>
+      <div class="inline-flex items-center gap-2 px-2.5 py-1 mb-8 rounded-md bg-subtle border border-(--border) font-mono text-xs md:text-[13px] uppercase tracking-widest text-muted backdrop-blur-sm">
+        <span class="w-1.5 h-1.5 rounded-sm bg-(--fg)"></span>
         500 Error
       </div>
 
       <h1 class="text-4xl md:text-5xl font-semibold tracking-tighter text-(--fg) mb-4">
-        {serverErrorHeading}
+        {siteData.serverErrorHeading}
       </h1>
       
-      <p class="text-sm md:text-base text-(--fg-muted) max-w-100 mb-10 leading-relaxed">
-        {serverErrorMessage}
+      <p class="text-sm md:text-base text-muted max-w-100 mb-10 leading-relaxed">
+        {siteData.serverErrorMessage}
       </p>
 
       <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
         <button 
           onclick="window.location.reload()"
-          class="w-full sm:w-auto inline-flex justify-center items-center h-10 px-6 rounded-md bg-(--bg-subtle) text-(--fg) text-sm font-medium hover:bg-(--bg-muted) transition-colors"
+          class="w-full sm:w-auto inline-flex justify-center items-center h-10 px-6 rounded-md bg-(--fg) text-(--bg) text-sm font-medium hover:opacity-90 transition-opacity"
         >
-          {tryAgainLabel}
+          {siteData.tryAgain}
         </button>
         <a 
           href='/' 
-          class="w-full sm:w-auto inline-flex justify-center items-center h-10 px-6 rounded-md bg-transparent text-(--fg) text-sm font-medium border border-(--border) hover:border-(--border-strong) transition-colors"
+          class="w-full sm:w-auto inline-flex justify-center items-center h-10 px-6 rounded-md bg-transparent text-(--fg) text-sm font-medium border border-(--border) hover:border-strong transition-colors"
         >
-          {returnHomeLabel}
+          {siteData.returnHome}
         </a>
       </div>
 

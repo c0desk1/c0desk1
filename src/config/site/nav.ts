@@ -21,12 +21,12 @@ type FooterSection = {
 
 export const navConfig = {
   navItems: [
-    { label: "Blog", href: "/blog/", isExternal: false },
-    { label: "Portfolio", href: "/portfolio/", isExternal: false },
+    { label: "Blog", href: "/blog", isExternal: false },
+    { label: "Portfolio", href: "/portfolio", isExternal: false },
     { label: "Community", 
       children: [
-        { label: "About", href: "/about/", isExternal: false },
-        { label: "Contact Us", href: "/contact/", isExternal: false },
+        { label: "About", href: "/about", isExternal: false },
+        { label: "Contact Us", href: "/contact", isExternal: false },
       ]
     },
     { 
@@ -38,23 +38,23 @@ export const navConfig = {
     {
       label: "Legal",
       children: [
-        { label: "Privacy Policy", href: "/privacy-policy/", isExternal: false },
-        { label: "Terms of Service", href: "/terms-of-service/", isExternal: false },
-        { label: "Disclaimer", href: "/disclaimer/", isExternal: false },
-        { label: "Cookie Policy", href: "/cookie-policy/", isExternal: false },
-        { label: "DMCA", href: "/dmca/", isExternal: false }
+        { label: "Privacy Policy", href: "/privacy-policy", isExternal: false },
+        { label: "Terms of Service", href: "/terms-of-service", isExternal: false },
+        { label: "Disclaimer", href: "/disclaimer", isExternal: false },
+        { label: "Cookie Policy", href: "/cookie-policy", isExternal: false },
+        { label: "DMCA", href: "/dmca", isExternal: false }
       ]
     },
   ] as NavItem[],
 
   MobileNavItems: [
     { label: "Home", href: "/", isExternal: false },
-    { label: "Blog", href: "/blog/", isExternal: false },
-    { label: "Portfolio", href: "/portfolio/", isExternal: false },
+    { label: "Blog", href: "/blog", isExternal: false },
+    { label: "Portfolio", href: "/portfolio", isExternal: false },
     { label: "Community", 
       children: [
-        { label: "About", href: "/about/", isExternal: false },
-        { label: "Contact Us", href: "/contact/", isExternal: false },
+        { label: "About", href: "/about", isExternal: false },
+        { label: "Contact Us", href: "/contact", isExternal: false },
       ]
     },
     { label: "Tools",
@@ -64,11 +64,11 @@ export const navConfig = {
     },
     { label: "Legal",
       children: [
-        { label: "Privacy Policy", href: "/privacy-policy/", isExternal: false },
-        { label: "Terms of Service", href: "/terms-of-service/", isExternal: false },
-        { label: "Disclaimer", href: "/disclaimer/", isExternal: false },
-        { label: "Cookie Policy", href: "/cookie-policy/", isExternal: false },
-        { label: "DMCA", href: "/dmca/", isExternal: false }
+        { label: "Privacy Policy", href: "/privacy-policy", isExternal: false },
+        { label: "Terms of Service", href: "/terms-of-service", isExternal: false },
+        { label: "Disclaimer", href: "/disclaimer", isExternal: false },
+        { label: "Cookie Policy", href: "/cookie-policy", isExternal: false },
+        { label: "DMCA", href: "/dmca", isExternal: false }
       ]
     }
   ] as MobileNavItem[],
@@ -77,8 +77,8 @@ export const navConfig = {
     {
       title: "Resource",
       items: [
-        { href: "/blog/", label: "Blog", isExternal: false },
-        { href: "/portfolio/", label: "Portfolio", isExternal: false },
+        { href: "/blog", label: "Blog", isExternal: false },
+        { href: "/portfolio", label: "Portfolio", isExternal: false },
       ]
     },
     {
@@ -90,18 +90,18 @@ export const navConfig = {
     {
       title: "Legal",
       items: [
-        { href: "/privacy-policy/", label: "Privacy Policy", isExternal: false },
-        { href: "/terms-of-service/", label: "Terms of Service", isExternal: false },
-        { href: "/disclaimer/", label: "Disclaimer", isExternal: false },
-        { href: "/cookie-policy/", label: "Cookie Policy", isExternal: false },
-        { href: "/dmca/", label: "DMCA", isExternal: false },
+        { href: "/privacy-policy", label: "Privacy Policy", isExternal: false },
+        { href: "/terms-of-service", label: "Terms of Service", isExternal: false },
+        { href: "/disclaimer", label: "Disclaimer", isExternal: false },
+        { href: "/cookie-policy", label: "Cookie Policy", isExternal: false },
+        { href: "/dmca", label: "DMCA", isExternal: false },
       ]
     },
     {
       title: "Get in touch",
       items: [
-        { label: "About", href: "/about/", isExternal: false },
-        { label: "Contact Us", href: "/contact/", isExternal: false },
+        { label: "About", href: "/about", isExternal: false },
+        { label: "Contact Us", href: "/contact", isExternal: false },
       ]
     }
   ] as FooterSection[],
