@@ -137,21 +137,17 @@ const siteData = siteConfig;
     </script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4943136052113535" crossorigin="anonymous"></script>
     <YandexLoader />
-    {seoProps.type === "article" && (
-      <>
-        <script async type="application/javascript" src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
-        <script is:inline>
-          (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
-            basicSubscriptions.init({
-              type: "NewsArticle",
-              isPartOfType: ["Product"],
-              isPartOfProductId: "CAow3NjGDA:openaccess",
-              clientOptions: { theme: "dark", lang: "en" },
-            });
-          });
-        </script>
-      </>
-    )}
+    <script async type="application/javascript" src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
+    <script is:inline>
+      (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
+        basicSubscriptions.init({
+          type: "NewsArticle",
+          isPartOfType: ["Product"],
+          isPartOfProductId: "CAow3NjGDA:openaccess",
+          clientOptions: { theme: "dark", lang: "en" },
+        });
+      });
+    </script>
   </head>
   <body>
     <noscript>
