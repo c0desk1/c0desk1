@@ -43,7 +43,7 @@ const embedSrc  = ytId
         loop={loop}
         muted={muted}
         title={title}
-        class="video-direct"
+        class="video-direct p-2"
       />
     ) : (
       <iframe
@@ -52,7 +52,7 @@ const embedSrc  = ytId
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowfullscreen
         loading="lazy"
-        class="video-iframe"
+        class="video-iframe p-2"
       />
     )}
   </div>
@@ -65,7 +65,7 @@ const embedSrc  = ytId
   .video-wrapper {
     position: relative;
     aspect-ratio: 16 / 9;
-    border-radius: var(--radius-md, 8px);
+    border-radius: var(--prose-radius-lg);
     overflow: hidden;
     border: 1px solid var(--border);
     background-color: var(--bg-muted);
@@ -79,6 +79,7 @@ const embedSrc  = ytId
     height: 100%;
     border: none;
     object-fit: cover;
+    radius: var(--prose-radius-lg);
   }
 
   .video-caption {
