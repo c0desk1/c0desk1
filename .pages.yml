@@ -29,7 +29,7 @@ content:
     label: Blog
     type: collection
     path: src/content/blog
-    filename: "{primary}.mdx"
+    filename: "{slug}.mdx"
     
     view:
       primary: title
