@@ -3,23 +3,24 @@ title: "Adobe Stock Metadata Generator with AI"
 slug: "generate-metadata-adobe-stock"
 description: "How I built an automated metadata generator using Astro 6, Tailwind 4, and Vision AI to cut contributor work time by up to 90%."
 pubDate: 2026-04-19T17:02
-updatedDate: 2026-04-19T17:02
+updatedDate: 2026-05-25T20:38
 image:
   src: "/images/blog/hero-adogen.webp"
   alt: "Adogen Metadata Generator Banner"
 category: tools
 author: bima-akbar
 tags:
-  - Product Launch
-  - Astro
-  - Adobe Stock
-  - AI Engineering
+  - product-launch
+  - astro
+  - adobe-stock
+  - ai-engineering
 draft: false
 featured: true
 seo:
   title: "AI Metadata Generator for Contributors"
   description: "Stop wasting time on manual keyword entry. Use Adogen to automatically optimize your Adobe Stock SEO for free."
   ogImage: "/images/blog/og/og-adogen.webp"
+  noIndex: false
 ---
 
 Being a microstock contributor today is no longer just about visual quality. It's an **SEO (Search Engine Optimization)** game. You could have a photo with perfect detail, but without the right title and 50 highly relevant keywords, your asset will simply sink in a sea of content — never to be found, let alone purchased.
@@ -38,11 +39,11 @@ After a photoshoot—say, a *gym* or *industrial* theme—and you have 100 fully
 - 50 truly relevant keywords.
 - A category that fits Adobe Stock's standards (there are 21 specific categories).
 
-If one photo takes 3–5 minutes for text work, you'll need **over 8 hours just for metadata**. This is where **[Adogen](https://dev-adogen.bimasaktiakbarr.workers.dev/)** steps in, slashing that time down to less than **10 seconds per image**.
+If one photo takes 3–5 minutes for text work, you'll need **over 8 hours just for metadata**. This is where **Adogen** steps in, slashing that time down to less than **10 seconds per image**.
 
 ## What Makes Adogen Different?
 
-I didn't build **[Adogen](https://dev-adogen.bimasaktiakbarr.workers.dev/)** as just another AI *wrapper*. There are a few technical decisions I made in the name of maximum performance:
+I didn't build **Adogen** as just another AI *wrapper*. There are a few technical decisions I made in the name of maximum performance:
 
 ### Astro 6 & Tailwind 4
 Adopting a modern stack to guarantee a *First Contentful Paint* (FCP) under 1 second. Lightweight, minimal, and blazing fast.
@@ -58,7 +59,7 @@ Once finished, you don't need to copy and paste one by one. A single click prepa
 
 ## The "Free but Premium" Philosophy
 
-Many similar services charge a hefty monthly subscription fee. **[Adogen](https://dev-adogen.bimasaktiakbarr.workers.dev/)** takes a different approach: **Bring Your Own API Key.**
+Many similar services charge a hefty monthly subscription fee. Adogen takes a different approach: **Bring Your Own API Key.**
 
 By leveraging an API key from **[Groq](https://console.groq.com/)** or **[Mistral](https://console.mistral.ai/)** (both of which offer a very generous free tier), you have full control over costs and privacy. No image data is permanently stored — everything is processed in *real-time*.
 
@@ -67,6 +68,7 @@ By leveraging an API key from **[Groq](https://console.groq.com/)** or **[Mistra
 ## Starting the Workflow
 
 :::steps
+
 ### Prepare Your API Key
 Get your free API key at **[Groq](https://console.groq.com/)** or **[Mistral AI](https://console.mistral.ai/)**.
 
@@ -78,10 +80,9 @@ Upload all your photos, and watch the AI assemble the metadata for you.
 
 ### Export
 Download the CSV, upload it to Adobe Stock, and get back to shooting!
+
 :::
 
 ## Creativity First, Data Behind
 
 AI isn't here to replace the photographer; it's here to free them from repetitive administrative tasks. With **[Adogen](https://dev-adogen.bimasaktiakbarr.workers.dev/)**, I hope Indonesian contributors can work more productively and compete in the global market.
-
-> Ready to give it a try? Head straight to [Adogen](https://dev-adogen.bimasaktiakbarr.workers.dev/) / author:bima-akbar
