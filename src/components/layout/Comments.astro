@@ -1,0 +1,29 @@
+---
+// src/components/layout/Comments.astro
+---
+
+<div id="tcomment"></div>
+
+<style is:global>
+    .twikoo .tk-footer {
+        display: none !important;
+    }
+</style>
+
+<script is:inline>
+  function initTwikoo() {
+    if (document.getElementById('twikoo-script')) return;
+    const script = document.createElement('script');
+    script.id = 'twikoo-script';
+    script.src = 'https://cdn.jsdelivr.net/npm/twikoo@1.6.39/dist/twikoo.all.min.js';
+    script.onload = () => {
+      twikoo.init({
+        envId: 'https://twikoo-cloudflare.dev-c0desk1.workers.dev/',
+        el: '#tcomment',
+        path: window.location.pathname,
+      });
+    };
+    document.head.appendChild(script);
+  }
+  initTwikoo();
+</script>
