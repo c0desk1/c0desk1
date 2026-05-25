@@ -14,7 +14,6 @@ const escapeXml = (str: string) =>
 
 export async function GET(context: APIContext) {
   const siteData = siteConfig;
-
   const site = new URL(context.site ?? siteData.siteUrl);
 
   const allPosts = await getCollection("blog", ({ data }: CollectionEntry<"blog">) => !data.draft);
@@ -50,7 +49,7 @@ export async function GET(context: APIContext) {
         } catch {}
       }
 
-      let categoryName = "Uncategorized";
+      let categoryName = siteConfig.general || 'General';
       if (post.data.category) {
         try {
           const categoryEntry = await getEntry(post.data.category);
@@ -60,10 +59,13 @@ export async function GET(context: APIContext) {
         } catch {}
       }
 
-      const tags = (post.data.tags ?? []).filter((tag: unknown): tag is string => typeof tag === 'string' && Boolean(tag));
+      const tags = (post.data.tags ?? []).filter(
+        (tag: unknown): tag is string => typeof tag === 'string' && Boolean(tag)
+      );
 
-      const imageUrl = post.data.image?.src
-        ? new URL(post.data.image.src, site).toString()
+      const rawImage = post.data.seo?.ogImage || post.data.image?.src || siteData.ogImage;
+      const imageUrl = rawImage
+        ? new URL(rawImage, site).toString()
         : null;
 
       return {
