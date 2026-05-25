@@ -135,26 +135,23 @@ const siteData = siteConfig;
         window.cookiehub.load(cpm);
       });
     </script>
-    <script is:inline>
-      window.ezstandalone = window.ezstandalone || {};
-      window.ezstandalone.cmd = window.ezstandalone.cmd || [];
-    </script>
-    <script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
-    <script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
-    <script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
-    <script is:inline src="//ezoicanalytics.com/analytics.js"></script>
-    <script async type="application/javascript" src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4943136052113535" crossorigin="anonymous"></script>
     <YandexLoader />
-    <script is:inline>
-      (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
-        basicSubscriptions.init({
-          type: "NewsArticle",
-          isPartOfType: ["Product"],
-          isPartOfProductId: "CAow3NjGDA:openaccess",
-          clientOptions: { theme: "dark", lang: "en" },
-        });
-      });
-    </script>
+    {seoProps.type === "article" && (
+      <>
+        <script async type="application/javascript" src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
+        <script is:inline>
+          (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
+            basicSubscriptions.init({
+              type: "NewsArticle",
+              isPartOfType: ["Product"],
+              isPartOfProductId: "CAow3NjGDA:openaccess",
+              clientOptions: { theme: "dark", lang: "en" },
+            }).catch(() => { /* silent */ });
+          });
+        </script>
+      </>
+    )}
   </head>
   <body>
     <noscript>
@@ -164,7 +161,6 @@ const siteData = siteConfig;
       {siteConfig.skipToContent}
     </a>   
     {header && <Header />}
-    <YandexAds />
     <main id="main-content">
       {withContainer? (
         <Container size={size}>
@@ -189,10 +185,6 @@ const siteData = siteConfig;
         })
       })
     </script>
-    <script is:inline>
-      ezstandalone.cmd.push(function () {
-        ezstandalone.showAds(101);
-      });
-    </script>
+    <YandexAds />
   </body>
 </html>
