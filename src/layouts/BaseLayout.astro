@@ -137,8 +137,7 @@ const siteData = siteConfig;
     <main id="main-content">
       {withContainer? (
         <Container size={size}>
-          <slot /> 
-          <div rrm-inline-cta="1b7a649f-eb54-48c5-8106-f2ac499dfc5f"></div>         
+          <slot />          
         </Container>
         ) : (
           <slot />
@@ -146,6 +145,9 @@ const siteData = siteConfig;
       }
     </main>
     <Search />
+    <Container size="lg">
+      <div rrm-inline-cta="1b7a649f-eb54-48c5-8106-f2ac499dfc5f"></div>
+    </Container>
     {footer && <Footer />}
     <script is:inline>
       window.yaContextCb.push(() => {
