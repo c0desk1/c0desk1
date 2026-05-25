@@ -18,40 +18,15 @@ interface Props {
   title?: string;
   description?: string;
   lang?: string;
-  image?: { 
-    src: string; 
-    alt: string 
-  };
-  
-  canonicalURL?: 
-    URL | 
-    string;
-    
-  type?: 
-    "website" | 
-    "article" | 
-    "profile" | 
-    "creativeWork";
-    
+  image?: { src: string; alt: string };
+  canonicalURL?: URL | string;
+  type?: "website" | "article" | "profile" | "creativeWork";
   noIndex?: boolean;
   publishedTime?: Date;
   modifiedTime?: Date;
   tags?: string[];
-  
-  category?: { 
-    name: string;
-    description?: string;
-    slug: string;
-  };
-  
-  author?: { 
-    name: string; 
-    role: string; 
-    avatar: string; 
-    bio: string; 
-    slug: string 
-  };
-  
+  category?: { name: string; description?: string; slug: string };
+  author?: { name: string; role: string; avatar: string; bio: string; slug: string };
   seo?: {
     title?: string;
     description?: string;
@@ -59,18 +34,10 @@ interface Props {
     canonical?: string;
     noIndex?: boolean;
   };
-  
   header?: boolean;
   footer?: boolean;
   withContainer?: boolean;
-  
-  size?: 
-    "sm" | 
-    "md" | 
-    "lg" | 
-    "xl" | 
-    "full";
-    
+  size?: "sm" | "md" | "lg" | "xl" | "full";
   client?: string;
   role?: string;
   duration?: string;
@@ -89,7 +56,7 @@ const {
   duration,
   demoUrl,
   repoUrl,
- ...seoProps
+  ...seoProps
 } = Astro.props;
 
 const siteData = siteConfig;
@@ -100,7 +67,10 @@ const siteData = siteConfig;
   lang={lang}
   dir="ltr"
   class="scroll-smooth antialiased"
-  prefix={seoProps.type === "article"? "og: https://ogp.me/ns# article: https://ogp.me/ns/article#" : "og: https://ogp.me/ns#"}>
+  prefix={seoProps.type === "article"
+    ? "og: https://ogp.me/ns# article: https://ogp.me/ns/article#"
+    : "og: https://ogp.me/ns#"}
+>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -116,66 +86,86 @@ const siteData = siteConfig;
     <ThemeScript />
     <script src="https://cdn.cookiehub.eu/c2/561fe9ba.js"></script>
     <script type="text/javascript">
-      document.addEventListener("DOMContentLoaded", function(event) {
+      document.addEventListener("DOMContentLoaded", function (event) {
         var cpm = {};
         window.cookiehub.load(cpm);
       });
     </script>
     <script is:inline>
-      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-NJJPZV2M');
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-NJJPZV2M");
     </script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2TKFP229HJ"></script>
+
+    <!--
+      CATATAN: GA4 (gtag.js) di bawah sebaiknya dihapus jika sudah
+      dikonfigurasi via GTM untuk menghindari double tracking.
+      Aktifkan hanya jika GTM belum mengelola GA4.
+    -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-2TKFP229HJ"></script>
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-2TKFP229HJ');
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-2TKFP229HJ");
+    </script> -->
+    
+    <script async type="application/javascript" src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
+    <script is:inline>
+      (self.SWG_BASIC = self.SWG_BASIC || []).push((basicSubscriptions) => {
+        basicSubscriptions.init({
+          type: "NewsArticle",
+          isPartOfType: ["Product"],
+          isPartOfProductId: "CAow3NjGDA:openaccess",
+          clientOptions: { theme: "dark", lang: "en" },
+        });
+      });
     </script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4943136052113535" crossorigin="anonymous"></script>
-    {seoProps.type === "article" && (
-      <>
-        <script async type="application/javascript" src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
-        <script is:inline>
-          (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
-            basicSubscriptions.init({
-              type: "NewsArticle",
-              isPartOfType: ["Product"],
-              isPartOfProductId: "CAow3NjGDA:openaccess",
-              clientOptions: { theme: "dark", lang: "en" },
-            });
-          });
-        </script>
-      </>
-    )}
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4943136052113535"
+      crossorigin="anonymous"
+    ></script>
     <YandexLoader />
   </head>
+
   <body>
     <noscript>
-      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NJJPZV2M" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-NJJPZV2M"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+      ></iframe>
     </noscript>
-    <YandexAds />
-    <a href="#main-content" class="sr-only text-copy-16 md:text-copy-18 focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:bg-(--bg) focus:text-(--fg) focus:px-4 focus:py-2 focus:border focus:border-(--border)">
+    <a
+      href="#main-content"
+      class="sr-only text-copy-16 md:text-copy-18 focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:bg-(--bg) focus:text-(--fg) focus:px-4 focus:py-2 focus:border focus:border-(--border)"
+    >
       {siteConfig.skipToContent}
-    </a>   
+    </a>
     {header && <Header />}
     <main id="main-content">
-      {withContainer? (
+      {withContainer ? (
         <Container size={size}>
-          <slot />          
-        </Container>
-        ) : (
           <slot />
-        )
-      }
+        </Container>
+      ) : (
+        <slot />
+      )}
     </main>
     <Search />
     {footer && <Footer />}
     <div id="modal-root"></div>
     <MobileMenu />
     <ScrollScript />
+    <YandexAds />
   </body>
 </html>
