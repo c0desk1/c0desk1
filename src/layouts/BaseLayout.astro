@@ -145,10 +145,10 @@ const siteData = siteConfig;
       }
     </main>
     <Search />
-    <Container size="lg">
-      <div rrm-inline-cta="1b7a649f-eb54-48c5-8106-f2ac499dfc5f"></div>
-    </Container>
     {footer && <Footer />}
+    <div id="modal-root"></div>
+    <MobileMenu />
+    <ScrollScript />
     <script is:inline>
       window.yaContextCb.push(() => {
         Ya.Context.AdvManager.render({
@@ -163,19 +163,16 @@ const siteData = siteConfig;
         ezstandalone.showAds(101);
       });
     </script>
-    <div id="modal-root"></div>
-    <MobileMenu />
-    <ScrollScript />
     <script async type="application/javascript" src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
-<script is:inline>
-  (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
-    basicSubscriptions.init({
-      type: "NewsArticle",
-      isPartOfType: ["Product"],
-      isPartOfProductId: "CAow3NjGDA:openaccess",
-      clientOptions: { theme: "dark", lang: "en" },
-    });
-  });
-</script>
+    <script is:inline>
+      (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
+        basicSubscriptions.init({
+          type: "NewsArticle",
+          isPartOfType: ["Product"],
+          isPartOfProductId: "CAow3NjGDA:openaccess",
+          clientOptions: { theme: "dark", lang: "en" },
+        });
+      });
+    </script>
   </body>
 </html>
