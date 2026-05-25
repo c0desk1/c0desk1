@@ -113,12 +113,6 @@ const stack = [
           <p class="text-copy-13 text-muted">
             &copy; {new Date().getFullYear()} {siteData.siteName}
           </p>
-          <a
-            href="/privacy-policy"
-            id="ezoic-ccpa-optout"
-            class="text-copy-13 text-muted hover:text-(--fg) transition-colors">
-            Do Not Sell or Share My Personal Information
-          </a>
         </div>
         <ThemeToggle />
       </div>
@@ -177,21 +171,3 @@ const stack = [
     }
   }
 </style>
-
-<script is:inline>
-  document.addEventListener('DOMContentLoaded', () => {
-    const ccpaLink = document.getElementById('ezoic-ccpa-optout');
-    if (ccpaLink) {
-      ccpaLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (window.ezCMP && typeof window.ezCMP.showConsentModal === 'function') {
-          window.ezCMP.showConsentModal();
-        } else if (window.__cmpUi && typeof window.__cmpUi.show === 'function') {
-          window.__cmpUi.show();
-        } else {
-          window.location.href = '/privacy-policy';
-        }
-      });
-    }
-  });
-</script>
