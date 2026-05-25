@@ -2,21 +2,16 @@
 import { siteConfig } from "@/config/site";
 
 const GTAG_ID = siteConfig.googleAnalyticsId || "";
-const ADSENSE_ID = siteConfig.googleAdsenseId || "";
-const ADSENSE_ENABLED = siteConfig.googleAdsenseEnabled ?? true;
 ---
 
 <script
   is:inline
   define:vars={{
     GTAG_ID,
-    ADSENSE_ID,
-    ADSENSE_ENABLED,
   }}
 >
   (() => {
     const GTAG_SCRIPT_ID = "gtag-script";
-    const ADSENSE_SCRIPT_ID = "adsense-script";
 
     const loadGtag = () => {
       if (!GTAG_ID) return;
@@ -34,20 +29,6 @@ const ADSENSE_ENABLED = siteConfig.googleAdsenseEnabled ?? true;
       gtag("config", GTAG_ID, { anonymize_ip: true });
     };
 
-    const loadAdsense = () => {
-      if (!ADSENSE_ENABLED || !ADSENSE_ID) return;
-      if (document.getElementById(ADSENSE_SCRIPT_ID)) return;
-
-      const script = document.createElement("script");
-      script.id = ADSENSE_SCRIPT_ID;
-      script.async = true;
-      script.crossOrigin = "anonymous";
-      script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}`;
-      document.head.appendChild(script);
-    };
-
-    // Langsung muat tanpa menunggu consent (Ezoic CMP yang akan memblokir jika perlu)
     loadGtag();
-    loadAdsense();
   })();
 </script>
