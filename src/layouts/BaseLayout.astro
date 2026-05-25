@@ -114,6 +114,13 @@ const siteData = siteConfig;
       repoUrl={repoUrl}
     />
     <ThemeScript />
+    <script src="https://cdn.cookiehub.eu/c2/561fe9ba.js"></script>
+    <script type="text/javascript">
+      document.addEventListener("DOMContentLoaded", function(event) {
+        var cpm = {};
+        window.cookiehub.load(cpm);
+      });
+    </script>
     <script is:inline>
       (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
       new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -128,15 +135,7 @@ const siteData = siteConfig;
       gtag('js', new Date());
       gtag('config', 'G-2TKFP229HJ');
     </script>
-    <script src="https://cdn.cookiehub.eu/c2/561fe9ba.js"></script>
-    <script type="text/javascript">
-      document.addEventListener("DOMContentLoaded", function(event) {
-        var cpm = {};
-        window.cookiehub.load(cpm);
-      });
-    </script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4943136052113535" crossorigin="anonymous"></script>
-    <YandexLoader />
     {seoProps.type === "article" && (
       <>
         <script async type="application/javascript" src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
@@ -152,11 +151,13 @@ const siteData = siteConfig;
         </script>
       </>
     )}
+    <YandexLoader />
   </head>
   <body>
     <noscript>
       <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NJJPZV2M" height="0" width="0" style="display:none;visibility:hidden"></iframe>
     </noscript>
+    <YandexAds />
     <a href="#main-content" class="sr-only text-copy-16 md:text-copy-18 focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:bg-(--bg) focus:text-(--fg) focus:px-4 focus:py-2 focus:border focus:border-(--border)">
       {siteConfig.skipToContent}
     </a>   
@@ -185,6 +186,5 @@ const siteData = siteConfig;
         })
       })
     </script>
-    <YandexAds />
   </body>
 </html>
