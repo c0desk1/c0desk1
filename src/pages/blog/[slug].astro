@@ -146,6 +146,12 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
           <Section size="sm">
             <RssFeed />
           </Section>
+          <Section size="sm">
+            <div class="flex items-center gap-2 justify-center">
+              <span class="text-label-16 text-(--fg)">Share this article: </span>
+              <SharePost url={canonicalURL} title={title} description={description} />
+            </div>
+          </Section>
         </Container>
       </div>
     </Section>
@@ -163,15 +169,7 @@ const Breadcrumbs = SeoBreadcrumbItems.filter(
         </h2>
         <Comments />
       </Container>     
-    </Section>
-    <Section size="sm">
-      <Container size="lg">
-        <div class="flex items-center gap-2 justify-center">
-          <span class="text-label-16 text-(--fg)">Share this article: </span>
-          <SharePost url={canonicalURL} title={title} description={description} />
-        </div>
-      </Container>
-    </Section>
+    </Section> 
     <Section size="sm">
       <Container size="lg">
         <div rrm-inline-cta="1b7a649f-eb54-48c5-8106-f2ac499dfc5f"></div>
