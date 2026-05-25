@@ -117,14 +117,6 @@ const siteData = siteConfig;
       repoUrl={repoUrl}
     />
     <ThemeScript />
-    <script is:inline>
-      window.ezstandalone = window.ezstandalone || {};
-      window.ezstandalone.cmd = window.ezstandalone.cmd || [];
-    </script>
-    <script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
-    <script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
-    <script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
-    <script is:inline src="//ezoicanalytics.com/analytics.js"></script>
     <Google />
     <script async type="application/javascript" src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
     <script is:inline>
@@ -168,11 +160,6 @@ const siteData = siteConfig;
           "platform": "touch"
         })
       })
-    </script>
-    <script is:inline>
-      ezstandalone.cmd.push(function () {
-        ezstandalone.showAds(101);
-      });
     </script>
   </body>
 </html>
