@@ -5,6 +5,7 @@ import { siteConfig } from "@/config/site";
 const YA_PUB_ID = siteConfig.yandexPubId || "";
 const YA_METRICA_ID = siteConfig.yandexMetricaId || "";
 const ADS_ENABLED = siteConfig.yandexAdsEnabled ?? true;
+const isDev = import.meta.env.DEV;
 ---
 
 <div
@@ -12,7 +13,8 @@ const ADS_ENABLED = siteConfig.yandexAdsEnabled ?? true;
   style="display:none"
   data-pub-id={YA_PUB_ID}
   data-metrica-id={YA_METRICA_ID}
-  data-ads-enabled={String(ADS_ENABLED)}></div>
+  data-ads-enabled={String(ADS_ENABLED)}
+  data-dev={String(isDev)}></div>
 
 <script is:inline>
   (() => {
@@ -20,6 +22,7 @@ const ADS_ENABLED = siteConfig.yandexAdsEnabled ?? true;
     const PUB_ID = el?.dataset.pubId || "";
     const METRICA_ID = el?.dataset.metricaId || "";
     const ADS_ON = el?.dataset.adsEnabled !== "false";
+    const IS_DEV = el?.dataset.dev === "true";
 
     if (!PUB_ID) {
       if (!METRICA_ID) return;
@@ -64,7 +67,7 @@ const ADS_ENABLED = siteConfig.yandexAdsEnabled ?? true;
       try {
         renderFn();
       } catch (err) {
-        if (import.meta.env.DEV) {
+        if (IS_DEV) {
           console.warn(`Yandex Ads: ${name} failed`, err);
         }
       }
@@ -128,7 +131,7 @@ const ADS_ENABLED = siteConfig.yandexAdsEnabled ?? true;
       const targetId = `yandex_rtb_${PUB_ID}-6`;
       const targetEl = document.getElementById(targetId);
       if (!targetEl) {
-        if (import.meta.env.DEV) {
+        if (IS_DEV) {
           console.warn(`Yandex Ads: Banner target #${targetId} not found, skipping`);
         }
         return;
@@ -181,7 +184,7 @@ const ADS_ENABLED = siteConfig.yandexAdsEnabled ?? true;
             document.body.appendChild(ns);
           }
         } catch (err) {
-          if (import.meta.env.DEV) console.warn("Yandex Metrica init failed", err);
+          if (IS_DEV) console.warn("Yandex Metrica init failed", err);
         }
       });
     }
@@ -192,8 +195,8 @@ const ADS_ENABLED = siteConfig.yandexAdsEnabled ?? true;
       initialized = true;
       if (ADS_ON && PUB_ID && !window.__yandexAdsInitialized) {
         window.__yandexAdsInitialized = true;
-        // renderFullscreen();
-        // renderTopAd();
+        // renderFullscreen();   // diaktifkan jika diperlukan
+        // renderTopAd();        // diaktifkan jika diperlukan
         renderFloorDesktop();
         renderBanner();
       }
