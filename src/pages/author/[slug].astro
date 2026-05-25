@@ -74,7 +74,7 @@ const optimizedAvatar = isCdnUrl(authorAvatar)
   : authorAvatar;
 ---
 
-<BaseLayout {...seoData}>
+<BaseLayout {...seoData} basepPath="author">
   <Section id="author-profile" size="lg" aria-label={authorName}>
     <Section size="sm">
       <Container size="xl">
