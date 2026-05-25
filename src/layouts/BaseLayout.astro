@@ -1,190 +1,189 @@
 ---
-// src/layouts/BaseLayout.astro
-import "@/styles/global.css";
+// src/pages/blog/[slug].astro
+import '@/styles/prose/index.css';
 
+import { getCollection, render, getEntry } from "astro:content";
 import { siteConfig } from "@/config/site";
-import ThemeScript from "@/components/scripts/ThemeScript.astro";
-import BaseHead from "@/components/layout/BaseHead.astro";
-import Header from "@/components/layout/Header.astro";
-import Footer from "@/components/layout/Footer.astro";
-import Container from "@/components/ui/Container.astro";
-import MobileMenu from "@/components/layout/MobileMenu.astro";
-import Search from "@/components/layout/Search.astro";
-import ScrollScript from "@/components/scripts/ScrollScript.astro";
-import YandexLoader from "@/components/ads/YandexLoader.astro";
-import YandexAds from "@/components/ads/YandexAds.astro";
+import { slugify } from "@/lib/utils";
+import { components } from '@/components/layout/MDXComponents';
 
-interface Props {
-  title?: string;
-  description?: string;
-  lang?: string;
-  image?: { 
-    src: string; 
-    alt: string 
-  };
-  
-  canonicalURL?: 
-    URL | 
-    string;
-    
-  type?: 
-    "website" | 
-    "article" | 
-    "profile" | 
-    "creativeWork";
-    
-  noIndex?: boolean;
-  publishedTime?: Date;
-  modifiedTime?: Date;
-  tags?: string[];
-  
-  category?: { 
-    name: string;
-    description?: string;
-    slug: string;
-  };
-  
-  author?: { 
-    name: string; 
-    role: string; 
-    avatar: string; 
-    bio: string; 
-    slug: string 
-  };
-  
-  seo?: {
-    title?: string;
-    description?: string;
-    ogImage?: string;
-    canonical?: string;
-    noIndex?: boolean;
-  };
-  
-  header?: boolean;
-  footer?: boolean;
-  withContainer?: boolean;
-  
-  size?: 
-    "sm" | 
-    "md" | 
-    "lg" | 
-    "xl" | 
-    "full";
-    
-  client?: string;
-  role?: string;
-  duration?: string;
-  demoUrl?: string;
-  repoUrl?: string;
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import Breadcrumb from "@/components/ui/Breadcrumb.astro";
+import PostHeader from "@/components/layout/PostHeader.astro";
+import PostNavigation from '@/components/blog/PostNavigation.astro';
+import BackToTop from "@/components/ui/BackToTop.astro";
+import BG from "@/components/ui/BgDot.astro";
+
+import RssFeed from '@/components/layout/RssFeed.astro';
+import SharePost from '@/components/blog/SharePost.astro';
+import Comments from '@/components/layout/Comments.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: {  slug: post.data.slug || slugify(post.data.title)  },
+    props: { post },
+  }));
 }
 
-const {
-  lang = "en-US",
-  header = true,
-  footer = true,
-  withContainer = false,
-  size = "xl",
-  client,
-  role: creativeWorkRole,
-  duration,
-  demoUrl,
-  repoUrl,
- ...seoProps
-} = Astro.props;
+const { post } = Astro.props;
+
+const articleLang = post.data.lang || 'en';
+
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const sortedPosts = allPosts.sort(
+  (a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+);
+
+const currentIndex = sortedPosts.findIndex(p => p.id === post.id);
+const prevPost = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
+const nextPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
 
 const siteData = siteConfig;
+
+const authorEntry = await getEntry(post.data.author);
+const categoryEntry = await getEntry(post.data.category);
+
+const { Content } = await render(post);
+
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  tags,
+  image,
+  seo
+} = post.data;
+
+const seoImage = {
+  src: seo?.ogImage || image?.src || siteConfig.ogImage,
+  alt: image?.alt || title
+};
+
+const categorySlug =
+  categoryEntry?.id ||
+  slugify(categoryEntry?.data?.name || siteData.general);
+
+const seoCategory = {
+  name: categoryEntry?.data?.name || siteData.general,
+  description: categoryEntry?.data?.description || "",
+  slug: categorySlug,
+};
+
+const seoTitle = seo?.title || title;
+const seoDescription = seo?.description || description;
+
+const siteURL = Astro.site?.toString() ?? siteConfig.siteUrl;
+const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
+
+const homeLabel = siteData.home;
+const blogLabel = siteData.blog;
+
+const SeoBreadcrumbItems = [
+  { name: homeLabel, href: '/'},
+  { name: blogLabel, href: '/blog'},
+  { name: seoCategory.name, href: `/blog/category/${seoCategory.slug}`},
+  { name: title, href: canonicalURL }
+];
+
+const Breadcrumbs = SeoBreadcrumbItems.filter(
+  (item) =>
+    item.name === blogLabel ||
+    item.name === seoCategory.name
+);
 ---
 
-<!DOCTYPE html>
-<html
-  lang={lang}
-  dir="ltr"
-  class="scroll-smooth antialiased"
-  prefix={seoProps.type === "article"? "og: https://ogp.me/ns# article: https://ogp.me/ns/article#" : "og: https://ogp.me/ns#"}>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <BaseHead
-      {...seoProps}
-      siteData={siteData}
-      client={client}
-      role={creativeWorkRole}
-      duration={duration}
-      demoUrl={demoUrl}
-      repoUrl={repoUrl}
-    />
-    <ThemeScript />
-    <script is:inline>
-      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-NJJPZV2M');
-    </script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2TKFP229HJ"></script>
-    <script is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-2TKFP229HJ');
-    </script>
-    <script src="https://cdn.cookiehub.eu/c2/561fe9ba.js"></script>
-    <script type="text/javascript">
-      document.addEventListener("DOMContentLoaded", function(event) {
-        var cpm = {};
-        window.cookiehub.load(cpm);
-      });
-    </script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4943136052113535" crossorigin="anonymous"></script>
-    <YandexLoader />
-    {seoProps.type === "article" && (
-      <>
-        <script async type="application/javascript" src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
-        <script is:inline>
-          (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
-            basicSubscriptions.init({
-              type: "NewsArticle",
-              isPartOfType: ["Product"],
-              isPartOfProductId: "CAow3NjGDA:openaccess",
-              clientOptions: { theme: "dark", lang: "en" },
-            });
-          });
-        </script>
-      </>
-    )}
-  </head>
-  <body>
-    <noscript>
-      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NJJPZV2M" height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
-    <a href="#main-content" class="sr-only text-copy-16 md:text-copy-18 focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:bg-(--bg) focus:text-(--fg) focus:px-4 focus:py-2 focus:border focus:border-(--border)">
-      {siteConfig.skipToContent}
-    </a>   
-    {header && <Header />}
-    <main id="main-content">
-      {withContainer? (
-        <Container size={size}>
-          <slot />          
+<BaseLayout
+  title={seoTitle}
+  description={seoDescription}
+  lang={articleLang}
+  image={seoImage}
+  type="article"
+  publishedTime={pubDate}
+  modifiedTime={updatedDate}
+  tags={tags}
+  category={seoCategory}
+  author={{
+    name: authorEntry?.data.name ?? siteConfig.author.name,
+    role: authorEntry?.data.role ?? siteConfig.author.role,
+    avatar: authorEntry?.data.avatar ?? siteConfig.author.avatar,
+    bio: authorEntry?.data.bio ?? siteConfig.author.bio,
+    slug: authorEntry?.id ?? siteConfig.author.slug,
+  }}
+  canonicalURL={canonicalURL}>  
+  <Section size="none" class="relative z-0">
+    <BG spacing={16} dotSize={0.8} opacity={0.1} />
+    <Section size="sm" class="relative z-10">
+      <div class="relative grid grid-cols-1 rounded-xl border border-(--border) max-w-5xl mx-auto p-0 bg-(--bg)/60">
+        <Container size="md">
+          <Section size="sm">
+            <Breadcrumb items={Breadcrumbs} />
+          </Section>
+          <article id="article" class="mx-auto max-w-3xl">
+            <Section size="sm">
+              <PostHeader
+                lang={articleLang}
+                title={title}
+                description={description}
+                pubDate={pubDate}
+                content={post.body}
+                authorName={authorEntry?.data.name}
+                authorAvatar={authorEntry?.data.avatar}
+                authorRole={authorEntry?.data.role}
+                authorSlug={authorEntry?.id}
+                overviewItems={post.data.overview}
+              />
+            </Section>
+            <Section size="sm">
+              <div id="article" class="prose-custom">
+                <Content components={components} />
+              </div>
+            </Section>
+          </article>
+          <Section size="sm">
+            <div rrm-inline-cta="1b7a649f-eb54-48c5-8106-f2ac499dfc5f"></div>
+          </Section>
+          <Section size="sm">
+            <RssFeed />
+          </Section>
         </Container>
-        ) : (
-          <slot />
-        )
-      }
-    </main>
-    <Search />
-    {footer && <Footer />}
-    <div id="modal-root"></div>
-    <MobileMenu />
-    <ScrollScript />
-    <script is:inline>
-      window.yaContextCb.push(() => {
-        Ya.Context.AdvManager.render({
-          "blockId": "R-A-19179231-1",
-          "type": "floorAd",
-          "platform": "touch"
-        })
-      })
-    </script>
-    <YandexAds />
-  </body>
-</html>
+      </div>
+    </Section>
+    <Section size="sm">
+      <Container size="lg">
+        <div id="yandex_rtb_R-A-19179231-6"></div>
+      </Container>
+    </Section>
+    <Section size="none">
+      <Container size="lg">
+        <h2 class="text-heading-24 lg:text-heading-32 text-(--fg) font-semibold pb-4 lg:pb-6">
+          Comments.
+        </h2>
+        <Comments />
+      </Container>     
+    </Section>
+    <Section size="sm">
+      <Container size="lg">
+        <div class="flex items-center gap-2 justify-center">
+          <span class="text-label-16 text-(--fg)">Share this article: </span>
+          <SharePost url={canonicalURL} title={title} description={description} />
+        </div>
+      </Container>
+    </Section>
+    <!--<Section size="sm">
+      <Container size="lg">
+        <div rrm-inline-cta="49034a2c-dc4c-4915-a82c-939bbf352095"></div>
+      </Container>
+    </Section>-->
+    <Section size="sm" class="border-t sm:border-none border-(--border)">
+      <h2 class="sr-only">{siteData.b_articleNavigation}</h2>
+      <Container size="lg">
+        <PostNavigation prevPost={prevPost} nextPost={nextPost} />
+      </Container>
+    </Section>
+  </Section>
+  <BackToTop />
+</BaseLayout>
