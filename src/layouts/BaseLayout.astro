@@ -21,12 +21,18 @@ interface Props {
   image?: { src: string; alt: string };
   canonicalURL?: URL | string;
   type?: "website" | "article" | "profile" | "creativeWork";
+  basePath?: 'blog' | 'portfolio' | 'legal' | 'blog/category' | 'author' | '';
   noIndex?: boolean;
   publishedTime?: Date;
   modifiedTime?: Date;
   tags?: string[];
   category?: { name: string; description?: string; slug: string };
   author?: { name: string; role: string; avatar: string; bio: string; slug: string };
+  client?: string;
+  role?: string;
+  duration?: string;
+  demoUrl?: string;
+  repoUrl?: string;
   seo?: {
     title?: string;
     description?: string;
@@ -38,11 +44,6 @@ interface Props {
   footer?: boolean;
   withContainer?: boolean;
   size?: "sm" | "md" | "lg" | "xl" | "full";
-  client?: string;
-  role?: string;
-  duration?: string;
-  demoUrl?: string;
-  repoUrl?: string;
 }
 
 const {
@@ -66,7 +67,7 @@ const siteData = siteConfig;
 <html
   lang={lang}
   dir="ltr"
-  class="scroll-smooth antialiased"
+  class="antialiased"
   prefix={seoProps.type === "article"
     ? "og: https://ogp.me/ns# article: https://ogp.me/ns/article#"
     : "og: https://ogp.me/ns#"}
@@ -124,16 +125,12 @@ const siteData = siteConfig;
           type: "NewsArticle",
           isPartOfType: ["Product"],
           isPartOfProductId: "CAow3NjGDA:openaccess",
-          clientOptions: { theme: "dark", lang: "id" },
+          clientOptions: { theme: "dark", lang: "en" },
           autoPromptType: "none"
         });
       });
     </script>
-    <script
-      async
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4943136052113535"
-      crossorigin="anonymous"
-    ></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4943136052113535" crossorigin="anonymous"></script>
     <YandexLoader />
   </head>
 
