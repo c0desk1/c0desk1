@@ -13,8 +13,8 @@ export const seoConfig = {
   },
 
   social: [
-    { label: "Facebook", icon: 'facebook', href: "https://facebook.com/c0desk1Page" },
-    { label: "WhatsApp", icon: 'whatsapp', href: "https://whatsapp.com/channel/0029VaxZggiFnSzHLKybx42h" },
-    { label: "Github", icon: 'github', href: "https://github.com/c0desk1" }
+    { label: "facebook", href: "https://facebook.com/c0desk1Page" },
+    { label: "whatsapp", href: "https://whatsapp.com/channel/0029VaxZggiFnSzHLKybx42h" },
+    { label: "github", href: "https://github.com/c0desk1" }
   ],
 } as const;
