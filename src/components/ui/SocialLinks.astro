@@ -45,7 +45,7 @@ const {
         class="inline-flex items-center gap-1.5 text-muted transition-colors hover:text-(--fg) active:text-(--fg) focus:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)"
       >
         <Icon
-          name={item.label as any}
+          name={item.label.toLowerCase() as any}
           className={iconClass}
           aria-hidden="true"
         />
