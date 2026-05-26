@@ -1,5 +1,4 @@
 ---
-// src/components/mdx/ImageMDX.astro
 import { cdnImage, isCdnUrl } from '@/lib/utils';
 import { Image } from 'astro:assets';
 import Icon from '@/components/ui/Icon';
@@ -8,37 +7,83 @@ interface Props {
   src: string;
   alt?: string;
   title?: string;
+  caption?: string;
+  href?: string;
 }
 
-const { src, alt = '', title } = Astro.props;
+const { src, alt = '', title, caption: propsCaption, href: propsHref } = Astro.props;
 
 const optimizedSrc = src && isCdnUrl(src)
   ? cdnImage(src, { w: 1280, h: 720, q: 80 })
   : src ?? '';
 
-const caption = title || alt;
+let finalAlt = alt;
+let finalCaption = propsCaption || '';
+let finalHref = propsHref || '';
+
+if (alt && alt.includes(' | ')) {
+  const parts = alt.split(' | ');
+
+  finalAlt = parts[0].trim(); 
+
+  parts.forEach(part => {
+    if (part.trim().startsWith('caption:')) {
+      finalCaption = part.replace('caption:', '').trim();
+    }
+    if (part.trim().startsWith('link:')) {
+      finalHref = part.replace('link:', '').trim();
+    }
+  });
+}
+
+const finalTitle = title || finalCaption || finalAlt;
+
+if (!finalCaption && title) {
+  finalCaption = title;
+}
+
+const imageClass = finalHref 
+  ? "relative h-full w-full object-cover transition duration-500 opacity-0" 
+  : "zoomable-image relative h-full w-full object-cover transition duration-500 opacity-0 cursor-zoom-in";
 ---
 
 <figure class="full-width-figure my-4">
   <div class="relative overflow-hidden rounded-(--prose-radius-lg) border border-(--prose-image-border) bg-(--prose-image-bg) p-2 shadow-sm">
-    <Image
-      src={optimizedSrc}
-      alt={alt}
-      loading="lazy"
-      decoding="async"
-      width={1200}
-      height={630}
-      class="zoomable-image relative h-full w-full object-cover transition duration-500 opacity-0 cursor-zoom-in"
-      onload="this.classList.remove('opacity-0')"
-    />
+    {finalHref ? (
+      <a href={finalHref} target="_blank" rel="noopener noreferrer" class="block w-full h-full">
+        <Image
+          src={optimizedSrc}
+          alt={finalAlt}
+          title={finalTitle}
+          loading="lazy"
+          decoding="async"
+          width={1200}
+          height={630}
+          class={imageClass}
+          onload="this.classList.remove('opacity-0')"
+        />
+      </a>
+    ) : (
+      <Image
+        src={optimizedSrc}
+        alt={finalAlt}
+        title={finalTitle}
+        loading="lazy"
+        decoding="async"
+        width={1200}
+        height={630}
+        class={imageClass}
+        onload="this.classList.remove('opacity-0')"
+      />
+    )}
   </div>
-  {caption && (
-    <figcaption class="text-copy-14 text-(--prose-figure-caption) mt-4!">{caption}</figcaption>
+  {finalCaption && (
+    <figcaption class="text-copy-14 text-(--prose-figure-caption) mt-4!">{finalCaption}</figcaption>
   )}
 </figure>
 
-<div class="lightbox-overlay" id="lightbox-overlay">
-  <button class="lightbox-close p-2 rounded-full bg-(--bg-muted)/10 hover:bg-(--bg-muted)/5 active:bg-(--bg-muted)/5 text-(--fg-inverted) dark:text-(--fg)" id="lightbox-close">
+<div class="lightbox-overlay" id="lightbox-overlay" aria-hidden="true">
+  <button class="lightbox-close p-2 rounded-full bg-(--bg-muted)/10 hover:bg-(--bg-muted)/5 active:bg-(--bg-muted)/5 text-(--fg-inverted) dark:text-(--fg)" id="lightbox-close" aria-label="Close lightbox">
     <Icon name="close" className="w-6 h-6" />
   </button>
   <div class="lightbox-zoom-container">
@@ -57,18 +102,12 @@ const caption = title || alt;
     padding: 0 1rem;
   }
   @media (min-width: 768px) {
-    .full-width-figure {
-      padding: 0 1.5rem;
-    }
+    .full-width-figure { padding: 0 1.5rem; }
   }
   @media (min-width: 1024px) {
-    .full-width-figure {
-      padding: 0 2rem;
-    }
+    .full-width-figure { padding: 0 2rem; }
   }
-  .full-width-figure .relative {
-    width: 100%;
-  }
+  .full-width-figure .relative { width: 100%; }
 
   .lightbox-overlay {
     display: flex;
@@ -83,7 +122,6 @@ const caption = title || alt;
     z-index: 999;
     opacity: 0;
     visibility: hidden;
-    transition: none;
     overscroll-behavior: contain;
   }
 
@@ -147,14 +185,24 @@ const caption = title || alt;
 
 <script>
   function initLightbox() {
-    const overlay = document.getElementById('lightbox-overlay');
+    const overlays = document.querySelectorAll('.lightbox-overlay');
+    if (overlays.length === 0) return;
+
+    if (overlays.length > 1) {
+      for (let i = 1; i < overlays.length; i++) {
+        overlays[i].remove();
+      }
+    }
+
+    const overlay = document.getElementById('lightbox-overlay') as HTMLElement;
     const lightboxImg = document.getElementById('lightbox-image') as HTMLImageElement;
     const closeBtn = document.getElementById('lightbox-close');
 
     if (!overlay || !lightboxImg || !closeBtn) return;
 
-    const openLightbox = (src: string) => {
+    const openLightbox = (src: string, alt: string) => {
       lightboxImg.src = src;
+      lightboxImg.alt = alt;
       overlay.classList.add('active');
       overlay.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
@@ -166,30 +214,30 @@ const caption = title || alt;
       document.body.style.overflow = '';
     };
 
-    // Buka lightbox dari artikel
     document.querySelectorAll('.zoomable-image').forEach(img => {
-      img.addEventListener('click', () => {
-        openLightbox((img as HTMLImageElement).src);
-      });
+      img.removeEventListener('click', handleImageClick);
+      img.addEventListener('click', handleImageClick);
     });
 
-    // Tutup dengan klik gambar
-    lightboxImg.addEventListener('click', closeLightbox);
+    function handleImageClick(e: Event) {
+      const target = e.target as HTMLImageElement;
+      openLightbox(target.src, target.alt);
+    }
 
-    // Tutup dengan tombol close
-    closeBtn.addEventListener('click', closeLightbox);
-
-    // Tutup dengan klik di luar gambar
-    overlay.addEventListener('click', (e) => {
+    lightboxImg.onclick = closeLightbox;
+    closeBtn.onclick = closeLightbox;
+    overlay.onclick = (e) => {
       if (e.target === overlay) closeLightbox();
-    });
+    };
 
-    // Tutup dengan ESC
-    document.addEventListener('keydown', (e) => {
+    document?.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
+
+    function handleKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape' && overlay.classList.contains('active')) {
         closeLightbox();
       }
-    });
+    }
   }
 
   document.addEventListener('astro:page-load', initLightbox);
