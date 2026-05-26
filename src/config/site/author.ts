@@ -7,6 +7,7 @@ export const authorConfig = {
     avatar: "/org/author.jpg",
     bio: "Music producer, Adobe Stock contributor, and developer.",
     slug: "bima-akbar",
+    twitter: '@bimaakbarmusic',
     social: [
       { label: "facebook", href: "https://facebook.com/bimaakbarmusicc" },
       { label: "instagram", href: "https://instagram.com/bimaakbarmusic" },
