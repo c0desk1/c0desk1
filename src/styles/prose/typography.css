@@ -7,7 +7,6 @@
 }
 
 .prose-custom :where(h1,h2,h3,h4,h5,h6){
-  @apply text-balance;
   font-family:var(--prose-font-sans);
   color:var(--prose-fg);
   margin-bottom:0;
@@ -50,7 +49,6 @@
 }
 
 .prose-custom p {
-  @apply text-pretty;
   margin-bottom:1.25rem;
 }
 
