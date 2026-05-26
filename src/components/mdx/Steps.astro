@@ -1,0 +1,82 @@
+---
+// src/components/mdx/Steps.astro
+import Icon from '@/components/ui/Icon';
+
+const html = await Astro.slots.render('default');
+
+const stepRegex = /(<h[234][^>]*>[\s\S]*?<\/h[234]>)([\s\S]*?)(?=<h[234]|$)/gi;
+const steps: { heading: string; content: string }[] = [];
+let match;
+while ((match = stepRegex.exec(html)) !== null) {
+  steps.push({ heading: match[1], content: match[2].trim() });
+}
+if (steps.length === 0) steps.push({ heading: '', content: html });
+---
+
+<div class="relative my-6 md:my-8 pl-10 sm:pl-12" id="steps-wrapper">
+  <div id="steps-line" class="absolute left-3.5 w-px bg-(--prose-border)" style="top:0; bottom:0;"></div>
+  <div class="space-y-8">
+    {steps.map((step, idx) => {
+      const isLast = idx === steps.length - 1;
+      return (
+        <div class="relative step-item">
+          {step.heading ? (
+            <div class="relative flex items-center mb-2">
+              <div class="absolute -left-10 sm:-left-12 w-7 h-7 rounded-full bg-(--prose-bg-muted) border border-(--prose-border) flex items-center justify-center text-label-13-mono md:text-label-14-mono font-semibold z-10">
+                {isLast ? (
+                  <Icon name="check" className="w-4 h-4 text-(--prose-accent-active)" />
+                ) : (
+                  <span class="text-label-mono-13 text-(--prose-fg-nuted)">{idx + 1}</span>
+                )}
+              </div>
+              <div class="steps-content text-heading-20 font-semibold mt-0!" set:html={step.heading} />
+            </div>
+          ) : null}
+          {step.content ? (
+            <div class="steps-content text-copy-14 lg:text-copy-16 text-(--prose-fg-muted) space-y-1 mt-1" set:html={step.content} />
+          ) : null}
+        </div>
+      );
+    })}
+  </div>
+</div>
+
+<style>
+  .step-item :global(h2),
+  .step-item :global(h3),
+  .step-item :global(h4) {
+    margin-top: 0 !important;
+  }
+</style>
+
+<script>
+  function adjustLine() {
+    const wrapper = document.getElementById('steps-wrapper');
+    const line = document.getElementById('steps-line');
+    if (!wrapper || !line) return;
+
+    const bullets = wrapper.querySelectorAll('.step-item .rounded-full');
+    if (bullets.length === 0) return;
+
+    const firstBullet = bullets[0] as HTMLElement;
+    const lastBullet = bullets[bullets.length - 1] as HTMLElement;
+
+    const wrapperRect = wrapper.getBoundingClientRect();
+    const firstBulletRect = firstBullet.getBoundingClientRect();
+    const lastBulletRect = lastBullet.getBoundingClientRect();
+
+    const top = firstBulletRect.top - wrapperRect.top + firstBullet.offsetHeight / 2;
+    const bottom = wrapperRect.bottom - (lastBulletRect.bottom - lastBullet.offsetHeight / 2);
+
+    line.style.top = `${top}px`;
+    line.style.bottom = `${bottom}px`;
+  }
+
+  document.addEventListener('astro:page-load', adjustLine);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', adjustLine);
+  } else {
+    adjustLine();
+  }
+  window.addEventListener('resize', adjustLine);
+</script>

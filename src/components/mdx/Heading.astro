@@ -1,0 +1,43 @@
+---
+// src/components/mdx/HeadingAnchor.astro
+import Icon from "../ui/Icon";
+
+interface Props {
+  id?: string;
+  'data-level'?: string;
+  class?: string;
+}
+
+const { id, 'data-level': levelStr, class: className } = Astro.props;
+const level = parseInt(levelStr || '2');
+const Tag = `h${level}` as any;
+
+const anchorLabel = 'Link to this heading';
+
+const headingClasses: Record<string, string> = {
+  h1: "text-heading-32 md:text-heading-40 lg:text-heading-56",
+  h2: "text-heading-24 md:text-heading-32",
+  h3: "text-heading-20 md:text-heading-24",
+  h4: "text-heading-16 md:text-heading-20",
+  h5: "text-label-14",
+  h6: "text-label-12",
+};
+const classes = headingClasses[`h${level}`] || "text-heading-20";
+---
+
+<Tag
+  id={id}
+  class:list={[
+    "heading-group has-anchor",
+    "inline-flex items-baseline flex-wrap gap-x-1",
+    classes,
+    className
+  ]}
+>
+  <span class="heading-text-content"><slot /></span>
+  {id && (
+    <a href={`#${id}`} class="anchor-link mt-auto mb-auto w-8 h-8 rounded-full" aria-label={anchorLabel}>
+      <Icon name="link" className="w-4 h-4 sm:w-5 sm:h-5" />
+    </a>
+  )}
+</Tag>

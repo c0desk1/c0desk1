@@ -1,0 +1,182 @@
+/* src/styles/prose/code.css */
+@reference '@/styles/utilities.css';
+
+/* Inline code */
+.prose code:not(pre code) {
+  @apply text-code-14;
+  background-color: var(--prose-code-bg);
+  color: var(--prose-fg);
+  padding: 0.2em 0.4em;
+  border-radius: var(--prose-radius-md);
+  border: 1px solid var(--prose-code-border);
+  white-space: break-spaces;
+}
+
+.prose h1 code,
+.prose h2 code,
+.prose h3 code,
+.prose summary code {
+  font-size: 0.9em;
+  background-color: var(--prose-code-bg);
+}
+
+.prose pre {
+  background: none !important;
+  padding: 1.25rem 1.5rem;
+  overflow-x: auto;
+  margin: 0 !important;
+  position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: var(--prose-border) transparent;
+}
+
+.prose pre::-webkit-scrollbar {
+  height: 4px;
+}
+.prose pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+.prose pre::-webkit-scrollbar-thumb {
+  background: var(--prose-border);
+  border-radius: 2px;
+}
+
+.prose pre code {
+  @apply text-code-14;
+}
+
+/* Copy button */
+.prose pre .copy-button {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  font-family: var(--prose-font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--prose-radius-sm);
+  border: 1px solid var(--prose-border);
+  color: var(--prose-fg-subtle);
+  cursor: pointer;
+  transition: all var(--prose-transition);
+  opacity: 0;
+}
+.prose pre:hover .copy-button {
+  opacity: 1;
+}
+.prose pre .copy-button:hover {
+  background: var(--prose-surface-hover);
+  color: var(--prose-fg);
+  border-color: var(--prose-border);
+}
+
+/* Code group */
+.prose .code-block-wrapper {
+  margin: 2.5rem 0;
+  overflow-x: auto;
+  border-radius: var(--prose-radius-lg);
+  border: 1px solid var(--prose-code-border);
+  background: var(--prose-code-bg) !important;
+}
+.prose .code-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--prose-code-border);
+  padding-inline: 0.5rem;
+  background: var(--prose-code-bg) !important;
+}
+
+.prose .code-block-title {
+  position: relative;
+  color: var(--prose-fg);
+  transition: color var(--prose-transition);
+}
+
+.prose .copy-button {
+  color: var(--prose-fg-subtle);
+  cursor: pointer;
+  transition: color var(--prose-transition);
+}
+.prose .copy-button:hover {
+  color: var(--prose-fg);
+}
+.prose .copy-button .copy-icon,
+.prose .copy-button .check-icon {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+.prose .code-content {
+  margin: 0;
+  border-radius: 0;
+  border-style: none;
+  background: var(--prose-code-bg) !important;
+}
+.prose .code-content pre {
+  border: none;
+  margin: 0;
+  border-radius: 0;
+  background-color: transparent !important;
+  overflow-x: auto;
+  white-space: pre;
+  word-break: normal;
+  word-wrap: normal;
+}
+.prose .code-content pre code {
+  white-space: pre !important;
+}
+.prose .code-content pre::-webkit-scrollbar {
+  height: 4px;
+}
+.prose .code-content pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+.prose .code-content pre::-webkit-scrollbar-thumb {
+  background: var(--prose-border);
+  border-radius: 2px;
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .prose code:not(pre code) {
+    @apply text-code-13;
+    padding: 0.15em 0.3em;
+  }
+  .prose pre {
+    padding: 1.5rem 1rem;
+    margin: 1.5rem 0;
+    border-radius: var(--prose-radius-sm);
+  }
+  .prose pre .copy-btn {
+    top: 0.5rem;
+    right: 0.5rem;
+    font-size: 10px;
+    padding: 0.2rem 0.45rem;
+  }
+  .prose .copy-button .copy-icon,
+  .prose .copy-button .check-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+  .prose code:not(pre code) {
+    @apply text-code-14;
+  }
+}
+
+.dark .astro-code {
+  background-color: var(--prose-surface) !important;
+  overflow-x: auto;
+}
+.dark .astro-code span {
+  background-color: transparent !important;
+  color: var(--shiki-dark) !important;
+  white-space: pre;
+  word-break: normal;
+  word-wrap: normal;
+}

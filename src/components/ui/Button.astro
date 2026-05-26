@@ -1,0 +1,86 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Variant = 'primary' | 'secondary' | 'tertiary' | 'danger';
+type Size = 'sm' | 'md' | 'lg';
+
+type BaseProps = {
+  variant?: Variant;
+  size?: Size;
+  loading?: boolean;
+  disabled?: boolean;
+  class?: string;
+};
+
+type AnchorProps = HTMLAttributes<'a'> & BaseProps & {
+  href: string;
+  type?: never;
+};
+
+type ButtonProps = HTMLAttributes<'button'> & BaseProps & {
+  href?: never;
+  type?: 'button' | 'submit' | 'reset';
+};
+
+type Props = AnchorProps | ButtonProps;
+
+const {
+  href,
+  variant = 'secondary',
+  size = 'md',
+  loading = false,
+  disabled = false,
+  class: className,
+  type,
+  ...rest
+} = Astro.props as Props;
+
+const isLink = !!href;
+const resolvedType = type ?? 'button';
+
+const base = [
+  "inline-flex items-center justify-center gap-2 rounded-full transition-colors duration-150 select-none",
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring) focus-visible:ring-offset-2 focus-visible:(--focus-ring-offset)",
+  "active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 data-[loading=true]:cursor-wait"
+].join(' ');
+
+const variants: Record<Variant, string> = {
+  primary: "bg-(--fg) text-(--bg) border border-(--border-strong)/5 hover:bg-(--fg-subtle) active:bg-(--fg-subtle) shadow-sm",
+  secondary: "bg-(--bg) text-(--fg) border border-(--border) hover:bg-(--bg-muted) active:bg-(-bg-muted) shadow-sm",
+  tertiary: "text-(--fg-muted) hover:bg-(--bg-muted) active:bg-(--bg-muted)",
+  danger: "bg-(--error) text-(--error-fg) hover:bg-(--error-dim) active:bg-(--error-soft) shadow-sm",
+};
+
+const sizes: Record<Size, string> = {
+  sm: 'h-8 px-3 text-button-12',
+  md: 'h-9 px-4 text-button-14',
+  lg: 'h-10 px-6 text-button-16',
+};
+
+const classes = [base, variants[variant], sizes[size], className].filter(Boolean).join(' ');
+---
+
+{isLink ? (
+  <a
+    href={href}
+    class={classes}
+    data-loading={loading}
+    aria-disabled={disabled || loading}
+    {...rest}
+  >
+    {loading && <span class="h-4 w-4 animate-spin border-2 border-current border-t-transparent rounded-full" />}
+    <slot />
+  </a>
+) : (
+  <button
+    type={resolvedType}
+    class={classes}
+    data-loading={loading}
+    disabled={disabled || loading}
+    aria-disabled={disabled || loading}
+    {...rest}
+  >
+    {loading && <span class="h-4 w-4 animate-spin border-2 border-current border-t-transparent rounded-full" />}
+    <slot />
+  </button>
+)}

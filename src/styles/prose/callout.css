@@ -1,0 +1,221 @@
+/* src/styles/prose/callout.css */
+@reference '@/styles/utilities.css';
+
+.prose .callout {
+  display: flex;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border-radius: var(--prose-radius-lg);
+  border: 1.5px solid;
+  color: inherit;
+}
+
+.prose .callout-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.prose .callout-icon {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.prose .callout-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.prose .callout-content > *:first-child {
+  margin-top: 0 !important;
+}
+
+.prose .callout-content > *:last-child {
+  margin-bottom: 0 !important;
+}
+
+.prose .callout-content p,
+.prose .callout-content ul,
+.prose .callout-content ol,
+.prose .callout-content li,
+.prose .callout-content small,
+.prose .callout-content mark {
+  margin-top: 0 !important;
+  color: inherit;
+}
+
+.prose .callout-content strong {
+  color: var(--prose-fg-strong);
+}
+
+.prose .callout-content em {
+  color: var(--prose-fg);
+}
+
+.prose .callout-content p,
+.prose .callout-content ul,
+.prose .callout-content ol {
+  margin-bottom: 1rem;
+}
+
+.prose .callout-content li {
+  margin-bottom: 0.25rem;
+}
+
+.prose .callout-content small {
+  display: inline-block;
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+  opacity: 0.8;
+}
+
+.prose .callout-content mark {
+  background-color: var(--prose-highlight-bg);
+  color: var(--prose-highlight-text);
+  border: 1px solid var(--prose-highlight-border);
+  padding: 0.1em 0.25em;
+  border-radius: 2px;
+  font-weight: 500;
+}
+
+.prose .callout-content sup,
+.prose .callout-content sub {
+  position: relative;
+  font-size: 0.6rem;
+  line-height: 1;
+  vertical-align: baseline;
+  opacity: 0.8;
+}
+
+.prose .callout-content sup {
+  top: -0.3em;
+}
+
+.prose .callout-content sub {
+  bottom: -0.2em;
+}
+
+.prose .callout-content a {
+  color: var(--prose-accent);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color 0.15s ease;
+}
+
+.prose .callout-content a:hover {
+  color: var(--prose-accent-hover);
+}
+
+.prose .callout-content .external-icon {
+  display: none;
+}
+
+.prose .callout-content ul,
+.prose .callout-content ol {
+  padding-left: 1.25rem;
+}
+.prose .callout-content li::marker {
+  color: currentColor;
+  opacity: 0.5;
+}
+
+/* NOTE */
+.prose [data-callout="note"] {
+  background: var(--callout-note-bg);
+  border-color: var(--callout-note-border);
+  color: var(--callout-note-text);
+}
+.prose [data-callout="note"] .callout-title {
+  color: var(--callout-note-title);
+}
+.prose [data-callout="note"] .callout-icon {
+  color: var(--callout-note-icon);
+}
+
+/* INFO */
+.prose [data-callout="info"] {
+  background: var(--callout-info-bg);
+  border-color: var(--callout-info-border);
+  color: var(--callout-info-text);
+}
+.prose [data-callout="info"] .callout-title {
+  color: var(--callout-info-title);
+}
+.prose [data-callout="info"] .callout-icon {
+  color: var(--callout-info-icon);
+}
+
+/* TIP */
+.prose [data-callout="tip"] {
+  background: var(--callout-tip-bg);
+  border-color: var(--callout-tip-border);
+  color: var(--callout-tip-text);
+}
+.prose [data-callout="tip"] .callout-title {
+  color: var(--callout-tip-title);
+}
+.prose [data-callout="tip"] .callout-icon {
+  color: var(--callout-tip-icon);
+}
+
+/* WARNING */
+.prose [data-callout="warning"] {
+  background: var(--callout-warning-bg);
+  border-color: var(--callout-warning-border);
+  color: var(--callout-warning-text);
+}
+.prose [data-callout="warning"] .callout-title {
+  color: var(--callout-warning-title);
+}
+.prose [data-callout="warning"] .callout-icon {
+  color: var(--callout-warning-icon);
+}
+
+/* CAUTION */
+.prose [data-callout="caution"] {
+  background: var(--callout-caution-bg);
+  border-color: var(--callout-caution-border);
+  color: var(--callout-caution-text);
+}
+.prose [data-callout="caution"] .callout-title {
+  color: var(--callout-caution-title);
+}
+.prose [data-callout="caution"] .callout-icon {
+  color: var(--callout-caution-icon);
+}
+
+/* IMPORTANT */
+.prose [data-callout="important"] {
+  background: var(--callout-important-bg);
+  border-color: var(--callout-important-border);
+  color: var(--callout-important-text);
+}
+.prose [data-callout="important"] .callout-title {
+  color: var(--callout-important-title);
+}
+.prose [data-callout="important"] .callout-icon {
+  color: var(--callout-important-icon);
+}
+
+/* DANGER */
+.prose [data-callout="danger"] {
+  background: var(--callout-danger-bg);
+  border-color: var(--callout-danger-border);
+  color: var(--callout-danger-text);
+}
+.prose [data-callout="danger"] .callout-title {
+  color: var(--callout-danger-title);
+}
+.prose [data-callout="danger"] .callout-icon {
+  color: var(--callout-danger-icon);
+}
+
+@media (min-width: 48rem) {
+  .prose .callout {
+    margin: 2.5rem 0;
+  }
+}

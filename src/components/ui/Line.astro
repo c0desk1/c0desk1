@@ -1,0 +1,29 @@
+---
+interface Props {
+  type?: 'h' | 'v' | 'h-full';
+  variant?: 'solid' | 'dashed';
+  class?: string;
+}
+
+const { 
+  type = 'h', 
+  variant = 'solid', 
+  class: className = '' 
+} = Astro.props;
+
+const baseStyles = "border-(--border) pointer-events-none z-10 absolute";
+const borderStyle = variant === 'dashed' ? 'border-dashed' : 'border-solid';
+
+let typeStyles = "";
+
+if (type === 'h') {
+  typeStyles = `w-full border-t ${borderStyle} top-0 left-0`;
+} else if (type === 'v') {
+  typeStyles = `h-full border-l ${borderStyle} top-0 left-0`;
+} else if (type === 'h-full') {
+
+  typeStyles = `w-full border-t ${borderStyle} inset-x-0 top-0 bottom-0 my-auto h-0`;
+}
+---
+
+<div class:list={[baseStyles, typeStyles, className]} />

@@ -1,0 +1,16 @@
+---
+// src/components/ui/Logo.astro
+import { siteConfig } from "@/config/site";
+import Icon from "./Icon";
+
+
+const siteData = siteConfig;
+const homeHref = '/';
+const homeLabel = siteData.home;
+---
+
+<a href={homeHref} class="group flex items-center justify-center gap-2.5 transition-all duration-200 hover:opacity-80" aria-label={homeLabel}>
+  <div class="relative">
+    <Icon name="logo" className="w-8 h-8 text-(--fg)" />
+  </div>
+</a>

@@ -1,0 +1,55 @@
+---
+// src/components/blog/postHeader.astro
+import PostMeta from './PostMeta.astro';
+import Overview from '../blog/BlogOverview.astro';
+import PostAuthor from './PostAuthor.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  content?: string;
+  authorName?: string;
+  authorAvatar?: string;
+  authorRole?: string;
+  authorSlug: string;
+  overviewItems?: string[];
+}
+
+const {
+  title,
+  pubDate,
+  content = '',
+  authorName,
+  authorAvatar,
+  authorRole,
+  authorSlug,
+  overviewItems
+} = Astro.props;
+---
+
+<header class="w-full">
+  <div class="flex flex-col items-center text-center gap-4 md:gap-6">
+    <h1 class="text-heading-24 md:text-heading-32 lg:text-heading-48 text-center text-(--fg) font-semibold">
+      {title}
+    </h1>
+    {authorName && (
+      <PostAuthor
+        name={authorName}
+        avatar={authorAvatar}
+        role={authorRole}
+        slug={authorSlug}
+      />
+    )}
+    {content && (
+      <div class="w-full mt-4">
+        <PostMeta pubDate={pubDate} content={content} />
+      </div>
+    )}
+    {overviewItems && overviewItems.length > 0 && (
+      <div class="w-full">
+        <Overview items={overviewItems} />
+      </div>
+    )}
+  </div>
+</header>

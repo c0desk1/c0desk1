@@ -1,0 +1,76 @@
+/* src/styles/prose/components/link.css */
+@reference '@/styles/utilities.css';
+
+.prose a {
+  color: var(--prose-accent-dim);
+  font-weight: 600;
+  text-decoration: none;
+  outline-offset: 2px;
+  -webkit-tap-highlight-color: transparent;
+  transition: color var(--prose-transition), text-decoration-color var(--prose-transition);
+}
+
+.prose a:visited {
+  color: var(--prose-accent-dim);
+}
+
+.prose a:focus-visible {
+  outline: 2px solid var(--prose-accent);
+  outline-offset: 2px;
+  border-radius: var(--prose-radius-sm);
+  text-decoration: underline;
+  text-decoration-color: var(--prose-accent);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+@media (hover: hover) {
+  .prose a:hover {
+    color: var(--prose-accent);
+    text-decoration: none;
+  }
+}
+
+.prose a:active {
+  text-decoration: underline;
+  text-decoration-color: var(--prose-accent);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.prose .inline-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.prose .inline-link:hover {
+  color: var(--prose-accent);
+  text-decoration: none;
+}
+
+.prose .inline-link:active {
+  text-decoration: underline;
+}
+
+.prose .external-icon {
+  opacity: 0.5;
+  width: 0.875em;
+  height: 0.875em;
+  transition: transform var(--prose-transition), opacity var(--prose-transition);
+}
+
+.prose a:hover > .external-icon {
+  opacity: 1;
+  transform: translate(1px, -1px);
+}
+
+@media (max-width: 767px) {
+  .prose a:focus-visible,
+  .prose a:active,
+  .prose .inline-link:active {
+    text-underline-offset: 2px;
+  }
+}

@@ -1,0 +1,39 @@
+@reference '@/styles/utilities.css';
+
+.prose .changelog-item :first-child {
+    margin-top: 0 !important;
+}
+.prose .changelog-item :last-child {
+    margin-bottom: 0 !important;
+}
+
+.prose .changelog-version h2,
+.prose .changelog-version h3,
+.prose .changelog-version h4 {
+    @apply text-heading-16;
+}
+
+.prose .changelog-items p {
+    @apply text-copy-14;
+}
+
+.prose .changelog-items ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.prose .changelog-items li {
+    @apply text-copy-14;
+    position: relative;
+    padding-left: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--prose-fg-muted);
+}
+
+.prose .changelog-items li::before {
+    content: '–';
+    position: absolute;
+    left: 0;
+    color: var(--prose-list-marker);
+}

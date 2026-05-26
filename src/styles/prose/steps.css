@@ -1,0 +1,40 @@
+/* src/styles/prose/steps.css */
+@reference '@/styles/utilities.css';
+
+.prose .steps-content :first-child {
+  margin-top: 0 !important;
+}
+
+.prose .steps-content :last-child {
+  margin-bottom: 0 !important;
+}
+
+.prose .steps-content h2,
+.prose .steps-content h3,
+.prose .steps-content h4 {
+  @apply text-heading-16;
+}
+.prose .steps-content ul,
+.prose .steps-content ol,
+.prose .steps-content p {
+  @apply text-copy-14;
+}
+.prose .steps-content .full-width-figure {
+  width: auto;
+}
+@media (min-width: 1024px) {
+  .prose .steps-content h2,
+  .prose .steps-content h3,
+  .prose .steps-content h4 {
+    @apply text-heading-20;
+  }
+  .prose .steps-content ul,
+  .prose .steps-content ol,
+  .prose .steps-content p {
+    @apply text-copy-16;
+  }
+
+  .prose .steps-content .full-width-figure {
+    width: auto;
+  }
+}

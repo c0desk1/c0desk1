@@ -1,0 +1,51 @@
+---
+// src/components/ui/SearchButton.astro
+import { siteConfig } from "@/config/site";
+import Icon from "./Icon";
+
+const siteData = siteConfig;
+const searchLabel = siteData.search;
+const searchPlaceholder = siteData.searchPlaceholder;
+---
+
+<button
+  id="search-trigger"
+  type="button"
+  aria-label={searchLabel}
+  title={searchLabel}
+  class="group flex items-center gap-2 p-2 sm:px-3 sm:py-1.5 rounded-full sm:rounded-lg border border-(--border) bg-transparent hover:bg-muted transition-colors duration-200"
+>
+  <Icon name="search" className="h-5 w-5 text-subtle active:text-(--fg)" />
+  <span class="hidden sm:inline text-label-13 text-muted">{searchPlaceholder}</span>
+  <kbd class="hidden sm:inline-flex items-center justify-center rounded px-1.5 py-0.5 text-code-12 text-subtle bg-subtle border border-strong ml-auto">
+    /
+  </kbd>
+</button>
+
+<script>
+  const openSearch = () => {
+    document.dispatchEvent(new CustomEvent("open-search"));
+  };
+
+  const initSearchButton = () => {
+    const btn = document.getElementById("search-trigger");
+    if (!btn) return;
+    btn.onclick = openSearch;
+  };
+
+  initSearchButton();
+  document.addEventListener("astro:page-load", initSearchButton);
+  document.addEventListener("keydown", (e) => {
+    const active = document.activeElement;
+    const isTyping =
+      active instanceof HTMLInputElement ||
+      active instanceof HTMLTextAreaElement ||
+      active?.getAttribute("contenteditable") === "true";
+
+    if (isTyping) return;
+    if (e.key === "/") {
+      e.preventDefault();
+      openSearch();
+    }
+  });
+</script>
