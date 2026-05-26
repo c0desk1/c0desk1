@@ -98,6 +98,7 @@ const activeAuthor = {
 };
 
 const isHomepage = Astro.url.pathname === "/";
+const isBlogIndex = Astro.url.pathname.replace(/\/$/, "") === "/blog";
 const isTimedContent = type === "article";
 const datePublished = isTimedContent ? publishedTime?.toISOString() : undefined;
 const dateModified = isTimedContent
@@ -105,6 +106,7 @@ const dateModified = isTimedContent
   : undefined;
 
 const twitterHandle = "@c0desk1";
+
 
 const schemaGraph: any[] = [];
 
@@ -121,6 +123,9 @@ schemaGraph.push({
     width: 512,
     height: 512,
   },
+  sameAs: [
+    `https://twitter.com/${twitterHandle.replace('@', '')}`
+  ]
 });
 
 // 2. WebSite
@@ -159,11 +164,14 @@ schemaGraph.push({
   },
   url: new URL(`author/${activeAuthor.slug}`, siteURL).toString(),
   worksFor: { "@id": `${siteURL}/#organization` },
+  sameAs: [
+    `https://twitter.com/${twitterHandle.replace('@', '')}`
+  ]
 });
 
 // 4. WebPage
 schemaGraph.push({
-  "@type": "WebPage",
+  "@type": isBlogIndex ? "CollectionPage" : "WebPage",
   "@id": `${seoResolved.canonical}#webpage`,
   url: seoResolved.canonical.toString(),
   name: formattedTitle,
