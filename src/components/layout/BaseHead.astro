@@ -194,56 +194,55 @@ schemaGraph.push({
 
 // 5. BreadcrumbList (non-homepage only)
 if (!isHomepage) {
-  const rawBreadcrumbs: { name: string; item: string }[] = [
-    { name: "Home", item: siteURL },
+  const breadcrumbItems: any[] = [
+    { "@type": "ListItem", position: 1, name: "Home", item: siteURL },
   ];
 
+  let currentPosition = 2;
+
   if (basePath.startsWith("blog")) {
-    rawBreadcrumbs.push({
+    breadcrumbItems.push({
+      "@type": "ListItem",
+      position: currentPosition++,
       name: "Blog",
       item: new URL("blog", siteURL).toString(),
     });
-    if (category?.name) {
-      rawBreadcrumbs.push({
+
+    if (type === "article" && category?.name) {
+      breadcrumbItems.push({
+        "@type": "ListItem",
+        position: currentPosition++,
         name: category.name,
         item: new URL(`blog/category/${category.slug}`, siteURL).toString(),
       });
     }
   } else if (basePath === "portfolio") {
-    rawBreadcrumbs.push({
+    breadcrumbItems.push({
+      "@type": "ListItem",
+      position: currentPosition++,
       name: "Portfolio",
       item: new URL("portfolio", siteURL).toString(),
     });
   } else if (basePath === "author") {
-    rawBreadcrumbs.push({
+    breadcrumbItems.push({
+      "@type": "ListItem",
+      position: currentPosition++,
       name: "Authors",
       item: new URL("author", siteURL).toString(),
     });
   }
 
-  rawBreadcrumbs.push({
-    name: seoResolved.title,
-    item: seoResolved.canonical.toString(),
-  });
+  const currentCanonicalStripped = seoResolved.canonical.toString().replace(/\/$/, "");
+  const lastItemUrlStripped = breadcrumbItems[breadcrumbItems.length - 1].item.replace(/\/$/, "");
 
-  const uniqueBreadcrumbs = rawBreadcrumbs.filter((crumb, index, self) => {
-    if (index === self.length - 1) return true;
-
-    const currentUrl = crumb.item.replace(/\/$/, "");
-    const finalUrl = self[self.length - 1].item.replace(/\/$/, "");
-    
-    const currentName = crumb.name.toLowerCase().trim();
-    const finalName = self[self.length - 1].name.toLowerCase().trim();
-
-    return currentUrl !== finalUrl && currentName !== finalName;
-  });
-
-  const breadcrumbItems = uniqueBreadcrumbs.map((crumb, index) => ({
-    "@type": "ListItem",
-    position: index + 1,
-    name: crumb.name,
-    item: crumb.item,
-  }));
+  if (currentCanonicalStripped !== lastItemUrlStripped) {
+    breadcrumbItems.push({
+      "@type": "ListItem",
+      position: currentPosition++,
+      name: seoResolved.title, 
+      item: seoResolved.canonical.toString(),
+    });
+  }
 
   schemaGraph.push({
     "@type": "BreadcrumbList",
@@ -252,7 +251,7 @@ if (!isHomepage) {
   });
 }
 
-// 6. NewsArticle
+// 6. Article
 if (type === "article") {
   schemaGraph.push({
     "@type": "NewsArticle",
