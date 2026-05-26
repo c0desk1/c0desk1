@@ -9,14 +9,14 @@ import MenuButton from "@/components/ui/MenuButton.astro";
 
 <header id="main-header" class="sticky top-0 z-50 mx-auto w-full">
   <Container size="xl">
-    <div class="relative flex items-center h-15">
+    <div class="relative flex items-center h-14">
       <div class="flex items-center shrink-0">
         <Logo />
       </div>
-       <div class="absolute left-1/2 -translate-x-1/2 hidden sm:flex">
+       <div class="absolute inline-flex left-1/2 -translate-x-1/2 order-2">
         <DesktopNav />
       </div>
-      <div class="ml-auto flex items-center gap-2 lg:gap-3">
+      <div class="ml-auto flex items-center gap-2 lg:gap-3 order-3">
         <SearchButton />
         <MenuButton />
       </div>
