@@ -21,7 +21,7 @@ interface Props {
   image?: { src: string; alt: string };
   canonicalURL?: URL | string;
   type?: "website" | "article" | "profile" | "creativeWork";
-  basePath?: 'blog' | 'portfolio' | 'legal' | 'blog/category' | 'author' | '';
+  basePath: 'blog' | 'portfolio' | 'legal' | 'blog/category' | 'author' | '';
   noIndex?: boolean;
   publishedTime?: Date;
   modifiedTime?: Date;
@@ -103,7 +103,7 @@ const siteData = siteConfig;
         j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
         f.parentNode.insertBefore(j, f);
       })(window, document, "script", "dataLayer", "GTM-NJJPZV2M");
-    </script>
+    </script>   
     <script async type="application/javascript" src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
     <script is:inline>
       (self.SWG_BASIC = self.SWG_BASIC || []).push((basicSubscriptions) => {
@@ -111,7 +111,7 @@ const siteData = siteConfig;
           type: "NewsArticle",
           isPartOfType: ["Product"],
           isPartOfProductId: "CAow3NjGDA:openaccess",
-          clientOptions: { theme: "dark", lang: "en" },
+          clientOptions: { theme: "dark", lang: "id" },
           autoPromptType: "none"
         });
       });
@@ -119,7 +119,6 @@ const siteData = siteConfig;
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4943136052113535" crossorigin="anonymous"></script>
     <YandexLoader />
   </head>
-
   <body>
     <noscript>
       <iframe
