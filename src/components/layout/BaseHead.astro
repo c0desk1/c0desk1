@@ -194,8 +194,10 @@ if (!isHomepage && breadcrumbItems.length > 0) {
 
 // 6. Article
 if (type === "article") {
+  const cleanDomain = siteURL.replace(/https?:\/\/(www\.)?/, "").replace(/\/$/, "");
+
   schemaGraph.push({
-    "@type": "NewsArticle",
+    "@type": "Article",
     "@id": `${seoResolved.canonical}#article`,
     headline: seoResolved.title,
     description: seoResolved.description,
@@ -203,26 +205,29 @@ if (type === "article") {
     publisher: { "@id": `${siteURL}/#organization` },
     datePublished,
     dateModified,
+    mainEntityOfPage: { "@id": `${seoResolved.canonical}#webpage` },
+    inLanguage: lang,
+    ...(category?.name && { articleSection: category.name }),
+    ...(tags.length > 0 && { keywords: tags.join(", ") }),
     image: {
       "@type": "ImageObject",
-      "@id": `${seoResolved.canonical}#primaryimage`,
       url: ogImageURL,
       width: 1200,
       height: 630,
     },
-    mainEntityOfPage: { "@id": `${seoResolved.canonical}#webpage` },
-    articleSection: category?.name,
-    keywords: tags.join(", "),
-    inLanguage: lang,
-    isAccessibleForFree: true,
+    isAccessibleForFree: true, 
     isPartOf: {
       "@type": ["CreativeWork", "Product"],
-      name: "Open Access",
-      productID: "CAow3NjGDA:openaccess",
-    },
+      name: siteConfig.siteName,
+      productID: `${cleanDomain}:news_subscription`
+    }
   });
 }
 
+const jsonLdString = JSON.stringify({
+  "@context": "https://schema.org",
+  "@graph": schemaGraph
+});
 ---
 
 <meta charset="utf-8" />
@@ -304,10 +309,4 @@ if (type === "article") {
   <meta name="yandex-verification" content={siteConfig.yandexVerification} />
 )}
 
-<script
-  type="application/ld+json"
-  set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@graph": schemaGraph,
-  })}
-/>
+<script type="application/ld+json" set:html={jsonLdString} />
