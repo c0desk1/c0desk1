@@ -148,26 +148,28 @@ schemaGraph.push({
 });
 
 // 3. Person
-schemaGraph.push({
-  "@type": "Person",
-  "@id": `${siteURL}/#person`,
-  name: activeAuthor.name,
-  jobTitle: activeAuthor.role,
-  description: activeAuthor.bio,
-  image: {
-    "@type": "ImageObject",
-    url: activeAuthor.avatar.startsWith("http")
-      ? activeAuthor.avatar
-      : new URL(activeAuthor.avatar, siteURL).toString(),
-    width: 400,
-    height: 400,
-  },
-  url: new URL(`author/${activeAuthor.slug}`, siteURL).toString(),
-  worksFor: { "@id": `${siteURL}/#organization` },
-  sameAs: [
-    `https://twitter.com/${twitterHandle.replace('@', '')}`
-  ]
-});
+if (type === "article" || type === "profile") {
+  schemaGraph.push({
+    "@type": "Person",
+    "@id": `${siteURL}/#person`,
+    name: activeAuthor.name,
+    jobTitle: activeAuthor.role,
+    description: activeAuthor.bio,
+    image: {
+      "@type": "ImageObject",
+      url: activeAuthor.avatar.startsWith("http")
+        ? activeAuthor.avatar
+        : new URL(activeAuthor.avatar, siteURL).toString(),
+      width: 400,
+      height: 400,
+    },
+    url: new URL(`author/${activeAuthor.slug}`, siteURL).toString(),
+    worksFor: { "@id": `${siteURL}/#organization` },
+    sameAs: [
+      `https://twitter.com/${twitterHandle.replace('@', '')}`
+    ]
+  });
+}
 
 // 4. WebPage
 schemaGraph.push({
