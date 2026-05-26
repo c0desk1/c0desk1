@@ -44,7 +44,7 @@ const siteURL = Astro.site?.toString() ?? siteData.siteUrl;
 const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
 const seoData = {
-  title: `${siteData.blog_PageTitle} | ${siteData.b_p_n} ${page.currentPage}`,
+  title: `${siteData.blog_PageTitle}`,
   description: siteData.blog_PageDescription,
   type: "website" as const,
   canonicalURL,
