@@ -32,6 +32,7 @@ const authors = defineCollection({
     role: z.string().optional(),
     avatar: z.string().optional(),
     bio: z.string().optional(),
+    twitter: z.string().optional(),
     social: socialSchema,
   }),
 });
