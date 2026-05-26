@@ -26,6 +26,7 @@ interface Props {
     avatar: string;
     bio: string;
     slug: string;
+    facebook?: string;
     twitter?: string;
   };
   seo?: {
@@ -294,8 +295,9 @@ const jsonLdString = JSON.stringify({
 
 <link rel="canonical" href={seoResolved.canonical.toString()} />
 
-<link rel="preconnect" href="https://api.c0desk1.my.id" crossorigin />
+<link rel="preconnect" href={siteConfig.siteUrl} crossorigin />
 <link rel="preconnect" href="https://cdn.c0desk1.my.id" crossorigin />
+<link rel="dns-prefetch" href={siteConfig.siteUrl} />
 
 <link rel="dns-prefetch" href="https://yandex.ru" />
 <link rel="dns-prefetch" href="https://mc.yandex.ru" />
@@ -304,8 +306,6 @@ const jsonLdString = JSON.stringify({
 <title>{formattedTitle}</title>
 <meta name="description" content={seoResolved.description} />
 <meta name="author" content={activeAuthor.name} />
-
-
 
 <meta name="color-scheme" content="light dark" />
 <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
@@ -327,6 +327,16 @@ const jsonLdString = JSON.stringify({
 <meta property="og:image:height" content="630" />
 <meta property="og:locale" content={lang === "id" ? "id_ID" : "en_US"} />
 
+{type === "article" && siteConfig.siteFacebook && (
+  <meta property="article:publisher" content={siteConfig.siteFacebook} />
+)}
+{type === "article" && author?.facebook && (
+  <meta property="article:author" content={author.facebook} />
+)}
+{siteConfig.facebookAppId && (
+  <meta property="fb:app_id" content={siteConfig.facebookAppId} />
+)}
+
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={formattedTitle} />
 <meta name="twitter:description" content={seoResolved.description} />
@@ -334,7 +344,7 @@ const jsonLdString = JSON.stringify({
 <meta name="twitter:site" content={siteTwitter} />
 <meta name="twitter:creator" content={authorTwitter} />
 
-{type === "article" && tags.map((tag) => (
+{type === "article" && Array.isArray(tags) && tags.map((tag) => (
   <meta property="article:tag" content={tag} />
 ))}
 {type === "article" && datePublished && (
