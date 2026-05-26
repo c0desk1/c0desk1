@@ -6,6 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 import sitemap, {ChangeFreqEnum } from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
+import astroConsent from 'astro-consent';
 
 import remarkCallout from './src/lib/mdx/remark-callout.ts';
 import remarkBlockquoteAuthor from './src/lib/mdx/remark-blockquote.ts';
@@ -22,8 +23,8 @@ import remarkBanner from './src/lib/mdx/remark-banner.ts';
 // https://astro.build/config
 export default defineConfig({
   site: siteConfig.siteUrl,
-  base: '/',
-  trailingSlash: 'never',
+  base: "/",
+  trailingSlash: "never",
   vite: {
     plugins: [tailwindcss()]
   },
@@ -31,6 +32,23 @@ export default defineConfig({
     inlineStylesheets: 'auto'
   },
   integrations: [
+    astroConsent({
+      siteName: siteConfig.siteName,
+      headline: "Manage cookie preferences for My Website",
+      description: "We use cookies to improve site performance, measure traffic, and support marketing.",
+      acceptLabel: "Accept all",
+      rejectLabel: "Reject all",
+      manageLabel: "Preferences",
+      cookiePolicyUrl: "/cookie-policy",
+      privacyPolicyUrl: "/privacy-policy",
+      displayUntilIdle: true,
+      displayIdleDelayMs: 1000,
+      presentation: "banner",
+      consent: {
+        days: 30,
+        storageKey: "astro-consent"
+      }
+    }),
     sitemap({
       filter: (page) =>
         !page.includes('/401') &&
@@ -50,7 +68,7 @@ export default defineConfig({
       },
     }),
     mdx(), 
-    react()
+    react(),
   ],
   markdown: {
     remarkPlugins: [

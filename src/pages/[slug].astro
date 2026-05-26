@@ -1,0 +1,102 @@
+---
+// src/pages/[slug].astro
+import '@/styles/prose/index.css';
+
+import { getCollection, render } from 'astro:content';
+import { siteConfig } from '@/config/site';
+import { formatDate } from "@/lib/utils";
+import { components } from '@/components/layout/MDXComponents';
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/ui/Container.astro';
+import Breadcrumb from '@/components/ui/Breadcrumb.astro';
+import Section from '@/components/ui/Section.astro';
+import BackToTop from '@/components/ui/BackToTop.astro';
+
+export async function getStaticPaths() {
+  const legalPages = await getCollection('legal');
+
+  return legalPages.map((page) => {
+    const pathParts = page.id.split('/');
+    const baseId = pathParts[0];
+
+    return {
+      params: {
+        slug: baseId
+      },
+      props: { page },
+    };
+  });
+}
+
+const { page } = Astro.props;
+
+if (!page) return Astro.redirect('/404');
+
+const { Content } = await render(page);
+
+const siteData = siteConfig;
+const siteURL = Astro.site?.toString() ?? siteData.siteUrl;
+const homeLabel = siteData.home;
+const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
+
+const SeoBreadcrumbItems = [
+  { name: homeLabel, item: '/' },
+  { name: page.data.title, item: canonicalURL }
+];
+
+const BreadcrumbsItems = SeoBreadcrumbItems.filter(
+  (item) => 
+    item.name === homeLabel ||
+    item.name === page.data.title
+);
+
+const formattedLastUpdated = page.data.lastUpdated
+  ? formatDate(page.data.lastUpdated)
+  : null;
+
+const seoData = {
+  title: page.data.seo?.title || page.data.title,
+  description: page.data.seo?.description
+  || page.data.description
+  || siteData.defaultSeo?.description,
+  type: "website" as const,
+  canonicalURL,
+  breadcrumbItems: SeoBreadcrumbItems
+};
+---
+
+<BaseLayout {...seoData}>
+  <div class="relative grid grid-cols-1 rounded-xl border border-(--border) max-w-4xl mx-auto z-20">
+    <Section size="sm">
+      <Container size="md">
+        <Section size="sm">
+          <div class="flex items-center justify-center">
+            <Breadcrumb items={BreadcrumbsItems} />
+          </div>
+        </Section>
+        <article id="article" class="mx-auto max-w-3xl">
+          <Section size="sm">
+            <div class="mt-4 items-center text-center justify-center">
+              <div class="prose">
+                <h1 class="text-heading-24 md:text-heading-32 lg:text-heading-56 justify-center">{page.data.title}</h1>
+              </div>
+              {formattedLastUpdated && (
+                <p class="text-copy-14 mt-4 text-muted text-center justify-center">
+                  {siteData.lastUpdated}: 
+                  <time datetime={page.data.lastUpdated?.toISOString()}>{formattedLastUpdated}</time>
+                </p>
+              )}
+            </div>
+          </Section>
+          <Section size="sm">
+            <div id="article-content" class="prose">
+              <Content components={components} />
+            </div>
+          </Section>
+        </article>
+      </Container>
+    </Section>
+  </div>
+  <BackToTop />
+</BaseLayout>

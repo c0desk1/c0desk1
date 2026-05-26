@@ -1,0 +1,154 @@
+---
+//src/pages/blog/[...page].astro
+import type { GetStaticPathsOptions, Page } from "astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+import { getPageNums, getPageUrl, sortByDate } from "@/lib/utils";
+import { siteConfig } from "@/config/site";
+import HERO from '@/assets/images/c0desk1-blog-hero.jpeg';
+
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import PostCard from "@/components/blog/PostCard.astro";
+import Button from "@/components/ui/Button.astro";
+import Icon from "@/components/ui/Icon";
+import Hero from "@/components/ui/Hero.astro";
+
+const siteData = siteConfig;
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+  const sortedPosts = sortByDate(allPosts);
+  
+  const featuredPosts = sortedPosts.filter(post => post.data.featured === true);
+  const otherPosts = featuredPosts.length 
+    ? sortedPosts.filter(p => !p.data.featured) 
+    : sortedPosts;
+  
+  return paginate(otherPosts, {
+    pageSize: 6,
+  });
+}
+
+interface Props {
+  page: Page<CollectionEntry<'blog'>>;
+}
+
+const { page } = Astro.props as Props;
+
+const allPostsForFeatured = await getCollection("blog", ({ data }) => !data.draft);
+const sortedAllPosts = sortByDate(allPostsForFeatured);
+const featuredPosts = sortedAllPosts.filter(post => post.data.featured === true);
+
+const siteURL = Astro.site?.toString() ?? siteData.siteUrl;
+const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
+
+const pageNums = getPageNums(page.currentPage, page.lastPage);
+
+const prevUrl = page.currentPage <= 1 ? undefined
+  : getPageUrl(page.currentPage - 1);
+const nextUrl = page.currentPage >= page.lastPage ? undefined
+  : getPageUrl(page.currentPage + 1);
+
+const title    = siteData.blog_HeroTitle;
+const prevLabel = siteData.b_prevPosts;
+const nextLabel = siteData.b_nextPosts;
+const blog_c   = siteData.blog_latestPosts;
+
+const seoData = {
+  title: siteData.blog_PageTitle,
+  description: siteData.blog_PageDescription,
+  type: "website" as const,
+  canonicalURL,
+};
+---
+
+<BaseLayout {...seoData}>
+  <Section size="none">
+    <Hero
+      title={siteData.blog_PageTitle}
+      subTitle={title}
+      description={siteData.blog_PageDescription}
+      bgImage={HERO}
+      overlayOpacity={0.4}
+    />
+  </Section>
+  <Section size="sm">
+    <Container size="xl">
+      <div id="yandex_rtb_R-A-19179231-6"></div>
+    </Container>
+  </Section>
+   {page.currentPage === 1 && featuredPosts.length > 0 && (
+    <Section size="md" aria-label="Featured posts">
+      <Container size="xl">
+        <h2 class="text-heading-24 lg:text-heading-32 text-(--fg) font-semibold py-4 lg:py-6">
+          {siteConfig.blog_featuredPosts}
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          {featuredPosts.map((post) => (
+            <PostCard post={post} />
+          ))}
+        </div>
+      </Container>
+    </Section>
+  )}
+  <Section id="browse-posts" size="lg" aria-label={blog_c}>
+    <Container size="xl">
+      <h2 class="text-heading-24 lg:text-heading-32 text-(--fg) font-semibold py-4 lg:py-6">
+        {blog_c}
+      </h2>
+      
+      {page.data.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+          {page.data.map((post) => (
+            <PostCard post={post} />
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-12">
+          <p class="text-muted text-copy-16">{siteConfig.blog_noBlogPosts}</p>
+        </div>
+      )}
+      {page.lastPage > 1 && (
+        <div class="flex items-center justify-between gap-2 py-8 mt-4">
+          <Button href={prevUrl} disabled={!prevUrl} variant="secondary" size="sm" class="gap-1.5" aria-label={prevLabel}>
+            <Icon name="arrow-left" className="w-4 h-4" />
+            <span class="hidden sm:inline text-button-14">{prevLabel}</span>
+          </Button>
+          <ol class="hidden sm:flex items-center gap-0.5">
+            {pageNums.map((n) => n === '…' ? (
+              <li>
+                <span class="flex items-center justify-center w-6 h-6 text-label-4 text-subtle select-none">
+                  …
+                </span>
+              </li>
+              ) : (
+              <li>
+                <a href={n === 1 ? '/blog' : getPageUrl(n as number)}
+                  aria-current={n === page.currentPage ? siteData.b_p_n as any : undefined}
+                  class:list={[
+                  'flex items-center justify-center w-6 h-6 rounded-md text-label-14 transition-colors gap-1',
+                    n === page.currentPage
+                    ? 'bg-(--fg) text-(--bg) pointer-events-none font-medium'
+                    : 'text-subtle hover:bg-muted hover:text-(--fg)',
+                  ]}>
+                  {n}
+                </a>
+              </li>
+              )
+            )}
+          </ol>
+          <span class="sm:hidden text-copy-14 text-subtle tabular-nums select-none">
+            {page.currentPage}
+            <span class="mx-1 text-(--border)">/</span>
+            {page.lastPage}
+          </span>
+          <Button href={nextUrl} disabled={!nextUrl} variant="secondary" size="sm" class="gap-1.5" aria-label={nextLabel}>
+            <span class="hidden sm:inline text-button-14">{nextLabel}</span>
+            <Icon name="arrow-right" className="w-4 h-4" />
+          </Button>
+        </div>
+      )}
+    </Container>
+  </Section>
+</BaseLayout>

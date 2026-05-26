@@ -1,0 +1,104 @@
+---
+// src/pages/contact/index.astro
+import { siteConfig } from "@/config/site";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import ContactForm from "@/components/contact/ContactForm.astro";
+import Breadcrumb from "@/components/ui/Breadcrumb.astro";
+
+import Icon from "@/components/ui/Icon";
+import SocialLinks from "@/components/ui/SocialLinks.astro";
+
+const siteData = siteConfig;
+
+const siteURL = Astro.site?.toString()?? siteData.siteUrl;
+const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
+
+const social = siteData.social;
+const email = siteData.siteMail;
+const homeLabel = siteData.home;
+
+const pageTitle = 'Contact';
+const pageDesc = 'ave a project in mind? Get in touch.';
+
+const SeoBreadcrumbItems = [
+  { name: homeLabel, item: '/'},
+  { name: "Contact", item: canonicalURL }
+];
+
+const BreadcrumbsItems = SeoBreadcrumbItems.filter(
+  (item) => 
+    item.name === homeLabel ||
+    item.name === "Contact"
+);
+
+const seoData = {
+  title: pageTitle,
+  description: pageDesc,
+  type: "website" as const,
+  canonicalURL,
+  breadcrumbItems: SeoBreadcrumbItems
+};
+---
+
+<BaseLayout {...seoData}>
+  <Section size="lg">
+    <div class="relative grid grid-cols-1 rounded-xl border border-(--border) max-w-5xl mx-auto">
+        <Container size="lg">
+            <Section size="sm">
+                <div class="flex items-center justify-start">
+                    <Breadcrumb items={BreadcrumbsItems} />
+                </div>
+            </Section>
+            <Section size="sm">
+                <h1 class="text-heading-24 md:text-heading-32 lg:text-heading-56 justify-start text-balance mb-4">
+                    Let's work together.
+                </h1>
+                <p class="text-copy-16 lg:text-copy-18 text-muted max-w-md text-pretty">
+                    Have a project in mind or just want to say hello? Fill out the form and I'll get back to you within 24 hours.
+                </p>
+            </Section>
+            <div class="grid grid-cols-1 md:grid-cols-[1fr_200px] gap-12 items-start">
+                <Section size="sm">
+                    <ContactForm />
+                </Section>
+                <Section size="sm">
+                    <aside class="flex flex-col gap-6">
+                        <div>
+                            <p class="text-overline-11 text-strong mb-4">Availability</p>
+                            <div class="flex items-center gap-2">
+                            <span
+                                class="w-1.5 h-1.5 rounded-full shrink-0"
+                                style="background: var(--success);"
+                            />
+                            <p class="text-copy-13 text-muted">Busy</p>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-overline-11 text-strong mb-4">Direct</p>
+                            <a
+                            href={`mailto:${email}`}
+                            class="text-copy-14 text-(--fg) flex items-center gap-2 hover:text-(--accent) transition-colors duration-150">
+                            <Icon name="email" className="h-4 w-4" />
+                            {email}
+                            </a>
+                        </div>
+                        <div>
+                            <p class="text-overline-11 text-strong mb-4">Elsewhere</p>
+                            <div class="flex flex-col gap-2.5">
+                                <SocialLinks
+                                    items={social}
+                                    direction="vertical"
+                                    showLabel
+                                    iconClass="h-4 w-4 text-muted transition-colors duration-150"
+                                />
+                            </div>
+                        </div>
+                    </aside>
+                </Section>
+            </div>
+        </Container>
+    </div>
+  </Section>
+</BaseLayout>
