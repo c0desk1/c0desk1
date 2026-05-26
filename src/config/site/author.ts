@@ -14,5 +14,4 @@ export const authorConfig = {
       { label: "tiktok", href: "https://tiktok.com/@bimaakbarmusicc" }
     ],
   },
-  siteMail: "hallo@c0desk1.my.id",
 } as const;
