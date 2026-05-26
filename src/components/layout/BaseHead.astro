@@ -98,7 +98,10 @@ const activeAuthor = {
 };
 
 const isHomepage = Astro.url.pathname === "/";
-const isBlogIndex = Astro.url.pathname.replace(/\/$/, "") === "/blog";
+const isBlogIndex = 
+  Astro.url.pathname.replace(/\/$/, "") === "/blog" || 
+  Astro.url.pathname.includes("/blog/category/") ||
+  Astro.url.pathname.includes("/blog/tag/");
 const isTimedContent = type === "article";
 const datePublished = isTimedContent ? publishedTime?.toISOString() : undefined;
 const dateModified = isTimedContent
