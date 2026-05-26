@@ -9,7 +9,7 @@ const currentPath = Astro.url.pathname;
 const navItems = siteConfig.navItems;
 ---
 
-<nav aria-label={siteConfig.navAria} class="hidden lg:inline-flex items-center rounded-xl border border-(--border) bg-(--bg) backdrop-blur p-1 gap-2">
+<nav aria-label={siteConfig.navAria} class="hidden sm:inline-flex items-center rounded-xl border border-(--border) bg-(--bg) backdrop-blur p-1 gap-2">
   {navItems.map((item) => {
     const children = item.children;
     const hasChildren = children && children.length > 0;
@@ -21,7 +21,7 @@ const navItems = siteConfig.navItems;
             {item.label}
             <Icon name="chevron-down" className="w-3 h-3 transition-transform duration-200 group-hover/dropdown:rotate-180"/>
           </button>
-          <div class="absolute left-0 top-full pt-2 invisible opacity-0 group-hover/dropdown:visible group-hover/dropdown:opacity-100 transition-all duration-200 z-50">
+          <div class="absolute left-0 top-full pt-4 invisible opacity-0 group-hover/dropdown:visible group-hover/dropdown:opacity-100 transition-all duration-200 z-50">
             <div class="min-w-45 rounded-xl border border-(--border) bg-(--bg) shadow-lg p-1 backdrop-blur-sm">
               {children.map((child) => {
                 const isActive = normalizePath(currentPath) === normalizePath(child.href || "");
