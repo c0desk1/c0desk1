@@ -2,7 +2,6 @@
 @import "tailwindcss";
 @import "@/styles/utilities.css";
 @import "@/styles/prose/index.css";
-@plugin "@tailwindcss/typography";
 @import "../cookiebanner/styles.css";
 @custom-variant dark (&:where(.dark,.dark *));
 
