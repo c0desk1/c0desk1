@@ -50,16 +50,24 @@ const prevUrl = page.currentPage <= 1 ? undefined
 const nextUrl = page.currentPage >= page.lastPage ? undefined
   : getPageUrl(page.currentPage + 1);
 
+const homeLabel = siteData.home;
+const blogLabel = siteData.blog;
 const title    = siteData.blog_HeroTitle;
 const prevLabel = siteData.b_prevPosts;
 const nextLabel = siteData.b_nextPosts;
 const blog_c   = siteData.blog_latestPosts;
+
+const SeoBreadcrumbItems = [
+  { name: homeLabel, item: '/'},
+  { name: blogLabel, item: '/blog'}
+];
 
 const seoData = {
   title: siteData.blog_PageTitle,
   description: siteData.blog_PageDescription,
   type: "website" as const,
   canonicalURL,
+  breadcrumbItems: SeoBreadcrumbItems
 };
 ---
 
