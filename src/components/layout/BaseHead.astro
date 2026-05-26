@@ -104,6 +104,7 @@ const isBlogIndex =
   Astro.url.pathname.includes("/blog/tag/");
   
 const isAuthorPage = Astro.url.pathname.includes("/author/");
+const isAboutPage = Astro.url.pathname.replace(/\/$/, "") === "/about" || Astro.url.pathname === "/about/";
 
 const isTimedContent = type === "article";
 const datePublished = isTimedContent ? publishedTime?.toISOString() : undefined;
@@ -179,7 +180,7 @@ if (type === "article" || type === "profile") {
 
 // 4. WebPage
 schemaGraph.push({
-  "@type": isBlogIndex ? "CollectionPage" : isAuthorPage ? "ProfilePage" : "WebPage",
+  "@type": isBlogIndex ? "CollectionPage" : isAuthorPage ? "ProfilePage" : isAboutPage ? "AboutPage" : "WebPage",
   "@id": `${seoResolved.canonical}#webpage`,
   url: seoResolved.canonical.toString(),
   name: formattedTitle,
@@ -194,6 +195,9 @@ schemaGraph.push({
   potentialAction: [
     { "@type": "ReadAction", target: [seoResolved.canonical.toString()] },
   ],
+  ...(isAboutPage && {
+    about: { "@id": `${siteURL}/#organization` }
+  })
 });
 
 // 5. BreadcrumbList
