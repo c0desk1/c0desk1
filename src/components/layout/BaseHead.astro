@@ -195,6 +195,9 @@ schemaGraph.push({
   potentialAction: [
     { "@type": "ReadAction", target: [seoResolved.canonical.toString()] },
   ],
+  ...(isAuthorPage && {
+    mainEntity: { "@id": `${siteURL}/#person` }
+  }),
   ...(isAboutPage && {
     about: { "@id": `${siteURL}/#organization` }
   })
