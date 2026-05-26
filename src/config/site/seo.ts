@@ -5,8 +5,8 @@ export const seoConfig = {
   siteUrl: "https://c0desk1.my.id",
   siteMail: "hello@c0desk1.my.id",
   siteLogo: "/org/c0desk1-logo.svg",
+  siteTwitter: '@c0desk1',
   ogImage: "./src/assets/images/c0desk1-og.webp",
-
   defaultSeo: {
     title: "c0desk1",
     description: "A creative portal exploring digital workflows, AI tools, music, anime, and games through the lens of a modern creator in the age of automation.",
