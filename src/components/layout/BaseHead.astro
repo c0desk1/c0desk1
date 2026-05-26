@@ -105,6 +105,7 @@ const isBlogIndex =
   
 const isAuthorPage = Astro.url.pathname.includes("/author/");
 const isAboutPage = Astro.url.pathname.replace(/\/$/, "") === "/about" || Astro.url.pathname === "/about/";
+const isContactPage = Astro.url.pathname.replace(/\/$/, "") === "/contact" || Astro.url.pathname === "/contact/";
 
 const isTimedContent = type === "article";
 const datePublished = isTimedContent ? publishedTime?.toISOString() : undefined;
@@ -180,7 +181,7 @@ if (type === "article" || type === "profile") {
 
 // 4. WebPage
 schemaGraph.push({
-  "@type": isBlogIndex ? "CollectionPage" : isAuthorPage ? "ProfilePage" : isAboutPage ? "AboutPage" : "WebPage",
+  "@type": isBlogIndex ? "CollectionPage" : isAuthorPage ? "ProfilePage" : isAboutPage ? "AboutPage" : isContactPage ? "ContactPage" : "WebPage",
   "@id": `${seoResolved.canonical}#webpage`,
   url: seoResolved.canonical.toString(),
   name: formattedTitle,
