@@ -36,16 +36,19 @@ const t_noArticles     = siteConfig.blog_noBlogPosts;
 const siteURL = Astro.site?.toString() ?? siteConfig.siteUrl;
 const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
-const authorName   = author.data.name ?? siteConfig.author.name;
-const authorRole   = author.data.role   ?? siteConfig.author.role;
-const authorAvatar = author.data.avatar ?? siteConfig.author.avatar;
-const authorBio    = author.data.bio    ?? siteConfig.author.bio;
-const authorSlug   = author.id;
+const seoAuthor = {
+  name: author.data.name ?? siteData.author.name,
+  role: author.data.role ?? siteData.author.role,
+  avatar: author.data.avatar ?? siteData.author.avatar,
+  bio: author.data.bio ?? siteData.author.bio,
+  slug: author.id ?? siteData.author.slug,
+  twitter: author.data.twitter ?? siteData.author.twitter
+}
 
 const SeoBreadcrumbItems = [
   { name: homeLabel, item: '/' },
   { name: authorsLabel, item: '/author' },
-  { name: authorName, item: canonicalURL },
+  { name: seoAuthor.name, item: canonicalURL },
 ];
 
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
@@ -62,28 +65,22 @@ const BreadcrumbsItems = SeoBreadcrumbItems.filter(
     item.name === authorsLabel
 );
 
-const optimizedAvatar = isCdnUrl(authorAvatar)
-  ? cdnImage(authorAvatar, { w: 112, h: 112, q: 85 })
-  : authorAvatar;
+const optimizedAvatar = isCdnUrl(seoAuthor.avatar)
+  ? cdnImage(seoAuthor.avatar, { w: 112, h: 112, q: 85 })
+  : seoAuthor.avatar;
 
 const seoData = {
   title: siteData.authorPage,
-  description: authorBio,
+  description: seoAuthor.bio,
   type: "profile" as const,
   canonicalURL,
-  author: {
-    name: authorName,
-    role: authorRole,
-    avatar: authorAvatar,
-    bio: authorBio,
-    slug: authorSlug,
-  },
+  author: seoAuthor,
   breadcrumbItems: SeoBreadcrumbItems
 };
 ---
 
 <BaseLayout {...seoData}>
-  <Section id="author-profile" size="lg" aria-label={authorName}>
+  <Section id="author-profile" size="lg" aria-label={seoAuthor.name}>
     <Section size="sm">
       <Container size="xl">
         <Breadcrumb items={BreadcrumbsItems} />
@@ -95,7 +92,7 @@ const seoData = {
           <div class="relative overflow-hidden rounded-3xl border border-(--border) bg-subtle p-1.5 size-48 shadow-sm aspect-auto mb-4 md:mb-0">
             <Image
               src={optimizedAvatar || siteConfig.author.avatar}
-              alt={authorName || siteConfig.author.name}
+              alt={seoAuthor.name || siteConfig.author.name}
               width={320}
               height={320}
               loading="eager"
@@ -107,15 +104,15 @@ const seoData = {
           <div class="flex flex-col self-end-safe">
             <div class="flex flex-row items-center text-start justify-start gap-2 mb-4">
               <h1 id="author-heading" class="text-heading-32 lg:text-heading-48 font-semibold text-(--fg)">
-                {authorName}
+                {seoAuthor.name}
               </h1>
               <p class="text-heading-14 text-subtle self-end-safe">
-                {authorRole}
+                {seoAuthor.role}
               </p>
             </div>
             <div class="flex items-center justify-start mb-4">
               <p class="text-copy-14 text-muted">
-                {authorBio}
+                {seoAuthor.bio}
               </p>
             </div>
             <div class="flex items-center justify-start gap-2">
