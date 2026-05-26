@@ -26,6 +26,7 @@ interface Props {
     avatar: string;
     bio: string;
     slug: string;
+    twitter?: string;
   };
   seo?: {
     title?: string;
@@ -95,6 +96,7 @@ const activeAuthor = {
   avatar: author?.avatar ?? authorConfig.avatar,
   bio: author?.bio ?? authorConfig.bio,
   slug: author?.slug ?? authorConfig.slug,
+  twitter: author?.twitter ?? authorConfig.twitter ?? "@c0desk1"
 };
 
 const isHomepage = Astro.url.pathname === "/";
@@ -107,14 +109,22 @@ const isAuthorPage = Astro.url.pathname.includes("/author/");
 const isAboutPage = Astro.url.pathname.replace(/\/$/, "") === "/about" || Astro.url.pathname === "/about/";
 const isContactPage = Astro.url.pathname.replace(/\/$/, "") === "/contact" || Astro.url.pathname === "/contact/";
 
+const currentPath = Astro.url.pathname.replace(/\/$/, "");
+const isLegalPage = 
+  currentPath.includes("privacy-policy") || 
+  currentPath.includes("terms-of-service") || 
+  currentPath.includes("cookie-policy") || 
+  currentPath.includes("dmca") || 
+  currentPath.includes("disclaimer");
+
 const isTimedContent = type === "article";
 const datePublished = isTimedContent ? publishedTime?.toISOString() : undefined;
 const dateModified = isTimedContent
   ? (modifiedTime?.toISOString() ?? datePublished)
   : undefined;
 
-const twitterHandle = "@c0desk1";
-
+const siteTwitter = siteConfig.siteTwitter ?? "@c0desk1";
+const authorTwitter = activeAuthor.twitter;
 
 const schemaGraph: any[] = [];
 
@@ -132,7 +142,7 @@ schemaGraph.push({
     height: 512,
   },
   sameAs: [
-    `https://twitter.com/${twitterHandle.replace('@', '')}`
+    `https://twitter.com/${siteTwitter.replace('@', '')}`
   ]
 });
 
@@ -174,14 +184,14 @@ if (type === "article" || type === "profile") {
     url: new URL(`author/${activeAuthor.slug}`, siteURL).toString(),
     worksFor: { "@id": `${siteURL}/#organization` },
     sameAs: [
-      `https://twitter.com/${twitterHandle.replace('@', '')}`
+      `https://twitter.com/${authorTwitter.replace('@', '')}`
     ]
   });
 }
 
 // 4. WebPage
 schemaGraph.push({
-  "@type": isBlogIndex ? "CollectionPage" : isAuthorPage ? "ProfilePage" : isAboutPage ? "AboutPage" : isContactPage ? "ContactPage" : "WebPage",
+  "@type": isBlogIndex ? "CollectionPage" : isAuthorPage ? "ProfilePage" : (isAboutPage || isLegalPage) ? "AboutPage" : isContactPage ? "ContactPage" : "WebPage",
   "@id": `${seoResolved.canonical}#webpage`,
   url: seoResolved.canonical.toString(),
   name: formattedTitle,
@@ -199,7 +209,7 @@ schemaGraph.push({
   ...(isAuthorPage && {
     mainEntity: { "@id": `${siteURL}/#person` }
   }),
-  ...(isAboutPage && {
+  ...((isAboutPage || isLegalPage) && {
     about: { "@id": `${siteURL}/#organization` }
   })
 });
@@ -321,8 +331,8 @@ const jsonLdString = JSON.stringify({
 <meta name="twitter:title" content={formattedTitle} />
 <meta name="twitter:description" content={seoResolved.description} />
 <meta name="twitter:image" content={ogImageURL} />
-<meta name="twitter:site" content={twitterHandle} />
-<meta name="twitter:creator" content={twitterHandle} />
+<meta name="twitter:site" content={siteTwitter} />
+<meta name="twitter:creator" content={authorTwitter} />
 
 {type === "article" && tags.map((tag) => (
   <meta property="article:tag" content={tag} />
