@@ -53,7 +53,9 @@ const {
 } = Astro.props;
 
 // ─── Helpers
-const siteURL = siteConfig.siteUrl;
+const siteURL = siteConfig.siteUrl.startsWith("http://")
+  ? siteConfig.siteUrl.replace("https://", "https://")
+  : siteConfig.siteUrl;
 
 const seoResolved = {
   title:
@@ -183,14 +185,26 @@ if (!isHomepage && breadcrumbItems.length > 0) {
   schemaGraph.push({
     "@type": "BreadcrumbList",
     "@id": `${seoResolved.canonical}#breadcrumb`,
-    itemListElement: breadcrumbItems.map((item, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      name: item.name,
-      item: item.item,
-    })),
+    itemListElement: breadcrumbItems.map((item, index) => {
+      
+      let absoluteItemUrl = item.item.startsWith("http")
+        ? item.item
+        : new URL(item.item, siteURL).toString();
+
+      if (absoluteItemUrl.startsWith("http://") && !absoluteItemUrl.includes("localhost")) {
+        absoluteItemUrl = absoluteItemUrl.replace("http://", "https://");
+      }
+
+      return {
+        "@type": "ListItem",
+        position: index + 1,
+        name: item.name,
+        item: absoluteItemUrl,
+      };
+    }),
   });
 }
+
 
 // 6. Article
 if (type === "article") {
