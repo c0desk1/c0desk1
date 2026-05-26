@@ -1,7 +1,6 @@
 ---
 // src/layouts/BaseLayout.astro
 import { siteConfig } from "@/config/site";
-import ThemeScript from "@/components/scripts/ThemeScript.astro";
 import BaseHead from "@/components/layout/BaseHead.astro";
 import Header from "@/components/layout/Header.astro";
 import Footer from "@/components/layout/Footer.astro";
@@ -59,10 +58,8 @@ const {
     : "og: https://ogp.me/ns#"}>
   <head>
     <BaseHead {...seoProps} breadcrumbItems={breadcrumbItems} />
-    <ThemeScript />
     <script 
       is:inline
-      type="text/plain"
       data-category="marketing">
       (function (w, d, s, l, i) {
         w[l] = w[l] || [];
@@ -74,7 +71,7 @@ const {
         j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
         f.parentNode.insertBefore(j, f);
       })(window, document, "script", "dataLayer", "GTM-NJJPZV2M");
-    </script>   
+    </script>
     <script 
       async 
       type="application/javascript" 
@@ -91,19 +88,11 @@ const {
       });
     </script>
     <script 
-      async 
-      type="text/plain" 
-      data-category="marketing"  
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4943136052113535" 
-      crossorigin="anonymous">
-    </script>
-    <script is:inline>window.yaContextCb=window.yaContextCb||[]</script>
-    <script 
       async
-      type="text/plain" 
       data-category="marketing" 
       src="https://yandex.ru/ads/system/context.js">
     </script>
+    <script is:inline>window.yaContextCb=window.yaContextCb||[]</script>
   </head>
   <body>
     <noscript>
