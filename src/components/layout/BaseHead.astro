@@ -194,69 +194,56 @@ schemaGraph.push({
 
 // 5. BreadcrumbList (non-homepage only)
 if (!isHomepage) {
-  const breadcrumbItems: any[] = [
-    { "@type": "ListItem", position: 1, name: "Home", item: siteURL },
+  const rawBreadcrumbs: { name: string; item: string }[] = [
+    { name: "Home", item: siteURL },
   ];
 
-  if (basePath === "blog" || basePath === "blog/category") {
-    breadcrumbItems.push({
-      "@type": "ListItem",
-      position: breadcrumbItems.length + 1,
+  if (basePath.startsWith("blog")) {
+    rawBreadcrumbs.push({
       name: "Blog",
       item: new URL("blog", siteURL).toString(),
     });
-  }
-
-  if (basePath === "portfolio") {
-    breadcrumbItems.push({
-      "@type": "ListItem",
-      position: breadcrumbItems.length + 1,
+    if (category?.name) {
+      rawBreadcrumbs.push({
+        name: category.name,
+        item: new URL(`blog/category/${category.slug}`, siteURL).toString(),
+      });
+    }
+  } else if (basePath === "portfolio") {
+    rawBreadcrumbs.push({
       name: "Portfolio",
       item: new URL("portfolio", siteURL).toString(),
     });
-  }
-
-  if (basePath === "author") {
-    breadcrumbItems.push({
-      "@type": "ListItem",
-      position: breadcrumbItems.length + 1,
+  } else if (basePath === "author") {
+    rawBreadcrumbs.push({
       name: "Authors",
       item: new URL("author", siteURL).toString(),
     });
   }
 
-  if (basePath === "blog" && category?.name) {
-    breadcrumbItems.push({
-      "@type": "ListItem",
-      position: breadcrumbItems.length + 1,
-      name: category.name,
-      item: new URL(`blog/category/${category.slug}`, siteURL).toString(),
-    });
-  }
-
-  const finalName =
-    basePath === "author" && author?.name
-      ? author.name
-      : seoResolved.title;
-
-  const finalItem = {
-    "@type": "ListItem",
-    position: breadcrumbItems.length + 1,
-    name: finalName,
-    item: seoResolved.canonical.toString(),
-  };
-
-  const lastItem = breadcrumbItems[breadcrumbItems.length - 1];
-  if (lastItem.item !== finalItem.item) {
-    breadcrumbItems.push(finalItem);
-  }
-
-  breadcrumbItems.push({
-    "@type": "ListItem",
-    position: breadcrumbItems.length + 1,
+  rawBreadcrumbs.push({
     name: seoResolved.title,
     item: seoResolved.canonical.toString(),
   });
+
+  const uniqueBreadcrumbs = rawBreadcrumbs.filter((crumb, index, self) => {
+    if (index === self.length - 1) return true;
+
+    const currentUrl = crumb.item.replace(/\/$/, "");
+    const finalUrl = self[self.length - 1].item.replace(/\/$/, "");
+    
+    const currentName = crumb.name.toLowerCase().trim();
+    const finalName = self[self.length - 1].name.toLowerCase().trim();
+
+    return currentUrl !== finalUrl && currentName !== finalName;
+  });
+
+  const breadcrumbItems = uniqueBreadcrumbs.map((crumb, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    name: crumb.name,
+    item: crumb.item,
+  }));
 
   schemaGraph.push({
     "@type": "BreadcrumbList",
