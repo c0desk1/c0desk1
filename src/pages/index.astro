@@ -1,6 +1,6 @@
 ---
 // src/pages/index.astro
-import { SITE, CATEGORIES, ROUTES } from "@/consts";
+import { SITE, CATEGORIES, ROUTES, buildMeta } from "@/consts";
 import { sortByDate } from "@/lib/utils";
 import { getCollection } from "astro:content";
 
@@ -18,9 +18,15 @@ const [latestPost, ...restPosts] = sortedPosts;
 
 const heroCTA = { label: "Blog", href: ROUTES.blog };
 const heroCTA2 = { label: "Latest Content", href: "#article" };
+
+const meta = buildMeta({
+  title: SITE.name,
+  description: SITE.description,
+  canonical: SITE.url,
+});
 ---
 
-<Layout isHome>
+<Layout isHome {meta}>
   <Hero
     title="UN"
     subTitle="LOYD"
