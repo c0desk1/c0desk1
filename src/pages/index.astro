@@ -1,48 +1,26 @@
 ---
 // src/pages/index.astro
-import { getCollection } from "astro:content";
+import { SITE, CATEGORIES, ROUTES } from "@/consts";
 import { sortByDate } from "@/lib/utils";
-import { siteConfig } from "@/config/site";
-import { SITE } from "@/consts";
+import { getCollection } from "astro:content";
 
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import Container from "@/components/ui/Container.astro";
+import Layout from "@/layouts/Layout.astro";
 import Section from "@/components/ui/Section.astro";
+import Container from "@/components/ui/Container.astro";
+import Hero from "@/components/ui/Hero.astro";
 import PostCard from "@/components/blog/PostCard.astro";
 import Button from "@/components/ui/Button.astro";
-import Hero from "@/components/ui/Hero.astro";
 
-const siteData = siteConfig
-const seo = siteData.defaultSeo
-const h_c   = seo.title;
-const blog_s = siteData.home_BlogSection;
-const latestTitle = siteData.home_BlogSection;
-const noPostsText = siteData.blog_noBlogPosts;
-const viewAllText = siteData.blog_viewAll;
-const blogPath = '/blog';
+const posts = await getCollection('blog', ({ data }) => !data.draft);
+const sortedPosts = sortByDate(posts).slice(0, 9);
 
-const allPosts = await getCollection("blog", ({ data }) =>
- !data.draft
-);
+const [latestPost, ...restPosts] = sortedPosts;
 
-const blogPosts = sortByDate(allPosts).slice(0, 9);
-
-const seoData = {
-
-  description: seo.description,
-  type: "website" as "website",
-  image: {
-    src: siteData.ogImage,
-    alt: seo.title,
-  },
-  canonicalURL: new URL(Astro.url.pathname, siteData.siteUrl).href,
-};
-
-const heroCTA = { label: "Blog", href: "/blog" };
+const heroCTA = { label: "Blog", href: ROUTES.blog };
 const heroCTA2 = { label: "Latest Content", href: "#article" };
 ---
 
-<BaseLayout {...seoData}>
+<Layout isHome>
   <Hero
     title="UN"
     subTitle="LOYD"
@@ -53,54 +31,69 @@ const heroCTA2 = { label: "Latest Content", href: "#article" };
   <Section size="sm">
     <div class="marquee-wrap">
       <div class="marquee-track">
-        <span class="marquee-item">Pop Culture</span><span class="marquee-dot"></span>
-        <span class="marquee-item">Game Reviews</span><span class="marquee-dot"></span>
-        <span class="marquee-item">Anime News</span><span class="marquee-dot"></span>
-        <span class="marquee-item">Modding Tutorials</span><span class="marquee-dot"></span>
-        <span class="marquee-item">Tech Guides</span><span class="marquee-dot"></span>
-        <span class="marquee-item">Beyond The Void</span><span class="marquee-dot"></span>
-        <span class="marquee-item">Pop Culture</span><span class="marquee-dot"></span>
-        <span class="marquee-item">Game Reviews</span><span class="marquee-dot"></span>
-        <span class="marquee-item">Anime News</span><span class="marquee-dot"></span>
-        <span class="marquee-item">Modding Tutorials</span><span class="marquee-dot"></span>
-        <span class="marquee-item">Tech Guides</span><span class="marquee-dot"></span>
-        <span class="marquee-item">Beyond The Void</span><span class="marquee-dot"></span>
+        {[...CATEGORIES, ...CATEGORIES].map((cat, i) => (
+          <>
+            <span class="marquee-item">{cat.label}</span>
+            <span class="marquee-dot" />
+          </>
+        ))}
       </div>
     </div>
   </Section>
   <Section size="sm">
     <Container size="xl">
-      <div id="yandex_rtb_R-A-19179231-6" class="min-h-0"></div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+        {CATEGORIES.map((cat) => (
+          <a
+            href={`/${cat.slug}`}
+            class="group flex flex-col items-center justify-center p-4 rounded-(--radius-md) border border-(--border) bg-(--bg-subtle) hover:border-(--accent) transition-colors"
+          >
+            <span class="text-heading-14 font-semibold text-(--fg) group-hover:text-(--accent) transition-colors">
+              {cat.label}
+            </span>
+            <span class="text-caption-11 text-(--fg-muted) mt-1 hidden sm:block">
+              {cat.description.slice(0, 40)}...
+            </span>
+          </a>
+        ))}
+      </div>
     </Container>
   </Section>
-  <Section size="sm" aria-label={h_c}>
+  <Section size="sm">
     <Container size="xl">
-      <Section id="blog" size="sm" aria-label={blog_s}>
-        <h2 id="article" class="text-heading-24 lg:text-heading-32 text-(--fg) font-semibold py-4 lg:py-6">
-          {latestTitle}
-        </h2>
-        {blogPosts.length > 0 ? (
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            {blogPosts.map((post) => (
-              <PostCard post={post} />
-            ))}
-          </div>
-          ) : (
-          <div class="py-12 text-center">
-            <p class="text-body-16 md:text-body-18 text-subtle">
-              {noPostsText}
-            </p>
-          </div>
-        )}
-        <div class="flex justify-center py-8">
-          <Button href={blogPath} variant="secondary" size="md">
-            {viewAllText}
-          </Button>
+      <h2 id="article" class="text-heading-24 lg:text-heading-32 text-(--fg) font-semibold py-4 lg:py-6">
+        {"Terbaru."}
+      </h2>
+      {latestPost ? (
+        <div class="pb-8">
+          <PostCard post={latestPost} />
         </div>
-      </Section>
+      ) : (
+        <div class="py-12 text-center">
+          <p class="text-body-16 md:text-body-18 text-(--fg-muted)">
+            {"Tidak ada postingan"}
+          </p>
+        </div>
+      )}
+      <div class="flex justify-center py-8">
+        <Button href={ROUTES.blog} variant="outline" size="md">
+          {"Lihat semua"}
+        </Button>
+      </div>
     </Container>
   </Section>
-</BaseLayout>
+  {restPosts.length > 0 && (
+    <Section size="sm">
+      <Container size="xl">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          {restPosts.map((post) => (
+            <PostCard post={post} />
+          ))}
+        </div>
+      </Container>
+    </Section>
+  )}
+</Layout>
 
 <style is:global>
   .marquee-wrap {
@@ -119,7 +112,7 @@ const heroCTA2 = { label: "Latest Content", href: "#article" };
   }
 
   .marquee-item {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono), 'DM Mono', monospace;
     font-size: 11px;
     letter-spacing: 0.15em;
     color: var(--fg);
@@ -135,86 +128,6 @@ const heroCTA2 = { label: "Latest Content", href: "#article" };
     border-radius: 50%;
     margin: 0 24px;
     vertical-align: middle;
-  }
-
-  /* BRAND IDENTITY */
-  .brand-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2px;
-  }
-
-  .brand-card {
-    background: var(--bg-subtle);
-    padding: 48px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .brand-card.light {
-    background: var(--fg);
-  }
-
-  .brand-card-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    opacity: 0.4;
-    margin-bottom: 32px;
-  }
-
-  .brand-logo-display {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  .logo-xl {
-    width: 56px;
-    height: 56px;
-  }
-
-  .brand-name-xl {
-    font-size: 42px;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  .brand-name-sm {
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-top: 24px;
-  }
-
-  .brand-tagline {
-    font-size: 13px;
-    letter-spacing: 0.08em;
-    opacity: 0.5;
-    margin-top: 8px;
-    text-transform: uppercase;
-    font-family: 'DM Mono', monospace;
-  }
-  .section-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    color: var(--fg-muted);
-    text-transform: uppercase;
-    margin-bottom: 48px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-    max-width: 80px;
+    flex-shrink: 0;
   }
 </style>
