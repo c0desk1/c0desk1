@@ -42,25 +42,6 @@ const heroCTA2 = { label: "Latest Content", href: "#article" };
   </Section>
   <Section size="sm">
     <Container size="xl">
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-        {CATEGORIES.map((cat) => (
-          <a
-            href={`/${cat.slug}`}
-            class="group flex flex-col items-center justify-center p-4 rounded-(--radius-md) border border-(--border) bg-(--bg-subtle) hover:border-(--accent) transition-colors"
-          >
-            <span class="text-heading-14 font-semibold text-(--fg) group-hover:text-(--accent) transition-colors">
-              {cat.label}
-            </span>
-            <span class="text-caption-11 text-(--fg-muted) mt-1 hidden sm:block">
-              {cat.description.slice(0, 40)}...
-            </span>
-          </a>
-        ))}
-      </div>
-    </Container>
-  </Section>
-  <Section size="sm">
-    <Container size="xl">
       <h2 id="article" class="text-heading-24 lg:text-heading-32 text-(--fg) font-semibold py-4 lg:py-6">
         {"Terbaru."}
       </h2>
@@ -101,24 +82,23 @@ const heroCTA2 = { label: "Latest Content", href: "#article" };
     border-bottom: 1px solid var(--border);
     overflow: hidden;
     padding: 16px 0;
-    background: var(--bg-subtle)
+    background: var(--bg-subtle);
   }
 
   .marquee-track {
     display: flex;
-    align-items: center;
     gap: 48px;
     animation: marquee 20s linear infinite;
-    white-space: nowrap
+    white-space: nowrap;
   }
 
   .marquee-item {
-    font-family: var(--font-mono);
+    font-family: var(--font-mono), 'DM Mono', monospace;
     font-size: 11px;
     letter-spacing: 0.15em;
     color: var(--fg);
     text-transform: uppercase;
-    flex-shrink: 0
+    flex-shrink: 0;
   }
 
   .marquee-dot {
@@ -129,6 +109,6 @@ const heroCTA2 = { label: "Latest Content", href: "#article" };
     border-radius: 50%;
     margin: 0 24px;
     vertical-align: middle;
-    flex-shrink: 0
+    flex-shrink: 0;
   }
 </style>
