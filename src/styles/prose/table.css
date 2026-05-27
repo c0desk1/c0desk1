@@ -1,12 +1,12 @@
 /* src/styles/prose/components/table.css */
 .prose table {
-  width:          100%;
+  width: 100%;
   margin: 2.5rem 0;
   border-collapse: collapse;
   border-spacing: 0;
-  overflow:       hidden;
-  border-radius:  var(--radius-md);
-  border:         var(--prose-table-border);
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  border: var(--prose-table-border);
 }
 
 .prose .table-wrapper {
@@ -17,9 +17,9 @@
 }
 
 .prose .table-wrapper table {
-  margin-top:    0;
+  margin-top: 0;
   margin-bottom: 0;
-  border:        none;
+  border: none;
   border-radius: 0;
 }
 
@@ -28,9 +28,7 @@
 }
 
 .prose thead th {
-  @apply text-numeric-14;
   font-weight: 600;
-  padding: 12px 14px;
   color: var(--fg-muted);
   text-align: left;
   white-space: nowrap;
@@ -38,13 +36,13 @@
   border-bottom: 1px solid var(--prose-table-border);
 }
 
-.prose tbody tr {
-  border-bottom: 1px solid var(--prose-table-border);
-  transition:    background-color var(--duration) var(--ease-out);
+.prose th {
+  padding: 12px 14px;
+  color: var(--fg);
 }
 
-.prose tbody tr:last-child {
-  border-bottom: none;
+.prose tbody tr {
+  transition: background-color var(--duration) var(--ease-out);
 }
 
 .prose tbody tr:hover {
@@ -55,16 +53,16 @@
 .prose td {
   white-space: nowrap;
   vertical-align: top;
-  color: var(--fg);
-  padding: 12px 14px;
 }
 
 .prose tbody td {
-  @apply text-numeric-14;
-  padding: 0.75rem 1rem;
   color: var(--prose-table-text);
   border-bottom: 1px solid var(--prose-table-border);
   background: var(--prose-table-row-bg);
+}
+
+.prose tbody td:last-child {
+  border-bottom: none;
 }
 
 .prose tbody td strong {
@@ -101,7 +99,6 @@
 
   .prose tbody td small {
     @apply text-label-12;
-    font-weight: 400;
   }
 }
 
@@ -119,6 +116,5 @@
 
   .prose tbody td small {
     @apply text-label-12;
-    font-weight: 400;
   }
 }
