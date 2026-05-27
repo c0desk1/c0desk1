@@ -1,3 +1,5 @@
+@reference '@/styles/utils.css';
+
 @import "./token.css";
 @import "./base.css";
 @import "./typography.css";
