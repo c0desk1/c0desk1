@@ -1,0 +1,1169 @@
+/* -----------------------------------------------------------------------------
+   1. BASE & RESET
+   ----------------------------------------------------------------------------- */
+
+.prose {
+  font-family:     var(--prose-font-family);
+  font-size:       var(--prose-font-size);
+  line-height:     var(--prose-line-height);
+  font-weight:     var(--prose-font-weight);
+  letter-spacing:  var(--prose-letter-spacing);
+  color:           var(--prose-color);
+  max-width:       var(--prose-max-width);
+  word-break:      break-word;
+  overflow-wrap:   break-word;
+  -webkit-font-smoothing:  antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.prose *,
+.prose *::before,
+.prose *::after {
+  box-sizing: border-box;
+}
+
+/* Reset margin anak pertama dan terakhir */
+.prose > *:first-child { margin-top: 0 !important; }
+.prose > *:last-child  { margin-bottom: 0 !important; }
+
+/* Selection */
+.prose ::selection {
+  background: var(--prose-selection-bg);
+  color:      var(--prose-selection-color);
+}
+
+
+/* -----------------------------------------------------------------------------
+   2. HEADINGS
+   ----------------------------------------------------------------------------- */
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  font-family:    var(--prose-font-family);
+  color:          var(--prose-color-strong);
+  text-wrap:      balance;
+  scroll-margin-top: var(--prose-scroll-margin);
+}
+
+/* H1 */
+.prose h1 {
+  font-size:      var(--prose-h1-size);
+  line-height:    var(--prose-h1-line-height);
+  font-weight:    var(--prose-h1-weight);
+  letter-spacing: var(--prose-h1-tracking);
+  color:          var(--prose-h1-color);
+  margin-top:     var(--prose-h1-margin-top);
+  margin-bottom:  var(--prose-h1-margin-bottom);
+}
+
+/* H2 — dengan dekorasi garis kiri */
+.prose h2 {
+  font-size:      var(--prose-h2-size);
+  line-height:    var(--prose-h2-line-height);
+  font-weight:    var(--prose-h2-weight);
+  letter-spacing: var(--prose-h2-tracking);
+  color:          var(--prose-h2-color);
+  margin-top:     var(--prose-h2-margin-top);
+  margin-bottom:  var(--prose-h2-margin-bottom);
+  padding-left:   16px;
+  position:       relative;
+}
+
+.prose h2::before {
+  content:          '';
+  position:         absolute;
+  left:             0;
+  top:              6px;
+  bottom:           6px;
+  width:            var(--prose-h2-accent-width);
+  background:       var(--prose-h2-accent-color);
+  border-radius:    var(--radius-full);
+}
+
+/* H3 */
+.prose h3 {
+  font-size:      var(--prose-h3-size);
+  line-height:    var(--prose-h3-line-height);
+  font-weight:    var(--prose-h3-weight);
+  letter-spacing: var(--prose-h3-tracking);
+  color:          var(--prose-h3-color);
+  margin-top:     var(--prose-h3-margin-top);
+  margin-bottom:  var(--prose-h3-margin-bottom);
+}
+
+/* H4 */
+.prose h4 {
+  font-size:      var(--prose-h4-size);
+  line-height:    var(--prose-h4-line-height);
+  font-weight:    var(--prose-h4-weight);
+  letter-spacing: var(--prose-h4-tracking);
+  color:          var(--prose-h4-color);
+  margin-top:     var(--prose-h4-margin-top);
+  margin-bottom:  var(--prose-h4-margin-bottom);
+}
+
+/* H5 */
+.prose h5 {
+  font-size:      var(--prose-h5-size);
+  line-height:    var(--prose-h5-line-height);
+  font-weight:    var(--prose-h5-weight);
+  letter-spacing: var(--prose-h5-tracking);
+  color:          var(--prose-h5-color);
+  margin-top:     var(--prose-h5-margin-top);
+  margin-bottom:  var(--prose-h5-margin-bottom);
+}
+
+/* H6 — overline style */
+.prose h6 {
+  font-size:      var(--prose-h6-size);
+  line-height:    var(--prose-h6-line-height);
+  font-weight:    var(--prose-h6-weight);
+  letter-spacing: var(--prose-h6-tracking);
+  text-transform: var(--prose-h6-text-transform);
+  color:          var(--prose-h6-color);
+  margin-top:     var(--prose-h6-margin-top);
+  margin-bottom:  var(--prose-h6-margin-bottom);
+}
+
+/* Heading setelah heading — kurangi margin atas */
+.prose h2 + h3,
+.prose h3 + h4,
+.prose h4 + h5 {
+  margin-top: 8px;
+}
+
+
+/* -----------------------------------------------------------------------------
+   3. PARAGRAPH & LEAD
+   ----------------------------------------------------------------------------- */
+
+.prose p {
+  margin-top:     0;
+  margin-bottom:  var(--prose-p-margin);
+  color:          var(--prose-p-color);
+  text-wrap:      pretty;
+}
+
+/* Lead — paragraph intro, lebih besar dan muted */
+.prose .lead,
+.prose p.lead {
+  font-size:      var(--prose-lead-size);
+  line-height:    var(--prose-lead-line-height);
+  color:          var(--prose-lead-color);
+  font-weight:    var(--prose-lead-weight);
+  letter-spacing: var(--prose-lead-tracking);
+  margin-bottom:  32px;
+}
+
+
+/* -----------------------------------------------------------------------------
+   4. LINKS
+   ----------------------------------------------------------------------------- */
+
+.prose a {
+  color:                     var(--prose-link-color);
+  text-decoration:           var(--prose-link-decoration);
+  text-underline-offset:     var(--prose-link-decoration-offset);
+  text-decoration-thickness: var(--prose-link-decoration-thickness);
+  text-decoration-color:     var(--prose-link-decoration-color);
+  transition:
+    color                    var(--duration) var(--ease-out),
+    text-decoration-color    var(--duration) var(--ease-out),
+    opacity                  var(--duration) var(--ease-out);
+}
+
+.prose a:hover {
+  color:                   var(--prose-link-hover-color);
+  text-decoration-color:   var(--prose-link-hover-decoration-color);
+  opacity:                 1;
+}
+
+/* Link di dalam heading — tanpa underline */
+.prose h1 a,
+.prose h2 a,
+.prose h3 a,
+.prose h4 a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.prose h1 a:hover,
+.prose h2 a:hover,
+.prose h3 a:hover,
+.prose h4 a:hover {
+  opacity: 0.7;
+}
+
+
+/* -----------------------------------------------------------------------------
+   5. STRONG, EM, DEL, SUB, SUP
+   ----------------------------------------------------------------------------- */
+
+.prose strong,
+.prose b {
+  font-weight: var(--prose-strong-weight);
+  color:       var(--prose-strong-color);
+}
+
+.prose em,
+.prose i {
+  font-style: var(--prose-em-style);
+  color:      var(--prose-em-color);
+}
+
+.prose del,
+.prose s {
+  color:           var(--fg-dim);
+  text-decoration: line-through;
+}
+
+.prose sub,
+.prose sup {
+  font-size:      0.75em;
+  line-height:    0;
+  position:       relative;
+  vertical-align: baseline;
+}
+
+.prose sup { top: -0.5em; }
+.prose sub { bottom: -0.25em; }
+
+
+/* -----------------------------------------------------------------------------
+   6. BLOCKQUOTE
+   ----------------------------------------------------------------------------- */
+
+.prose blockquote {
+  border-left:    var(--prose-quote-border-width) solid var(--prose-quote-border-color);
+  padding-left:   var(--prose-quote-padding-left);
+  margin-top:     var(--prose-quote-margin-y);
+  margin-bottom:  var(--prose-quote-margin-y);
+  margin-left:    0;
+  margin-right:   0;
+  font-size:      var(--prose-quote-font-size);
+  line-height:    var(--prose-quote-line-height);
+  color:          var(--prose-quote-color);
+  font-weight:    var(--prose-quote-weight);
+  font-style:     var(--prose-quote-font-style);
+}
+
+.prose blockquote p {
+  margin-bottom: 0;
+  color: inherit;
+}
+
+.prose blockquote p + p {
+  margin-top: 12px;
+}
+
+/* Cite — nama sumber di dalam blockquote */
+.prose blockquote cite,
+.prose blockquote footer {
+  display:        block;
+  margin-top:     12px;
+  font-size:      var(--prose-cite-size);
+  color:          var(--prose-cite-color);
+  letter-spacing: var(--prose-cite-tracking);
+  font-style:     normal;
+}
+
+.prose blockquote cite::before {
+  content: '— ';
+}
+
+
+/* -----------------------------------------------------------------------------
+   7. CODE — INLINE
+   ----------------------------------------------------------------------------- */
+
+.prose code {
+  font-family: var(--prose-code-font);
+  font-size:   var(--prose-code-size);
+  font-weight: var(--prose-code-weight);
+  color:       var(--prose-code-color);
+  background:  var(--prose-code-bg);
+  border:      var(--prose-code-border);
+  border-radius: var(--prose-code-radius);
+  padding:     var(--prose-code-padding-y) var(--prose-code-padding-x);
+  white-space: break-spaces;
+}
+
+/* Code di dalam heading — tidak ada box */
+.prose h1 code,
+.prose h2 code,
+.prose h3 code,
+.prose h4 code {
+  font-size:   0.85em;
+  background:  transparent;
+  border:      none;
+  padding:     0;
+  color:       inherit;
+}
+
+/* Code di dalam link */
+.prose a code {
+  color: inherit;
+}
+
+
+/* -----------------------------------------------------------------------------
+   8. CODE — BLOCK (pre)
+   ----------------------------------------------------------------------------- */
+
+.prose pre {
+  background:    var(--prose-pre-bg);
+  border:        var(--prose-pre-border);
+  border-radius: var(--prose-pre-radius);
+  padding:       var(--prose-pre-padding-y) var(--prose-pre-padding-x);
+  margin-top:    var(--prose-pre-margin-y);
+  margin-bottom: var(--prose-pre-margin-y);
+  overflow-x:    var(--prose-pre-overflow);
+  box-shadow:    var(--prose-pre-shadow);
+  position:      relative;
+}
+
+.prose pre code {
+  font-family:   var(--prose-code-font);
+  font-size:     var(--prose-pre-font-size);
+  line-height:   var(--prose-pre-line-height);
+  color:         var(--prose-pre-color);
+  background:    transparent;
+  border:        none;
+  border-radius: 0;
+  padding:       0;
+  white-space:   pre;
+  font-weight:   400;
+}
+
+/* Scrollbar code block */
+.prose pre::-webkit-scrollbar {
+  height: 4px;
+}
+
+.prose pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.prose pre::-webkit-scrollbar-thumb {
+  background:    var(--prose-pre-scrollbar-color);
+  border-radius: var(--radius-full);
+}
+
+/* Language label */
+.prose pre[data-lang]::before {
+  content:        attr(data-lang);
+  position:       absolute;
+  top:            10px;
+  right:          14px;
+  font-family:    var(--font-mono);
+  font-size:      10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color:          var(--fg-dim);
+  pointer-events: none;
+  user-select:    none;
+}
+
+/* Line numbers — opsional via .prose pre.line-numbers */
+.prose pre.line-numbers {
+  padding-left: 52px;
+  counter-reset: line;
+}
+
+.prose pre.line-numbers code > .line::before {
+  counter-increment: line;
+  content:           counter(line);
+  display:           inline-block;
+  width:             28px;
+  margin-left:       -36px;
+  margin-right:      16px;
+  text-align:        right;
+  color:             var(--fg-dim);
+  user-select:       none;
+  font-size:         0.85em;
+}
+
+/* Line highlight — via .highlighted pada <span> */
+.prose pre .highlighted {
+  background:   rgba(255, 255, 255, 0.06);
+  margin-inline: calc(var(--prose-pre-padding-x) * -1);
+  padding-inline: var(--prose-pre-padding-x);
+  display:      block;
+}
+
+/* Diff lines */
+.prose pre .diff-add {
+  background: rgba(61, 214, 140, 0.08);
+  display:    block;
+  margin-inline: calc(var(--prose-pre-padding-x) * -1);
+  padding-inline: var(--prose-pre-padding-x);
+}
+
+.prose pre .diff-remove {
+  background: rgba(242, 85, 90, 0.08);
+  display:    block;
+  margin-inline: calc(var(--prose-pre-padding-x) * -1);
+  padding-inline: var(--prose-pre-padding-x);
+}
+
+
+/* -----------------------------------------------------------------------------
+   9. LISTS
+   ----------------------------------------------------------------------------- */
+
+/* ---- Shared ---- */
+.prose ul,
+.prose ol {
+  margin-top:    var(--prose-list-margin-y);
+  margin-bottom: var(--prose-list-margin-y);
+  padding-left:  var(--prose-list-padding-left);
+  color:         var(--prose-list-color);
+}
+
+.prose li {
+  margin-top:    var(--prose-list-item-margin-y);
+  margin-bottom: var(--prose-list-item-margin-y);
+}
+
+.prose li > p {
+  margin-top:    8px;
+  margin-bottom: 8px;
+}
+
+/* ---- Unordered — bullet custom ---- */
+.prose ul {
+  list-style: none;
+}
+
+.prose ul > li {
+  position:    relative;
+  padding-left: 4px;
+}
+
+.prose ul > li::before {
+  content:       '';
+  position:      absolute;
+  left:          calc(var(--prose-list-padding-left) * -1 + 6px);
+  top:           calc(var(--prose-line-height) * var(--prose-font-size) / 2 - var(--prose-ul-marker-size) / 2);
+  width:         var(--prose-ul-marker-size);
+  height:        var(--prose-ul-marker-size);
+  border-radius: var(--radius-full);
+  background:    var(--prose-ul-marker-color);
+  flex-shrink:   0;
+}
+
+/* Nested ul — marker lebih kecil, hollow */
+.prose ul ul > li::before {
+  width:        3px;
+  height:       3px;
+  background:   transparent;
+  border:       1px solid var(--prose-ul-marker-color);
+  top:          calc(var(--prose-line-height) * var(--prose-font-size) / 2 - 2px);
+}
+
+/* ---- Ordered — angka mono ---- */
+.prose ol {
+  list-style:     none;
+  counter-reset:  prose-counter;
+}
+
+.prose ol > li {
+  counter-increment: prose-counter;
+  position:          relative;
+  padding-left:       4px;
+}
+
+.prose ol > li::before {
+  content:       counter(prose-counter) ".";
+  position:      absolute;
+  left:          calc(var(--prose-list-padding-left) * -1);
+  top:           0;
+  font-family:   var(--prose-ol-marker-font);
+  font-size:     var(--prose-ol-marker-size);
+  font-weight:   var(--prose-ol-marker-weight);
+  color:         var(--prose-ol-marker-color);
+  line-height:   var(--prose-line-height);
+  min-width:     20px;
+  user-select:   none;
+}
+
+/* Nested ol */
+.prose ol ol {
+  counter-reset: prose-counter-nested;
+}
+
+.prose ol ol > li {
+  counter-increment: prose-counter-nested;
+}
+
+.prose ol ol > li::before {
+  content:    counter(prose-counter-nested, lower-alpha) ".";
+  color:      var(--fg-dim);
+}
+
+/* ---- Nested list shared margin ---- */
+.prose ul ul,
+.prose ul ol,
+.prose ol ul,
+.prose ol ol {
+  margin-top:    var(--prose-list-nested-margin);
+  margin-bottom: var(--prose-list-nested-margin);
+}
+
+/* ---- Task list (checkbox) ---- */
+.prose ul.task-list {
+  padding-left: 0;
+}
+
+.prose ul.task-list > li {
+  display:      flex;
+  align-items:  flex-start;
+  gap:          10px;
+  padding-left: 0;
+}
+
+.prose ul.task-list > li::before {
+  display: none;
+}
+
+.prose ul.task-list input[type="checkbox"] {
+  margin-top:   3px;
+  width:        14px;
+  height:       14px;
+  flex-shrink:  0;
+  accent-color: var(--fg-strong);
+  cursor:       default;
+}
+
+
+/* -----------------------------------------------------------------------------
+   10. DEFINITION LIST
+   ----------------------------------------------------------------------------- */
+
+.prose dl {
+  margin-top:    var(--prose-list-margin-y);
+  margin-bottom: var(--prose-list-margin-y);
+}
+
+.prose dt {
+  font-weight:    600;
+  color:          var(--prose-color-strong);
+  letter-spacing: -0.01em;
+  margin-top:     16px;
+}
+
+.prose dt:first-child {
+  margin-top: 0;
+}
+
+.prose dd {
+  margin-left: 20px;
+  margin-top:  4px;
+  color:       var(--prose-color-muted);
+}
+
+
+/* -----------------------------------------------------------------------------
+   11. TABLE
+   ----------------------------------------------------------------------------- */
+
+.prose table {
+  width:          100%;
+  margin-top:     var(--prose-table-margin-y);
+  margin-bottom:  var(--prose-table-margin-y);
+  font-size:      var(--prose-table-font-size);
+  line-height:    var(--prose-table-line-height);
+  border-collapse: collapse;
+  border-spacing: 0;
+  overflow:       hidden;
+  border-radius:  var(--radius-md);
+  border:         var(--prose-thead-border);
+}
+
+.prose thead {
+  background: var(--prose-thead-bg);
+}
+
+.prose thead th {
+  padding:        var(--prose-td-padding-y) var(--prose-td-padding-x);
+  font-size:      var(--prose-thead-font-size);
+  font-weight:    var(--prose-thead-weight);
+  letter-spacing: var(--prose-thead-tracking);
+  text-transform: var(--prose-thead-text-transform);
+  color:          var(--prose-thead-color);
+  text-align:     left;
+  white-space:    nowrap;
+  border-bottom:  var(--prose-tbody-border-width) solid var(--prose-tbody-border-color);
+}
+
+.prose tbody tr {
+  border-bottom: var(--prose-tbody-border-width) solid var(--prose-tbody-border-color);
+  transition:    background-color var(--duration) var(--ease-out);
+}
+
+.prose tbody tr:last-child {
+  border-bottom: none;
+}
+
+.prose tbody tr:hover {
+  background: var(--prose-tr-hover-bg);
+}
+
+.prose td {
+  padding:    var(--prose-td-padding-y) var(--prose-td-padding-x);
+  color:      var(--prose-color);
+  vertical-align: top;
+}
+
+/* Responsive table wrapper */
+.prose .table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top:    var(--prose-table-margin-y);
+  margin-bottom: var(--prose-table-margin-y);
+  border:        var(--prose-thead-border);
+  border-radius: var(--radius-md);
+}
+
+.prose .table-wrapper table {
+  margin-top:    0;
+  margin-bottom: 0;
+  border:        none;
+  border-radius: 0;
+}
+
+
+/* -----------------------------------------------------------------------------
+   12. IMAGES, FIGURE, VIDEO
+   ----------------------------------------------------------------------------- */
+
+.prose img {
+  border-radius: var(--prose-img-radius);
+  margin-top:    var(--prose-img-margin-y);
+  margin-bottom: var(--prose-img-margin-y);
+  max-width:     100%;
+  height:        auto;
+  box-shadow:    var(--prose-img-shadow);
+  border:        var(--prose-img-border);
+}
+
+/* Gambar inline — di dalam paragraf, tidak ada margin besar */
+.prose p img {
+  margin-top:    8px;
+  margin-bottom: 8px;
+}
+
+.prose figure {
+  margin-top:    var(--prose-img-margin-y);
+  margin-bottom: var(--prose-img-margin-y);
+  margin-left:   0;
+  margin-right:  0;
+}
+
+.prose figure img {
+  margin-top:    0;
+  margin-bottom: 0;
+  width:         100%;
+}
+
+.prose figcaption {
+  margin-top:  var(--prose-figcaption-margin-top);
+  font-size:   var(--prose-figcaption-size);
+  color:       var(--prose-figcaption-color);
+  line-height: var(--prose-figcaption-line-height);
+  text-align:  var(--prose-figcaption-align);
+}
+
+/* Video & iframe embed */
+.prose video,
+.prose iframe {
+  width:         100%;
+  border-radius: var(--prose-img-radius);
+  margin-top:    var(--prose-img-margin-y);
+  margin-bottom: var(--prose-img-margin-y);
+  border:        var(--prose-img-border);
+}
+
+/* Responsive video wrapper */
+.prose .video-wrapper {
+  position:      relative;
+  padding-bottom: 56.25%;  /* 16:9 */
+  height:        0;
+  overflow:      hidden;
+  border-radius: var(--prose-img-radius);
+  margin-top:    var(--prose-img-margin-y);
+  margin-bottom: var(--prose-img-margin-y);
+  border:        var(--prose-img-border);
+}
+
+.prose .video-wrapper iframe,
+.prose .video-wrapper video {
+  position: absolute;
+  top:      0;
+  left:     0;
+  width:    100%;
+  height:   100%;
+  margin:   0;
+  border:   none;
+  border-radius: 0;
+}
+
+
+/* -----------------------------------------------------------------------------
+   13. HORIZONTAL RULE
+   ----------------------------------------------------------------------------- */
+
+.prose hr {
+  border:        none;
+  border-top:    var(--prose-hr-border-width) solid var(--prose-hr-border-color);
+  margin-top:    var(--prose-hr-margin-y);
+  margin-bottom: var(--prose-hr-margin-y);
+}
+
+/* HR dekoratif dengan tiga titik */
+.prose hr.ornamental {
+  border:        none;
+  text-align:    center;
+  margin-top:    var(--prose-hr-margin-y);
+  margin-bottom: var(--prose-hr-margin-y);
+}
+
+.prose hr.ornamental::before {
+  content:        '· · ·';
+  color:          var(--fg-dim);
+  letter-spacing: 0.5em;
+  font-size:      14px;
+}
+
+
+/* -----------------------------------------------------------------------------
+   14. KEYBOARD, MARK, ABBR, SMALL
+   ----------------------------------------------------------------------------- */
+
+.prose kbd {
+  font-family:   var(--prose-kbd-font);
+  font-size:     var(--prose-kbd-size);
+  color:         var(--prose-kbd-color);
+  background:    var(--prose-kbd-bg);
+  border:        var(--prose-kbd-border);
+  border-bottom: var(--prose-kbd-border-bottom);
+  border-radius: var(--prose-kbd-radius);
+  padding:       var(--prose-kbd-padding-y) var(--prose-kbd-padding-x);
+  white-space:   nowrap;
+  vertical-align: baseline;
+}
+
+.prose mark {
+  background:    var(--prose-mark-bg);
+  color:         var(--prose-mark-color);
+  padding:       0 var(--prose-mark-padding-x);
+  border-radius: var(--prose-mark-radius);
+}
+
+.prose abbr[title] {
+  text-decoration:        var(--prose-abbr-decoration);
+  text-decoration-color:  var(--prose-abbr-decoration-color);
+  text-underline-offset:  var(--prose-abbr-decoration-offset);
+  cursor:                 help;
+}
+
+.prose small {
+  font-size:   0.85em;
+  color:       var(--fg-muted);
+  font-weight: inherit;
+}
+
+
+/* -----------------------------------------------------------------------------
+   15. DETAILS / SUMMARY
+   ----------------------------------------------------------------------------- */
+
+.prose details {
+  border:        var(--prose-details-border);
+  border-radius: var(--prose-details-radius);
+  margin-top:    var(--prose-details-margin-y);
+  margin-bottom: var(--prose-details-margin-y);
+  overflow:      hidden;
+}
+
+.prose details[open] {
+  padding-bottom: 16px;
+}
+
+.prose summary {
+  padding:        var(--prose-details-padding);
+  font-weight:    var(--prose-summary-weight);
+  color:          var(--prose-summary-color);
+  cursor:         var(--prose-summary-cursor);
+  user-select:    none;
+  list-style:     none;
+  display:        flex;
+  align-items:    center;
+  justify-content: space-between;
+  gap:            12px;
+  transition:     background-color var(--duration) var(--ease-out);
+}
+
+.prose summary:hover {
+  background: var(--bg-subtle);
+}
+
+.prose summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Chevron icon */
+.prose summary::after {
+  content:    '';
+  width:      16px;
+  height:     16px;
+  flex-shrink: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%23737371' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:   no-repeat;
+  background-position: center;
+  transition:  transform var(--duration) var(--ease-out);
+}
+
+.prose details[open] summary::after {
+  transform: rotate(180deg);
+}
+
+.prose details > *:not(summary) {
+  padding-left:  20px;
+  padding-right: 20px;
+}
+
+.prose details > *:not(summary):first-of-type {
+  margin-top: 12px;
+}
+
+
+/* -----------------------------------------------------------------------------
+   16. CALLOUTS
+   .callout, .callout-tip, .callout-warning, .callout-danger, .callout-info
+   ----------------------------------------------------------------------------- */
+
+.prose .callout,
+.prose .callout-note,
+.prose .callout-tip,
+.prose .callout-warning,
+.prose .callout-danger,
+.prose .callout-info {
+  padding:       var(--prose-callout-padding);
+  border-radius: var(--prose-callout-radius);
+  margin-top:    var(--prose-callout-margin-y);
+  margin-bottom: var(--prose-callout-margin-y);
+  font-size:     var(--prose-callout-font-size);
+  line-height:   var(--prose-callout-line-height);
+}
+
+.prose .callout,
+.prose .callout-note {
+  background: var(--prose-callout-note-bg);
+  border:     1px solid var(--prose-callout-note-border);
+  border-left: 3px solid var(--prose-callout-note-accent);
+  color:      var(--prose-callout-note-color);
+}
+
+.prose .callout-tip {
+  background:  var(--prose-callout-tip-bg);
+  border:      1px solid var(--prose-callout-tip-border);
+  border-left: 3px solid var(--prose-callout-tip-accent);
+  color:       var(--prose-callout-tip-color);
+}
+
+.prose .callout-warning {
+  background:  var(--prose-callout-warning-bg);
+  border:      1px solid var(--prose-callout-warning-border);
+  border-left: 3px solid var(--prose-callout-warning-accent);
+  color:       var(--prose-callout-warning-color);
+}
+
+.prose .callout-danger {
+  background:  var(--prose-callout-danger-bg);
+  border:      1px solid var(--prose-callout-danger-border);
+  border-left: 3px solid var(--prose-callout-danger-accent);
+  color:       var(--prose-callout-danger-color);
+}
+
+.prose .callout-info {
+  background:  var(--prose-callout-info-bg);
+  border:      1px solid var(--prose-callout-info-border);
+  border-left: 3px solid var(--prose-callout-info-accent);
+  color:       var(--prose-callout-info-color);
+}
+
+/* Callout title */
+.prose .callout-title,
+.prose [class*="callout-"] > strong:first-child {
+  display:     block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.prose .callout-note    .callout-title,
+.prose .callout-note    > strong:first-child { color: var(--prose-callout-note-title-color);    }
+.prose .callout-tip     .callout-title,
+.prose .callout-tip     > strong:first-child { color: var(--prose-callout-tip-title-color);     }
+.prose .callout-warning .callout-title,
+.prose .callout-warning > strong:first-child { color: var(--prose-callout-warning-title-color); }
+.prose .callout-danger  .callout-title,
+.prose .callout-danger  > strong:first-child { color: var(--prose-callout-danger-title-color);  }
+.prose .callout-info    .callout-title,
+.prose .callout-info    > strong:first-child { color: var(--prose-callout-info-title-color);    }
+
+/* Semua elemen dalam callout — reset margin */
+.prose [class*="callout-"] > *:first-child { margin-top:    0; }
+.prose [class*="callout-"] > *:last-child  { margin-bottom: 0; }
+
+
+/* -----------------------------------------------------------------------------
+   17. TUTORIAL STEPS (.prose-steps)
+   Ordered list dengan numbering yang menonjol dan connector line
+   ----------------------------------------------------------------------------- */
+
+.prose .prose-steps {
+  list-style:    none;
+  padding-left:  0;
+  margin-top:    28px;
+  margin-bottom: 28px;
+  counter-reset: prose-step;
+}
+
+.prose .prose-steps > li {
+  counter-increment: prose-step;
+  position:          relative;
+  padding-left:      48px;
+  padding-bottom:    var(--prose-step-margin-y);
+  margin-top:        0;
+  margin-bottom:     0;
+}
+
+/* Connector line antara steps */
+.prose .prose-steps > li::after {
+  content:    '';
+  position:   absolute;
+  left:       calc(var(--prose-step-number-size-box) / 2 - var(--prose-step-connector-width) / 2);
+  top:        calc(var(--prose-step-number-size-box) + 6px);
+  bottom:     0;
+  width:      var(--prose-step-connector-width);
+  background: var(--prose-step-connector-color);
+}
+
+/* Hapus connector di step terakhir */
+.prose .prose-steps > li:last-child {
+  padding-bottom: 0;
+}
+
+.prose .prose-steps > li:last-child::after {
+  display: none;
+}
+
+/* Nomor step */
+.prose .prose-steps > li::before {
+  content:         counter(prose-step);
+  position:        absolute;
+  left:            0;
+  top:             2px;
+  width:           var(--prose-step-number-size-box);
+  height:          var(--prose-step-number-size-box);
+  border-radius:   var(--prose-step-number-radius);
+  background:      var(--prose-step-number-bg);
+  color:           var(--prose-step-number-color);
+  font-family:     var(--font-mono);
+  font-size:       var(--prose-step-number-size);
+  font-weight:     var(--prose-step-number-weight);
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  line-height:     1;
+  flex-shrink:     0;
+}
+
+/* Title dalam step */
+.prose .prose-steps > li > strong:first-child,
+.prose .prose-steps > li > .step-title {
+  display:        block;
+  font-size:      15px;
+  font-weight:    700;
+  color:          var(--fg-strong);
+  margin-bottom:  8px;
+  line-height:    1.3;
+}
+
+
+/* -----------------------------------------------------------------------------
+   18. FOOTNOTES
+   ----------------------------------------------------------------------------- */
+
+.prose .footnotes {
+  margin-top:    var(--prose-footnote-margin-top);
+  padding-top:   24px;
+  border-top:    1px solid var(--prose-footnote-border-color);
+  font-size:     var(--prose-footnote-size);
+  color:         var(--prose-footnote-color);
+  line-height:   1.6;
+}
+
+.prose .footnotes ol {
+  padding-left: 20px;
+  margin:       0;
+}
+
+.prose .footnotes li {
+  margin-top: 6px;
+}
+
+.prose .footnotes p {
+  margin-bottom: 0;
+  color:         inherit;
+}
+
+/* Back link dari footnote ke teks */
+.prose .footnotes a[data-footnote-backref] {
+  text-decoration: none;
+  margin-left:     4px;
+  color:           var(--fg-dim);
+  font-size:       0.9em;
+}
+
+.prose .footnotes a[data-footnote-backref]:hover {
+  color: var(--fg-strong);
+}
+
+/* Superscript footnote ref di dalam teks */
+.prose [data-footnote-ref] {
+  font-family:   var(--font-mono);
+  font-size:     0.7em;
+  vertical-align: super;
+  line-height:   0;
+  color:         var(--fg-dim);
+  text-decoration: none;
+  padding:       0 1px;
+}
+
+.prose [data-footnote-ref]:hover {
+  color: var(--fg-strong);
+}
+
+
+/* -----------------------------------------------------------------------------
+   19. BREAKOUT UTILITIES
+   Elemen yang keluar dari max-width prose, full-width dalam kontainer
+   ----------------------------------------------------------------------------- */
+
+/* Full width — keluar dari max-width prose */
+.prose .breakout {
+  width:          100vw;
+  margin-left:    calc(50% - 50vw);
+  margin-right:   calc(50% - 50vw);
+}
+
+/* Wide — lebih lebar dari prose max-width tapi tidak full viewport */
+.prose .wide {
+  max-width:      var(--prose-max-width-wide);
+  margin-left:    auto;
+  margin-right:   auto;
+}
+
+/* Breakout untuk tabel agar bisa scroll */
+.prose .table-wrapper.breakout {
+  overflow-x: auto;
+}
+
+
+/* -----------------------------------------------------------------------------
+   20. ANCHOR LINKS PADA HEADING
+   Tombol "#" yang muncul saat hover heading
+   ----------------------------------------------------------------------------- */
+
+.prose .heading-anchor {
+  opacity:         0;
+  margin-left:     8px;
+  font-size:       0.75em;
+  color:           var(--fg-dim);
+  text-decoration: none;
+  transition:      opacity var(--duration) var(--ease-out),
+                   color   var(--duration) var(--ease-out);
+  vertical-align:  middle;
+}
+
+.prose h2:hover .heading-anchor,
+.prose h3:hover .heading-anchor,
+.prose h4:hover .heading-anchor {
+  opacity: 1;
+}
+
+.prose .heading-anchor:hover {
+  color:   var(--fg-strong);
+  opacity: 1;
+}
+
+
+/* -----------------------------------------------------------------------------
+   21. SELECTION
+   ----------------------------------------------------------------------------- */
+
+.prose ::selection {
+  background: var(--prose-selection-bg);
+  color:      var(--prose-selection-color);
+}
+
+
+/* -----------------------------------------------------------------------------
+   22. RESPONSIVE
+   ----------------------------------------------------------------------------- */
+
+@media (max-width: 640px) {
+
+  .prose {
+    --prose-font-size:     16px;
+    --prose-h1-size:       30px;
+    --prose-h2-size:       22px;
+    --prose-h3-size:       18px;
+    --prose-h4-size:       16px;
+    --prose-lead-size:     17px;
+    --prose-quote-font-size: 16px;
+    --prose-h2-margin-top: 40px;
+    --prose-h3-margin-top: 28px;
+    --prose-hr-margin-y:   36px;
+  }
+
+  .prose pre {
+    border-radius: var(--radius-sm);
+    font-size:     12px;
+  }
+
+  .prose table {
+    font-size: 13px;
+  }
+
+  .prose td,
+  .prose th {
+    padding: 8px 10px;
+  }
+
+  /* Steps lebih compact */
+  .prose .prose-steps > li {
+    padding-left: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .prose {
+    --prose-pre-padding-x: 14px;
+    --prose-pre-padding-y: 14px;
+  }
+
+  /* Table — selalu scroll di mobile kecil */
+  .prose table {
+    display:    block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
