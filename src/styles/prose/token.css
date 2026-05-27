@@ -4,41 +4,41 @@
   --prose-font-sans: var(--font-sans);
   --prose-font-mono: var(--font-mono);
 
-  --prose-scroll-margin:         calc(var(--header-height, 60px) + 16px);
+  --prose-scroll-margin: calc(var(--header-height, 60px) + 16px);
 
-  --prose-link-color:               var(--fg-strong);
-  --prose-link-decoration:          underline;
-  --prose-link-decoration-color:    var(--border-strong);
-  --prose-link-decoration-offset:   3px;
+  /* Link */
+  --prose-link-color: var(--fg-strong);
+  --prose-link-decoration: underline;
+  --prose-link-decoration-color: var(--border-strong);
+  --prose-link-decoration-offset: 3px;
   --prose-link-decoration-thickness: 1px;
-  --prose-link-hover-color:         var(--fg-strong);
+  --prose-link-hover-color: var(--fg-strong);
   --prose-link-hover-decoration-color: var(--fg-strong);
 
-  --prose-strong-weight:      700;
-  --prose-strong-color:       var(--fg-strong);
-  --prose-em-color:           var(--fg-muted);
-  --prose-em-style:           normal;
-  
+  /* Typography */
+  --prose-strong-weight: 700;
+  --prose-strong-color: var(--fg-strong);
+  --prose-em-color: var(--fg-muted);
+  --prose-em-style: normal;
 
   /* Radius */
-  --prose-radius-xs:    var(--radius-xs);
-  --prose-radius-sm:    var(--radius-sm);
-  --prose-radius:       var(--radius);
-  --prose-radius-md:    var(--radius-md);
-  --prose-radius-lg:    var(--radius-lg);
-  --prose-radius-xl:    var(--radius-xl);
-  --prose-radius-full:  var(--radius-full);
+  --prose-radius-xs: var(--radius-xs);
+  --prose-radius-sm: var(--radius-sm);
+  --prose-radius: var(--radius);
+  --prose-radius-md: var(--radius-md);
+  --prose-radius-lg: var(--radius-lg);
+  --prose-radius-xl: var(--radius-xl);
+  --prose-radius-full: var(--radius-full);
 
   /* Motion */
-  --prose-ease:  var(--ease-snappy);
-  --prose-ease-in:      var(--ease-in);
-  --prose-ease-out:     var(--ease-out);
-  --prose-ease-in-out:  var(--ease-out);
-
+  --prose-ease: var(--ease-snappy);
+  --prose-ease-in: var(--ease-in);
+  --prose-ease-out: var(--ease-out);
+  --prose-ease-in-out: var(--ease-out);
   --prose-duration: var(--duration);
   --prose-duration-md: var(--duration-md);
 
-  /* Accent Colors */
+  /* Accent */
   --prose-accent: var(--accent);
   --prose-accent-dim: var(--accent-dim);
   --prose-accent-soft: var(--accent-soft);
@@ -50,22 +50,21 @@
   --prose-highlight-border: rgba(255, 214, 0, 0.4);
   --prose-highlight-text: #664d00;
 
-  /* Foreground Hierarchy */
-  --prose-fg:           var(--fg);
-  --prose-fg-strong:    var(--fg-strong);
-  --prose-fg-muted:     var(--fg-muted);
-  --prose-fg-subtle:    var(--fg-subtle);
-  --prose-fg-dim:       var(--fg-dim);
-  --prose-fg-disabled:  var(--fg-disabled);
-  --prose-fg-inverted:  var(--fg-inverted);
+  /* Foreground */
+  --prose-fg: var(--fg);
+  --prose-fg-strong: var(--fg-strong);
+  --prose-fg-muted: var(--fg-muted);
+  --prose-fg-subtle: var(--fg-subtle);
+  --prose-fg-dim: var(--fg-dim);
+  --prose-fg-disabled: var(--fg-disabled);
+  --prose-fg-inverted: var(--fg-inverted);
 
-  /* Surfaces & Backgrounds */
+  /* Surfaces */
   --prose-bg: var(--bg);
   --prose-bg-subtle: var(--bg-subtle);
   --prose-bg-muted: var(--bg-muted);
   --prose-bg-elevated: var(--bg-elevated);
   --prose-bg-overlay: var(--bg-overlay);
-
   --prose-surface: var(--bg-muted);
   --prose-surface-hover: var(--bg-subtle);
   --prose-surface-active: var(--bg-elevated);
@@ -94,13 +93,13 @@
   --prose-quote-text: var(--fg-muted);
   --prose-quote-cite: var(--fg-subtle);
 
-  /* Tables */
-  --prose-table-header-bg: var(--bg-muted);
-  --prose-table-header-text: var(--fg-muted);
-  --prose-table-row-bg: var(--bg);
-  --prose-table-row-hover: var(--bg-muted);
-  --prose-table-border: var(--border);
-  --prose-table-text: var(--fg);
+  /* ========== Tables – Light (bersih, netral) ========== */
+  --prose-table-header-bg: var(--bg-muted);        /* #e8e8e6 */
+  --prose-table-header-text: var(--fg-muted);      /* #525250 */
+  --prose-table-row-bg: var(--bg);                 /* #ffffff */
+  --prose-table-row-hover: var(--bg-subtle);       /* #f5f5f3 */
+  --prose-table-border: var(--border);             /* #e8e8e6 */
+  --prose-table-text: var(--fg);                   /* #111110 */
 
   /* Horizontal Rule */
   --prose-hr: #e5e5e5;
@@ -110,69 +109,63 @@
   --prose-list-marker: #a3a3a3;
   --prose-list-marker-hover: #737373;
 
-  /* Links */
+  /* Links (inline) */
   --prose-link: #0070f3;
   --prose-link-hover: #0761d1;
   --prose-link-visited: #7c3aed;
   --prose-link-underline: rgba(0, 112, 243, 0.3);
   --prose-link-underline-hover: rgba(0, 112, 243, 0.6);
 
-  /* Callouts - Note (Neutral) */
+  /* Callouts – tetap seperti asli, tanpa perubahan */
   --callout-note-bg: #f5f5f5;
   --callout-note-border: #e5e5e5;
   --callout-note-text: #737373;
   --callout-note-icon: #737373;
   --callout-note-title: #171717;
 
-  /* Callouts - Info (Blue) */
   --callout-info-bg: rgba(0, 112, 243, 0.06);
   --callout-info-border: rgba(0, 112, 243, 0.15);
   --callout-info-text: #0761d1;
   --callout-info-icon: #0761d1;
   --callout-info-title: #0070f3;
 
-  /* Callouts - Tip (Green) */
   --callout-tip-bg: rgba(34, 197, 94, 0.06);
   --callout-tip-border: rgba(34, 197, 94, 0.15);
   --callout-tip-text: #16a34a;
   --callout-tip-icon: #16a34a;
   --callout-tip-title: #22c55e;
 
-  /* Callouts - Warning (Amber) */
   --callout-warning-bg: rgba(245, 158, 11, 0.08);
   --callout-warning-border: rgba(245, 158, 11, 0.2);
   --callout-warning-text: #d97706;
   --callout-warning-icon: #d97706;
   --callout-warning-title: #f59e0b;
 
-  /* Callouts - Danger (Red) */
   --callout-danger-bg: rgba(239, 68, 68, 0.06);
   --callout-danger-border: rgba(239, 68, 68, 0.15);
   --callout-danger-text: #dc2626;
   --callout-danger-icon: #dc2626;
   --callout-danger-title: #ef4444;
 
-  /* Callouts - Important (Purple) */
   --callout-important-bg: rgba(168, 85, 247, 0.06);
   --callout-important-border: rgba(168, 85, 247, 0.15);
   --callout-important-text: #9333ea;
   --callout-important-icon: #9333ea;
   --callout-important-title: #a855f7;
 
-  /* Callouts - Caution (Orange) */
   --callout-caution-bg: rgba(249, 115, 22, 0.06);
   --callout-caution-border: rgba(249, 115, 22, 0.15);
   --callout-caution-text: #ea580c;
   --callout-caution-icon: #ea580c;
   --callout-caution-title: #f97316;
 
-  /* Details / Accordion */
+  /* Details */
   --prose-details-bg: #fafafa;
   --prose-details-border: #e5e5e5;
   --prose-details-summary: #171717;
   --prose-details-marker: #737373;
 
-  /* Kbd / Keyboard */
+  /* Kbd */
   --prose-kbd-bg: #f5f5f5;
   --prose-kbd-border: #d4d4d4;
   --prose-kbd-text: #171717;
@@ -189,14 +182,16 @@
   --prose-image-bg: #fafafa;
 }
 
-/* Dark Mode */
+/* =============================================
+   Dark Mode – Black Noir
+   ============================================= */
 .dark {
-  /* Highlight / Mark */
+  /* Highlight */
   --prose-highlight-bg: rgba(255, 214, 0, 0.15);
   --prose-highlight-border: rgba(255, 214, 0, 0.3);
   --prose-highlight-text: #ffd600;
 
-  /* Code & Pre */
+  /* Code */
   --prose-code-bg: #000000;
   --prose-code-border: #262626;
   --prose-code-text: #e5e5e5;
@@ -208,7 +203,7 @@
   --prose-code-operator: #ff7b72;
   --prose-code-punctuation: #8b949e;
 
-  /* Horizontal Rule */
+  /* HR */
   --prose-hr: #262626;
   --prose-hr-strong: #333333;
 
@@ -221,71 +216,58 @@
   --prose-link-hover: #52a8ff;
   --prose-link-visited: #a78bfa;
   --prose-link-underline: rgba(50, 145, 255, 0.4);
-  --prose-link-underline-hover: rgba(50, 145, 255, 0.8);  
+  --prose-link-underline-hover: rgba(50, 145, 255, 0.8);
 
-  /* Callouts - Note (Neutral) */
-  /*--callout-note-bg: #171717;*/
+  /* Callouts */
   --callout-note-bg: none;
   --callout-note-border: #262626;
   --callout-note-text: #666666;
   --callout-note-icon: #666666;
   --callout-note-title: #ededed;
 
-  /* Callouts - Info (Blue) */
-  /*--callout-info-bg: rgba(50, 145, 255, 0.08);*/
   --callout-info-bg: none;
   --callout-info-border: rgba(50, 145, 255, 0.2);
   --callout-info-text: #52a8ff;
   --callout-info-icon: #3291ff;
   --callout-info-title: #52a8ff;
 
-  /* Callouts - Tip (Green) */
-  /*--callout-tip-bg: rgba(34, 197, 94, 0.08);*/
   --callout-tip-bg: none;
   --callout-tip-border: rgba(34, 197, 94, 0.2);
   --callout-tip-text: #4ade80;
   --callout-tip-icon: #22c55e;
   --callout-tip-title: #4ade80;
 
-  /* Callouts - Warning (Amber) */
-  /*--callout-warning-bg: rgba(245, 158, 11, 0.08);*/
   --callout-warning-bg: none;
   --callout-warning-border: rgba(245, 158, 11, 0.2);
   --callout-warning-text: #fbbf24;
   --callout-warning-icon: #f59e0b;
   --callout-warning-title: #fbbf24;
 
-  /* Callouts - Danger (Red) */
-  /*--callout-danger-bg: rgba(239, 68, 68, 0.08);*/
   --callout-danger-bg: none;
   --callout-danger-border: rgba(239, 68, 68, 0.2);
   --callout-danger-text: #f87171;
   --callout-danger-icon: #ef4444;
   --callout-danger-title: #f87171;
 
-  /* Callouts - Important (Purple) */
-  /*--callout-important-bg: rgba(168, 85, 247, 0.08);*/
   --callout-important-bg: none;
   --callout-important-border: rgba(168, 85, 247, 0.2);
   --callout-important-text: #c084fc;
   --callout-important-icon: #a855f7;
   --callout-important-title: #c084fc;
 
-  /* Callouts - Caution (Orange) */
-  /*--callout-caution-bg: rgba(249, 115, 22, 0.08);*/
   --callout-caution-bg: none;
   --callout-caution-border: rgba(249, 115, 22, 0.2);
   --callout-caution-text: #fb923c;
   --callout-caution-icon: #f97316;
   --callout-caution-title: #fb923c;
 
-  /* Details / Accordion */
+  /* Details */
   --prose-details-bg: #0a0a0a;
   --prose-details-border: #262626;
   --prose-details-summary: #ededed;
   --prose-details-marker: #666666;
 
-  /* Kbd / Keyboard */
+  /* Kbd */
   --prose-kbd-bg: #171717;
   --prose-kbd-border: #333333;
   --prose-kbd-text: #ededed;
@@ -296,8 +278,16 @@
   --prose-footnote-hover: #888888;
   --prose-footnote-border: #262626;
 
-  /* Image & Figure */
+  /* Image */
   --prose-figure-caption: #666666;
   --prose-image-border: #262626;
   --prose-image-bg: #0a0a0a;
+
+  /* ========== Tables – Noir ========== */
+  --prose-table-header-bg: var(--color-void-950);   /* #0a0a09 – sangat gelap, kontras elegan */
+  --prose-table-header-text: var(--fg-dim);         /* #525250 – abu redup */
+  --prose-table-row-bg: transparent;                /* menyatu dengan latar */
+  --prose-table-row-hover: var(--color-void-800);   /* #1a1a18 – sedikit lebih terang */
+  --prose-table-border: var(--border);              /* #2a2a28 – abu gelap */
+  --prose-table-text: var(--fg);                    /* #f5f5f3 – putih tulang */
 }
