@@ -1,5 +1,5 @@
 /* src/styles/prose/code.css */
-
+@refrence '@/styles/global.css';
 /* Inline code */
 .prose code:not(pre code) {
   @apply text-code-14;
