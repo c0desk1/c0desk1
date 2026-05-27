@@ -1,12 +1,17 @@
-/* src/styles/prose/components/table.css */
-.prose table {
-  width: 100%;
-  margin: 2.5rem 0;
-  border-collapse: collapse;
-  border-spacing: 0;
-  overflow: hidden;
-  border-radius: var(--radius-md);
-  border: 1px var(--prose-table-border);
+:root {
+  --noir-bg:       #0a0a0a;
+  --noir-surface:  #141414;
+  --noir-border:   #262626;
+  --noir-text:     #b0b0b0;
+  --noir-text-dim: #707070;
+  --noir-accent:   #c9a96e;
+  --noir-hover:    rgba(255, 255, 255, 0.03);
+  --radius-sm:     6px;
+  --radius-md:     10px;
+  --space-xs:      0.5rem;
+  --space-sm:      0.75rem;
+  --space-md:      1rem;
+  --font-mono:     'JetBrains Mono', 'Fira Code', monospace;
 }
 
 .prose .table-wrapper {
@@ -14,108 +19,108 @@
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   border-radius: var(--radius-md);
-  border: 1px solid var(--prose-table-border);
+  border: 1px solid var(--noir-border);
+  background: var(--noir-surface);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.02),
+              0 4px 24px rgba(0, 0, 0, 0.6);
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--noir-text);
+}
+
+.prose > table {
+  margin: 2.5rem 0;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--noir-border);
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.02),
+              0 4px 24px rgba(0, 0, 0, 0.6);
 }
 
 .prose .table-wrapper table {
-  margin-top: 0;
-  margin-bottom: 0;
+  margin: 0;
   border: none;
   border-radius: 0;
+  box-shadow: none;
 }
 
 .prose thead {
-  background: var(--bg-subtle);
+  background: var(--noir-bg);
 }
 
 .prose thead th {
   font-weight: 600;
-  color: var(--fg-muted);
-  text-align: left;
-  white-space: nowrap;
+  font-size: 0.75rem;
   text-transform: uppercase;
-  border-bottom: 1px solid var(--prose-table-border);
-}
-
-.prose th {
-  padding: 12px 14px;
-  color: var(--fg);
+  letter-spacing: 0.06em;
+  color: var(--noir-text-dim);
+  padding: var(--space-sm) var(--space-md);
+  text-align: start;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--noir-border);
 }
 
 .prose tbody tr {
-  transition: background-color var(--duration) var(--ease-out);
+  transition: background-color 0.2s ease;
 }
 
-.prose tbody tr:hover {
-  background: var(--prose-table-row-hover);
-}
-
-.prose th,
-.prose td {
-  white-space: nowrap;
-  vertical-align: top;
+@media (hover: hover) {
+  .prose tbody tr:hover {
+    background: var(--noir-hover);
+  }
 }
 
 .prose tbody td {
-  color: var(--prose-table-text);
-  border-bottom: 1px solid var(--prose-table-border);
-  background: var(--prose-table-row-bg);
-}
-
-.prose tbody tr:last-child {
-  border-bottom: none;
+  padding: var(--space-sm) var(--space-md);
+  color: var(--noir-text);
+  border-bottom: 1px solid var(--noir-border);
+  vertical-align: top;
+  white-space: nowrap;
 }
 
 .prose tbody td strong {
   font-weight: 600;
-  color: var(--prose-fg);
+  color: #e0e0e0;
 }
 
 .prose tbody td small {
-  @apply text-label-12;
+  font-size: 0.75rem;
+  color: var(--noir-text-dim);
   font-weight: 400;
-  color: var(--prose-fg-subtle);
 }
 
 .prose th:not(:last-child),
 .prose td:not(:last-child) {
-  border-right: 1px solid var(--prose-table-border);
+  border-inline-end: 1px solid var(--noir-border);   /* logical */
 }
 
-/* Mobile */
+.prose tbody tr:last-child td {
+  border-bottom: none;
+}
+
 @media (max-width: 767px) {
-  .prose .table-wrapper {
+  .prose .table-wrapper,
+  .prose > table {
     margin: 1.5rem 0;
   }
 
-  .prose thead th {
-    @apply text-numeric-14;
-    padding: 0.625rem 0.875rem;
-  }
-
+  .prose thead th,
   .prose tbody td {
-    @apply text-numeric-14;
     padding: 0.625rem 0.875rem;
-  }
-
-  .prose tbody td small {
-    @apply text-label-12;
+    font-size: 0.8125rem;
   }
 }
 
-/* Desktop */
 @media (min-width: 768px) {
-  .prose thead th {
-    @apply text-numeric-14;
-    padding: 0.875rem 1.25rem;
-  }
-
+  .prose thead th,
   .prose tbody td {
-    @apply text-numeric-14;
     padding: 0.875rem 1.25rem;
-  }
-
-  .prose tbody td small {
-    @apply text-label-12;
+    font-size: 0.875rem;
   }
 }
