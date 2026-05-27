@@ -23,15 +23,40 @@
   border-radius: 0;
 }
 
+.prose thead {
+  background: var(--bg-subtle);
+}
+
 .prose thead th {
   @apply text-numeric-14;
-  font-weight: 500;
-  padding: 0.75rem 1rem;
+  font-weight: 600;
+  padding: 12px 14px;
   color: var(--fg-muted);
-  background: var(--bg-subtle);
-  border-bottom: 1px solid var(--prose-table-border);
   text-align: left;
   white-space: nowrap;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--prose-table-border);
+}
+
+.prose tbody tr {
+  border-bottom: 1px solid var(--prose-table-border);
+  transition:    background-color var(--duration) var(--ease-out);
+}
+
+.prose tbody tr:last-child {
+  border-bottom: none;
+}
+
+.prose tbody tr:hover {
+  background: var(--prose-table-row-hover);
+}
+
+.prose th,
+.prose td {
+  white-space: nowrap;
+  vertical-align: top;
+  color: var(--fg);
+  padding: 12px 14px;
 }
 
 .prose tbody td {
@@ -53,19 +78,6 @@
   color: var(--prose-fg-subtle);
 }
 
-.prose tbody tr:last-child td {
-  border-bottom: none;
-}
-
-.prose tbody tr:hover td {
-  background: var(--prose-table-row-hover);
-}
-
-.prose th,
-.prose td {
-  white-space: nowrap;
-}
-
 .prose th:not(:last-child),
 .prose td:not(:last-child) {
   border-right: 1px solid var(--prose-table-border);
@@ -79,7 +91,6 @@
 
   .prose thead th {
     @apply text-numeric-14;
-    font-weight: 500;
     padding: 0.625rem 0.875rem;
   }
 
@@ -98,7 +109,6 @@
 @media (min-width: 768px) {
   .prose thead th {
     @apply text-numeric-14;
-    font-weight: 500;
     padding: 0.875rem 1.25rem;
   }
 
