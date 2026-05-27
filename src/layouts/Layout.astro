@@ -1,0 +1,129 @@
+---
+import { SITE, buildMeta } from "@/consts";
+import Head     from "@/components/Head.astro";
+import Navbar   from "@/components/Navbar.astro";
+import Footer   from "@/components/Footer.astro";
+
+interface Props {
+  meta?:      Partial<ReturnType<typeof buildMeta>>;
+  schema?:    object | object[];
+  isHome?:    boolean;
+  variant?:   "default" | "full" | "bare";
+  bodyClass?: string;
+  mainClass?: string;
+  canonical?: string;
+}
+
+const {
+  meta,
+  schema,
+  isHome    = false,
+  variant   = "default",
+  bodyClass = "",
+  mainClass = "",
+  canonical,
+} = Astro.props;
+
+const currentPath = new URL(Astro.request.url).pathname;
+---
+
+<!DOCTYPE html>
+<html lang={SITE.lang} dir={SITE.dir}>
+  <Head {meta} {schema} {isHome} {canonical} />
+  <body class:list={[bodyClass,]}>
+    <script is:inline>
+      (function () {
+        try {
+          var stored      = localStorage.getItem("unloyd-theme");
+          var theme = stored === "light" ? "light" : "dark";
+          var html  = document.documentElement;
+          html.classList.remove("dark", "light");
+          html.classList.add(theme);
+          html.setAttribute("data-theme", theme);
+        } catch (e) {
+          document.documentElement.classList.add("dark");
+        }
+      })();
+    </script>
+    <a
+      href="#main-content"
+      class="
+        sr-only focus:not-sr-only
+        fixed top-4 left-4 z-9999
+        px-4 py-2
+        bg-elevated text-strong
+        border border-strong
+        rounded-(--radius)
+        text-sm font-semibold
+        focus:outline-none focus:ring-2 focus:ring-(--accent)
+        transition-all duration-150
+      "
+    >
+      Lewati ke konten
+    </a>
+    {variant !== "bare" && (
+      <Navbar currentPath={currentPath} />
+    )}
+    <main
+      id="main-content"
+      tabindex="-1"
+      class:list={[
+        "min-h-[calc(100svh-var(--header-height,60px))]",
+        variant !== "bare" && "pt-(--header-height,60px)",
+        variant === "full"  && "min-h-svh pt-0",
+        variant === "bare"  && "min-h-svh pt-0",
+        mainClass,
+      ]}
+    >
+      <slot />
+    </main>
+    {variant !== "bare" && (
+      <Footer />
+    )}
+    <script>
+      document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((a) => {
+        a.addEventListener("click", (e) => {
+          const href   = a.getAttribute("href");
+          if (!href || href === "#") return;
+          const target = document.querySelector(href);
+          if (!target) return;
+          e.preventDefault();
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+          history.pushState(null, "", href);
+        });
+      });
+      window.addEventListener("unloyd:toggle-theme", () => {
+        const html    = document.documentElement;
+        const isDark  = html.classList.contains("dark");
+        const next    = isDark ? "light" : "dark";
+
+        html.classList.remove("dark", "light");
+        html.classList.add(next);
+        html.setAttribute("data-theme", next);
+
+        try {
+          localStorage.setItem("unloyd-theme", next);
+        } catch (_) {}
+      });
+
+      let lastKey = "";
+      document.addEventListener("keydown", (e) => {
+        const active = document.activeElement;
+        const isEditing =
+          active instanceof HTMLInputElement  ||
+          active instanceof HTMLTextAreaElement ||
+          (active as HTMLElement)?.isContentEditable;
+
+        if (isEditing) return;
+
+        if (lastKey === "g" && e.key === "h") {
+          window.location.href = "/";
+        }
+
+        lastKey = e.key;
+        setTimeout(() => { lastKey = ""; }, 800);
+      });
+    </script>
+    <slot name="body-end" />
+  </body>
+</html>

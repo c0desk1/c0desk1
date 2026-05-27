@@ -1,6 +1,4 @@
 ---
-// src/components/mdx/Callout.astro
-
 import Icon from '@/components/ui/Icon';
 
 interface Props {
@@ -15,21 +13,23 @@ const types = {
   tip: { icon: 'tip' },
   warning: { icon: 'warning' },
   danger: { icon: 'danger' },
-  important: {icon: 'important'},
-  caution: {icon: 'caution'}
+  important: { icon: 'important' },
+  caution: { icon: 'caution' },
 } as const;
 
 const current = types[type];
+const label = type.toUpperCase();
 ---
 
 <aside class="callout" data-callout={type}>
-  <div class="callout-body gap-4">
-    <div class="flex flex-col items-center h-full order-1">
-      <div class="callout-icon items-center justify-center top-1">
-        <Icon name={current.icon as any} className="size-4 lg:size-5" />
+  <div class="callout-body">
+    <div class="callout-header">
+      <div class="callout-icon" aria-hidden="true">
+        <Icon name={current.icon as any} className="size-5 md:size-6" />
       </div>
+      <span class="callout-mobile-label">{label}</span>
     </div>
-    <div class="text-body-14 md:text-body-16 callout-content order-2">
+    <div class="callout-content text-body-14 md:text-body-16">
       <slot />
     </div>
   </div>

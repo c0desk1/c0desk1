@@ -29,15 +29,33 @@ const classes = headingClasses[`h${level}`] || "text-heading-20";
   id={id}
   class:list={[
     "heading-group has-anchor",
-    "inline-flex items-baseline flex-wrap gap-x-1 text-balance font-semibold",
+    "relative inline-flex items-baseline flex-wrap gap-x-1 text-balance font-bold tracking-tight",
     classes,
     className
   ]}
 >
   <span class="heading-text-content"><slot /></span>
   {id && (
-    <a href={`#${id}`} class="anchor-link mt-auto mb-auto w-8 h-8 rounded-full" aria-label={anchorLabel}>
-      <Icon name="link" className="w-4 h-4 sm:w-5 sm:h-5" />
+    <a 
+      href={`#${id}`} 
+      class="anchor-link inline-flex items-center justify-center w-6 h-6 md:w-7 md:h-7 rounded-sm border border-(--prose-border) bg-(--prose-bg-muted) opacity-0 group-hover:opacity-100 transition-all duration-200 hover:border-(--prose-accent) hover:bg-(--prose-accent) hover:text-(--prose-fg-inverted) ml-2"
+      aria-label={anchorLabel}
+    >
+      <Icon name="link" className="w-3 h-3 md:w-3.5 md:h-3.5" />
     </a>
   )}
 </Tag>
+
+<style>
+  .heading-group.has-anchor {
+    scroll-margin-top: var(--prose-scroll-margin, 5rem);
+  }
+
+  .anchor-link {
+    backdrop-filter: blur(4px);
+  }
+  
+  .heading-group:hover .heading-text-content {
+    color: var(--prose-fg-strong);
+  }
+</style>

@@ -1,16 +1,10 @@
 ---
 // src/components/ui/Logo.astro
-import { siteConfig } from "@/config/site";
+import { SITE, ROUTES } from "@/consts";
 import Icon from "./Icon";
-import { SITE } from "@/consts";
-
-
-const siteData = siteConfig;
-const homeHref = '/';
-const homeLabel = siteData.home;
 ---
 
-<a href={homeHref} class="nav-logo group flex items-center justify-center gap-2.5 transition-all duration-200 hover:opacity-80" aria-label={homeLabel}>
+<a href={ROUTES.home} class="nav-logo group flex items-center justify-center gap-2.5 transition-all duration-200 hover:opacity-80">
   <div class="flex items-center gap-4">
     <Icon name="logo" className="logo-icon text-(--fg)" />
     {SITE.name}

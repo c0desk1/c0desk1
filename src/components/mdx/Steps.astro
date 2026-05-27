@@ -24,9 +24,9 @@ if (steps.length === 0) steps.push({ heading: '', content: html });
             <div class="relative flex items-center mb-2">
               <div class="absolute -left-10 sm:-left-12 w-7 h-7 rounded-full bg-(--prose-bg-muted) border border-(--prose-border) flex items-center justify-center text-label-13-mono md:text-label-14-mono font-semibold z-10">
                 {isLast ? (
-                  <Icon name="check" className="w-4 h-4 text-(--prose-accent-active)" />
+                  <Icon name="check" className="w-4 h-4 text-(--prose-accent)" />
                 ) : (
-                  <span class="text-mono-label-13 text-(--prose-fg-nuted)">{idx + 1}</span>
+                  <span class="text-mono-label-13 text-(--prose-fg-muted)">{idx + 1}</span>
                 )}
               </div>
               <div class="steps-content text-heading-20 font-semibold mt-0!" set:html={step.heading} />

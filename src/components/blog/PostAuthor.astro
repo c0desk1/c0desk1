@@ -14,7 +14,7 @@ interface Props {
 
 const { name, avatar, role, slug } = Astro.props;
 
-const siteData = siteConfig
+const siteData = siteConfig;
 
 const authorLabel = siteData.author;
 const avatarOfLabel = siteData.avatarOf;
@@ -24,43 +24,37 @@ const authorAvatar = avatar || siteConfig.author?.avatar || siteConfig.siteLogo;
 const authorTitle = role || siteConfig.author.role || authorLabel;
 const authorSlug = slug || siteConfig.author?.slug || "author";
 
-const optimizedAvatar = isCdnUrl(authorAvatar)? cdnImage(authorAvatar, { w: 40, h: 40, q: 80 }) : authorAvatar;
+const optimizedAvatar = isCdnUrl(authorAvatar) ? cdnImage(authorAvatar, { w: 48, h: 48, q: 80 }) : authorAvatar;
 const authorPath = `/author/${authorSlug}`;
 ---
 
-<div class="flex w-full justify-center gap-2">
-  <a
-    href={authorPath}
-    rel="author"
-    aria-label={`${authorLabel}: ${authorName}`}
-    class="inline-flex items-center gap-2 no-underline"
-  >
-    <div class="inline-flex cursor-pointer flex-[0_1_auto] overflow-hidden">
-      {authorAvatar && (
-        <span aria-hidden="true" aria-label="" role="img" class="w-6 h-6 shrink-0 rounded-full inline-block overflow-hidden leading-0 align-top relative transition-[background] duration-200 ease-in-out">
-          <Image
-            src={optimizedAvatar}
-            alt={`${avatarOfLabel} ${authorName}`}
-            width={40}
-            height={40}
-            class="h-full w-full object-cover"
-            loading="eager"
-            decoding="async"
-          />
-          <span class="absolute inset-0 rounded-full border-(--border)"></span>
-        </span>
-      )}
-    </div>
-    <div class="flex items-center gap-2">
-      <span class="text-body-14 leading-5 font-medium text-(--fg)">
-        {authorName}
+<div class="flex items-center justify-center gap-3">
+  <a href={authorPath} rel="author" aria-label={`${authorLabel}: ${authorName}`} class="flex items-center gap-3 no-underline group">
+    {authorAvatar && (
+      <span class="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-(--prose-border-strong) shrink-0 transition-shadow group-hover:shadow-glow">
+        <Image
+          src={optimizedAvatar}
+          alt={`${avatarOfLabel} ${authorName}`}
+          width={48}
+          height={48}
+          class="h-full w-full object-cover"
+          loading="eager"
+          decoding="async"
+        />
       </span>
+    )}
+    <div class="flex flex-col">
+      <span class="text-body-14 md:text-body-16 font-semibold text-(--prose-fg-strong)">{authorName}</span>
       {authorTitle && (
-        <span class="text-body-14 text-muted">
-          {authorTitle}
-        </span>
+        <span class="text-label-12 md:text-label-13 text-(--prose-fg-muted) uppercase tracking-wider">{authorTitle}</span>
       )}
     </div>
   </a>
   <Contribution />
 </div>
+
+<style is:inline>
+  .shadow-glow {
+    box-shadow: 0 0 8px rgba(var(--prose-accent-rgb), 0.3);
+  }
+</style>

@@ -1,19 +1,19 @@
 ---
 // src/components/layout/DesktopNav.astro
-import { siteConfig } from "@/config/site";
+import { NAV } from "@/consts";
 import { normalizePath } from "@/lib/utils";
+
 import NavLink from "@/components/ui/NavLink.astro";
 import Icon from "@/components/ui/Icon";
 
 const currentPath = Astro.url.pathname;
-const navItems = siteConfig.navItems;
+const navItems = NAV.navBar;
 ---
 
-<nav aria-label={siteConfig.navAria} class="hidden sm:inline-flex items-center rounded-xl border border-(--border) bg-base backdrop-blur p-1 gap-2">
+<nav class="hidden sm:inline-flex items-center rounded-xl border border-(--border) bg-base backdrop-blur p-1 gap-2">
   {navItems.map((item) => {
     const children = item.children;
     const hasChildren = children && children.length > 0;
-
     if (hasChildren) {
       return (
         <div class="relative group/dropdown">

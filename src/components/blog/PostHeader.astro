@@ -6,7 +6,7 @@ import PostAuthor from './PostAuthor.astro';
 
 interface Props {
   title: string;
-  description: string;
+  description?: string;
   pubDate: Date;
   content?: string;
   authorName?: string;
@@ -18,6 +18,7 @@ interface Props {
 
 const {
   title,
+  description,
   pubDate,
   content = '',
   authorName,
@@ -28,24 +29,32 @@ const {
 } = Astro.props;
 ---
 
-<header class="w-full">
-  <div class="flex flex-col items-center gap-4 md:gap-6">
-    <h1 class="text-heading-24 md:text-heading-32 lg:text-heading-48 font-semibold text-balance text-center">{title}</h1>
-    {authorName && (
-      <PostAuthor
-        name={authorName}
-        avatar={authorAvatar}
-        role={authorRole}
-        slug={authorSlug}
-      />
+<header class="w-full max-w-3xl mx-auto">
+  <div class="flex flex-col items-center text-center gap-5 md:gap-6">
+    <h1 class="text-heading-32 md:text-heading-40 lg:text-heading-48 font-bold text-balance tracking-tight">
+      {title}
+    </h1>
+    {description && (
+      <p class="lead text-body-18 md:text-body-20 text-(--prose-fg-muted) max-w-2xl">{description}</p>
     )}
-    {content && (
-      <div class="w-full mt-4">
-        <PostMeta pubDate={pubDate} content={content} />
-      </div>
-    )}
+    <div class="flex flex-col items-center gap-3 w-full">
+      {authorName && (
+        <PostAuthor
+          name={authorName}
+          avatar={authorAvatar}
+          role={authorRole}
+          slug={authorSlug}
+        />
+      )}
+      {content && (
+        <div class="w-full">
+          <PostMeta pubDate={pubDate} content={content} />
+        </div>
+      )}
+    </div>
+    <hr class="w-16 border-t-2 border-(--prose-accent) opacity-40" />
     {overviewItems && overviewItems.length > 0 && (
-      <div class="w-full">
+      <div class="w-full mt-2">
         <Overview items={overviewItems} />
       </div>
     )}

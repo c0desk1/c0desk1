@@ -1,37 +1,35 @@
-// =============================================================================
-// UNLOYD — Site Constants
 // src/const.ts
-// =============================================================================
 
+type NavItem = {
+  label: string;
+  href: string;
+  isExternal?: boolean;
+  children?: NavItem[];
+};
 
-// -----------------------------------------------------------------------------
+type FooterSection = {
+  items: NavItem[];
+};
+
 // SITE BASE
-// -----------------------------------------------------------------------------
-
 export const SITE = {
   name:        "Unloyd",
   tagline:     "Beyond the Void",
   description: "Platform kuratif untuk pop culture, game, anime, tutorial, dan modding. Konten yang dipilih dengan cermat, bukan sekadar ramai.",
   url:         "https://unloyd.web.id",
+  ogImage: "./src/assets/images/c0desk1-og.webp",
   locale:      "id_ID",
   lang:        "id",
   dir:         "ltr",
   charset:     "utf-8",
   themeColor:  "#0a0a09",
   bgColor:     "#0a0a09",
-
-  /** Email kontak publik */
   email:       "hello@unloyd.web.id",
-
-  /** Didirikan */
-  foundingYear: 2024,
+  foundingYear: 2025,
 } as const;
 
 
-// -----------------------------------------------------------------------------
 // AUTHOR / ORGANIZATION
-// -----------------------------------------------------------------------------
-
 export const AUTHOR = {
   name:    "Unloyd",
   url:     SITE.url,
@@ -42,7 +40,7 @@ export const AUTHOR = {
 export const ORG = {
   name:        "Unloyd",
   url:         SITE.url,
-  logo:        `${SITE.url}/images/logo.png`,
+  logo:        "/org/unloyd-logo.svg",
   sameAs: [
     "https://twitter.com/unloyd",
     "https://instagram.com/unloyd",
@@ -51,13 +49,10 @@ export const ORG = {
   ],
 } as const;
 
-
-// -----------------------------------------------------------------------------
 // ROUTES
-// -----------------------------------------------------------------------------
-
 export const ROUTES = {
   home:       "/",
+  blog:       "/blog",
   news:       "/news",
   game:       "/game",
   anime:      "/anime",
@@ -66,12 +61,51 @@ export const ROUTES = {
   tech:       "/tech",
   about:      "/about",
   contact:    "/contact",
-  privacy:    "/privacy",
-  terms:      "/terms",
+  privacy:    "/privacy-policy",
+  cookie:     "/cookie-policy",
+  terms:      "/terms-of-service",
   search:     "/search",
   sitemap:    "/sitemap.xml",
   feed:       "/feed.xml",
+  rss:        "/rss.xml",
   robots:     "/robots.txt",
+} as const;
+
+export const NAV = {
+  navBar: [
+    { label: "Blog", href: ROUTES.blog, isExternal: false },
+    { label: "Community", 
+      children: [
+        { label: "About", href: ROUTES.about, isExternal: false },
+        { label: "Contact Us", href: ROUTES.contact, isExternal: false },
+      ]
+    },
+    { 
+      label: "Tools", 
+      children: [ 
+        { label: "Adogen", href: "https://dev-adogen.bimasaktiakbarr.workers.dev", isExternal: true }
+      ]
+    },
+    {
+      label: "Legal",
+      children: [
+        { label: "Privacy Policy", href: ROUTES.privacy, isExternal: false },
+        { label: "Terms of Service", href: ROUTES.terms, isExternal: false },
+        { label: "Cookie Policy", href: ROUTES.cookie, isExternal: false }
+      ]
+    },
+  ] as NavItem[],
+  footerSections: [
+    {
+      items: [
+        { label: "About", href: ROUTES.about, isExternal: false },
+        { label: "Contact Us", href: ROUTES.contact, isExternal: false },
+        { label: "Privacy Policy", href: ROUTES.privacy, isExternal: false },
+        { label: "Terms of Service", href: ROUTES.terms, isExternal: false },
+        { label: "Cookie Policy", href: ROUTES.cookie, isExternal: false },
+      ]
+    }
+  ] as FooterSection[],
 } as const;
 
 
@@ -93,40 +127,24 @@ export type CategorySlug = typeof CATEGORIES[number]["slug"];
 
 // -----------------------------------------------------------------------------
 // SEO DEFAULTS
-// Dipakai sebagai fallback di semua halaman
 // -----------------------------------------------------------------------------
 
 export const SEO = {
-  /** Default title — dipakai jika halaman tidak punya judul spesifik */
   titleDefault:    SITE.name,
-
-  /** Template judul halaman: "Judul Artikel | Unloyd" */
   titleTemplate:   `%s | ${SITE.name}`,
-
-  /** Max karakter judul yang ideal untuk SERP (50–60) */
   titleMaxLength:  60,
-
-  /** Default description (150–160 karakter ideal) */
   description:     SITE.description,
-
-  /** Max karakter description */
   descriptionMaxLength: 160,
-
-  /** Canonical base */
   canonical:       SITE.url,
-
-  /** Default OG image — 1200×630 px */
-  ogImage:         `${SITE.url}/images/og-default.jpg`,
+  ogImage:         `${SITE.url}/org/unloyd-og.webp`,
   ogImageWidth:    1200,
   ogImageHeight:   630,
   ogImageAlt:      `${SITE.name} — ${SITE.tagline}`,
 
-  /** Twitter card type */
   twitterCard:     "summary_large_image" as const,
   twitterSite:     "@unloyd",
   twitterCreator:  "@unloyd",
 
-  /** Robots default */
   robots: {
     index:            true,
     follow:           true,
@@ -140,10 +158,9 @@ export const SEO = {
     },
   },
 
-  /** Verification tokens */
   verification: {
-    google:  "",   // isi dengan Google Search Console token
-    bing:    "",   // isi dengan Bing Webmaster token
+    google:  "",
+    bing:    "",
     yandex:  "",
   },
 } as const;
@@ -177,7 +194,6 @@ export const TWITTER = {
 
 // -----------------------------------------------------------------------------
 // JSON-LD SCHEMAS
-// Gunakan di <head> setiap halaman yang relevan
 // -----------------------------------------------------------------------------
 
 /** WebSite schema — untuk halaman utama */
@@ -250,7 +266,7 @@ export function schemaArticle(opts: {
   category?:     string;
   tags?:         string[];
   wordCount?:    number;
-  readingTime?:  number;   // menit
+  readingTime?:  number;
 }) {
   return {
     "@context":        "https://schema.org",
@@ -346,7 +362,7 @@ export function schemaHowTo(opts: {
   description:   string;
   url:           string;
   image?:        string;
-  totalTime?:    string;   // ISO 8601 duration, e.g. "PT30M"
+  totalTime?:    string;
   steps: {
     name:        string;
     text:        string;
@@ -407,8 +423,8 @@ export function schemaVideo(opts: {
   name:          string;
   description:   string;
   thumbnailUrl:  string;
-  uploadDate:    string;    // ISO 8601
-  duration?:     string;    // ISO 8601, e.g. "PT5M30S"
+  uploadDate:    string;
+  duration?:     string;
   contentUrl?:   string;
   embedUrl?:     string;
 }) {
@@ -468,7 +484,6 @@ export function schemaCollectionPage(opts: {
 
 // -----------------------------------------------------------------------------
 // META HELPERS
-// Fungsi builder untuk props meta di Astro component
 // -----------------------------------------------------------------------------
 
 /** Bangun object meta lengkap untuk satu halaman */
@@ -595,7 +610,6 @@ export const IMAGE = {
 
 // -----------------------------------------------------------------------------
 // READING TIME
-// Estimasi menit baca berdasarkan jumlah kata
 // -----------------------------------------------------------------------------
 
 export const READING = {

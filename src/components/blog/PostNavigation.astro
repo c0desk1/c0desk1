@@ -15,35 +15,36 @@ const nextUrl = nextPost ? `/blog/${nextPost.data.slug || slugify(nextPost.data.
 ---
 
 {(prevPost || nextPost) && (
-  <div class="relative grid grid-cols-1 md:grid-cols-2 w-full">
-    <div class="w-full">
-      {prevPost ? (
-        <a href={prevUrl} class="group flex w-full flex-col py-4 lg:py-6 transition-colors">
-          <div class="flex items-center gap-1.5 text-label-14 text-(--fg) mb-2">
-            <Icon name="arrow-left" className="w-4 h-4" />
-            <span>{siteConfig.b_prevPosts}</span>
-          </div>
-          <span class="text-heading-14 md:text-heading-16 font-medium text-muted group-hover:text-(--fg) active:text-(--fg) line-clamp-2 text-left">
-            {prevPost.data.title}
-          </span>
-        </a>
-      ) : (
-        <div class="hidden md:block w-full h-full min-h-25" />
-      )}
+  <nav aria-label="Pagination">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        {prevPost ? (
+          <a href={prevUrl} class="group block text-left">
+            <span class="flex items-center gap-1.5 text-label-12 text-(--prose-fg-muted) uppercase tracking-widest mb-2">
+              <Icon name="arrow-left" className="w-3.5 h-3.5" />
+              {siteConfig.b_prevPosts}
+            </span>
+            <span class="text-body-14 md:text-body-16 font-medium text-(--prose-fg) group-hover:text-(--prose-accent) transition-colors duration-200 line-clamp-2">
+              {prevPost.data.title}
+            </span>
+          </a>
+        ) : (
+          <div class="hidden md:block" />
+        )}
+      </div>
+      <div class="text-right md:text-right">
+        {nextPost && (
+          <a href={nextUrl} class="group block">
+            <span class="flex items-center justify-end gap-1.5 text-label-12 text-(--prose-fg-muted) uppercase tracking-widest mb-2">
+              {siteConfig.b_nextPosts}
+              <Icon name="arrow-right" className="w-3.5 h-3.5" />
+            </span>
+            <span class="text-body-14 md:text-body-16 font-medium text-(--prose-fg) group-hover:text-(--prose-accent) transition-colors duration-200 line-clamp-2">
+              {nextPost.data.title}
+            </span>
+          </a>
+        )}
+      </div>
     </div>
-    <div class="w-full">
-      {nextPost && (
-        <a href={nextUrl} class="group flex w-full flex-col py-4 lg:py-6 transition-colors">
-          <div class="flex items-center justify-end gap-1.5 text-label-14 text-(--fg) mb-2">
-            <span>{siteConfig.b_nextPosts}</span>
-            <Icon name="arrow-right" className="w-4 h-4" />
-          </div>
-          <span class="text-heading-14 md:text-heading-16 font-medium text-muted group-hover:text-(--fg) active:text-(--fg) line-clamp-2 text-right">
-            {nextPost.data.title}
-          </span>
-        </a>
-      )}
-    </div>
-    
-  </div>
+  </nav>
 )}

@@ -1,0 +1,40 @@
+---
+// src/components/blog/RssFeed.astro
+import { siteConfig } from "@/config/site";
+import Icon from "../ui/Icon";
+import Button from "../ui/Button.astro";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+const siteURL = (Astro.site?.toString() ?? siteConfig.siteUrl).replace(/\/$/, "");
+const rssURL = `${siteURL}/rss.xml`;
+---
+
+<div class:list={[
+  "flex items-center gap-3 p-3",
+  "border border-(--border) rounded-lg",
+  "bg-subtle",
+  "shadow-sm",
+  className
+]}>
+  <div class="flex items-center justify-center w-8 h-8 rounded bg-(--accent) text-(--fg-inverted) shrink-0">
+    <Icon name="rss" className="w-4 h-4" />
+  </div>
+  <div class="flex-1 min-w-0">
+    <p class="text-label-14 font-semibold text-(--fg)">
+      {"Berlangganan melalui RSS"}
+    </p>
+    <p class="text-caption-12 text-muted hidden sm:block">
+      {"Dapatkan postingan baru di pembaca Anda."}
+    </p>
+  </div>
+  <Button variant="primary" size="sm" class="border-(--accent) text-(--accent) hover:bg-(--accent) hover:text-(--fg-inverted) transition-colors shrink-0">
+    <a href={rssURL} target="_blank" rel="noopener noreferrer" class="text-button-14 whitespace-nowrap">
+      Buka
+    </a>
+  </Button>
+</div>

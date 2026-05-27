@@ -1,7 +1,7 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 
-type Variant = 'primary' | 'secondary' | 'tertiary' | 'danger';
+type Variant = 'primary' | 'secondary' | 'tertiary' | 'danger' | 'accent' | 'outline';
 type Size = 'sm' | 'md' | 'lg';
 
 type BaseProps = {
@@ -41,15 +41,17 @@ const resolvedType = type ?? 'button';
 
 const base = [
   "inline-flex items-center justify-center gap-2 rounded-full transition-colors duration-150 select-none",
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring) focus-visible:ring-offset-2 focus-visible:(--focus-ring-offset)",
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring) focus-visible:ring-offset-2",
   "active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 data-[loading=true]:cursor-wait"
 ].join(' ');
 
 const variants: Record<Variant, string> = {
-  primary: "bg-(--fg) text-(--bg) border border-(--border-strong)/5 hover:bg-(--fg-subtle) active:bg-(--fg-subtle) shadow-sm",
-  secondary: "bg-(--bg) text-(--fg) border border-(--border) hover:bg-(--bg-muted) active:bg-(-bg-muted) shadow-sm",
-  tertiary: "text-(--fg-muted) hover:bg-(--bg-muted) active:bg-(--bg-muted)",
-  danger: "bg-(--error) text-(--error-fg) hover:bg-(--error-dim) active:bg-(--error-soft) shadow-sm",
+  primary:   "bg-(--fg) text-(--bg) border border-transparent hover:bg-(--fg-muted) active:bg-(--fg-subtle) shadow-sm",
+  secondary: "bg-(--bg) text-(--fg) border border-(--border) hover:bg-(--bg-muted) active:bg-(--bg-subtle) shadow-sm",
+  tertiary:  "text-(--fg-muted) hover:bg-(--bg-muted) active:bg-(--bg-subtle)",
+  danger:    "bg-(--error) text-(--error-fg) hover:bg-red-600 active:bg-red-700 shadow-sm",
+  accent:    "bg-(--accent) text-(--fg-inverted) border border-transparent hover:bg-(--fg-strong) active:bg-(--fg) shadow-sm",
+  outline:   "bg-transparent text-(--accent) border border-(--accent) hover:bg-(--accent) hover:text-(--fg-inverted) active:bg-(--fg-strong)",
 };
 
 const sizes: Record<Size, string> = {
