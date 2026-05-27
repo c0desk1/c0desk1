@@ -3,7 +3,7 @@
 
 /*@import "@/styles/prose/index.css";*/
 
-@import "@/styles/content/tokens.css";
+@import "@/styles/content/token.css";
 @import "@/styles/content/index.css";
 
 @custom-variant dark (&:where(.dark,.dark *));
