@@ -6,7 +6,7 @@
   border-spacing: 0;
   overflow: hidden;
   border-radius: var(--radius-md);
-  border: var(--prose-table-border);
+  border: 1px var(--prose-table-border);
 }
 
 .prose .table-wrapper {
@@ -62,7 +62,7 @@
   background: var(--prose-table-row-bg);
 }
 
-.prose tbody td:last-child {
+.prose tbody tr:last-child {
   border-bottom: none;
 }
 
