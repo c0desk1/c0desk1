@@ -1,104 +1,99 @@
 ---
 // src/pages/contact/index.astro
-import { siteConfig } from "@/config/site";
-import BaseLayout from "@/layouts/BaseLayout.astro";
+import { SITE, ROUTES, SOCIAL, buildMeta, schemaWebPage, schemaOrganization, schemaBreadcrumb } from "@/consts";
+import Layout from "@/layouts/Layout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
-import ContactForm from "@/components/contact/ContactForm.astro";
 import Breadcrumb from "@/components/ui/Breadcrumb.astro";
-
+import ContactForm from "@/components/contact/ContactForm.astro";
 import Icon from "@/components/ui/Icon";
-import SocialLinks from "@/components/ui/SocialLinks.astro";
 
-const siteData = siteConfig;
+const pageTitle = "Kontak";
+const pageDesc = "Punya proyek atau sekadar ingin menyapa? Isi formulir di bawah dan kami akan merespons dalam 1×24 jam.";
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
 
-const siteURL = Astro.site?.toString()?? siteData.siteUrl;
-const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
-
-const social = siteData.social;
-const email = siteData.siteMail;
-const homeLabel = siteData.home;
-
-const pageTitle = 'Contact';
-const pageDesc = 'ave a project in mind? Get in touch.';
-
-const SeoBreadcrumbItems = [
-  { name: homeLabel, item: '/'},
-  { name: "Contact", item: canonicalURL }
-];
-
-const BreadcrumbsItems = SeoBreadcrumbItems.filter(
-  (item) => 
-    item.name === homeLabel ||
-    item.name === "Contact"
-);
-
-const seoData = {
+const meta = buildMeta({
   title: pageTitle,
   description: pageDesc,
-  type: "website" as const,
-  canonicalURL,
-  breadcrumbItems: SeoBreadcrumbItems
-};
+  canonical: canonicalURL,
+});
+
+const schemas = [
+  schemaWebPage({ title: pageTitle, description: pageDesc, url: canonicalURL }),
+  schemaOrganization,
+  schemaBreadcrumb([
+    { name: "Beranda", url: SITE.url },
+    { name: pageTitle, url: canonicalURL },
+  ]),
+];
+
+const email = SITE.email;
 ---
 
-<BaseLayout {...seoData}>
+<Layout {meta} schema={schemas}>
   <Section size="lg">
-    <div class="relative grid grid-cols-1 rounded-xl border border-(--border) max-w-5xl mx-auto">
-        <Container size="lg">
-            <Section size="sm">
-                <div class="flex items-center justify-start">
-                    <Breadcrumb items={BreadcrumbsItems} />
-                </div>
-            </Section>
-            <Section size="sm">
-                <h1 class="text-heading-24 md:text-heading-32 lg:text-heading-56 justify-start text-balance mb-4">
-                    Let's work together.
-                </h1>
-                <p class="text-body-16 lg:text-body-18 text-muted max-w-md text-pretty">
-                    Have a project in mind or just want to say hello? Fill out the form and I'll get back to you within 24 hours.
-                </p>
-            </Section>
-            <div class="grid grid-cols-1 md:grid-cols-[1fr_200px] gap-12 items-start">
-                <Section size="sm">
-                    <ContactForm />
-                </Section>
-                <Section size="sm">
-                    <aside class="flex flex-col gap-6">
-                        <div>
-                            <p class="text-overline-11 text-strong mb-4">Availability</p>
-                            <div class="flex items-center gap-2">
-                            <span
-                                class="w-1.5 h-1.5 rounded-full shrink-0"
-                                style="background: var(--success);"
-                            />
-                            <p class="text-body-13 text-muted">Busy</p>
-                            </div>
-                        </div>
-                        <div>
-                            <p class="text-overline-11 text-strong mb-4">Direct</p>
-                            <a
-                            href={`mailto:${email}`}
-                            class="text-body-14 text-(--fg) flex items-center gap-2 hover:text-(--accent) transition-colors duration-150">
-                            <Icon name="email" className="h-4 w-4" />
-                            {email}
-                            </a>
-                        </div>
-                        <div>
-                            <p class="text-overline-11 text-strong mb-4">Elsewhere</p>
-                            <div class="flex flex-col gap-2.5">
-                                <SocialLinks
-                                    items={social}
-                                    direction="vertical"
-                                    showLabel
-                                    iconClass="h-4 w-4 text-muted transition-colors duration-150"
-                                />
-                            </div>
-                        </div>
-                    </aside>
-                </Section>
+    <Container size="lg">
+      <div class="mb-8">
+        <Breadcrumb
+          items={[
+            { name: "Beranda", url: ROUTES.home },
+            { name: pageTitle, url: canonicalURL },
+          ]}
+        />
+      </div>
+      <div class="max-w-2xl mb-12">
+        <h1 class="text-heading-32 md:text-heading-40 lg:text-heading-56 font-bold text-balance mb-4">
+          Mari bekerja sama.
+        </h1>
+        <p class="text-body-16 md:text-body-18 text-(--fg-muted) max-w-xl text-pretty">
+          {pageDesc}
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-[1fr_220px] gap-10 items-start">
+        <div class="p-6 rounded-(--radius-md) border border-(--border) bg-(--bg-subtle)">
+          <ContactForm />
+        </div>
+        <aside class="flex flex-col gap-6 p-6 rounded-(--radius-md) border border-(--border) bg-(--bg-subtle)">
+          <div>
+            <p class="text-overline-12 text-(--fg-muted) mb-3 uppercase tracking-widest">
+              Status
+            </p>
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-(--success) shrink-0" />
+              <span class="text-body-13 text-(--fg-muted)">Tersedia</span>
             </div>
-        </Container>
-    </div>
+          </div>
+          <div>
+            <p class="text-overline-12 text-(--fg-muted) mb-3 uppercase tracking-widest">
+              Email
+            </p>
+            <a
+              href={`mailto:${email}`}
+              class="text-body-14 text-(--fg) flex items-center gap-2 hover:text-(--accent) transition-colors">
+              <Icon name="email" class="w-4 h-4" />
+              {email}
+            </a>
+          </div>
+          <div>
+            <p class="text-overline-12 text-(--fg-muted) mb-3 uppercase tracking-widest">
+              Sosial
+            </p>
+            <div class="flex flex-col gap-2.5">
+              {SOCIAL.map((s) => (
+                <a
+                  href={s.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-body-14 text-(--fg-muted) hover:text-(--accent) transition-colors"
+                  aria-label={s.name}
+                >
+                  {s.name}
+                </a>
+              ))}
+            </div>
+          </div>
+        </aside>
+      </div>
+    </Container>
   </Section>
-</BaseLayout>
+</Layout>
