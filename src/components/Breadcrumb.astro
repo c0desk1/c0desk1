@@ -1,0 +1,43 @@
+---
+// src/components/Breadcrumb.astro
+import { SITE } from "@/consts";
+
+interface Props {
+  items: Array<{
+    name?: string;
+    url?: string;
+  }>;
+}
+
+const { items = [] } = Astro.props;
+if (!items.length) return;
+
+const ariaLabel = "Breadcrumb";
+---
+
+<nav aria-label={ariaLabel} class="flex justify-center">
+  <ol class="flex items-center gap-1.5 text-body-14 flex-wrap">
+    {items.map((item, i) => (
+      <li class="flex items-center gap-1">
+        {i > 0 && (
+          <span class="text-(--fg-muted) opacity-50" aria-hidden="true">
+            /
+          </span>
+        )}
+
+        {i === items.length - 1 ? (
+          <span aria-current="page" class="text-(--fg) truncate max-w-[16rem] font-medium">
+            {item.name}
+          </span>
+        ) : (
+          <a
+            href={item.url}
+            class="text-(--fg-muted) hover:text-(--accent) active:text-(--fg) no-underline whitespace-nowrap transition-colors"
+          >
+            {item.name}
+          </a>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>
