@@ -5,13 +5,106 @@
 }
 
 .prose :where(h1,h2,h3,h4,h5,h6){
-  font-family:var(--prose-font-sans);
-  color:var(--prose-fg);
-  margin-bottom:0;
-  scroll-margin-top:56px;
-  font-feature-settings:"kern" 1,"liga" 1,"calt" 1;
-  text-rendering:optimizeLegibility;
-  -webkit-font-smoothing:antialiased;
+  font-family: var(--prose-font-sans);
+  text-wrap:      balance;
+  scroll-margin-top: var(--prose-scroll-margin);
+}
+
+.prose h1 {
+  color: var(--fg-strong);
+  margin-top: 0;
+  margin-bottom: 24px;
+}
+
+.prose h2 {
+  color: var(--fg-strong);
+  margin-top: 56px;
+  margin-bottom: 16px
+}
+
+.prose h3 {
+  color: var(--fg-strong);
+  margin-top: 40px;
+  margin-bottom: 12px
+}
+
+.prose h4 {
+  color: var(--fg-strong);
+  margin-top: 32px;
+  margin-bottom: 8px
+}
+
+.prose h5 {
+  color: var(--fg-muted);
+  margin-top: 24px;
+  margin-bottom: 8px;
+}
+
+.prose h6 {
+  color: var(--fg-subtle);
+  margin-top: 24px;
+  margin-bottom: 8px;
+}
+
+.prose h2 + h3,
+.prose h3 + h4,
+.prose h4 + h5 {
+  margin-top: 8px;
+}
+
+.prose h1 a,
+.prose h2 a,
+.prose h3 a,
+.prose h4 a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.prose h1 a:hover,
+.prose h2 a:hover,
+.prose h3 a:hover,
+.prose h4 a:hover {
+  opacity: 0.7;
+}
+
+.prose p {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: var(--fg); 
+  text-wrap: pretty;
+}
+
+.prose .lead,
+.prose p.lead {
+  font-size:      20px;
+  line-height:    1.65;
+  color:          var(--fg-muted);
+  font-weight:    400;
+  letter-spacing: -0.01em;
+  margin-bottom:  32px;
+}
+
+.prose strong,
+.prose b {
+  font-weight: var(--prose-strong-weight);
+  color:       var(--prose-strong-color);
+}
+
+.prose em,
+.prose i {
+  font-style: var(--prose-em-style);
+  color:      var(--prose-em-color);
+}
+
+.prose del,
+.prose s {
+  color:           var(--fg-dim);
+  text-decoration: line-through;
+}
+
+.prose strong em,
+.prose em strong {
+  font-style: var(--prose-em-style);
 }
 
 .prose .heading-group.has-anchor{
@@ -36,7 +129,7 @@
   width:1.125rem;
   height:1.125rem;
   margin-left:0.375rem;
-  color:var(--prose-fg-subtle);
+  color:var(--fg-subtle);
   text-decoration:none;
   opacity:0;
   pointer-events:none;
@@ -46,63 +139,7 @@
   position:relative;
 }
 
-.prose p {
-  margin-bottom:1.25rem;
-}
-
-.prose strong {
-  font-weight:600;
-  color:var(--prose-fg-strong);
-}
-
-.prose em{
-  font-style:italic;
-  color:var(--prose-fg-muted);
-}
-
-.prose strong em,
-.prose em strong{
-  font-style:italic;
-  font-weight:600;
-}
-
 @media (max-width: 767px){
-  .prose :where(h1,h2,h3,h4,h5,h6){
-    scroll-margin-top:56px
-  }
-
-  .prose h1{
-    margin-top:2.5rem;
-    margin-bottom:1rem;
-  }
-
-  .prose h2{
-    margin-top:2.25rem;
-    margin-bottom:0.75rem
-  }
-
-  .prose h3{
-    margin-top:1.75rem;
-    margin-bottom:0.625rem
-  }
-
-  .prose h4{
-    margin-top:1.5rem;
-    margin-bottom:0.5rem
-  }
-
-  .prose h5{
-    margin-top:1.25rem;
-    margin-bottom:0.5rem;
-    color:var(--prose-fg-subtle)
-  }
-
-  .prose h6{
-    margin-top:1rem;
-    margin-bottom:0.5rem;
-    color:var(--prose-fg-dim)
-  }
-
   .prose .anchor-link{
     width:1rem;
     height:1rem;
@@ -113,83 +150,19 @@
     opacity:1;
     pointer-events:auto;
     transform:translateX(0);
-    color:var(--prose-fg-subtle)
+    color:var(--fg-subtle)
   }
 }
 
 @media (min-width: 768px){
-  .prose :where(h1,h2,h3,h4,h5,h6){
-    scroll-margin-top:80px
-  }
-  .prose h1{
-    margin-top:4rem;
-    margin-bottom:1.125rem;
-  }
-
-  .prose h2{
-    margin-top:3rem;
-    margin-bottom:0.875rem
-  }
-
-  .prose h3{
-    margin-top:2rem;
-    margin-bottom:0.75rem
-  }
-
-  .prose h4{
-    margin-top:2rem;
-    margin-bottom:0.625rem
-  }
-
-  .prose h5{
-    margin-top:1.5rem;
-    margin-bottom:0.5rem;
-    color:var(--prose-fg-subtle)
-  }
-
-  .prose h6{
-    margin-top:1.25rem;
-    margin-bottom:0.5rem;
-    color:var(--prose-fg-dim)
-  }
-
   .prose .heading-group.has-anchor:hover .anchor-link{
     opacity:1;
     pointer-events:auto;
     transform:translateX(0);
-    color:var(--prose-fg-subtle)
+    color:var(--fg-subtle)
   }
 
   .prose .anchor-link:hover{
-    color:var(--prose-fg)
-  }
-}
-
-@media (min-width: 1024px){
-  .prose h1{
-    margin-top:4rem;
-    margin-bottom:1.125rem;
-  }
-
-  .prose h2{
-    margin-top:3.5rem;
-    margin-bottom:1rem
-  }
-
-  .prose h3{
-    margin-top:2.25rem;
-    margin-bottom:0.75rem
-  }
-
-  .prose h4{
-    margin-top:2rem;
-    margin-bottom:0.625rem
-  }
-
-  .prose p{
-    margin-bottom:1.5rem;
-    width:100%;
-    font-feature-settings:"kern" 1,"liga" 1;
-    color:color-mix(in srgb,var(--prose-fg) 90%,transparent)
+    color:var(--fg-strong)
   }
 }
