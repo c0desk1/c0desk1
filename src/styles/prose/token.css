@@ -1,0 +1,301 @@
+/* src/styles/prose/tokens.css */
+
+:root {
+  --prose-font-sans: var(--font-sans);
+  --prose-font-mono: var(--font-mono);
+
+  /* Radius */
+  --prose-radius-xs:    var(--radius-xs);
+  --prose-radius-sm:    var(--radius-sm);
+  --prose-radius:       var(--radius);
+  --prose-radius-md:    var(--radius-md);
+  --prose-radius-lg:    var(--radius-lg);
+  --prose-radius-xl:    var(--radius-xl);
+  --prose-radius-full:  var(--radius-full);
+
+  /* Motion */
+  --prose-ease:  var(--ease-snappy);
+  --prose-ease-in:      var(--ease-in);
+  --prose-ease-out:     var(--ease-out);
+  --prose-ease-in-out:  var(--ease-out);
+
+  --prose-duration: var(--duration);
+  --prose-duration-md: var(--duration-md);
+
+  /* Accent Colors */
+  --prose-accent: var(--accent);
+  --prose-accent-dim: var(--accent-dim);
+  --prose-accent-soft: var(--accent-soft);
+  --prose-accent-ring: var(--accent-ring);
+  --prose-accent-fg: var(--accent-fg);
+
+  /* Highlight / Mark */
+  --prose-highlight-bg: rgba(255, 214, 0, 0.2);
+  --prose-highlight-border: rgba(255, 214, 0, 0.4);
+  --prose-highlight-text: #664d00;
+
+  /* Foreground Hierarchy */
+  --prose-fg:           var(--fg);
+  --prose-fg-strong:    var(--fg-strong);
+  --prose-fg-muted:     var(--fg-muted);
+  --prose-fg-subtle:    var(--fg-subtle);
+  --prose-fg-dim:       var(--fg-dim);
+  --prose-fg-disabled:  var(--fg-disabled);
+  --prose-fg-inverted:  var(--fg-inverted);
+
+  /* Surfaces & Backgrounds */
+  --prose-bg: var(--bg);
+  --prose-bg-subtle: var(--bg-subtle);
+  --prose-bg-muted: var(--bg-muted);
+  --prose-bg-elevated: var(--bg-elevated);
+  --prose-bg-overlay: var(--bg-overlay);
+
+  --prose-surface: var(--bg-muted);
+  --prose-surface-hover: var(--bg-subtle);
+  --prose-surface-active: var(--bg-elevated);
+  --prose-surface-elevated: var(--bg-elevated);
+
+  /* Borders */
+  --prose-border: var(--border);
+  --prose-border-strong: var(--border-strong);
+  --prose-border-subtle: var(--border-subtle);
+
+  /* Code & Pre */
+  --prose-code-bg: #f5f5f5;
+  --prose-code-border: #e5e5e5;
+  --prose-code-text: #171717;
+  --prose-code-keyword: #d73a49;
+  --prose-code-string: #032f62;
+  --prose-code-comment: #6a737d;
+  --prose-code-function: #6f42c1;
+  --prose-code-number: #005cc5;
+  --prose-code-operator: #d73a49;
+  --prose-code-punctuation: #6a737d;
+
+  /* Blockquote */
+  --prose-quote-border: #e5e5e5;
+  --prose-quote-bg: transparent;
+  --prose-quote-text: #525252;
+  --prose-quote-cite: #737373;
+
+  /* Tables */
+  --prose-table-header-bg: #fafafa;
+  --prose-table-header-text: #171717;
+  --prose-table-row-bg: transparent;
+  --prose-table-row-hover: #fafafa;
+  --prose-table-border: #e5e5e5;
+  --prose-table-text: #525252;
+
+  /* Horizontal Rule */
+  --prose-hr: #e5e5e5;
+  --prose-hr-strong: #d4d4d4;
+
+  /* Lists */
+  --prose-list-marker: #a3a3a3;
+  --prose-list-marker-hover: #737373;
+
+  /* Links */
+  --prose-link: #0070f3;
+  --prose-link-hover: #0761d1;
+  --prose-link-visited: #7c3aed;
+  --prose-link-underline: rgba(0, 112, 243, 0.3);
+  --prose-link-underline-hover: rgba(0, 112, 243, 0.6);
+
+  /* Callouts - Note (Neutral) */
+  --callout-note-bg: #f5f5f5;
+  --callout-note-border: #e5e5e5;
+  --callout-note-text: #737373;
+  --callout-note-icon: #737373;
+  --callout-note-title: #171717;
+
+  /* Callouts - Info (Blue) */
+  --callout-info-bg: rgba(0, 112, 243, 0.06);
+  --callout-info-border: rgba(0, 112, 243, 0.15);
+  --callout-info-text: #0761d1;
+  --callout-info-icon: #0761d1;
+  --callout-info-title: #0070f3;
+
+  /* Callouts - Tip (Green) */
+  --callout-tip-bg: rgba(34, 197, 94, 0.06);
+  --callout-tip-border: rgba(34, 197, 94, 0.15);
+  --callout-tip-text: #16a34a;
+  --callout-tip-icon: #16a34a;
+  --callout-tip-title: #22c55e;
+
+  /* Callouts - Warning (Amber) */
+  --callout-warning-bg: rgba(245, 158, 11, 0.08);
+  --callout-warning-border: rgba(245, 158, 11, 0.2);
+  --callout-warning-text: #d97706;
+  --callout-warning-icon: #d97706;
+  --callout-warning-title: #f59e0b;
+
+  /* Callouts - Danger (Red) */
+  --callout-danger-bg: rgba(239, 68, 68, 0.06);
+  --callout-danger-border: rgba(239, 68, 68, 0.15);
+  --callout-danger-text: #dc2626;
+  --callout-danger-icon: #dc2626;
+  --callout-danger-title: #ef4444;
+
+  /* Callouts - Important (Purple) */
+  --callout-important-bg: rgba(168, 85, 247, 0.06);
+  --callout-important-border: rgba(168, 85, 247, 0.15);
+  --callout-important-text: #9333ea;
+  --callout-important-icon: #9333ea;
+  --callout-important-title: #a855f7;
+
+  /* Callouts - Caution (Orange) */
+  --callout-caution-bg: rgba(249, 115, 22, 0.06);
+  --callout-caution-border: rgba(249, 115, 22, 0.15);
+  --callout-caution-text: #ea580c;
+  --callout-caution-icon: #ea580c;
+  --callout-caution-title: #f97316;
+
+  /* Details / Accordion */
+  --prose-details-bg: #fafafa;
+  --prose-details-border: #e5e5e5;
+  --prose-details-summary: #171717;
+  --prose-details-marker: #737373;
+
+  /* Kbd / Keyboard */
+  --prose-kbd-bg: #f5f5f5;
+  --prose-kbd-border: #d4d4d4;
+  --prose-kbd-text: #171717;
+  --prose-kbd-shadow: #e5e5e5;
+
+  /* Footnotes */
+  --prose-footnote-text: #737373;
+  --prose-footnote-hover: #525252;
+  --prose-footnote-border: #e5e5e5;
+
+  /* Image & Figure */
+  --prose-figure-caption: #737373;
+  --prose-image-border: #e5e5e5;
+  --prose-image-bg: #fafafa;
+}
+
+/* Dark Mode */
+.dark {
+  /* Highlight / Mark */
+  --prose-highlight-bg: rgba(255, 214, 0, 0.15);
+  --prose-highlight-border: rgba(255, 214, 0, 0.3);
+  --prose-highlight-text: #ffd600;
+
+  /* Code & Pre */
+  --prose-code-bg: #000000;
+  --prose-code-border: #262626;
+  --prose-code-text: #e5e5e5;
+  --prose-code-keyword: #ff7b72;
+  --prose-code-string: #a5d6ff;
+  --prose-code-comment: #8b949e;
+  --prose-code-function: #d2a8ff;
+  --prose-code-number: #79c0ff;
+  --prose-code-operator: #ff7b72;
+  --prose-code-punctuation: #8b949e;
+
+  /* Blockquote */
+  --prose-quote-border: #333333;
+  --prose-quote-bg: transparent;
+  --prose-quote-text: #a1a1a1;
+  --prose-quote-cite: #666666;
+
+  /* Tables */
+  --prose-table-header-bg: #111111;
+  --prose-table-header-text: #ededed;
+  --prose-table-row-bg: transparent;
+  --prose-table-row-hover: #0a0a0a;
+  --prose-table-border: #262626;
+  --prose-table-text: #a1a1a1;
+
+  /* Horizontal Rule */
+  --prose-hr: #262626;
+  --prose-hr-strong: #333333;
+
+  /* Lists */
+  --prose-list-marker: #666666;
+  --prose-list-marker-hover: #888888;
+
+  /* Links */
+  --prose-link: #3291ff;
+  --prose-link-hover: #52a8ff;
+  --prose-link-visited: #a78bfa;
+  --prose-link-underline: rgba(50, 145, 255, 0.4);
+  --prose-link-underline-hover: rgba(50, 145, 255, 0.8);  
+
+  /* Callouts - Note (Neutral) */
+  /*--callout-note-bg: #171717;*/
+  --callout-note-bg: none;
+  --callout-note-border: #262626;
+  --callout-note-text: #666666;
+  --callout-note-icon: #666666;
+  --callout-note-title: #ededed;
+
+  /* Callouts - Info (Blue) */
+  /*--callout-info-bg: rgba(50, 145, 255, 0.08);*/
+  --callout-info-bg: none;
+  --callout-info-border: rgba(50, 145, 255, 0.2);
+  --callout-info-text: #52a8ff;
+  --callout-info-icon: #3291ff;
+  --callout-info-title: #52a8ff;
+
+  /* Callouts - Tip (Green) */
+  /*--callout-tip-bg: rgba(34, 197, 94, 0.08);*/
+  --callout-tip-bg: none;
+  --callout-tip-border: rgba(34, 197, 94, 0.2);
+  --callout-tip-text: #4ade80;
+  --callout-tip-icon: #22c55e;
+  --callout-tip-title: #4ade80;
+
+  /* Callouts - Warning (Amber) */
+  /*--callout-warning-bg: rgba(245, 158, 11, 0.08);*/
+  --callout-warning-bg: none;
+  --callout-warning-border: rgba(245, 158, 11, 0.2);
+  --callout-warning-text: #fbbf24;
+  --callout-warning-icon: #f59e0b;
+  --callout-warning-title: #fbbf24;
+
+  /* Callouts - Danger (Red) */
+  /*--callout-danger-bg: rgba(239, 68, 68, 0.08);*/
+  --callout-danger-bg: none;
+  --callout-danger-border: rgba(239, 68, 68, 0.2);
+  --callout-danger-text: #f87171;
+  --callout-danger-icon: #ef4444;
+  --callout-danger-title: #f87171;
+
+  /* Callouts - Important (Purple) */
+  /*--callout-important-bg: rgba(168, 85, 247, 0.08);*/
+  --callout-important-bg: none;
+  --callout-important-border: rgba(168, 85, 247, 0.2);
+  --callout-important-text: #c084fc;
+  --callout-important-icon: #a855f7;
+  --callout-important-title: #c084fc;
+
+  /* Callouts - Caution (Orange) */
+  /*--callout-caution-bg: rgba(249, 115, 22, 0.08);*/
+  --callout-caution-bg: none;
+  --callout-caution-border: rgba(249, 115, 22, 0.2);
+  --callout-caution-text: #fb923c;
+  --callout-caution-icon: #f97316;
+  --callout-caution-title: #fb923c;
+
+  /* Details / Accordion */
+  --prose-details-bg: #0a0a0a;
+  --prose-details-border: #262626;
+  --prose-details-summary: #ededed;
+  --prose-details-marker: #666666;
+
+  /* Kbd / Keyboard */
+  --prose-kbd-bg: #171717;
+  --prose-kbd-border: #333333;
+  --prose-kbd-text: #ededed;
+  --prose-kbd-shadow: #000000;
+
+  /* Footnotes */
+  --prose-footnote-text: #666666;
+  --prose-footnote-hover: #888888;
+  --prose-footnote-border: #262626;
+
+  /* Image & Figure */
+  --prose-figure-caption: #666666;
+  --prose-image-border: #262626;
+  --prose-image-bg: #0a0a0a;
+}

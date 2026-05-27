@@ -1,0 +1,60 @@
+/* src/styles/prose/blockquote.css */
+.prose .quote {
+  margin: 2rem 0;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+.prose .quote-body {
+  color: var(--prose-quote-text);
+}
+
+.prose .quote-body p {
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+}
+
+.prose .quote-body p:last-child {
+  margin-bottom: 0;
+}
+
+.prose .quote-body p:first-of-type::before {
+  content:"❝";
+  margin-right:-0.05rem;
+  font-style:normal
+}
+
+.prose .quote-body p:last-of-type::after {
+  content:"❞";
+  margin-left:-0.1rem;
+  font-style:normal
+}
+
+.prose .quote-name {
+  color: var(--prose-fg);
+}
+
+.prose .quote-name::after {
+  content:",";
+  color: var(--prose-fg);
+}
+
+.prose .quote-role {
+  color: var(--prose-quote-cite);
+}
+
+@media (max-width: 48rem) {
+  .prose .quote {
+    margin: 2rem 0;
+  }
+}
+
+@media (min-width: 64rem) {
+  .prose .quote {
+    margin: 2.5rem 0;
+  }
+}
