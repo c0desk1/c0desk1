@@ -1,129 +1,133 @@
 ---
-import { SITE, buildMeta } from "@/consts";
-import Head     from "@/components/Head.astro";
-import Navbar   from "@/components/Navbar.astro";
-import Footer   from "@/components/Footer.astro";
+// src/pages/index.astro
+import { SITE, CATEGORIES, ROUTES } from "@/consts";
+import { sortByDate } from "@/lib/utils";
+import { getCollection } from "astro:content";
 
-interface Props {
-  meta?:      Partial<ReturnType<typeof buildMeta>>;
-  schema?:    object | object[];
-  isHome?:    boolean;
-  variant?:   "default" | "full" | "bare";
-  bodyClass?: string;
-  mainClass?: string;
-  canonical?: string;
-}
+import Layout from "@/layouts/Layout.astro";
+import Section from "@/components/ui/Section.astro";
+import Container from "@/components/ui/Container.astro";
+import Hero from "@/components/ui/Hero.astro";
+import PostCard from "@/components/blog/PostCard.astro";
+import Button from "@/components/ui/Button.astro";
 
-const {
-  meta,
-  schema,
-  isHome    = false,
-  variant   = "default",
-  bodyClass = "",
-  mainClass = "",
-  canonical,
-} = Astro.props;
+const posts = await getCollection('blog', ({ data }) => !data.draft);
+const sortedPosts = sortByDate(posts).slice(0, 9);
 
-const currentPath = new URL(Astro.request.url).pathname;
+const [latestPost, ...restPosts] = sortedPosts;
+
+const heroCTA = { label: "Blog", href: ROUTES.blog };
+const heroCTA2 = { label: "Latest Content", href: "#article" };
 ---
 
-<!DOCTYPE html>
-<html lang={SITE.lang} dir={SITE.dir}>
-  <Head {meta} {schema} {isHome} {canonical} />
-  <body class:list={[bodyClass,]}>
-    <script is:inline>
-      (function () {
-        try {
-          var stored      = localStorage.getItem("unloyd-theme");
-          var theme = stored === "light" ? "light" : "dark";
-          var html  = document.documentElement;
-          html.classList.remove("dark", "light");
-          html.classList.add(theme);
-          html.setAttribute("data-theme", theme);
-        } catch (e) {
-          document.documentElement.classList.add("dark");
-        }
-      })();
-    </script>
-    <a
-      href="#main-content"
-      class="
-        sr-only focus:not-sr-only
-        fixed top-4 left-4 z-9999
-        px-4 py-2
-        bg-elevated text-strong
-        border border-strong
-        rounded-(--radius)
-        text-sm font-semibold
-        focus:outline-none focus:ring-2 focus:ring-(--accent)
-        transition-all duration-150
-      "
-    >
-      Lewati ke konten
-    </a>
-    {variant !== "bare" && (
-      <Navbar currentPath={currentPath} />
-    )}
-    <main
-      id="main-content"
-      tabindex="-1"
-      class:list={[
-        "min-h-[calc(100svh-var(--header-height,60px))]",
-        variant !== "bare" && "pt-(--header-height,60px)",
-        variant === "full"  && "min-h-svh pt-0",
-        variant === "bare"  && "min-h-svh pt-0",
-        mainClass,
-      ]}
-    >
-      <slot />
-    </main>
-    {variant !== "bare" && (
-      <Footer />
-    )}
-    <script>
-      document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((a) => {
-        a.addEventListener("click", (e) => {
-          const href   = a.getAttribute("href");
-          if (!href || href === "#") return;
-          const target = document.querySelector(href);
-          if (!target) return;
-          e.preventDefault();
-          target.scrollIntoView({ behavior: "smooth", block: "start" });
-          history.pushState(null, "", href);
-        });
-      });
-      window.addEventListener("unloyd:toggle-theme", () => {
-        const html    = document.documentElement;
-        const isDark  = html.classList.contains("dark");
-        const next    = isDark ? "light" : "dark";
+<Layout isHome>
+  <Hero
+    title="UN"
+    subTitle="LOYD"
+    description={SITE.description}
+    cta={heroCTA}
+    cta2={heroCTA2}
+  />
+  <Section size="sm">
+    <div class="marquee-wrap">
+      <div class="marquee-track">
+        {[...CATEGORIES, ...CATEGORIES].map((cat, i) => (
+          <>
+            <span class="marquee-item">{cat.label}</span>
+            <span class="marquee-dot" />
+          </>
+        ))}
+      </div>
+    </div>
+  </Section>
+  <Section size="sm">
+    <Container size="xl">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+        {CATEGORIES.map((cat) => (
+          <a
+            href={`/${cat.slug}`}
+            class="group flex flex-col items-center justify-center p-4 rounded-(--radius-md) border border-(--border) bg-(--bg-subtle) hover:border-(--accent) transition-colors"
+          >
+            <span class="text-heading-14 font-semibold text-(--fg) group-hover:text-(--accent) transition-colors">
+              {cat.label}
+            </span>
+            <span class="text-caption-11 text-(--fg-muted) mt-1 hidden sm:block">
+              {cat.description.slice(0, 40)}...
+            </span>
+          </a>
+        ))}
+      </div>
+    </Container>
+  </Section>
+  <Section size="sm">
+    <Container size="xl">
+      <h2 id="article" class="text-heading-24 lg:text-heading-32 text-(--fg) font-semibold py-4 lg:py-6">
+        {"Terbaru."}
+      </h2>
+      {latestPost ? (
+        <div class="pb-8">
+          <PostCard post={latestPost} />
+        </div>
+      ) : (
+        <div class="py-12 text-center">
+          <p class="text-body-16 md:text-body-18 text-(--fg-muted)">
+            {"Tidak ada postingan"}
+          </p>
+        </div>
+      )}
+      <div class="flex justify-center py-8">
+        <Button href={ROUTES.blog} variant="secondary" size="md">
+          {"Lihat semua"}
+        </Button>
+      </div>
+    </Container>
+  </Section>
+  {restPosts.length > 0 && (
+    <Section size="sm">
+      <Container size="xl">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          {restPosts.map((post) => (
+            <PostCard post={post} />
+          ))}
+        </div>
+      </Container>
+    </Section>
+  )}
+</Layout>
 
-        html.classList.remove("dark", "light");
-        html.classList.add(next);
-        html.setAttribute("data-theme", next);
+<style is:global>
+  .marquee-wrap {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    padding: 16px 0;
+    background: var(--bg-subtle);
+  }
 
-        try {
-          localStorage.setItem("unloyd-theme", next);
-        } catch (_) {}
-      });
+  .marquee-track {
+    display: flex;
+    gap: 48px;
+    animation: marquee 20s linear infinite;
+    white-space: nowrap;
+  }
 
-      let lastKey = "";
-      document.addEventListener("keydown", (e) => {
-        const active = document.activeElement;
-        const isEditing =
-          active instanceof HTMLInputElement  ||
-          active instanceof HTMLTextAreaElement ||
-          (active as HTMLElement)?.isContentEditable;
+  .marquee-item {
+    font-family: var(--font-mono), 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--fg);
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
 
-        if (isEditing) return;
-
-        if (lastKey === "g" && e.key === "h") {
-          window.location.href = "/";
-        }
-
-        lastKey = e.key;
-        setTimeout(() => { lastKey = ""; }, 800);
-      });
-    </script>
-    <slot name="body-end" />
-  </body>
-</html>
+  .marquee-dot {
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin: 0 24px;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+</style>
