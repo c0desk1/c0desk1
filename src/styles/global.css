@@ -62,36 +62,35 @@
 :root {
   color-scheme: light;
 
-  --bg:          #ffffff;
-  --bg-subtle:   #f5f5f3;
-  --bg-muted:    #e8e8e6;
-  --bg-elevated: #ffffff;
+  --bg:          var(--color-void-0);      /* #ffffff */
+  --bg-subtle:   var(--color-void-50);     /* #f5f5f3 */
+  --bg-muted:    var(--color-void-100);    /* #e8e8e6 */
+  --bg-elevated: var(--color-void-0);      /* #ffffff */
   --bg-overlay:  rgba(255, 255, 255, 0.85);
 
-  --fg:          #111110;
-  --fg-strong:   #000000;
-  --fg-muted:    #525250;
-  --fg-subtle:   #737371;
-  --fg-dim:      #a8a8a6;
-  --fg-disabled: #d1d1cf;
-  --fg-inverted: #ffffff;
+  --fg:          var(--color-void-900);    /* #111110 */
+  --fg-strong:   var(--color-void-1000);   /* #000000 */
+  --fg-muted:    var(--color-void-500);    /* #525250 */
+  --fg-subtle:   var(--color-void-400);    /* #737371 */
+  --fg-dim:      var(--color-void-300);    /* #a8a8a6 */
+  --fg-disabled: var(--color-void-200);    /* #d1d1cf */
+  --fg-inverted: var(--color-void-0);      /* #ffffff */
 
-  --border:        #e8e8e6;
-  --border-strong: #d1d1cf;
-  --border-subtle: #f0f0ee;
+  --border:        var(--color-void-100);  /* #e8e8e6 */
+  --border-strong: var(--color-void-200);  /* #d1d1cf */
+  --border-subtle: #f0f0ee;                /* sedikit lebih terang dari void-50, biarkan hardcoded */
 
-  --accent:      #000000;
+  --accent:      var(--color-void-1000);   /* #000000 */
   --accent-dim:  rgba(0, 0, 0, 0.6);
   --accent-soft: rgba(0, 0, 0, 0.05);
   --accent-ring: rgba(0, 0, 0, 0.12);
-  --accent-fg:   #ffffff;
-  
+  --accent-fg:   var(--color-void-0);
+
   --shadow-sm:  0 1px 2px 0 rgba(0, 0, 0, 0.06);
   --shadow-md:  0 4px 8px -2px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
   --shadow-lg:  0 12px 24px -4px rgba(0, 0, 0, 0.12), 0 4px 8px -4px rgba(0, 0, 0, 0.08);
   --shadow-xl:  0 24px 48px -8px rgba(0, 0, 0, 0.15);
 
-  /* Misc */
   --scroll-padding: 5rem;
   --header-height:  60px;
 }
@@ -99,47 +98,42 @@
 .dark {
   color-scheme: dark;
 
-  --bg:          #0a0a09;
-  --bg-subtle:   #111110;
-  --bg-muted:    #1a1a18;
-  --bg-elevated: #2a2a28;
+  --bg:          var(--color-void-950);    /* #0a0a09 */
+  --bg-subtle:   var(--color-void-900);    /* #111110 */
+  --bg-muted:    var(--color-void-800);    /* #1a1a18 */
+  --bg-elevated: var(--color-void-700);    /* #2a2a28 */
   --bg-overlay:  rgba(10, 10, 9, 0.85);
 
-  /* Foreground/Text */
-  --fg:          #f5f5f3;
-  --fg-strong:   #ffffff;
-  --fg-muted:    #a8a8a6;
-  --fg-subtle:   #737371;
-  --fg-dim:      #525250;
-  --fg-disabled: #3a3a38;
-  --fg-inverted: #0a0a09;
+  --fg:          var(--color-void-50);     /* #f5f5f3 */
+  --fg-strong:   var(--color-void-0);      /* #ffffff */
+  --fg-muted:    var(--color-void-300);    /* #a8a8a6 */
+  --fg-subtle:   var(--color-void-400);    /* #737371 */
+  --fg-dim:      var(--color-void-500);    /* #525250 */
+  --fg-disabled: var(--color-void-700);    /* #3a3a38 */
+  --fg-inverted: var(--color-void-950);    /* #0a0a09 */
 
-  /* Borders */
-  --border:        #2a2a28;
-  --border-strong: #3a3a38;
-  --border-subtle: #1a1a18;
+  --border:        var(--color-void-700);  /* #2a2a28 */
+  --border-strong: var(--color-void-600);  /* #3a3a38 */
+  --border-subtle: var(--color-void-800);  /* #1a1a18 */
 
-  /* Accent */
-  --accent:      #ffffff;
+  --accent:      var(--color-void-0);      /* #ffffff */
   --accent-dim:  rgba(255, 255, 255, 0.6);
   --accent-soft: rgba(255, 255, 255, 0.06);
   --accent-ring: rgba(255, 255, 255, 0.15);
-  --accent-fg:   #0a0a09;
+  --accent-fg:   var(--color-void-950);
 
-  /* Status */
   --success:      #3dd68c;
   --success-soft: rgba(61, 214, 140, 0.08);
-  --success-fg:   #0a0a09;
+  --success-fg:   var(--color-void-950);
 
   --error:        #f2555a;
   --error-soft:   rgba(242, 85, 90, 0.08);
-  --error-fg:     #ffffff;
+  --error-fg:     var(--color-void-0);
 
   --warning:      #f5a623;
   --warning-soft: rgba(245, 166, 35, 0.08);
-  --warning-fg:   #0a0a09;
+  --warning-fg:   var(--color-void-950);
 
-  /* Shadows */
   --shadow-sm:  0 1px 2px 0 rgba(0, 0, 0, 0.6);
   --shadow-md:  0 4px 8px -2px rgba(0, 0, 0, 0.7), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
   --shadow-lg:  0 12px 24px -4px rgba(0, 0, 0, 0.8), 0 4px 8px -4px rgba(0, 0, 0, 0.6);
