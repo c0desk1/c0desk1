@@ -75,10 +75,10 @@
   --prose-border-strong: var(--border-strong);
   --prose-border-subtle: var(--border-subtle);
 
-  /* Code & Pre */
-  --prose-code-bg: #f5f5f5;
-  --prose-code-border: #e5e5e5;
-  --prose-code-text: #171717;
+  /* Code & Pre – diselaraskan dengan void */
+  --prose-code-bg: var(--color-void-50);     /* #f5f5f3 */
+  --prose-code-border: var(--color-void-100);
+  --prose-code-text: var(--color-void-900);
   --prose-code-keyword: #d73a49;
   --prose-code-string: #032f62;
   --prose-code-comment: #6a737d;
@@ -93,32 +93,32 @@
   --prose-quote-text: var(--fg-muted);
   --prose-quote-cite: var(--fg-subtle);
 
-  /* ========== Tables – Light (bersih, netral) ========== */
-  --prose-table-header-bg: var(--bg-muted);        /* #e8e8e6 */
-  --prose-table-header-text: var(--fg-muted);      /* #525250 */
-  --prose-table-row-bg: var(--bg);                 /* #ffffff */
-  --prose-table-row-hover: var(--bg-subtle);       /* #f5f5f3 */
-  --prose-table-border: var(--border);             /* #e8e8e6 */
-  --prose-table-text: var(--fg);                   /* #111110 */
+  /* Tables – Light (void native) */
+  --prose-table-header-bg: var(--bg-muted);
+  --prose-table-header-text: var(--fg-muted);
+  --prose-table-row-bg: var(--bg);
+  --prose-table-row-hover: var(--bg-subtle);
+  --prose-table-border: var(--border);
+  --prose-table-text: var(--fg);
 
   /* Horizontal Rule */
-  --prose-hr: #e5e5e5;
-  --prose-hr-strong: #d4d4d4;
+  --prose-hr: var(--color-void-200);
+  --prose-hr-strong: var(--color-void-300);
 
   /* Lists */
-  --prose-list-marker: #a3a3a3;
-  --prose-list-marker-hover: #737373;
+  --prose-list-marker: var(--color-void-300);
+  --prose-list-marker-hover: var(--color-void-400);
 
-  /* Links (inline) */
+  /* Links (inline) – tetap fungsional */
   --prose-link: #0070f3;
   --prose-link-hover: #0761d1;
   --prose-link-visited: #7c3aed;
   --prose-link-underline: rgba(0, 112, 243, 0.3);
   --prose-link-underline-hover: rgba(0, 112, 243, 0.6);
 
-  /* Callouts – tetap seperti asli, tanpa perubahan */
-  --callout-note-bg: #f5f5f5;
-  --callout-note-border: #e5e5e5;
+  /* Callouts – tetap seperti asli (warna tidak diambil dari void) */
+  --callout-note-bg: var(--color-void-50);
+  --callout-note-border: var(--color-void-100);
   --callout-note-text: #737373;
   --callout-note-icon: #737373;
   --callout-note-title: #171717;
@@ -160,41 +160,39 @@
   --callout-caution-title: #f97316;
 
   /* Details */
-  --prose-details-bg: #fafafa;
-  --prose-details-border: #e5e5e5;
-  --prose-details-summary: #171717;
-  --prose-details-marker: #737373;
+  --prose-details-bg: var(--color-void-50);
+  --prose-details-border: var(--color-void-100);
+  --prose-details-summary: var(--color-void-900);
+  --prose-details-marker: var(--color-void-400);
 
   /* Kbd */
-  --prose-kbd-bg: #f5f5f5;
-  --prose-kbd-border: #d4d4d4;
-  --prose-kbd-text: #171717;
-  --prose-kbd-shadow: #e5e5e5;
+  --prose-kbd-bg: var(--color-void-50);
+  --prose-kbd-border: var(--color-void-200);
+  --prose-kbd-text: var(--color-void-900);
+  --prose-kbd-shadow: var(--color-void-100);
 
   /* Footnotes */
-  --prose-footnote-text: #737373;
-  --prose-footnote-hover: #525252;
-  --prose-footnote-border: #e5e5e5;
+  --prose-footnote-text: var(--color-void-400);
+  --prose-footnote-hover: var(--color-void-500);
+  --prose-footnote-border: var(--color-void-100);
 
   /* Image & Figure */
-  --prose-figure-caption: #737373;
-  --prose-image-border: #e5e5e5;
-  --prose-image-bg: #fafafa;
+  --prose-figure-caption: var(--color-void-400);
+  --prose-image-border: var(--color-void-100);
+  --prose-image-bg: var(--color-void-50);
 }
 
 /* =============================================
    Dark Mode – Black Noir
    ============================================= */
 .dark {
-  /* Highlight */
   --prose-highlight-bg: rgba(255, 214, 0, 0.15);
   --prose-highlight-border: rgba(255, 214, 0, 0.3);
   --prose-highlight-text: #ffd600;
 
-  /* Code */
-  --prose-code-bg: #000000;
-  --prose-code-border: #262626;
-  --prose-code-text: #e5e5e5;
+  --prose-code-bg: var(--color-void-1000);
+  --prose-code-border: var(--color-void-700);
+  --prose-code-text: var(--color-void-50);
   --prose-code-keyword: #ff7b72;
   --prose-code-string: #a5d6ff;
   --prose-code-comment: #8b949e;
@@ -203,27 +201,24 @@
   --prose-code-operator: #ff7b72;
   --prose-code-punctuation: #8b949e;
 
-  /* HR */
-  --prose-hr: #262626;
-  --prose-hr-strong: #333333;
+  --prose-hr: var(--color-void-700);
+  --prose-hr-strong: var(--color-void-600);
 
-  /* Lists */
-  --prose-list-marker: #666666;
-  --prose-list-marker-hover: #888888;
+  --prose-list-marker: var(--color-void-500);
+  --prose-list-marker-hover: var(--color-void-400);
 
-  /* Links */
   --prose-link: #3291ff;
   --prose-link-hover: #52a8ff;
   --prose-link-visited: #a78bfa;
   --prose-link-underline: rgba(50, 145, 255, 0.4);
   --prose-link-underline-hover: rgba(50, 145, 255, 0.8);
 
-  /* Callouts */
+  /* Callouts – dark mode */
   --callout-note-bg: none;
-  --callout-note-border: #262626;
-  --callout-note-text: #666666;
-  --callout-note-icon: #666666;
-  --callout-note-title: #ededed;
+  --callout-note-border: var(--color-void-700);
+  --callout-note-text: var(--color-void-400);
+  --callout-note-icon: var(--color-void-400);
+  --callout-note-title: var(--color-void-50);
 
   --callout-info-bg: none;
   --callout-info-border: rgba(50, 145, 255, 0.2);
@@ -261,33 +256,29 @@
   --callout-caution-icon: #f97316;
   --callout-caution-title: #fb923c;
 
-  /* Details */
-  --prose-details-bg: #0a0a0a;
-  --prose-details-border: #262626;
-  --prose-details-summary: #ededed;
-  --prose-details-marker: #666666;
+  --prose-details-bg: var(--color-void-950);
+  --prose-details-border: var(--color-void-700);
+  --prose-details-summary: var(--color-void-50);
+  --prose-details-marker: var(--color-void-400);
 
-  /* Kbd */
-  --prose-kbd-bg: #171717;
-  --prose-kbd-border: #333333;
-  --prose-kbd-text: #ededed;
-  --prose-kbd-shadow: #000000;
+  --prose-kbd-bg: var(--color-void-800);
+  --prose-kbd-border: var(--color-void-600);
+  --prose-kbd-text: var(--color-void-50);
+  --prose-kbd-shadow: var(--color-void-1000);
 
-  /* Footnotes */
-  --prose-footnote-text: #666666;
-  --prose-footnote-hover: #888888;
-  --prose-footnote-border: #262626;
+  --prose-footnote-text: var(--color-void-400);
+  --prose-footnote-hover: var(--color-void-300);
+  --prose-footnote-border: var(--color-void-700);
 
-  /* Image */
-  --prose-figure-caption: #666666;
-  --prose-image-border: #262626;
-  --prose-image-bg: #0a0a0a;
+  --prose-figure-caption: var(--color-void-400);
+  --prose-image-border: var(--color-void-700);
+  --prose-image-bg: var(--color-void-950);
 
-  /* ========== Tables – Noir ========== */
-  --prose-table-header-bg: var(--color-void-950);   /* #0a0a09 – sangat gelap, kontras elegan */
-  --prose-table-header-text: var(--fg-dim);         /* #525250 – abu redup */
-  --prose-table-row-bg: transparent;                /* menyatu dengan latar */
-  --prose-table-row-hover: var(--color-void-800);   /* #1a1a18 – sedikit lebih terang */
-  --prose-table-border: var(--border);              /* #2a2a28 – abu gelap */
-  --prose-table-text: var(--fg);                    /* #f5f5f3 – putih tulang */
+  /* Tables – Noir */
+  --prose-table-header-bg: var(--color-void-950);
+  --prose-table-header-text: var(--fg-dim);
+  --prose-table-row-bg: transparent;
+  --prose-table-row-hover: var(--color-void-800);
+  --prose-table-border: var(--border);
+  --prose-table-text: var(--fg);
 }
