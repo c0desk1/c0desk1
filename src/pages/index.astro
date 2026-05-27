@@ -76,7 +76,7 @@ const heroCTA2 = { label: "Latest Content", href: "#article" };
         </div>
       )}
       <div class="flex justify-center py-8">
-        <Button href={ROUTES.blog} variant="outline" size="md">
+        <Button href={ROUTES.blog} variant="secondary" size="md">
           {"Lihat semua"}
         </Button>
       </div>
@@ -101,23 +101,24 @@ const heroCTA2 = { label: "Latest Content", href: "#article" };
     border-bottom: 1px solid var(--border);
     overflow: hidden;
     padding: 16px 0;
-    background: var(--bg-subtle);
+    background: var(--bg-subtle)
   }
 
   .marquee-track {
     display: flex;
+    align-items: center;
     gap: 48px;
     animation: marquee 20s linear infinite;
-    white-space: nowrap;
+    white-space: nowrap
   }
 
   .marquee-item {
-    font-family: var(--font-mono), 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
     letter-spacing: 0.15em;
     color: var(--fg);
     text-transform: uppercase;
-    flex-shrink: 0;
+    flex-shrink: 0
   }
 
   .marquee-dot {
@@ -128,6 +129,6 @@ const heroCTA2 = { label: "Latest Content", href: "#article" };
     border-radius: 50%;
     margin: 0 24px;
     vertical-align: middle;
-    flex-shrink: 0;
+    flex-shrink: 0
   }
 </style>
