@@ -1,4 +1,4 @@
 #:schema node_modules/wrangler/config-schema.json
-name = "c0desk1"
+name = "unloyd"
 compatibility_date = "2026-05-26"
 pages_build_output_dir = "./dist"

@@ -6,7 +6,6 @@ import tailwindcss from '@tailwindcss/vite';
 import sitemap, {ChangeFreqEnum } from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
-import astroConsent from 'astro-consent';
 
 import remarkCallout from './src/lib/mdx/remark-callout.ts';
 import remarkBlockquoteAuthor from './src/lib/mdx/remark-blockquote.ts';
@@ -32,23 +31,6 @@ export default defineConfig({
     inlineStylesheets: 'auto'
   },
   integrations: [
-    astroConsent({
-      siteName: siteConfig.siteName,
-      headline: "Manage cookie preferences for My Website",
-      description: "We use cookies to improve site performance, measure traffic, and support marketing.",
-      acceptLabel: "Accept all",
-      rejectLabel: "Reject all",
-      manageLabel: "Preferences",
-      cookiePolicyUrl: "/cookie-policy",
-      privacyPolicyUrl: "/privacy-policy",
-      displayUntilIdle: true,
-      displayIdleDelayMs: 1000,
-      presentation: "banner",
-      consent: {
-        days: 30,
-        storageKey: "astro-consent"
-      }
-    }),
     sitemap({
       filter: (page) =>
         !page.includes('/401') &&
@@ -94,29 +76,45 @@ export default defineConfig({
   },
   fonts: [
     {
-      name: "Geist",
-      cssVariable: "--font-GeistSans",
       provider: fontProviders.local(),
+      name: 'Syne',
+      cssVariable: '--font-Syne',
+      fallbacks: ['sans-serif'],
       options: {
-        variants: [{
-          src: ['./src/assets/fonts/Geist.woff2'],
-          weight: '100 900',
-          style: 'normal'
-        }]
-      }
+        variants: [
+          {
+            src: ['./src/assets/fonts/Syne-Regular.woff2'],
+            weight: 400,
+            style: 'normal',
+            display: 'swap',
+          },
+          {
+            src: ['./src/assets/fonts/Syne-Medium.woff2'],
+            weight: 500,
+            style: 'normal',
+            display: 'swap',
+          },
+          {
+            src: ['./src/assets/fonts/Syne-SemiBold.woff2'],
+            weight: 600,
+            style: 'normal',
+            display: 'swap',
+          },
+          {
+            src: ['./src/assets/fonts/Syne-Bold.woff2'],
+            weight: 700,
+            style: 'normal',
+            display: 'swap',
+          },
+          {
+            src: ['./src/assets/fonts/Syne-ExtraBold.woff2'],
+            weight: 800,
+            style: 'normal',
+            display: 'swap',
+          },
+        ],
+      },
     },
-    {
-      name: "Geist Mono",
-      cssVariable: "--font-GeistMono",
-      provider: fontProviders.local(),
-      options: {
-        variants: [{
-          src: ['./src/assets/fonts/GeistMono.woff2'],
-          weight: '100 900',
-          style: 'normal'
-        }]
-      }
-    }
   ],
   image: {
     domains: ["cdn.c0desk1.my.id", "play-lh.googleusercontent.com", "avatars.githubusercontent.com", "next.nexusmods.com"],
