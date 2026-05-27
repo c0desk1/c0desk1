@@ -1,0 +1,34 @@
+---
+// src/components/mdx/Callout.astro
+
+import Icon from '@/components/ui/Icon';
+
+interface Props {
+  type?: 'note' | 'info' | 'tip' | 'warning' | 'danger' | 'important' | 'caution';
+}
+
+const { type = 'note' } = Astro.props;
+
+const types = {
+  note: { icon: 'note' },
+  info: { icon: 'info' },
+  tip: { icon: 'tip' },
+  warning: { icon: 'warning' },
+  danger: { icon: 'danger' },
+  important: {icon: 'important'},
+  caution: {icon: 'caution'}
+} as const;
+
+const current = types[type];
+---
+
+<aside class="callout" data-callout={type}>
+  <div class="callout-body">
+    <div class="callout-icon items-center justify-center top-1">
+      <Icon name={current.icon as any} className="size-4 lg:size-5" />
+    </div>
+    <div class="text-body-14 md:text-body-16 callout-content">
+      <slot />
+    </div>
+  </div>
+</aside>

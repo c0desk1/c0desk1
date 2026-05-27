@@ -1,0 +1,35 @@
+---
+// src/components/mdx/ImageGrid.astro
+interface Props {
+  images: {
+    src: string;
+    alt?: string;
+  }[];
+}
+
+const { images } = Astro.props;
+
+const cols =
+  images.length === 1 ? "grid-cols-1" :
+  images.length === 2 ? "grid-cols-1 sm:grid-cols-2" :
+                        "grid-cols-1 sm:grid-cols-2 md:grid-cols-3";
+---
+
+<div class={`not-prose grid ${cols} gap-3 my-8 mx-auto max-w-3xl`}>
+  {images.map((img) => (
+    <figure class="overflow-hidden rounded-(--prose-radius-md) border border-(--prose-border) bg-(--prose-surface) m-0">
+      <img
+        src={img.src}
+        alt={img.alt || ""}
+        loading="lazy"
+        decoding="async"
+        class="w-full h-auto object-cover block"
+      />
+      {img.alt && (
+        <figcaption class="px-3 py-2 text-xs text-center text-(--prose-fg-subtle) border-t border-(--prose-border)">
+          {img.alt}
+        </figcaption>
+      )}
+    </figure>
+  ))}
+</div>

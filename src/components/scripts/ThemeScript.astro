@@ -1,0 +1,9 @@
+<script is:inline>
+  (function(){
+    var s = localStorage.getItem('theme-mode') || 'system';
+    var d = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var dark = s === 'dark' || (s === 'system' && d);
+    document.documentElement.classList.toggle('dark', dark);
+    document.documentElement.setAttribute('data-theme', s);
+  })();
+</script>

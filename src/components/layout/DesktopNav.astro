@@ -1,0 +1,73 @@
+---
+// src/components/layout/DesktopNav.astro
+import { siteConfig } from "@/config/site";
+import { normalizePath } from "@/lib/utils";
+import NavLink from "@/components/ui/NavLink.astro";
+import Icon from "@/components/ui/Icon";
+
+const currentPath = Astro.url.pathname;
+const navItems = siteConfig.navItems;
+---
+
+<nav aria-label={siteConfig.navAria} class="hidden sm:inline-flex items-center rounded-xl border border-(--border) bg-base backdrop-blur p-1 gap-2">
+  {navItems.map((item) => {
+    const children = item.children;
+    const hasChildren = children && children.length > 0;
+
+    if (hasChildren) {
+      return (
+        <div class="relative group/dropdown">
+          <button aria-expanded="false" class="relative inline-flex items-center gap-1 px-4 py-1.5 text-label-14 uppercase font-medium rounded-lg transition-all duration-200 text-muted hover:text-(--fg) hover:bg-muted">
+            {item.label}
+            <Icon name="chevron-down" className="w-3 h-3 transition-transform duration-200 group-hover/dropdown:rotate-180"/>
+          </button>
+          <div class="absolute left-0 top-full pt-4 invisible opacity-0 group-hover/dropdown:visible group-hover/dropdown:opacity-100 transition-all duration-200 z-50">
+            <div class="min-w-45 rounded-xl border border-(--border) bg-base shadow-lg p-1 backdrop-blur-sm">
+              {children.map((child) => {
+                const isActive = normalizePath(currentPath) === normalizePath(child.href || "");
+                const isExternal = child.isExternal === true;
+                return (
+                  <a
+                    href={child.href}
+                    aria-label={child.label}
+                    target={isExternal ? "_blank" : undefined}
+                    rel={isExternal ? "noopener noreferrer" : undefined}
+                    class:list={[
+                      "flex items-center justify-between gap-2 px-3 py-2 text-label-14 rounded-lg transition-colors",
+                      isActive
+                        ? "text-(--fg) bg-muted"
+                        : "text-muted hover:text-(--fg) hover:bg-subtle"
+                    ]}>
+                    <span>{child.label}</span>
+                    {isExternal && (
+                      <Icon
+                        name="external"
+                        className="w-3 h-3 opacity-60 shrink-0"
+                      />
+                    )}
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    const localizedHref = item.href || "#";
+    const activePath = normalizePath(currentPath);
+    const targetPath = normalizePath(localizedHref);
+    const isActive = activePath === targetPath || (targetPath !== "/" && activePath.startsWith(targetPath));
+
+    return (
+      <NavLink
+        href={localizedHref}
+        current={isActive}
+        isExternal={item.isExternal}
+        target={item.isExternal ? "_blank" : undefined}
+        rel={item.isExternal ? "noopener noreferrer" : undefined}>
+        {item.label}
+      </NavLink>
+    );
+  })}
+</nav>

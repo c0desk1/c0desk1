@@ -1,0 +1,39 @@
+---
+// src/components/blog/RssFeed.astro
+
+import { siteConfig } from "@/config/site";
+import Icon from "../ui/Icon";
+import Button from "../ui/Button.astro";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+const siteURL = (Astro.site?.toString() ?? siteConfig.siteUrl).replace(/\/$/, "");
+const rssURL = `${siteURL}/rss.xml`;
+---
+
+<div class:list={["border border-(--border) rounded-xl bg-(--bg-dim) overflow-hidden", className]}>
+  <div class="flex items-center gap-3 p-4 flex-wrap">
+    <div class="flex items-center justify-center p-1.5 rounded-full border border-(--border) text-orange-500/80 shrink-0">
+      <Icon name="rss" className="w-5 h-5" />
+    </div>
+    <div class="flex-1 min-w-0">
+      <h4 class="text-heading-16 font-semibold text-(--fg)">
+        Subscribe via RSS
+      </h4>
+      <p class="text-body-14 text-muted mt-0.5 hidden sm:inline">
+        Get new posts delivered to your reader automatically.
+      </p>
+    </div>
+    <div class="flex items-center shrink-0">
+      <Button variant="primary" class="text-button-14" size="sm">
+        <a href={rssURL} target="_blank" rel="noopener noreferrer" class="whitespace-nowrap" aria-label="Open RSS feed">
+          Open feed
+        </a>
+      </Button>
+    </div>
+  </div>
+</div>

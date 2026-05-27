@@ -1,0 +1,20 @@
+---
+import Button from '@/components/ui/Button.astro';
+import Icon from '../ui/Icon';
+interface Props {
+  className?: string;
+}
+
+const { className = "" } = Astro.props;
+---
+
+<Button
+  type="button"
+  swg-standard-button="contribution"
+  size='sm'
+  variant='secondary'
+  class={`inline-flex items-center justify-center gap-2 text-button-14 text-success ${className}`}
+>
+  <Icon name="donate" className="w-5 h-5" />
+  <span>Donate</span>
+</Button>
