@@ -25,31 +25,31 @@
 .prose h2 {
   color: var(--prose-fg-strong);
   margin-top: 56px;
-  margin-bottom: 20px;   /* ↑ dari 16px, memberi ruang setelah heading */
+  margin-bottom: 20px;
 }
 
 .prose h3 {
   color: var(--prose-fg-strong);
   margin-top: 40px;
-  margin-bottom: 16px;   /* ↑ dari 12px */
+  margin-bottom: 16px;
 }
 
 .prose h4 {
   color: var(--prose-fg-strong);
   margin-top: 32px;
-  margin-bottom: 12px;   /* ↑ dari 8px */
+  margin-bottom: 12px;
 }
 
 .prose h5 {
   color: var(--prose-fg-muted);
   margin-top: 24px;
-  margin-bottom: 12px;   /* ↑ dari 8px */
+  margin-bottom: 12px;
 }
 
 .prose h6 {
   color: var(--prose-fg-subtle);
   margin-top: 24px;
-  margin-bottom: 12px;   /* ↑ dari 8px */
+  margin-bottom: 12px;
 }
 
 /* Heading bertumpuk tetap rapat */

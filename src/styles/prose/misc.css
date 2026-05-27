@@ -2,149 +2,80 @@
 
 .prose sub,
 .prose sup {
-  font-size:      0.75em;
-  line-height:    0;
-  position:       relative;
+  font-size: 0.75em;
+  line-height: 0;
+  position: relative;
   vertical-align: baseline;
+  margin: 0 0.05em;
+  color: var(--prose-fg-dim);
+  transition: color 0.15s ease;
 }
 
 .prose sup { top: -0.5em; }
 .prose sub { bottom: -0.25em; }
 
-time {
-  @apply text-numeric-14;
-}
-
-.prose sup,
-.prose sub{
-  transition:color 0.15s ease;
-}
-
-.prose sup,
-.prose sub {
-  margin: 0 0.05em;
-  color: var(--accent);
-}
-
-.prose sup a{
+.prose sup a {
   text-decoration: none;
   color: inherit;
-  transition: color 0.15s ease
+  transition: color 0.15s ease;
 }
 
-.prose sup a:hover{
-  color:var(--accent)
+.prose sup a:hover {
+  color: var(--prose-accent);
 }
 
-.prose sup:has(a[href^="#fn"]){
-  cursor:pointer;
+.prose sup:has(a[href^="#fn"]) {
+  cursor: pointer;
   scroll-margin-top: 80px;
 }
 
-.prose small{
-  color:var(--fg-subtle);
-  display:inline-block;
+.prose small {
+  color: var(--prose-fg-subtle);
+  display: inline-block;
 }
 
 .prose figcaption small,
 .prose aside small,
-.prose footer small{
-  color:var(--fg-dim)
+.prose footer small {
+  color: var(--prose-fg-dim);
+}
+
+time {
+  @apply text-numeric-14;
 }
 
 .prose mark {
-  background: rgba(255, 255, 255, 0.12);
-  color: var(--fg-strong);
-  padding: 3px;
+  background: var(--prose-highlight-bg);
+  color: var(--prose-highlight-text);
+  padding: 0.1em 0.25em;
   border-radius: 2px;
 }
 
-.prose abbr[title]{
-  text-decoration:none;
-  border-bottom:1px dashed var(--border);
-  cursor:help;
-  font-feature-settings:"calt" 1;
-  transition:border-color 0.15s ease,color 0.15s ease
+.prose abbr[title] {
+  text-decoration: none;
+  border-bottom: 1px dashed var(--prose-border);
+  cursor: help;
+  font-feature-settings: "calt" 1;
+  transition: border-color 0.15s ease, color 0.15s ease;
 }
 
-.prose abbr[title]:hover{
-  border-bottom-color:var(--accent);
-  color:var(--accent)
+.prose abbr[title]:hover {
+  border-bottom-color: var(--prose-accent);
+  color: var(--prose-accent);
 }
 
-.prose abbr[title]:active{
-  border-bottom-style:solid;
-  transition:none
+.prose abbr[title]:active {
+  border-bottom-style: solid;
+  transition: none;
 }
 
 .prose cite {
   font-style: italic;
-  color: var(--accent);
+  color: var(--prose-accent);
 }
 
 .prose ins {
-  color: var(--fg-strong);
-}
-
-.prose dl {
-  margin: 20px 0;
-}
-
-.prose dl :last-child {
-  margin-bottom: 0;
-}
-
-.prose dt {
-  font-weight: 600;
-  color: var(--fg-strong);
-  letter-spacing: -0.01em;
-  margin-top:     16px;
-}
-
-.prose dt:first-child {
-  margin-top: 0;
-}
-
-.prose dd {
-  margin-left: 20px;
-  margin-top:  4px;
-  color: var(--fg-subtle);
-}
-
-.prose dt + dd {
-  margin-top: 0;
-}
-
-.prose address {
-  @apply text-body-14;
-  font-style: normal;
-  color: var(--fg-subtle);
-  background-color: var(--prose-surface);
-  padding: 0.75rem 1rem;
-  border-radius: var(--prose-radius-md);
-  border: 1px solid var(--border);
-  margin: 1.5rem 0;
-  transition: border-color 0.15s ease;
-}
-
-.prose address:hover {
-  border-color: var(--fg-subtle);
-}
-
-.prose address a {
-  color: var(--accent);
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.15s ease;
-}
-
-.prose address a:hover {
-  border-bottom-color: var(--accent);
-}
-
-.prose address .contact-label {
-  font-weight: 600;
-  color: var(--prose-fg);
+  color: var(--prose-fg-strong);
 }
 
 .prose q {
@@ -162,6 +93,67 @@ time {
   margin-right: 0.125rem;
 }
 
+.prose dl {
+  margin: 20px 0;
+}
+
+.prose dl :last-child {
+  margin-bottom: 0;
+}
+
+.prose dt {
+  font-weight: 600;
+  color: var(--prose-fg-strong);
+  letter-spacing: -0.01em;
+  margin-top: 16px;
+}
+
+.prose dt:first-child {
+  margin-top: 0;
+}
+
+.prose dd {
+  margin-left: 20px;
+  margin-top: 4px;
+  color: var(--prose-fg-subtle);
+}
+
+.prose dt + dd {
+  margin-top: 0;
+}
+
+.prose address {
+  @apply text-body-14;
+  font-style: normal;
+  color: var(--prose-fg-subtle);
+  background-color: var(--prose-surface);
+  padding: 0.75rem 1rem;
+  border-radius: var(--prose-radius-md);
+  border: 1px solid var(--prose-border);
+  margin: 1.5rem 0;
+  transition: border-color 0.15s ease;
+}
+
+.prose address:hover {
+  border-color: var(--prose-fg-subtle);
+}
+
+.prose address a {
+  color: var(--prose-accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s ease;
+}
+
+.prose address a:hover {
+  border-bottom-color: var(--prose-accent);
+}
+
+.prose address .contact-label {
+  font-weight: 600;
+  color: var(--prose-fg);
+}
+
 .prose samp {
   @apply text-code-14;
   background-color: var(--prose-code-bg);
@@ -173,44 +165,31 @@ time {
 }
 
 .prose hr {
-  border:        none;
-  border-top:    1px solid var(--border);
+  border: none;
+  border-top: 1px solid var(--prose-hr);
   margin: 2rem 0;
 }
 
 .prose hr.ornamental {
-  border:        none;
-  text-align:    center;
+  border: none;
+  text-align: center;
   margin: 2rem 0;
 }
 
 .prose hr.ornamental::before {
-  content:        '· · ·';
-  color:          var(--fg-dim);
+  content: '· · ·';
+  color: var(--prose-fg-dim);
   letter-spacing: 0.5em;
-  font-size:      14px;
+  font-size: 14px;
 }
 
 @media (max-width: 767px) {
-  time {
-    @apply text-numeric-14;
+  .prose mark {
+    padding: 0.1em 0.2em;
   }
 
-  .prose sup,
-  .prose sub{
-    @apply text-numeric-14;
-  }
-
-  .prose mark{
-    padding:.1em 0.2em;
-  }
-
-  .prose small{
-    @apply text-overline-11;
-  }
-
-  .prose abbr[title]{
-    font-size:14px
+  .prose abbr[title] {
+    font-size: 14px;
   }
 
   .prose hr {
@@ -222,24 +201,11 @@ time {
     padding: 0.625rem 0.875rem;
     margin: 1.25rem 0;
   }
-  .prose samp {
-    @apply text-code-14;
-  }
 }
 
-/* Desktop */
 @media (min-width: 768px) {
-  .prose sup,
-  .prose sub{
-    @apply text-numeric-16;
-  }
-
-  .prose mark{
-    padding:.1em 0.25em;
-  }
-
-  .prose small{
-    @apply text-overline-12;
+  .prose mark {
+    padding: 0.1em 0.25em;
   }
 
   .prose address {
@@ -247,11 +213,4 @@ time {
     padding: 0.75rem 1rem;
     margin: 1.5rem 0;
   }
-}
-
-@media (min-width: 1024px){
-  .prose samp {
-    @apply text-code-14;
-  }
-
 }

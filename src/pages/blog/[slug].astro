@@ -5,18 +5,18 @@ import { siteConfig } from "@/config/site";
 import { slugify } from "@/lib/utils";
 import { components } from '@/components/layout/MDXComponents';
 
+import Head from "@/components/Head.astro";
+import { buildMeta, schemaArticle, schemaBreadcrumb } from "@/consts";
+
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import Breadcrumb from "@/components/ui/Breadcrumb.astro";
 import PostHeader from "@/components/blog/PostHeader.astro";
+import RssFeed from '@/components/blog/RssFeed.astro';
+import SharePost from '@/components/blog/SharePost.astro';
 import PostNavigation from '@/components/blog/PostNavigation.astro';
 import BackToTop from "@/components/ui/BackToTop.astro";
-import BG from "@/components/ui/BgDot.astro";
-
-import RssFeed from '@/components/layout/RssFeed.astro';
-import SharePost from '@/components/blog/SharePost.astro';
-import Comments from '@/components/layout/Comments.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -83,8 +83,6 @@ const seoCategory = {
   slug: categorySlug,
 };
 
-
-
 const siteURL = Astro.site?.toString() ?? siteConfig.siteUrl;
 const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
@@ -119,7 +117,7 @@ const seoData = {
 <BaseLayout {...seoData}>  
   <Section size="none" class="relative z-0">
     <Section size="sm" class="relative z-10">
-      <div class="relative grid grid-cols-1 rounded-xl border border-(--border) max-w-5xl mx-auto p-0 bg-(--bg)/60">
+      <div class="max-w-5xl mx-auto">
         <Container size="md">
           <Section size="sm">
             <Breadcrumb items={BreadcrumbsItems} />
@@ -145,34 +143,23 @@ const seoData = {
             </Section>
           </article>
           <Section size="sm">
+            <SharePost url={canonicalURL} title={title} description={description} />
+          </Section>
+          <Section size="sm">
             <RssFeed />
           </Section>
           <Section size="sm">
-            <div rrm-inline-cta="1b7a649f-eb54-48c5-8106-f2ac499dfc5f"></div>
+            <div id="yandex_rtb_R-A-19179231-6"></div>
           </Section>
         </Container>
       </div>
     </Section>
     <Section size="sm">
       <Container size="lg">
-        <div id="yandex_rtb_R-A-19179231-6"></div>
+        <div rrm-inline-cta="1b7a649f-eb54-48c5-8106-f2ac499dfc5f"></div>
       </Container>
     </Section>
-    <Section size="sm">
-      <Container size="lg">
-        <div class="flex items-center gap-2 justify-center">
-          <span class="text-label-16 text-(--fg)">Share this article: </span>
-          <SharePost url={canonicalURL} title={title} description={description} />
-        </div>
-      </Container>
-    </Section>
-    <!--<Section size="sm">
-      <Container size="lg">
-        <div rrm-inline-cta="49034a2c-dc4c-4915-a82c-939bbf352095"></div>
-      </Container>
-    </Section>-->
     <Section size="sm" class="border-t sm:border-none border-(--border)">
-      <h2 class="sr-only">{siteData.b_articleNavigation}</h2>
       <Container size="lg">
         <PostNavigation prevPost={prevPost} nextPost={nextPost} />
       </Container>

@@ -76,7 +76,7 @@
   --prose-border-subtle: var(--border-subtle);
 
   /* Code & Pre – diselaraskan dengan void */
-  --prose-code-bg: var(--color-void-50);     /* #f5f5f3 */
+  --prose-code-bg: var(--color-void-50);
   --prose-code-border: var(--color-void-100);
   --prose-code-text: var(--color-void-900);
   --prose-code-keyword: #d73a49;
@@ -109,14 +109,12 @@
   --prose-list-marker: var(--color-void-300);
   --prose-list-marker-hover: var(--color-void-400);
 
-  /* Links (inline) – tetap fungsional */
   --prose-link: #0070f3;
   --prose-link-hover: #0761d1;
   --prose-link-visited: #7c3aed;
   --prose-link-underline: rgba(0, 112, 243, 0.3);
   --prose-link-underline-hover: rgba(0, 112, 243, 0.6);
 
-  /* Callouts – tetap seperti asli (warna tidak diambil dari void) */
   --callout-note-bg: var(--color-void-50);
   --callout-note-border: var(--color-void-100);
   --callout-note-text: #737373;
@@ -182,9 +180,6 @@
   --prose-image-bg: var(--color-void-50);
 }
 
-/* =============================================
-   Dark Mode – Black Noir
-   ============================================= */
 .dark {
   --prose-highlight-bg: rgba(255, 214, 0, 0.15);
   --prose-highlight-border: rgba(255, 214, 0, 0.3);

@@ -1,10 +1,14 @@
 /* src/styles/prose/list.css */
+
+/* =============================================
+   Base Lists
+   ============================================= */
 .prose ul,
-.prose ol{
+.prose ol {
   @apply text-body-16;
-  padding-left: 24px;
-  margin: 20px 0;
-  color:         var(--fg);
+  padding-left: 0;                /* kita atur manual di li */
+  margin: 24px 0;
+  color: var(--prose-fg);
 }
 
 .prose li {
@@ -15,30 +19,66 @@
   margin: 8px 0;
 }
 
-.prose li:last-child{
-  margin-bottom:0
+.prose li:last-child {
+  margin-bottom: 0;
 }
 
+/* =============================================
+   Unordered List – Custom Markers
+   ============================================= */
 .prose ul {
   list-style: none;
-  list-style-type:disc
 }
 
+/* Level 1: em dash */
 .prose ul > li {
-  position:    relative;
-  padding-left: 4px;
+  position: relative;
+  padding-left: 1.5rem;           /* ruang tetap untuk semua marker */
 }
 
-.prose ol{
-  list-style:     none;
+.prose ul > li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--prose-accent);
+  font-weight: 700;
+}
+
+/* Level 2: en dash */
+.prose ul ul > li {
+  padding-left: 1.5rem;
+}
+.prose ul ul > li::before {
+  content: "–";
+  color: var(--prose-list-marker);
+  font-weight: 400;
+}
+
+/* Level 3: bullet kecil */
+.prose ul ul ul > li {
+  padding-left: 1.5rem;
+}
+.prose ul ul ul > li::before {
+  content: "•";
+  color: var(--prose-list-marker);
+  font-weight: 400;
+  font-size: 0.8em;
+  top: 0.1em;                    /* sedikit penyesuaian vertikal */
+}
+
+/* =============================================
+   Ordered List
+   ============================================= */
+.prose ol {
   list-style-type: decimal;
-  counter-reset:  prose-counter;
+  counter-reset: prose-counter;
+  padding-left: 1.75rem;          /* ruang untuk nomor */
 }
 
 .prose ol > li {
   counter-increment: prose-counter;
-  position:          relative;
-  padding-left:       4px;
+  padding-left: 0.25rem;
 }
 
 .prose ol ol {
@@ -46,48 +86,54 @@
   counter-reset: prose-counter-nested;
 }
 
-.prose ol ol ol{
-  list-style-type: lower-roman
+.prose ol ol ol {
+  list-style-type: lower-roman;
 }
 
 .prose ol ol > li {
   counter-increment: prose-counter-nested;
 }
 
+/* =============================================
+   Nested Lists Margin
+   ============================================= */
 .prose ul ul,
 .prose ol ol,
 .prose ul ol,
-.prose ol ul{
+.prose ol ul {
   margin: 8px 0;
 }
 
-.prose ul ul{
-  list-style-type:circle
-}
-
-.prose ul ul ul{
-  list-style-type:square
-}
-
-.prose ::marker{
+/* =============================================
+   Markers untuk ol
+   ============================================= */
+.prose ol ::marker {
   color: var(--prose-list-marker);
+  font-weight: 600;
 }
 
-.prose ::marker:hover{
+.prose ol ::marker:hover {
   color: var(--prose-list-marker-hover);
 }
 
+/* =============================================
+   Task List (Checkbox)
+   ============================================= */
 .prose ul:has(input[type="checkbox"]) {
   list-style: none;
-  padding-left:1rem !important;
-  margin: 1.25rem 0;
+  padding-left: 0 !important;
+  margin: 1.5rem 0;
 }
 
 .prose ul:has(input[type="checkbox"]) li {
   display: flex;
   align-items: flex-start;
-  gap: 0.5rem;
+  gap: 0.625rem;
   padding: 0;
+}
+
+.prose ul:has(input[type="checkbox"]) li::before {
+  content: none;
 }
 
 .prose ul:has(input[type="checkbox"]) li input[type="checkbox"] {
@@ -97,17 +143,16 @@
   margin-top: 0.4rem;
   appearance: none;
   -webkit-appearance: none;
-  cursor: default;
+  cursor: pointer;
   border: 2px solid var(--prose-border-strong);
   border-radius: var(--prose-radius-sm);
   background-color: transparent;
   transition: all 0.2s ease;
-  cursor: pointer;
   position: relative;
 }
 
 .prose ul:has(input[type="checkbox"]) li input[type="checkbox"]:checked {
-  border-color: var(--prose-border-strong);
+  border-color: var(--prose-accent);
 }
 
 .prose ul:has(input[type="checkbox"]) li input[type="checkbox"]:checked::after {
@@ -117,7 +162,7 @@
   left: 4px;
   width: 6px;
   height: 12px;
-  border: solid var(--prose-fg);
+  border: solid var(--prose-accent);
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
@@ -132,14 +177,24 @@
   border-color: var(--prose-border-strong);
 }
 
-@media (min-width: 767px){
+/* =============================================
+   Responsive
+   ============================================= */
+@media (max-width: 767px) {
+  .prose ul > li,
+  .prose ul ul > li,
+  .prose ul ul ul > li {
+    padding-left: 1.25rem;
+  }
+
   .prose ul:has(input[type="checkbox"]) li input[type="checkbox"] {
     margin-top: 0;
   }
 }
-@media (min-width: 768px){
-  .prose ul:has(input[type="checkbox"]){
-    padding-left:1.75rem
+
+@media (min-width: 768px) {
+  .prose ul:has(input[type="checkbox"]) {
+    padding-left: 0 !important;
   }
 
   .prose ul:has(input[type="checkbox"]) li input[type="checkbox"] {
@@ -147,14 +202,14 @@
   }
 }
 
-@media (min-width: 1024px){
-  .prose ul:has(input[type="checkbox"]){
+@media (min-width: 1024px) {
+  .prose ul,
+  .prose ol {
     @apply text-body-18;
-    margin-bottom: 2rem;
   }
 
-  .prose ul,
-  .prose ol{
+  .prose ul:has(input[type="checkbox"]) {
     @apply text-body-18;
+    margin-bottom: 2rem;
   }
 }

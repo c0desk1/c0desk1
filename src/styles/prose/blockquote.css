@@ -1,21 +1,13 @@
 /* src/styles/prose/blockquote.css */
-.prose blockquote,
-.prose .quote {
-  margin: 2rem 0;
-  border: none;
-  background: none;
-  padding: 0;
-}
-.prose .quote:last-child,
-.prose blockquote:last-child {
-  margin-bottom: 0;
-}
 
-.prose .quote-body {
+.prose blockquote {
+  margin: 2rem 0;
+  border-left: 2px solid var(--prose-quote-border);
+  padding-left: 1.25rem;
   color: var(--prose-quote-text);
 }
-.prose blockquote p,
-.prose .quote-body p {
+
+.prose blockquote p {
   margin: 0;
   color: inherit;
   font: inherit;
@@ -27,44 +19,124 @@
   margin-top: 12px;
 }
 
-.prose .quote-body p:last-child {
-  margin-bottom: 0;
-}
-
-.prose .quote-body p:first-of-type::before {
-  content:"“";
-  margin-right:-0.05rem;
-  font-style:normal
-}
-
-.prose .quote-body p:last-of-type::after {
-  content:"”";
-  margin-left:-0.1rem;
-  font-style:normal
-}
-
-.prose .quote-name {
-  color: var(--prose-fg);
-}
-
-.prose .quote-name::after {
-  content:",";
-  color: var(--prose-fg);
-}
-
-.prose .quote-role {
-  color: var(--prose-quote-cite);
-}
-
 .prose blockquote cite,
 .prose blockquote footer {
   @apply text-body-14;
-  display:        block;
-  margin-top:     1rem;
-  color:          var(--prose-quote-cite);
-  font-style:     normal;
+  display: block;
+  margin-top: 1rem;
+  color: var(--prose-quote-cite);
+  font-style: normal;
+  text-align: end;
 }
 
 .prose blockquote cite::before {
-  content: '— ';
+  content: "— ";
+}
+
+.prose .quote {
+  display: flex;
+  flex-direction: column;
+  margin: 2.5rem 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--prose-fg-strong);
+}
+
+.prose .quote::before {
+  content: "“";
+  display: block;
+  font-size: 4rem;
+  line-height: 1;
+  margin-bottom: -2rem;
+  margin-left: -0.125rem;
+  color: var(--prose-accent);
+  opacity: 0.2;
+  font-family: var(--prose-font-serif, var(--prose-font-sans));
+}
+
+.prose .quote-body {
+  padding-left: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.prose .quote-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  gap: 0.375rem;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.prose .quote-author {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.prose .quote-avatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  object-fit: cover;
+  order: 2;
+}
+
+.prose .quote-name {
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--prose-fg-strong);
+  order: 0;
+}
+
+.prose .quote-role {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--prose-fg-muted);
+  order: 1;
+}
+
+.prose .quote-cite {
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-align: right;
+  width: 100%;
+}
+
+.prose .quote-cite a {
+  color: var(--prose-accent);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: opacity 0.2s ease;
+}
+
+.prose .quote-cite a:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 48rem) {
+  .prose .quote::before {
+    font-size: 3rem;
+    margin-bottom: -1rem;
+  }
+
+  .prose .quote-body {
+    padding-left: 1rem;
+  }
+
+  .prose .quote-avatar {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
 }

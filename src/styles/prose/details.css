@@ -1,11 +1,12 @@
 /* src/styles/prose/details.css */
+
 .prose .details {
   margin: 2.5rem 0;
   border: 1px solid var(--prose-details-border);
   border-radius: var(--prose-radius-md);
   background-color: var(--prose-details-bg);
   overflow: hidden;
-  transition: box-shadow var(--prose-transition);
+  transition: box-shadow var(--duration) var(--ease-out);
 }
 
 .prose .details-summary {
@@ -77,6 +78,7 @@
   .prose .details-content p {
     @apply text-body-14;
   }
+
   .prose .details-content > *:first-child {
     margin-top: 10px !important;
   }
@@ -90,5 +92,4 @@
   .prose .details-summary {
     padding: 12px 14px;
   }
-
 }
