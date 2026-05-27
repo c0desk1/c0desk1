@@ -6,14 +6,14 @@
   border-spacing: 0;
   overflow: hidden;
   border-radius: var(--radius-md);
-  border: 1px solid var(--prose-table-border);
+  border: var(--prose-table-border);
 }
 
 .prose .table-wrapper {
   margin: 2.5rem 0;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  border-radius: var(--prose-radius-md);
+  border-radius: var(--radius-md);
   border: 1px solid var(--prose-table-border);
 }
 
@@ -62,10 +62,9 @@
   background: var(--prose-table-row-bg);
 }
 
-/* Hapus blok ini – penyebab border-bottom tidak utuh */
-/* .prose tbody td:last-child {
+.prose tbody td:last-child {
   border-bottom: none;
-} */
+}
 
 .prose tbody td strong {
   font-weight: 600;
