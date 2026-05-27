@@ -1,4 +1,5 @@
 ---
+// src/components/mdx/Blockquote.astro
 import { getEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 import Icon from '@/components/ui/Icon';
@@ -17,20 +18,24 @@ let finalRole = '';
 let finalAvatar = '';
 
 if (authorSlug) {
-  try {
-    const authorEntry = await getEntry('authors', authorSlug);
-    if (authorEntry) {
-      finalAuthor = authorEntry.data.name;
-      finalRole = authorEntry.data.role ?? '';
-      finalAvatar = authorEntry.data.avatar ?? '';
-      if (finalAvatar && isCdnUrl(finalAvatar)) {
-        finalAvatar = cdnImage(finalAvatar, { w: 48, h: 48, q: 80 });
+  if (authorSlug.includes(' ') || !/^[a-z0-9-]+$/.test(authorSlug)) {
+    finalAuthor = authorSlug;
+  } else {
+    try {
+      const authorEntry = await getEntry('authors', authorSlug);
+      if (authorEntry) {
+        finalAuthor = authorEntry.data.name;
+        finalRole = authorEntry.data.role ?? '';
+        finalAvatar = authorEntry.data.avatar ?? '';
+        if (finalAvatar && isCdnUrl(finalAvatar)) {
+          finalAvatar = cdnImage(finalAvatar, { w: 48, h: 48, q: 80 });
+        }
+      } else {
+        finalAuthor = authorSlug;
       }
-    } else {
+    } catch {
       finalAuthor = authorSlug;
     }
-  } catch {
-    finalAuthor = authorSlug;
   }
 }
 
