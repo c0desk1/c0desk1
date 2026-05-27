@@ -14,12 +14,13 @@
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   border-radius: var(--prose-radius-md);
+  border: var(--prose-table-border); /* ← tambahkan border di wrapper */
 }
 
 .prose .table-wrapper table {
   margin-top: 0;
   margin-bottom: 0;
-  border: none;
+  border: none;          /* tetap tanpa border agar tidak bentrok */
   border-radius: 0;
 }
 
@@ -61,9 +62,10 @@
   background: var(--prose-table-row-bg);
 }
 
-.prose tbody td:last-child {
+/* Hapus blok ini – penyebab border-bottom tidak utuh */
+/* .prose tbody td:last-child {
   border-bottom: none;
-}
+} */
 
 .prose tbody td strong {
   font-weight: 600;
