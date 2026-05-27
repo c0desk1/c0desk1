@@ -47,6 +47,7 @@
   color:          var(--prose-color-strong);
   text-wrap:      balance;
   scroll-margin-top: var(--prose-scroll-margin);
+  width: 100%;
 }
 
 /* H1 */
@@ -69,19 +70,7 @@
   color:          var(--prose-h2-color);
   margin-top:     var(--prose-h2-margin-top);
   margin-bottom:  var(--prose-h2-margin-bottom);
-  padding-left:   16px;
   position:       relative;
-}
-
-.prose h2::before {
-  content:          '';
-  position:         absolute;
-  left:             0;
-  top:              6px;
-  bottom:           6px;
-  width:            var(--prose-h2-accent-width);
-  background:       var(--prose-h2-accent-color);
-  border-radius:    var(--radius-full);
 }
 
 /* H3 */

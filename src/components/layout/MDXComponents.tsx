@@ -8,7 +8,6 @@ import LI from '@/components/mdx/LI.astro';
 import UL from '@/components/mdx/UL.astro';
 import OL from '@/components/mdx/OL.astro';
 import Image from "@/components/mdx/imageMDX.astro";
-import HR from "@/components/mdx/HR.astro";
 import Table from '@/components/mdx/Table.astro';
 import Details from '@/components/mdx/Details.astro';
 import Steps from '@/components/mdx/Steps.astro';
@@ -38,7 +37,6 @@ export const components: MDXComponents = {
   ol: OL,
   a: InlineLink,
   img: Image,
-  hr: HR,
   Blockquote,
   table: Table,
   Details,

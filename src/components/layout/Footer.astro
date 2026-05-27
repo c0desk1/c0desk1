@@ -17,14 +17,14 @@ const footerSections = siteConfig.footerSections;
   <Section size="none" class="bg-subtle">
     <Container size="xl">
     <div class="grid items-center grid-cols-1 lg:grid-cols-2" id="philosophy">
-      <div class="px-6 py-8">
+      <div class="px-0 sm:px-4 py-8">
         <p class="philosophy-quote">
           The void is not<br>
           empty. It is<br>
           <em>full of potential.</em>
         </p>
       </div>
-      <div class="flex flex-col justify-center px-6 py-8 border-0 sm:border-l border-(--border)">
+      <div class="flex flex-col justify-center px-0 sm:px-4 py-8 border-0 sm:border-l border-(--border)">
           {footerSections.map((section) => (
           <ul class="philosophy-values">
             {section.items.map((link) => (
@@ -87,7 +87,7 @@ const footerSections = siteConfig.footerSections;
   .philosophy-quote em {
     font-style: normal;
     color: transparent;
-    -webkit-text-stroke: 1px rgba(255,255,255,0.3);
+    -webkit-text-stroke: 1px var(--border-strong);
   }
 
   .philosophy-values {

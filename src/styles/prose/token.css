@@ -4,6 +4,22 @@
   --prose-font-sans: var(--font-sans);
   --prose-font-mono: var(--font-mono);
 
+  --prose-scroll-margin:         calc(var(--header-height, 60px) + 16px);
+
+  --prose-link-color:               var(--fg-strong);
+  --prose-link-decoration:          underline;
+  --prose-link-decoration-color:    var(--border-strong);
+  --prose-link-decoration-offset:   3px;
+  --prose-link-decoration-thickness: 1px;
+  --prose-link-hover-color:         var(--fg-strong);
+  --prose-link-hover-decoration-color: var(--fg-strong);
+
+  --prose-strong-weight:      700;
+  --prose-strong-color:       var(--fg-strong);
+  --prose-em-color:           var(--fg-muted);
+  --prose-em-style:           normal;
+  
+
   /* Radius */
   --prose-radius-xs:    var(--radius-xs);
   --prose-radius-sm:    var(--radius-sm);
@@ -73,18 +89,18 @@
   --prose-code-punctuation: #6a737d;
 
   /* Blockquote */
-  --prose-quote-border: #e5e5e5;
+  --prose-quote-border: var(--border-strong);
   --prose-quote-bg: transparent;
-  --prose-quote-text: #525252;
-  --prose-quote-cite: #737373;
+  --prose-quote-text: var(--fg-muted);
+  --prose-quote-cite: var(--fg-subtle);
 
   /* Tables */
-  --prose-table-header-bg: #fafafa;
-  --prose-table-header-text: #171717;
-  --prose-table-row-bg: transparent;
-  --prose-table-row-hover: #fafafa;
-  --prose-table-border: #e5e5e5;
-  --prose-table-text: #525252;
+  --prose-table-header-bg: var(--bg-muted);
+  --prose-table-header-text: var(--fg-muted);
+  --prose-table-row-bg: var(--bg);
+  --prose-table-row-hover: var(--bg-muted);
+  --prose-table-border: var(--border);
+  --prose-table-text: var(--fg);
 
   /* Horizontal Rule */
   --prose-hr: #e5e5e5;
@@ -191,20 +207,6 @@
   --prose-code-number: #79c0ff;
   --prose-code-operator: #ff7b72;
   --prose-code-punctuation: #8b949e;
-
-  /* Blockquote */
-  --prose-quote-border: #333333;
-  --prose-quote-bg: transparent;
-  --prose-quote-text: #a1a1a1;
-  --prose-quote-cite: #666666;
-
-  /* Tables */
-  --prose-table-header-bg: #111111;
-  --prose-table-header-text: #ededed;
-  --prose-table-row-bg: transparent;
-  --prose-table-row-hover: #0a0a0a;
-  --prose-table-border: #262626;
-  --prose-table-text: #a1a1a1;
 
   /* Horizontal Rule */
   --prose-hr: #262626;

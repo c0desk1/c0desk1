@@ -57,7 +57,7 @@ if (!isCiteMode && authorSlug) {
     <slot />
   </div>
   {isAuthorMode && (finalAuthor || finalRole) && (
-    <div class="author-info flex flex-col md:flex-row items-end md:items-center justify-end gap-2 md:gap-3 flex-initial">
+    <div class="author-info flex flex-col md:flex-row items-start md:items-center justify-start gap-2 md:gap-3 flex-initial">
       <div class="w-6 h-6 shrink-0 overflow-hidden flex items-center justify-center">
         {finalAvatar && (
           <Image
@@ -75,9 +75,9 @@ if (!isCiteMode && authorSlug) {
       {finalRole && (<span class="quote-role text-body-14 md:text-body-16">{finalRole}</span>)}
     </div>
   )}
-  {isPlainSource && finalAuthor && (<div class="quote-role text-body-14 md:text-body-16 self-end text-end">{finalAuthor}</div>)}
+  {isPlainSource && finalAuthor && (<div class="quote-role text-body-14 md:text-body-16 self-start text-start mt-0!">{finalAuthor}</div>)}
   {isCiteMode && cite && (
-    <div class="quote-role text-label-14 md:text-label-16 self-end text-end">
+    <div class="quote-role text-label-14 md:text-label-16 self-start text-start">
       <a href={cite} target="_blank" rel="noopener noreferrer" class="flex items-center">
         {citeLabel || 'Source'}
         <Icon name="external" className="external-icon w-3 h-3"/>

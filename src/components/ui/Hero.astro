@@ -47,7 +47,7 @@ const { title, subTitle, description, cta, cta2 } = Astro.props;
 
 <style is:global>
   .hero {
-    min-height: 100vh;
+    min-height: 80vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -103,7 +103,7 @@ const { title, subTitle, description, cta, cta2 } = Astro.props;
   .hero-title span {
     display: block;
     color: transparent;
-    -webkit-text-stroke: 1px rgba(255,255,255,0.25);
+    -webkit-text-stroke: 1px var(--border-strong);
   }
 
   .hero-sub {

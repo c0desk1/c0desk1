@@ -1,39 +1,39 @@
 /* src/styles/prose/components/misc.css */
+
+.prose sub,
+.prose sup {
+  font-size:      0.75em;
+  line-height:    0;
+  position:       relative;
+  vertical-align: baseline;
+}
+
+.prose sup { top: -0.5em; }
+.prose sub { bottom: -0.25em; }
+
 time {
   @apply text-numeric-14;
 }
 
 .prose sup,
 .prose sub{
-  vertical-align:baseline;
-  position:relative;
   transition:color 0.15s ease;
-  font-feature-settings:"sups" 1;
 }
 
-.prose sup{
-  top:-0.35em;
-  left: 0.125em;
-  margin-left:0.05em;
-  margin-right:0.05em;
-  color:var(--prose-accent);
-}
-
-.prose sub{
-  bottom:-0.1em;
-  margin-left:0.05em;
-  margin-right:0.05em;
-  color:var(--prose-accent);
+.prose sup,
+.prose sub {
+  margin: 0 0.05em;
+  color: var(--accent);
 }
 
 .prose sup a{
-  text-decoration:none;
-  color:inherit;
-  transition:color 0.15s ease
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.15s ease
 }
 
 .prose sup a:hover{
-  color:var(--prose-accent)
+  color:var(--accent)
 }
 
 .prose sup:has(a[href^="#fn"]){
@@ -41,43 +41,35 @@ time {
   scroll-margin-top: 80px;
 }
 
-.prose h1 sup,
-.prose h2 sup,
-.prose h3 sup{
-  @apply text-numeric-14;
-  top:-0.35em
-}
-
 .prose small{
-  color:var(--prose-fg-subtle);
+  color:var(--fg-subtle);
   display:inline-block;
 }
 
 .prose figcaption small,
 .prose aside small,
 .prose footer small{
-  color:var(--prose-fg-dim)
+  color:var(--fg-dim)
 }
 
 .prose mark {
-  background: none;
-  color: var(--prose-highlight-text);
-  padding: 0;
-  border-radius: 0;
-  border-bottom: 2px solid var(--prose-highlight-border);
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--fg-strong);
+  padding: 3px;
+  border-radius: 2px;
 }
 
 .prose abbr[title]{
   text-decoration:none;
-  border-bottom:1px dashed var(--prose-border);
+  border-bottom:1px dashed var(--border);
   cursor:help;
   font-feature-settings:"calt" 1;
   transition:border-color 0.15s ease,color 0.15s ease
 }
 
 .prose abbr[title]:hover{
-  border-bottom-color:var(--prose-accent);
-  color:var(--prose-accent)
+  border-bottom-color:var(--accent);
+  color:var(--accent)
 }
 
 .prose abbr[title]:active{
@@ -87,23 +79,15 @@ time {
 
 .prose cite {
   font-style: italic;
-  color: var(--prose-accent);
-}
-
-.prose del {
-  color: var(--prose-fg-disabled);
+  color: var(--accent);
 }
 
 .prose ins {
-  color: var(--prose-fg-strong);
+  color: var(--fg-strong);
 }
 
 .prose dl {
-  @apply text-body-14;
-  margin: 1.5rem 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  margin: 20px 0;
 }
 
 .prose dl :last-child {
@@ -112,53 +96,50 @@ time {
 
 .prose dt {
   font-weight: 600;
-  color: var(--prose-fg);
-  font-family: var(--prose-font-sans);
-  margin-bottom: 0.25rem;
+  color: var(--fg-strong);
+  letter-spacing: -0.01em;
+  margin-top:     16px;
+}
+
+.prose dt:first-child {
+  margin-top: 0;
 }
 
 .prose dd {
-  margin-left: 0;
-  color: var(--prose-fg-subtle);
-  border-left: 1.5px solid var(--prose-border);
-  padding-left: 1rem;
-  margin-bottom: 0.5rem;
-  transition: border-left-color 0.15s ease;
+  margin-left: 20px;
+  margin-top:  4px;
+  color: var(--fg-subtle);
 }
 
 .prose dt + dd {
   margin-top: 0;
 }
 
-.prose dd:hover {
-  border-left-color: var(--prose-accent);
-}
-
 .prose address {
   @apply text-body-14;
   font-style: normal;
-  color: var(--prose-fg-subtle);
+  color: var(--fg-subtle);
   background-color: var(--prose-surface);
   padding: 0.75rem 1rem;
   border-radius: var(--prose-radius-md);
-  border: 1px solid var(--prose-border);
+  border: 1px solid var(--border);
   margin: 1.5rem 0;
   transition: border-color 0.15s ease;
 }
 
 .prose address:hover {
-  border-color: var(--prose-fg-subtle);
+  border-color: var(--fg-subtle);
 }
 
 .prose address a {
-  color: var(--prose-accent);
+  color: var(--accent);
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: border-color 0.15s ease;
 }
 
 .prose address a:hover {
-  border-bottom-color: var(--prose-accent);
+  border-bottom-color: var(--accent);
 }
 
 .prose address .contact-label {
@@ -186,9 +167,28 @@ time {
   background-color: var(--prose-code-bg);
   color: var(--prose-code-text);
   padding: 0.15rem 0.35rem;
-  border-radius: var(--prose-radius);
+  border-radius: var(--radius);
   border: 1px solid var(--prose-code-border);
   display: inline-block;
+}
+
+.prose hr {
+  border:        none;
+  border-top:    1px solid var(--border);
+  margin: 2rem 0;
+}
+
+.prose hr.ornamental {
+  border:        none;
+  text-align:    center;
+  margin: 2rem 0;
+}
+
+.prose hr.ornamental::before {
+  content:        '· · ·';
+  color:          var(--fg-dim);
+  letter-spacing: 0.5em;
+  font-size:      14px;
 }
 
 @media (max-width: 767px) {
@@ -203,7 +203,6 @@ time {
 
   .prose mark{
     padding:.1em 0.2em;
-    font-size:14px
   }
 
   .prose small{
@@ -216,20 +215,6 @@ time {
 
   .prose hr {
     margin: 2rem 0;
-  }
-
-  .prose dl {
-    @apply text-body-14;
-    margin: 1.25rem 0;
-    gap: 0.5rem;
-  }
-
-  .prose dt {
-    margin-bottom: 0.15rem;
-  }
-
-  .prose dd {
-    padding-left: 0.75rem;
   }
 
   .prose address {
@@ -251,21 +236,10 @@ time {
 
   .prose mark{
     padding:.1em 0.25em;
-    font-size:14px
   }
 
   .prose small{
     @apply text-overline-12;
-  }
-
-  .prose dl {
-    @apply text-body-14;
-    margin: 1.5rem 0;
-    gap: 0.75rem;
-  }
-
-  .prose dd {
-    padding-left: 1rem;
   }
 
   .prose address {

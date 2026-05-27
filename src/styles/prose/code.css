@@ -12,9 +12,16 @@
 .prose h1 code,
 .prose h2 code,
 .prose h3 code,
+.prose h4 code
 .prose summary code {
-  font-size: 0.9em;
-  background-color: var(--prose-code-bg);
+  background:  transparent;
+  border:      none;
+  padding:     0;
+  color:       inherit;
+}
+
+.prose a code {
+  color: inherit;
 }
 
 .prose pre {
@@ -35,7 +42,55 @@
 }
 .prose pre::-webkit-scrollbar-thumb {
   background: var(--prose-border);
-  border-radius: 2px;
+  border-radius: var(--radius-full);
+}
+
+.prose pre[data-lang]::before {
+  content:        attr(data-lang);
+  position:       absolute;
+  top:            10px;
+  right:          14px;
+  font-family:    var(--font-mono);
+  font-size:      10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color:          var(--prose-code-string);
+  pointer-events: none;
+  user-select:    none;
+}
+
+.prose pre.line-numbers {
+  padding-left: 52px;
+  counter-reset: line;
+}
+
+.prose pre.line-numbers code > .line::before {
+  counter-increment: line;
+  content:           counter(line);
+  display:           inline-block;
+  width:             28px;
+  margin-left:       -36px;
+  margin-right:      16px;
+  text-align:        right;
+  color:             var(--prose-code-number);
+  user-select:       none;
+  font-size:         0.85em;
+}
+
+.prose pre .highlighted {
+  background:   rgba(255, 255, 255, 0.06);
+  display:      block;
+}
+
+/* Diff lines */
+.prose pre .diff-add {
+  background: rgba(61, 214, 140, 0.08);
+  display:    block;
+}
+
+.prose pre .diff-remove {
+  background: rgba(242, 85, 90, 0.08);
+  display:    block;
 }
 
 .prose pre code {

@@ -1,37 +1,37 @@
 /* src/styles/prose/components/link.css */
 .prose a {
-  color: var(--prose-accent-dim);
-  font-weight: 600;
-  text-decoration: none;
-  outline-offset: 2px;
-  -webkit-tap-highlight-color: transparent;
-  transition: color var(--prose-transition), text-decoration-color var(--prose-transition);
+  color:                     var(--prose-link-color);
+  text-decoration:           none;
+  text-underline-offset:     var(--prose-link-decoration-offset);
+  text-decoration-thickness: var(--prose-link-decoration-thickness);
+  text-decoration-color:     var(--prose-link-decoration-color);
+  transition:
+    color                    var(--duration) var(--ease-out),
+    text-decoration-color    var(--duration) var(--ease-out),
+    opacity                  var(--duration) var(--ease-out);
 }
 
-.prose a:visited {
-  color: var(--prose-accent-dim);
+.prose a:hover {
+  text-decoration:           var(--prose-link-decoration);
+  color:                   var(--prose-link-hover-color);
+  text-decoration-color:   var(--prose-link-hover-decoration-color);
+  opacity:                 1;
+}
+
+
+.prose a:active {
+  text-decoration:           var(--prose-link-decoration);
+  text-decoration-color: var(--prose-link-hover-color);
+  text-underline-offset: var(--prose-link-decoration-offset);
+  text-decoration-thickness: var(--prose-link-decoration-thickness);
 }
 
 .prose a:focus-visible {
-  outline: 2px solid var(--prose-accent);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
-  border-radius: var(--prose-radius-sm);
+  border-radius: var(--radius-sm);
   text-decoration: underline;
-  text-decoration-color: var(--prose-accent);
-  text-underline-offset: 3px;
-  text-decoration-thickness: 1px;
-}
-
-@media (hover: hover) {
-  .prose a:hover {
-    color: var(--prose-accent);
-    text-decoration: none;
-  }
-}
-
-.prose a:active {
-  text-decoration: underline;
-  text-decoration-color: var(--prose-accent);
+  text-decoration-color: var(--accent);
   text-underline-offset: 3px;
   text-decoration-thickness: 1px;
 }
@@ -45,7 +45,7 @@
 }
 
 .prose .inline-link:hover {
-  color: var(--prose-accent);
+  color: var(--accent);
   text-decoration: none;
 }
 
