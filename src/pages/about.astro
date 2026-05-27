@@ -1,33 +1,55 @@
 ---
 // src/pages/about/index.astro
-import { siteConfig } from "@/config/site";
-import BaseLayout from "@/layouts/BaseLayout.astro";
+import { SITE, ROUTES, SOCIAL, buildMeta, schemaWebPage, schemaOrganization, schemaBreadcrumb } from "@/consts";
+
+import Layout from "@/layouts/Layout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+
 import Button from "@/components/ui/Button.astro";
-import SocialLinks from "@/components/ui/SocialLinks.astro";
-import Breadcrumb from "@/components/ui/Breadcrumb.astro";
 import Icon from "@/components/ui/Icon";
 
-const siteData = siteConfig;
-const social = siteData.social;
-const email = siteData.siteMail;
-const homeLabel = siteData.home;
-
-const pageTitle = 'About';
-const pageDesc = siteConfig.defaultSeo.description;
+const pageTitle = "Tentang";
+const pageDesc = SITE.description;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
 
-const SeoBreadcrumbItems = [
-  { name: homeLabel, item: '/'},
-  { name: pageTitle, item: canonicalURL }
+const meta = buildMeta({
+  title: pageTitle,
+  description: pageDesc,
+  canonical: canonicalURL,
+});
+
+const schemas = [
+  schemaWebPage({
+    title: pageTitle,
+    description: pageDesc,
+    url: canonicalURL,
+  }),
+  schemaOrganization,
+  schemaBreadcrumb([
+    { name: "Home", url: SITE.url },
+    { name: pageTitle, url: canonicalURL },
+  ]),
 ];
 
-const BreadcrumbsItems = SeoBreadcrumbItems.filter(
-  (item) => 
-    item.name === homeLabel ||
-    item.name === pageTitle
-);
+const topics = [
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M13 4.05493C17.5 4.55237 21 8.36745 21 13V22H3V13C3 8.36745 6.50005 4.55237 11 4.05493V1H13V4.05493ZM19 20V13C19 9.13401 15.866 6 12 6C8.13401 6 5 9.13401 5 13V20H19ZM12 18C9.23858 18 7 15.7614 7 13C7 10.2386 9.23858 8 12 8C14.7614 8 17 10.2386 17 13C17 15.7614 14.7614 18 12 18ZM12 16C13.6569 16 15 14.6569 15 13C15 11.3431 13.6569 10 12 10C10.3431 10 9 11.3431 9 13C9 14.6569 10.3431 16 12 16ZM12 14C11.4477 14 11 13.5523 11 13C11 12.4477 11.4477 12 12 12C12.5523 12 13 12.4477 13 13C13 13.5523 12.5523 14 12 14Z"></path></svg>`,
+    label: "AI & automation",
+    desc: "Tools that change how we work",
+  },
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M6 21.5C4.067 21.5 2.5 19.933 2.5 18C2.5 16.067 4.067 14.5 6 14.5C7.5852 14.5 8.92427 15.5539 9.35481 16.9992L15 16.9994V15L17 14.9994V9.24339L14.757 6.99938H9V9.00003H3V3.00003H9V4.99939H14.757L18 1.75739L22.2426 6.00003L19 9.24139V14.9994L21 15V21H15V18.9994L9.35499 19.0003C8.92464 20.4459 7.58543 21.5 6 21.5ZM6 16.5C5.17157 16.5 4.5 17.1716 4.5 18C4.5 18.8285 5.17157 19.5 6 19.5C6.82843 19.5 7.5 18.8285 7.5 18C7.5 17.1716 6.82843 16.5 6 16.5ZM19 17H17V19H19V17ZM18 4.58581L16.5858 6.00003L18 7.41424L19.4142 6.00003L18 4.58581ZM7 5.00003H5V7.00003H7V5.00003Z"></path></svg>`,
+    label: "Digital workflows",
+    desc: "Systems for modern creators",
+  },
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4H9V6H15V4H17V2H19V6H17V8H19V10H23V16H21V12H20V18H17V20H19V22H15V18H9V22H5V20H7V18H4V12H3V16H1V10H5V8H7V6H5V2H7V4ZM9 10H7V12H6V16H18V12H17V10H15V8H9V10ZM11 14H9V11H11V14ZM15 14H13V11H15V14Z"></path></svg>`,
+    label: "Music & culture",
+    desc: "Anime, games, and more",
+  },
+];
 
 const stack = [
   {
@@ -57,126 +79,92 @@ const stack = [
   },
 ];
 
-const topics = [
-  {
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M13 4.05493C17.5 4.55237 21 8.36745 21 13V22H3V13C3 8.36745 6.50005 4.55237 11 4.05493V1H13V4.05493ZM19 20V13C19 9.13401 15.866 6 12 6C8.13401 6 5 9.13401 5 13V20H19ZM12 18C9.23858 18 7 15.7614 7 13C7 10.2386 9.23858 8 12 8C14.7614 8 17 10.2386 17 13C17 15.7614 14.7614 18 12 18ZM12 16C13.6569 16 15 14.6569 15 13C15 11.3431 13.6569 10 12 10C10.3431 10 9 11.3431 9 13C9 14.6569 10.3431 16 12 16ZM12 14C11.4477 14 11 13.5523 11 13C11 12.4477 11.4477 12 12 12C12.5523 12 13 12.4477 13 13C13 13.5523 12.5523 14 12 14Z"></path></svg>`,
-    label: "AI & automation",
-    desc: "Tools that change how we work",
-  },
-  {
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M6 21.5C4.067 21.5 2.5 19.933 2.5 18C2.5 16.067 4.067 14.5 6 14.5C7.5852 14.5 8.92427 15.5539 9.35481 16.9992L15 16.9994V15L17 14.9994V9.24339L14.757 6.99938H9V9.00003H3V3.00003H9V4.99939H14.757L18 1.75739L22.2426 6.00003L19 9.24139V14.9994L21 15V21H15V18.9994L9.35499 19.0003C8.92464 20.4459 7.58543 21.5 6 21.5ZM6 16.5C5.17157 16.5 4.5 17.1716 4.5 18C4.5 18.8285 5.17157 19.5 6 19.5C6.82843 19.5 7.5 18.8285 7.5 18C7.5 17.1716 6.82843 16.5 6 16.5ZM19 17H17V19H19V17ZM18 4.58581L16.5858 6.00003L18 7.41424L19.4142 6.00003L18 4.58581ZM7 5.00003H5V7.00003H7V5.00003Z"></path></svg>`,
-    label: "Digital workflows",
-    desc: "Systems for modern creators",
-  },
-  {
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4H9V6H15V4H17V2H19V6H17V8H19V10H23V16H21V12H20V18H17V20H19V22H15V18H9V22H5V20H7V18H4V12H3V16H1V10H5V8H7V6H5V2H7V4ZM9 10H7V12H6V16H18V12H17V10H15V8H9V10ZM11 14H9V11H11V14ZM15 14H13V11H15V14Z"></path></svg>`,
-    label: "Music & culture",
-    desc: "Anime, games, and more",
-  },
-];
-
-const seoData = {
-  title: pageTitle,
-  description: pageDesc,
-  type: "website" as const,
-  canonicalURL,
-  breadcrumbItems: SeoBreadcrumbItems
-};
+const email = SITE.email;
 ---
 
-<BaseLayout {...seoData}>
+<Layout {meta} schema={schemas}>
   <Section size="lg">
     <Container size="lg">
-      <Section size="sm">
-        <div class="flex items-center justify-start">
-          <Breadcrumb items={BreadcrumbsItems} />
-        </div>
-      </Section>
-      <Section size="sm">
-        <div class="items-start">
-          <div>
-            <h1 class="text-heading-24 md:text-heading-32 lg:text-heading-56 justify-start text-balance mb-4">
-              A creative portal for the age of automation.
-            </h1>
-            <p class="text-body-16 lg:text-body-18 text-muted max-w-md text-pretty">
-              {siteConfig.siteName} is a space for exploring how modern creators navigate digital workflows, AI tools, and the broader culture around building things on the web.
-            </p>
-            <p class="text-body-16 lg:text-body-18 text-muted text-pretty max-w-xl">
-              From productivity systems to music, anime, and games — this is where those worlds intersect.
-            </p>
-          </div>
-        </div>
-        <Section size="sm">
-          <Button href="/contact" variant="primary" size="md">
-            Get in touch
-          </Button>
-        </Section>
-      </Section>
-      <Section size="sm">
-        <p class="text-overline-12 text-subtle mb-5">What we cover</p>
-        <div class="grid grid-cols-1 sm:grid-cols-3 border border-(--border) rounded-xl">
+      <div class="mb-8">
+        <Breadcrumb
+          items={[
+            { name: "Beranda", url: ROUTES.home },
+            { name: "Tentang", url: canonicalURL },
+          ]}
+        />
+      </div>
+      <div class="max-w-2xl">
+        <h1 class="text-heading-32 md:text-heading-40 lg:text-heading-56 font-bold text-balance mb-6">
+          A creative portal for the age of automation.
+        </h1>
+        <p class="text-body-16 md:text-body-18 text-(--fg-muted) max-w-xl text-pretty mb-4">
+          {SITE.name} is a space for exploring how modern creators navigate digital workflows, AI tools, and the broader culture around building things on the web.
+        </p>
+        <p class="text-body-16 md:text-body-18 text-(--fg-muted) text-pretty max-w-xl mb-8">
+          From productivity systems to music, anime, and games — this is where those worlds intersect.
+        </p>
+        <Button href={ROUTES.contact} variant="accent" size="md">
+          Get in touch
+        </Button>
+      </div>
+      <div class="mt-16 md:mt-20">
+        <p class="text-overline-12 text-(--fg-muted) mb-6 uppercase tracking-widest">
+          What we cover
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-px bg-(--border) rounded-(--radius-md) overflow-hidden">
           {topics.map(({ icon, label, desc }, i) => (
-            <div
-              class:list={[
-                "bg-(--bg-subtle)/20 p-4",
-                i !== topics.length - 1 && "border-b border-(--border)",
-                "sm:border-b-0",
-                i !== 0 && "sm:border-l",
-                "sm:border-(--border)",
-              ]}
-            >
-              <span
-                class="text-muted mb-3 block h-5 w-5"
-                set:html={icon}
-                aria-hidden="true"
-              />
-              <p class="text-label-14 mb-1 text-(--fg)">
-                {label}
-              </p>
-              <p class="text-body-13 text-muted">
-                {desc}
-              </p>
+            <div class="bg-(--bg-subtle) p-6 flex flex-col gap-3 group hover:bg-(--bg-muted) transition-colors">
+              <span class="text-(--fg-muted) w-5 h-5" set:html={icon} aria-hidden="true" />
+              <div>
+                <p class="text-label-14 font-semibold text-(--fg) mb-1">{label}</p>
+                <p class="text-body-13 text-(--fg-muted)">{desc}</p>
+              </div>
             </div>
           ))}
         </div>
-      </Section>
-      <Section size="sm">
-        <p class="text-overline-12 text-subtle mb-5">Built with</p>
+      </div>
+      <div class="mt-16 md:mt-20">
+        <p class="text-overline-12 text-(--fg-muted) mb-6 uppercase tracking-widest">
+          Built with
+        </p>
         <div class="marquee-root">
           <div class="marquee-track">
             {[...stack, ...stack].map(({ name, description, icon }) => (
-              <div class="marquee-item rounded-xl border border-(--border)" style="background: var(--bg-subtle);">
-                <span class="marquee-icon text-muted" set:html={icon} />
+              <div class="marquee-item rounded-(--radius-md) border border-(--border) bg-(--bg-subtle) hover:border-(--accent) transition-colors">
+                <span class="marquee-icon text-(--fg-muted)" set:html={icon} />
                 <div>
                   <p class="text-label-13 text-(--fg) mb-1">{name}</p>
-                  <p class="text-caption-11 text-subtle">{description}</p>
+                  <p class="text-caption-11 text-(--fg-muted)">{description}</p>
                 </div>
               </div>
             ))}
           </div>
         </div>
-      </Section>
-      <Section size="sm">
-        <div class="flex items-center justify-between gap-4 flex-wrap">
-          <a
-            href={`mailto:${email}`}
-            class="flex items-center text-body-13 text-subtle hover:text-(--fg) transition-colors duration-150 gap-2">
-            <Icon name="email" className="w-4 h-4" />
-            {email}
-          </a>
-          <div class="flex items-center gap-3">
-            <SocialLinks
-              items={social}
-              class="flex items-center gap-1"
-              showLabel
-              iconClass="h-4 w-4 text-muted hover:text-(--fg) active:text-(--fg) transition-colors duration-150"
-            />
-          </div>
+      </div>
+      <div class="mt-16 md:mt-20 border-t border-(--border) pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <a
+          href={`mailto:${email}`}
+          class="flex items-center gap-2 text-body-14 text-(--fg-muted) hover:text-(--accent) transition-colors">
+          <Icon name="email" class="w-4 h-4" />
+          {email}
+        </a>
+        <div class="flex items-center gap-4">
+          {SOCIAL.map((s) => (
+            <a
+              href={s.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-body-14 text-(--fg-muted) hover:text-(--accent) transition-colors"
+              aria-label={s.name}
+            >
+              {s.name}
+            </a>
+          ))}
         </div>
-      </Section>
+      </div>
     </Container>
   </Section>
-</BaseLayout>
+</Layout>
 
 <style>
   .marquee-root {
