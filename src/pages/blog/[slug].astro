@@ -7,8 +7,16 @@ import {
 } from "astro:content";
 
 import { 
-  SITE, AUTHOR, ROUTES, CATEGORIES, 
-  buildMeta, schemaArticle, schemaBreadcrumb, schemaPerson 
+  SITE, 
+  AUTHOR, 
+  ROUTES, 
+  CATEGORIES, 
+  buildMeta, 
+  schemaArticle, 
+  schemaNewsArticle,
+  schemaHowTo,
+  schemaBreadcrumb, 
+  schemaPerson 
 } from "@/consts";
 
 import { slugify } from "@/lib/utils";
@@ -34,7 +42,7 @@ export async function getStaticPaths() {
 }
 
 const { post, allPosts } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 
 const authorEntry = await getEntry(post.data.author);
 const canonicalURL = new URL(Astro.url.pathname, SITE.url).href;
@@ -63,6 +71,9 @@ const mainImage = post.data.seo?.ogImage || post.data.heroImage?.src || SITE.ogI
 const datePub = post.data.pubDate.toISOString();
 const dateMod = (post.data.updatedDate ?? post.data.pubDate).toISOString();
 
+const isNews = Category.slug === 'news';
+const isHowTo = ['tutorial', 'workflow', 'tips'].includes(Category.slug);
+
 const meta = buildMeta({
   title: post.data.seo?.title || post.data.title,
   description: post.data.seo?.description || post.data.description,
@@ -75,7 +86,7 @@ const meta = buildMeta({
   keywords: post.data.tags,
 });
 
-const articleSchema = schemaArticle({
+const schemaData = {
   title: post.data.title,
   description: post.data.description,
   url: canonicalURL,
@@ -86,10 +97,36 @@ const articleSchema = schemaArticle({
   authorUrl: new URL(`/author/${Author.slug}`, SITE.url).href,
   category: Category.name,
   tags: post.data.tags,
-});
+};
+
+let activeArticleSchema;
+
+if (isNews) {
+  activeArticleSchema = schemaNewsArticle(schemaData);
+} else if (isHowTo) {
+  const extractedSteps = headings
+    .filter(heading => heading.depth === 2 || heading.depth === 3)
+    .map((heading) => ({
+      name: heading.text,
+      text: heading.text,
+      url: `${canonicalURL}#${heading.slug}`
+    }));
+
+  if (extractedSteps.length > 0) {
+    activeArticleSchema = schemaHowTo({
+      ...schemaData,
+      name: schemaData.title,
+      steps: extractedSteps
+    });
+  } else {
+    activeArticleSchema = schemaArticle(schemaData);
+  }
+} else {
+  activeArticleSchema = schemaArticle(schemaData);
+}
 ---
 
-<Layout {meta} schema={[articleSchema, schemaBreadcrumb([
+<Layout {meta} schema={[activeArticleSchema, schemaBreadcrumb([
     { name: "Beranda", url: SITE.url },
     { name: "Blog", url: new URL(ROUTES.blog, SITE.url).href },
     { name: Category.name, url: new URL(`${ROUTES.blog}/category/${Category.slug}`, SITE.url).href },
@@ -102,7 +139,7 @@ const articleSchema = schemaArticle({
     description: authorEntry?.data?.bio,
     sameAs: Author.handle ? [`https://twitter.com/${Author.handle.replace('@', '')}`] : undefined,
 })]}>
-  <Section size="md">
+  <Section size="sm">
     <Section size="sm">
       <Container size="md">
         <Breadcrumb
