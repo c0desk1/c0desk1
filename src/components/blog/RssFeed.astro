@@ -2,7 +2,7 @@
 // src/components/blog/RssFeed.astro
 import { siteConfig } from "@/config/site";
 import Icon from "../ui/Icon";
-import Button from "../ui/Button.astro";
+import Link from "../ui/Link.astro";
 
 interface Props {
   class?: string;
@@ -32,9 +32,7 @@ const rssURL = `${siteURL}/rss.xml`;
       {"Dapatkan postingan baru di pembaca Anda."}
     </p>
   </div>
-  <Button variant="primary" size="sm" class="border-(--accent) text-(--accent) hover:bg-(--accent) hover:text-(--fg-inverted) transition-colors shrink-0">
-    <a href={rssURL} target="_blank" rel="noopener noreferrer" class="text-button-14 whitespace-nowrap">
-      Buka
-    </a>
-  </Button>
+  <Link href={rssURL} variant="noir" size="sm">
+    Buka
+  </Link>
 </div>

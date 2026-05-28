@@ -3,11 +3,11 @@
 import Container from "./ui/Container.astro";
 import Logo from "./ui/Logo.astro";
 import DesktopNav from "./layout/DesktopNav.astro";
-import SearchButton from "./ui/SearchButton.astro";
+import Search from "./Search.astro";
 import MenuButton from "./ui/MenuButton.astro";
 ---
 
-<header id="main-header" class="sticky top-0 z-50 mx-auto w-full">
+<header id="main-header" class="fixed top-0 z-50 mx-auto w-full">
   <Container size="xl">
     <div class="relative flex items-center h-(--header-height)">
       <div class="flex items-center shrink-0">
@@ -17,7 +17,7 @@ import MenuButton from "./ui/MenuButton.astro";
         <DesktopNav />
       </div>
       <div class="ml-auto flex items-center gap-2 lg:gap-3 order-3">
-        <SearchButton />
+        <Search />
         <MenuButton />
       </div>
     </div>

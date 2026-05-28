@@ -51,7 +51,7 @@ const footerSections = NAV.footerSections;
   <Section size="none" class="border-t border-(--border)">
     <Container size="xl">
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4 py-4">
-        <div class="footer-logo">
+        <div class="footer-logo flex flex-col sm:flex-row">
           <div class="w-5 h-5 flex items-center justify-center shrink-0">
             <Image
               src={ORG.logo}
@@ -64,8 +64,8 @@ const footerSections = NAV.footerSections;
             />
           </div>
           {SITE.name}
-          <p class="footer-copy">
-            &copy; {new Date().getFullYear()} {SITE.name}. All rights reserved.
+          <p class="footer-copy text-label-12">
+            &copy; {new Date().getFullYear()}. All rights reserved.
           </p>
         </div>
         <ThemeToggle />
@@ -125,7 +125,6 @@ const footerSections = NAV.footerSections;
   }
 
   .footer-logo {
-    display: flex;
     align-items: center;
     gap: 10px;
     font-size: 14px;
@@ -135,9 +134,6 @@ const footerSections = NAV.footerSections;
   }
 
   .footer-copy {
-    font-family: 'DM Mono', monospace;
-    font-size: 13px;
     color: var(--fg-muted);
-    letter-spacing: 0.08em;
   }
 </style>

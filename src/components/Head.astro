@@ -2,6 +2,7 @@
 // src/components/Head.astro
 
 import "@/styles/global.css";
+
 import { Font } from "astro:assets";
 import {
   SITE,
@@ -143,8 +144,9 @@ const faviconBase = "/favicon";
   <meta name="twitter:image"       content={twitterImage} />
   <meta name="twitter:image:alt"   content={twitterImageAlt} />
 
-  <link rel="icon"                href={`${faviconBase}/favicon.ico`}               sizes="any" />
   <link rel="icon"                href={`${faviconBase}/icon.svg`}                  type="image/svg+xml" />
+  <link rel="icon"                href={`${faviconBase}/favicon.ico`}               sizes="any" />
+  <link rel="icon"                href={`${faviconBase}/favicon.svg`}               sizes="any"     type="image/svg+xml" />
   <link rel="icon"                href={`${faviconBase}/favicon-16x16.png`}         sizes="16x16"   type="image/png" />
   <link rel="icon"                href={`${faviconBase}/favicon-32x32.png`}         sizes="32x32"   type="image/png" />
   <link rel="icon"                href={`${faviconBase}/favicon-48x48.png`}         sizes="48x48"   type="image/png" />
@@ -173,7 +175,6 @@ const faviconBase = "/favicon";
     href={`${SITE.url}/feed.json`}
   />
 
-  <link rel="preconnect"    href="https://fonts.googleapis.com" />
   <link rel="preconnect"    href="https://fonts.gstatic.com"    crossorigin />
   <link rel="dns-prefetch"  href="https://fonts.googleapis.com" />
   <link rel="dns-prefetch"  href="https://www.googletagmanager.com" />
@@ -200,6 +201,5 @@ const faviconBase = "/favicon";
       set:html={jsonLd}
     />
   )}
-
   <slot />
 </head>

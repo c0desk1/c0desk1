@@ -1,0 +1,18 @@
+---
+// src/components/ui/SearchTrigger.astro
+---
+<form action="/search" method="GET" class="flex items-center">
+  <div class="relative">
+    <input 
+      type="search" 
+      name="q" 
+      placeholder="Cari..." 
+      class="w-40 bg-transparent border border-(--border) rounded-full px-3 py-1.5 pl-8 text-caption-12 text-(--fg) placeholder:text-(--fg-dim) outline-none focus:border-(--accent) focus:w-56 transition-all duration-300"
+      aria-label="Cari artikel"
+    />
+    <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-(--fg-dim)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"></circle>
+      <path d="m21 21-4.3-4.3"></path>
+    </svg>
+  </div>
+</form>

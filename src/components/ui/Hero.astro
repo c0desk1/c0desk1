@@ -2,7 +2,8 @@
 // src/components/ui/hero.astro
 import { SITE } from '@/consts';
 import Container from './Container.astro';
-import Button from './Button.astro';
+import Link from './Link.astro';
+import Section from './Section.astro';
 
 export interface Props {
   title?: string;
@@ -14,36 +15,39 @@ export interface Props {
 
 const { title, subTitle, description, cta, cta2 } = Astro.props;
 ---
-
-<section class="hero">
-  <Container size="xl">
-    <p class="hero-tag">{SITE.tagline}</p>
-    <h1 class="hero-title text-heading-32 lg:text-heading-56">
-      {title}<span>{subTitle}</span>
-    </h1>
-    <p class="hero-sub text-body-14">
+<Container size="xl">
+  <Section size="none" class="hero">
+    <p class="text-mono-label-13 text-subtle uppercase mb-4 font-semibold text-start sm:text-center hero-tag">{SITE.tagline}</p>
+    <div class="flex items-center justify-start sm:justify-center">
+      <h1 class="flex flex-wrap hero-title text-heading-32 lg:text-heading-56 font-extrabold mb-6">
+        {title}<span>{subTitle}</span>
+      </h1>
+    </div>
+    <p class="hero-sub text-body-16 lg:text-body-18 text-start sm:text-center text-pretty text-muted mb-6 mx-auto max-w-xl">
       {description}
     </p>
-    <div class="hero-cta">
+    <div class="hero-cta flex items-center justify-start sm:justify-center gap-6">
       {cta && (
-        <Button 
-          variant='primary'
+        <Link 
+          href={cta.href}
+          variant="noir"
           size='lg'
           class="text-button-14">
-          <a href={cta.href}>{cta.label}</a>
-        </Button>
+          {cta.label}
+        </Link>
       )}
       {cta2 && (
-        <Button 
+        <Link 
+          href={cta2.href}
           variant='secondary'
           size='lg'
           class="text-button-14">
-          <a href={cta2.href}>{cta2.label}</a>
-        </Button>
+          {cta2.label}
+        </Link>
       )}
     </div>
-  </Container>
-</section>
+  </Section>
+</Container>
 
 <style is:global>
   .hero {
@@ -61,10 +65,10 @@ const { title, subTitle, description, cta, cta2 } = Astro.props;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 600px;
-    height: 600px;
+    width: 500px;
+    height: 500px;
     border-radius: 50%;
-    border: 1px solid rgba(255,255,255,0.04);
+    border: 2px solid rgba(255,255,255,0.04);
     pointer-events: none;
   }
 
@@ -75,18 +79,12 @@ const { title, subTitle, description, cta, cta2 } = Astro.props;
     left: 50%;
     transform: translate(-50%, -50%) rotate(45deg);
     width: 600px;
-    height: 1px;
+    height: 2px;
     background: rgba(255,255,255,0.04);
     pointer-events: none;
   }
 
   .hero-tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    color: var(--gray-3);
-    text-transform: uppercase;
-    margin-bottom: 32px;
     opacity: 0;
     animation: fadeUp 0.8s ease forwards;
   }
@@ -107,21 +105,11 @@ const { title, subTitle, description, cta, cta2 } = Astro.props;
   }
 
   .hero-sub {
-    margin-top: 48px;
-    max-width: 480px;
-    font-size: 16px;
-    line-height: 1.7;
-    color: var(--fg-muted);
-    font-weight: 400;
     opacity: 0;
     animation: fadeUp 0.8s ease 0.2s forwards;
   }
 
   .hero-cta {
-    margin-top: 48px;
-    display: flex;
-    gap: 16px;
-    align-items: center;
     opacity: 0;
     animation: fadeUp 0.8s ease 0.3s forwards;
   }
