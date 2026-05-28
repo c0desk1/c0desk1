@@ -11,9 +11,8 @@ type FooterSection = {
   items: NavItem[];
 };
 
-const DOMAIN = "https://unloyd.web.id";
-const LOGO = `${DOMAIN}/org/c0desk1-logo.svg`;
-const OGIMAGE = `${DOMAIN}/org/c0desk1-og.webp`;
+const LOGO = "/org/c0desk1-logo.svg"
+const OGIMAGE = "/org/c0desk1-og.webp"
 
 // SITE BASE
 export const SITE = {
