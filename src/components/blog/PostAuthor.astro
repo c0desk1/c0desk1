@@ -1,9 +1,17 @@
 ---
 // src/components/layout/PostAuthor.astro
-import { AUTHOR } from '@/consts';
 import { Image } from 'astro:assets';
+import { 
+  AUTHOR, 
+  IMAGE 
+} from '@/consts';
 
-import { cdnImage, isCdnUrl, slugify } from '@/lib/utils';
+import { 
+  cdnImage, 
+  isCdnUrl,
+  slugify 
+} from '@/lib/utils';
+
 import Contribution from './Contribution.astro';
 
 interface Props {
@@ -23,7 +31,7 @@ const Author = {
 }
 
 const optimizedAvatar = Author.avatar && isCdnUrl(Author.avatar)
-  ? cdnImage(Author.avatar, { w: 48, h: 48, q: 80 })
+  ? cdnImage(Author.avatar, { w: IMAGE.avatar.width, h: IMAGE.avatar.height, q: IMAGE.avatar.quality })
   : Author.avatar;
 
 const authorPath = `/author/${Author.slug}`;
@@ -36,8 +44,8 @@ const authorPath = `/author/${Author.slug}`;
         <Image
           src={optimizedAvatar}
           alt={Author.name}
-          width={48}
-          height={48}
+          width={IMAGE.avatar.width}
+          height={IMAGE.avatar.height}
           class="h-full w-full object-cover"
           loading="eager"
           decoding="async"
