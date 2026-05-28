@@ -1,6 +1,6 @@
 // src/pages/feed.xml.ts
 import type { APIRoute } from "astro";
-import { getCollection } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 import { SITE, AUTHOR, PAGINATION, CATEGORIES } from "@/consts";
 import { slugify } from "@/lib/utils";
 
@@ -11,28 +11,40 @@ export const GET: APIRoute = async () => {
     .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
     .slice(0, PAGINATION.postsPerFeed);
 
-  const items = sorted
-    .map((post) => {
+  const items = await Promise.all(
+    sorted.map(async (post) => {
       const slug = post.data.slug || slugify(post.data.title);
-
       const url = `${SITE.url}/blog/${slug}`;
 
-      const authorName =
-        typeof post.data.author === "string"
-          ? post.data.author
-          : (post.data.author as any)?.name || AUTHOR.name;
+      let authorName = AUTHOR.name;
+      if (post.data.author) {
+        if (typeof post.data.author === "string" && /^[a-z0-9-]+$/.test(post.data.author)) {
+          try {
+            const authorEntry = await getEntry("authors", post.data.author);
+            if (authorEntry?.data?.name) {
+              authorName = authorEntry.data.name;
+            }
+          } catch {}
+        } else if (typeof post.data.author === "object" && (post.data.author as any)?.name) {
+          authorName = (post.data.author as any).name;
+        }
+      }
 
       const pubDate = post.data.pubDate.toUTCString();
 
-      const coverImg = post.data.heroImage?.src
-        ? `<enclosure url="${post.data.heroImage.src}" type="image/jpeg" length="0"/>`
+      const imageSrc =
+        post.data.heroImage?.src ||
+        post.data.seo?.ogImage ||
+        SITE.ogImage;
+
+      const coverImg = imageSrc
+        ? `<enclosure url="${new URL(imageSrc, SITE.url).href}" type="image/jpeg" length="0"/>`
         : "";
 
       let categoryName = "Uncategorized";
       const rawCat = post.data.category as any;
       if (rawCat) {
-        const catSlug =
-          typeof rawCat === "string" ? rawCat : rawCat.slug || rawCat.id || "";
+        const catSlug = typeof rawCat === "string" ? rawCat : rawCat.slug || rawCat.id || "";
         const matched = CATEGORIES.find((c) => c.slug === catSlug);
         categoryName = matched?.label || catSlug || "Uncategorized";
       }
@@ -44,7 +56,7 @@ export const GET: APIRoute = async () => {
       <guid isPermaLink="true">${url}</guid>
       <description><![CDATA[${post.data.description}]]></description>
       <pubDate>${pubDate}</pubDate>
-      <author>${SITE.email} (${authorName})</author>
+      <author>${authorName}</author>
       <category>${categoryName}</category>
       ${
         post.data.tags
@@ -54,7 +66,7 @@ export const GET: APIRoute = async () => {
       ${coverImg}
     </item>`;
     })
-    .join("\n");
+  );
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"
@@ -67,7 +79,7 @@ export const GET: APIRoute = async () => {
     <description>${SITE.description}</description>
     <language>${SITE.lang}</language>
     <copyright>© ${new Date().getFullYear()} ${SITE.name}</copyright>
-    <managingEditor>${SITE.email} (${SITE.name})</managingEditor>
+    <managingEditor>${SITE.name} (${SITE.email})</managingEditor>
     <webMaster>${SITE.email}</webMaster>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <ttl>60</ttl>
@@ -77,7 +89,7 @@ export const GET: APIRoute = async () => {
       <title>${SITE.name}</title>
       <link>${SITE.url}</link>
     </image>
-${items}
+${items.join("\n")}
   </channel>
 </rss>`;
 
