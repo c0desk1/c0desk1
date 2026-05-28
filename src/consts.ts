@@ -70,8 +70,10 @@ export const ROUTES = {
   cookie:     "/cookie-policy",
   terms:      "/terms-of-service",
   search:     "/search",
-  sitemap:    "/sitemap.xml",
+  sitemap:    "/sitemap-index.xml",
   feed:       "/feed.xml",
+  feedAtom:   "/feed.atom",
+  feedJson:   "/feed.json",
   rss:        "/rss.xml",
   robots:     "/robots.txt",
 } as const;
@@ -175,7 +177,6 @@ export const TWITTER = {
   site:    SEO.twitterSite,
   creator: SEO.twitterCreator,
 } as const;
-
 
 export const schemaWebSite = {
   "@context":     "https://schema.org",
