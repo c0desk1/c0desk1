@@ -1,7 +1,7 @@
 ---
 // src/pages/blog/[slug].astro
 import { getCollection, render, getEntry } from "astro:content";
-import { SITE, ROUTES, buildMeta, schemaArticle, schemaBreadcrumb } from "@/consts";
+import { SITE, ROUTES, CATEGORIES, buildMeta, schemaArticle, schemaBreadcrumb } from "@/consts";
 import { slugify } from "@/lib/utils";
 import { components } from '@/components/layout/MDXComponents';
 
@@ -33,6 +33,7 @@ const currentIndex = sortedPosts.findIndex(p => p.id === post.id);
 const prevPost = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
 const nextPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
 
+// Author
 let authorData = {
   name: SITE.author?.name || 'Unloyd',
   avatar: SITE.author?.avatar || '',
@@ -51,21 +52,28 @@ if (post.data.author && /^[a-z0-9-]+$/.test(post.data.author)) {
   } catch {}
 }
 
-let categoryName = '';
-
-if (post.data.category && /^[a-z0-9-]+$/.test(post.data.category)) {
+let categoryName = 'General';
+const categorySlug = post.data.category;
+if (categorySlug) {
   try {
-    const catEntry = await getEntry(post.data.category);
-    if (catEntry) categoryName = catEntry.data.name;
-  } catch {}
-} else if (post.data.category) {
-  categoryName = post.data.category;
+    const catEntry = await getEntry(categorySlug);
+    if (catEntry?.data?.name) {
+      categoryName = catEntry.data.name;
+    } else {
+      const matched = CATEGORIES.find(c => c.slug === categorySlug);
+      if (matched) categoryName = matched.label;
+      else categoryName = String(categorySlug);
+    }
+  } catch {
+    const matched = CATEGORIES.find(c => c.slug === categorySlug);
+    if (matched) categoryName = matched.label;
+    else categoryName = String(categorySlug);
+  }
 }
 
 const { Content } = await render(post);
 
 const canonicalURL = new URL(Astro.url.pathname, SITE.url).href;
-
 const meta = buildMeta({
   title: post.data.seo?.title || post.data.title,
   description: post.data.seo?.description || post.data.description,
@@ -95,7 +103,7 @@ const articleSchema = schemaArticle({
 const breadcrumbSchema = schemaBreadcrumb([
   { name: "Beranda", url: SITE.url },
   { name: "Blog", url: `${SITE.url}/blog` },
-  { name: categoryName || "Umum", url: `${SITE.url}/blog/category/${post.data.category || 'general'}` },
+  { name: categoryName, url: `${SITE.url}/blog/category/${categorySlug || 'general'}` },
   { name: post.data.title, url: canonicalURL },
 ]);
 ---
@@ -108,8 +116,7 @@ const breadcrumbSchema = schemaBreadcrumb([
           items={[
             { name: "Beranda", url: ROUTES.home },
             { name: "Blog", url: ROUTES.blog },
-            { name: categoryName || "Umum", url: `/blog/category/${post.data.category || 'general'}` },
-            { name: post.data.title, url: canonicalURL },
+            { name: categoryName, url: `/blog/category/${categorySlug || 'general'}` },
           ]}
         />
       </Section>
@@ -120,7 +127,7 @@ const breadcrumbSchema = schemaBreadcrumb([
             title={post.data.title}
             description={post.data.description}
             pubDate={post.data.pubDate}
-            content={post.body}
+            content={post.body?.raw?.slice(0, 1000) || ''}
             authorName={authorData.name}
             authorAvatar={authorData.avatar}
             authorRole={authorData.role}
