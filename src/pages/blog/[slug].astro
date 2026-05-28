@@ -1,7 +1,21 @@
 ---
 // src/pages/blog/[slug].astro
-import { getCollection, render, getEntry } from "astro:content";
-import { SITE, AUTHOR, ROUTES, CATEGORIES, buildMeta, schemaArticle, schemaBreadcrumb } from "@/consts";
+import { 
+  getCollection, 
+  render, 
+  getEntry 
+} from "astro:content";
+
+import { 
+  SITE, 
+  AUTHOR, 
+  ROUTES, 
+  CATEGORIES, 
+  buildMeta, 
+  schemaArticle, 
+  schemaBreadcrumb 
+} from "@/consts";
+
 import { slugify } from "@/lib/utils";
 import { components } from '@/components/layout/MDXComponents';
 
@@ -10,10 +24,10 @@ import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
 import PostHeader from "@/components/blog/PostHeader.astro";
+import HeroImage from '@/components/blog/PostHeroImage.astro';
 import ShareArticle from "@/components/blog/SharePost.astro";
 import RssFeed from '@/components/blog/RssFeed.astro';
 import PostNavigation from '@/components/blog/PostNavigation.astro';
-import HeroImage from '@/components/blog/PostHeroImage.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -24,69 +38,34 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
+const { Content } = await render(post);
 
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const authorEntry = await getEntry(post.data.author);
+const categoryEntry = await getEntry(post.data.category);
+
+const canonicalURL = new URL(Astro.url.pathname, SITE.url).href;
+
 const sortedPosts = allPosts.sort(
   (a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
 );
+
+const Author = {
+  name: authorEntry?.data?.name ?? AUTHOR.name,
+  role: authorEntry?.data?.role ?? AUTHOR.role,
+  avatar: authorEntry?.data?.avatar ?? AUTHOR.avatar,
+  slug: (post.data.author as any)?.slug || (post.data.author as any)?.id || slugify(authorEntry.data.name)
+}
+
+const Category = {
+  name: categoryEntry?.data?.name ?? CATEGORIES.find(c => c.slug === (post.data.category as any)?.slug)?.label ?? 'General',
+  slug: (post.data.category as any)?.slug || (post.data.category as any)?.id || slugify(categoryEntry.data.name)
+}
+
 const currentIndex = sortedPosts.findIndex(p => p.id === post.id);
 const prevPost = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
 const nextPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
 
-let authorData = {
-  name: AUTHOR.name,
-  avatar: AUTHOR.avatar,
-  role: AUTHOR.role,
-  slug: slugify(AUTHOR.name),
-};
-
-if (post.data.author) {
-  if (typeof post.data.author === 'string' && /^[a-z0-9-]+$/.test(post.data.author)) {
-    try {
-      const authorEntry = await getEntry('authors', post.data.author);
-      if (authorEntry) {
-        authorData = {
-          name: authorEntry.data.name || authorData.name,
-          avatar: authorEntry.data.avatar || authorData.avatar,
-          role: authorEntry.data.role || authorData.role,
-          slug: post.data.author,
-        };
-      }
-    } catch {}
-  }
-  else if (typeof post.data.author === 'object' && post.data.author !== null) {
-    const ref = post.data.author as any;
-    authorData = {
-      name: ref.name || authorData.name,
-      avatar: ref.avatar || authorData.avatar,
-      role: ref.role || authorData.role,
-      slug: ref.slug || ref.id || authorData.slug,
-    };
-  }
-}
-
-let categoryName = 'General';
-const categorySlug = post.data.category;
-if (categorySlug) {
-  try {
-    const catEntry = await getEntry(categorySlug);
-    if (catEntry?.data?.name) {
-      categoryName = catEntry.data.name;
-    } else {
-      const matched = CATEGORIES.find(c => c.slug === categorySlug);
-      if (matched) categoryName = matched.label;
-      else categoryName = String(categorySlug);
-    }
-  } catch {
-    const matched = CATEGORIES.find(c => c.slug === categorySlug);
-    if (matched) categoryName = matched.label;
-    else categoryName = String(categorySlug);
-  }
-}
-
-const { Content } = await render(post);
-
-const canonicalURL = new URL(Astro.url.pathname, SITE.url).href;
 const meta = buildMeta({
   title: post.data.seo?.title || post.data.title,
   description: post.data.seo?.description || post.data.description,
@@ -95,7 +74,7 @@ const meta = buildMeta({
   ogType: 'article',
   datePublished: post.data.pubDate.toISOString(),
   dateModified: post.data.updatedDate?.toISOString(),
-  authorName: authorData.name,
+  authorName: Author.name,
   keywords: post.data.tags,
 });
 
@@ -103,11 +82,11 @@ const articleSchema = schemaArticle({
   title: post.data.title,
   description: post.data.description,
   url: canonicalURL,
-  image: post.data.seo?.ogImage || post.data.heroImage?.src || SITE.defaultImage || '',
+  image: post.data.seo?.ogImage || post.data.heroImage?.src || SITE.ogImage || '',
   datePublished: post.data.pubDate.toISOString(),
   dateModified: post.data.updatedDate?.toISOString() || post.data.pubDate.toISOString(),
-  authorName: authorData.name,
-  category: categoryName,
+  authorName: Author.name,
+  category: Category.name,
   tags: post.data.tags,
   wordCount: 0,
   readingTime: 0,
@@ -116,35 +95,35 @@ const articleSchema = schemaArticle({
 const breadcrumbSchema = schemaBreadcrumb([
   { name: "Beranda", url: SITE.url },
   { name: "Blog", url: `${SITE.url}/blog` },
-  { name: categoryName, url: `${SITE.url}/blog/category/${categorySlug || 'general'}` },
+  { name: Category.name, url: `${SITE.url}/blog/category/${Category.slug || 'General'}` },
   { name: post.data.title, url: canonicalURL },
 ]);
 ---
 
 <Layout {meta} schema={[articleSchema, breadcrumbSchema]}>
-  <Section size="md">
+  <Section size="none">
     <Container size="md">
-      <Section size="sm">
-        <Breadcrumb
-          items={[
-            { name: "Beranda", url: ROUTES.home },
-            { name: "Blog", url: ROUTES.blog },
-            { name: categoryName, url: `/blog/category/${categorySlug || 'general'}` },
-          ]}
-        />
-      </Section>
-      
-      <article id="article" class="max-w-3xl mx-auto">
+      <Breadcrumb
+        items={[
+          { name: "Blog", url: ROUTES.blog },
+          { name: Category.name, url: `${SITE.url}/blog/category/${Category.slug || 'General'}` },
+        ]}
+      />
+    </Container>
+  </Section>
+  <Section size="none">
+    <Container size="md">
+      <article id="article">
         <Section size="sm">
           <PostHeader
             title={post.data.title}
             description={post.data.description}
             pubDate={post.data.pubDate}
             content={post.body || ''}
-            authorName={authorData.name}
-            authorAvatar={authorData.avatar}
-            authorRole={authorData.role}
-            authorSlug={authorData.slug}
+            authorName={Author.name}
+            authorAvatar={Author.avatar}
+            authorRole={Author.role}
+            authorSlug={Author.slug}
             overviewItems={post.data.overview}
           />
         </Section>
@@ -152,7 +131,6 @@ const breadcrumbSchema = schemaBreadcrumb([
           <HeroImage
             image={post.data.heroImage.src}
             alt={post.data.heroImage.alt || post.data.title}
-            caption={post.data.heroImage.caption}
           />
         )}
         <Section size="sm">
@@ -161,9 +139,9 @@ const breadcrumbSchema = schemaBreadcrumb([
           </div>
         </Section>
         <Section size="sm">
-          <div class="mt-12 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+          <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
             <ShareArticle url={canonicalURL} title={post.data.title} description={post.data.description} />
-            <RssFeed class="sm:self-end" />
+            <RssFeed />
           </div>
         </Section>
         <Section size="sm">
