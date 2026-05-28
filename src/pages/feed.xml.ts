@@ -73,7 +73,7 @@ export const GET: APIRoute = async () => {
     <ttl>60</ttl>
     <atom:link href="${SITE.url}/feed.xml" rel="self" type="application/rss+xml"/>
     <image>
-      <url>${SITE.url}/favicon/favicon-96x96.png</url>
+      <url>${SITE.url}/favicon-96x96.png</url>
       <title>${SITE.name}</title>
       <link>${SITE.url}</link>
     </image>
