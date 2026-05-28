@@ -1,7 +1,7 @@
 {
   "name": "unloyd",
   "type": "module",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "engines": {
     "node": ">=22.12.0"
   },
@@ -13,16 +13,17 @@
     "generate-types": "wrangler types"
   },
   "dependencies": {
-    "@astrojs/mdx": "^5.0.6",
-    "@astrojs/react": "^5.0.5",
+    "@astrojs/mdx": "^6.0.0",
+    "@astrojs/react": "^5.0.6",
     "@astrojs/rss": "^4.0.18",
-    "@astrojs/sitemap": "^3.7.2",
+    "@astrojs/sitemap": "^3.7.3",
     "@tailwindcss/vite": "^4.2.2",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
-    "astro": "^6.3.6",
+    "astro": "^6.4.0",
     "clsx": "^2.1.1",
     "cssnano": "^7.1.9",
+    "fuse.js": "^7.3.0",
     "limax": "^4.2.3",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
