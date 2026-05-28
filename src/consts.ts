@@ -105,23 +105,29 @@ export const NAV = {
   footerSections: [
     {
       items: [
-        { label: "About", href: ROUTES.about, isExternal: false },
-        { label: "Contact Us", href: ROUTES.contact, isExternal: false },
-        { label: "Privacy Policy", href: ROUTES.privacy, isExternal: false },
-        { label: "Terms of Service", href: ROUTES.terms, isExternal: false },
-        { label: "Cookie Policy", href: ROUTES.cookie, isExternal: false },
+        { label: "Tentang", href: ROUTES.about, isExternal: false },
+        { label: "Hubungi Kami", href: ROUTES.contact, isExternal: false },
+        { label: "Kebijakan Privasi", href: ROUTES.privacy, isExternal: false },
+        { label: "Ketentuan Layanan", href: ROUTES.terms, isExternal: false },
+        { label: "Kebijakan Cookie", href: ROUTES.cookie, isExternal: false },
       ]
     }
   ] as FooterSection[],
 } as const;
 
 export const CATEGORIES = [
-  { slug: "news",     label: "News",     description: "Berita terbaru dari dunia pop culture, game, dan anime."       },
-  { slug: "game",     label: "Game",     description: "Review, preview, dan segala hal tentang video game."           },
-  { slug: "anime",    label: "Anime",    description: "Ulasan, rekomendasi, dan berita seputar anime."                },
-  { slug: "tutorial", label: "Tutorial", description: "Panduan langkah demi langkah untuk berbagai skill digital."    },
-  { slug: "modding",  label: "Modding",  description: "Dunia modding game — dari cara mulai hingga mod terbaik."      },
-  { slug: "tech",     label: "Tech",     description: "Teknologi yang relevan untuk gamer dan kreator konten."        },
+  { slug: "general",  label: "General",   description: "General articles"       },
+  { slug: "news",     label: "News",      description: "Berita terbaru dari dunia pop culture, game, anime, dan tech." },
+  { slug: "game",     label: "Game",      description: "Review, preview, dan segala hal tentang video game."           },
+  { slug: "anime",    label: "Anime",     description: "Ulasan, rekomendasi, dan berita seputar anime."                },
+  { slug: "tutorial", label: "Tutorial",  description: "Panduan langkah demi langkah untuk berbagai skill digital."    },
+  { slug: "modding",  label: "Modding",   description: "Dunia modding game — dari cara mulai hingga mod terbaik."      },
+  { slug: "tech",     label: "Tech",      description: "Teknologi yang relevan untuk gamer dan kreator konten."        },
+  { slug: "workflow", label: "Workflow",  description: "Workflow optimization, productivity, and project management."  },
+  { slug: "creator",  label: "Creator",   description: "Guide to becoming a content creator, editing tools, and content strategy." },
+  { slug: "lifestyle",label: "Lifestyle", description: "Collection of articles about lifestyle." },
+  { slug: "tips",     label: "Tips",      description: "Quick tips and tricks to increase coding productivity." },
+  { slug: "tools",    label: "Tools",     description: "A collection of tools and software to increase the productivity of digital creators." },
 ] as const;
 
 export type CategorySlug = typeof CATEGORIES[number]["slug"];
