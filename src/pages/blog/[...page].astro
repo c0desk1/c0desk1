@@ -1,9 +1,26 @@
 ---
 // src/pages/blog/[...page].astro
 import type { Page } from "astro";
-import { getCollection, type CollectionEntry } from "astro:content";
-import { SITE, ROUTES, buildMeta, schemaCollectionPage, schemaBreadcrumb } from "@/consts";
-import { getPageNums, getPageUrl, sortByDate } from "@/lib/utils";
+
+import { 
+  getCollection, 
+  type CollectionEntry 
+} from "astro:content";
+
+import { 
+  SITE, 
+  ROUTES,
+  PAGINATION,
+  buildMeta, 
+  schemaCollectionPage, 
+  schemaBreadcrumb } from "@/consts";
+
+import { 
+  getPageNums, 
+  getPageUrl, 
+  sortByDate 
+} from "@/lib/utils";
+
 import Layout from "@/layouts/Layout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
@@ -15,7 +32,7 @@ import Hero from "@/components/ui/Hero.astro";
 export async function getStaticPaths({ paginate }: { paginate: Function }) {
   const allPosts = await getCollection("blog", ({ data }) => !data.draft);
   const sortedPosts = sortByDate(allPosts);
-  return paginate(sortedPosts, { pageSize: 6 });
+  return paginate(sortedPosts, { pageSize: PAGINATION.postsPerPage });
 }
 
 interface Props {
@@ -24,28 +41,32 @@ interface Props {
 
 const { page } = Astro.props;
 
-const title = "Blog";
-const description = `Semua artikel di ${SITE.name}.`;
-const canonical = new URL(Astro.url.pathname, SITE.url).href;
-const meta = buildMeta({ title, description, canonical });
+const pageTitle = page.currentPage > 1 ? `Blog - Halaman ${page.currentPage}` : "Blog";
+const pageDesc = page.currentPage > 1 
+  ? `Semua artikel di ${SITE.name} (Halaman ${page.currentPage}).` 
+  : `Semua artikel di ${SITE.name}.`;
+
+const meta = buildMeta({ 
+  title: pageTitle,
+  description: pageDesc,
+  canonical: new URL(Astro.url.pathname, SITE.url).href 
+});
 
 const breadcrumbSchema = schemaBreadcrumb([
   { name: "Home", url: SITE.url },
-  { name: "Blog", url: `${SITE.url}/blog` },
+  { name: "Blog", url: new URL(ROUTES.blog, SITE.url).href },
 ]);
 
 const collectionSchema = schemaCollectionPage({
-  title: "Blog",
-  description: description,
-  url: canonical,
+  title: pageTitle,
+  description: pageDesc,
+  url: meta.canonical,
 });
 
 const schema = [breadcrumbSchema, collectionSchema];
 
-const heroCTA = { label: "Featured", href: "#featured" };
-const heroCTA2 = { label: "Latest", href: "#latest" };
-
 let featuredPosts: CollectionEntry<"blog">[] = [];
+
 if (page.currentPage === 1) {
   const allPosts = await getCollection("blog", ({ data }) => !data.draft && data.featured === true);
   featuredPosts = sortByDate(allPosts);
@@ -54,6 +75,9 @@ if (page.currentPage === 1) {
 const pageNums = getPageNums(page.currentPage, page.lastPage);
 const prevUrl = page.currentPage <= 1 ? undefined : getPageUrl(page.currentPage - 1);
 const nextUrl = page.currentPage >= page.lastPage ? undefined : getPageUrl(page.currentPage + 1);
+
+const heroCTA = { label: "Unggulan", href: "#featured" };
+const heroCTA2 = { label: "Terbaru.", href: "#latest" };
 ---
 
 <Layout {meta} {schema}>
@@ -61,7 +85,7 @@ const nextUrl = page.currentPage >= page.lastPage ? undefined : getPageUrl(page.
     <Hero
       title="BL"
       subTitle="OG"
-      description={description}
+      description={meta.description}
       cta={heroCTA}
       cta2={heroCTA2}
     />
@@ -94,7 +118,7 @@ const nextUrl = page.currentPage >= page.lastPage ? undefined : getPageUrl(page.
         </div>
       ) : (
         <div class="text-center py-12">
-          <p class="text-(--fg-muted) text-body-16">Belum ada postingan.</p>
+          <p class="text-muted text-body-16">Belum ada postingan.</p>
         </div>
       )}
 
