@@ -1,59 +1,31 @@
 ---
-import { siteConfig } from '@/config/site';
+import Container from "@/components/ui/Container.astro";
+import Link from "@/components/ui/Link.astro";
+import { buildMeta, ROUTES } from "@/consts";
+import Layout from "@/layouts/Layout.astro";
 
-import ErrorLayout from '@/layouts/ErrorLayout.astro';
-import Container from '@/components/ui/Container.astro';
-
-const siteData = siteConfig
-const siteURL = Astro.site?.toString() ?? siteData.siteUrl;
-
-const notFoundTitle = siteData.notFoundTitle;
-const notFoundDesc = siteData.notFoundDesc;
-const returnHomeLabel = siteData.returnHome;
-const searchArticlesLabel = siteData.searchArticles;
-const pageNotFoundLabel = siteData.pageNotFound;
-
-const seoData = {
-  title: notFoundTitle,
-  description: notFoundDesc,
-  noIndex: true,
-  type: "website" as const,
-  canonicalURL: new URL(Astro.url.pathname, siteURL).toString(),
-};
+const meta = buildMeta({
+  title: "404 - Not Found",
+  description: "Halaman tidak ditemukan.",
+});
 ---
 
-<ErrorLayout {...seoData}>
+<Layout {meta} hideHeader={true} hideFooter={true}>
   <Container size="md">
     <div class="flex flex-col items-center justify-center min-h-[80vh] text-center px-4">
-      
-      <div class="inline-flex items-center gap-2 px-2.5 py-1 mb-8 rounded-md bg-subtle border border-(--border) font-mono text-xs md:text-[13px] uppercase tracking-widest text-muted backdrop-blur-sm">
-        <span class="w-1.5 h-1.5 rounded-sm bg-(--fg)"></span>
-        404 Error
-      </div>
-
-      <h1 class="text-4xl md:text-5xl font-semibold tracking-tighter text-(--fg) mb-4">
-        {pageNotFoundLabel}
+      <h1 class="text-4xl md:text-7xl font-extrabold tracking-tighter text-strong mb-4">
+        404
       </h1>
-      
-      <p class="text-sm md:text-base text-muted max-w-100 mb-10 leading-relaxed">
-        {notFoundDesc}
+      <p class="text-body-16 text-muted mb-10 max-w-sm">
+        Halaman yang Anda cari tidak tersedia. Pastikan URL benar atau kembali ke pusat navigasi.
       </p>
-
-      <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-        <a 
-          href='/' 
-          class="w-full sm:w-auto inline-flex justify-center items-center h-10 px-6 rounded-md bg-(--fg) text-(--bg) text-sm font-medium hover:opacity-90 transition-opacity"
-        >
-          {returnHomeLabel}
-        </a>
-        <a 
-          href='/blog' 
-          class="w-full sm:w-auto inline-flex justify-center items-center h-10 px-6 rounded-md bg-transparent text-(--fg) text-sm font-medium border border-(--border) hover:border-strong transition-colors"
-        >
-          {searchArticlesLabel}
-        </a>
-      </div>
-
+      <Link 
+        href={ROUTES.home || "/"} 
+        variant="noir"
+        size="lg"
+      >
+        Kembali ke Beranda
+      </Link>
     </div>
   </Container>
-</ErrorLayout>
+</Layout>
