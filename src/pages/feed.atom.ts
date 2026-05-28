@@ -10,7 +10,7 @@ import {
 } from "@/consts";
 import { slugify } from "@/lib/utils";
 
-export const GET: APIRoute = async () => {
+export const GET: APIRoute = async (context) => {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
 
   const sorted = posts
@@ -36,25 +36,20 @@ export const GET: APIRoute = async () => {
 
     const updatedDate = post.data.pubDate.toISOString();
 
-    const imageSrc =
-      post.data.heroImage?.src ||
-      post.data.seo?.ogImage ||
-      SITE.ogImage;
-
+    const imageSrc = post.data.heroImage?.src || post.data.seo?.ogImage || SITE.ogImage;
     const coverLink = imageSrc
       ? `<link rel="enclosure" type="image/jpeg" href="${new URL(imageSrc, SITE.url).href}" />`
       : "";
 
-    const categorySlug = post.data.category;
+    const categorySlug = post.data.category || "uncategorized";
     const matchedCategory = CATEGORIES.find(c => c.slug === categorySlug);
-    const categoryName = matchedCategory ? matchedCategory.label : (categorySlug || "General");
+    const categoryName = matchedCategory ? matchedCategory.label : categorySlug;
 
     const filteredTags = post.data.tags
       ?.map((t: string) => t.trim())
       .filter(
         (t: string) => 
           t.toLowerCase() !== categorySlug.toLowerCase() && 
-          t.toLowerCase() !== categoryName.toLowerCase() &&
           t !== ""
       ) || [];
 
@@ -69,29 +64,26 @@ export const GET: APIRoute = async () => {
       ${authorXml}
     </author>
     <category term="${categorySlug}" label="${categoryName}" />
-    ${
-      filteredTags
-        ?.map((t: string) => {
-           const term = t.toLowerCase().replace(/\s+/g, '-');
-           return `<category term="${term}" label="${t}" />`;
-        })
-        .join("\n    ") || ""
-    }
-    <summary type="html"><![CDATA[${post.data.description}]]></summary>
+    ${filteredTags.map((t: string) => {
+        const term = t.toLowerCase().replace(/\s+/g, '-');
+        return `    <category term="${term}" label="${t}" />`;
+      }).join("\n")}
+    <summary type="html"><![CDATA[${post.data.description || ""}]]></summary>
     ${coverLink}
   </entry>`;
 
     entries.push(entryXml);
   }
   
-  const atomNamespace = "http://www.w3.org/2005/Atom";
+  const selfUrl = new URL(context.request.url).href;
+
   const atomXml = `<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="${atomNamespace}">
+<feed xmlns="http://www.w3.org/2005/Atom">
   <title type="text">${SITE.name}</title>
   <subtitle type="text">${SITE.description}</subtitle>
-  <id>${SITE.url}/feed.atom</id>
+  <id>${SITE.url}/</id>
   <link rel="alternate" type="text/html" hreflang="${SITE.lang}" href="${SITE.url}" />
-  <link rel="self" type="application/atom+xml" href="${SITE.url}/feed.atom" />
+  <link rel="self" type="application/atom+xml" href="${selfUrl}" />
   <rights>© ${new Date().getFullYear()} ${SITE.name}</rights>
   <updated>${new Date().toISOString()}</updated>
 ${entries.join("\n")}
