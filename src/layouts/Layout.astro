@@ -1,8 +1,15 @@
 ---
-import { SITE, buildMeta } from "@/consts";
+import { 
+  SITE, 
+  buildMeta 
+} from "@/consts";
+
 import Head     from "@/components/Head.astro";
 import Navbar   from "@/components/Navbar.astro";
 import Footer   from "@/components/Footer.astro";
+import ThemeScript from "@/components/scripts/ThemeScript.astro";
+import Mobile from "@/components/Mobile.astro";
+import ScrollScript from "@/components/scripts/ScrollScript.astro";
 
 interface Props {
   meta?:      Partial<ReturnType<typeof buildMeta>>;
@@ -30,21 +37,8 @@ const currentPath = new URL(Astro.request.url).pathname;
 <!DOCTYPE html>
 <html lang={SITE.lang} dir={SITE.dir}>
   <Head {meta} {schema} {isHome} {canonical} />
-  <body class:list={[bodyClass,]}>
-    <script is:inline>
-      (function () {
-        try {
-          var stored      = localStorage.getItem("unloyd-theme");
-          var theme = stored === "light" ? "light" : "dark";
-          var html  = document.documentElement;
-          html.classList.remove("dark", "light");
-          html.classList.add(theme);
-          html.setAttribute("data-theme", theme);
-        } catch (e) {
-          document.documentElement.classList.add("dark");
-        }
-      })();
-    </script>
+  <body class:list={[bodyClass]}>
+    <ThemeScript />
     <a
       href="#main-content"
       class="
@@ -63,12 +57,12 @@ const currentPath = new URL(Astro.request.url).pathname;
     {variant !== "bare" && (
       <Navbar currentPath={currentPath} />
     )}
+    
     <main
       id="main-content"
-      tabindex="-1"
       class:list={[
-        "min-h-[calc(100svh-var(--header-height,60px))]",
-        variant !== "bare" && "pt-(--header-height,60px)",
+        "min-h-[calc(100svh-var(--header-height))]",
+        variant !== "bare" && "pt-(--header-height)",
         variant === "full"  && "min-h-svh pt-0",
         variant === "bare"  && "min-h-svh pt-0",
         mainClass,
@@ -76,35 +70,13 @@ const currentPath = new URL(Astro.request.url).pathname;
     >
       <slot />
     </main>
+    
     {variant !== "bare" && (
       <Footer />
     )}
+    <Mobile />
+    <ScrollScript />
     <script>
-      document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((a) => {
-        a.addEventListener("click", (e) => {
-          const href   = a.getAttribute("href");
-          if (!href || href === "#") return;
-          const target = document.querySelector(href);
-          if (!target) return;
-          e.preventDefault();
-          target.scrollIntoView({ behavior: "smooth", block: "start" });
-          history.pushState(null, "", href);
-        });
-      });
-      window.addEventListener("unloyd:toggle-theme", () => {
-        const html    = document.documentElement;
-        const isDark  = html.classList.contains("dark");
-        const next    = isDark ? "light" : "dark";
-
-        html.classList.remove("dark", "light");
-        html.classList.add(next);
-        html.setAttribute("data-theme", next);
-
-        try {
-          localStorage.setItem("unloyd-theme", next);
-        } catch (_) {}
-      });
-
       let lastKey = "";
       document.addEventListener("keydown", (e) => {
         const active = document.activeElement;
