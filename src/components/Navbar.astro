@@ -4,6 +4,7 @@ import Container from "./ui/Container.astro";
 import Logo from "./ui/Logo.astro";
 import DesktopNav from "./layout/DesktopNav.astro";
 import MenuButton from "./ui/MenuButton.astro";
+import SearchBar from "./SearchBar.astro";
 ---
 
 <header id="main-header" class="fixed top-0 z-50 mx-auto w-full">
@@ -16,6 +17,7 @@ import MenuButton from "./ui/MenuButton.astro";
         <DesktopNav />
       </div>
       <div class="ml-auto flex items-center gap-2 lg:gap-3 order-3">
+        <SearchBar />
         <MenuButton />
       </div>
     </div>
