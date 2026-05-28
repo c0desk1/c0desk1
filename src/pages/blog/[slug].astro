@@ -111,9 +111,9 @@ const personSchema = schemaPerson({
     url: `${SITE.url}/author/${Author.slug}`,
     jobTitle: Author.role || undefined,
     image: Author.avatar || undefined,
-    description: authorEntry?.data?.bio || AUTHOR.bio || undefined,
+    description: authorEntry?.data?.bio || undefined,
     sameAs: sameAs.length > 0 ? sameAs : undefined,
-  }),
+  });
 ---
 
 <Layout {meta} schema={[articleSchema, breadcrumbSchema, personSchema]}>
