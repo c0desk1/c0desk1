@@ -52,6 +52,7 @@ if (post.data.author && /^[a-z0-9-]+$/.test(post.data.author)) {
 }
 
 let categoryName = '';
+
 if (post.data.category && /^[a-z0-9-]+$/.test(post.data.category)) {
   try {
     const catEntry = await getEntry(post.data.category);
@@ -112,19 +113,21 @@ const breadcrumbSchema = schemaBreadcrumb([
           ]}
         />
       </Section>
-      <Section size="sm">
+      
       <article id="article" class="max-w-3xl mx-auto">
-        <PostHeader
-          title={post.data.title}
-          description={post.data.description}
-          pubDate={post.data.pubDate}
-          content={post.body}
-          authorName={authorData.name}
-          authorAvatar={authorData.avatar}
-          authorRole={authorData.role}
-          authorSlug={post.data.author || ''}
-          overviewItems={post.data.overview}
-        />
+        <Section size="sm">
+          <PostHeader
+            title={post.data.title}
+            description={post.data.description}
+            pubDate={post.data.pubDate}
+            content={post.body}
+            authorName={authorData.name}
+            authorAvatar={authorData.avatar}
+            authorRole={authorData.role}
+            authorSlug={post.data.author || ''}
+            overviewItems={post.data.overview}
+          />
+        </Section>
         {post.data.heroImage && (
           <HeroImage
             image={post.data.heroImage.src}
@@ -138,16 +141,15 @@ const breadcrumbSchema = schemaBreadcrumb([
           </div>
         </Section>
         <Section size="sm">
-        <div class="mt-12 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-          <ShareArticle url={canonicalURL} title={post.data.title} description={post.data.description} />
-          <RssFeed class="sm:self-end" />
-        </div>
+          <div class="mt-12 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            <ShareArticle url={canonicalURL} title={post.data.title} description={post.data.description} />
+            <RssFeed class="sm:self-end" />
+          </div>
         </Section>
         <Section size="sm">
           <PostNavigation prevPost={prevPost} nextPost={nextPost} />
         </Section>
       </article>
-      </Section>
     </Container>
   </Section>
 </Layout>
