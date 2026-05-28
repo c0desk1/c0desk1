@@ -8,9 +8,12 @@ import Breadcrumb from "@/components/ui/Breadcrumb.astro";
 import Section from "@/components/ui/Section.astro";
 
 export async function getStaticPaths() {
-  const legalPages = await getCollection('legal');
+  const legalPages = await getCollection("legal");
+
   return legalPages.map((page) => ({
-    params: { slug: page.slug },
+    params: {
+      slug: page.data.slug,
+    },
     props: { page },
   }));
 }
