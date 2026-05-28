@@ -7,7 +7,12 @@ type NavItem = {
   children?: NavItem[];
 };
 
-type FooterSection = {
+type MobileNav = {
+  label: string;
+  children?: NavItem[];
+};
+
+type FooterNav = {
   items: NavItem[];
 };
 
@@ -80,30 +85,48 @@ export const ROUTES = {
 
 export const NAV = {
   navBar: [
-    { label: "Blog", href: ROUTES.blog, isExternal: false },
-    { label: "Kategori", href: `${ROUTES.blog}/category`, isExternal: false },
+    { label: "Resource", children: [
+      { label: "Blog", href: ROUTES.blog, isExternal: false },
+      { label: "Kategori", href: `${ROUTES.blog}/category`, isExternal: false },
+    ]},
     { label: "Community", 
       children: [
-        { label: "About", href: ROUTES.about, isExternal: false },
-        { label: "Contact Us", href: ROUTES.contact, isExternal: false },
-      ]
-    },
-    { 
-      label: "Tools", 
-      children: [ 
-        { label: "Adogen", href: "https://dev-adogen.bimasaktiakbarr.workers.dev", isExternal: true }
+        { label: "Tentang", href: ROUTES.about, isExternal: false },
+        { label: "Hubungi Kami", href: ROUTES.contact, isExternal: false },
       ]
     },
     {
       label: "Legal",
       children: [
-        { label: "Privacy Policy", href: ROUTES.privacy, isExternal: false },
-        { label: "Terms of Service", href: ROUTES.terms, isExternal: false },
-        { label: "Cookie Policy", href: ROUTES.cookie, isExternal: false }
+        { label: "Kebijakan Privasi", href: ROUTES.privacy, isExternal: false },
+        { label: "Ketentuan Layanan", href: ROUTES.terms, isExternal: false },
+        { label: "Kebijakan Cookie", href: ROUTES.cookie, isExternal: false }
       ]
     },
   ] as NavItem[],
-  footerSections: [
+  MobileBar: [
+    { label: "Resource", 
+      children: [
+        { label: "Blog", href: ROUTES.blog, isExternal: false },
+        { label: "Kategori", href: `${ROUTES.blog}/category`, isExternal: false },
+      ]
+    },
+    { label: "Community", 
+      children: [
+        { label: "Tentang", href: ROUTES.about, isExternal: false },
+        { label: "Hubungi Kami", href: ROUTES.contact, isExternal: false },
+      ]
+    },
+    {
+      label: "Legal",
+      children: [
+        { label: "Kebijakan Privasi", href: ROUTES.privacy, isExternal: false },
+        { label: "Ketentuan Layanan", href: ROUTES.terms, isExternal: false },
+        { label: "Kebijakan Cookie", href: ROUTES.cookie, isExternal: false }
+      ]
+    },
+  ] as MobileNav[],
+  footerBar: [
     {
       items: [
         { label: "Tentang", href: ROUTES.about, isExternal: false },
@@ -113,7 +136,7 @@ export const NAV = {
         { label: "Kebijakan Cookie", href: ROUTES.cookie, isExternal: false },
       ]
     }
-  ] as FooterSection[],
+  ] as FooterNav[],
 } as const;
 
 export const CATEGORIES = [
