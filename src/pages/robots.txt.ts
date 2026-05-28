@@ -3,6 +3,8 @@ import type { APIRoute } from "astro";
 import { SITE, ROUTES } from "@/consts";
 
 export const GET: APIRoute = () => {
+  const sitemapUrl = ROUTES.sitemap.startsWith('/') ? ROUTES.sitemap : `/${ROUTES.sitemap}`;
+  
   const content = `
 User-agent: *
 Allow: /
@@ -10,9 +12,7 @@ Allow: /
 Disallow: ${ROUTES.search}
 Disallow: /api/
 
-Crawl-delay: 1
-
-Sitemap: ${SITE.url}${ROUTES.sitemap}
+Sitemap: ${SITE.url}${sitemapUrl}
 `.trim();
 
   return new Response(content, {
