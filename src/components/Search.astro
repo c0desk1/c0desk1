@@ -1,32 +1,8 @@
 ---
-// src/components/Search.astro
-import { getCollection } from "astro:content";
-import { CATEGORIES } from "@/consts";
-import { slugify } from "@/lib/utils";
+import { ROUTES } from "@/consts";
 import Icon from "@/components/ui/Icon";
 
-const posts = await getCollection("blog", ({ data }) => !data.draft);
-
-const searchData = posts.map((post) => {
-  const autoSlug = post.data.slug || slugify(post.data.title);
-  return {
-    id: post.id,
-    title: post.data.title,
-    desc: post.data.description ?? "",
-    category: post.data.category ?? CATEGORIES[0],
-    url: `/blog/${autoSlug}`,
-  };
-});
-
-const labels = {
-  notFoundTitle: "Tidak ditemukan",
-  tryOtherKeywords: "Coba kata kunci lain",
-  searchArticlesTitle: "Cari judul postingan",
-  typeToSearch: "Ketik untuk mencari",
-  dataNotReady: "Data belum siap",
-  refreshPage: "Refresh Halaman",
-  resultsLabel: "Hasil",
-};
+const searchRoute = ROUTES.search;
 ---
 
 <div
@@ -46,21 +22,21 @@ const labels = {
       id="search-panel"
       class="w-full max-w-2xl overflow-hidden rounded-xl border border-(--border) bg-base shadow-(--shadow-lg) opacity-0 scale-95 transition-all duration-200"
     >
-      <div class="flex items-center gap-2 border-b border-(--border) px-3.5">
+      <div class="flex items-center gap-2 px-3.5">
         <Icon name="search" className="h-5 w-5 shrink-0 text-dim" />
 
         <input
           id="search-input"
           type="text"
-          placeholder="Cari..."
+          placeholder="Cari artikel..."
           aria-label="Cari postingan"
           autocomplete="off"
           spellcheck="false"
-          class="flex-1 min-w-0 border-none bg-transparent py-3.5 text-sm lg:text-base text-muted outline-none placeholder:text-dim"
+          class="flex-1 min-w-0 border-none bg-transparent py-4 text-sm lg:text-base text-muted outline-none placeholder:text-dim"
         />
         <button
           id="search-clear"
-          aria-label="Hapus pencarian"
+          aria-label="Hapus"
           tabindex="-1"
           class="hidden h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted hover:bg-muted hover:text-(--fg) transition-colors"
         >
@@ -68,7 +44,7 @@ const labels = {
         </button>
         <button
           id="search-close-mobile"
-          aria-label="Tutup pencarian"
+          aria-label="Tutup"
           class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted hover:bg-muted hover:text-(--fg) transition-colors sm:hidden"
         >
           <Icon name="close" className="h-4 w-4" />
@@ -77,132 +53,46 @@ const labels = {
           ESC
         </kbd>
       </div>
-      <div
-        id="search-results"
-        class="max-h-[55dvh] overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-(--border)"
-      ></div>
-      <div class="hidden sm:flex items-center justify-between border-t border-(--border) bg-subtle px-3.5 py-2">
-        <div class="flex items-center gap-4 text-sm text-muted">
-          <span class="flex items-center gap-1">
-            <kbd class="rounded border border-(--prose-kbd-border) bg-(--prose-kbd-bg) px-1 py-0.5 text-xs">↑↓</kbd>
-            Navigasi
-          </span>
-          <span class="flex items-center gap-1">
-            <kbd class="rounded border border-(--prose-kbd-border) bg-(--prose-kbd-bg) px-1 py-0.5 text-xs">↵</kbd>
-            Buka
-          </span>
-        </div>
-        <span id="search-count" class="text-xs text-subtle"></span>
+      <div class="flex items-center justify-between border-t border-(--border) bg-subtle px-3.5 py-2">
+        <span class="text-xs text-subtle">
+          Tekan
+          <kbd class="mx-0.5 inline-flex items-center rounded border border-(--prose-kbd-border) bg-(--prose-kbd-bg) px-1 py-0.5 text-xs">↵</kbd>
+          untuk mencari
+        </span>
+        <a
+          id="search-browse"
+          href={searchRoute}
+          class="text-xs text-(--accent) hover:underline"
+        >
+          Lihat semua artikel →
+        </a>
       </div>
     </div>
   </div>
 </div>
 
-<style is:global>
-  .sm-hl {
-    background: var(--prose-highlight-bg);
-    color: var(--prose-highlight-text);
-    border-radius: 2px;
-    padding: 0 2px;
-  }
-
-  .sritem {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-    padding: 0.625rem 0.875rem;
-    text-decoration: none;
-    transition: background 0.1s;
-  }
-  .sritem:hover,
-  .sritem.is-active {
-    background-color: var(--bg-muted);
-  }
-  .sm-empty {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.375rem;
-    padding: 3rem 1rem;
-    text-align: center;
-  }
-</style>
-
-<script define:vars={{ searchData, labels }}>
+<script define:vars={{ searchRoute }}>
   (() => {
     const $ = (id) => document.getElementById(id);
 
-    const modal     = $("search-modal");
-    const backdrop  = $("search-backdrop");
-    const panel     = $("search-panel");
-    const input     = $("search-input");
-    const results   = $("search-results");
-    const clearBtn  = $("search-clear");
-    const closeMob  = $("search-close-mobile");
-    const countEl   = $("search-count");
+    const modal    = $("search-modal");
+    const backdrop = $("search-backdrop");
+    const panel    = $("search-panel");
+    const input    = $("search-input");
+    const clearBtn = $("search-clear");
+    const closeMob = $("search-close-mobile");
 
-    if (!modal || !input || !results) return;
+    if (!modal || !input) return;
 
-    let activeIdx = -1, filtered = [], prevFocus = null, debounce;
+    let prevFocus = null;
 
-    const esc = (s) =>
-      String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
-               .replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+    const onSearchPage = () => window.location.pathname === searchRoute;
 
-    const highlight = (str, q) => {
-      if (!q) return esc(str);
-      const safe = q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-      return esc(str).replace(new RegExp(`(${safe})`, "gi"), '<mark class="sm-hl">$1</mark>');
+    const submit = () => {
+      const q = input.value.trim();
+      if (!q) return;
+      window.location.href = `${searchRoute}?q=${encodeURIComponent(q)}`;
     };
-
-    const score = (p, q) => {
-      const t = p.title.toLowerCase(), d = p.desc.toLowerCase(), c = p.category.toLowerCase();
-      if (t === q)           return 100;
-      if (t.startsWith(q))  return 80;
-      if (t.includes(q))    return 60;
-      if (d.includes(q))    return 40;
-      if (c.includes(q))    return 30;
-      let qi = 0;
-      for (let i = 0; i < t.length && qi < q.length; i++) if (t[i] === q[qi]) qi++;
-      return qi === q.length ? 10 : 0;
-    };
-
-    const emptyHTML = (title, sub, isError = false) => {
-      const icon = isError
-        ? `<svg class="w-10 h-10 text-red-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`
-        : `<svg class="w-10 h-10 text-dim mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>`;
-      return `<div class="sm-empty">${icon}
-        <p class="text-lg font-semibold text-(--fg)">${title}</p>
-        <p class="text-sm text-subtle">${sub}</p>
-      </div>`;
-    };
-
-    const renderResults = (items, q) => {
-      if (!items.length) {
-        results.innerHTML = emptyHTML(labels.notFoundTitle, labels.tryOtherKeywords);
-        if (countEl) countEl.textContent = "";
-        return;
-      }
-      if (countEl) countEl.textContent = `${items.length} ${labels.resultsLabel}`;
-      results.innerHTML = items.map((p, i) => `
-        <a href="${esc(p.url)}" data-idx="${i}" class="sritem${i === activeIdx ? " is-active" : ""}">
-          <div style="min-width:0;flex:1">
-            <div class="text-xs font-medium text-subtle mb-0.5">${esc(p.category)}</div>
-            <div class="text-sm font-semibold text-(--fg) truncate">${highlight(p.title, q)}</div>
-            <div class="text-xs text-muted line-clamp-1 mt-0.5">${highlight(p.desc, q)}</div>
-          </div>
-        </a>
-      `).join("");
-    };
-
-    const resetView = () => {
-      activeIdx = -1; filtered = [];
-      results.innerHTML = emptyHTML(labels.searchArticlesTitle, labels.typeToSearch);
-      if (countEl) countEl.textContent = "";
-    };
-
-    const setActive = (items) =>
-      items.forEach((el, i) => el.classList.toggle("is-active", i === activeIdx));
 
     const openModal = () => {
       prevFocus = document.activeElement;
@@ -211,11 +101,10 @@ const labels = {
       document.body.style.overflow = "hidden";
       requestAnimationFrame(() => {
         backdrop.style.opacity = "1";
-        panel.style.opacity   = "1";
-        panel.style.transform = "scale(1)";
+        panel.style.opacity    = "1";
+        panel.style.transform  = "scale(1)";
         input.focus();
       });
-      resetView();
     };
 
     const closeModal = () => {
@@ -229,7 +118,6 @@ const labels = {
         input.value = "";
         clearBtn?.classList.add("hidden");
         clearBtn?.classList.remove("flex");
-        resetView();
         prevFocus?.focus();
       }, 200);
     };
@@ -243,61 +131,31 @@ const labels = {
       clearBtn.classList.add("hidden");
       clearBtn.classList.remove("flex");
       input.focus();
-      resetView();
-    });
-
-    document.addEventListener("keydown", (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault();
-        modal.style.display === "none" ? openModal() : closeModal();
-        return;
-      }
-      if (e.key === "Escape" && modal.style.display !== "none") {
-        e.preventDefault(); closeModal();
-      }
     });
 
     input.addEventListener("input", () => {
       const q = input.value.trim();
       clearBtn?.classList.toggle("hidden", !q);
       clearBtn?.classList.toggle("flex", !!q);
-      clearTimeout(debounce);
-      debounce = setTimeout(() => {
-        if (!q) { resetView(); return; }
-        const ql = q.toLowerCase();
-        filtered = searchData
-          .map((p) => ({ ...p, _score: score(p, ql) }))
-          .filter((p) => p._score > 0)
-          .sort((a, b) => b._score - a._score)
-          .slice(0, 8);
-        activeIdx = -1;
-        renderResults(filtered, ql);
-      }, 80);
     });
 
     input.addEventListener("keydown", (e) => {
-      const items = results.querySelectorAll(".sritem");
-      if (!items.length) return;
-      if (e.key === "ArrowDown") {
-        e.preventDefault(); activeIdx = (activeIdx + 1) % items.length;
-      } else if (e.key === "ArrowUp") {
-        e.preventDefault(); activeIdx = (activeIdx - 1 + items.length) % items.length;
-      } else if (e.key === "Enter" && activeIdx >= 0) {
-        e.preventDefault(); items[activeIdx]?.click(); return;
-      } else return;
-      setActive(items);
-      items[activeIdx]?.scrollIntoView({ block: "nearest" });
+      if (e.key === "Enter") { e.preventDefault(); submit(); }
     });
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const q = new URLSearchParams(window.location.search).get("q");
-      if (!q) return;
-      setTimeout(() => {
-        openModal();
-        input.value = q;
-        input.dispatchEvent(new Event("input", { bubbles: true }));
-        history.replaceState({}, "", window.location.pathname);
-      }, 100);
+    document.addEventListener("keydown", (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        if (onSearchPage()) {
+          document.getElementById("search-input")?.focus();
+          return;
+        }
+        modal.style.display === "none" ? openModal() : closeModal();
+        return;
+      }
+      if (e.key === "Escape" && modal.style.display !== "none") {
+        e.preventDefault(); closeModal();
+      }
     });
   })();
 </script>
