@@ -22,8 +22,9 @@ import SearchBar from "./SearchBar.astro";
       </div>
     </div>
   </Container>
-  <div class="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-(--border) to-transparent opacity-0 transition-opacity duration-300" id="header-border"></div>
+  <div class="absolute bottom-0 left-0 right-0 h-px bg-(--border) opacity-0 transition-opacity duration-300" id="header-border"></div>
 </header>
+<div class="h-(--header-height) hidden" aria-hidden="true"></div>
 
 <style is:global>
   #main-header {
