@@ -36,6 +36,7 @@ export const AUTHOR = {
   name:    SITE.name,
   url:     "/admin",
   role:    "Editor",
+  bio:     SITE.description,
   email:   SITE.email,
   avatar:  LOGO,
   twitter: "@unloyd",
