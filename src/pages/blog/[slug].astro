@@ -1,27 +1,24 @@
 ---
 // src/pages/blog/[slug].astro
 import { getCollection, render, getEntry } from "astro:content";
-import { siteConfig } from "@/config/site";
+import { SITE, ROUTES, buildMeta, schemaArticle, schemaBreadcrumb } from "@/consts";
 import { slugify } from "@/lib/utils";
 import { components } from '@/components/layout/MDXComponents';
 
-import Head from "@/components/Head.astro";
-import { buildMeta, schemaArticle, schemaBreadcrumb } from "@/consts";
-
-import BaseLayout from "@/layouts/BaseLayout.astro";
+import Layout from "@/layouts/Layout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import Breadcrumb from "@/components/ui/Breadcrumb.astro";
 import PostHeader from "@/components/blog/PostHeader.astro";
+import ShareArticle from "@/components/blog/ShareArticle.astro";
 import RssFeed from '@/components/blog/RssFeed.astro';
-import SharePost from '@/components/blog/SharePost.astro';
 import PostNavigation from '@/components/blog/PostNavigation.astro';
-import BackToTop from "@/components/ui/BackToTop.astro";
+import HeroImage from '@/components/blog/HeroImage.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
   return posts.map((post) => ({
-    params: {  slug: post.data.slug || slugify(post.data.title)  },
+    params: { slug: post.data.slug || slugify(post.data.title) },
     props: { post },
   }));
 }
@@ -32,138 +29,116 @@ const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 const sortedPosts = allPosts.sort(
   (a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
 );
-
 const currentIndex = sortedPosts.findIndex(p => p.id === post.id);
 const prevPost = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
 const nextPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
 
-const siteData = siteConfig;
-const homeLabel = siteData.home;
-const blogLabel = siteData.blog;
+let authorData = {
+  name: SITE.author?.name || 'Unloyd',
+  avatar: SITE.author?.avatar || '',
+  role: '',
+};
+if (post.data.author && /^[a-z0-9-]+$/.test(post.data.author)) {
+  try {
+    const authorEntry = await getEntry('authors', post.data.author);
+    if (authorEntry) {
+      authorData = {
+        name: authorEntry.data.name || authorData.name,
+        avatar: authorEntry.data.avatar || authorData.avatar,
+        role: authorEntry.data.role || '',
+      };
+    }
+  } catch {}
+}
 
-const authorEntry = await getEntry(post.data.author);
-const categoryEntry = await getEntry(post.data.category);
+let categoryName = '';
+if (post.data.category && /^[a-z0-9-]+$/.test(post.data.category)) {
+  try {
+    const catEntry = await getEntry(post.data.category);
+    if (catEntry) categoryName = catEntry.data.name;
+  } catch {}
+} else if (post.data.category) {
+  categoryName = post.data.category;
+}
 
 const { Content } = await render(post);
 
-const {
-  title,
-  description,
-  pubDate,
-  updatedDate,
-  tags,
-  heroImage,
-  seo
-} = post.data;
+const canonicalURL = new URL(Astro.url.pathname, SITE.url).href;
+const meta = buildMeta({
+  title: post.data.seo?.title || post.data.title,
+  description: post.data.seo?.description || post.data.description,
+  canonical: canonicalURL,
+  ogImage: post.data.seo?.ogImage || post.data.heroImage?.src,
+  ogType: 'article',
+  datePublished: post.data.pubDate.toISOString(),
+  dateModified: post.data.updatedDate?.toISOString(),
+  authorName: authorData.name,
+  keywords: post.data.tags,
+});
 
-const seoTitle = seo?.title || title;
-const seoDescription = seo?.description || description;
+const articleSchema = schemaArticle({
+  title: post.data.title,
+  description: post.data.description,
+  url: canonicalURL,
+  image: post.data.seo?.ogImage || post.data.heroImage?.src || SITE.defaultImage || '',
+  datePublished: post.data.pubDate.toISOString(),
+  dateModified: post.data.updatedDate?.toISOString() || post.data.pubDate.toISOString(),
+  authorName: authorData.name,
+  category: categoryName,
+  tags: post.data.tags,
+  wordCount: 0,
+  readingTime: 0,
+});
 
-const seoImage = {
-  src: seo?.ogImage || heroImage?.src || siteConfig.ogImage,
-  alt: heroImage?.alt || title
-};
-
-const seoAuthor = {
-  name: authorEntry?.data.name ?? siteData.author.name,
-  role: authorEntry?.data.role ?? siteData.author.role,
-  avatar: authorEntry?.data.avatar ?? siteData.author.avatar,
-  bio: authorEntry?.data.bio ?? siteData.author.bio,
-  slug: authorEntry?.id ?? siteData.author.slug,
-  twitter: authorEntry?.data.twitter ?? siteData.author.twitter
-}
-
-const categorySlug =
-  categoryEntry?.id ||
-  slugify(categoryEntry?.data?.name || siteData.general);
-
-const seoCategory = {
-  name: categoryEntry?.data?.name || siteData.general,
-  description: categoryEntry?.data?.description || "",
-  slug: categorySlug,
-};
-
-const siteURL = Astro.site?.toString() ?? siteConfig.siteUrl;
-const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
-
-const SeoBreadcrumbItems = [
-  { name: homeLabel, item: '/'},
-  { name: blogLabel, item: '/blog'},
-  { name: seoCategory.name, item: `/blog/category/${seoCategory.slug}`},
-  { name: title, item: canonicalURL }
-];
-
-const BreadcrumbsItems = SeoBreadcrumbItems.filter(
-  (item) =>
-    item.name === blogLabel ||
-    item.name === seoCategory.name
-);
-
-const seoData = {
-  title: seoTitle,
-  description: seoDescription,
-  type: "article" as const,
-  canonicalURL,
-  image: seoImage,
-  publishedTime: pubDate,
-  modifiedTime: updatedDate,
-  author: seoAuthor,
-  category: seoCategory,
-  tags: tags,
-  breadcrumbItems: SeoBreadcrumbItems
-};
+const breadcrumbSchema = schemaBreadcrumb([
+  { name: "Beranda", url: SITE.url },
+  { name: "Blog", url: `${SITE.url}/blog` },
+  { name: categoryName || "Umum", url: `${SITE.url}/blog/category/${post.data.category || 'general'}` },
+  { name: post.data.title, url: canonicalURL },
+]);
 ---
 
-<BaseLayout {...seoData}>  
-  <Section size="none" class="relative z-0">
-    <Section size="sm" class="relative z-10">
-      <div class="max-w-5xl mx-auto">
-        <Container size="md">
-          <Section size="sm">
-            <Breadcrumb items={BreadcrumbsItems} />
-          </Section>
-          <article id="article" class="mx-auto max-w-3xl">
-            <Section size="sm">
-              <PostHeader
-                title={title}
-                description={description}
-                pubDate={pubDate}
-                content={post.body}
-                authorName={authorEntry?.data.name}
-                authorAvatar={authorEntry?.data.avatar}
-                authorRole={authorEntry?.data.role}
-                authorSlug={authorEntry?.id}
-                overviewItems={post.data.overview}
-              />
-            </Section>
-            <Section size="sm">
-              <div id="article" class="prose">
-                <Content components={components} />
-              </div>
-            </Section>
-          </article>
-          <Section size="sm">
-            <SharePost url={canonicalURL} title={title} description={description} />
-          </Section>
-          <Section size="sm">
-            <RssFeed />
-          </Section>
-          <Section size="sm">
-            <div id="yandex_rtb_R-A-19179231-6"></div>
-          </Section>
-        </Container>
+<Layout {meta} schema={[articleSchema, breadcrumbSchema]}>
+  <Section size="lg">
+    <Container size="md">
+      <div class="mb-8">
+        <Breadcrumb
+          items={[
+            { name: "Beranda", url: ROUTES.home },
+            { name: "Blog", url: ROUTES.blog },
+            { name: categoryName || "Umum", url: `/blog/category/${post.data.category || 'general'}` },
+            { name: post.data.title, url: canonicalURL },
+          ]}
+        />
       </div>
-    </Section>
-    <Section size="sm">
-      <Container size="lg">
-        <div rrm-inline-cta="1b7a649f-eb54-48c5-8106-f2ac499dfc5f"></div>
-      </Container>
-    </Section>
-    <Section size="sm" class="border-t sm:border-none border-(--border)">
-      <Container size="lg">
+      <article id="article" class="max-w-3xl mx-auto">
+        <PostHeader
+          title={post.data.title}
+          description={post.data.description}
+          pubDate={post.data.pubDate}
+          content=""
+          authorName={authorData.name}
+          authorAvatar={authorData.avatar}
+          authorRole={authorData.role}
+          authorSlug={post.data.author || ''}
+          overviewItems={post.data.overview}
+        />
+        {post.data.heroImage && (
+          <HeroImage
+            image={post.data.heroImage.src}
+            alt={post.data.heroImage.alt || post.data.title}
+            caption={post.data.heroImage.caption}
+          />
+        )}
+        <div class="prose mt-8 md:mt-10">
+          <Content components={components} />
+        </div>
+        <div class="mt-12 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+          <ShareArticle url={canonicalURL} title={post.data.title} description={post.data.description} />
+          <RssFeed class="sm:self-end" />
+        </div>
         <PostNavigation prevPost={prevPost} nextPost={nextPost} />
-      </Container>
-    </Section>
+      </article>
+    </Container>
   </Section>
-  <BackToTop />
-</BaseLayout>
+</Layout>
