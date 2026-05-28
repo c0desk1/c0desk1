@@ -9,19 +9,13 @@ import Section from "@/components/ui/Section.astro";
 
 export async function getStaticPaths() {
   const legalPages = await getCollection('legal');
-
-  return legalPages.map((page) => {
-    const slug = page.slug;
-
-    return {
-      params: { slug },
-      props: { page },
-    };
-  });
+  return legalPages.map((page) => ({
+    params: { slug: page.slug },
+    props: { page },
+  }));
 }
 
 const { page } = Astro.props;
-
 if (!page) return Astro.redirect('/404');
 
 const { Content } = await render(page);
