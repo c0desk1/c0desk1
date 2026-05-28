@@ -1,0 +1,93 @@
+---
+// src/pages/blog/category/[category].astro
+import { getCollection } from "astro:content";
+import { 
+  SITE, 
+  ROUTES, 
+  CATEGORIES, 
+  buildMeta, 
+  schemaCollectionPage, 
+  schemaBreadcrumb 
+} from "@/consts";
+import { sortByDate } from "@/lib/utils";
+
+import Layout from "@/layouts/Layout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import PostCard from "@/components/blog/PostCard.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+
+// 1. Generate path berdasarkan kategori yang ada di consts.ts
+export async function getStaticPaths() {
+  const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+  
+  return CATEGORIES.map((category) => {
+    const filteredPosts = allPosts
+      .filter((post) => post.data.category === category.slug)
+      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+    return {
+      params: { category: category.slug },
+      props: { category, posts: filteredPosts },
+    };
+  });
+}
+
+const { category, posts } = Astro.props;
+const canonicalURL = new URL(`${ROUTES.blog}/category/${category.slug}`, SITE.url).href;
+
+const meta = buildMeta({
+  title: category.label,
+  description: category.description,
+  canonical: canonicalURL,
+});
+
+const schemas = [
+  schemaCollectionPage({
+    title: category.label,
+    description: category.description,
+    url: canonicalURL,
+  }),
+  schemaBreadcrumb([
+    { name: "Beranda", url: SITE.url },
+    { name: "Blog", url: new URL(ROUTES.blog, SITE.url).href },
+    { name: category.label, url: canonicalURL },
+  ]),
+];
+---
+
+<Layout {meta} schema={schemas}>
+  <Section size="lg">
+    <Container size="xl">
+      <div class="mb-8">
+        <Breadcrumb
+          items={[
+            { name: "Blog", url: ROUTES.blog },
+            { name: category.label, url: Astro.url.pathname },
+          ]}
+        />
+      </div>
+      
+      <div class="mb-12">
+        <h1 class="text-heading-32 md:text-heading-40 lg:text-heading-56 font-bold text-balance mb-4">
+          {category.label}
+        </h1>
+        <p class="text-body-18 text-muted max-w-xl">
+          {category.description}
+        </p>
+      </div>
+
+      {posts.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          {posts.map((post) => (
+            <PostCard post={post} />
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-24">
+          <p class="text-muted">Belum ada artikel dalam kategori ini.</p>
+        </div>
+      )}
+    </Container>
+  </Section>
+</Layout>

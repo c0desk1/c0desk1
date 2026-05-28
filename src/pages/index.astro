@@ -16,11 +16,10 @@ import Section from "@/components/ui/Section.astro";
 import Container from "@/components/ui/Container.astro";
 import Hero from "@/components/ui/Hero.astro";
 import PostCard from "@/components/blog/PostCard.astro";
-import Button from "@/components/ui/Button.astro";
+import Link from "@/components/ui/Link.astro";
 
 const posts = await getCollection('blog', ({ data }) => !data.draft);
-
-const sortedPosts = sortByDate(posts).slice(0, 9);
+const sortedPosts = sortByDate(posts).slice(0, 10);
 
 const [latestPost, ...restPosts] = sortedPosts;
 
@@ -36,11 +35,21 @@ const homepageSchema = schemaWebPage({
   type: "WebPage",
 });
 
-const heroCTA = { label: "Blog", href: ROUTES.blog };
-const heroCTA2 = { label: "Latest Content", href: "#article" };
+const heroCTA = { 
+  label: "Blog", 
+  href: ROUTES.blog 
+};
+const heroCTA2 = { 
+  label: "Konten Terbaru", 
+  href: "#article" 
+};
 ---
 
-<Layout isHome={true} {meta} schema={homepageSchema}>
+<Layout
+  {meta}
+  isHome={true} 
+  schema={homepageSchema}
+  >
   <Hero
     title="UN"
     subTitle="LOYD"
@@ -77,9 +86,9 @@ const heroCTA2 = { label: "Latest Content", href: "#article" };
         </div>
       )}
       <div class="flex justify-center py-8">
-        <Button href={ROUTES.blog} variant="secondary" size="md">
+        <Link href={ROUTES.blog} variant="secondary" size="md">
           {"Lihat semua"}
-        </Button>
+        </Link>
       </div>
     </Container>
   </Section>

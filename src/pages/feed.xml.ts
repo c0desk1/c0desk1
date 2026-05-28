@@ -26,7 +26,6 @@ export const GET: APIRoute = async () => {
     if (post.data.author) {
       try {
         const authorEntry = await getEntry(post.data.author);
-        
         if (authorEntry?.data?.name) {
           const authorEmail = authorEntry.data.mail || SITE.email;
           authorName = `${authorEmail} (${authorEntry.data.name})`;
@@ -45,27 +44,18 @@ export const GET: APIRoute = async () => {
       ? `<enclosure url="${new URL(imageSrc, SITE.url).href}" type="image/jpeg" length="0"/>`
       : "";
 
-    let categoryName = "General";
-    const rawCategory = post.data.category;
+    const categorySlug = post.data.category;
+    const matchedCategory = CATEGORIES.find(c => c.slug === categorySlug);
+    const categoryName = matchedCategory ? matchedCategory.label : (categorySlug || "General");
 
-    if (rawCategory) {
-      if (typeof rawCategory === "object" && "collection" in rawCategory) {
-        try {
-          const catEntry = await getEntry(rawCategory);
-          const slugToFind = catEntry?.data?.slug || catEntry?.id;
-          const matched = CATEGORIES.find(c => c.slug === slugToFind);
-          categoryName = matched ? matched.label : (slugToFind || "General");
-        } catch {}
-      } else {
-        const categorySlug = String(rawCategory);
-        const matched = CATEGORIES.find(c => c.slug === categorySlug);
-        
-        categoryName = matched 
-          ? matched.label 
-          : categorySlug.charAt(0).toUpperCase() + categorySlug.slice(1);
-      }
-    }
-
+    const filteredTags = post.data.tags
+      ?.map((t: string) => t.trim().toLowerCase().replace(/-/g, ' '))
+      .filter(
+        (t: string) => 
+          t !== categorySlug.toLowerCase() && 
+          t !== categoryName.toLowerCase() &&
+          t !== ""
+      ) || [];
 
     const itemXml = `
     <item>
@@ -77,7 +67,7 @@ export const GET: APIRoute = async () => {
       <author>${authorName}</author>
       <category>${categoryName}</category>
       ${
-        post.data.tags
+        filteredTags
           ?.map((t: string) => `<category>${t}</category>`)
           .join("\n      ") || ""
       }
@@ -89,9 +79,9 @@ export const GET: APIRoute = async () => {
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"
-  xmlns:content="http://purl.org"
-  xmlns:atom="http://w3.org"
-  xmlns:media="http://yahoo.com">
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:media="http://search.yahoo.com/mrss/">
   <channel>
     <title>${SITE.name}</title>
     <link>${SITE.url}</link>

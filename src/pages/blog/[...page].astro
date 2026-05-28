@@ -1,20 +1,15 @@
 ---
 // src/pages/blog/[...page].astro
 import type { Page } from "astro";
-
-import { 
-  getCollection, 
-  type CollectionEntry 
-} from "astro:content";
-
+import { getCollection, type CollectionEntry } from "astro:content";
 import { 
   SITE, 
   ROUTES,
   PAGINATION,
   buildMeta, 
   schemaCollectionPage, 
-  schemaBreadcrumb } from "@/consts";
-
+  schemaBreadcrumb 
+} from "@/consts";
 import { 
   getPageNums, 
   getPageUrl, 
@@ -42,52 +37,45 @@ interface Props {
 const { page } = Astro.props;
 
 const pageTitle = page.currentPage > 1 ? `Blog - Halaman ${page.currentPage}` : "Blog";
-const pageDesc = page.currentPage > 1 
-  ? `Semua artikel di ${SITE.name} (Halaman ${page.currentPage}).` 
-  : `Semua artikel di ${SITE.name}.`;
+const pageDesc = `Kumpulan artikel terbaru tentang sistem, kreativitas, dan dunia digital di ${SITE.name}.`;
+const canonicalURL = new URL(page.url.current, SITE.url).href;
 
 const meta = buildMeta({ 
   title: pageTitle,
   description: pageDesc,
-  canonical: new URL(Astro.url.pathname, SITE.url).href 
+  canonical: canonicalURL,
+  ...(page.url.prev && { canonical: new URL(page.url.prev, SITE.url).href }), 
 });
 
-const breadcrumbSchema = schemaBreadcrumb([
-  { name: "Home", url: SITE.url },
-  { name: "Blog", url: new URL(ROUTES.blog, SITE.url).href },
-]);
-
-const collectionSchema = schemaCollectionPage({
-  title: pageTitle,
-  description: pageDesc,
-  url: meta.canonical,
-});
-
-const schema = [breadcrumbSchema, collectionSchema];
+const schemas = [
+  schemaBreadcrumb([
+    { name: "Beranda", url: SITE.url },
+    { name: "Blog", url: new URL(ROUTES.blog, SITE.url).href },
+  ]),
+  schemaCollectionPage({
+    title: pageTitle,
+    description: pageDesc,
+    url: canonicalURL,
+  }),
+];
 
 let featuredPosts: CollectionEntry<"blog">[] = [];
-
 if (page.currentPage === 1) {
   const allPosts = await getCollection("blog", ({ data }) => !data.draft && data.featured === true);
   featuredPosts = sortByDate(allPosts);
 }
 
 const pageNums = getPageNums(page.currentPage, page.lastPage);
-const prevUrl = page.currentPage <= 1 ? undefined : getPageUrl(page.currentPage - 1);
-const nextUrl = page.currentPage >= page.lastPage ? undefined : getPageUrl(page.currentPage + 1);
-
-const heroCTA = { label: "Unggulan", href: "#featured" };
-const heroCTA2 = { label: "Terbaru.", href: "#latest" };
 ---
 
-<Layout {meta} {schema}>
+<Layout {meta} schema={schemas}>
   <Section size="none">
     <Hero
       title="BL"
       subTitle="OG"
-      description={meta.description}
-      cta={heroCTA}
-      cta2={heroCTA2}
+      description="Jelajahi postingan dan pembaruan Blog kami. Catatan di balik layar tentang sistem, kreativitas, dan menjelajahi dunia digital modern."
+      cta={{ label: "Unggulan", href: "#featured" }}
+      cta2={{ label: "Terbaru", href: "#latest" }}
     />
   </Section>
   {page.currentPage === 1 && featuredPosts.length > 0 && (
@@ -97,24 +85,21 @@ const heroCTA2 = { label: "Terbaru.", href: "#latest" };
           Unggulan
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {featuredPosts.map((post) => (
-            <PostCard post={post} />
-          ))}
+          {featuredPosts.map((post) => <PostCard post={post} />)}
         </div>
       </Container>
     </Section>
   )}
+
   <Section size="lg" aria-label="Postingan terbaru">
     <Container size="xl">
       <h2 id="latest" class="text-heading-24 lg:text-heading-32 text-(--fg) font-semibold py-4 lg:py-6">
-        Terbaru.
+        Terbaru
       </h2>
 
       {page.data.length > 0 ? (
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-          {page.data.map((post) => (
-            <PostCard post={post} />
-          ))}
+          {page.data.map((post) => <PostCard post={post} />)}
         </div>
       ) : (
         <div class="text-center py-12">
@@ -124,39 +109,31 @@ const heroCTA2 = { label: "Terbaru.", href: "#latest" };
 
       {page.lastPage > 1 && (
         <div class="flex items-center justify-between gap-2 py-8 mt-4">
-          <Button href={prevUrl} disabled={!prevUrl} variant="secondary" size="sm" class="gap-1.5" aria-label="Previous">
+          <Button href={page.url.prev} disabled={!page.url.prev} variant="secondary" size="sm" class="gap-1.5" aria-label="Sebelumnya">
             <Icon name="arrow-left" className="w-4 h-4" />
             <span class="hidden sm:inline text-button-14">Sebelumnya</span>
           </Button>
 
           <ol class="hidden sm:flex items-center gap-0.5">
-            {pageNums.map((n) =>
-              n === "…" ? (
-                <li>
-                  <span class="flex items-center justify-center w-6 h-6 text-subtle select-none">…</span>
-                </li>
-              ) : (
-                <li>
-                  <a
-                    href={n === 1 ? ROUTES.blog : getPageUrl(n as number)}
-                    aria-current={n === page.currentPage ? "page" : undefined}
-                    class:list={[
-                      "flex items-center justify-center w-6 h-6 rounded-md text-label-14 transition-colors",
-                      n === page.currentPage
-                        ? "bg-(--fg) text-(--bg) pointer-events-none font-medium"
-                        : "text-subtle hover:bg-muted hover:text-(--fg)",
-                    ]}
-                  >
-                    {n}
-                  </a>
-                </li>
-              )
-            )}
+            {pageNums.map((n) => (
+              <li>
+                <a
+                  href={n === 1 ? ROUTES.blog : getPageUrl(n as number)}
+                  aria-current={n === page.currentPage ? "page" : undefined}
+                  class:list={[
+                    "flex items-center justify-center w-6 h-6 rounded-md text-label-14 transition-colors",
+                    n === page.currentPage
+                      ? "bg-(--fg) text-(--bg) pointer-events-none font-medium"
+                      : "text-subtle hover:bg-muted hover:text-(--fg)",
+                  ]}
+                >
+                  {n}
+                </a>
+              </li>
+            ))}
           </ol>
-          <span class="sm:hidden text-body-14 text-subtle tabular-nums select-none">
-            {page.currentPage}<span class="mx-1 text-(--border)">/</span>{page.lastPage}
-          </span>
-          <Button href={nextUrl} disabled={!nextUrl} variant="secondary" size="sm" class="gap-1.5" aria-label="Next">
+
+          <Button href={page.url.next} disabled={!page.url.next} variant="secondary" size="sm" class="gap-1.5" aria-label="Berikutnya">
             <span class="hidden sm:inline text-button-14">Berikutnya</span>
             <Icon name="arrow-right" className="w-4 h-4" />
           </Button>
