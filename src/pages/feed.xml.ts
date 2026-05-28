@@ -9,7 +9,7 @@ import {
 } from "@/consts";
 import { slugify } from "@/lib/utils";
 
-export const GET: APIRoute = async () => {
+export const GET: APIRoute = async (context) => {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
 
   const sorted = posts
@@ -62,20 +62,18 @@ export const GET: APIRoute = async () => {
       <title><![CDATA[${post.data.title}]]></title>
       <link>${url}</link>
       <guid isPermaLink="true">${url}</guid>
-      <description><![CDATA[${post.data.description}]]></description>
+      <description><![CDATA[${post.data.description || ""}]]></description>
       <pubDate>${pubDate}</pubDate>
       <author>${authorName}</author>
       <category>${categoryName}</category>
-      ${
-        filteredTags
-          ?.map((t: string) => `<category>${t}</category>`)
-          .join("\n      ") || ""
-      }
+      ${filteredTags.map((t: string) => `<category>${t}</category>`).join("\n      ")}
       ${coverImg}
     </item>`;
     
     items.push(itemXml);
   }
+
+  const selfUrl = new URL(context.request.url).href;
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"
@@ -88,11 +86,11 @@ export const GET: APIRoute = async () => {
     <description>${SITE.description}</description>
     <language>${SITE.lang}</language>
     <copyright>© ${new Date().getFullYear()} ${SITE.name}</copyright>
-    <managingEditor>${SITE.email} (${SITE.name})</managingEditor>
-    <webMaster>${SITE.email}</webMaster>
+    <managingEditor>${SITE.email} (${AUTHOR.name})</managingEditor>
+    <webMaster>${SITE.email} (${AUTHOR.name})</webMaster>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <ttl>60</ttl>
-    <atom:link href="${SITE.url}/feed.xml" rel="self" type="application/rss+xml"/>
+    <atom:link href="${selfUrl}" rel="self" type="application/rss+xml"/>
     <image>
       <url>${SITE.url}/favicon/favicon-96x96.png</url>
       <title>${SITE.name}</title>
