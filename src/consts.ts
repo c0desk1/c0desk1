@@ -11,13 +11,16 @@ type FooterSection = {
   items: NavItem[];
 };
 
+const LOGO = "/org/c0desk1-logo.svg"
+const OGIMAGE = "/org/c0desk1-og.webp"
+
 // SITE BASE
 export const SITE = {
   name:        "Unloyd",
   tagline:     "Beyond the Void",
   description: "Platform kuratif untuk pop culture, game, anime, tutorial, dan modding. Konten yang dipilih dengan cermat, bukan sekadar ramai.",
   url:         "https://unloyd.web.id",
-  ogImage: "./src/assets/images/c0desk1-og.webp",
+  ogImage:      OGIMAGE,
   locale:      "id_ID",
   lang:        "id",
   dir:         "ltr",
@@ -28,21 +31,20 @@ export const SITE = {
   foundingYear: 2025,
 } as const;
 
-
 // AUTHOR / ORGANIZATION
 export const AUTHOR = {
-  name:    "Admin",
+  name:    SITE.name,
   url:     "/admin",
   role:    "Editor",
   email:   SITE.email,
-  avatar: "/org/unloyd-logo.svg",
+  avatar:  LOGO,
   twitter: "@unloyd",
 } as const;
 
 export const ORG = {
   name:        "Unloyd",
   url:         SITE.url,
-  logo:        "/org/unloyd-logo.svg",
+  logo:        LOGO,
   sameAs: [
     "https://twitter.com/unloyd",
     "https://instagram.com/unloyd",
@@ -110,11 +112,6 @@ export const NAV = {
   ] as FooterSection[],
 } as const;
 
-
-// -----------------------------------------------------------------------------
-// CATEGORIES
-// -----------------------------------------------------------------------------
-
 export const CATEGORIES = [
   { slug: "news",     label: "News",     description: "Berita terbaru dari dunia pop culture, game, dan anime."       },
   { slug: "game",     label: "Game",     description: "Review, preview, dan segala hal tentang video game."           },
@@ -126,11 +123,6 @@ export const CATEGORIES = [
 
 export type CategorySlug = typeof CATEGORIES[number]["slug"];
 
-
-// -----------------------------------------------------------------------------
-// SEO DEFAULTS
-// -----------------------------------------------------------------------------
-
 export const SEO = {
   titleDefault:    SITE.name,
   titleTemplate:   `%s | ${SITE.name}`,
@@ -138,7 +130,7 @@ export const SEO = {
   description:     SITE.description,
   descriptionMaxLength: 160,
   canonical:       SITE.url,
-  ogImage:         `${SITE.url}/org/unloyd-og.webp`,
+  ogImage:         OGIMAGE,
   ogImageWidth:    1200,
   ogImageHeight:   630,
   ogImageAlt:      `${SITE.name} — ${SITE.tagline}`,
@@ -167,11 +159,6 @@ export const SEO = {
   },
 } as const;
 
-
-// -----------------------------------------------------------------------------
-// OPEN GRAPH
-// -----------------------------------------------------------------------------
-
 export const OG = {
   type:        "website" as const,
   siteName:    SITE.name,
@@ -182,11 +169,6 @@ export const OG = {
   imageAlt:    SEO.ogImageAlt,
 } as const;
 
-
-// -----------------------------------------------------------------------------
-// TWITTER / X CARD
-// -----------------------------------------------------------------------------
-
 export const TWITTER = {
   card:    SEO.twitterCard,
   site:    SEO.twitterSite,
@@ -194,11 +176,6 @@ export const TWITTER = {
 } as const;
 
 
-// -----------------------------------------------------------------------------
-// JSON-LD SCHEMAS
-// -----------------------------------------------------------------------------
-
-/** WebSite schema — untuk halaman utama */
 export const schemaWebSite = {
   "@context":     "https://schema.org",
   "@type":        "WebSite",
@@ -216,8 +193,6 @@ export const schemaWebSite = {
   },
 } as const;
 
-
-/** Organization schema */
 export const schemaOrganization = {
   "@context":    "https://schema.org",
   "@type":       "Organization",
@@ -238,8 +213,6 @@ export const schemaOrganization = {
   },
 } as const;
 
-
-/** BreadcrumbList schema — bangun dinamis per halaman */
 export function schemaBreadcrumb(
   items: { name: string; url: string }[]
 ) {
@@ -255,15 +228,13 @@ export function schemaBreadcrumb(
   };
 }
 
-
-/** Article schema — untuk halaman artikel/post */
 export function schemaArticle(opts: {
   title:         string;
   description:   string;
   url:           string;
   image:         string;
-  datePublished: string;   // ISO 8601
-  dateModified:  string;   // ISO 8601
+  datePublished: string;
+  dateModified:  string;
   authorName:    string;
   category?:     string;
   tags?:         string[];
@@ -309,8 +280,6 @@ export function schemaArticle(opts: {
   };
 }
 
-
-/** NewsArticle schema — untuk konten berita */
 export function schemaNewsArticle(opts: {
   title:         string;
   description:   string;
@@ -357,8 +326,6 @@ export function schemaNewsArticle(opts: {
   };
 }
 
-
-/** HowTo schema — untuk halaman tutorial */
 export function schemaHowTo(opts: {
   name:          string;
   description:   string;
@@ -400,8 +367,6 @@ export function schemaHowTo(opts: {
   };
 }
 
-
-/** FAQPage schema */
 export function schemaFAQ(
   items: { question: string; answer: string }[]
 ) {
@@ -419,8 +384,6 @@ export function schemaFAQ(
   };
 }
 
-
-/** VideoObject schema — untuk konten video/embed */
 export function schemaVideo(opts: {
   name:          string;
   description:   string;
@@ -448,8 +411,6 @@ export function schemaVideo(opts: {
   };
 }
 
-
-/** WebPage schema — untuk halaman statis (about, contact, dll) */
 export function schemaWebPage(opts: {
   title:       string;
   description: string;
@@ -473,8 +434,6 @@ export function schemaWebPage(opts: {
   };
 }
 
-
-/** CollectionPage schema — untuk halaman kategori/tag */
 export function schemaCollectionPage(opts: {
   title:       string;
   description: string;
@@ -483,12 +442,6 @@ export function schemaCollectionPage(opts: {
   return schemaWebPage({ ...opts, type: "CollectionPage" });
 }
 
-
-// -----------------------------------------------------------------------------
-// META HELPERS
-// -----------------------------------------------------------------------------
-
-/** Bangun object meta lengkap untuk satu halaman */
 export function buildMeta(opts: {
   title?:        string;
   description?:  string;
@@ -529,8 +482,6 @@ export function buildMeta(opts: {
     canonical,
     robots:          robotsContent,
     keywords:        opts.keywords?.join(", ") ?? "",
-
-    // Open Graph
     og: {
       title,
       description,
@@ -546,8 +497,6 @@ export function buildMeta(opts: {
       ...(opts.dateModified  ? { modifiedTime:  opts.dateModified  } : {}),
       ...(opts.authorName    ? { author:         opts.authorName   } : {}),
     },
-
-    // Twitter / X
     twitter: {
       card:           TWITTER.card,
       site:           TWITTER.site,
@@ -560,33 +509,18 @@ export function buildMeta(opts: {
   };
 }
 
-
-// -----------------------------------------------------------------------------
-// SOCIAL LINKS
-// -----------------------------------------------------------------------------
-
 export const SOCIAL = [
-  { name: "Twitter / X",  url: "https://twitter.com/unloyd",       handle: "@unloyd" },
+  { name: "Twitter / X",  url: "https://twitter.com/unloyd",        handle: "@unloyd" },
   { name: "Instagram",    url: "https://instagram.com/unloyd",      handle: "@unloyd" },
   { name: "YouTube",      url: "https://youtube.com/@unloyd",       handle: "@unloyd" },
   { name: "TikTok",       url: "https://tiktok.com/@unloyd",        handle: "@unloyd" },
 ] as const;
-
-
-// -----------------------------------------------------------------------------
-// PAGINATION
-// -----------------------------------------------------------------------------
 
 export const PAGINATION = {
   postsPerPage:    12,
   postsPerFeed:    20,
   postsPerSitemap: 1000,
 } as const;
-
-
-// -----------------------------------------------------------------------------
-// IMAGE
-// -----------------------------------------------------------------------------
 
 export const IMAGE = {
   og: {
@@ -601,6 +535,7 @@ export const IMAGE = {
   avatar: {
     width:   96,
     height:  96,
+    quality: 80,
   },
   logo: {
     width:   512,
@@ -608,11 +543,6 @@ export const IMAGE = {
   },
   placeholder: `${SITE.url}/images/placeholder.jpg`,
 } as const;
-
-
-// -----------------------------------------------------------------------------
-// READING TIME
-// -----------------------------------------------------------------------------
 
 export const READING = {
   wordsPerMinute: 200,
@@ -622,11 +552,6 @@ export function estimateReadingTime(wordCount: number): number {
   return Math.max(1, Math.ceil(wordCount / READING.wordsPerMinute));
 }
 
-
-// -----------------------------------------------------------------------------
-// DATE FORMAT
-// -----------------------------------------------------------------------------
-
 export const DATE_FORMAT: Intl.DateTimeFormatOptions = {
   year:  "numeric",
   month: "long",
@@ -634,7 +559,6 @@ export const DATE_FORMAT: Intl.DateTimeFormatOptions = {
 } as const;
 
 export const DATE_FORMAT_SHORT: Intl.DateTimeFormatOptions = {
-  year:  "numeric",
   month: "short",
   day:   "numeric",
 } as const;
