@@ -1,4 +1,8 @@
 #:schema node_modules/wrangler/config-schema.json
 name = "unloyd"
 compatibility_date = "2026-05-26"
-pages_build_output_dir = "./dist"
+
+[assets]
+directory = "./dist"
+not_found_handling = "404-page"
+html_handling = "drop-trailing-slash"
