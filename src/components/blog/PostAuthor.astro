@@ -2,6 +2,7 @@
 // src/components/layout/PostAuthor.astro
 import { AUTHOR } from '@/consts';
 import { Image } from 'astro:assets';
+
 import { cdnImage, isCdnUrl, slugify } from '@/lib/utils';
 import Contribution from './Contribution.astro';
 
@@ -14,25 +15,27 @@ interface Props {
 
 const { name, avatar, role, slug } = Astro.props;
 
-const authorName = name || AUTHOR.name;
-const authorAvatar = avatar || '';
-const authorTitle = role || AUTHOR.role;
-const authorSlug = slug || slugify(authorName);
+const Author = {
+  name: name || AUTHOR.name,
+  avatar: avatar || AUTHOR.avatar,
+  role: role || AUTHOR.role,
+  slug: slug || slugify(AUTHOR.name)
+}
 
-const optimizedAvatar = authorAvatar && isCdnUrl(authorAvatar)
-  ? cdnImage(authorAvatar, { w: 48, h: 48, q: 80 })
-  : authorAvatar;
+const optimizedAvatar = Author.avatar && isCdnUrl(Author.avatar)
+  ? cdnImage(Author.avatar, { w: 48, h: 48, q: 80 })
+  : Author.avatar;
 
-const authorPath = `/author/${authorSlug}`;
+const authorPath = `/author/${Author.slug}`;
 ---
 
 <div class="flex items-center justify-center gap-3">
-  <a href={authorPath} rel="author" aria-label={`Penulis: ${authorName}`} class="flex items-center gap-3 no-underline group">
-    {authorAvatar && (
-      <span class="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-(--border) shrink-0 transition-shadow group-hover:ring-2 group-hover:ring-(--accent)">
+  <a href={authorPath} rel="author" aria-label={`Penulis: ${Author.name}`} class="flex items-center gap-3 no-underline group">
+    {Author.avatar && (
+      <span class="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border border-(--border) shrink-0 transition-shadow group-hover:ring-2 group-hover:ring-(--accent-ring)">
         <Image
           src={optimizedAvatar}
-          alt={authorName}
+          alt={Author.name}
           width={48}
           height={48}
           class="h-full w-full object-cover"
@@ -41,10 +44,10 @@ const authorPath = `/author/${authorSlug}`;
         />
       </span>
     )}
-    <div class="flex flex-col">
-      <span class="text-body-14 md:text-body-16 font-semibold text-(--fg)">{authorName}</span>
-      {authorTitle && (
-        <span class="text-label-12 md:text-label-13 text-muted uppercase tracking-wider">{authorTitle}</span>
+    <div class="flex flex-col text-start">
+      <span class="text-body-14 md:text-body-16 font-semibold text-(--fg)">{Author.name}</span>
+      {Author.role && (
+        <span class="text-label-12 md:text-label-13 text-muted uppercase">{Author.role}</span>
       )}
     </div>
   </a>
