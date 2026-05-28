@@ -1,8 +1,5 @@
 /* src/styles/prose/typography.css */
 
-/* =============================================
-   Reset & Base
-   ============================================= */
 .prose :where(h1, h2, h3, h4, h5, h6, p, ul, ol, blockquote, pre, hr, table) {
   margin-top: 0;
   width: 100%;
@@ -14,9 +11,6 @@
   scroll-margin-top: var(--prose-scroll-margin);
 }
 
-/* =============================================
-   Headings – margin disesuaikan untuk noir
-   ============================================= */
 .prose h1 {
   color: var(--prose-fg-strong);
   margin-bottom: 24px;

@@ -5,11 +5,11 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-weight: 600;
-  background: var(--color-void-1000);
-  color: var(--prose-fg-strong);
-  border: 1px solid var(--prose-border-strong);
+  background: var(--fg);
+  color: var(--fg-inverted);
+  border: 1px solid var(--border-strong);
   padding: 0.2em 0.6em;
-  border-radius: var(--prose-radius-sm);
+  border-radius: var(--radius-sm);
   white-space: nowrap;
   vertical-align: middle;
   user-select: none;
