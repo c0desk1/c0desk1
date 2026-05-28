@@ -9,7 +9,8 @@ import {
   IMAGE, 
   buildMeta, 
   schemaWebPage, 
-  schemaBreadcrumb 
+  schemaBreadcrumb,
+  schemaPerson
 } from "@/consts";
 
 import { 
@@ -41,6 +42,11 @@ const Author = {
   handle: author.data.twitter || ''
 }
 
+const sameAs: string[] = [];
+if (Author.handle) {
+  sameAs.push(`https://twitter.com/${Author.handle.replace('@', '')}`);
+}
+
 const optimizedAvatar = isCdnUrl(Author.avatar)
   ? cdnImage(Author.avatar, { w: IMAGE.avatar.width, h: IMAGE.avatar.height, q: IMAGE.avatar.quality })
   : Author.avatar;
@@ -63,6 +69,14 @@ const schemas = [
     { name: "Beranda", url: SITE.url },
     { name: Author.name, url: canonicalURL },
   ]),
+  schemaPerson({
+    name: Author.name,
+    url: canonicalURL,
+    jobTitle: Author.role || undefined,
+    image: Author.avatar || undefined,
+    description: Author.bio || undefined,
+    sameAs: sameAs.length > 0 ? sameAs : undefined,
+  }),
 ];
 
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
