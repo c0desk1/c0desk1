@@ -13,7 +13,8 @@ import {
   CATEGORIES, 
   buildMeta, 
   schemaArticle, 
-  schemaBreadcrumb 
+  schemaBreadcrumb,
+  schemaPerson
 } from "@/consts";
 
 import { slugify } from "@/lib/utils";
@@ -54,7 +55,13 @@ const Author = {
   name: authorEntry?.data?.name ?? AUTHOR.name,
   role: authorEntry?.data?.role ?? AUTHOR.role,
   avatar: authorEntry?.data?.avatar ?? AUTHOR.avatar,
-  slug: (post.data.author as any)?.slug || (post.data.author as any)?.id || slugify(authorEntry.data.name)
+  slug: (post.data.author as any)?.slug || (post.data.author as any)?.id || slugify(authorEntry.data.name),
+  handle: authorEntry?.data?.twitter || ''
+}
+
+const sameAs: string[] = [];
+if (Author.handle) {
+  sameAs.push(`https://twitter.com/${Author.handle.replace('@', '')}`);
 }
 
 const Category = {
@@ -98,9 +105,18 @@ const breadcrumbSchema = schemaBreadcrumb([
   { name: Category.name, url: `${SITE.url}/blog/category/${Category.slug || 'General'}` },
   { name: post.data.title, url: canonicalURL },
 ]);
+
+const personSchema = schemaPerson({
+    name: Author.name,
+    url: `${SITE.url}/author/${Author.slug}`,
+    jobTitle: Author.role || undefined,
+    image: Author.avatar || undefined,
+    description: authorEntry?.data?.bio || AUTHOR.bio || undefined,
+    sameAs: sameAs.length > 0 ? sameAs : undefined,
+  }),
 ---
 
-<Layout {meta} schema={[articleSchema, breadcrumbSchema]}>
+<Layout {meta} schema={[articleSchema, breadcrumbSchema, personSchema]}>
   <Section size="none">
     <Container size="md">
       <Breadcrumb
