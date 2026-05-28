@@ -234,10 +234,11 @@ export function schemaArticle(opts: {
   title:         string;
   description:   string;
   url:           string;
-  image:         string;
+  image:         string | string[];
   datePublished: string;
   dateModified:  string;
   authorName:    string;
+  authorUrl?:    string;
   category?:     string;
   tags?:         string[];
   wordCount?:    number;
@@ -249,23 +250,17 @@ export function schemaArticle(opts: {
     headline:          opts.title,
     description:       opts.description,
     url:               opts.url,
-    image: {
-      "@type":         "ImageObject",
-      url:             opts.image,
-      width:           1200,
-      height:          630,
-    },
+    image:             opts.image,
     datePublished:     opts.datePublished,
     dateModified:      opts.dateModified,
     author: {
       "@type":         "Person",
       name:            opts.authorName,
-      url:             `${SITE.url}/author/${opts.authorName.toLowerCase().replace(/\s+/g, "-")}`,
+      url:             opts.authorUrl ?? `${SITE.url}/author/${opts.authorName.toLowerCase().replace(/\s+/g, "-")}`,
     },
     publisher: {
       "@type":         "Organization",
       name:            ORG.name,
-      url:             ORG.url,
       logo: {
         "@type":       "ImageObject",
         url:           ORG.logo,
@@ -286,10 +281,11 @@ export function schemaNewsArticle(opts: {
   title:         string;
   description:   string;
   url:           string;
-  image:         string;
+  image:         string | string[];
   datePublished: string;
   dateModified:  string;
   authorName:    string;
+  authorUrl?:    string;
   keywords?:     string[];
 }) {
   return {
@@ -298,22 +294,17 @@ export function schemaNewsArticle(opts: {
     headline:          opts.title,
     description:       opts.description,
     url:               opts.url,
-    image: {
-      "@type":         "ImageObject",
-      url:             opts.image,
-      width:           1200,
-      height:          630,
-    },
+    image:             opts.image,
     datePublished:     opts.datePublished,
     dateModified:      opts.dateModified,
     author: {
       "@type":         "Person",
       name:            opts.authorName,
+      url:             opts.authorUrl ?? `${SITE.url}/author/${opts.authorName.toLowerCase().replace(/\s+/g, "-")}`,
     },
     publisher: {
       "@type":         "Organization",
       name:            ORG.name,
-      url:             ORG.url,
       logo: {
         "@type":       "ImageObject",
         url:           ORG.logo,
@@ -389,12 +380,16 @@ export function schemaFAQ(
 export function schemaVideo(opts: {
   name:          string;
   description:   string;
-  thumbnailUrl:  string;
+  thumbnailUrl:  string | string[];
   uploadDate:    string;
   duration?:     string;
   contentUrl?:   string;
-  embedUrl?:     string;
+  embedUrl?:     string; 
 }) {
+  if (!opts.contentUrl && !opts.embedUrl) {
+    console.warn("VideoObject schema requires either 'contentUrl' or 'embedUrl' for Google indexing.");
+  }
+
   return {
     "@context":      "https://schema.org",
     "@type":         "VideoObject",
@@ -405,7 +400,10 @@ export function schemaVideo(opts: {
     publisher: {
       "@type":       "Organization",
       name:          ORG.name,
-      url:           ORG.url,
+      logo: {
+        "@type":     "ImageObject",
+        url:         ORG.logo,
+      }
     },
     ...(opts.duration   ? { duration: opts.duration }     : {}),
     ...(opts.contentUrl ? { contentUrl: opts.contentUrl } : {}),
@@ -429,8 +427,7 @@ export function schemaWebPage(opts: {
     inLanguage:      SITE.lang,
     isPartOf: {
       "@type":       "WebSite",
-      name:          SITE.name,
-      url:           SITE.url,
+      "@id":         `${SITE.url}/#website`,
     },
     ...(opts.dateModified ? { dateModified: opts.dateModified } : {}),
   };
@@ -596,4 +593,4 @@ export function formatDate(date: Date | string, short = false): string {
 export function toISOString(date: Date | string): string {
   const d = typeof date === "string" ? new Date(date) : date;
   return d.toISOString();
-}
+}
