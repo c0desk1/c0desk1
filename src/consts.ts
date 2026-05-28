@@ -11,8 +11,9 @@ type FooterSection = {
   items: NavItem[];
 };
 
-const LOGO = "/org/c0desk1-logo.svg"
-const OGIMAGE = "/org/c0desk1-og.webp"
+const DOMAIN = "https://unloyd.web.id";
+const LOGO = `${DOMAIN}/org/c0desk1-logo.svg`;
+const OGIMAGE = `${DOMAIN}/org/c0desk1-og.webp`;
 
 // SITE BASE
 export const SITE = {
@@ -81,6 +82,7 @@ export const ROUTES = {
 export const NAV = {
   navBar: [
     { label: "Blog", href: ROUTES.blog, isExternal: false },
+    { label: "Kategori", href: `${ROUTES.blog}/category`, isExternal: false },
     { label: "Community", 
       children: [
         { label: "About", href: ROUTES.about, isExternal: false },
