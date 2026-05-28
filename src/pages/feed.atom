@@ -1,0 +1,105 @@
+// src/pages/feed.atom.ts
+import type { APIRoute } from "astro";
+import { getCollection, getEntry } from "astro:content";
+import { 
+  SITE, 
+  AUTHOR, 
+  CATEGORIES,
+  PAGINATION 
+} from "@/consts";
+import { slugify } from "@/lib/utils";
+
+export const GET: APIRoute = async () => {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+  const sorted = posts
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+    .slice(0, PAGINATION.postsPerFeed);
+
+  const entries: string[] = [];
+
+  for (const post of sorted) {
+    const slug = post.data.slug || slugify(post.data.title);
+    const url = `${SITE.url}/blog/${slug}`;
+
+    let authorXml = `<name>${AUTHOR.name}</name><email>${SITE.email}</email>`;
+    if (post.data.author) {
+      try {
+        const authorEntry = await getEntry(post.data.author);
+        if (authorEntry?.data?.name) {
+          authorXml = `<name>${authorEntry.data.name}</name><email>${SITE.email}</email>`;
+        }
+      } catch {}
+    }
+
+    const updatedDate = post.data.pubDate.toISOString();
+
+    const imageSrc =
+      post.data.heroImage?.src ||
+      post.data.seo?.ogImage ||
+      SITE.ogImage;
+
+    const coverLink = imageSrc
+      ? `<link rel="enclosure" type="image/jpeg" href="${new URL(imageSrc, SITE.url).href}" />`
+      : "";
+
+    let categoryName = "General";
+    const rawCategory = post.data.category;
+
+    if (rawCategory) {
+      if (typeof rawCategory === "object" && "collection" in rawCategory) {
+        try {
+          const catEntry = await getEntry(rawCategory);
+          const slugToFind = catEntry?.data?.slug || catEntry?.id;
+          const matched = CATEGORIES.find(c => c.slug === slugToFind);
+          categoryName = matched ? matched.label : (slugToFind || "General");
+        } catch {}
+      } else {
+        const categorySlug = String(rawCategory);
+        const matched = CATEGORIES.find(c => c.slug === categorySlug);
+        categoryName = matched 
+          ? matched.label 
+          : categorySlug.charAt(0).toUpperCase() + categorySlug.slice(1);
+      }
+    }
+
+    const entryXml = `
+  <entry>
+    <title type="text"><![CDATA[${post.data.title}]]></title>
+    <link rel="alternate" type="text/html" href="${url}" />
+    <id>${url}</id>
+    <published>${updatedDate}</published>
+    <updated>${updatedDate}</updated>
+    <author>
+      ${authorXml}
+    </author>
+    <category term="${categoryName.toLowerCase()}" label="${categoryName}" />
+    ${
+      post.data.tags
+        ?.map((t: string) => `<category term="${t.toLowerCase()}" label="${t}" />`)
+        .join("\n    ") || ""
+    }
+    <summary type="html"><![CDATA[${post.data.description}]]></summary>
+    ${coverLink}
+  </entry>`;
+
+    entries.push(entryXml);
+  }
+  
+  const atomNamespace = "http://" + "www.w3.org/" + "2005/" + "Atom";
+  const atomXml = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="${atomNamespace}">
+  <title type="text">${SITE.name}</title>
+  <subtitle type="text">${SITE.description}</subtitle>
+  <id>${SITE.url}/feed.atom</id>
+  <link rel="alternate" type="text/html" hreflang="${SITE.lang}" href="${SITE.url}" />
+  <link rel="self" type="application/atom+xml" href="${SITE.url}/feed.atom" />
+  <rights>© ${new Date().getFullYear()} ${SITE.name}</rights>
+  <updated>${new Date().toISOString()}</updated>
+${entries.join("\n")}
+</feed>`;
+
+  return new Response(atomXml, {
+    headers: { "Content-Type": "application/atom+xml; charset=utf-8" },
+  });
+};
