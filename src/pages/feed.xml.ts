@@ -2,6 +2,7 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
 import { SITE, AUTHOR, PAGINATION, CATEGORIES } from "@/consts";
+import { slugify } from "@/lib/utils";
 
 export const GET: APIRoute = async () => {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -10,23 +11,33 @@ export const GET: APIRoute = async () => {
     .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
     .slice(0, PAGINATION.postsPerFeed);
 
-  const items = sorted.map((post) => {
-    const url = `${SITE.url}/blog/${post.slug}`;
-    const authorName =
-      typeof post.data.author === "string"
-        ? post.data.author
-        : post.data.author?.name || AUTHOR.name;
-    const pubDate = post.data.pubDate.toUTCString();
-    const coverImg = post.data.heroImage?.src
-      ? `<enclosure url="${post.data.heroImage.src}" type="image/jpeg" length="0"/>`
-      : "";
+  const items = sorted
+    .map((post) => {
+      const slug = post.data.slug || slugify(post.data.title);
 
-    const categoryName =
-      CATEGORIES.find((c) => c.slug === post.data.category)?.label ||
-      post.data.category ||
-      "Uncategorized";
+      const url = `${SITE.url}/blog/${slug}`;
 
-    return `
+      const authorName =
+        typeof post.data.author === "string"
+          ? post.data.author
+          : (post.data.author as any)?.name || AUTHOR.name;
+
+      const pubDate = post.data.pubDate.toUTCString();
+
+      const coverImg = post.data.heroImage?.src
+        ? `<enclosure url="${post.data.heroImage.src}" type="image/jpeg" length="0"/>`
+        : "";
+
+      let categoryName = "Uncategorized";
+      const rawCat = post.data.category as any;
+      if (rawCat) {
+        const catSlug =
+          typeof rawCat === "string" ? rawCat : rawCat.slug || rawCat.id || "";
+        const matched = CATEGORIES.find((c) => c.slug === catSlug);
+        categoryName = matched?.label || catSlug || "Uncategorized";
+      }
+
+      return `
     <item>
       <title><![CDATA[${post.data.title}]]></title>
       <link>${url}</link>
@@ -35,10 +46,15 @@ export const GET: APIRoute = async () => {
       <pubDate>${pubDate}</pubDate>
       <author>${SITE.email} (${authorName})</author>
       <category>${categoryName}</category>
-      ${post.data.tags?.map((t: string) => `<category>${t}</category>`).join("\n      ") || ""}
+      ${
+        post.data.tags
+          ?.map((t: string) => `<category>${t}</category>`)
+          .join("\n      ") || ""
+      }
       ${coverImg}
     </item>`;
-  }).join("\n");
+    })
+    .join("\n");
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"
@@ -57,7 +73,7 @@ export const GET: APIRoute = async () => {
     <ttl>60</ttl>
     <atom:link href="${SITE.url}/feed.xml" rel="self" type="application/rss+xml"/>
     <image>
-      <url>${SITE.url}/favicon-96x96.png</url>
+      <url>${SITE.url}/favicon/favicon-96x96.png</url>
       <title>${SITE.name}</title>
       <link>${SITE.url}</link>
     </image>
