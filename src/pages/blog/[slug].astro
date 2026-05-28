@@ -64,6 +64,7 @@ if (post.data.category && /^[a-z0-9-]+$/.test(post.data.category)) {
 const { Content } = await render(post);
 
 const canonicalURL = new URL(Astro.url.pathname, SITE.url).href;
+
 const meta = buildMeta({
   title: post.data.seo?.title || post.data.title,
   description: post.data.seo?.description || post.data.description,
@@ -99,9 +100,9 @@ const breadcrumbSchema = schemaBreadcrumb([
 ---
 
 <Layout {meta} schema={[articleSchema, breadcrumbSchema]}>
-  <Section size="lg">
+  <Section size="md">
     <Container size="md">
-      <div class="mb-8">
+      <Section size="sm">
         <Breadcrumb
           items={[
             { name: "Beranda", url: ROUTES.home },
@@ -110,13 +111,14 @@ const breadcrumbSchema = schemaBreadcrumb([
             { name: post.data.title, url: canonicalURL },
           ]}
         />
-      </div>
+      </Section>
+      <Section size="sm">
       <article id="article" class="max-w-3xl mx-auto">
         <PostHeader
           title={post.data.title}
           description={post.data.description}
           pubDate={post.data.pubDate}
-          content=""
+          content={post.body}
           authorName={authorData.name}
           authorAvatar={authorData.avatar}
           authorRole={authorData.role}
@@ -130,15 +132,22 @@ const breadcrumbSchema = schemaBreadcrumb([
             caption={post.data.heroImage.caption}
           />
         )}
-        <div class="prose mt-8 md:mt-10">
-          <Content components={components} />
-        </div>
+        <Section size="sm">
+          <div class="prose">
+            <Content components={components} />
+          </div>
+        </Section>
+        <Section size="sm">
         <div class="mt-12 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           <ShareArticle url={canonicalURL} title={post.data.title} description={post.data.description} />
           <RssFeed class="sm:self-end" />
         </div>
-        <PostNavigation prevPost={prevPost} nextPost={nextPost} />
+        </Section>
+        <Section size="sm">
+          <PostNavigation prevPost={prevPost} nextPost={nextPost} />
+        </Section>
       </article>
+      </Section>
     </Container>
   </Section>
 </Layout>
