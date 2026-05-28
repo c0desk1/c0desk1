@@ -1,7 +1,6 @@
----
 // src/pages/robots.txt.ts
 import type { APIRoute } from "astro";
-import { SITE } from "@/const";
+import { SITE } from "@/consts";
 
 export const GET: APIRoute = () => {
   const content = `
