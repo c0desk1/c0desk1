@@ -561,10 +561,10 @@ export function buildMeta(opts: {
 }
 
 export const SOCIAL = [
-  { name: "Twitter / X",  url: "https://twitter.com/unloyd",        handle: "@unloyd" },
+  { name: "X",            url: "https://twitter.com/unloyd",        handle: "@unloyd" },
+  { name: "Facebook",     url: "https://facebook.com/unloyd",        handle: "@unloyd" },
+  { name: "Whatsapp",     url: "https://facebook.com/unloyd",        handle: "@unloyd" },
   { name: "Instagram",    url: "https://instagram.com/unloyd",      handle: "@unloyd" },
-  { name: "YouTube",      url: "https://youtube.com/@unloyd",       handle: "@unloyd" },
-  { name: "TikTok",       url: "https://tiktok.com/@unloyd",        handle: "@unloyd" },
 ] as const;
 
 export const PAGINATION = {
