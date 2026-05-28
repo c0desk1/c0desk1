@@ -444,6 +444,26 @@ export function schemaCollectionPage(opts: {
   return schemaWebPage({ ...opts, type: "CollectionPage" });
 }
 
+export function schemaPerson(opts: {
+  name: string;
+  url: string;
+  jobTitle?: string;
+  image?: string;
+  description?: string;
+  sameAs?: string[];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: opts.name,
+    url: opts.url,
+    ...(opts.jobTitle    ? { jobTitle: opts.jobTitle }       : {}),
+    ...(opts.image       ? { image: opts.image }             : {}),
+    ...(opts.description ? { description: opts.description } : {}),
+    ...(opts.sameAs      ? { sameAs: opts.sameAs }           : {}),
+  };
+}
+
 export function buildMeta(opts: {
   title?:        string;
   description?:  string;
@@ -576,4 +596,4 @@ export function formatDate(date: Date | string, short = false): string {
 export function toISOString(date: Date | string): string {
   const d = typeof date === "string" ? new Date(date) : date;
   return d.toISOString();
-}
+}
