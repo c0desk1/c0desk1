@@ -70,7 +70,7 @@ const legal = defineCollection({
   schema: z.object({
     lang: z.string().optional(),
     title: z.string(),
-    slug: z.string().optional(),
+    slug: z.string(),
     description: z.string().optional(),
     lastUpdated: z.coerce.date().optional(),
     seo: seoSchema,
