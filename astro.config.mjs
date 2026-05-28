@@ -1,6 +1,6 @@
 // @ts-check
 import { defineConfig, fontProviders, passthroughImageService } from 'astro/config';
-import { siteConfig } from './src/config/site';
+import { SITE } from './src/consts';
 
 import tailwindcss from '@tailwindcss/vite';
 import sitemap, {ChangeFreqEnum } from '@astrojs/sitemap';
@@ -21,9 +21,10 @@ import remarkBanner from './src/lib/mdx/remark-banner.ts';
 
 // https://astro.build/config
 export default defineConfig({
-  site: siteConfig.siteUrl,
+  site: SITE.url,
   base: "/",
   trailingSlash: "never",
+  output: 'static',
   vite: {
     plugins: [tailwindcss()]
   },
@@ -32,19 +33,20 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      filter: (page) =>
-        !page.includes('/401') &&
-        !page.includes('/403') &&
-        !page.includes('/404') &&
-        !page.includes('/500'),
+      filter: (page) => !page.match(/\/(401|403|404|500)$/),
       serialize(item) {
-        if (/\/blog\//.test(item.url)) {
+        const url = new URL(item.url);
+        if (url.pathname === '/') {
+          item.changefreq = ChangeFreqEnum.DAILY;
+          item.priority = 1.0;
+        } 
+        else if (url.pathname.startsWith('/blog')) {
           item.changefreq = ChangeFreqEnum.WEEKLY;
           item.priority = 0.8;
         }
-        if (item.url === 'https://c0desk1.my.id') {
-          item.changefreq = ChangeFreqEnum.DAILY;
-          item.priority = 1.0;
+        else {
+          item.changefreq = ChangeFreqEnum.MONTHLY;
+          item.priority = 0.5;
         }
         return item;
       },
