@@ -1,8 +1,7 @@
 ---
-// src/pages/legal/[slug].astro
+// src/pages/[slug].astro
 import { getCollection, render } from 'astro:content';
 import { SITE, ROUTES, buildMeta, schemaWebPage, schemaBreadcrumb } from "@/consts";
-import { formatDate } from "@/lib/utils";
 import Layout from "@/layouts/Layout.astro";
 import Container from "@/components/ui/Container.astro";
 import Breadcrumb from "@/components/ui/Breadcrumb.astro";
@@ -10,13 +9,19 @@ import Section from "@/components/ui/Section.astro";
 
 export async function getStaticPaths() {
   const legalPages = await getCollection('legal');
-  return legalPages.map((page) => ({
-    params: { slug: page.slug },
-    props: { page },
-  }));
+
+  return legalPages.map((page) => {
+    const slug = page.slug;
+
+    return {
+      params: { slug },
+      props: { page },
+    };
+  });
 }
 
 const { page } = Astro.props;
+
 if (!page) return Astro.redirect('/404');
 
 const { Content } = await render(page);
@@ -39,10 +44,6 @@ const schemas = [
     { name: page.data.title, url: canonicalURL },
   ]),
 ];
-
-const formattedLastUpdated = page.data.lastUpdated
-  ? formatDate(page.data.lastUpdated)
-  : null;
 ---
 
 <Layout {meta} schema={schemas}>
@@ -60,14 +61,6 @@ const formattedLastUpdated = page.data.lastUpdated
         <h1 class="text-heading-32 md:text-heading-40 lg:text-heading-56 font-bold text-balance mb-4">
           {page.data.title}
         </h1>
-        {formattedLastUpdated && (
-          <p class="text-body-14 text-(--fg-muted)">
-            Terakhir diperbarui:{" "}
-            <time datetime={page.data.lastUpdated?.toISOString()}>
-              {formattedLastUpdated}
-            </time>
-          </p>
-        )}
       </div>
       <article class="prose max-w-none">
         <Content />
