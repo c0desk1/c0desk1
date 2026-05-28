@@ -31,9 +31,11 @@ export const SITE = {
 
 // AUTHOR / ORGANIZATION
 export const AUTHOR = {
-  name:    "Unloyd",
-  url:     SITE.url,
+  name:    "Admin",
+  url:     "/admin",
+  role:    "Editor",
   email:   SITE.email,
+  avatar: "/org/unloyd-logo.svg",
   twitter: "@unloyd",
 } as const;
 
