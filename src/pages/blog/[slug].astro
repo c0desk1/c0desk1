@@ -14,7 +14,6 @@ import {
   buildMeta, 
   schemaArticle, 
   schemaNewsArticle,
-  schemaHowTo,
   schemaBreadcrumb, 
   schemaPerson 
 } from "@/consts";
@@ -42,7 +41,7 @@ export async function getStaticPaths() {
 }
 
 const { post, allPosts } = Astro.props;
-const { Content, headings } = await render(post);
+const { Content } = await render(post);
 
 const authorEntry = await getEntry(post.data.author);
 const canonicalURL = new URL(Astro.url.pathname, SITE.url).href;
@@ -71,8 +70,10 @@ const mainImage = post.data.seo?.ogImage || post.data.heroImage?.src || SITE.ogI
 const datePub = post.data.pubDate.toISOString();
 const dateMod = (post.data.updatedDate ?? post.data.pubDate).toISOString();
 
-const isNews = Category.slug === 'news';
-const isHowTo = ['tutorial', 'workflow', 'tips'].includes(Category.slug);
+const isNews = post.data.tags?.some(tag => {
+  const t = tag.toLowerCase();
+  return ['berita', 'news', 'update', 'pengumuman'].some(keyword => t.includes(keyword));
+});
 
 const meta = buildMeta({
   title: post.data.seo?.title || post.data.title,
@@ -99,31 +100,7 @@ const schemaData = {
   tags: post.data.tags,
 };
 
-let activeArticleSchema;
-
-if (isNews) {
-  activeArticleSchema = schemaNewsArticle(schemaData);
-} else if (isHowTo) {
-  const extractedSteps = headings
-    .filter(heading => heading.depth === 2 || heading.depth === 3)
-    .map((heading) => ({
-      name: heading.text,
-      text: heading.text,
-      url: `${canonicalURL}#${heading.slug}`
-    }));
-
-  if (extractedSteps.length > 0) {
-    activeArticleSchema = schemaHowTo({
-      ...schemaData,
-      name: schemaData.title,
-      steps: extractedSteps
-    });
-  } else {
-    activeArticleSchema = schemaArticle(schemaData);
-  }
-} else {
-  activeArticleSchema = schemaArticle(schemaData);
-}
+const activeArticleSchema = isNews ? schemaNewsArticle(schemaData) : schemaArticle(schemaData);
 ---
 
 <Layout {meta} schema={[activeArticleSchema, schemaBreadcrumb([
