@@ -1,7 +1,7 @@
 ---
 // src/pages/blog/[slug].astro
 import { getCollection, render, getEntry } from "astro:content";
-import { SITE, ROUTES, CATEGORIES, buildMeta, schemaArticle, schemaBreadcrumb } from "@/consts";
+import { SITE, AUTHOR, ROUTES, CATEGORIES, buildMeta, schemaArticle, schemaBreadcrumb } from "@/consts";
 import { slugify } from "@/lib/utils";
 import { components } from '@/components/layout/MDXComponents';
 
@@ -33,23 +33,36 @@ const currentIndex = sortedPosts.findIndex(p => p.id === post.id);
 const prevPost = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
 const nextPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
 
-// Author
 let authorData = {
-  name: SITE.author?.name || 'Unloyd',
-  avatar: SITE.author?.avatar || '',
-  role: '',
+  name: AUTHOR.name,
+  avatar: AUTHOR.avatar,
+  role: AUTHOR.role,
+  slug: slugify(AUTHOR.name),
 };
-if (post.data.author && /^[a-z0-9-]+$/.test(post.data.author)) {
-  try {
-    const authorEntry = await getEntry('authors', post.data.author);
-    if (authorEntry) {
-      authorData = {
-        name: authorEntry.data.name || authorData.name,
-        avatar: authorEntry.data.avatar || authorData.avatar,
-        role: authorEntry.data.role || '',
-      };
-    }
-  } catch {}
+
+if (post.data.author) {
+  if (typeof post.data.author === 'string' && /^[a-z0-9-]+$/.test(post.data.author)) {
+    try {
+      const authorEntry = await getEntry('authors', post.data.author);
+      if (authorEntry) {
+        authorData = {
+          name: authorEntry.data.name || authorData.name,
+          avatar: authorEntry.data.avatar || authorData.avatar,
+          role: authorEntry.data.role || authorData.role,
+          slug: post.data.author,
+        };
+      }
+    } catch {}
+  }
+  else if (typeof post.data.author === 'object' && post.data.author !== null) {
+    const ref = post.data.author as any;
+    authorData = {
+      name: ref.name || authorData.name,
+      avatar: ref.avatar || authorData.avatar,
+      role: ref.role || authorData.role,
+      slug: ref.slug || ref.id || authorData.slug,
+    };
+  }
 }
 
 let categoryName = 'General';
@@ -131,7 +144,7 @@ const breadcrumbSchema = schemaBreadcrumb([
             authorName={authorData.name}
             authorAvatar={authorData.avatar}
             authorRole={authorData.role}
-            authorSlug={post.data.author || ''}
+            authorSlug={authorData.slug}
             overviewItems={post.data.overview}
           />
         </Section>
