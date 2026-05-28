@@ -9,6 +9,8 @@ type NavItem = {
 
 type MobileNav = {
   label: string;
+  href: string;
+  isExternal?: boolean;
   children?: NavItem[];
 };
 
