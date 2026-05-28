@@ -1,25 +1,9 @@
 ---
-import Container from "@/components/ui/Container.astro";
-import Link from "@/components/ui/Link.astro";
-import { buildMeta, ROUTES } from "@/consts";
-import Layout from "@/layouts/Layout.astro";
-
-const meta = buildMeta({
-  title: "500 - Server Error",
-  description: "Terjadi kesalahan pada server.",
-});
+import Error from "@/components/Error.astro";
 ---
 
-<Layout {meta} hideHeader={true} hideFooter={true}>
-  <Container size="md">
-    <div class="flex flex-col items-center justify-center min-h-[80vh] text-center px-4">
-      <h1 class="text-4xl md:text-7xl font-extrabold tracking-tighter text-strong mb-4">500</h1>
-      <p class="text-body-16 text-muted mb-10 max-w-sm">
-        Maaf, sistem sedang mengalami kendala teknis. Tim kami sedang memperbaikinya.
-      </p>
-      <Link href={ROUTES.home || "/"} variant="noir" size="lg">
-        Kembali ke Beranda
-      </Link>
-    </div>
-  </Container>
-</Layout>
+<Error 
+  code="500" 
+  title="Server Error" 
+  description="Terjadi kesalahan pada server." 
+/>
