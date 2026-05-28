@@ -1,6 +1,14 @@
-import { defineCollection, reference } from "astro:content";
+import { 
+  defineCollection, 
+  reference 
+} from "astro:content";
+
 import { glob } from "astro/loaders";
 import { z } from 'astro/zod';
+
+import { CATEGORIES } from './consts';
+
+const categorySlugs = CATEGORIES.map((c) => c.slug) as [string, ...string[]];
 
 const seoSchema = z.object({
   title: z.string(),
@@ -39,15 +47,6 @@ const authors = defineCollection({
   }),
 });
 
-const categories = defineCollection({
-  loader: glob({ base: './src/content/categories', pattern: '**/*.{json, md}' }),
-  schema: z.object({
-    name: z.string(),
-    slug: z.string().optional(),
-    description: z.string(),
-  }),
-});
-
 const blog = defineCollection({
   loader: glob({ base: './src/content/blog', pattern: '**/*.{md,mdx}' }),
   schema: z.object({
@@ -59,7 +58,7 @@ const blog = defineCollection({
     draft: z.boolean().default(false),
 	  featured: z.boolean().default(false),
     author: reference("authors"),
-    category: reference("categories"),
+    category: z.enum(categorySlugs),
     tags: z.array(z.string()).default([]),
     overview: z.array(z.string()).optional(),
     seo: seoSchema,
@@ -81,6 +80,5 @@ const legal = defineCollection({
 export const collections = {
   blog,
   authors,
-  categories,
   legal
 };
