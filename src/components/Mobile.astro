@@ -1,10 +1,13 @@
 ---
 // src/components/layout/MobileMenu.astro
-import { siteConfig } from "@/config/site";
+import { 
+  SITE,
+  NAV 
+} from "@/consts";
 import Icon from "@/components/ui/Icon";
 import ThemeToggle from "@/components/ui/ThemeToggle.astro";
 
-const navItems = siteConfig.MobileNavItems;
+const navItems = NAV.MobileBar;
 ---
 
 <div
@@ -18,9 +21,9 @@ const navItems = siteConfig.MobileNavItems;
   id="mnav-sheet"
   role="dialog"
   aria-modal="true"
-  aria-label={siteConfig.mobileAria}
+  aria-label="Menu mobile"
   class="fixed bottom-0 left-0 right-0 z-200
-         bg-(--bg) border-t border-(--border)
+         bg-base border-t border-(--border)
          rounded-t-xl
          shadow-[0_-8px_40px_rgba(0,0,0,0.12)]
          max-h-[75dvh]
@@ -80,7 +83,7 @@ const navItems = siteConfig.MobileNavItems;
   </nav>
   
   <div class="flex items-center justify-between px-5 py-4 border-t border-(--border)/60 gap-4">
-    <div class="text-label-12 text-muted">© {new Date().getFullYear()} {siteConfig.siteName}</div>
+    <div class="text-label-12 text-muted">© {new Date().getFullYear()} {SITE.name}</div>
     <ThemeToggle />
   </div>
 </div>
