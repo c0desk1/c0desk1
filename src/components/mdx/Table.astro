@@ -1,6 +1,7 @@
 ---
 // src/components/mdx/Table.astro
 
+// Fungsi konversi HTML table ke markdown (pipe table)
 function tableToMarkdown(tableEl: HTMLTableElement): string {
   const rows = Array.from(tableEl.querySelectorAll('tr'));
   const markdownRows: string[] = [];
@@ -8,99 +9,101 @@ function tableToMarkdown(tableEl: HTMLTableElement): string {
   rows.forEach((row, idx) => {
     const cells = Array.from(row.querySelectorAll('th, td'));
     const cellContents = cells.map(cell => {
-      const text = cell.textContent?.trim() || '';
-      return text.replace(/\|/g, '\\|');
+      let text = cell.textContent?.trim() || '';
+      // Escape pipe
+      text = text.replace(/\|/g, '\\|');
+      // Hapus newline
+      text = text.replace(/\n/g, ' ');
+      return text;
     });
-    const markdownRow = '| ' + cellContents.join(' | ') + ' |';
-    markdownRows.push(markdownRow);
-    
+    markdownRows.push('| ' + cellContents.join(' | ') + ' |');
+    // separator setelah header (baris pertama)
     if (idx === 0) {
-      const separator = '|' + cells.map(() => ' --- |').join('');
-      markdownRows.push(separator);
+      markdownRows.push('|' + cells.map(() => ' --- |').join(''));
     }
   });
-  
   return markdownRows.join('\n');
 }
 ---
 
 <div class="table-group relative my-6 md:my-8">
-  <div class="table-toolbar absolute right-2 top-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+  <div class="table-toolbar absolute right-2 top-2 z-10 opacity-0 transition-opacity duration-200">
     <button
-      aria-label="Copy table as Markdown"
       type="button"
-      class="copy-table-btn rounded-md bg-(--prose-bg-muted) px-2 py-1 text-xs font-medium text-(--prose-fg-subtle) hover:bg-(--prose-surface-hover) hover:text-(--prose-fg) shadow-sm border border-(--prose-border)">
+      aria-label="Copy table as Markdown"
+      class="copy-table-btn rounded-md bg-(--prose-bg-muted) px-2 py-1 text-xs font-medium text-(--prose-fg-subtle) shadow-sm border border-(--prose-border) hover:bg-(--prose-surface-hover) hover:text-(--prose-fg)"
+    >
       Copy
     </button>
   </div>
   <div class="table-wrapper overflow-x-auto border border-(--prose-border) rounded-(--prose-radius-lg) bg-(--prose-surface)">
-    <table class="min-w-full">
+    <table class="min-w-full border-collapse">
       <slot />
-    </table>
+    }
   </div>
 </div>
 
 <script>
-  document.querySelectorAll('.table-group').forEach(group => {
-    const btn = group.querySelector('.copy-table-btn');
-    const wrapper = group.querySelector('.table-wrapper');
-    if (!btn || !wrapper) return;
-    
-    btn.addEventListener('click', async () => {
-      const table = wrapper.querySelector('table');
-      if (!table) return;
-      const markdown = tableToMarkdown(table);
-      try {
-        await navigator.clipboard.writeText(markdown);
-        const originalText = btn.textContent;
-        btn.textContent = 'Copied!';
-        setTimeout(() => {
-          btn.textContent = originalText;
-        }, 2000);
-      } catch (err) {
-        console.error('Gagal copy:', err);
-      }
-    });
-  });
-  
-  function tableToMarkdown(table) {
-    const rows = Array.from(table.querySelectorAll('tr'));
-    const markdownRows = [];
-    rows.forEach((row, idx) => {
-      const cells = Array.from(row.querySelectorAll('th, td'));
-      const cellContents = cells.map(cell => {
-        let text = cell.textContent?.trim() || '';
-        text = text.replace(/\|/g, '\\|');
-        text = text.replace(/\n/g, ' ');
-        return text;
+  (() => {
+    function tableToMarkdown(table) {
+      const rows = Array.from(table.querySelectorAll('tr'));
+      const mdRows = [];
+      rows.forEach((row, idx) => {
+        const cells = Array.from(row.querySelectorAll('th, td'));
+        const contents = cells.map(cell => {
+          let t = cell.textContent?.trim() || '';
+          t = t.replace(/\|/g, '\\|');
+          t = t.replace(/\n/g, ' ');
+          return t;
+        });
+        mdRows.push('| ' + contents.join(' | ') + ' |');
+        if (idx === 0) {
+          mdRows.push('|' + cells.map(() => ' --- |').join(''));
+        }
       });
-      const markdownRow = '| ' + cellContents.join(' | ') + ' |';
-      markdownRows.push(markdownRow);
-      if (idx === 0) {
-        const separator = '|' + cells.map(() => ' --- |').join('');
-        markdownRows.push(separator);
-      }
+      return mdRows.join('\n');
+    }
+
+    document.querySelectorAll('.table-group').forEach(group => {
+      const btn = group.querySelector('.copy-table-btn');
+      const wrapper = group.querySelector('.table-wrapper');
+      if (!btn || !wrapper) return;
+
+      btn.addEventListener('click', async () => {
+        const table = wrapper.querySelector('table');
+        if (!table) return;
+        const markdown = tableToMarkdown(table);
+        try {
+          await navigator.clipboard.writeText(markdown);
+          const orig = btn.textContent;
+          btn.textContent = 'Copied!';
+          setTimeout(() => { btn.textContent = orig; }, 2000);
+        } catch (err) {
+          console.error(err);
+        }
+      });
     });
-    return markdownRows.join('\n');
-  }
+  })();
 </script>
 
-<style is:global>
-  .table-group {
-    position: relative;
+<style>
+  .table-group:hover .table-toolbar {
+    opacity: 1;
   }
   .table-toolbar {
-    transition: opacity 0.2s ease;
+    opacity: 0;
   }
   .table-wrapper {
     max-width: 100%;
     overflow-x: auto;
   }
-  .prose th, .prose td {
+  .prose .table-wrapper th,
+  .prose .table-wrapper td {
     padding: 0.75rem 1.25rem;
   }
   @media (min-width: 768px) {
-    .prose th, .prose td {
+    .prose .table-wrapper th,
+    .prose .table-wrapper td {
       padding: 1rem 1.5rem;
     }
   }
