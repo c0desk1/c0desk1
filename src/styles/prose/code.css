@@ -82,8 +82,6 @@
   display:     flex;
   align-items: center;
   flex-shrink: 0;
-  width:       1.125rem;
-  height:      1.125rem;
   color:       var(--prose-code-text);
 }
 
@@ -117,7 +115,7 @@
   align-items:   center;
   justify-content: center;
   flex-shrink:   0;
-  border-radius: var(--prose-radius-sm);
+  border-radius: var(--prose-radius-md);
   border:        1px solid transparent;
   color:         var(--prose-fg-dim);
   background:    transparent;
@@ -180,6 +178,7 @@
 .prose pre.line-numbers {
   counter-reset:  line;
   padding-left:   2.5rem;
+  
 }
 
 .prose pre.line-numbers .line {
