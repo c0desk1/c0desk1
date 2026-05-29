@@ -1,13 +1,12 @@
 // @ts-check
 import { defineConfig, fontProviders, passthroughImageService } from 'astro/config';
 import { SITE } from './src/consts';
-
-import tailwindcss from '@tailwindcss/vite';
 import sitemap, {ChangeFreqEnum } from '@astrojs/sitemap';
-import mdx from '@astrojs/mdx';
-import expressiveCode from 'astro-expressive-code';
-import { satteri } from '@astrojs/markdown-satteri';
+import tailwindcss from '@tailwindcss/vite';
 import react from '@astrojs/react';
+import mdx from '@astrojs/mdx';
+import { satteri } from '@astrojs/markdown-satteri';
+
 
 import { satteriHeadingAnchor } from './src/lib/mdx/satteri-heading-anchor';
 import { satteriCallout } from './src/lib/mdx/satteri-callout';
