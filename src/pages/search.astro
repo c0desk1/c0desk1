@@ -128,7 +128,7 @@ const totalPosts = sortedPosts.length;
 </Layout>
 
 <script define:vars={{ totalPosts }}>
-  const initSearch = () => {
+  function initSearch() {
     const input     = document.getElementById("search-input");
     const grid      = document.getElementById("search-grid");
     const empty     = document.getElementById("empty-state");
@@ -142,12 +142,12 @@ const totalPosts = sortedPosts.length;
       const desc     = el.dataset.desc     ?? "";
       const cat      = el.dataset.cat      ?? "";
       const catSlug  = el.dataset.catSlug  ?? "";
-      if (title === q)         return 100;
+      if (title === q)          return 100;
       if (title.startsWith(q)) return 80;
       if (title.includes(q))   return 60;
       if (desc.includes(q))    return 40;
       if (cat.includes(q) || catSlug.includes(q)) return 30;
-      
+      // fuzzy
       let qi = 0;
       for (let i = 0; i < title.length && qi < q.length; i++)
         if (title[i] === q[qi]) qi++;
@@ -184,12 +184,9 @@ const totalPosts = sortedPosts.length;
         s: score(el, q),
       }));
 
-      scored.sort((a, b) => b.s - a.s);
-
       scored.forEach(({ el, s }) => {
         if (s > 0) {
           el.style.display = "block";
-          grid.appendChild(el); 
           visible++;
         } else {
           el.style.display = "none";
@@ -209,25 +206,6 @@ const totalPosts = sortedPosts.length;
       updateCount(visible, q);
     };
 
-    input.removeEventListener("input", window.__searchInputHandler);
-    window.__searchInputHandler = (e) => {
-      const q = e.target.value;
-      const url = new URL(window.location.href);
-      q.trim() ? url.searchParams.set("q", q) : url.searchParams.delete("q");
-      window.history.replaceState({}, "", url.toString());
-      filterPosts(q);
-    };
-    input.addEventListener("input", window.__searchInputHandler);
-
-    document.removeEventListener("keydown", window.__searchPageKeyHandler);
-    window.__searchPageKeyHandler = (e) => {
-      if (e.key === "/" && document.activeElement !== input) {
-        e.preventDefault();
-        input.focus();
-      }
-    };
-    document.addEventListener("keydown", window.__searchPageKeyHandler);
-
     const urlParams = new URLSearchParams(window.location.search);
     const initialQuery = urlParams.get("q") ?? "";
     if (initialQuery) {
@@ -240,8 +218,23 @@ const totalPosts = sortedPosts.length;
     } else {
       updateCount(items.length, "");
     }
-  };
 
-  initSearch();
+    input.addEventListener("input", (e) => {
+      const q = e.target.value;
+      const url = new URL(window.location.href);
+      q.trim() ? url.searchParams.set("q", q) : url.searchParams.delete("q");
+      window.history.replaceState({}, "", url.toString());
+      filterPosts(q);
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "/" && document.activeElement !== input) {
+        e.preventDefault();
+        input.focus();
+      }
+    });
+  }
+
   document.addEventListener("astro:page-load", initSearch);
+  document.addEventListener("DOMContentLoaded", initSearch);
 </script>

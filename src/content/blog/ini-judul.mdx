@@ -42,20 +42,27 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor i
 Ini paragraf kedua dengan **teks tebal**, *teks miring*, dan ***teks tebal miring***. Juga ada ~~coret~~ dan `inline code`. Selain itu terdapat kombinasi elemen inline lain untuk membantu testing typography, spacing antar paragraf, line-height, wrapping text, serta rendering markdown pada berbagai ukuran layar dan mode tema..
 
 ## Blockquote
-> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere, nibh sed commodo tristique, augue lacus facilisis nisl, sed vulputate velit nunc eget erat. Quote ini dibuat lebih panjang untuk membantu proses testing typography, spacing, wrapping text, dan rendering multiline pada component admonition quote.
-> / author: bima-akbar
+:::quote
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere, nibh sed commodo tristique, augue lacus facilisis nisl, sed vulputate velit nunc eget erat. Quote ini dibuat lebih panjang untuk membantu proses testing typography, spacing, wrapping text, dan rendering multiline pada component admonition quote.
+:author[bima-akbar]
+:::
 
-> Suspendisse potenti. Curabitur convallis, sapien sit amet faucibus tempus, ligula tortor dignissim erat, vel vulputate elit sem sed neque. Bagian ini berguna untuk memastikan inline link, hover state, dan external source rendering tetap konsisten pada berbagai ukuran layar.
-> / source: [c0desk1](https://c0desk1.my.id/)
+:::quote
+Suspendisse potenti. Curabitur convallis, sapien sit amet faucibus tempus, ligula tortor dignissim erat, vel vulputate elit sem sed neque. Bagian ini berguna untuk memastikan inline link, hover state, dan external source rendering tetap konsisten pada berbagai ukuran layar.
+:cite[c0desk1 | https://c0desk1.my.id/]
+:::
 
-> Praesent feugiat, purus vel luctus elementum, lorem arcu tincidunt nisl, vitae pulvinar libero turpis nec justo. Konten diperpanjang untuk membantu debugging alignment author, overflow content, serta vertical rhythm pada layout quote custom.
-> / Seseorang
+:::quote
+Praesent feugiat, purus vel luctus elementum, lorem arcu tincidunt nisl, vitae pulvinar libero turpis nec justo. Konten diperpanjang untuk membantu debugging alignment author, overflow content, serta vertical rhythm pada layout quote custom.
+:cite[Seseorang]
+:::
+
+:::quote
+Donec faucibus, risus vel luctus tincidunt, justo sapien placerat nibh, sed gravida lorem lectus non sapien. Variasi tanpa metadata seperti ini penting untuk memastikan renderer tetap stabil meskipun tidak memiliki source maupun author tambahan.
+:::
 
 > Donec faucibus, risus vel luctus tincidunt, justo sapien placerat nibh, sed gravida lorem lectus non sapien. Variasi tanpa metadata seperti ini penting untuk memastikan renderer tetap stabil meskipun tidak memiliki source maupun author tambahan.
-
-> Donec faucibus, risus vel luctus tincidunt, justo sapien placerat nibh, sed gravida lorem lectus non sapien. Variasi tanpa metadata seperti ini penting untuk memastikan renderer tetap stabil meskipun tidak memiliki source maupun author tambahan.
->
-> <cite>OK</cite>
+> <cite>Ini cite</cite>
 
 ## Daftar (List)
 
@@ -88,6 +95,7 @@ Ini paragraf kedua dengan **teks tebal**, *teks miring*, dan ***teks tebal mirin
 
 ## Kode
 :::code 
+:title[console.log]
 :del[1] 
 :ins[2-4] 
 :mark[5]
@@ -138,6 +146,7 @@ export function getUser(): User {
 :::
 
 :::code
+:title[Button.tsx]
 ```tsx
 // React TSX example
 type ButtonProps = {
@@ -281,10 +290,12 @@ ORDER BY published_at DESC;
 ![](/org/c0desk1-og.webp)
 
 ## Gambar dengan caption
-:::figure
-![ini alt](/org/c0desk1-og.webp "Ini tooltip")
-Ini Caption OG Image
-:::
+<figure>
+  <img src="/org/c0desk1-og.webp" alt="Ini OG c0desk1" />
+  <figcaption>
+    Caption dan gambar di atas dipakai untuk memastikan alignment caption, typography, spacing vertikal, serta perilaku layout media tetap konsisten ketika digunakan bersama elemen markdown lainnya seperti paragraf, heading, maupun list.
+  </figcaption>
+</figure>
 
 ## Horizontal Rule
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Bagian ini digunakan untuk membantu testing spacing sebelum elemen horizontal rule, termasuk margin atas, vertical rhythm, dan konsistensi typography pada prose custom.
