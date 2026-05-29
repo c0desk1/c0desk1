@@ -34,7 +34,7 @@ In this article, I'll show you how to create simple PowerShell scripts so your W
 
 ## PowerShell: Not Just a Blue Screen Thing
 
-Many ask, `Why not just use CMD, dude?`. Well, PowerShell is way *smarter* than CMD. It can read objects. So if you want to find files larger than 1GB or files that haven't been opened in a year, **PowerShell** can find them super easily.
+Many ask, <q>Why not just use CMD, dude?</q>. Well, PowerShell is way *smarter* than **CMD**. It can read objects. So if you want to find files larger than 1GB or files that haven't been opened in a year, **PowerShell** can find them super easily.
 
 ### Auto-Rename: Make Your Folder Aesthetic
 
@@ -43,7 +43,7 @@ Let's say you have a folder with camera photos named `DSC001`, `DSC002`, etc. An
 Smash this code:
 
 :::code
-```powershell
+```sh
 # Change this path to your target folder!
 $folderPath = "C:\Users\You\Documents\Project_Assets"
 
@@ -67,7 +67,7 @@ I'm sure your Temp or Downloads folder is a ghost town. Well, we can create a sc
 Copy-Paste this code:
 
 :::code
-```powershell
+```sh
 # Your junk folder path
 $trashPath = "D:\Downloads\Trash"
 $daysLimit = 30
@@ -86,7 +86,6 @@ If you're afraid of deleting the wrong thing, add `-WhatIf` at the end of the `R
 The scripts above won't be useful if you have to open and run them manually every day. You need to use Windows' built-in Task Scheduler:
 
 :::steps
-
 ### Step 1
 Search for Task Scheduler in the Start Menu.
 
@@ -101,11 +100,9 @@ In Program/script, enter: `powershell.exe`.
 
 ### Step 5 
 In Add arguments, enter: `-ExecutionPolicy Bypass -File "C:\Path\To\Your\Script.ps1"`.
-
 :::
 
 Done! Now every morning when you turn on your PC, that script will run automatically in the background.
 
 ## Conclusion
-
 Still doing things manually these days? Such a waste of your skills. With a little automation like this, you're one step closer to becoming an efficient power user.
