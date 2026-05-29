@@ -1,39 +1,45 @@
 /* src/styles/prose/code.css */
-
 .prose code:not(pre code) {
   @apply text-code-14;
   background-color: var(--prose-code-bg);
-  color:            var(--prose-accent);
-  padding:          0.2em 0.45em;
-  border-radius:    var(--prose-radius-sm);
-  border:           1px solid var(--prose-border);
-  white-space:      break-spaces;
-  font-weight:      500;
+  color: var(--prose-accent);
+  padding: 0.2em 0.45em;
+  border-radius: var(--prose-radius-sm);
+  border: 1px solid var(--prose-border);
+  white-space: break-spaces;
+  font-weight: 500;
 }
 
-.prose h1 code, .prose h2 code,
-.prose h3 code, .prose h4 code,
+.prose h1 code,
+.prose h2 code,
+.prose h3 code,
+.prose h4 code,
 .prose summary code {
   background: transparent;
-  border:     none;
-  padding:    0;
-  color:      inherit;
+  border: none;
+  padding: 0;
+  color: inherit;
 }
 
-.prose a code { color: inherit; }
-
+.prose a code {
+  color: inherit;
+}
 .prose pre {
-  background:  none !important;
-  padding:     1.25rem 1.5rem;
-  overflow-x:  auto;
-  margin:      0 !important;
-  position:    relative;
+  background: none !important;
+  padding: 1.25rem 1.5rem;
+  overflow-x: auto;
+  margin: 0 !important;
+  position: relative;
   scrollbar-width: thin;
   scrollbar-color: var(--prose-border) transparent;
 }
-.prose pre::-webkit-scrollbar        { height: 4px; }
-.prose pre::-webkit-scrollbar-track  { background: transparent; }
-.prose pre::-webkit-scrollbar-thumb  { background: var(--prose-border); border-radius: var(--radius-full); }
+
+.prose pre::-webkit-scrollbar { height: 4px; }
+.prose pre::-webkit-scrollbar-track { background: transparent; }
+.prose pre::-webkit-scrollbar-thumb {
+  background: var(--prose-border);
+  border-radius: var(--radius-full);
+}
 
 .prose pre[data-lang]::before {
   content:        attr(data-lang);
@@ -54,10 +60,11 @@
 }
 
 .prose .code-block-wrapper {
-  margin:       2.5rem 0;
+  margin: 2.5rem 0;
+  overflow-x: auto;
   border-radius: var(--prose-radius-lg);
-  border:        1px solid var(--prose-code-border);
-  background:    var(--prose-code-bg) !important;
+  border: 1px solid var(--prose-code-border);
+  background: var(--prose-code-bg) !important;
   overflow:      hidden;
 }
 
@@ -77,22 +84,18 @@
   flex-shrink: 0;
   width:       1.125rem;
   height:      1.125rem;
-  color:       var(--prose-fg-subtle);
+  color:       var(--prose-code-text);
 }
 
 .prose .code-block-title {
-  font-family:    var(--font-mono);
-  font-size:      0.6875rem;
-  font-weight:    600;
-  letter-spacing: 0.04em;
-  color:          var(--prose-fg-subtle);
+  @apply text-mono-label-13;
+  color:          var(--prose-code-text);
   white-space:    nowrap;
   overflow:       hidden;
   text-overflow:  ellipsis;
   min-width:      0;
 }
 
-/* diff legend badges */
 .prose .code-diff-legend {
   display:     flex;
   align-items: center;
@@ -114,8 +117,6 @@
   align-items:   center;
   justify-content: center;
   flex-shrink:   0;
-  width:         1.75rem;
-  height:        1.75rem;
   border-radius: var(--prose-radius-sm);
   border:        1px solid transparent;
   color:         var(--prose-fg-dim);
@@ -139,79 +140,80 @@
   .prose .copy-button { opacity: 1; }
 }
 
+.prose .copy-button .copy-icon,
+.prose .copy-button .check-icon {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
 .prose .code-content {
+  margin: 0;
   overflow-x: auto;
+  border-radius: 0;
+  border-style: none;
+  background: var(--prose-code-bg) !important;
   scrollbar-width: thin;
   scrollbar-color: var(--prose-border) transparent;
 }
+
 .prose .code-content::-webkit-scrollbar        { height: 4px; }
 .prose .code-content::-webkit-scrollbar-track  { background: transparent; }
 .prose .code-content::-webkit-scrollbar-thumb  { background: var(--prose-border); border-radius: 2px; }
 
 .prose .code-content pre {
   @apply text-code-14;
-  border:           none !important;
-  margin:           0 !important;
-  border-radius:    0 !important;
-  background:       transparent !important;
+  border: none;
+  margin: 0;
+  border-radius: 0;
+  background-color: transparent !important;
+  overflow-x: visible;
+  white-space: pre;
+  word-break: normal;
+  word-wrap: normal;
   padding:          1.125rem 1.25rem;
-  overflow-x:       visible;
-  white-space:      pre;
-  word-break:       normal;
-  word-wrap:        normal;
 }
 
 .prose .code-content pre code {
   white-space: pre !important;
 }
 
-.prose .code-content pre {
-  line-height: 1.4;
-}
-
-.prose pre .line {
-  margin: 0;
-  padding: 0;
-  line-height: inherit;
-}
-
 .prose pre.line-numbers {
   counter-reset:  line;
-  padding-left:   3.5rem;
+  padding-left:   2.5rem;
 }
 
 .prose pre.line-numbers .line {
-  display:        block;
   position:       relative;
   counter-increment: line;
 }
 
 .prose pre.line-numbers .line::before {
+  @apply text-code-14;
   content:        counter(line);
   position:       absolute;
   left:           -3rem;
   width:          2.25rem;
   text-align:     right;
   color:          var(--prose-code-number);
-  font-size:      0.8em;
   user-select:    none;
   pointer-events: none;
   opacity:        0.4;
 }
 
 .prose pre .line.highlighted {
-  background:    rgba(255, 255, 255, 0.06);
+  background:    var(--prose-code-punctuation);
   display:       block;
   margin-inline: -1.25rem;
   padding-inline: 1.25rem;
 }
 
 .prose pre .line.diff-add {
-  background:    rgba(61, 214, 140, 0.08);
+  background:    var(--prose-code-function);
   display:       block;
   margin-inline: -1.25rem;
   padding-inline: 1.25rem;
 }
+
 .prose pre .line.diff-add::before {
   content:       "+";
   position:      absolute;
@@ -245,12 +247,13 @@
   background-color: var(--prose-surface) !important;
   overflow-x: auto;
 }
+
 .dark .astro-code span {
   background-color: transparent !important;
-  color:            var(--shiki-dark) !important;
-  white-space:      pre;
-  word-break:       normal;
-  word-wrap:        normal;
+  color: var(--shiki-dark) !important;
+  white-space: pre;
+  word-break: normal;
+  word-wrap: normal;
 }
 
 @media (max-width: 767px) {
@@ -260,6 +263,11 @@
 
   .prose .code-block-wrapper {
     margin:        1.75rem 0;
+  }
+
+  .prose pre {
+    padding: 1.5rem 1rem;
+    margin: 1.5rem 0;
     border-radius: var(--prose-radius-sm);
   }
 
