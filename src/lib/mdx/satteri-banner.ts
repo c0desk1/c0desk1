@@ -1,11 +1,11 @@
 // src/lib/mdx/satteri-banner.ts
 import { defineMdastPlugin } from 'satteri';
 
-function extractTextFromChildren(nodes: any[]): string {
+function collectText(nodes: any[]): string {
   let text = '';
   for (const node of nodes) {
     if (node.type === 'text') text += node.value;
-    else if (node.children) text += extractTextFromChildren(node.children);
+    else if (node.children) text += collectText(node.children);
   }
   return text.trim();
 }
@@ -15,31 +15,26 @@ export const satteriBanner = defineMdastPlugin({
   containerDirective(node: any, ctx: any) {
     if (node.name !== 'banner') return;
 
-    let icon = '';
     let title = '';
+    let icon = '';
     let description = '';
-    const links: { url: string; label: string }[] = [];
+    const links: { label: string; url: string }[] = [];
 
-    const newChildren: any[] = [];
     for (const child of node.children || []) {
       if (child.type === 'paragraph') {
         for (const sub of child.children) {
           if (sub.type === 'textDirective') {
-            if (sub.name === 'ikon') {
-              const url = sub.children?.[0]?.value || '';
-              if (url) icon = url;
+            if (sub.name === 'icons') {
+              const textNode = sub.children?.find((c: any) => c.type === 'text');
+              if (textNode) icon = textNode.value;
             } else if (sub.name === 'title') {
-              title = sub.children?.[0]?.value || '';
-            } else if (sub.name === 'button') {
-              let label = '';
-              let url = '';
-              if (sub.children?.[0]?.type === 'text') label = sub.children[0].value;
-              if (sub.attributes) {
-                const hrefAttr = sub.attributes.find((a: any) => a.name === 'href');
-                if (hrefAttr && hrefAttr.value) url = hrefAttr.value;
-              }
-              if (label && url) links.push({ label, url });
+              const textNode = sub.children?.find((c: any) => c.type === 'text');
+              if (textNode) title = textNode.value;
             }
+          } else if (sub.type === 'link') {
+            const label = collectText(sub.children);
+            const url = sub.url;
+            if (label && url) links.push({ label, url });
           } else if (sub.type === 'text') {
             description += sub.value + ' ';
           }
@@ -48,6 +43,7 @@ export const satteriBanner = defineMdastPlugin({
         description += child.value + ' ';
       }
     }
+
     description = description.trim().replace(/\s+/g, ' ');
 
     const component: any = {
