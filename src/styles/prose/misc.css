@@ -158,7 +158,7 @@ time {
   @apply text-code-16;
   background-color: var(--prose-code-bg);
   color: var(--prose-code-text);
-  padding: 0.15rem 0.35rem;
+  padding: 0.2em 0.45em;
   border-radius: var(--radius);
   border: 1px solid var(--prose-code-border);
   display: inline-block;
