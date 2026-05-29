@@ -109,8 +109,14 @@ if (isNews) {
   activeArticleSchema = schemaNewsArticle(schemaData);
 } else if (hasAppDetails) {
   activeArticleSchema = schemaSoftwareApplication({
-    ...schemaData,
-    appDetails: post.data.appDetails
+    name: schemaData.title,
+    description: schemaData.description,
+    url: schemaData.url,
+    image: schemaData.image,
+    operatingSystem: post.data.appDetails.operatingSystem,
+    applicationCategory: post.data.appDetails.applicationCategory,
+    price: post.data.appDetails.price,
+    priceCurrency: post.data.appDetails.priceCurrency
   });
 } else {
   activeArticleSchema = schemaArticle(schemaData);
