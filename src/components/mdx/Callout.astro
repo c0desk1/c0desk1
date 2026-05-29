@@ -1,34 +1,34 @@
 ---
-import Icon from '@/components/ui/Icon';
+// src/components/ui/Callout.astro — Variant C: Split column icon strip
+import Icon from "@/components/ui/Icon";
 
 interface Props {
-  type?: 'note' | 'info' | 'tip' | 'warning' | 'danger' | 'important' | 'caution';
+  type?: "note" | "info" | "tip" | "warning" | "danger" | "important" | "caution";
 }
 
-const { type = 'note' } = Astro.props;
+const { type = "note" } = Astro.props;
 
-const types = {
-  note: { icon: 'note' },
-  info: { icon: 'info' },
-  tip: { icon: 'tip' },
-  warning: { icon: 'warning' },
-  danger: { icon: 'danger' },
-  important: { icon: 'important' },
-  caution: { icon: 'caution' },
+const icons = {
+  note:      "note",
+  info:      "info",
+  tip:       "tip",
+  warning:   "warning",
+  danger:    "danger",
+  important: "important",
+  caution:   "caution",
 } as const;
 
-const current = types[type];
-const label = type.toUpperCase();
+const label = type.charAt(0).toUpperCase() + type.slice(1);
 ---
 
-<aside class="callout" data-callout={type}>
+<aside class="callout" data-callout={type} role="note" aria-label={label}>
+  <div class="callout-aside">
+    <span class="callout-icon" aria-hidden="true">
+      <Icon name={icons[type] as any} className="size-5" />
+    </span>
+    <span class="callout-label" aria-hidden="true">{label}</span>
+  </div>
   <div class="callout-body">
-    <div class="callout-header">
-      <div class="callout-icon" aria-hidden="true">
-        <Icon name={current.icon as any} className="size-5 md:size-6" />
-      </div>
-      <span class="callout-mobile-label">{label}</span>
-    </div>
     <div class="callout-content text-body-14 md:text-body-16">
       <slot />
     </div>
