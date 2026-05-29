@@ -8,13 +8,24 @@ export const satteriFigure = defineMdastPlugin({
 
     let imageNode = null;
     let captionText = '';
+    let href = '';
 
     for (const child of node.children || []) {
       if (child.type === 'paragraph') {
         for (const sub of child.children) {
-          if (sub.type === 'image') {
+          if (sub.type === 'link') {
+            href = sub.url || '';
+            if (sub.children) {
+              for (const subSub of sub.children) {
+                if (subSub.type === 'image') imageNode = subSub;
+                else if (subSub.type === 'text') captionText += subSub.value;
+              }
+            }
+          }
+          else if (sub.type === 'image') {
             imageNode = sub;
-          } else if (sub.type === 'text') {
+          }
+          else if (sub.type === 'text') {
             captionText += sub.value;
           }
         }
@@ -39,6 +50,9 @@ export const satteriFigure = defineMdastPlugin({
       ],
       children: [],
     };
+    if (href) {
+      component.attributes.push({ type: 'mdxJsxAttribute', name: 'href', value: href });
+    }
     ctx.replaceNode(node, component);
   },
 });
