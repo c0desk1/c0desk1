@@ -2,7 +2,7 @@
 // src/components/mdx/Table.astro
 import Icon from "@/components/ui/Icon";
 
-const { title = "Table" } = Astro.props;
+const { title = "Tabel" } = Astro.props;
 ---
 
 <div class="table-wrapper relative my-4 overflow-hidden rounded-lg border border-(--prose-table-border) bg-(--prose-table-bg)">
@@ -13,97 +13,79 @@ const { title = "Table" } = Astro.props;
     <div class="flex items-center gap-2 shrink-0">
       <button
         type="button"
-        aria-label="Copy table as Markdown"
+        aria-label="Copy table as CSV"
+        title="Copy as CSV"
         class="copy-table-button rounded-full p-2 hover:bg-muted active:bg-muted"
       >
         <Icon name="copy" className="copy-icon size-5 transition-colors" />
         <Icon name="check" className="check-icon hidden size-5 text-accent transition-colors" />
-      </button>
-      <button
-        type="button"
-        aria-label="Zoom table"
-        class="zoom-table-button rounded-full p-2 hover:bg-muted active:bg-muted"
-      >
-        <Icon name="zoom" className="copy-icon size-5 transition-colors" />
       </button>
     </div>
   </div>
   <div class="table-content overflow-x-auto">
     <table class="min-w-full border-collapse">
       <slot />
-    </div>
+    </table>
   </div>
 </div>
 
 <script>
-  // @ts-nocheck
   (() => {
-    function tableToMarkdown(table) {
+    function tableToCSV(table: HTMLTableElement) {
       const rows = Array.from(table.querySelectorAll('tr'));
-      const mdRows = [];
-      rows.forEach((row, idx) => {
+      const csvRows = rows.map(row => {
         const cells = Array.from(row.querySelectorAll('th, td'));
-        const contents = cells.map(cell => {
-          let t = cell.textContent?.trim() || '';
-          t = t.replace(/\|/g, '\\|').replace(/\n/g, ' ');
-          return t;
+        const csvCells = cells.map(cell => {
+          let text = cell.textContent?.trim() || '';
+          
+          text = text.replace(/"/g, '""');
+          
+          if (text.search(/("|,|\n)/g) >= 0) {
+            text = `"${text}"`;
+          }
+          return text;
         });
-        mdRows.push('| ' + contents.join(' | ') + ' |');
-        if (idx === 0) {
-          mdRows.push('|' + cells.map(() => ' --- |').join(''));
-        }
+        return csvCells.join(',');
       });
-      return mdRows.join('\n');
+      return csvRows.join('\n');
     }
 
-    // Perbaiki selector: gunakan .table-wrapper, bukan .table-block-wrapper
-    document.querySelectorAll('.table-wrapper').forEach(wrapper => {
+    document.querySelectorAll('.table-wrapper').forEach((wrapper) => {
       const copyBtn = wrapper.querySelector('.copy-table-button');
-      const zoomBtn = wrapper.querySelector('.zoom-table-button');
       const table = wrapper.querySelector('table');
+      
       if (!table || !copyBtn) return;
 
       copyBtn.addEventListener('click', async () => {
-        const markdown = tableToMarkdown(table);
+        const csvData = tableToCSV(table);
         try {
-          await navigator.clipboard.writeText(markdown);
+          await navigator.clipboard.writeText(csvData);
+          
           const copyIcon = copyBtn.querySelector('.copy-icon');
           const checkIcon = copyBtn.querySelector('.check-icon');
+          
           copyIcon?.classList.add('hidden');
           checkIcon?.classList.remove('hidden');
+          copyBtn.setAttribute('aria-label', 'Copied!');
+          
           setTimeout(() => {
             copyIcon?.classList.remove('hidden');
             checkIcon?.classList.add('hidden');
+            copyBtn.setAttribute('aria-label', 'Copy table as CSV');
           }, 2000);
+          
         } catch (err) {
-          console.error(err);
+          console.error("Gagal menyalin CSV:", err);
         }
       });
-
-      if (zoomBtn) {
-        zoomBtn.addEventListener('click', () => {
-          wrapper.classList.toggle('table-zoomed');
-        });
-      }
     });
   })();
 </script>
 
 <style>
-  .table-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .table-wrapper.table-zoomed .table-content {
-    overflow-x: auto;
-  }
-  .table-wrapper.table-zoomed table {
-    min-width: 800px;
-    font-size: 1rem;
-  }
-  .table-wrapper.table-zoomed th,
-  .table-wrapper.table-zoomed td {
+  .table-wrapper th,
+  .table-wrapper td {
     padding: 0.75rem 1rem;
+    white-space: nowrap;
   }
 </style>
