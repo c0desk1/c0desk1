@@ -23,19 +23,19 @@ export const satteriBanner = defineMdastPlugin({
     for (const child of node.children || []) {
       if (child.type === 'paragraph') {
         for (const sub of child.children) {
-          if (sub.type === 'textDirective') {
-            if (sub.name === 'icons') {
-              const textNode = sub.children?.find((c: any) => c.type === 'text');
-              if (textNode) icon = textNode.value;
-            } else if (sub.name === 'title') {
-              const textNode = sub.children?.find((c: any) => c.type === 'text');
-              if (textNode) title = textNode.value;
-            }
-          } else if (sub.type === 'link') {
+          if (sub.type === 'image' && !icon) {
+            icon = sub.url;
+          }
+          else if (sub.type === 'textDirective' && sub.name === 'title') {
+            const textNode = sub.children?.find((c: any) => c.type === 'text');
+            if (textNode) title = textNode.value;
+          }
+          else if (sub.type === 'link') {
             const label = collectText(sub.children);
             const url = sub.url;
             if (label && url) links.push({ label, url });
-          } else if (sub.type === 'text') {
+          }
+          else if (sub.type === 'text') {
             description += sub.value + ' ';
           }
         }
