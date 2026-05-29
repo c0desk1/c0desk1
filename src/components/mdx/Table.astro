@@ -1,7 +1,6 @@
 ---
 // src/components/mdx/Table.astro
 
-// Fungsi untuk mengubah HTML table menjadi format Markdown
 function tableToMarkdown(tableEl: HTMLTableElement): string {
   const rows = Array.from(tableEl.querySelectorAll('tr'));
   const markdownRows: string[] = [];
@@ -9,15 +8,12 @@ function tableToMarkdown(tableEl: HTMLTableElement): string {
   rows.forEach((row, idx) => {
     const cells = Array.from(row.querySelectorAll('th, td'));
     const cellContents = cells.map(cell => {
-      // Bersihkan HTML, ambil teks polos
       const text = cell.textContent?.trim() || '';
-      // Escape pipe karakter
       return text.replace(/\|/g, '\\|');
     });
     const markdownRow = '| ' + cellContents.join(' | ') + ' |';
     markdownRows.push(markdownRow);
     
-    // Baris separator setelah header (baris pertama)
     if (idx === 0) {
       const separator = '|' + cells.map(() => ' --- |').join('');
       markdownRows.push(separator);
@@ -33,8 +29,7 @@ function tableToMarkdown(tableEl: HTMLTableElement): string {
     <button
       aria-label="Copy table as Markdown"
       type="button"
-      class="copy-table-btn rounded-md bg-(--prose-bg-muted) px-2 py-1 text-xs font-medium text-(--prose-fg-subtle) hover:bg-(--prose-surface-hover) hover:text-(--prose-fg) shadow-sm border border-(--prose-border)"
-    >
+      class="copy-table-btn rounded-md bg-(--prose-bg-muted) px-2 py-1 text-xs font-medium text-(--prose-fg-subtle) hover:bg-(--prose-surface-hover) hover:text-(--prose-fg) shadow-sm border border-(--prose-border)">
       Copy
     </button>
   </div>
@@ -57,7 +52,6 @@ function tableToMarkdown(tableEl: HTMLTableElement): string {
       const markdown = tableToMarkdown(table);
       try {
         await navigator.clipboard.writeText(markdown);
-        // Feedback visual
         const originalText = btn.textContent;
         btn.textContent = 'Copied!';
         setTimeout(() => {
@@ -76,9 +70,7 @@ function tableToMarkdown(tableEl: HTMLTableElement): string {
       const cells = Array.from(row.querySelectorAll('th, td'));
       const cellContents = cells.map(cell => {
         let text = cell.textContent?.trim() || '';
-        // Escape pipe
         text = text.replace(/\|/g, '\\|');
-        // Ganti newline dengan spasi
         text = text.replace(/\n/g, ' ');
         return text;
       });
@@ -93,22 +85,19 @@ function tableToMarkdown(tableEl: HTMLTableElement): string {
   }
 </script>
 
-<style>
-  /* Tambahkan group hover agar toolbar muncul */
+<style is:global>
   .table-group {
     position: relative;
   }
   .table-toolbar {
     transition: opacity 0.2s ease;
   }
-  /* Perbesar area tampilan: overflow-x auto dengan lebar maksimal */
   .table-wrapper {
     max-width: 100%;
     overflow-x: auto;
   }
-  /* Optional: perbesar padding dan font untuk readability */
   .prose th, .prose td {
-    padding: 0.75rem 1.25rem; /* Ukuran lebih besar */
+    padding: 0.75rem 1.25rem;
   }
   @media (min-width: 768px) {
     .prose th, .prose td {
