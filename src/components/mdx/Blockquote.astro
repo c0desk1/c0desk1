@@ -37,11 +37,11 @@ if (authorSlug) {
   finalAuthor = authorName;
 }
 
-const showCredit = finalAuthor || cite;
+const showCredit = finalAuthor || cite || citeLabel;
 ---
 
 <blockquote class="quote" cite={cite}>
-  <div class="quote-body text-body-20 lg:text-heading-32 font-semibold">
+  <div class="quote-body text-body-20 font-semibold">
     <slot />
   </div>
   {showCredit && (
@@ -56,6 +56,7 @@ const showCredit = finalAuthor || cite;
               height={24}
               class="quote-avatar"
               loading="lazy"
+              fetchpriority="low"
               decoding="async"
             />
           )}
@@ -64,11 +65,16 @@ const showCredit = finalAuthor || cite;
         </div>
       )}
       {cite && (
-        <div class="quote-cite">
+        <div class="quote-cite text-dim">
           <a href={cite} target="_blank" rel="noopener noreferrer">
             {citeLabel || 'Source'}
             <Icon name="external" className="w-3 h-3 ml-1" />
           </a>
+        </div>
+      )}
+      {!cite && citeLabel && (
+        <div class="quote-cite text-dim">
+          <span>{citeLabel}</span>
         </div>
       )}
     </div>

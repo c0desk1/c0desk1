@@ -15,7 +15,7 @@ export type Variant =
 export type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 export const base = [
-  "inline-flex items-center justify-center gap-2 font-medium tracking-wide transition-all duration-200 select-none cursor-pointer",
+  "inline-flex items-center justify-center gap-2 font-medium tracking-wide transition-colors duration-200 select-none cursor-pointer",
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring,#d4a853) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg,#0a0a0a)",
   "active:scale-[0.97] disabled:pointer-events-none disabled:opacity-40 data-[loading=true]:cursor-wait",
   "relative overflow-hidden"

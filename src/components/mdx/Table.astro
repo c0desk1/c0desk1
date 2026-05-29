@@ -5,10 +5,10 @@ import Icon from "@/components/ui/Icon";
 const { title = "Tabel" } = Astro.props;
 ---
 
-<div class="table-wrapper relative my-4 overflow-hidden rounded-lg border border-(--prose-table-border) bg-(--prose-table-bg)">
-  <div class="table-header flex items-center justify-between border-b border-(--prose-code-border) bg-(--prose-code-bg) px-4 py-2">
+<div class="table-wrapper relative overflow-hidden">
+  <div class="table-header flex items-center justify-between bg-(--prose-table-header-bg) border-b border-(--prose-table-border) px-4 py-2">
     <div class="flex items-center gap-2 min-w-0">
-      <span class="table-block-title text-label-14">{title}</span>
+      <span class="table-block-title text-label-14 font-semibold">{title}</span>
     </div>
     <div class="flex items-center gap-2 shrink-0">
       <button
@@ -18,7 +18,7 @@ const { title = "Tabel" } = Astro.props;
         class="copy-table-button rounded-full p-2 hover:bg-muted active:bg-muted"
       >
         <Icon name="copy" className="copy-icon size-5 transition-colors" />
-        <Icon name="check" className="check-icon hidden size-5 text-accent transition-colors" />
+        <Icon name="check" className="check-icon hidden size-5 text-(--fg) transition-colors" />
       </button>
     </div>
   </div>

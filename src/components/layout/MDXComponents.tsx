@@ -7,7 +7,7 @@ import P from '@/components/mdx/P.astro';
 import LI from '@/components/mdx/LI.astro';
 import UL from '@/components/mdx/UL.astro';
 import OL from '@/components/mdx/OL.astro';
-import Image from "@/components/mdx/imageMDX.astro";
+import Figure from "@/components/mdx/Figure.astro";
 import Table from '@/components/mdx/Table.astro';
 import Details from '@/components/mdx/Details.astro';
 import Steps from '@/components/mdx/Steps.astro';
@@ -23,7 +23,6 @@ import Kbd from '../mdx/KBD.astro';
 import Changelog from '../mdx/changelog.astro';
 import Banner from '../mdx/Banner.astro';
 import Video from '../mdx/Video.astro';
-import Figure from '../mdx/Figure.astro';
 
 export const components: MDXComponents = {
   Heading,
@@ -38,14 +37,14 @@ export const components: MDXComponents = {
   ul: UL,
   ol: OL,
   a: InlineLink,
-  img: Image,
+  img: Figure,
+  Figure,
   table: Table,
   Code,
   footnotes: Footnotes,
   Footnotes,
   Accordion,
   Badge,
-  Figure,
   Kbd,
   Banner,
   Video,
