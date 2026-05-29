@@ -66,7 +66,7 @@ const blog = defineCollection({
       applicationCategory: z.string().optional(),
       price: z.string().optional(),
       priceCurrency: z.string().optional(),
-    }).optional()
+    }).optional(),
     seo: seoSchema,
   }),
 });
