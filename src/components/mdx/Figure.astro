@@ -30,7 +30,7 @@ const tooltip = title || caption || alt;
 <figure class="full-width-figure my-4">
   <div class="relative overflow-hidden rounded-(--prose-radius-lg) border border-(--prose-image-border) bg-(--prose-image-bg) p-2 shadow-sm">
     {hasLink ? (
-      <a href={href} target="_blank" rel="nofollow noopener noreferrer" class="block w-full h-full">
+      <a href={href} target="_blank" rel="nofollow noopener noreferrer" title={tooltip} class="block w-full h-full">
         <Image
           src={optimizedSrc}
           alt={alt}
@@ -58,7 +58,7 @@ const tooltip = title || caption || alt;
     )}
   </div>
   {caption && (
-    <figcaption class="text-(--prose-figure-caption) mt-4!">{caption}</figcaption>
+    <figcaption class="text-caption-12 text-(--prose-figure-caption) mt-4!">{caption}</figcaption>
   )}
 </figure>
 
