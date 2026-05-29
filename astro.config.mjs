@@ -5,19 +5,19 @@ import { SITE } from './src/consts';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap, {ChangeFreqEnum } from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
+import { satteri } from '@astrojs/markdown-satteri';
 import react from '@astrojs/react';
 
-import remarkCallout from './src/lib/mdx/remark-callout.ts';
-import remarkBlockquoteAuthor from './src/lib/mdx/remark-blockquote.ts';
-import remarkHeading from './src/lib/mdx/remark-heading.ts';
-import remarkDetails from './src/lib/mdx/remark-details.ts';
-import remarkSteps from './src/lib/mdx/remark-steps.ts';
-import remarkTimeline from './src/lib/mdx/remark-timeline.ts';
-import remarkBadge from './src/lib/mdx/remark-badge.ts';
-import remarkKbd from './src/lib/mdx/remark-kbd.ts';
-import remarkChangelog from './src/lib/mdx/remark-changelog.ts';
-import remarkCodeBlock from './src/lib/mdx/remark-code-block.ts';
-import remarkBanner from './src/lib/mdx/remark-banner.ts';
+import { satteriHeadingAnchor } from './src/lib/mdx/satteri-heading-anchor';
+import { satteriCallout } from './src/lib/mdx/satteri-callout';
+import { satteriBlockquote } from './src/lib/mdx/satteri-blockquote';
+import { satteriSteps } from './src/lib/mdx/satteri-steps';
+import { satteriTimeline } from './src/lib/mdx/satteri-timeline';
+import { satteriChangelog } from './src/lib/mdx/satteri-changelog';
+import { satteriDetails } from './src/lib/mdx/satteri-details';
+import { satteriBadge } from './src/lib/mdx/satteri-badge';
+import { satteriKbd } from './src/lib/mdx/satteri-kbd';
+import { satteriCodeBlock } from './src/lib/mdx/satteri-code-block';
 
 // https://astro.build/config
 export default defineConfig({
@@ -55,19 +55,22 @@ export default defineConfig({
     react(),
   ],
   markdown: {
-    remarkPlugins: [
-      remarkHeading,
-      remarkCallout,
-      remarkDetails,
-      remarkTimeline,
-      remarkChangelog,
-      remarkSteps,
-      remarkBlockquoteAuthor,
-      remarkBadge,
-      remarkKbd,
-      remarkCodeBlock,
-      remarkBanner
-    ],
+    processor: satteri({
+      features: { directive: true },
+      mdastPlugins: [
+        satteriHeadingAnchor,
+        satteriBlockquote,
+        satteriCallout,
+        satteriSteps,
+        satteriTimeline,
+        satteriChangelog,
+        satteriDetails,
+        satteriBadge,
+        satteriKbd,
+        satteriCodeBlock,
+      ]
+      
+    }),
     shikiConfig: {
       themes: {
         light: 'github-light',
