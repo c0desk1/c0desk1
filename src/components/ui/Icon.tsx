@@ -1,7 +1,7 @@
 // src/components/ui/Icon.tsx
 
 export type IconName =
-  | 'logo' | 'sun' | 'moon' | 'search' | 'menu' | 'close' | 'plus' | 'minus' | 'code' | 'donate'
+  | 'logo' | 'sun' | 'moon' | 'search' | 'menu' | 'close' | 'plus' | 'minus' | 'code' | 'donate' | 'zoom'
   | 'check' | 'clock' | 'calender' | 'trash' | 'note' | 'tip' | 'info' | 'danger' | 'warning' | 'caution' | 'important'
   | 'github' | 'x' | 'twitter' | 'linkedin' | 'instagram' | 'youtube' | 'facebook' | 'tiktok' | 'telegram' | 'threads' | 'whatsapp' | 'reddit'
   | 'dribbble' | 'behance' | 'adobestock' | 'wirestock' | 'spotify' | 'soundcloud'
@@ -84,6 +84,14 @@ export default function Icon({ name, className = 'w-5 h-5' }: IconProps) {
           <path strokeLinecap="round" strokeLinejoin="round" d="M3 8.5H21M3 15.5H21" />
         </svg>
       );
+    
+    case 'zoom':
+      return (
+        <svg {...s} width={size} height={size} fill="currentColor" viewBox="0 0 24 24" stroke="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth}>
+          <path d="M16 3H22V9H20V5H16V3ZM2 3H8V5H4V9H2V3ZM20 19V15H22V21H16V19H20ZM4 19H8V21H2V15H4V19Z"></path>
+        </svg>
+      );
+
 
     case 'close':
       return (
@@ -338,9 +346,7 @@ export default function Icon({ name, className = 'w-5 h-5' }: IconProps) {
           strokeLinecap="round" 
           strokeLinejoin="round" 
           strokeWidth={strokeWidth}>
-          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-          <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
-          <path d="M9 5a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2" />
+          <path d="M9 9V6.2c0-1.12 0-1.68.218-2.108c.192-.377.497-.682.874-.874C10.52 3 11.08 3 12.2 3h5.6c1.12 0 1.68 0 2.108.218a2 2 0 0 1 .874.874C21 4.52 21 5.08 21 6.2v5.6c0 1.12 0 1.68-.218 2.108a2 2 0 0 1-.874.874C19.48 15 18.92 15 17.803 15H15M9 9H6.2c-1.12 0-1.68 0-2.108.218a2 2 0 0 0-.874.874C3 10.52 3 11.08 3 12.2v5.6c0 1.12 0 1.68.218 2.108a2 2 0 0 0 .874.874c.427.218.987.218 2.105.218h5.607c1.117 0 1.676 0 2.104-.218a2 2 0 0 0 .874-.874c.218-.428.218-.987.218-2.105V15M9 9h2.8c1.12 0 1.68 0 2.108.218a2 2 0 0 1 .874.874c.218.427.218.987.218 2.105V15" />
         </svg>
       );
 
