@@ -29,7 +29,7 @@ const tooltip = title || caption || alt;
 
 <figure class="full-width-figure my-4">
   <div class="relative overflow-hidden rounded-(--prose-radius-lg) border border-(--prose-image-border) bg-(--prose-image-bg) p-2 shadow-sm">
-    {href ? (
+    {hasLink ? (
       <a href={href} target="_blank" rel="nofollow noopener noreferrer" class="block w-full h-full">
         <Image
           src={optimizedSrc}
