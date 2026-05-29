@@ -155,7 +155,7 @@ time {
 }
 
 .prose samp {
-  @apply text-code-14;
+  @apply text-code-16;
   background-color: var(--prose-code-bg);
   color: var(--prose-code-text);
   padding: 0.15rem 0.35rem;
