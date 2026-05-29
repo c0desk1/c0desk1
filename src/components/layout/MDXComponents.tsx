@@ -46,5 +46,6 @@ export const components: MDXComponents = {
   Badge,
   Kbd,
   Banner,
-  Video
+  Video,
+  Table,
 };
