@@ -1,0 +1,140 @@
+/* src/styles/prose/components/footnotes.css */
+
+.prose .footnotes,
+.prose section[data-footnotes] {
+  @apply text-body-14;
+  margin: 2.5rem 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--prose-footnote-border);
+}
+
+.prose section[data-footnotes] h2,
+.prose section[data-footnotes] h2.sr-only {
+  display: none !important;
+}
+
+.prose section[data-footnotes] ol {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  counter-reset: footnotes;
+}
+
+.prose section[data-footnotes] li {
+  @apply text-body-14;
+  display: flex;
+  gap: 0.75rem;
+  color: var(--prose-footnote-text);
+  scroll-margin-top: 80px;
+  margin-bottom: 0;
+  padding-left: 0;
+  position: relative;
+}
+
+.prose section[data-footnotes] li::marker {
+  content: none;
+}
+
+.prose section[data-footnotes] li::before {
+  @apply text-mono-label-13;
+  content: counter(footnotes) ".";
+  counter-increment: footnotes;
+  color: var(--prose-list-marker);
+  top: 0.125rem;
+}
+
+.prose section[data-footnotes] li:hover {
+  color: var(--prose-footnote-hover);
+}
+
+.prose .footnote-highlight {
+  background-color: var(--prose-bg-subtle) !important;
+  border-radius: 4px;
+  outline: 1px solid var(--prose-accent);
+  outline-offset: 2px;
+  transition: background-color 0.5s, outline 0.5s;
+}
+
+.prose section[data-footnotes] li:target {
+  background-color: transparent !important;
+  border-radius: var(--radius);
+  outline: 1px solid var(--prose-accent);
+  outline-offset: 2px;
+  transition: background-color 0.5s, outline 0.5s;
+}
+
+.prose section[data-footnotes] p {
+  @apply text-label-14;
+  color: var(--prose-footnote-text);
+}
+
+.prose section[data-footnotes] .data-footnote-backref {
+  margin-left: 0.25rem;
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity var(--duration) var(--ease-out);
+  color: var(--prose-accent-dim);
+  vertical-align: middle;
+}
+
+.prose section[data-footnotes] li:hover .data-footnote-backref {
+  opacity: 1;
+}
+
+.prose section[data-footnotes] .external-icon {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+}
+
+.prose a[href^="#fn"] {
+  scroll-margin-top: 80px;
+  text-decoration: none;
+  transition: color var(--duration) var(--ease-out);
+}
+
+.prose a[href^="#fn"]:hover {
+  color: var(--prose-accent);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+@media (max-width: 767px) {
+  .prose .footnotes,
+  .prose section[data-footnotes] {
+    @apply text-body-14;
+    margin: 2rem 0;
+    padding-top: 1.5rem;
+  }
+
+  .prose section[data-footnotes] ol {
+    gap: 0.5rem;
+  }
+
+  .prose section[data-footnotes] li {
+    gap: 0.5rem;
+  }
+
+  .prose section[data-footnotes] .data-footnote-backref {
+    margin-left: 0.15rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .prose .footnotes,
+  .prose section[data-footnotes] {
+    @apply text-body-14;
+    margin: 2.5rem 0;
+  }
+
+  .prose section[data-footnotes] ol {
+    gap: 0.625rem;
+  }
+
+  .prose section[data-footnotes] li {
+    gap: 0.75rem;
+  }
+}

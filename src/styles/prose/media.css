@@ -1,0 +1,90 @@
+/* src/styles/prose/components/media.css */
+
+/* =============================================
+   Gambar dalam Prose
+   ============================================= */
+.prose img {
+  height: auto;
+  display: block;
+  margin-inline: auto;
+  border-radius: var(--prose-radius-lg);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);   /* shadow noir halus */
+}
+
+/* =============================================
+   Figure & Figcaption
+   ============================================= */
+.prose figure {
+  margin: 2.5rem 0;
+  text-align: center;
+}
+
+.prose figure p {
+  margin: 0;
+}
+
+.prose figure img {
+  height: auto;
+  display: block;
+  margin-inline: auto;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+.prose figcaption {
+  text-align: center;
+  color: var(--prose-figure-caption);
+  margin-top: 0.75rem;
+  font-weight: 400;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;            /* gaya kredit majalah */
+  opacity: 0.8;
+}
+
+/* =============================================
+   Video
+   ============================================= */
+.prose video {
+  width: 100%;
+  display: block;
+  overflow: hidden;
+  position: relative;
+  background-color: var(--prose-bg-subtle);
+  border-radius: var(--prose-radius-md);
+  border: 1px solid var(--prose-border);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+/* =============================================
+   Responsive
+   ============================================= */
+@media (max-width: 767px) {
+  .prose figure {
+    margin: 1.5rem 0;
+  }
+
+  .prose figcaption {
+    text-transform: none;
+    font-weight: 400;
+    margin-top: 0.5rem;
+  }
+
+  .prose video {
+    margin: 1.5rem 0;
+    border-radius: var(--prose-radius-sm);
+  }
+}
+
+@media (min-width: 48rem) {
+  .prose figure {
+    margin: 2.5rem 0;
+  }
+
+  .prose figcaption {
+    margin-top: 0.75rem;
+  }
+
+  .prose video {
+    margin: 2.5rem 0;
+  }
+}

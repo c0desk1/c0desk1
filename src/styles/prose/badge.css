@@ -1,0 +1,30 @@
+/* src/styles/prose/badge.css */
+
+.prose .badge {
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  background: var(--fg);
+  color: var(--fg-inverted);
+  border: 1px solid var(--border-strong);
+  padding: 0.2em 0.6em;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+  line-height: 1.4;
+}
+
+@media (max-width: 767px) {
+  .prose .badge {
+    padding: 0.15em 0.5em;
+    letter-spacing: 0.08em;
+  }
+}
+
+@media (min-width: 768px) {
+  .prose .badge {
+    padding: 0.2em 0.65em;
+  }
+}

@@ -1,0 +1,28 @@
+/* src/styles/prose/timeline.css */
+.prose .timeline-content :first-child {
+  margin-top: 0 !important;
+}
+.prose .timeline-content :last-child {
+  margin-bottom: 0 !important;
+}
+
+.prose .timeline-content h2,
+.prose .timeline-content h3,
+.prose .timeline-content h4 {
+  @apply text-heading-16;
+}
+.prose .timeline-content ul,
+.prose .timeline-content p {
+  @apply text-body-14;
+}
+@media (min-width: 1024px) {
+  .prose .timeline-content h2,
+  .prose .timeline-content h3,
+  .prose .timeline-content h4 {
+    @apply text-heading-20;
+  }
+  .prose .timeline-content ul,
+  .prose .timeline-content p {
+    @apply text-body-16;
+  }
+}

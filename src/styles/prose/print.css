@@ -1,0 +1,18 @@
+@media print {
+  .prose a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.75em;
+    color: var(--prose-fg-subtle);
+  }
+  .prose pre,
+  .prose blockquote {
+    page-break-inside: avoid;
+  }
+  .prose h2,
+  .prose h3 {
+    page-break-after: avoid;
+  }
+  .prose img {
+    max-width: 100% !important;
+  }
+}
