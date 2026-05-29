@@ -29,14 +29,10 @@ import SearchBar from "./SearchBar.astro";
 <style is:global>
   #main-header {
     background-color: transparent;
-    backdrop-filter: blur(0px);
-    -webkit-backdrop-filter: blur(0px);
   }
   
   #main-header.scrolled {
-    background-color: color-mix(in srgb, var(--bg) 80%, transparent);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background-color: var(--bg);
   }
   
   #main-header.scrolled #header-border {
