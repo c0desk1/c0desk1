@@ -1,4 +1,4 @@
-// src/const.ts
+// src/consts.ts
 
 type NavItem = {
   label: string;
@@ -25,7 +25,7 @@ const OGIMAGE = "/org/c0desk1-og.webp"
 export const SITE = {
   name:        "Unloyd",
   tagline:     "Beyond the Void",
-  description: "Platform kuratif untuk pop culture, game, anime, tutorial, dan modding. Konten yang dipilih dengan cermat, bukan sekadar ramai.",
+  description: "Platform kuratif untuk pop culture, game, anime, tutorial, dan modding.",
   url:         "https://unloyd.web.id",
   ogImage:      OGIMAGE,
   locale:      "id_ID",
@@ -55,8 +55,8 @@ export const ORG = {
   logo:        LOGO,
   sameAs: [
     "https://twitter.com/unloyd",
-    "https://instagram.com/unloyd",
-    "https://youtube.com/@unloyd",
+    "https://whatsapp.com/unloyd",
+    "https://facebook.com/@unloyd",
     "https://tiktok.com/@unloyd",
   ],
 } as const;
@@ -351,44 +351,30 @@ export function schemaNewsArticle(opts: {
   };
 }
 
-export function schemaHowTo(opts: {
+export function schemaSoftwareApplication(opts: {
   name:          string;
   description:   string;
   url:           string;
-  image?:        string;
-  totalTime?:    string;
-  steps: {
-    name:        string;
-    text:        string;
-    image?:      string;
-    url?:        string;
-  }[];
-  tools?:        string[];
-  supply?:       string[];
+  image:         string | string[];
+  operatingSystem?: string;
+  applicationCategory?: string;
+  price?:        string;
+  priceCurrency?: string;
 }) {
   return {
-    "@context":    "https://schema.org",
-    "@type":       "HowTo",
-    name:          opts.name,
-    description:   opts.description,
-    url:           opts.url,
-    inLanguage:    SITE.lang,
-    ...(opts.image      ? { image: opts.image }           : {}),
-    ...(opts.totalTime  ? { totalTime: opts.totalTime }   : {}),
-    ...(opts.tools ? {
-      tool: opts.tools.map(t => ({ "@type": "HowToTool", name: t })),
-    } : {}),
-    ...(opts.supply ? {
-      supply: opts.supply.map(s => ({ "@type": "HowToSupply", name: s })),
-    } : {}),
-    step: opts.steps.map((step, i) => ({
-      "@type":    "HowToStep",
-      position:   i + 1,
-      name:       step.name,
-      text:       step.text,
-      ...(step.image ? { image: step.image } : {}),
-      ...(step.url   ? { url: step.url }     : {}),
-    })),
+    "@context":          "https://schema.org",
+    "@type":             "SoftwareApplication",
+    name:                opts.name,
+    description:         opts.description,
+    url:                 opts.url,
+    image:               opts.image,
+    operatingSystem:     opts.operatingSystem || "All",
+    applicationCategory: opts.applicationCategory || "SoftwareApplication",
+    offers: {
+      "@type":           "Offer",
+      price:             opts.price || "0",
+      priceCurrency:     opts.priceCurrency || "IDR",
+    },
   };
 }
 
