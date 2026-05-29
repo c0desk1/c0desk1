@@ -21,7 +21,7 @@ const { ins = "", del = "", mark = "", title = "" } = Astro.props;
 >
   <div class="code-block-header">
     <div class="flex items-center gap-2 min-w-0">
-      <span data-icon-placeholder class="code-icon size-5" aria-hidden="true">
+      <span data-icon-placeholder class="code-icon w-5 h-5" aria-hidden="true">
         <Fragment set:html={codeIcons.default} />
       </span>
       <span class="code-block-title">
@@ -38,9 +38,9 @@ const { ins = "", del = "", mark = "", title = "" } = Astro.props;
       <button
         type="button"
         aria-label="Salin kode"
-        class="copy-button p-2">
-        <Icon name="copy"  className="copy-icon  size-5" />
-        <Icon name="check" className="check-icon hidden size-5" />
+        class="hover:bg-(--prose-bg-muted)/20 text-(--prose-fg-muted) hover:text-(--prose-fg) copy-button p-2">
+        <Icon name="copy"  className="copy-icon w-5 h-5" />
+        <Icon name="check" className="check-icon hidden w-5 h-5" />
       </button>
     </div>
   </div>
@@ -150,27 +150,25 @@ const { ins = "", del = "", mark = "", title = "" } = Astro.props;
 
       btn.addEventListener("click", async () => {
         const text = code.textContent ?? "";
+        
         try {
           await navigator.clipboard.writeText(text);
-        } catch {
-          const ta = document.createElement("textarea");
-          ta.value = text;
-          ta.style.cssText = "position:fixed;opacity:0";
-          document.body.appendChild(ta);
-          ta.select();
-          document.execCommand("copy");
-          ta.remove();
+          const copy  = btn.querySelector(".copy-icon");
+          const check = btn.querySelector(".check-icon");
+          
+          copy?.classList.add("hidden");
+          check?.classList.remove("hidden");
+          btn.setAttribute("aria-label", "Tersalin!");
+          
+          setTimeout(() => {
+            copy?.classList.remove("hidden");
+            check?.classList.add("hidden");
+            btn.setAttribute("aria-label", "Salin kode");
+          }, 2000);
+          
+        } catch (err) {
+          console.error("Gagal menyalin teks: ", err);
         }
-        const copy  = btn.querySelector(".copy-icon");
-        const check = btn.querySelector(".check-icon");
-        copy?.classList.add("hidden");
-        check?.classList.remove("hidden");
-        btn.setAttribute("aria-label", "Tersalin!");
-        setTimeout(() => {
-          copy?.classList.remove("hidden");
-          check?.classList.add("hidden");
-          btn.setAttribute("aria-label", "Salin kode");
-        }, 2000);
       });
     };
 
