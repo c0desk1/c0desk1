@@ -1,6 +1,7 @@
 ---
 import { ROUTES } from "@/consts";
 import Icon from "@/components/ui/Icon";
+import Link from "./ui/Link.astro";
 
 const searchRoute = ROUTES.search;
 ---
@@ -32,7 +33,7 @@ const searchRoute = ROUTES.search;
           aria-label="Cari postingan"
           autocomplete="off"
           spellcheck="false"
-          class="flex-1 min-w-0 border-none bg-transparent py-4 text-sm lg:text-base text-muted outline-none placeholder:text-dim"
+          class="flex-1 min-w-0 border-none bg-transparent py-4 text-body-14 sm:text-body-16 text-muted outline-none placeholder:text-dim"
         />
         <button
           id="search-clear"
@@ -40,7 +41,7 @@ const searchRoute = ROUTES.search;
           tabindex="-1"
           class="hidden h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted hover:bg-muted hover:text-(--fg) transition-colors"
         >
-          <Icon name="trash" className="h-4 w-4" />
+          <Icon name="trash" className="h-5 w-5" />
         </button>
         <button
           id="search-close-mobile"
@@ -54,18 +55,18 @@ const searchRoute = ROUTES.search;
         </kbd>
       </div>
       <div class="flex items-center justify-between border-t border-(--border) bg-subtle px-3.5 py-2">
-        <span class="text-xs text-subtle">
+        <span class="text-body-14 text-muted">
           Tekan
           <kbd class="mx-0.5 inline-flex items-center rounded border border-(--prose-kbd-border) bg-(--prose-kbd-bg) px-1 py-0.5 text-xs">↵</kbd>
           untuk mencari
         </span>
-        <a
+        <Link
           id="search-browse"
           href={searchRoute}
-          class="text-xs text-(--accent) hover:underline"
-        >
-          Lihat semua artikel →
-        </a>
+          variant="noir"
+          size="sm">
+          Lihat semua
+        </Link>
       </div>
     </div>
   </div>
