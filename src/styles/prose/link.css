@@ -27,11 +27,11 @@
 }
 
 .prose a:focus-visible {
-  outline: 2px solid var(--prose-accent);            /* dari var(--accent) */
+  outline: 2px solid var(--prose-link-color);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
   text-decoration: underline;
-  text-decoration-color: var(--prose-accent);        /* dari var(--accent) */
+  text-decoration-color: var(--prose-link-decoration-color);
   text-underline-offset: 3px;
   text-decoration-thickness: 1px;
 }
@@ -45,7 +45,7 @@
 }
 
 .prose .inline-link:hover {
-  color: var(--prose-accent);                        /* dari var(--accent) */
+  color: var(--prose-link-hover-color);
   text-decoration: none;
 }
 

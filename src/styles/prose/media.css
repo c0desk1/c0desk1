@@ -1,19 +1,13 @@
 /* src/styles/prose/components/media.css */
 
-/* =============================================
-   Gambar dalam Prose
-   ============================================= */
 .prose img {
   height: auto;
   display: block;
   margin-inline: auto;
   border-radius: var(--prose-radius-lg);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.4);   /* shadow noir halus */
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
 }
 
-/* =============================================
-   Figure & Figcaption
-   ============================================= */
 .prose figure {
   margin: 2.5rem 0;
   text-align: center;
@@ -34,10 +28,6 @@
   text-align: center;
   color: var(--prose-figure-caption);
   margin-top: 0.75rem;
-  font-weight: 400;
-  font-size: 0.8rem;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;            /* gaya kredit majalah */
   opacity: 0.8;
 }
 
@@ -65,7 +55,6 @@
 
   .prose figcaption {
     text-transform: none;
-    font-weight: 400;
     margin-top: 0.5rem;
   }
 

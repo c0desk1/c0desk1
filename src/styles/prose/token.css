@@ -90,12 +90,12 @@
   /* Blockquote */
   --prose-quote-border: var(--border-strong);
   --prose-quote-bg: transparent;
-  --prose-quote-text: var(--fg-muted);
+  --prose-quote-text: var(--fg);
   --prose-quote-cite: var(--fg-subtle);
 
   /* Tables – Light (void native) */
-  --prose-table-header-bg: var(--bg-muted);
-  --prose-table-header-text: var(--fg-muted);
+  --prose-table-header-bg: var(--bg-dim);
+  --prose-table-header-text: var(--prose-fg-strong);
   --prose-table-row-bg: var(--bg);
   --prose-table-row-hover: var(--bg-subtle);
   --prose-table-border: var(--border);

@@ -6,7 +6,6 @@
   -webkit-overflow-scrolling: touch;
   border-radius: var(--radius-md);
   border: 1px solid var(--prose-table-border);
-  background: var(--prose-table-row-bg);
   box-shadow: 0 0 0 1px rgba(0,0,0,0.03), 0 4px 24px rgba(0,0,0,0.06);
 }
 
@@ -38,18 +37,24 @@
 }
 
 .prose thead th {
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  text-transform: none;
   color: var(--prose-table-header-text);
   text-align: start;
   white-space: nowrap;
   border-bottom: 1px solid var(--prose-table-border);
 }
 
+.prose thead tr {
+  color: var(--prose-fg-subtle);
+}
+
 .prose th {
   padding: 0.75rem 1rem;
-  color: var(--fg-muted);
+  color: var(--prose-table-header-text);
+}
+
+.prose tbody {
+  background: var(--prose-table-row-bg);
 }
 
 .prose tbody tr {
@@ -116,12 +121,12 @@
 
 @media (min-width: 768px) {
   .prose thead th {
-    @apply text-numeric-14;
+    @apply text-numeric-16;
     padding: 0.875rem 1.25rem;
   }
 
   .prose tbody td {
-    @apply text-numeric-14;
+    @apply text-numeric-16;
     padding: 0.875rem 1.25rem;
   }
 }
