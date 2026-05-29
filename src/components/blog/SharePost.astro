@@ -1,7 +1,7 @@
 ---
 // src/components/blog/ShareArticle.astro
-import { siteConfig } from "@/config/site";
 import Icon from "@/components/ui/Icon";
+import Button from "../ui/Button.astro";
 
 interface Props {
   url: string;
@@ -10,11 +10,13 @@ interface Props {
 }
 
 const { url, title, description = "" } = Astro.props;
-const shareLabel = siteConfig.share;
+const shareLabel = "Bagikan";
 ---
 
-<button
-  class="sa-btn not-prose"
+<Button
+  class="sa-btn not-prose text-button-14"
+  variant="noir"
+  size="md"
   data-url={url}
   data-title={title}
   data-description={description}
@@ -24,34 +26,20 @@ const shareLabel = siteConfig.share;
 >
   <Icon name="share" className="w-4 h-4" />
   <span>{shareLabel}</span>
-</button>
+</Button>
 
 <style>
   .sa-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.375rem;
-    padding: 0.375rem 0.75rem;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    color: var(--fg-strong);
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
     cursor: pointer;
-    transition: background 0.2s, color 0.2s;
+    transition: color 0.2s;
     white-space: nowrap;
   }
 
   .sa-btn:not([hidden]) {
     display: inline-flex;
-  }
-
-  .sa-btn:hover {
-    background: var(--bg-dim);
-    color: var(--fg-dim);
   }
 </style>
 
