@@ -19,6 +19,7 @@ import { satteriBadge } from './src/lib/mdx/satteri-badge';
 import { satteriKbd } from './src/lib/mdx/satteri-kbd';
 import { satteriCodeBlock } from './src/lib/mdx/satteri-code-block';
 import { satteriBanner } from './src/lib/mdx/satteri-banner';
+import { satteriFigure } from './src/lib/mdx/satteri-figure';
 
 // https://astro.build/config
 export default defineConfig({
@@ -70,6 +71,7 @@ export default defineConfig({
         satteriKbd,
         satteriCodeBlock,
         satteriBanner,
+        satteriFigure,
       ]
       
     }),
