@@ -5,12 +5,13 @@ import { SITE } from './src/consts';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap, {ChangeFreqEnum } from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
+import expressiveCode from 'astro-expressive-code';
 import { satteri } from '@astrojs/markdown-satteri';
 import react from '@astrojs/react';
 
 import { satteriHeadingAnchor } from './src/lib/mdx/satteri-heading-anchor';
 import { satteriCallout } from './src/lib/mdx/satteri-callout';
-import { satteriBlockquote } from './src/lib/mdx/satteri-blockquote';
+import { satteriQuote } from './src/lib/mdx/satteri-blockquote';
 import { satteriSteps } from './src/lib/mdx/satteri-steps';
 import { satteriTimeline } from './src/lib/mdx/satteri-timeline';
 import { satteriChangelog } from './src/lib/mdx/satteri-changelog';
@@ -53,25 +54,31 @@ export default defineConfig({
         return item;
       },
     }),
+
     mdx(), 
     react(),
   ],
   markdown: {
     processor: satteri({
-      features: { directive: true },
+      features: { 
+        directive: true,
+        gfm: true,
+        math: true,
+        frontmatter: true,
+      },
       mdastPlugins: [
         satteriHeadingAnchor,
-        satteriBlockquote,
+        satteriFigure,
+        satteriQuote,
+        satteriCodeBlock,
+        satteriKbd,
         satteriCallout,
         satteriSteps,
         satteriTimeline,
         satteriChangelog,
         satteriDetails,
         satteriBadge,
-        satteriKbd,
-        satteriCodeBlock,
         satteriBanner,
-        satteriFigure,
       ]
       
     }),
@@ -118,6 +125,36 @@ export default defineConfig({
           {
             src: ['./src/assets/fonts/Syne-ExtraBold.woff2'],
             weight: 800,
+            style: 'normal',
+            display: 'swap',
+          },
+        ],
+      },
+    },
+    {
+      provider: fontProviders.local(),
+      name: 'Geist',
+      cssVariable: '--font-Geist',
+      options: {
+        variants: [
+          {
+            src: ['./src/assets/fonts/Geist.woff2'],
+            weight: "100 800",
+            style: 'normal',
+            display: 'swap',
+          },
+        ],
+      },
+    },
+    {
+      provider: fontProviders.local(),
+      name: 'GeistMono',
+      cssVariable: '--font-GeistMono',
+      options: {
+        variants: [
+          {
+            src: ['./src/assets/fonts/GeistMono.woff2'],
+            weight: "100 800",
             style: 'normal',
             display: 'swap',
           },
