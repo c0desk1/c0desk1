@@ -9,18 +9,19 @@
   --font-mono: var(--font-GeistMono);
   --font-sans: var(--font-Syne), ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, monospace;
 
+  /* --- Deep Chrome (Premium Industrial) --- */
   --color-void-0:    #ffffff;
-  --color-void-50:   #f5f5f3;
-  --color-void-100:  #e8e8e6;
-  --color-void-200:  #d1d1cf;
-  --color-void-300:  #a8a8a6;
-  --color-void-400:  #737371;
-  --color-void-500:  #525250;
-  --color-void-600:  #3a3a38;
-  --color-void-700:  #2a2a28;
-  --color-void-800:  #1a1a18;
-  --color-void-900:  #111110;
-  --color-void-950:  #0a0a09;
+  --color-void-50:   #f3f4f6; /* Titanium White */
+  --color-void-100:  #e4e7eb; /* Bright Chrome */
+  --color-void-200:  #c9ced6; /* Silver Reflection */
+  --color-void-300:  #a3a9b3; /* Matte Chrome */
+  --color-void-400:  #7d8591; /* Solid Steel */
+  --color-void-500:  #5c646f; /* Dark Metallic */
+  --color-void-600:  #434a53; /* Gunmetal */
+  --color-void-700:  #2d3238; /* Deep Gunmetal */
+  --color-void-800:  #1b1e22; /* Chrome Shadow */
+  --color-void-900:  #101215; /* Black Chrome */
+  --color-void-950:  #07080a; /* Deepest Reflection */
   --color-void-1000: #000000;
 
   --color-accent:       #ffffff;
@@ -76,11 +77,11 @@
   --border-strong: var(--color-void-200);
   --border-subtle: #f0f0ee;
 
-  --accent:      var(--color-void-1000);
-  --accent-dim:  rgba(0, 0, 0, 0.6);
-  --accent-soft: rgba(0, 0, 0, 0.05);
-  --accent-ring: rgba(0, 0, 0, 0.12);
-  --accent-fg:   var(--color-void-0);
+  --accent:        var(--color-void-1000);
+  --accent-dim:    rgba(0, 0, 0, 0.6);
+  --accent-soft:   rgba(0, 0, 0, 0.05);
+  --accent-ring:   rgba(0, 0, 0, 0.12);
+  --accent-fg:     var(--color-void-0);
 
   --shadow-sm:  0 1px 2px 0 rgba(0, 0, 0, 0.06);
   --shadow-md:  0 4px 8px -2px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
@@ -98,7 +99,7 @@
   --bg-subtle:   var(--color-void-900);
   --bg-muted:    var(--color-void-800);
   --bg-elevated: var(--color-void-700);
-  --bg-overlay:  rgba(10, 10, 9, 0.85);
+  --bg-overlay:  rgba(7, 8, 10, 0.85);
 
   --fg:          var(--color-void-50);
   --fg-strong:   var(--color-void-0);
@@ -108,15 +109,15 @@
   --fg-disabled: var(--color-void-700);
   --fg-inverted: var(--color-void-950);
 
-  --border:        var(--color-void-700);
+  --border:        var(--color-void-800);
   --border-strong: var(--color-void-600);
-  --border-subtle: var(--color-void-800);
+  --border-subtle: var(--color-void-900);
 
-  --accent:      var(--color-void-0);
-  --accent-dim:  rgba(255, 255, 255, 0.6);
-  --accent-soft: rgba(255, 255, 255, 0.06);
-  --accent-ring: rgba(255, 255, 255, 0.15);
-  --accent-fg:   var(--color-void-950);
+  --accent:        var(--color-void-0);
+  --accent-dim:    rgba(255, 255, 255, 0.6);
+  --accent-soft:   rgba(255, 255, 255, 0.06);
+  --accent-ring:   rgba(255, 255, 255, 0.15);
+  --accent-fg:     var(--color-void-950);
 
   --success:      #3dd68c;
   --success-soft: rgba(61, 214, 140, 0.08);
@@ -334,6 +335,131 @@
     background-color: var(--accent);
     border-radius: var(--radius-md);
   }
+}
+/* --- UI COMPONENTS (Deep Chrome / Noir Aligned) --- */
+
+/* 1. Buttons */
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: all var(--duration) var(--ease-out);
+  
+  /* Focus States */
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+/* Primary Button: Solid High Contrast */
+@utility btn-primary {
+  background-color: var(--fg-strong);
+  color: var(--bg);
+  border: 1px solid transparent;
+
+  &:hover {
+    background-color: var(--fg-muted);
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+/* Secondary Button: Metallic Surface */
+@utility btn-secondary {
+  background-color: var(--bg-subtle);
+  color: var(--fg-strong);
+  border: 1px solid var(--border-strong);
+
+  &:hover {
+    background-color: var(--bg-muted);
+    border-color: var(--fg-subtle);
+  }
+}
+
+/* Ghost Button: Invisible until hover */
+@utility btn-ghost {
+  background-color: transparent;
+  color: var(--fg-muted);
+
+  &:hover {
+    background-color: var(--bg-subtle);
+    color: var(--fg-strong);
+  }
+}
+
+/* 2. Form Inputs (Sleek & Minimal) */
+@utility input-base {
+  display: flex;
+  width: 100%;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-strong);
+  background-color: var(--bg);
+  color: var(--fg-strong);
+  transition: border-color var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out);
+
+  &::placeholder {
+    color: var(--fg-dim);
+  }
+
+  &:hover {
+    border-color: var(--fg-subtle);
+  }
+
+  &:focus-visible {
+    outline: none;
+    border-color: var(--fg-strong);
+    box-shadow: 0 0 0 1px var(--fg-strong);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    background-color: var(--bg-subtle);
+  }
+}
+
+/* 3. Badges / Tags (Industrial Pills) */
+@utility badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all var(--duration) var(--ease-out);
+}
+
+@utility badge-neutral {
+  background-color: var(--bg-muted);
+  color: var(--fg-strong);
+  border: 1px solid var(--border-strong);
+}
+
+@utility badge-outline {
+  background-color: transparent;
+  color: var(--fg-muted);
+  border: 1px solid var(--border);
+}
+
+/* 4. Dividers / Separators */
+@utility divider {
+  width: 100%;
+  height: 1px;
+  background-color: var(--border);
+}
+
+@utility divider-vertical {
+  height: 100%;
+  width: 1px;
+  background-color: var(--border);
 }
 
 @utility surface {
