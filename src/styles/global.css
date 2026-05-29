@@ -7,21 +7,20 @@
 
 @theme inline {
   --font-mono: var(--font-GeistMono);
-  --font-sans: var(--font-Syne), ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, monospace;
+  --font-sans: var(--font-Syne);
 
-  /* --- Deep Chrome (Premium Industrial) --- */
   --color-void-0:    #ffffff;
-  --color-void-50:   #f3f4f6; /* Titanium White */
-  --color-void-100:  #e4e7eb; /* Bright Chrome */
-  --color-void-200:  #c9ced6; /* Silver Reflection */
-  --color-void-300:  #a3a9b3; /* Matte Chrome */
-  --color-void-400:  #7d8591; /* Solid Steel */
-  --color-void-500:  #5c646f; /* Dark Metallic */
-  --color-void-600:  #434a53; /* Gunmetal */
-  --color-void-700:  #2d3238; /* Deep Gunmetal */
-  --color-void-800:  #1b1e22; /* Chrome Shadow */
-  --color-void-900:  #101215; /* Black Chrome */
-  --color-void-950:  #07080a; /* Deepest Reflection */
+  --color-void-50:   #f3f4f6;
+  --color-void-100:  #e4e7eb;
+  --color-void-200:  #c9ced6;
+  --color-void-300:  #a3a9b3;
+  --color-void-400:  #7d8591;
+  --color-void-500:  #5c646f;
+  --color-void-600:  #434a53;
+  --color-void-700:  #2d3238;
+  --color-void-800:  #1b1e22;
+  --color-void-900:  #101215;
+  --color-void-950:  #07080a;
   --color-void-1000: #000000;
 
   --color-accent:       #ffffff;
@@ -336,7 +335,6 @@
     border-radius: var(--radius-md);
   }
 }
-/* --- UI COMPONENTS (Deep Chrome / Noir Aligned) --- */
 
 /* 1. Buttons */
 @utility btn {
@@ -361,7 +359,7 @@
   }
 }
 
-/* Primary Button: Solid High Contrast */
+/* Primary Button */
 @utility btn-primary {
   background-color: var(--fg-strong);
   color: var(--bg);
@@ -373,7 +371,7 @@
   }
 }
 
-/* Secondary Button: Metallic Surface */
+/* Secondary Button */
 @utility btn-secondary {
   background-color: var(--bg-subtle);
   color: var(--fg-strong);
@@ -385,7 +383,7 @@
   }
 }
 
-/* Ghost Button: Invisible until hover */
+/* Ghost Button */
 @utility btn-ghost {
   background-color: transparent;
   color: var(--fg-muted);
@@ -427,7 +425,7 @@
   }
 }
 
-/* 3. Badges / Tags (Industrial Pills) */
+/* 3. Badges / Tags */
 @utility badge {
   display: inline-flex;
   align-items: center;
@@ -538,7 +536,7 @@
   background: linear-gradient(to bottom, var(--bg), var(--color-void-1000));
 }
 
-/* Radial glow untuk hero section */
+/* Radial glow */
 @utility gradient-glow-hero {
   background: radial-gradient(
     ellipse 80% 50% at 50% -10%,
