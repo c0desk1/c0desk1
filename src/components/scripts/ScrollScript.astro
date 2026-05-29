@@ -1,0 +1,81 @@
+<script>
+  //@ts-nocheck
+  const initProseLinks = () => {
+    const clickHandler = (e) => {
+      const target = e.target;
+      if (!(target instanceof HTMLElement)) return;
+
+      const anchorLink = target.closest('.anchor-link');
+      if (anchorLink instanceof HTMLAnchorElement) {
+        const href = anchorLink.getAttribute('href');
+        if (href?.startsWith('#') && href.length > 1) {
+          const section = document.querySelector(href);
+          if (section instanceof HTMLElement) {
+            e.preventDefault();
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            history.replaceState(null, '', href);
+          }
+        }
+        return;
+      }
+
+      const refLink = target.closest('a[href^="#user-content-fn-"]:not(a[href*="-ref-"])');
+      if (refLink instanceof HTMLAnchorElement) {
+        e.preventDefault();
+        const href = refLink.getAttribute('href');
+        if (!href) return;
+        const match = href.match(/fn-(\d+)/);
+        if (match) {
+          const num = match[1];
+          const li = document.querySelector(`a[href="#user-content-fnref-${num}"]`)?.closest('li');
+          if (li) {
+            li.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            li.classList.add('footnote-highlight');
+            setTimeout(() => li.classList.remove('footnote-highlight'), 2000);
+            history.pushState(null, '', `#fn-${num}`);
+          }
+        }
+        return;
+      }
+
+      const backref = target.closest('a[href^="#user-content-fnref-"]');
+      if (backref instanceof HTMLAnchorElement) {
+        e.preventDefault();
+        const href = backref.getAttribute('href');
+        if (!href) return;
+        const el = document.querySelector(href);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          el.classList.add('footnote-highlight');
+          setTimeout(() => el.classList.remove('footnote-highlight'), 2000);
+          history.pushState(null, '', href);
+        }
+        return;
+      }
+
+      if (window.innerWidth >= 768) return;
+      const heading = target.closest(".heading-group.has-anchor");
+      if (!(heading instanceof HTMLElement)) return;
+      if (target.closest(".anchor-link")) return;
+
+      document.querySelectorAll(".anchor-link-active").forEach((el) => {
+        el.classList.remove("anchor-link-active");
+      });
+
+      const anchor = heading.querySelector(".anchor-link");
+      if (!(anchor instanceof HTMLElement)) return;
+
+      anchor.classList.add("anchor-link-active");
+      setTimeout(() => {
+        anchor.classList.remove("anchor-link-active");
+      }, 2000);
+    };
+
+    document.removeEventListener('click', window.__proseClickHandler);
+    window.__proseClickHandler = clickHandler;
+    document.addEventListener('click', window.__proseClickHandler);
+  };
+
+  initProseLinks();
+  document.addEventListener('astro:page-load', initProseLinks);
+</script>

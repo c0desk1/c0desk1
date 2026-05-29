@@ -1,0 +1,79 @@
+---
+import { CATEGORIES, buildMeta, ROUTES, schemaCollectionPage, schemaBreadcrumb, SITE } from "@/consts";
+import Layout from "@/layouts/Layout.astro";
+import Section from "@/components/ui/Section.astro";
+import Container from "@/components/ui/Container.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+
+const currentPath = `${ROUTES.blog}/category`;
+const canonicalURL = new URL(currentPath, SITE.url).href;
+
+const meta = buildMeta({
+  title: "Kategori",
+  description: "Jelajahi konten mendalam seputar teknologi, game, anime, hingga modding dan tutorial.",
+  canonical: canonicalURL,
+});
+
+const schemas = [
+  schemaCollectionPage({
+    title: "Kategori Artikel",
+    description: "Daftar lengkap kategori topik yang dibahas di Unloyd.",
+    url: canonicalURL,
+  }),
+  schemaBreadcrumb([
+    { name: "Beranda", url: SITE.url },
+    { name: "Blog", url: new URL(ROUTES.blog, SITE.url).href },
+    { name: "Kategori", url: canonicalURL },
+  ])
+];
+---
+
+<Layout {meta} schema={schemas}>
+    <Section size="lg">
+        <Container size="xl">
+            <Section size="sm">
+                <div class="flex items-center self-start">
+                    <Breadcrumb
+                        items={[
+                        { name: "Blog", url: ROUTES.blog },
+                        { name: "Kategori", url: currentPath },
+                        ]}
+                    />
+                </div>
+            </Section>
+            <Section size="sm">
+                <h1 class="text-heading-40 md:text-heading-56 font-extrabold text-strong mb-4">
+                    Eksplorasi
+                </h1>
+                <p class="text-body-18 text-muted max-w-xl">
+                    Pilih direktori topik yang ingin Anda dalami. Seluruh konten dikurasi untuk memberikan wawasan teknis dan hiburan yang relevan.
+                </p>
+            </Section>
+            <Section size="sm">
+                <nav aria-label="Daftar Kategori">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {CATEGORIES.map((cat) => (
+                        <article class="relative surface p-6 hover-glow flex flex-col justify-between group">
+                            <div>
+                            <h2 class="text-heading-20 font-semibold text-strong mb-3 group-hover:text-(--fg) transition-colors">
+                                <a href={`${ROUTES.blog}/category/${cat.slug}`} class="focus:outline-none">
+                                <span class="absolute inset-0" aria-hidden="true"></span>
+                                {cat.label}
+                                </a>
+                            </h2>
+                            <p class="text-body-14 text-muted mb-6">
+                                {cat.description}
+                            </p>
+                            </div>
+                            <div class="inline-flex items-center text-label-13 font-semibold text-strong group-hover:text-muted transition-colors mt-auto">
+                            Telusuri Direktori 
+                            <span class="ml-2 transition-transform group-hover:translate-x-1">→</span>
+                            </div>
+                        </article>
+                        ))}
+                    </div>
+                </nav>
+            </Section>
+        </Container>
+    </Section>
+</Layout>

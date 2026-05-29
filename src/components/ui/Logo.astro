@@ -1,0 +1,28 @@
+---
+// src/components/ui/Logo.astro
+import { SITE, ROUTES } from "@/consts";
+import Icon from "./Icon";
+---
+
+<a href={ROUTES.home} class="nav-logo group flex items-center justify-center gap-2.5 duration-200 hover:opacity-80">
+  <div class="flex items-center gap-4 transition-colors">
+    <Icon name="logo" className="logo-icon text-(--fg)" />
+    {SITE.name}
+  </div>
+</a>
+
+<style is:global>
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .logo-icon {
+    width: 28px;
+    height: 28px;
+  }
+</style>

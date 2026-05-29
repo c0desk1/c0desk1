@@ -1,0 +1,38 @@
+---
+// src/components/mdx/HR.astro
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<hr class:list={['hr-bn', className]} />
+
+<style>
+  .hr-bn {
+    margin: 2rem 0;
+    height: 1px;
+    background-color: var(--prose-hr);
+    border: none;
+    position: relative;
+    overflow: visible;
+  }
+
+  .hr-bn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    opacity: 0.5;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+  }
+
+  @media (max-width: 767px) {
+    .hr-bn {
+      margin: 1.5rem 0;
+    }
+  }
+</style>

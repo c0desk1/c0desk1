@@ -1,0 +1,239 @@
+---
+// src/components/Mobile.astro
+import { 
+  SITE,
+  NAV 
+} from "@/consts";
+import Icon from "@/components/ui/Icon";
+import Theme from "./Theme.astro";
+
+const navItems = NAV.MobileBar;
+---
+
+<div
+  id="mnav-backdrop"
+  class="fixed inset-0 z-100 bg-(--bg)/80"
+  style="display: none; opacity: 0; transition: opacity 0.25s ease;"
+  aria-hidden="true"
+></div>
+
+<div
+  id="mnav-sheet"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Menu mobile"
+  class="fixed bottom-0 left-0 right-0 z-200
+         bg-base border-t border-(--border)
+         rounded-t-xl
+         shadow-[0_-8px_40px_rgba(0,0,0,0.12)]
+         max-h-[75dvh]
+         pb-[env(safe-area-inset-bottom)]
+         will-change-transform"
+  style="display: none; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);"
+  inert>
+  
+  <div id="mnav-handle" class="flex h-8 justify-center pt-4 pb-1">
+    <div class="w-9 h-1 rounded-full bg-muted"></div>
+  </div>
+
+  <nav class="flex flex-col px-3 pt-2 pb-4 gap-3 overflow-y-auto max-h-[calc(75dvh-120px)]">
+    {navItems.map((item) => {
+      const hasChildren = item.children && item.children.length > 0;
+      if (hasChildren) {
+        return (
+          <div class="accordion-item" data-accordion>
+            <button aria-expanded="false" class="accordion-trigger flex items-center justify-between w-full px-3 py-2 text-body-16 font-medium text-(--fg) rounded-lg active:bg-muted hover:bg-muted transition-colors">
+              <span>{item.label}</span>
+              <Icon name="chevron-right" className="chevron-icon w-4 h-4 transition-transform duration-200" />
+            </button>
+            <div class="accordion-content">
+              <div class="flex flex-col gap-0.5 pt-1 pb-2">
+                {item.children?.map((child) => {
+                  const isExternal = child.isExternal === true;
+                  return (
+                    <a
+                      href={child.href}
+                      target={isExternal ? "_blank" : undefined}
+                      rel={isExternal ? "noopener noreferrer" : undefined}
+                      class="mnav-link flex items-center gap-2 px-3 py-1.5 text-body-16 text-(--fg) rounded-lg active:bg-muted hover:bg-muted transition-colors">
+                      {child.label}
+                      {isExternal && (
+                        <Icon name="external" className="w-3 h-3 shrink-0 opacity-80" />
+                      )}
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        );
+      } else {
+        return (
+          <a href={item.href}
+            class="mnav-link flex items-center gap-2 px-3 py-2 text-body-14 text-(--fg) active:bg-muted hover:bg-muted rounded-lg transition-colors">
+            {item.label}
+            {item.isExternal && (
+              <Icon name="external" className="w-3 h-3 shrink-0 opacity-80" />
+            )}
+          </a>
+        );
+      }
+    })}
+  </nav>
+  
+  <div class="flex items-center justify-between px-5 py-4 border-t border-(--border)/60 gap-4">
+    <div class="text-label-12 text-muted">© {new Date().getFullYear()} {SITE.name}</div>
+    <Theme />
+  </div>
+</div>
+
+<style is:global>
+  .accordion-trigger .chevron-icon {
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .accordion-trigger[aria-expanded="true"] .chevron-icon {
+    transform: rotate(90deg);
+  }
+  
+  .accordion-content {
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: height;
+  }
+</style>
+
+<script>
+  //@ts-nocheck
+  const initMobileMenu = () => {
+    const sheet    = document.getElementById('mnav-sheet');
+    const backdrop = document.getElementById('mnav-backdrop');
+    const handle   = document.getElementById('mnav-handle');
+    
+    if (!sheet || !backdrop || !handle) return;
+
+    let open = false;
+    let startY = 0, currentY = 0, dragging = false;
+
+    const openSheet = () => {
+      if (open) return;
+      open = true;
+      
+      sheet.style.display = 'block';
+      backdrop.style.display = 'block';
+      void sheet.offsetHeight; 
+      
+      sheet.style.transform = 'translateY(0)';
+      backdrop.style.opacity = '1';
+      sheet.removeAttribute('inert');
+      document.body.style.overflow = 'hidden';
+      
+      const btn = document.getElementById('mnav-btn');
+      if (btn) btn.setAttribute('aria-expanded', 'true');
+    };
+
+    const closeSheet = () => {
+      if (!open) return;
+      open = false;
+      
+      sheet.style.transform = 'translateY(100%)';
+      backdrop.style.opacity = '0';
+      document.body.style.overflow = '';
+      
+      setTimeout(() => {
+        if (!open) {
+          sheet.style.display = 'none';
+          backdrop.style.display = 'none';
+          sheet.setAttribute('inert', '');
+        }
+      }, 300);
+      
+      const btn = document.getElementById('mnav-btn');
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+    };
+
+    document.removeEventListener('mnav:open', window.__mnavOpenHandler);
+    window.__mnavOpenHandler = openSheet;
+    document.addEventListener('mnav:open', window.__mnavOpenHandler);
+
+    backdrop.addEventListener('click', closeSheet);
+    
+    document.removeEventListener('keydown', window.__mnavKeyHandler);
+    window.__mnavKeyHandler = (e) => {
+      if (e.key === 'Escape' && open) closeSheet();
+    };
+    document.addEventListener('keydown', window.__mnavKeyHandler);
+
+    document.querySelectorAll('.mnav-link').forEach(link => {
+      link.addEventListener('click', closeSheet);
+    });
+
+    handle.addEventListener('touchstart', e => {     
+      startY = e.touches[0].clientY;
+      currentY = startY; 
+      dragging = true;
+      sheet.style.transition = 'none';
+    }, { passive: true });
+
+    handle.addEventListener('touchmove', e => {
+      if (!dragging || !open) return;
+      currentY = e.touches[0].clientY;
+      const delta = Math.max(0, currentY - startY);  
+      
+      if (delta > 0 && e.cancelable) {
+        e.preventDefault(); 
+      }
+      
+      sheet.style.transform = `translateY(${delta}px)`;
+    }, { passive: false });
+
+    handle.addEventListener('touchend', () => {
+      dragging = false;
+      sheet.style.transition = 'transform 0.3s cubic-bezier(0.32, 0.72, 0, 1)';
+      const delta = currentY - startY;
+      
+      if (delta > 80) {
+        closeSheet();
+      } else {
+        sheet.style.transform = 'translateY(0)';
+      }
+    });
+
+    const accordionTriggers = document.querySelectorAll('.accordion-trigger');
+    accordionTriggers.forEach(trigger => {
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const accordionItem = trigger.closest('.accordion-item');
+        if (!accordionItem) return;
+
+        const content = accordionItem.querySelector('.accordion-content');
+        if (!(content instanceof HTMLElement)) return;
+
+        const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
+        
+        if (isExpanded) {
+          content.style.height = `${content.scrollHeight}px`;
+          
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              content.style.height = '0px';
+              trigger.setAttribute('aria-expanded', 'false');
+            });
+          });
+        } else {
+          content.style.height = `${content.scrollHeight}px`;
+          trigger.setAttribute('aria-expanded', 'true');
+
+          const onTransitionEnd = () => {
+            if (trigger.getAttribute('aria-expanded') === 'true') {
+              content.style.height = 'auto';
+            }
+            content.removeEventListener('transitionend', onTransitionEnd);
+          };
+          content.addEventListener('transitionend', onTransitionEnd);
+        }
+      });
+    });
+  };
+  document.addEventListener('astro:page-load', initMobileMenu);
+</script>

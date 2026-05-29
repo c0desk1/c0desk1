@@ -1,0 +1,40 @@
+---
+// src/components/blog/HeroImage.astro
+import { Image } from 'astro:assets';
+import { cdnImage, isCdnUrl } from '@/lib/utils';
+
+interface Props {
+  image?: string;
+  alt?: string;
+  caption?: string;
+  loading?: boolean;
+}
+
+const { image, alt = '', caption } = Astro.props;
+
+const optimizedSrc = image && isCdnUrl(image)
+  ? cdnImage(image, { w: 1280, h: 720, q: 85 })
+  : image ?? '';
+const finalCaption = caption || '';
+---
+
+<figure class="w-full max-w-4xl mx-auto my-8 md:my-10">
+  <div class="relative overflow-hidden rounded-(--prose-radius-lg) shadow-2xl">
+    <div class="absolute inset-0 bg-base animate-pulse" aria-hidden="true"></div>
+    <Image
+      src={optimizedSrc}
+      alt={alt}
+      width={1280}
+      height={720}
+      loading="eager"
+      decoding="async"
+      class="relative z-10 h-full w-full object-cover aspect-video transition duration-500 opacity-0"
+      onload="this.classList.remove('opacity-0')"
+    />
+  </div>
+  {finalCaption && (
+    <figcaption class="text-label-13 text-(--prose-figure-caption) mt-4 text-center uppercase tracking-wide opacity-80">
+      {finalCaption}
+    </figcaption>
+  )}
+</figure>

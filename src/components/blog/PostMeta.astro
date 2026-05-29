@@ -1,0 +1,26 @@
+---
+// src/components/layout/PostMeta.astro
+import { formatDate, getReadingTime } from '@/lib/utils';
+import Icon from '@/components/ui/Icon';
+
+interface Props {
+  pubDate: Date;
+  content: string;
+}
+
+const { pubDate, content } = Astro.props;
+
+const formattedDate = formatDate(pubDate);
+const readingTime = getReadingTime(content);
+---
+
+<div class="flex items-center justify-center gap-3 text-(--prose-fg-muted)">
+  <div class="flex items-center gap-1.5">
+    <Icon name="clock" className="w-3.5 h-3.5" />
+    <span class="text-label-14 font-medium">{readingTime}</span>
+  </div>
+  <span class="text-label-14 opacity-50">·</span>
+  <time datetime={pubDate.toISOString()} class="text-label-14 font-medium">
+    {formattedDate}
+  </time>
+</div>

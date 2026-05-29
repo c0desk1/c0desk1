@@ -1,0 +1,93 @@
+---
+// src/components/blog/PostCard.astro
+import { 
+  getEntry, 
+  type CollectionEntry  
+} from 'astro:content';
+
+import { 
+  AUTHOR, 
+  ROUTES, 
+  IMAGE,
+  CATEGORIES,
+  formatDate, 
+  toISOString 
+} from '@/consts';
+
+import { 
+  generateExcerpt, 
+  cdnImage, 
+  isCdnUrl, 
+  slugify 
+} from '@/lib/utils';
+
+import { Image } from 'astro:assets';
+
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+
+let title = '', excerpt = '', categoryName = '', pubDateISO = '', pubDateDisplay = '';
+let authorName = '', authorAvatar = '', optimizedAvatar = '', postUrl = '';
+
+if (post) {
+  const { data } = post;
+  const { title: t, pubDate, category, author } = data;
+
+  const categoryData  = CATEGORIES.find((c) => c.slug === category);
+  
+  const authorEntry   = author ? await getEntry(author) : null;
+  const autoSlug = post.data.slug || slugify(t);
+
+  title = t;
+  excerpt = generateExcerpt(post.body || '', 140);
+  categoryName = categoryData?.label || '';
+  
+  pubDateISO      = toISOString(pubDate);
+  pubDateDisplay  = formatDate(pubDate, true);
+  
+  authorName      = authorEntry?.data.name   || AUTHOR.name;
+  authorAvatar    = authorEntry?.data.avatar || AUTHOR.avatar;
+  
+  optimizedAvatar = isCdnUrl(authorAvatar)
+    ? cdnImage(authorAvatar, { w: 48, h: 48, q: IMAGE.avatar.quality })
+    : authorAvatar;
+    
+  postUrl = `${ROUTES.blog}/${autoSlug}`;
+}
+---
+
+<a href={postUrl} class="group flex flex-col h-full w-full py-4 lg:py-6">
+  <div class="flex items-center justify-between mb-4 text-label-14 text-subtle group-hover:text-(--fg) active:text-(--fg)">
+    <span>{categoryName}</span>
+    <time datetime={pubDateISO}>{pubDateDisplay}</time>
+  </div>
+  <div class="flex flex-col gap-4 flex-1">
+    <h2 class="text-heading-20 lg:text-heading-24 text-(--fg) font-semibold line-clamp-3">
+      {title}
+    </h2>
+    <p class="text-body-14 md:text-body-16 font-medium text-muted line-clamp-3 group-hover:text-(--fg) active:text-(--fg)">
+      {excerpt}
+    </p>
+    <div class="mt-auto flex items-center gap-2 text-label-14 text-subtle group-hover:text-(--fg) active:text-(--fg)">
+      {authorAvatar && (
+        <div class="w-5 h-5 shrink-0 rounded-full overflow-hidden flex items-center justify-center border border-(--border)">
+          <Image
+            src={optimizedAvatar}
+            alt={`Avatar ${authorName}`}
+            width={48}
+            height={48}
+            loading='lazy'
+            decoding='async'
+            fetchpriority='low'
+            class="h-full w-full object-cover"
+          />
+        </div>
+      )}
+      <span>{authorName}</span>
+    </div>
+  </div>
+</a>

@@ -1,0 +1,11 @@
+<script is:inline>
+  const initTheme = () => {
+    const s = localStorage.getItem('theme-mode') || 'system';
+    const d = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const dark = s === 'dark' || (s === 'system' && d);
+    document.documentElement.classList.toggle('dark', dark);
+    document.documentElement.setAttribute('data-theme', s);
+  };
+  initTheme();
+  document.addEventListener('astro:after-swap', initTheme);
+</script>

@@ -1,0 +1,22 @@
+---
+// src/components/mdx/FileTree.astro
+interface Props {
+  files: string[];
+}
+
+const { files } = Astro.props;
+---
+
+<div class="not-prose my-6 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 p-4 font-mono text-sm">
+  <div class="mb-2 text-xs font-medium text-zinc-500 dark:text-zinc-400">File structure</div>
+  <div class="space-y-0.5">
+    {files.map(file => (
+      <div class="flex items-center gap-2 text-zinc-700 dark:text-zinc-300">
+        <span class="text-zinc-400 dark:text-zinc-600">
+          {file.includes('/') ? '📁' : '📄'}
+        </span>
+        <span>{file}</span>
+      </div>
+    ))}
+  </div>
+</div>

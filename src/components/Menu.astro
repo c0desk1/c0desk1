@@ -1,0 +1,33 @@
+---
+// src/components/Menu.astro
+import Icon from "./ui/Icon";
+
+const menuLabel = "Buka Menu";
+---
+
+<button
+  id="mnav-btn"
+  aria-label={menuLabel}
+  aria-expanded="false"
+  class="flex sm:hidden h-9 w-9 items-center justify-center rounded-full border border-(--border) text-muted hover:bg-subtle active:bg-subtle hover:text-strong active:text-strong focus:outline-none focus:ring-2 focus:ring-(--border-strong)">
+  <Icon name="menu" className="w-5 h-5 transition-colors" />
+</button>
+
+<script>
+  //@ts-nocheck
+  const initMenuButton = () => {
+    const btn = document.getElementById('mnav-btn');
+    if (!btn) return;
+    
+    btn.removeEventListener('click', window.__menuBtnHandler);
+    
+    window.__menuBtnHandler = () => {
+      document.dispatchEvent(new CustomEvent('mnav:open'));
+    };
+    
+    btn.addEventListener('click', window.__menuBtnHandler);
+  };
+
+  initMenuButton();
+  document.addEventListener('astro:page-load', initMenuButton);
+</script>

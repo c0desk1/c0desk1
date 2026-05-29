@@ -1,0 +1,104 @@
+---
+// src/components/ui/CopyLink.astro
+import { siteConfig } from "@/config/site";
+import Icon from "./Icon";
+
+
+const labels = {
+  copy: siteConfig.copyUrl,
+  copied: siteConfig.copied,
+  failed: siteConfig.copyFailed,
+  ariaDefault: siteConfig.copyUrlAria,
+  ariaSuccess: siteConfig.copiedAria,
+  ariaFailed: siteConfig.copyFailedAria,
+  toastSuccess: siteConfig.copyToastSuccess,
+  toastFailed: siteConfig.copyToastFailed,
+};
+---
+
+<button
+  class="copy-link-btn relative text-(--accent-dim) hover:text-(--accent) group active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-200"
+  aria-label={labels.ariaDefault}
+  title={labels.ariaDefault}
+  aria-live="polite"
+  data-url={Astro.url.href}
+  data-labels={JSON.stringify(labels)}
+>
+  <div class="flex shrink-0 items-center justify-center gap-1.5">
+    <div class="relative w-4 h-4 items-center">
+      <span class="icon-copy absolute inset-0 w-full h-full transition-all duration-200">
+        <Icon name="link" className="w-4 h-4" />
+      </span>
+      <span class="icon-check absolute inset-0 w-full h-full opacity-0 scale-75 transition-all duration-200">
+        <Icon name="check" className="w-4 h-4" />
+      </span>
+    </div>
+    <span class="copy-text text-[13px] md:text-sm font-medium leading-none">
+      {labels.copy}
+    </span>
+  </div>
+</button>
+
+<script>
+  const initCopyButtons = () => {
+    const handleCopyClick = async (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const btn = target.closest('.copy-link-btn') as HTMLButtonElement;
+      
+      if (!btn || btn.disabled) return;
+
+      const labels = JSON.parse(btn.dataset.labels || '{}');
+      const copyIcon = btn.querySelector('.icon-copy') as HTMLElement;
+      const checkIcon = btn.querySelector('.icon-check') as HTMLElement;
+      const text = btn.querySelector('.copy-text') as HTMLElement;
+      
+      const isClipboardSupported = navigator.clipboard && window.isSecureContext;
+
+      const showToast = (message: string, type = 'success') => {
+        if ((window as any).toast?.show) {
+          (window as any).toast.show(message, { type, duration: 2000 });
+        }
+      };
+
+      btn.disabled = true;
+
+      let success = false;
+      if (isClipboardSupported) {
+        try {
+          const url = btn.dataset.url || window.location.href;
+          await navigator.clipboard.writeText(url);
+          success = true;
+        } catch {
+          success = false;
+        }
+      }
+
+      if (success) {
+        if (copyIcon) copyIcon.style.cssText = 'opacity:0;transform:scale(0.75)';
+        if (checkIcon) checkIcon.style.cssText = 'opacity:1;transform:scale(1)';
+        if (text) text.textContent = labels.copied;
+        btn.setAttribute('aria-label', labels.ariaSuccess);
+        showToast(labels.toastSuccess, 'success');
+      } else {
+        if (text) text.textContent = labels.failed;
+        btn.setAttribute('aria-label', labels.ariaFailed);
+        showToast(labels.toastFailed, 'error');
+      }
+
+      setTimeout(() => {
+        if (copyIcon) copyIcon.style.cssText = 'opacity:1;transform:scale(1)';
+        if (checkIcon) checkIcon.style.cssText = 'opacity:0;transform:scale(0.75)';
+        if (text) text.textContent = labels.copy;
+        btn.setAttribute('aria-label', labels.ariaDefault);
+        btn.disabled = false;
+      }, 1500);
+    };
+
+    document.removeEventListener('click', (window as any).__copyLinkHandler);
+    (window as any).__copyLinkHandler = handleCopyClick;
+    document.addEventListener('click', (window as any).__copyLinkHandler);
+  };
+
+  initCopyButtons();
+  document.addEventListener('astro:page-load', initCopyButtons);
+</script>

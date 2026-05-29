@@ -1,0 +1,64 @@
+---
+// src/components/layout/PostAuthor.astro
+import { Image } from 'astro:assets';
+
+import { 
+  AUTHOR, 
+  IMAGE 
+} from '@/consts';
+
+import { 
+  cdnImage, 
+  isCdnUrl,
+  slugify 
+} from '@/lib/utils';
+
+import Contribution from './Contribution.astro';
+
+interface Props {
+  name?: string;
+  avatar?: string;
+  role?: string;
+  slug?: string;
+}
+
+const { name, avatar, role, slug } = Astro.props;
+
+const Author = {
+  name: name || AUTHOR.name,
+  avatar: avatar || AUTHOR.avatar,
+  role: role || AUTHOR.role,
+  slug: slug || slugify(AUTHOR.name)
+}
+
+const optimizedAvatar = Author.avatar && isCdnUrl(Author.avatar)
+  ? cdnImage(Author.avatar, { w: IMAGE.avatar.width, h: IMAGE.avatar.height, q: IMAGE.avatar.quality })
+  : Author.avatar;
+
+const authorPath = `/author/${Author.slug}`;
+---
+
+<div class="flex items-center justify-center gap-3">
+  <a href={authorPath} rel="author" aria-label={`Penulis: ${Author.name}`} class="flex items-center gap-3 no-underline group">
+    {Author.avatar && (
+      <span class="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border border-(--border) shrink-0 transition-shadow group-hover:ring-2 group-hover:ring-(--accent-ring)">
+        <Image
+          src={optimizedAvatar}
+          alt={Author.name}
+          width={IMAGE.avatar.width}
+          height={IMAGE.avatar.height}
+          class="h-full w-full object-cover"
+          loading="eager"
+          decoding="async"
+        />
+      </span>
+    )}
+    <div class="flex flex-col text-start">
+      <span class="text-body-14 md:text-body-16 font-semibold text-(--fg)">{Author.name}</span>
+      {Author.role && (
+        <span class="text-label-12 md:text-label-13 text-muted uppercase">{Author.role}</span>
+      )}
+    </div>
+  </a>
+  <Contribution />
+</div>

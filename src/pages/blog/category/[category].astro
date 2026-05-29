@@ -1,0 +1,104 @@
+---
+import { getCollection } from "astro:content";
+import { 
+  SITE, 
+  ROUTES, 
+  CATEGORIES, 
+  buildMeta, 
+  schemaCollectionPage, 
+  schemaBreadcrumb 
+} from "@/consts";
+
+import Layout from "@/layouts/Layout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import PostCard from "@/components/blog/PostCard.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection("blog");
+  return CATEGORIES.map((category) => {
+    const categoryPosts = allPosts
+      .filter((post) => post.data.category === category.slug && !post.data.draft)
+      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+    return {
+      params: { category: category.slug },
+      props: { category, posts: categoryPosts },
+    };
+  });
+}
+
+const { category, posts } = Astro.props;
+
+const currentPath = `${ROUTES.blog}/category/${category.slug}`;
+const canonicalURL = new URL(currentPath, SITE.url).href;
+
+const meta = buildMeta({
+  title: category.label,
+  description: category.description,
+  canonical: canonicalURL,
+});
+
+const schemas = [
+  schemaCollectionPage({
+    title: `Kategori: ${category.label}`,
+    description: category.description,
+    url: canonicalURL,
+  }),
+  schemaBreadcrumb([
+    { name: "Beranda", url: SITE.url },
+    { name: "Blog", url: new URL(ROUTES.blog, SITE.url).href }, 
+    { name: "Kategori", url: new URL(`${ROUTES.blog}/category`, SITE.url).href }, 
+    { name: category.label, url: canonicalURL },
+  ]),
+];
+---
+
+<Layout {meta} schema={schemas} bodyClass="bg-base">
+  <Section size="lg">
+    <Container size="xl">
+      
+      <Section size="sm">
+        <div class="flex items-center self-start mb-8">
+          <Breadcrumb
+            items={[
+              { name: "Kategori", url: `${ROUTES.blog}/category` },
+              { name: category.label, url: currentPath },
+            ]}
+          />
+        </div>
+      </Section>
+      
+      <header class="mb-16">
+        <h1 class="text-heading-40 md:text-heading-56 font-extrabold tracking-tighter text-strong mb-4 text-balance">
+          {category.label}
+        </h1>
+        <p class="text-body-18 text-muted max-w-xl text-pretty">
+          {category.description}
+        </p>
+      </header>
+
+      {posts.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          {posts.map((post) => (
+            <PostCard post={post} />
+          ))}
+        </div>
+      ) : (
+        <div class="flex flex-col items-center justify-center py-32 px-4 text-center border border-dashed border-border-strong rounded-lg bg-subtle">
+          <p class="text-body-16 text-muted font-medium mb-6">
+            Belum ada postingan kategori ini.
+          </p>
+          <a 
+            href={`${ROUTES.blog}/category`} 
+            class="text-label-14 font-semibold text-strong hover:text-muted transition-colors border-b border-border-strong hover:border-transparent pb-0.5"
+          >
+            Kembali ke Indeks Kategori
+          </a>
+        </div>
+      )}
+
+    </Container>
+  </Section>
+</Layout>

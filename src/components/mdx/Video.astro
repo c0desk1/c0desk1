@@ -1,0 +1,92 @@
+---
+// src/components/mdx/Video.astro
+interface Props {
+  src: string;
+  title?: string;
+  caption?: string;
+  autoplay?: boolean;
+  loop?: boolean;
+  muted?: boolean;
+}
+const { src, title = 'Embedded video', caption, autoplay = false, loop = false, muted = true } = Astro.props;
+
+const getYouTubeId = (url: string) => {
+  const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  return m ? m[1] : null;
+};
+
+const getVimeoId = (url: string) => {
+  const m = url.match(/vimeo\.com\/(\d+)/);
+  return m ? m[1] : null;
+};
+
+const ytId     = getYouTubeId(src);
+const vimeoId  = getVimeoId(src);
+const isDirect = !ytId && !vimeoId;
+
+const ytParams  = new URLSearchParams({ rel: '0', modestbranding: '1', ...(autoplay ? { autoplay: '1' } : {}) });
+const embedSrc  = ytId
+  ? `https://www.youtube-nocookie.com/embed/${ytId}?${ytParams}`
+  : vimeoId
+  ? `https://player.vimeo.com/video/${vimeoId}?dnt=1`
+  : null;
+---
+
+<figure class="video-figure not-prose mx-auto max-w-3xl my-8">
+  <div class="video-wrapper">
+    {isDirect ? (
+      <video
+        src={src}
+        controls
+        playsinline
+        autoplay={autoplay}
+        loop={loop}
+        muted={muted}
+        title={title}
+        class="video-direct p-2"
+      />
+    ) : (
+      <iframe
+        src={embedSrc!}
+        title={title}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+        loading="lazy"
+        class="video-iframe p-2"
+      />
+    )}
+  </div>
+  {caption && <figcaption class="video-caption">{caption}</figcaption>}
+</figure>
+
+<style is:global>
+  .video-figure { margin: 0; }
+
+  .video-wrapper {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--prose-radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background-color: var(--bg-muted);
+  }
+
+  .video-iframe,
+  .video-direct {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    object-fit: cover;
+    radius: var(--prose-radius-lg);
+  }
+
+  .video-caption {
+    text-align: center;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--fg-subtle);
+    margin-top: 0.75rem;
+  }
+</style>

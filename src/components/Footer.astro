@@ -1,0 +1,139 @@
+---
+// src/components/layout/Footer.astro
+import { Image } from "astro:assets";
+import { ORG, SITE, NAV } from "@/consts";
+
+import Container from "./ui/Container.astro";
+import Section from "./ui/Section.astro";
+import Icon from "./ui/Icon";
+import Theme from "./Theme.astro";
+
+const footerSections = NAV.footerBar;
+---
+
+<footer class="border-t border-(--border)">
+  <Section size="none" class="bg-subtle">
+    <Container size="xl">
+    <div class="grid items-center grid-cols-1 lg:grid-cols-2" id="philosophy">
+      <div class="px-0 sm:px-4 py-8">
+        <p class="philosophy-quote">
+          The void is not<br>
+          empty. It is<br>
+          <em>full of potential.</em>
+        </p>
+      </div>
+      <div class="flex flex-col justify-center px-0 sm:px-4 py-8 border-0 sm:border-l border-(--border)">
+          {footerSections.map((section) => (
+          <ul class="philosophy-values">
+            {section.items.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                target={link.isExternal ? "_blank" : undefined}
+                rel={link.isExternal ? "noopener noreferrer" : undefined}
+                class=" val-name group inline-flex items-center gap-1 text-body-14 text-muted transition-colors duration-150 hover:text-(--fg)">
+                {link.label}
+                {link.isExternal && (
+                  <Icon
+                    name="external"
+                    className="h-3 w-3 shrink-0 opacity-40 transition-opacity duration-150 group-hover:opacity-100"
+                  />
+                )}
+              </a>
+            </li>
+            ))}
+          </ul>
+          ))}
+      </div>
+    </div>
+    </Container>
+  </Section>
+  <Section size="none" class="border-t border-(--border)">
+    <Container size="xl">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 py-4">
+        <div class="footer-logo flex flex-col sm:flex-row">
+          <div class="w-5 h-5 flex items-center justify-center shrink-0">
+            <Image
+              src={ORG.logo}
+              alt={SITE.name}
+              width={48}
+              height={48}
+              loading="lazy"
+              fetchpriority="low"
+              class="w-8 h-8 object-contain"
+            />
+          </div>
+          {SITE.name}
+          <p class="footer-copy text-label-12">
+            &copy; {new Date().getFullYear()}. All rights reserved.
+          </p>
+        </div>
+        <Theme />
+      </div>
+    </Container>
+  </Section>
+</footer>
+
+<style is:global>
+  .philosophy-quote {
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .philosophy-quote em {
+    font-style: normal;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--border-strong);
+  }
+
+  .philosophy-values {
+    list-style: none;
+    margin-top: 0;
+  }
+
+  .philosophy-values li {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .philosophy-values li:last-child {
+    border-bottom: none;
+  }
+
+  .val-name {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  .val-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--gray-3);
+    letter-spacing: 0.1em;
+  }
+
+  /* FOOTER */
+  footer {
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-logo {
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .footer-copy {
+    color: var(--fg-muted);
+  }
+</style>
