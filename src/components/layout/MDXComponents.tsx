@@ -23,6 +23,7 @@ import Kbd from '../mdx/KBD.astro';
 import Changelog from '../mdx/changelog.astro';
 import Banner from '../mdx/Banner.astro';
 import Video from '../mdx/Video.astro';
+import Figure from '../mdx/Figure.astro';
 
 export const components: MDXComponents = {
   Heading,
@@ -44,6 +45,7 @@ export const components: MDXComponents = {
   Footnotes,
   Accordion,
   Badge,
+  Figure,
   Kbd,
   Banner,
   Video,
