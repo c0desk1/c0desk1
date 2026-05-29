@@ -87,8 +87,20 @@ Ini paragraf kedua dengan **teks tebal**, *teks miring*, dan ***teks tebal mirin
 
 
 ## Kode
-:::code
+:::code 
+:del[1] 
+:ins[2-4] 
+:mark[5]
+```js
+console.log("line 1")
+console.log("line 2")
+console.log("line 3")
+console.log("line 4")
+console.log("line 5")
+```
+:::
 
+:::code
 ```js
 // JavaScript example
 function testMarkdown() {
@@ -102,11 +114,9 @@ function testMarkdown() {
   }));
 }
 ```
-
 :::
 
 :::code
-
 ```ts
 // TypeScript example
 type User = {
@@ -125,11 +135,9 @@ export function getUser(): User {
   return user;
 }
 ```
-
 :::
 
 :::code
-
 ```tsx
 // React TSX example
 type ButtonProps = {
@@ -144,11 +152,9 @@ export function Button({ label }: ButtonProps) {
   );
 }
 ```
-
 :::
 
 :::code
-
 ```astro
 ---
 // Astro component example
@@ -163,11 +169,9 @@ const title = "Markdown Testing";
   </p>
 </section>
 ```
-
 :::
 
 :::code
-
 ```html
 <!-- HTML example -->
 <section class="card">
@@ -178,11 +182,9 @@ const title = "Markdown Testing";
   </p>
 </section>
 ```
-
 :::
 
 :::code
-
 ```css
 /* CSS example */
 .prose code {
@@ -191,11 +193,9 @@ const title = "Markdown Testing";
   padding: 0.2rem 0.4rem;
 }
 ```
-
 :::
 
 :::code
-
 ```json
 {
   "name": "markdown-test",
@@ -206,11 +206,9 @@ const title = "Markdown Testing";
   }
 }
 ```
-
 :::
 
 :::code
-
 ```yaml
 name: markdown-testing
 
@@ -223,22 +221,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
 ```
-
 :::
 
 :::code
-
 ```bash
 # Bash example
 npm install
 npm run dev
 git status
 ```
-
 :::
 
 :::code
-
 ```python
 # Python example
 def test_markdown():
@@ -248,11 +242,9 @@ def test_markdown():
         "success": True
     }
 ```
-
 :::
 
 :::code
-
 ```php
 <?php
 
@@ -262,11 +254,9 @@ function testMarkdown() {
 
 echo testMarkdown();
 ```
-
 :::
 
 :::code
-
 ```sql
 -- SQL example
 SELECT
@@ -276,18 +266,15 @@ SELECT
 FROM posts
 ORDER BY published_at DESC;
 ```
-
 :::
 
 :::code
-
 ```md
 # Markdown example
 - Item pertama
 - Item kedua
 - Item ketiga
 ```
-
 :::
 
 ## Gambar
