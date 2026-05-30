@@ -1,22 +1,125 @@
 ---
 // src/components/mdx/FileTree.astro
-interface Props {
-  files: string[];
-}
 
-const { files } = Astro.props;
+const folderClosed = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7l-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2Z"/></svg>`;
+const folderOpen = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7l-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2Z"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>`;
+const fileDefault = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`;
+
+const iconMap: Record<string, string> = {
+  js: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>`,
+  ts: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/><text x="6" y="17" font-size="10">TS</text></svg>`,
+  astro: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2v4M22 12h-4M12 20v-4M4 12h4"/></svg>`,
+  md: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M8 8h8"/><path d="M8 12h6"/></svg>`,
+  json: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><text x="6" y="16" font-size="8">{}</text></svg>`,
+  html: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><text x="6" y="16" font-size="8">HTML</text></svg>`,
+  css: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><text x="6" y="16" font-size="8">CSS</text></svg>`,
+  apk: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/></svg>`,
+  kt: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><text x="6" y="16" font-size="10">KT</text></svg>`,
+  gradle: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><text x="4" y="16" font-size="8">gradle</text></svg>`,
+};
+
+function getFileIcon(filename: string): string {
+  const ext = filename.split('.').pop()?.toLowerCase() || '';
+  return iconMap[ext] || fileDefault;
+}
 ---
 
-<div class="not-prose my-6 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 p-4 font-mono text-sm">
-  <div class="mb-2 text-xs font-medium text-zinc-500 dark:text-zinc-400">File structure</div>
-  <div class="space-y-0.5">
-    {files.map(file => (
-      <div class="flex items-center gap-2 text-zinc-700 dark:text-zinc-300">
-        <span class="text-zinc-400 dark:text-zinc-600">
-          {file.includes('/') ? '📁' : '📄'}
-        </span>
-        <span>{file}</span>
-      </div>
-    ))}
-  </div>
+<div class="file-tree-wrapper">
+  <slot />
 </div>
+
+<script define:vars={{ folderClosed, folderOpen, getFileIcon }}>
+  (() => {
+    function initFileTree(wrapper: HTMLElement) {
+      const rootList = wrapper.querySelector('ul, ol');
+      if (!rootList) return;
+      rootList.classList.add('file-tree-root');
+      
+      function processList(ul: HTMLUListElement | HTMLOListElement) {
+        for (const li of ul.children) {
+          if (li.tagName !== 'LI') continue;
+          let textNode = li.firstChild;
+          let text = textNode?.textContent?.trim() || '';
+          const isFolder = text.endsWith('/');
+          
+          if (isFolder) {
+            text = text.slice(0, -1);
+            li.classList.add('file-tree-folder');
+            const span = document.createElement('span');
+            span.innerHTML = `${folderClosed} ${text}`;
+            textNode?.replaceWith(span);
+            const subUl = li.querySelector(':scope > ul, :scope > ol');
+            if (subUl) {
+              subUl.classList.add('file-tree-children');
+              processList(subUl);
+            }
+          } else {
+            li.classList.add('file-tree-file');
+            const span = document.createElement('span');
+            const icon = getFileIcon(text);
+            span.innerHTML = `${icon} ${text}`;
+            textNode?.replaceWith(span);
+          }
+        }
+      }
+      processList(rootList);
+      
+      wrapper.querySelectorAll('.file-tree-folder').forEach((folder) => {
+        const span = folder.querySelector('span');
+        if (!span) return;
+        span.style.cursor = 'pointer';
+        span.addEventListener('click', (e) => {
+          e.stopPropagation();
+          folder.classList.toggle('open');
+          if (folder.classList.contains('open')) {
+            span.innerHTML = span.innerHTML.replace(/<svg.*?>.*?<\/svg>/, folderOpen);
+          } else {
+            span.innerHTML = span.innerHTML.replace(/<svg.*?>.*?<\/svg>/, folderClosed);
+          }
+        });
+      });
+    }
+    
+    document.querySelectorAll('.file-tree-wrapper').forEach(initFileTree);
+  })();
+</script>
+
+<style is:inline>
+  .file-tree-wrapper {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    background: var(--bg-subtle);
+    margin: 1rem 0;
+  }
+  .file-tree-wrapper ul {
+    list-style: none;
+    padding-left: 1.5rem;
+    margin: 0.25rem 0;
+  }
+  .file-tree-root {
+    padding-left: 0;
+  }
+  .file-tree-folder > span svg,
+  .file-tree-file > span svg {
+    vertical-align: middle;
+    margin-right: 0.25rem;
+    flex-shrink: 0;
+  }
+  .file-tree-folder > span,
+  .file-tree-file > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .file-tree-folder > ul {
+    display: none;
+    margin-left: 1rem;
+    border-left: 1px dashed var(--border);
+  }
+  .file-tree-folder.open > ul {
+    display: block;
+  }
+</style>
