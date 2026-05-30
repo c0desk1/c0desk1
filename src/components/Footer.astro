@@ -57,15 +57,7 @@ const footerSections = NAV.footerBar;
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4 py-4">
         <div class="footer-logo flex flex-col sm:flex-row">
           <div class="w-5 h-5 flex items-center justify-center shrink-0">
-            <Image
-              src={ORG.logo}
-              alt={SITE.name}
-              width={48}
-              height={48}
-              loading="lazy"
-              fetchpriority="low"
-              class="w-8 h-8 object-contain"
-            />
+            <Icon name="logo" className="w-full h-full" />
           </div>
           {SITE.name}
           <p class="footer-copy text-label-12">
@@ -116,9 +108,9 @@ const footerSections = NAV.footerBar;
   }
 
   .val-num {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
-    color: var(--gray-3);
+    color: var(--fg-muted);
     letter-spacing: 0.1em;
   }
 
@@ -140,4 +132,4 @@ const footerSections = NAV.footerBar;
   .footer-copy {
     color: var(--fg-muted);
   }
-</style>
+</style>
