@@ -1,4 +1,3 @@
-#:schema node_modules/wrangler/config-schema.json
 name = "unloyd"
 compatibility_date = "2026-05-26"
 
