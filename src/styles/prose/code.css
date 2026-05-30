@@ -1,268 +1,177 @@
-/* src/styles/prose/code.css */
-.prose code:not(pre code) {
-  @apply text-code-14;
-  background-color: var(--prose-code-bg);
-  color: var(--prose-code-text);
-  padding: 0.2em 0.45em;
-  border-radius: var(--prose-radius-sm);
-  border: 1px solid var(--prose-code-border);
-  white-space: break-spaces;
-  font-weight: 500;
+---
+// src/components/mdx/Code.astro
+import Icon from "@/components/ui/Icon";
+
+interface Props {
+  ins?:   string;
+  del?:   string;
+  mark?:  string;
+  title?: string;
 }
 
-.prose h1 code,
-.prose h2 code,
-.prose h3 code,
-.prose h4 code,
-.prose summary code {
-  background: transparent;
-  border: none;
-  padding: 0;
-  color: inherit;
-}
+const { ins = "", del = "", mark = "", title = "" } = Astro.props;
+---
 
-.prose a code {
-  color: inherit;
-}
-.prose pre {
-  background: none !important;
-  padding: 1.25rem 1.5rem;
-  overflow-x: auto;
-  margin: 0 !important;
-  position: relative;
-  scrollbar-width: thin;
-  scrollbar-color: var(--prose-border) transparent;
-}
+<div
+  class="code-block-wrapper"
+  data-ins={ins}
+  data-del={del}
+  data-mark={mark}
+>
+  <div class="code-block-header group">
+    <div class="flex items-center gap-3 min-w-0">
+      <div class="mac-controls flex gap-1.5 shrink-0" aria-hidden="true">
+        <div class="mac-dot close"></div>
+        <div class="mac-dot minimize"></div>
+        <div class="mac-dot maximize"></div>
+      </div>
+      <span class="code-block-title">
+        {title || <span class="code-language">plain</span>}
+      </span>
+    </div>
+    <div class="flex items-center gap-3 shrink-0">
+      {(ins || del) && (
+        <span class="code-diff-legend" aria-hidden="true">
+          {ins && <span class="diff-tag add">+</span>}
+          {del && <span class="diff-tag remove">−</span>}
+        </span>
+      )}
+      <button
+        type="button"
+        aria-label="Salin kode"
+        class="hover:bg-(--prose-bg-muted)/20 text-(--prose-fg-muted) hover:text-(--prose-fg) copy-button p-2 transition-colors duration-200">
+        <Icon name="copy"  className="copy-icon w-4 h-4" />
+        <Icon name="check" className="check-icon hidden w-4 h-4 text-green-500" />
+      </button>
+    </div>
+  </div>
+  <div class="code-content">
+    <slot />
+  </div>
+</div>
 
-.prose pre::-webkit-scrollbar { height: 4px; }
-.prose pre::-webkit-scrollbar-track { background: transparent; }
-.prose pre::-webkit-scrollbar-thumb {
-  background: var(--prose-border);
-  border-radius: var(--radius-full);
-}
+<script>
+  (() => {
+    const NAMES: Record<string, string> = {
+      js: "JavaScript", ts: "TypeScript", jsx: "JSX", tsx: "TSX",
+      py: "Python", html: "HTML", css: "CSS", scss: "SCSS",
+      json: "JSON", jsonc: "JSONC", yaml: "YAML", toml: "TOML",
+      bash: "Bash", sh: "Shell", zsh: "Zsh", sql: "SQL",
+      md: "Markdown", mdx: "MDX", astro: "Astro", vue: "Vue",
+      svelte: "Svelte", go: "Go", rust: "Rust", cpp: "C++",
+      c: "C", cs: "C#", java: "Java", php: "PHP", rb: "Ruby",
+      swift: "Swift", kt: "Kotlin", dockerfile: "Dockerfile",
+      prisma: "Prisma", graphql: "GraphQL",
+    };
+    
+    const ALIASES: Record<string, string> = {
+      javascript: "js", typescript: "ts", python: "py", 
+      shell: "sh", ruby: "rb", csharp: "cs",
+    };
 
-.prose pre[data-lang]::before {
-  content:        attr(data-lang);
-  position:       absolute;
-  top:            10px;
-  right:          14px;
-  text-transform: uppercase;
-  pointer-events: none;
-  user-select:    none;
-}
+    const normalize = (l = "") => {
+      const n = l.toLowerCase();
+      return ALIASES[n] || n;
+    };
 
-.prose pre code {
-  @apply text-code-14;
-}
+    const getLang = (pre: Element | null) => {
+      if (!pre) return "plain";
+      const dl = pre.getAttribute("data-language");
+      if (dl) return normalize(dl);
+      const m = pre.className.match(/language-([a-zA-Z0-9+#-]+)/);
+      return normalize(m?.[1] || "plain");
+    };
 
-.prose .code-block-wrapper {
-  margin: 2.5rem 0;
-  overflow-x: auto;
-  border-radius: var(--prose-radius-md);
-  border: 1px solid var(--prose-code-border);
-  background: var(--prose-code-bg) !important;
-  overflow:      hidden;
-}
+    const parseRanges = (str = "") => {
+      const set = new Set<number>();
+      if (!str) return set;
+      str.split(",").forEach((part) => {
+        const [a, b] = part.trim().split("-").map(Number);
+        if (!isNaN(a) && !isNaN(b)) {
+          for (let i = a; i <= b; i++) set.add(i);
+        } else if (!isNaN(a)) {
+          set.add(a);
+        }
+      });
+      return set;
+    };
 
-.prose .code-block-header {
-  display:         flex;
-  align-items:     center;
-  justify-content: space-between;
-  gap:             0.5rem;
-  border-bottom:   1px solid var(--prose-code-border);
-  padding:         0.375rem 0.75rem 0.375rem 1rem;
-  background:      var(--prose-code-bg) !important;
-}
+    const applyLineClasses = (wrapper: HTMLElement) => {
+      const ins  = parseRanges(wrapper.dataset.ins);
+      const del  = parseRanges(wrapper.dataset.del);
+      const mark = parseRanges(wrapper.dataset.mark);
+      if (!ins.size && !del.size && !mark.size) return;
 
-.prose .code-icon {
-  display:     flex;
-  align-items: center;
-  flex-shrink: 0;
-  color:       var(--prose-fg-muted);
-}
+      const lines = wrapper.querySelectorAll(".code-content pre code .line");
+      lines.forEach((line, i) => {
+        const n = i + 1;
+        if (ins.has(n))  line.classList.add("diff-add");
+        if (del.has(n))  line.classList.add("diff-remove");
+        if (mark.has(n)) line.classList.add("highlighted");
+      });
+    };
 
-.prose .code-block-title {
-  @apply text-label-14;
-  color:          var(--prose-fg-muted);
-  white-space:    nowrap;
-  overflow:       hidden;
-  text-overflow:  ellipsis;
-  min-width:      0;
-}
+    const applyLineNumbers = (wrapper: HTMLElement) => {
+      const pre = wrapper.querySelector(".code-content pre");
+      if (!pre || pre.classList.contains("line-numbers")) return;
+      const lines = pre.querySelectorAll("code .line");
+      if (lines.length <= 1) return;
+      pre.classList.add("line-numbers");
+    };
 
-.prose .code-diff-legend {
-  display:     flex;
-  align-items: center;
-  gap:         0.25rem;
-}
-.prose .diff-tag {
-  @apply text-label-14;
-  padding:        0.3rem;
-  border-radius:  var(--prose-radius-sm);
-}
-.prose .diff-tag.add    { color: rgba(61, 214, 140, 0.9);  background: rgba(61, 214, 140, 0.1); }
-.prose .diff-tag.remove { color: rgba(242, 85, 90, 0.9);   background: rgba(242, 85, 90, 0.1); }
+    const setupCopy = (wrapper: HTMLElement) => {
+      const btn  = wrapper.querySelector(".copy-button");
+      const code = wrapper.querySelector(".code-content pre code");
+      if (!btn || !code) return;
 
-.prose .copy-button {
-  display:       flex;
-  align-items:   center;
-  justify-content: center;
-  flex-shrink:   0;
-  border-radius: var(--prose-radius-md);
-  cursor:        pointer;
-  transition:    all var(--duration) var(--ease-out);
-  opacity:       0;
-}
+      btn.addEventListener("click", async () => {
+        const text = code.textContent ?? "";
+        
+        try {
+          await navigator.clipboard.writeText(text);
+          const copyIcon  = btn.querySelector(".copy-icon");
+          const checkIcon = btn.querySelector(".check-icon");
+          
+          copyIcon?.classList.add("hidden");
+          checkIcon?.classList.remove("hidden");
+          btn.setAttribute("aria-label", "Tersalin!");
+          
+          setTimeout(() => {
+            copyIcon?.classList.remove("hidden");
+            checkIcon?.classList.add("hidden");
+            btn.setAttribute("aria-label", "Salin kode");
+          }, 2000);
+          
+        } catch (err) {
+          console.error("Gagal menyalin teks: ", err);
+        }
+      });
+    };
 
-.prose pre:hover .copy-button,
-.prose .code-block-wrapper:hover .copy-button,
-.prose .copy-button:focus-visible { opacity: 1; }
+    const updateHeader = (wrapper: HTMLElement, lang: string) => {
+      const langEl = wrapper.querySelector(".code-language");
+      if (langEl) langEl.textContent = NAMES[lang] || lang.toUpperCase();
+    };
 
-@media (hover: none) {
-  .prose .copy-button { opacity: 1; }
-}
+    const initAll = () => {
+      document.querySelectorAll(".code-block-wrapper:not(.is-processed)").forEach((el) => {
+        const wrapper = el as HTMLElement;
+        wrapper.classList.add("is-processed");
 
-.prose .code-content {
-  margin: 0;
-  overflow-x: auto;
-  border-radius: 0;
-  border-style: none;
-  background: var(--prose-code-bg) !important;
-  scrollbar-width: thin;
-  scrollbar-color: var(--prose-border) transparent;
-}
+        const pre  = wrapper.querySelector(".code-content pre");
+        const lang = getLang(pre);
 
-.prose .code-content::-webkit-scrollbar        { height: 4px; }
-.prose .code-content::-webkit-scrollbar-track  { background: transparent; }
-.prose .code-content::-webkit-scrollbar-thumb  { background: var(--prose-border); border-radius: 2px; }
+        updateHeader(wrapper, lang);
+        applyLineNumbers(wrapper);
+        applyLineClasses(wrapper);
+        setupCopy(wrapper);
+      });
+    };
 
-.prose .code-content pre {
-  @apply text-code-14;
-  border: none;
-  margin: 0;
-  border-radius: 0;
-  background-color: transparent !important;
-  overflow-x: visible;
-  white-space: pre;
-  word-break: normal;
-  word-wrap: normal;
-  padding:          1.125rem 1.25rem;
-}
-
-.prose .code-content pre code {
-  white-space: pre !important;
-}
-
-.prose pre.line-numbers {
-  counter-reset:  line;
-  padding-left:   3rem;
-}
-
-.prose pre.line-numbers .line {
-  position:       relative;
-  counter-increment: line;
-}
-
-.prose pre.line-numbers .line::before {
-  @apply text-code-14;
-  content:        counter(line);
-  position:       absolute;
-  left:           -3rem;
-  width:          2.25rem;
-  text-align:     right;
-  color:          var(--prose-code-number);
-  user-select:    none;
-  pointer-events: none;
-  opacity:        0.4;
-}
-
-.prose pre .line.highlighted {
-  display:       block;
-  background:    rgba(255, 255, 255, 0.06) !important;
-  margin-inline: -1.25rem;
-  padding-inline: 1.25rem;
-}
-
-.prose pre .line.diff-add {
-  background:    rgba(61, 214, 140, 0.08) !important;
-  display:       block;
-  margin-inline: -1.25rem;
-  padding-inline: 1.25rem;
-}
-
-.prose pre .line.diff-remove {
-  background:    rgba(242, 85, 90, 0.08) !important;
-  display:       block;
-  margin-inline: -1.25rem;
-  padding-inline: 1.25rem;
-}
-
-.prose pre .line.diff-add::before {
-  @apply text-label-14;
-  content:       "+";
-  position:      absolute;
-  color:         rgba(61, 214, 140, 0.7) !important;
-  user-select:   none;
-}
-
-.prose pre .line.diff-remove::before {
-  @apply text-label-14;
-  content:       "−";
-  position:      absolute;
-  color:         rgba(242, 85, 90, 0.7) !important;
-  user-select:   none;
-}
-
-.prose pre.line-numbers .line.diff-add::before,
-.prose pre.line-numbers .line.diff-remove::before {
-  left: -3rem;
-}
-
-.dark .astro-code {
-  background-color: var(--prose-surface) !important;
-  overflow-x: auto;
-}
-
-.dark .astro-code span {
-  background-color: transparent !important;
-  color: var(--shiki-dark) !important;
-  white-space: pre;
-  word-break: normal;
-  word-wrap: normal;
-}
-
-@media (max-width: 767px) {
-  .prose code:not(pre code) {
-    padding: 0.15em 0.3em;
-  }
-
-  .prose .code-block-wrapper {
-    margin:        1.75rem 0;
-  }
-
-  .prose pre {
-    padding: 1.5rem 1rem;
-    margin: 1.5rem 0;
-    border-radius: var(--prose-radius-sm);
-  }
-
-  .prose .code-content pre {
-    padding: 1rem 0.875rem;
-  }
-
-  .prose pre.line-numbers {
-    padding-left: 3rem;
-  }
-
-  .prose pre.line-numbers .line::before {
-    left:  -2.5rem;
-    width: 1.75rem;
-  }
-
-  .prose pre.line-numbers .line.diff-add::before,
-  .prose pre.line-numbers .line.diff-remove::before {
-    left: -2.5rem;
-  }
-
-  .prose .copy-button { opacity: 1; }
-}
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initAll);
+    } else {
+      initAll();
+    }
+  })();
+</script>
