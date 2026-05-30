@@ -1,0 +1,224 @@
+---
+// src/pages/about/index.astro
+import { 
+  SITE, 
+  ROUTES, 
+  SOCIAL, 
+  buildMeta, 
+  schemaWebPage, 
+  schemaOrganization, 
+  schemaBreadcrumb 
+} from "@/consts";
+
+import Layout from "@/layouts/Layout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import Button from "@/components/ui/Button.astro";
+
+import Icon from '@/components/ui/icons/Icon.astro';
+import type { IconName } from '@/components/ui/icons';
+
+const pageTitle = "Tentang";
+const canonicalURL = new URL(ROUTES.about, SITE.url).href;
+
+const meta = buildMeta({
+  title: pageTitle,
+  canonical: canonicalURL,
+});
+
+const schemas = [
+  schemaWebPage({
+    title: pageTitle,
+    description: SITE.description,
+    url: canonicalURL,
+    type: "AboutPage"
+  }),
+  schemaOrganization,
+  schemaBreadcrumb([
+    { name: "Beranda", url: SITE.url },
+    { name: pageTitle, url: canonicalURL },
+  ]),
+];
+
+const topics: { icon: IconName; label: string; desc: string }[] = [
+  {
+    icon: "bot",
+    label: "AI & Otomatisasi",
+    desc: "Tools yang mengubah cara kita bekerja",
+  },
+  {
+    icon: "brain",
+    label: "Workflow Digital",
+    desc: "Sistem cerdas untuk kreator modern",
+  },
+  {
+    icon: "virus",
+    label: "Kultur Pop",
+    desc: "Anime, game, dan banyak lagi",
+  },
+];
+
+const stack: { name: string; description: string; icon: IconName }[] = [
+  { name: "Astro", description: "Framework web", icon: "Astro" },
+  { name: "Tailwind CSS", description: "Framework CSS", icon: "TailwindCSS" },
+  { name: "React", description: "Komponen UI", icon: "React" },
+  { name: "TypeScript", description: "Bahasa pemrograman", icon: "Typescript" },
+  { name: "Cloudflare", description: "Infrastruktur & Edge", icon: "Cloudflare" },
+];
+---
+
+<Layout {meta} schema={schemas}>
+  <Section size="lg">
+    <Section size="sm">
+      <Container size="lg">
+        <div class="flex items-center self-start">
+          <Breadcrumb
+            items={[
+              { name: "Beranda", url: ROUTES.home },
+              { name: pageTitle, url: ROUTES.about }
+            ]}
+          />
+        </div>
+      </Container>
+    </Section>
+    <Section size="lg">
+      <Container size="lg">
+        
+        <Section size="none">
+          <div class="max-w-2xl">
+            <h1 class="text-heading-32 md:text-heading-40 lg:text-heading-56 font-bold text-strong text-balance mb-6">
+              Portal kreatif untuk era otomatisasi.
+            </h1>
+            <p class="text-body-16 md:text-body-18 text-muted max-w-xl text-pretty mb-4">
+              {SITE.name} adalah ruang untuk mengeksplorasi bagaimana kreator modern memanfaatkan *workflow* digital, *tools* AI, dan kultur di balik karya-karya di internet.
+            </p>
+            <p class="text-body-16 md:text-body-18 text-muted text-pretty max-w-xl mb-8">
+              Dari sistem produktivitas hingga musik, anime, dan video game — di sinilah semua dunia tersebut saling terhubung.
+            </p>
+            <Button href={ROUTES.contact} variant="accent" size="md">
+              Hubungi kami
+            </Button>
+          </div>
+        </Section>
+
+        <Section size="sm">
+          <div class="mt-12">
+            <p class="text-overline-12 text-muted mb-6 uppercase tracking-widest">
+              Topik Pembahasan
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-px bg-border-strong rounded-md overflow-hidden">
+              {topics.map(({ icon, label, desc }) => (
+                <div class="bg-subtle p-6 flex flex-col gap-4 group hover:bg-muted transition-colors">
+                  <div class="text-muted w-6 h-6 transition-colors group-hover:text-strong">
+                    <Icon name={icon} className="w-full h-full" />
+                  </div>
+                  <div>
+                    <p class="text-label-14 font-semibold text-strong mb-1">{label}</p>
+                    <p class="text-body-13 text-muted">{desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Section>
+
+        <Section size="sm">
+          <div class="mt-12">
+            <p class="text-overline-12 text-muted mb-6 uppercase tracking-widest">
+              Dibangun dengan
+            </p>
+            <div class="marquee-root">
+              <div class="marquee-track">
+                {[...stack, ...stack].map(({ name, description, icon }) => (
+                  <div class="marquee-item rounded-md border border-(--border) bg-subtle hover:border-accent transition-colors">
+                    <div class="marquee-icon text-muted shrink-0">
+                      <Icon name={icon} className="w-full h-full" viewBox="0 0 128 128" />
+                    </div>
+                    <div>
+                      <p class="text-label-13 text-strong font-medium mb-1">{name}</p>
+                      <p class="text-caption-11 text-muted">{description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Section>
+
+        <Section size="sm">
+          <div class="border-t border-strong pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <a
+              href={`mailto:${SITE.email}`}
+              class="flex items-center gap-2 text-body-14 text-muted hover:text-accent transition-colors">
+              <Icon name="email" className="w-4 h-4 items-baseline" />
+              {SITE.email}
+            </a>
+            <div class="flex items-center gap-4">
+              {SOCIAL.map((s) => (
+                <a
+                  href={s.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="flex items-center gap-2 text-body-14 text-muted hover:text-accent transition-colors"
+                  aria-label={s.name}
+                >
+                  <Icon name={s.name.toLocaleLowerCase() as any} className="w-4 h-4 items-baseline" />
+                  {s.name}
+                </a>
+              ))}
+            </div>
+          </div>
+        </Section>
+        
+      </Container>
+    </Section>
+  </Section>
+</Layout>
+
+<style>
+  .marquee-root {
+    overflow: hidden;
+    mask: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    -webkit-mask: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  }
+
+  .marquee-track {
+    display: flex;
+    gap: 12px;
+    width: max-content;
+    animation: marquee 20s linear infinite;
+  }
+
+  .marquee-track:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  .marquee-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .marquee-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation: none;
+    }
+  }
+</style>

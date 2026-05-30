@@ -1,0 +1,124 @@
+---
+import { SITE, ROUTES, SOCIAL, IMAGE, buildMeta, schemaWebPage, schemaOrganization, AUTHOR } from "@/consts";
+import Layout from "@/layouts/Layout.astro";
+import Container from "@/components/ui/Container.astro";
+import Icon from '@/components/ui/icons/Icon.astro';
+import { Image } from 'astro:assets';
+import { cdnImage, isCdnUrl } from "@/lib/utils";
+import Section from "@/components/ui/Section.astro";
+import LOGO from "@/assets/images/c0desk1-logo.svg"
+import BG from "@/components/ui/BG.astro";
+
+const currentPath = "/links";
+const canonicalURL = new URL(currentPath, SITE.url).href;
+
+const meta = buildMeta({
+  title: `Hubungi & Ikuti ${SITE.name}`,
+  description: "Direktori tautan resmi untuk terhubung dengan Unloyd di berbagai platform.",
+  canonical: canonicalURL,
+});
+
+const schemas = [
+  schemaWebPage({
+    title: `Tautan Resmi ${SITE.name}`,
+    description: "Kumpulan tautan sosial media dan platform resmi Unloyd.",
+    url: canonicalURL,
+  }),
+  schemaOrganization
+];
+
+const optimizedLogo = isCdnUrl(AUTHOR.avatar)
+  ? cdnImage(AUTHOR.avatar, { w: IMAGE.avatar.width, h: IMAGE.avatar.height, q: IMAGE.avatar.quality })
+  : AUTHOR.avatar;
+
+const mainLinks = [
+  { name: "Website Utama", url: ROUTES.home, icon: "logo" as const },
+  { name: "Artikel Terbaru", url: ROUTES.blog, icon: "note" as const },
+  { name: "Hubungi Kami", url: ROUTES.contact, icon: "email" as const },
+];
+---
+
+<Layout {meta} schema={schemas} hideHeader={true} hideFooter={true}>
+    <BG />
+    <Container size="md">
+        <div class="flex flex-col items-center justify-center min-h-[80vh] text-center px-4">
+            <Section size="sm">
+                <div class="flex flex-col items-center text-center animate-fade-up">
+                    <div class="size-48 rounded-full border-0 border-(--border) overflow-hidden mb-6 flex items-center justify-center">
+                        <Image 
+                            src={LOGO || optimizedLogo} 
+                            alt={SITE.name}
+                            width={IMAGE.logo.width}
+                            height={IMAGE.logo.height}
+                            loading="eager"
+                            fetchpriority="high"
+                            decoding="async"
+                            class="w-full h-full object-cover" 
+                            />
+                    </div>
+                    <h1 class="text-heading-24 font-extrabold text-strong text-balance mb-2">
+                        @{SITE.name.toLowerCase()}
+                    </h1>
+                    <p class="text-body-16 text-muted text-pretty">
+                        {SITE.tagline}
+                    </p>
+                </div>
+            </Section>
+            <Section size="sm">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-px bg-(--border) border border-(--border) rounded-md overflow-hidden animate-fade-up" style="animation-delay: 100ms;">
+                    {mainLinks.map((link) => (
+                        <div class="space-y-2">
+                            <a href={link.url} class="items-center bg-subtle p-6 flex gap-2 group hover:bg-muted transition-colors">
+                                <div class="shrink-0 w-10 flex justify-center text-muted group-hover:text-strong transition-colors">
+                                    <Icon name={link.icon} className="w-5 h-5" />
+                                </div>
+                                <span class="text-heading-16 text-center font-semibold text-strong pr-10">
+                                    {link.name}
+                                </span>
+                            </a>
+                        </div>
+                    ))}
+                </div>
+            </Section>
+            <Section size="sm">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-fade-up" style="animation-delay: 200ms;">
+                    {SOCIAL.map((soc) => {
+                        let iconName: any = "link";
+
+                        const nameLower = soc.name.toLowerCase();
+                        if (nameLower.includes("twitter") || nameLower.includes("x")) iconName = "twitter";
+                        else if (nameLower.includes("instagram")) iconName = "instagram";
+                        else if (nameLower.includes("facebook")) iconName = "facebook";
+                        else if (nameLower.includes("whatsapp")) iconName = "whatsapp";
+
+                        return (
+                            <div class="space-y-2">  
+                                <a 
+                                    href={soc.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="flex items-center p-4 w-full rounded-xl border border-(--border) bg-base hover:bg-subtle transition-all duration-300 group"
+                                    >
+                                    <div class="shrink-0 w-10 flex justify-center text-muted group-hover:text-strong transition-colors">
+                                        <Icon name={iconName} className="w-5 h-5" />
+                                    </div>
+                                    <span class="flex-1 text-center font-medium text-strong pr-10">
+                                        {soc.name}
+                                    </span>
+                                </a>
+                            </div>
+                        )
+                    })}
+                </div>
+                </div>
+            </Section>
+            <Section size="none">
+                <div class="text-center animate-fade-up" style="animation-delay: 300ms;">
+                    <p class="text-label-12 text-subtle uppercase">
+                        © {new Date().getFullYear()} {SITE.name}
+                    </p>
+                </div>
+            </Section>
+        </div>
+    </Container>
+</Layout>
