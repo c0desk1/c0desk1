@@ -1,9 +1,19 @@
 ---
-import { CATEGORIES, buildMeta, ROUTES, schemaCollectionPage, schemaBreadcrumb, SITE } from "@/consts";
+// src/pages/blog/category/index.astro
+import { 
+    CATEGORIES, 
+    buildMeta,
+    ROUTES, 
+    schemaCollectionPage, 
+    schemaBreadcrumb, 
+    SITE 
+} from "@/consts";
+
 import Layout from "@/layouts/Layout.astro";
 import Section from "@/components/ui/Section.astro";
 import Container from "@/components/ui/Container.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
+import Icon from "@/components/ui/icons/Icon.astro"; // <-- Pastikan ini di-import
 
 const currentPath = `${ROUTES.blog}/category`;
 const canonicalURL = new URL(currentPath, SITE.url).href;
@@ -26,6 +36,11 @@ const schemas = [
     { name: "Kategori", url: canonicalURL },
   ])
 ];
+
+const cardClass  = "relative surface p-6 hover-glow flex flex-col justify-between group";
+const titleClass = "text-heading-16 lg:text-heading-18 font-semibold text-strong mb-3 group-hover:text-muted transition-colors";
+const descClass  = "text-body-14 text-muted mb-6";
+const linkClass  = "inline-flex items-center text-label-13 font-semibold text-muted group-hover:text-strong transition-colors mt-auto self-end";
 ---
 
 <Layout {meta} schema={schemas}>
@@ -41,33 +56,39 @@ const schemas = [
                     />
                 </div>
             </Section>
+
             <Section size="sm">
                 <h1 class="text-heading-40 md:text-heading-56 font-extrabold text-strong mb-4">
                     Eksplorasi
                 </h1>
-                <p class="text-body-18 text-muted max-w-xl">
+                <p class="text-body-18 text-muted max-w-xl text-pretty">
                     Pilih direktori topik yang ingin Anda dalami. Seluruh konten dikurasi untuk memberikan wawasan teknis dan hiburan yang relevan.
                 </p>
             </Section>
+
             <Section size="sm">
-                <nav aria-label="Daftar Kategori">
+                <nav aria-label="Daftar Kategori Artikel">
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {CATEGORIES.map((cat) => (
-                        <article class="relative surface p-6 hover-glow flex flex-col justify-between group">
+                        <article class={cardClass}>
                             <div>
-                            <h2 class="text-heading-20 font-semibold text-strong mb-3 group-hover:text-(--fg) transition-colors">
-                                <a href={`${ROUTES.blog}/category/${cat.slug}`} class="focus:outline-none">
-                                <span class="absolute inset-0" aria-hidden="true"></span>
-                                {cat.label}
-                                </a>
-                            </h2>
-                            <p class="text-body-14 text-muted mb-6">
-                                {cat.description}
-                            </p>
+                                <h2 class={titleClass}>
+                                    <a href={`${ROUTES.blog}/category/${cat.slug}`} class="focus:outline-none">
+                                        <span class="absolute inset-0" aria-hidden="true"></span>
+                                        {cat.label}
+                                    </a>
+                                </h2>
+                                <p class={descClass}>
+                                    {cat.description}
+                                </p>
                             </div>
-                            <div class="inline-flex items-center text-label-13 font-semibold text-strong group-hover:text-muted transition-colors mt-auto">
-                            Telusuri Direktori 
-                            <span class="ml-2 transition-transform group-hover:translate-x-1">→</span>
+                            
+                            <div class={linkClass}>
+                                Telusuri Direktori 
+                                <Icon 
+                                  name="arrow-right" 
+                                  className="w-4 h-4 ml-2 transition-transform duration-300 group-hover:translate-x-1" 
+                                />
                             </div>
                         </article>
                         ))}

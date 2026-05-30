@@ -14,7 +14,7 @@ import Layout from "@/layouts/Layout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
-import ContactForm from "@/components/contact/ContactForm.astro";
+import ContactForm from "@/components/ContactForm.astro";
 import Icon from '@/components/ui/icons/Icon.astro';
 
 const pageTitle = "Kontak";
@@ -99,9 +99,10 @@ const email = SITE.email;
                     href={s.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="text-body-14 text-muted hover:text-(--accent) transition-colors"
+                    class="flex items-center gap-2 text-body-14 text-muted hover:text-(--accent) transition-colors"
                     aria-label={s.name}
                   >
+                    <Icon name={s.name.toLocaleLowerCase() as any} className="w-4.5 h-4.5" />
                     {s.name}
                   </a>
                 ))}

@@ -23,6 +23,11 @@ import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import PostCard from "@/components/blog/PostCard.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
+import { 
+  ICONS, 
+  type IconName 
+} from "@/components/ui/icons";
+import Icon from "@/components/ui/icons/Icon.astro";
 
 export async function getStaticPaths() {
   const authors = await getCollection("authors");
@@ -53,20 +58,19 @@ if (author.data.social && author.data.social.length > 0) {
   author.data.social.forEach(link => sameAs.push(link.href));
 }
 
-const displaySocials: { href: string; label: string }[] = [];
-if (Author.handle) {
-  displaySocials.push({
-    href: `https://twitter.com/${Author.handle.replace('@', '')}`,
-    label: `@${Author.handle.replace('@', '')}`
-  });
-}
-if (author.data.social && author.data.social.length > 0) {
-  displaySocials.push(...author.data.social);
-}
-
 const optimizedAvatar = isCdnUrl(Author.avatar)
   ? cdnImage(Author.avatar, { w: IMAGE.avatar.width, h: IMAGE.avatar.height, q: IMAGE.avatar.quality })
   : Author.avatar;
+
+const displaySocials = (author.data.social || []).map(s => {
+  const lowerLabel = s.label.toLowerCase();
+  const iconName = (lowerLabel in ICONS) ? (lowerLabel as IconName) : 'link';
+  return {
+    href: s.href,
+    label: s.label,
+    icon: iconName
+  };
+});
 
 const currentPath = Astro.url.pathname;
 const canonicalURL = new URL(currentPath, SITE.url).href;
@@ -165,8 +169,9 @@ const authorPosts = allPosts
                       href={social.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="text-label-14 text-(--fg) hover:underline inline-flex items-center transition-colors capitalize"
+                      class="text-label-14 text-(--fg) gap-2 hover:text-strong inline-flex items-center transition-colors capitalize"
                     >
+                      <Icon name={social.icon} className="w-4 h-4" />
                       {social.label}
                     </a>
                   ))}

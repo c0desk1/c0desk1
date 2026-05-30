@@ -1,7 +1,11 @@
 ---
 // src/pages/blog/[...page].astro
 import type { Page } from "astro";
-import { getCollection, type CollectionEntry } from "astro:content";
+import { 
+  getCollection, 
+  type CollectionEntry 
+} from "astro:content";
+
 import { 
   SITE, 
   ROUTES,
@@ -74,8 +78,6 @@ const pageNums = getPageNums(page.currentPage, page.lastPage);
       title="BL"
       subTitle="OG"
       description="Jelajahi postingan dan pembaruan Blog kami. Catatan di balik layar tentang sistem, kreativitas, dan menjelajahi dunia digital modern."
-      cta={{ label: "Unggulan", href: "#featured" }}
-      cta2={{ label: "Terbaru", href: "#latest" }}
     />
   </Section>
   {page.currentPage === 1 && featuredPosts.length > 0 && (
