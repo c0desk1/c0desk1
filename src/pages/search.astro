@@ -14,7 +14,7 @@ import Layout from "@/layouts/Layout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import PostCard from "@/components/blog/PostCard.astro";
-import Icon from "@/components/ui/Icon";
+import Icon from '@/components/ui/icons/Icon.astro';
 
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 const sortedPosts = allPosts.sort(

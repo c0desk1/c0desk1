@@ -15,11 +15,10 @@ import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
 import Button from "@/components/ui/Button.astro";
-import Icon from "@/components/ui/Icon";
+import Icon from '@/components/ui/icons/Icon.astro';
 
 const pageTitle = "Tentang";
 
-// Kunci langsung ke ROUTES.about
 const canonicalURL = new URL(ROUTES.about, SITE.url).href;
 
 const meta = buildMeta({
