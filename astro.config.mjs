@@ -8,7 +8,7 @@ import mdx from '@astrojs/mdx';
 import { satteri } from '@astrojs/markdown-satteri';
 
 
-import { satteriHeadingAnchor } from './src/lib/mdx/satteri-heading-anchor';
+import { satteriHeading } from './src/lib/mdx/satteri-heading';
 import { satteriCallout } from './src/lib/mdx/satteri-callout';
 import { satteriQuote } from './src/lib/mdx/satteri-blockquote';
 import { satteriSteps } from './src/lib/mdx/satteri-steps';
@@ -67,7 +67,7 @@ export default defineConfig({
         frontmatter: true,
       },
       mdastPlugins: [
-        satteriHeadingAnchor,
+        satteriHeading,
         satteriFigure,
         satteriQuote,
         satteriCodeBlock,
