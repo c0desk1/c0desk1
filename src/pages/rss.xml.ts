@@ -1,108 +1,106 @@
-import rss from "@astrojs/rss";
-import type { APIContext } from "astro";
-import { getCollection, getEntry, type CollectionEntry } from "astro:content";
-import { siteConfig } from "@/config/site";
+// src/pages/rss.xml.ts
+import type { APIRoute } from "astro";
+import { getCollection, getEntry } from "astro:content";
+import { 
+  SITE, 
+  AUTHOR, 
+  CATEGORIES,
+  PAGINATION 
+} from "@/consts";
 import { slugify } from "@/lib/utils";
 
-const escapeXml = (str: string) =>
-  str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&apos;");
+export const GET: APIRoute = async (context) => {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
 
-export async function GET(context: APIContext) {
-  const siteData = siteConfig;
-  const site = new URL(context.site ?? siteData.siteUrl);
+  const sorted = posts
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+    .slice(0, PAGINATION.postsPerFeed);
 
-  const allPosts = await getCollection("blog", ({ data }: CollectionEntry<"blog">) => !data.draft);
+  const items: string[] = [];
 
-  const validPosts = allPosts.filter(
-    (post: CollectionEntry<"blog">) =>
-      Boolean(post.data.title) &&
-      Boolean(post.data.description) &&
-      post.data.pubDate instanceof Date &&
-      !isNaN(post.data.pubDate.getTime())
-  );
+  for (const post of sorted) {
+    const slug = post.data.slug || slugify(post.data.title);
+    const url = `${SITE.url}/blog/${slug}`;
 
-  const sorted = [...validPosts]
-    .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
-    .slice(0, 30);
+    let authorName = `${SITE.email} (${AUTHOR.name})`;
+    if (post.data.author) {
+      try {
+        const authorEntry = await getEntry(post.data.author);
+        if (authorEntry?.data?.name) {
+          const authorEmail = authorEntry.data.mail || SITE.email;
+          authorName = `${authorEmail} (${authorEntry.data.name})`;
+        }
+      } catch {}
+    }
 
-  if (sorted.length === 0) {
-    throw new Error("No valid blog posts found for RSS feed");
+    const pubDate = post.data.pubDate.toUTCString();
+
+    const imageSrc =
+      post.data.heroImage?.src ||
+      post.data.seo?.ogImage ||
+      SITE.ogImage;
+
+    const coverImg = imageSrc
+      ? `<enclosure url="${new URL(imageSrc, SITE.url).href}" type="image/jpeg" length="0"/>`
+      : "";
+
+    const categorySlug = post.data.category;
+    const matchedCategory = CATEGORIES.find(c => c.slug === categorySlug);
+    const categoryName = matchedCategory ? matchedCategory.label : (categorySlug || "General");
+
+    const filteredTags = post.data.tags
+      ?.map((t: string) => t.trim().toLowerCase().replace(/-/g, ' '))
+      .filter(
+        (t: string) => 
+          t !== categorySlug.toLowerCase() && 
+          t !== categoryName.toLowerCase() &&
+          t !== ""
+      ) || [];
+
+    const itemXml = `
+    <item>
+      <title><![CDATA[${post.data.title}]]></title>
+      <link>${url}</link>
+      <guid isPermaLink="true">${url}</guid>
+      <description><![CDATA[${post.data.description || ""}]]></description>
+      <pubDate>${pubDate}</pubDate>
+      <author>${authorName}</author>
+      <category>${categoryName}</category>
+      ${filteredTags.map((t: string) => `<category>${t}</category>`).join("\n      ")}
+      ${coverImg}
+    </item>`;
+    
+    items.push(itemXml);
   }
 
-  const items = await Promise.all(
-    sorted.map(async (post) => {
-      const autoSlug = post.data.slug || slugify(post.data.title);
-      const url = new URL(`blog/${autoSlug}`, site).toString();
+  const selfUrl = new URL(context.request.url).href;
 
-      let authorName: string = siteData.siteName;
-      if (post.data.author) {
-        try {
-          const authorEntry = await getEntry(post.data.author);
-          if (authorEntry?.data?.name) {
-            authorName = authorEntry.data.name;
-          }
-        } catch {}
-      }
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:media="http://search.yahoo.com/mrss/">
+  <channel>
+    <title>${SITE.name}</title>
+    <link>${SITE.url}</link>
+    <description>${SITE.description}</description>
+    <language>${SITE.lang}</language>
+    <copyright>© ${new Date().getFullYear()} ${SITE.name}</copyright>
+    <managingEditor>${SITE.email} (${AUTHOR.name})</managingEditor>
+    <webMaster>${SITE.email} (${AUTHOR.name})</webMaster>
+    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+    <ttl>60</ttl>
+    <atom:link href="${selfUrl}" rel="self" type="application/rss+xml"/>
+    <image>
+      <url>${SITE.url}/favicon/favicon-96x96.png</url>
+      <title>${SITE.name}</title>
+      <link>${SITE.url}</link>
+    </image>
+${items.join("\n")}
+  </channel>
+</rss>`;
 
-      let categoryName = siteConfig.general || 'General';
-      if (post.data.category) {
-        try {
-          const categoryEntry = await getEntry(post.data.category);
-          if (categoryEntry?.data?.name && typeof categoryEntry.data.name === "string") {
-            categoryName = categoryEntry.data.name;
-          }
-        } catch {}
-      }
-
-      const tags = (post.data.tags ?? []).filter(
-        (tag: unknown): tag is string => typeof tag === 'string' && Boolean(tag)
-      );
-
-      const rawImage = post.data.seo?.ogImage || post.data.image?.src || siteData.ogImage;
-      const imageUrl = rawImage
-        ? new URL(rawImage, site).toString()
-        : null;
-
-      return {
-        title: post.data.title,
-        link: url,
-        pubDate: post.data.pubDate,
-        description: post.data.description,
-        categories: [categoryName, ...tags],
-        guid: url,
-        customData: `
-          <dc:creator>${escapeXml(authorName)}</dc:creator>
-          ${imageUrl ? `<media:content url="${imageUrl}" medium="image" />` : ""}
-        `,
-      };
-    })
-  );
-
-  const rssResponse = await rss({
-    title: siteData.siteName,
-    description: siteData.defaultSeo?.description ?? "",
-    site: site.toString(),
-    items,
-    customData: `
-      <language>en-US</language>
-      <lastBuildDate>${sorted[0]?.data.pubDate.toUTCString() ?? new Date().toUTCString()}</lastBuildDate>
-      <generator>Astro Content Engine</generator>
-      <atom:link href="${new URL("rss.xml", site).toString()}" rel="self" type="application/rss+xml" />
-    `,
-    xmlns: {
-      dc: "http://purl.org/dc/elements/1.1/",
-      atom: "http://www.w3.org/2005/Atom",
-      media: "http://search.yahoo.com/mrss/",
-    },
+  return new Response(xml, {
+    headers: { "Content-Type": "application/xml; charset=utf-8" },
   });
-
-  rssResponse.headers.set("Cache-Control", "public, max-age=3600, s-maxage=3600");
-  rssResponse.headers.set("Content-Type", "application/xml");
-
-  return rssResponse;
-}
+};
