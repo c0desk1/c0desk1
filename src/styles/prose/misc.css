@@ -8,7 +8,7 @@
   vertical-align: baseline;
   margin: 0 0.05em;
   color: var(--prose-fg-dim);
-  transition: color 0.15s ease;
+  transition: color var(--prose-duration) var(--prose-ease-out);
 }
 
 .prose sup { top: -0.5em; }
@@ -17,11 +17,11 @@
 .prose sup a {
   text-decoration: none;
   color: inherit;
-  transition: color 0.15s ease;
+  transition: color var(--prose-duration) var(--prose-ease-out);
 }
 
 .prose sup a:hover {
-  color: var(--prose-accent);
+  color: var(--prose-link-hover);
 }
 
 .prose sup:has(a[href^="#fn"]) {
@@ -48,20 +48,22 @@ time {
   background: var(--prose-highlight-bg);
   color: var(--prose-highlight-text);
   padding: 0.1em 0.25em;
-  border-radius: 2px;
+  border-radius: var(--prose-radius-xs);
 }
 
 .prose abbr[title] {
   text-decoration: none;
-  border-bottom: 1px dashed var(--prose-border);
+  border-bottom: 1px dashed var(--prose-border-strong);
   cursor: help;
   font-feature-settings: "calt" 1;
-  transition: border-color 0.15s ease, color 0.15s ease;
+  transition: 
+    border-color var(--prose-duration) var(--prose-ease-out), 
+    color var(--prose-duration) var(--prose-ease-out);
 }
 
 .prose abbr[title]:hover {
-  border-bottom-color: var(--prose-accent);
-  color: var(--prose-accent);
+  border-bottom-color: var(--prose-fg-strong);
+  color: var(--prose-fg-strong);
 }
 
 .prose abbr[title]:active {
@@ -71,26 +73,30 @@ time {
 
 .prose cite {
   font-style: italic;
-  color: var(--prose-accent);
+  color: var(--prose-fg-muted);
 }
 
 .prose ins {
   color: var(--prose-fg-strong);
+  text-decoration-color: var(--prose-border-strong);
 }
 
 .prose q {
   @apply text-body-16;
   quotes: "“" "”" "‘" "’";
+  color: var(--prose-fg-muted);
 }
 
 .prose q::before {
   content: open-quote;
   margin-left: 0.125rem;
+  color: var(--prose-border-strong);
 }
 
 .prose q::after {
   content: close-quote;
   margin-right: 0.125rem;
+  color: var(--prose-border-strong);
 }
 
 .prose dl {
@@ -131,35 +137,35 @@ time {
   border-radius: var(--prose-radius-md);
   border: 1px solid var(--prose-border);
   margin: 1.5rem 0;
-  transition: border-color 0.15s ease;
+  transition: border-color var(--prose-duration) var(--prose-ease-out);
 }
 
 .prose address:hover {
-  border-color: var(--prose-fg-subtle);
+  border-color: var(--prose-border-strong);
 }
 
 .prose address a {
-  color: var(--prose-accent);
+  color: var(--prose-link);
   text-decoration: none;
   border-bottom: 1px solid transparent;
-  transition: border-color 0.15s ease;
+  transition: border-color var(--prose-duration) var(--prose-ease-out);
 }
 
 .prose address a:hover {
-  border-bottom-color: var(--prose-accent);
+  border-bottom-color: var(--prose-link-underline-hover);
 }
 
 .prose address .contact-label {
   font-weight: 600;
-  color: var(--prose-fg);
+  color: var(--prose-fg-strong);
 }
 
 .prose samp {
   @apply text-code-16;
+  padding: 0.15rem 0.35rem;
   background-color: var(--prose-code-bg);
   color: var(--prose-code-text);
-  padding: 0.15rem 0.35rem;
-  border-radius: var(--radius);
+  border-radius: var(--prose-radius-sm);
   border: 1px solid var(--prose-code-border);
   display: inline-block;
 }
@@ -178,7 +184,7 @@ time {
 
 .prose hr.ornamental::before {
   content: '· · ·';
-  color: var(--prose-fg-dim);
+  color: var(--prose-border-strong);
   letter-spacing: 0.5em;
   font-size: 14px;
 }

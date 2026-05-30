@@ -198,16 +198,30 @@
 }
 
 /* ---- Caption ---- */
+@utility text-caption-16 {
+  font-size:      16px;
+  line-height:    1.6;
+  letter-spacing: 0;
+  font-weight:    400;
+}
+
+@utility text-caption-14 {
+  font-size:      14px;
+  line-height:    1.45;
+  letter-spacing: 0;
+  font-weight:    400;
+}
+
 @utility text-caption-12 {
   font-size:      12px;
-  line-height:    1.5;
+  line-height:    1.4;
   letter-spacing: 0;
   font-weight:    400;
 }
 
 @utility text-caption-11 {
   font-size:      11px;
-  line-height:    1.45;
+  line-height:    1.35;
   letter-spacing: 0;
   font-weight:    400;
 }

@@ -1,15 +1,12 @@
 /* src/styles/prose/badge.css */
+
 .prose .badge {
   display: inline-block;
   text-transform: uppercase;
-  font-weight: 600;
-  
-  background: var(--bg-muted);
-  color: var(--fg-strong);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-sm);
-  
-  padding: 0.2em 0.6em;
+  background: var(--prose-badge-bg);
+  color: var(--prose-badge-text);
+  border: 1px solid var(--prose-badge-border);
+  border-radius: var(--prose-radius-sm);
   white-space: nowrap;
   vertical-align: middle;
   user-select: none;

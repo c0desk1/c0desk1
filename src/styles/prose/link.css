@@ -1,37 +1,40 @@
 /* src/styles/prose/components/link.css */
 
 .prose a {
-  color: var(--prose-link-color);
-  text-decoration: none;
-  text-underline-offset: var(--prose-link-decoration-offset);
-  text-decoration-thickness: var(--prose-link-decoration-thickness);
-  text-decoration-color: var(--prose-link-decoration-color);
+  color: var(--prose-link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--prose-link-underline);
   transition:
-    color var(--duration) var(--ease-out),
-    text-decoration-color var(--duration) var(--ease-out),
-    opacity var(--duration) var(--ease-out);
+    color var(--prose-duration) var(--prose-ease-out),
+    text-decoration-color var(--prose-duration) var(--prose-ease-out),
+    opacity var(--prose-duration) var(--prose-ease-out);
+}
+
+.prose a:visited {
+  color: var(--prose-link-visited);
 }
 
 .prose a:hover {
-  text-decoration: var(--prose-link-decoration);
-  color: var(--prose-link-hover-color);
-  text-decoration-color: var(--prose-link-hover-decoration-color);
+  color: var(--prose-link-hover);
+  text-decoration-color: var(--prose-link-underline-hover);
   opacity: 1;
 }
 
 .prose a:active {
-  text-decoration: var(--prose-link-decoration);
-  text-decoration-color: var(--prose-link-hover-color);
-  text-underline-offset: var(--prose-link-decoration-offset);
-  text-decoration-thickness: var(--prose-link-decoration-thickness);
+  color: var(--prose-link-hover);
+  text-decoration-color: var(--prose-link-hover);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
 }
 
 .prose a:focus-visible {
-  outline: 2px solid var(--prose-link-color);
+  outline: 2px solid var(--prose-link);
   outline-offset: 2px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--prose-radius-sm);
   text-decoration: underline;
-  text-decoration-color: var(--prose-link-decoration-color);
+  text-decoration-color: var(--prose-link-underline);
   text-underline-offset: 3px;
   text-decoration-thickness: 1px;
 }
@@ -45,7 +48,7 @@
 }
 
 .prose .inline-link:hover {
-  color: var(--prose-link-hover-color);
+  color: var(--prose-link-hover);
   text-decoration: none;
 }
 
