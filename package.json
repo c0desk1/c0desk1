@@ -28,6 +28,7 @@
     "limax": "^4.2.3",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
+    "satteri": "^0.6.3",
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.2",
     "unist-util-visit": "^5.1.0"
