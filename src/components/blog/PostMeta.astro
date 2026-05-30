@@ -1,6 +1,10 @@
 ---
 // src/components/layout/PostMeta.astro
-import { formatDate, getReadingTime } from '@/lib/utils';
+import { 
+  formatDate, 
+  getReadingTime 
+} from '@/lib/utils';
+
 import Icon from '@/components/ui/icons/Icon.astro';
 
 interface Props {
@@ -12,15 +16,21 @@ const { pubDate, content } = Astro.props;
 
 const formattedDate = formatDate(pubDate);
 const readingTime = getReadingTime(content);
+
+const wrapperClass   = "flex items-center justify-center gap-3 text-muted";
+const itemGroupClass = "flex items-center gap-1.5";
+const iconClass      = "w-4 h-4 text-muted";
+const textStyle      = "text-label-14 font-medium text-muted";
+const separatorClass = "text-label-14 text-dim opacity-50";
 ---
 
-<div class="flex items-center justify-center gap-3 text-(--prose-fg-muted)">
-  <div class="flex items-center gap-1.5">
-    <Icon name="clock" className="w-4 h-4" />
-    <span class="text-label-14 font-medium">{readingTime}</span>
+<div class={wrapperClass}>
+  <div class={itemGroupClass}>
+    <Icon name="clock" className={iconClass} />
+    <span class={textStyle}>{readingTime}</span>
   </div>
-  <span class="text-label-14 opacity-50">|</span>
-  <time datetime={pubDate.toISOString()} class="text-label-14 font-medium">
+  <span class={separatorClass}>|</span>
+  <time datetime={pubDate.toISOString()} class={textStyle}>
     {formattedDate}
   </time>
 </div>
