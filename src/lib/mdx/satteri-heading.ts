@@ -11,7 +11,7 @@ function sluggify(text: string): string {
     .replace(/^-|-$/g, '');
 }
 
-export const satteriHeadingAnchor = defineMdastPlugin({
+export const satteriHeading = defineMdastPlugin({
   name: 'satteri-heading-anchor',
   heading(node: Heading, ctx) {
     let text = '';
