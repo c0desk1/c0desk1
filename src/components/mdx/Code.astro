@@ -1,7 +1,6 @@
 ---
 // src/components/mdx/Code.astro
 import Icon from "@/components/ui/Icon";
-import { codeIcons } from "@/assets/icons/code";
 
 interface Props {
   ins?:   string;
@@ -19,11 +18,13 @@ const { ins = "", del = "", mark = "", title = "" } = Astro.props;
   data-del={del}
   data-mark={mark}
 >
-  <div class="code-block-header">
-    <div class="flex items-center gap-2 min-w-0">
-      <span data-icon-placeholder class="code-icon w-5 h-5" aria-hidden="true">
-        <Fragment set:html={codeIcons.default} />
-      </span>
+  <div class="code-block-header group">
+    <div class="flex items-center gap-3 min-w-0">
+      <div class="mac-controls flex gap-1.5 shrink-0" aria-hidden="true">
+        <div class="mac-dot close"></div>
+        <div class="mac-dot minimize"></div>
+        <div class="mac-dot maximize"></div>
+      </div>
       <span class="code-block-title">
         {title || <span class="code-language">plain</span>}
       </span>
@@ -38,9 +39,9 @@ const { ins = "", del = "", mark = "", title = "" } = Astro.props;
       <button
         type="button"
         aria-label="Salin kode"
-        class="hover:bg-(--prose-bg-muted)/20 text-(--prose-fg-muted) hover:text-(--prose-fg) copy-button p-2">
-        <Icon name="copy"  className="copy-icon w-5 h-5" />
-        <Icon name="check" className="check-icon hidden w-5 h-5" />
+        class="hover:bg-(--prose-bg-muted)/20 text-(--prose-fg-muted) hover:text-(--prose-fg) copy-button p-2 transition-colors duration-200">
+        <Icon name="copy"  className="copy-icon w-4 h-4" />
+        <Icon name="check" className="check-icon hidden w-4 h-4 text-green-500" />
       </button>
     </div>
   </div>
@@ -49,48 +50,23 @@ const { ins = "", del = "", mark = "", title = "" } = Astro.props;
   </div>
 </div>
 
-<script define:vars={{ codeIcons }}>
+<script>
   (() => {
-    const NAMES = {
-      js:         "JavaScript",
-      ts:         "TypeScript",
-      jsx:        "JSX",
-      tsx:        "TSX",
-      py:         "Python",
-      html:       "HTML",
-      css:        "CSS",
-      scss:       "SCSS",
-      json:       "JSON",
-      jsonc:      "JSONC",
-      yaml:       "YAML",
-      toml:       "TOML",
-      bash:       "Bash",
-      sh:         "Shell",
-      zsh:        "Zsh",
-      sql:        "SQL",
-      md:         "Markdown",
-      mdx:        "MDX",
-      astro:      "Astro",
-      vue:        "Vue",
-      svelte:     "Svelte",
-      go:         "Go",
-      rust:       "Rust",
-      cpp:        "C++",
-      c:          "C",
-      cs:         "C#",
-      java:       "Java",
-      php:        "PHP",
-      rb:         "Ruby",
-      swift:      "Swift",
-      kt:         "Kotlin",
-      dockerfile: "Dockerfile",
-      prisma:     "Prisma",
-      graphql:    "GraphQL",
+    const NAMES: Record<string, string> = {
+      js: "JavaScript", ts: "TypeScript", jsx: "JSX", tsx: "TSX",
+      py: "Python", html: "HTML", css: "CSS", scss: "SCSS",
+      json: "JSON", jsonc: "JSONC", yaml: "YAML", toml: "TOML",
+      bash: "Bash", sh: "Shell", zsh: "Zsh", sql: "SQL",
+      md: "Markdown", mdx: "MDX", astro: "Astro", vue: "Vue",
+      svelte: "Svelte", go: "Go", rust: "Rust", cpp: "C++",
+      c: "C", cs: "C#", java: "Java", php: "PHP", rb: "Ruby",
+      swift: "Swift", kt: "Kotlin", dockerfile: "Dockerfile",
+      prisma: "Prisma", graphql: "GraphQL",
     };
-    const ALIASES = {
-      javascript: "js", typescript: "ts",
-      python:     "py", shell:      "sh",
-      ruby:       "rb", csharp:     "cs",
+    
+    const ALIASES: Record<string, string> = {
+      javascript: "js", typescript: "ts", python: "py", 
+      shell: "sh", ruby: "rb", csharp: "cs",
     };
 
     const normalize = (l = "") => {
@@ -98,7 +74,7 @@ const { ins = "", del = "", mark = "", title = "" } = Astro.props;
       return ALIASES[n] || n;
     };
 
-    const getLang = (pre) => {
+    const getLang = (pre: Element | null) => {
       if (!pre) return "plain";
       const dl = pre.getAttribute("data-language");
       if (dl) return normalize(dl);
@@ -107,7 +83,7 @@ const { ins = "", del = "", mark = "", title = "" } = Astro.props;
     };
 
     const parseRanges = (str = "") => {
-      const set = new Set();
+      const set = new Set<number>();
       if (!str) return set;
       str.split(",").forEach((part) => {
         const [a, b] = part.trim().split("-").map(Number);
@@ -120,7 +96,7 @@ const { ins = "", del = "", mark = "", title = "" } = Astro.props;
       return set;
     };
 
-    const applyLineClasses = (wrapper) => {
+    const applyLineClasses = (wrapper: HTMLElement) => {
       const ins  = parseRanges(wrapper.dataset.ins);
       const del  = parseRanges(wrapper.dataset.del);
       const mark = parseRanges(wrapper.dataset.mark);
@@ -135,7 +111,7 @@ const { ins = "", del = "", mark = "", title = "" } = Astro.props;
       });
     };
 
-    const applyLineNumbers = (wrapper) => {
+    const applyLineNumbers = (wrapper: HTMLElement) => {
       const pre = wrapper.querySelector(".code-content pre");
       if (!pre || pre.classList.contains("line-numbers")) return;
       const lines = pre.querySelectorAll("code .line");
@@ -143,7 +119,7 @@ const { ins = "", del = "", mark = "", title = "" } = Astro.props;
       pre.classList.add("line-numbers");
     };
 
-    const setupCopy = (wrapper) => {
+    const setupCopy = (wrapper: HTMLElement) => {
       const btn  = wrapper.querySelector(".copy-button");
       const code = wrapper.querySelector(".code-content pre code");
       if (!btn || !code) return;
@@ -153,16 +129,16 @@ const { ins = "", del = "", mark = "", title = "" } = Astro.props;
         
         try {
           await navigator.clipboard.writeText(text);
-          const copy  = btn.querySelector(".copy-icon");
-          const check = btn.querySelector(".check-icon");
+          const copyIcon  = btn.querySelector(".copy-icon");
+          const checkIcon = btn.querySelector(".check-icon");
           
-          copy?.classList.add("hidden");
-          check?.classList.remove("hidden");
+          copyIcon?.classList.add("hidden");
+          checkIcon?.classList.remove("hidden");
           btn.setAttribute("aria-label", "Tersalin!");
           
           setTimeout(() => {
-            copy?.classList.remove("hidden");
-            check?.classList.add("hidden");
+            copyIcon?.classList.remove("hidden");
+            checkIcon?.classList.add("hidden");
             btn.setAttribute("aria-label", "Salin kode");
           }, 2000);
           
@@ -172,22 +148,30 @@ const { ins = "", del = "", mark = "", title = "" } = Astro.props;
       });
     };
 
-    const updateHeader = (wrapper, lang) => {
-      const iconEl = wrapper.querySelector("[data-icon-placeholder]");
-      if (iconEl) iconEl.innerHTML = codeIcons[lang] || codeIcons.default;
-
+    const updateHeader = (wrapper: HTMLElement, lang: string) => {
       const langEl = wrapper.querySelector(".code-language");
       if (langEl) langEl.textContent = NAMES[lang] || lang.toUpperCase();
     };
 
-    document.querySelectorAll(".code-block-wrapper").forEach((wrapper) => {
-      const pre  = wrapper.querySelector(".code-content pre");
-      const lang = getLang(pre);
+    const initAll = () => {
+      document.querySelectorAll(".code-block-wrapper:not(.is-processed)").forEach((el) => {
+        const wrapper = el as HTMLElement;
+        wrapper.classList.add("is-processed");
 
-      updateHeader(wrapper, lang);
-      applyLineNumbers(wrapper);
-      applyLineClasses(wrapper);
-      setupCopy(wrapper);
-    });
+        const pre  = wrapper.querySelector(".code-content pre");
+        const lang = getLang(pre);
+
+        updateHeader(wrapper, lang);
+        applyLineNumbers(wrapper);
+        applyLineClasses(wrapper);
+        setupCopy(wrapper);
+      });
+    };
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initAll);
+    } else {
+      initAll();
+    }
   })();
 </script>
