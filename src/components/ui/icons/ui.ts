@@ -2,11 +2,11 @@
 
 export const uiIcons = {
   logo: {
-    viewBox: "0 0 32 32",
+    viewBox: "0 0 512 512",
     body: `
       <g fill="currentColor" stroke="none">
-        <path d="M8 4v14c0 4.418 3.582 8 8 8s8-3.582 8-8V4h-5v14c0 1.657-1.343 3-3 3s-3-1.343-3-3V4H8z" fill="currentColor"/>
-        <rect x="14" y="10" width="4" height="4" fill="currentColor" />
+        <path d="M128 80v224c0 70.688 57.312 128 128 128s128-57.312 128-128V80h-80v224c0 26.512-21.488 48-48 48s-48-21.488-48-48V80H128z" fill="currentColor"/>
+        <rect x="224" y="176" width="64" height="64" fill="currentColor"/>
       </g>
     `
   },
