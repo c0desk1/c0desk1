@@ -1,7 +1,7 @@
 /* src/styles/prose/badge.css */
 
 .prose .badge {
-  display: inline-block;
+  display: inline-flex;
   text-transform: uppercase;
   background: var(--prose-badge-bg);
   color: var(--prose-badge-text);

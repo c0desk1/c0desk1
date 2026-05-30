@@ -35,7 +35,7 @@ const {
       {title}
     </h1>
     {description && (
-      <p class="lead text-body-18 md:text-body-20 text-(--prose-fg-muted) max-w-2xl">{description}</p>
+      <p class="lead text-body-18 text-(--prose-fg-muted) max-w-2xl">{description}</p>
     )}
     <div class="flex flex-col items-center gap-4 w-full">
       {authorName && (
@@ -52,11 +52,11 @@ const {
         </div>
       )}
     </div>
+    <hr class="w-16 border-t-4 border-(--border) rounded-full opacity-40" />
     {overviewItems && overviewItems.length > 0 && (
       <div class="w-full mt-2">
         <Overview items={overviewItems} />
       </div>
     )}
-    <hr class="w-16 border-t-4 border-(--border) rounded-full opacity-40" />
   </div>
 </header>

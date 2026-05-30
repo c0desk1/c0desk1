@@ -1,18 +1,32 @@
 ---
 // src/components/Mobile.astro
-import { 
-  SITE,
-  NAV 
-} from "@/consts";
+import { NAV } from "@/consts";
 import Icon from '@/components/ui/icons/Icon.astro';
 import Theme from "./Theme.astro";
 
 const navItems = NAV.MobileBar;
+
+// ==========================================
+// Computed Classes
+// ==========================================
+// Menggunakan latar hitam transparan dengan efek blur kaca
+const backdropClass = "fixed inset-0 z-100 bg-black/60 backdrop-blur-sm";
+const sheetClass    = "fixed bottom-0 left-0 right-0 z-200 bg-base border-t border-strong rounded-t-xl shadow-[0_-8px_40px_rgba(0,0,0,0.12)] max-h-[75dvh] pb-[env(safe-area-inset-bottom)] will-change-transform";
+const handleWrapper = "flex h-8 justify-center pt-4 pb-1";
+const handleBar     = "w-9 h-1 rounded-full bg-muted";
+const navClass      = "flex flex-col px-3 pt-2 pb-4 gap-3 overflow-y-auto max-h-[calc(75dvh-120px)]";
+
+// Interaksi Menu
+const accordionBtn  = "accordion-trigger flex items-center justify-between w-full px-3 py-2 text-body-16 font-medium text-strong rounded-lg active:bg-subtle hover:bg-subtle transition-colors";
+const childLink     = "mnav-link flex items-center gap-2 px-3 py-1.5 text-body-16 text-strong rounded-lg active:bg-subtle hover:bg-subtle transition-colors";
+const singleLink    = "mnav-link flex items-center gap-2 px-3 py-2 text-body-16 font-medium text-strong active:bg-subtle hover:bg-subtle rounded-lg transition-colors";
+
+const footerClass   = "flex items-center justify-between px-5 py-4 border-t border-strong gap-4";
 ---
 
 <div
   id="mnav-backdrop"
-  class="fixed inset-0 z-100 bg-(--bg)/80"
+  class={backdropClass}
   style="display: none; opacity: 0; transition: opacity 0.25s ease;"
   aria-hidden="true"
 ></div>
@@ -22,27 +36,21 @@ const navItems = NAV.MobileBar;
   role="dialog"
   aria-modal="true"
   aria-label="Menu mobile"
-  class="fixed bottom-0 left-0 right-0 z-200
-         bg-base border-t border-(--border)
-         rounded-t-xl
-         shadow-[0_-8px_40px_rgba(0,0,0,0.12)]
-         max-h-[75dvh]
-         pb-[env(safe-area-inset-bottom)]
-         will-change-transform"
+  class={sheetClass}
   style="display: none; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);"
   inert>
   
-  <div id="mnav-handle" class="flex h-8 justify-center pt-4 pb-1">
-    <div class="w-9 h-1 rounded-full bg-muted"></div>
+  <div id="mnav-handle" class={handleWrapper}>
+    <div class={handleBar}></div>
   </div>
 
-  <nav class="flex flex-col px-3 pt-2 pb-4 gap-3 overflow-y-auto max-h-[calc(75dvh-120px)]">
+  <nav class={navClass}>
     {navItems.map((item) => {
       const hasChildren = item.children && item.children.length > 0;
       if (hasChildren) {
         return (
           <div class="accordion-item" data-accordion>
-            <button aria-expanded="false" class="accordion-trigger flex items-center justify-between w-full px-3 py-2 text-body-16 font-medium text-(--fg) rounded-lg active:bg-muted hover:bg-muted transition-colors">
+            <button aria-expanded="false" class={accordionBtn}>
               <span>{item.label}</span>
               <Icon name="chevron-right" className="chevron-icon w-4 h-4 transition-transform duration-200" />
             </button>
@@ -55,7 +63,7 @@ const navItems = NAV.MobileBar;
                       href={child.href}
                       target={isExternal ? "_blank" : undefined}
                       rel={isExternal ? "noopener noreferrer" : undefined}
-                      class="mnav-link flex items-center gap-2 px-3 py-1.5 text-body-16 text-(--fg) rounded-lg active:bg-muted hover:bg-muted transition-colors">
+                      class={childLink}>
                       {child.label}
                       {isExternal && (
                         <Icon name="external" className="w-3 h-3 shrink-0 opacity-80" />
@@ -69,8 +77,7 @@ const navItems = NAV.MobileBar;
         );
       } else {
         return (
-          <a href={item.href}
-            class="mnav-link flex items-center gap-2 px-3 py-2 text-body-14 text-(--fg) active:bg-muted hover:bg-muted rounded-lg transition-colors">
+          <a href={item.href} class={singleLink}>
             {item.label}
             {item.isExternal && (
               <Icon name="external" className="w-3 h-3 shrink-0 opacity-80" />
@@ -81,8 +88,8 @@ const navItems = NAV.MobileBar;
     })}
   </nav>
   
-  <div class="flex items-center justify-between px-5 py-4 border-t border-(--border)/60 gap-4">
-    <div class="text-label-12 text-muted">© {new Date().getFullYear()} {SITE.name}</div>
+  <div class={footerClass}>
+    <Icon name="logo" className="w-8 h-8 text-strong" />
     <Theme />
   </div>
 </div>
@@ -104,11 +111,10 @@ const navItems = NAV.MobileBar;
 </style>
 
 <script>
-  //@ts-nocheck
   const initMobileMenu = () => {
-    const sheet    = document.getElementById('mnav-sheet');
-    const backdrop = document.getElementById('mnav-backdrop');
-    const handle   = document.getElementById('mnav-handle');
+    const sheet    = document.getElementById('mnav-sheet') as HTMLElement | null;
+    const backdrop = document.getElementById('mnav-backdrop') as HTMLElement | null;
+    const handle   = document.getElementById('mnav-handle') as HTMLElement | null;
     
     if (!sheet || !backdrop || !handle) return;
 
@@ -151,31 +157,42 @@ const navItems = NAV.MobileBar;
       const btn = document.getElementById('mnav-btn');
       if (btn) btn.setAttribute('aria-expanded', 'false');
     };
+    const mediaQuery = window.matchMedia('(min-width: 768px)');
+    
+    const handleResize = (e: MediaQueryListEvent | MediaQueryList) => {
+      if (e.matches && open) {
+        closeSheet();
+      }
+    };
+    
+    mediaQuery.addEventListener('change', handleResize);
 
-    document.removeEventListener('mnav:open', window.__mnavOpenHandler);
-    window.__mnavOpenHandler = openSheet;
-    document.addEventListener('mnav:open', window.__mnavOpenHandler);
+    const win = window as any;
+
+    document.removeEventListener('mnav:open', win.__mnavOpenHandler);
+    win.__mnavOpenHandler = openSheet;
+    document.addEventListener('mnav:open', win.__mnavOpenHandler);
 
     backdrop.addEventListener('click', closeSheet);
     
-    document.removeEventListener('keydown', window.__mnavKeyHandler);
-    window.__mnavKeyHandler = (e) => {
+    document.removeEventListener('keydown', win.__mnavKeyHandler);
+    win.__mnavKeyHandler = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && open) closeSheet();
     };
-    document.addEventListener('keydown', window.__mnavKeyHandler);
+    document.addEventListener('keydown', win.__mnavKeyHandler);
 
     document.querySelectorAll('.mnav-link').forEach(link => {
       link.addEventListener('click', closeSheet);
     });
 
-    handle.addEventListener('touchstart', e => {     
+    handle.addEventListener('touchstart', (e: TouchEvent) => {     
       startY = e.touches[0].clientY;
       currentY = startY; 
       dragging = true;
       sheet.style.transition = 'none';
     }, { passive: true });
 
-    handle.addEventListener('touchmove', e => {
+    handle.addEventListener('touchmove', (e: TouchEvent) => {
       if (!dragging || !open) return;
       currentY = e.touches[0].clientY;
       const delta = Math.max(0, currentY - startY);  
@@ -201,13 +218,13 @@ const navItems = NAV.MobileBar;
 
     const accordionTriggers = document.querySelectorAll('.accordion-trigger');
     accordionTriggers.forEach(trigger => {
-      trigger.addEventListener('click', (e) => {
+      trigger.addEventListener('click', (e: Event) => {
         e.stopPropagation();
         const accordionItem = trigger.closest('.accordion-item');
         if (!accordionItem) return;
 
-        const content = accordionItem.querySelector('.accordion-content');
-        if (!(content instanceof HTMLElement)) return;
+        const content = accordionItem.querySelector('.accordion-content') as HTMLElement | null;
+        if (!content) return;
 
         const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
         

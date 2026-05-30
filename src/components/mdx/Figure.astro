@@ -1,13 +1,8 @@
 ---
-import { 
-  cdnImage, 
-  isCdnUrl 
-} from '@/lib/utils';
-
+// src/components/ui/Figure.astro
+import { cdnImage, isCdnUrl } from '@/lib/utils';
 import { Image } from 'astro:assets';
-
 import Icon from '@/components/ui/icons/Icon.astro';
-import Container from '../ui/Container.astro';
 
 interface Props {
   src: string;
@@ -20,42 +15,53 @@ interface Props {
 const { src, alt, title, caption, href } = Astro.props;
 
 const fallbackSrc = '/images/placeholder.svg';
-
 const optimizedSrc = src 
   ? (isCdnUrl(src) ? cdnImage(src, { w: 1280, h: 720, q: 80 }) : src) 
   : fallbackSrc;
   
 const hasLink = !!href;
-const imageClass = hasLink
-  ? "relative h-full w-full object-cover transition duration-500 opacity-0"
-  : "zoomable-image relative h-full w-full object-cover transition duration-500 opacity-0 cursor-zoom-in";
-
 const tooltip = title;
 
 let displayUrl = 'c0desk1.my.id';
+
 if (href && href.startsWith('http')) {
   try { displayUrl = new URL(href).hostname; } catch(e) {}
 } else if (title) {
   displayUrl = title.toLowerCase().replace(/\s+/g, '-');
 }
+
+const figureClass    = "full-width-figure my-8 lg:my-12";
+const browserWindow  = "relative overflow-hidden rounded-xl border border-strong bg-base shadow-lg dark:shadow-xl";
+const browserHeader  = "flex items-center px-4 py-3 border-b border-strong bg-subtle";
+const trafficLights  = "flex items-center gap-1.5 shrink-0 z-10";
+const urlBarWrapper  = "absolute inset-x-0 flex justify-center pointer-events-none";
+const urlBar         = "flex items-center justify-center bg-dim border border-strong rounded-md h-6 px-8 max-w-30 md:max-w-xs w-full text-body-13 text-muted truncate";
+const imageContainer = "relative w-full bg-base";
+
+const imageClass = hasLink
+  ? "relative h-full w-full object-cover transition duration-500 opacity-0"
+  : "zoomable-image relative h-full w-full object-cover transition duration-500 opacity-0 cursor-zoom-in";
+
+const captionClass = "text-caption-14! text-muted mt-4 text-center max-w-2xl mx-auto px-4 text-pretty";
 ---
 
-<figure class="full-width-figure my-8 lg:my-12">
-  <div class="relative overflow-hidden rounded-xl border border-strong bg-ase shadow-lg dark:shadow-xl">
-    <div class="flex items-center px-4 py-3 border-b border-strong bg-subtle">
-      <div class="flex items-center gap-1.5 shrink-0 z-10">
-        <div class="w-2.5 h-2.5 rounded-full bg-[#ff5f56] border border-(--border)/10"></div>
-        <div class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e] border border-(--border)/10"></div>
-        <div class="w-2.5 h-2.5 rounded-full bg-[#27c93f] border border-(--border)/10"></div>
+<figure class={figureClass}>
+  <div class={browserWindow}>
+    <div class={browserHeader}>
+      <div class={trafficLights}>
+        <div class="w-2.5 h-2.5 rounded-full bg-[#ff5f56] border border-strong/10"></div>
+        <div class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e] border border-strong/10"></div>
+        <div class="w-2.5 h-2.5 rounded-full bg-[#27c93f] border border-strong/10"></div>
       </div>
-      <div class="absolute inset-x-0 flex justify-center pointer-events-none">
-        <div class="flex items-center justify-center bg-dim border border-strong rounded-md h-6 px-8 max-w-30 md:max-w-xs w-full text-body-13 text-muted truncate">
-          <Icon name="lock" className="w-3.5 h-3.5 mr-1.5 text-subtle" />
+      <div class={urlBarWrapper}>
+        <div class={urlBar}>
+          <Icon name="lock" className="w-3.5 h-3.5 mr-1.5 text-muted" />
           {displayUrl}
         </div>
       </div>
     </div>
-    <div class="relative w-full bg-base">
+
+    <div class={imageContainer}>
       {hasLink ? (
         <a href={href} target="_blank" rel="nofollow noopener noreferrer" title={tooltip} class="block w-full h-full">
           <Image
@@ -87,14 +93,12 @@ if (href && href.startsWith('http')) {
   </div>
 
   {caption && (
-    <Container size="md">
-      <figcaption class="text-caption-14 text-subtle mt-4 text-center">{caption}</figcaption>
-    </Container>
+    <figcaption class={captionClass}>{caption}</figcaption>
   )}
 </figure>
 
 <div class="lightbox-overlay" id="lightbox-overlay" aria-hidden="true">
-  <button class="lightbox-close p-2 rounded-full bg-muted/50 hover:bg-muted active:bg-muted text-inverted" id="lightbox-close" aria-label="Close lightbox">
+  <button class="lightbox-close p-2 rounded-full bg-subtle/50 hover:bg-muted active:bg-strong text-inverted" id="lightbox-close" aria-label="Close lightbox">
     <Icon name="close" className="w-6 h-6" />
   </button>
   <div class="lightbox-zoom-container">
@@ -207,7 +211,7 @@ if (href && href.startsWith('http')) {
 
     const overlay = document.getElementById('lightbox-overlay') as HTMLElement;
     const lightboxImg = document.getElementById('lightbox-image') as HTMLImageElement;
-    const closeBtn = document.getElementById('lightbox-close');
+    const closeBtn = document.getElementById('lightbox-close') as HTMLButtonElement;
 
     if (!overlay || !lightboxImg || !closeBtn) return;
 
@@ -226,8 +230,8 @@ if (href && href.startsWith('http')) {
     };
 
     document.querySelectorAll('.zoomable-image').forEach(img => {
-      img.removeEventListener('click', handleImageClick);
-      img.addEventListener('click', handleImageClick);
+      img.removeEventListener('click', handleImageClick as EventListener);
+      img.addEventListener('click', handleImageClick as EventListener);
     });
 
     function handleImageClick(e: Event) {
@@ -237,7 +241,8 @@ if (href && href.startsWith('http')) {
 
     lightboxImg.onclick = closeLightbox;
     closeBtn.onclick = closeLightbox;
-    overlay.onclick = (e) => {
+    
+    overlay.onclick = (e: MouseEvent) => {
       if (e.target === overlay) closeLightbox();
     };
 
@@ -245,7 +250,7 @@ if (href && href.startsWith('http')) {
     document.addEventListener('keydown', handleKeyDown);
 
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape' && overlay.classList.contains('active')) {
+      if (e.key === 'Escape' && overlay?.classList.contains('active')) {
         closeLightbox();
       }
     }

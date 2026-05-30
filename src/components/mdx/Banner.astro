@@ -2,6 +2,7 @@
 // src/components/mdx/Banner.astro
 import { Image } from "astro:assets";
 import Link from "../ui/Link.astro";
+import Icon from "../ui/icons/Icon.astro";
 
 interface Props {
   title?: string;
@@ -26,7 +27,7 @@ const parsedLinks: { label: string; url: string }[] = links
   <div class="flex items-start gap-3 sm:gap-4">
     {
       icon && (
-        <div class="relative shrink-0">
+        <div class="relative shrink-0 h-10 w-10 lg:h-12 lg:w-12">
           <div class="absolute inset-0 rounded-lg ring-1 ring-inset ring-(--prose-border-strong) opacity-20 z-10 pointer-events-none"></div>
           <Image
             src={icon}
@@ -36,7 +37,7 @@ const parsedLinks: { label: string; url: string }[] = links
             loading="lazy"
             fetchpriority="low"
             decoding="async"
-            class="h-10 w-10 lg:h-12 lg:w-12 rounded-lg object-cover"
+            class="h-full w-full rounded-lg object-cover"
           />
         </div>
       )
@@ -63,12 +64,8 @@ const parsedLinks: { label: string; url: string }[] = links
         parsedLinks.length > 0 && (
           <div class="mt-4 flex flex-wrap gap-2 justify-start sm:justify-end">
             {parsedLinks.map((link) => (
-              <Link variant="noir" size="md" title={link.label} href={link.url} class="text-(--prose-fg-strong)">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1.5 opacity-75">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                  <polyline points="7 10 12 15 17 10"/>
-                  <line x1="12" y1="15" x2="12" y2="3"/>
-                </svg>
+              <Link variant="noir" size="sm" title={link.label} href={link.url} class="text-(--prose-fg-strong) no-underline!">
+                <Icon name="download" className="w-4 h-4" />
                 {link.label}
               </Link>
             ))}

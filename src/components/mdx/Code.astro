@@ -1,6 +1,6 @@
 ---
 // src/components/mdx/Code.astro
-import Icon from "@/components/ui/Icon";
+import Icon from '@/components/ui/icons/Icon.astro';
 
 interface Props {
   ins?:   string;
@@ -32,16 +32,16 @@ const { ins = "", del = "", mark = "", title = "" } = Astro.props;
     <div class="flex items-center gap-3 shrink-0">
       {(ins || del) && (
         <span class="code-diff-legend" aria-hidden="true">
-          {ins && <span class="diff-tag add">+</span>}
-          {del && <span class="diff-tag remove">−</span>}
+          {ins && <span class="diff-tag add"><Icon name="plus"  className="copy-icon w-4 h-4" /></span>}
+          {del && <span class="diff-tag remove"><Icon name="minus"  className="copy-icon w-4 h-4" /></span>}
         </span>
       )}
       <button
         type="button"
         aria-label="Salin kode"
         class="hover:bg-(--prose-bg-muted)/20 text-(--prose-fg-muted) hover:text-(--prose-fg) copy-button p-2 transition-colors duration-200">
-        <Icon name="copy"  className="copy-icon w-4 h-4" />
-        <Icon name="check" className="check-icon hidden w-4 h-4 text-green-500" />
+        <Icon name="copy"  className="copy-icon w-5 h-5" />
+        <Icon name="check" className="check-icon hidden w-5 h-5 text-success" />
       </button>
     </div>
   </div>

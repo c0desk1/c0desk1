@@ -1,6 +1,7 @@
 ---
 import Container from "@/components/ui/Container.astro";
 import Link from "@/components/ui/Link.astro";
+import Icon from "@/components/ui/icons/Icon.astro"; // <-- Import Icon
 import { buildMeta, ROUTES, schemaWebPage, SITE } from "@/consts";
 import Layout from "@/layouts/Layout.astro";
 import BG from "./ui/BG.astro";
@@ -25,20 +26,35 @@ const schema = schemaWebPage({
   url: `${SITE.url}/${code}`,
   type: "WebPage",
 });
+
+const wrapperClass = "flex flex-col items-center justify-center min-h-[80vh] text-center px-4 relative z-10";
+const codeClass = "text-display-80 md:text-display-96 text-strong mb-2 md:mb-4";
+const titleClass   = "text-heading-24 md:text-heading-32 font-bold text-strong mb-4";
+const descClass    = "text-body-16 text-muted mb-10 max-w-sm text-pretty";
+const linkContent  = "inline-flex items-center gap-2 group";
 ---
 
 <Layout {meta} {schema} hideHeader={true} hideFooter={true}>
   <BG />
   <Container size="md">
-    <div class="flex flex-col items-center justify-center min-h-[80vh] text-center px-4">
-      <h1 class="text-4xl md:text-7xl font-extrabold tracking-tighter text-strong mb-4">
+    <div class={wrapperClass}>
+      <h1 class={codeClass}>
         {code}
       </h1>
-      <p class="text-body-16 text-muted mb-10 max-w-sm text-pretty">
+      
+      <h2 class={titleClass}>
+        {title}
+      </h2>
+      
+      <p class={descClass}>
         {description}
       </p>
+      
       <Link href={ROUTES.home} variant="noir" size="lg">
-        Kembali ke Beranda
+        <span class={linkContent}>
+          <Icon name="arrow-left" className="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-1" />
+          Kembali ke Beranda
+        </span>
       </Link>
     </div>
   </Container>

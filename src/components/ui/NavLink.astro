@@ -1,6 +1,5 @@
 ---
 // src/components/ui/NavLink.astro
-import { siteConfig } from '@/config/site';
 import Icon from '@/components/ui/icons/Icon.astro';
 
 interface Props {
@@ -21,7 +20,7 @@ const {
   isExternal = false,
 } = Astro.props;
 
-const ariaCurrentValue = (siteConfig.b_p_n || "page") as "page";
+const ariaCurrentValue = ("Halaman") as "page";
 ---
 
 <a

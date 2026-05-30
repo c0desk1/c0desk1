@@ -1,6 +1,6 @@
 ---
 // src/components/blog/RssFeed.astro
-import { siteConfig } from "@/config/site";
+import { SITE } from "@/consts";
 import Icon from '@/components/ui/icons/Icon.astro';
 import Link from "../ui/Link.astro";
 
@@ -10,7 +10,7 @@ interface Props {
 
 const { class: className } = Astro.props;
 
-const siteURL = (Astro.site?.toString() ?? siteConfig.siteUrl).replace(/\/$/, "");
+const siteURL = (Astro.site?.toString() ?? SITE.url).replace(/\/$/, "");
 const rssURL = `${siteURL}/rss.xml`;
 ---
 

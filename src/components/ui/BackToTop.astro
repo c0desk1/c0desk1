@@ -1,9 +1,8 @@
 ---
 // src/components/ui/BackToTop.astro
-import { siteConfig } from '@/config/site';
 import Icon from '@/components/ui/icons/Icon.astro';
 
-const backToTop = siteConfig.backToTop || "Back to Top";
+const backToTop = "Kembali ke atas";
 ---
 
 <button
@@ -52,7 +51,7 @@ const backToTop = siteConfig.backToTop || "Back to Top";
     <div class="absolute inset-0 bg-noise opacity-20 mix-blend-overlay"></div>
   </div>
   <span class="relative z-10 transition-transform duration-300 group-hover:-translate-y-1 active:-translate-y-1 flex items-center">
-    <Icon name="arrow-up" className="w-5 h-5" />
+    <Icon name="arrow-move-up" className="w-5 h-5" />
   </span>
 </button>
 

@@ -1,5 +1,4 @@
 ---
-import { siteConfig } from '@/config/site';
 import { slugify } from '@/lib/utils';
 import Icon from '@/components/ui/icons/Icon.astro';
 
@@ -22,7 +21,7 @@ const nextUrl = nextPost ? `/blog/${nextPost.data.slug || slugify(nextPost.data.
           <a href={prevUrl} class="group block text-left">
             <span class="flex items-center gap-1.5 text-label-12 text-(--prose-fg-muted) uppercase tracking-widest mb-2">
               <Icon name="arrow-left" className="w-3.5 h-3.5" />
-              {siteConfig.b_prevPosts}
+              {'Sebelumnya'}
             </span>
             <span class="text-body-14 md:text-body-16 font-medium text-(--prose-fg) group-hover:text-(--prose-accent) transition-colors duration-200 line-clamp-2">
               {prevPost.data.title}
@@ -36,7 +35,7 @@ const nextUrl = nextPost ? `/blog/${nextPost.data.slug || slugify(nextPost.data.
         {nextPost && (
           <a href={nextUrl} class="group block">
             <span class="flex items-center justify-end gap-1.5 text-label-12 text-(--prose-fg-muted) uppercase tracking-widest mb-2">
-              {siteConfig.b_nextPosts}
+              {'Selanjutnya'}
               <Icon name="arrow-right" className="w-3.5 h-3.5" />
             </span>
             <span class="text-body-14 md:text-body-16 font-medium text-(--prose-fg) group-hover:text-(--prose-accent) transition-colors duration-200 line-clamp-2">

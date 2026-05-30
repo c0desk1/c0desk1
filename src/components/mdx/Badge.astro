@@ -1,4 +1,6 @@
 ---
+import Icon from '../ui/icons/Icon.astro';
+
 // src/components/mdx/Badge.astro
 interface Props {
   text: string;
@@ -7,4 +9,4 @@ interface Props {
 const { text } = Astro.props;
 ---
 
-<span class="badge text-label-11! lg:text-label-13!">{text}</span>
+<span class="badge flex text-label-11! lg:text-label-13! gap-1"><Icon name='badge' className='w-4.5 h-4.5 text-accent' />{text}</span>
