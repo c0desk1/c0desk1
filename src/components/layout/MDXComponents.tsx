@@ -23,6 +23,7 @@ import Kbd from '../mdx/KBD.astro';
 import Changelog from '../mdx/changelog.astro';
 import Banner from '../mdx/Banner.astro';
 import Video from '../mdx/Video.astro';
+import FileTree from '../mdx/FileTree.astro';
 
 export const components: MDXComponents = {
   Heading,
@@ -39,6 +40,7 @@ export const components: MDXComponents = {
   a: InlineLink,
   img: Figure,
   Figure,
+  FileTree,
   table: Table,
   Code,
   footnotes: Footnotes,
