@@ -1,4 +1,5 @@
 /* src/styles/prose/changelog.css */
+
 .prose .changelog-item :first-child {
     margin-top: 0 !important;
 }
@@ -10,10 +11,12 @@
 .prose .changelog-version h3,
 .prose .changelog-version h4 {
     @apply text-heading-16;
+    color: var(--prose-fg-strong);
 }
 
 .prose .changelog-items p {
     @apply text-body-14;
+    color: var(--prose-fg-muted);
 }
 
 .prose .changelog-items ul {
@@ -25,14 +28,15 @@
 .prose .changelog-items li {
     @apply text-body-14;
     position: relative;
-    padding-left: 1rem;
+    padding-left: 1.25rem;
     margin-bottom: 0.5rem;
     color: var(--prose-fg-muted);
 }
 
 .prose .changelog-items li::before {
-    content: '–';
+    content: '—';
     position: absolute;
     left: 0;
-    color: var(--prose-list-marker);
+    color: var(--prose-border-strong);
+    font-weight: 700;
 }

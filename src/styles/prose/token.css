@@ -3,11 +3,10 @@
 :root {
   --prose-font-sans: var(--font-sans);
   --prose-font-mono: var(--font-mono);
-
   --prose-scroll-margin: calc(var(--header-height, 60px) + 16px);
 
   /* Typography */
-  --prose-strong-weight: 700;
+  --prose-strong-weight: 600;
   --prose-strong-color: var(--fg-strong);
   --prose-em-color: var(--fg-muted);
   --prose-em-style: normal;
@@ -36,9 +35,9 @@
   --prose-accent-ring: var(--accent-ring);
   --prose-accent-fg: var(--accent-fg);
 
-  /* Highlight / Mark - Subdued Accent */
-  --prose-highlight-bg: var(--warning-soft);
-  --prose-highlight-border: var(--warning);
+  /* Highlight / Mark */
+  --prose-highlight-bg: var(--accent-soft);
+  --prose-highlight-border: var(--accent);
   --prose-highlight-text: var(--fg-strong);
 
   /* Foreground */
@@ -72,16 +71,32 @@
   --prose-badge-border: var(--border-strong);
 
   /* Code & Pre */
-  --prose-code-bg: var(--color-void-50);
-  --prose-code-border: var(--color-void-100);
-  --prose-code-text: var(--color-void-900);
-  --prose-code-keyword: #d73a49;
-  --prose-code-string: #032f62;
-  --prose-code-comment: #6a737d;
-  --prose-code-function: #6f42c1;
-  --prose-code-number: #005cc5;
-  --prose-code-operator: #d73a49;
-  --prose-code-punctuation: #6a737d;
+  --prose-code-bg: var(--bg-subtle);
+  --prose-code-border: var(--border);
+  --prose-code-text: var(--fg-strong);
+
+  --prose-code-keyword: var(--fg-strong);
+  --prose-code-string: var(--fg-muted);
+  --prose-code-comment: var(--fg-subtle);
+  --prose-code-function: var(--fg-strong);
+  --prose-code-number: var(--fg);
+  --prose-code-operator: var(--fg-muted);
+  --prose-code-punctuation: var(--fg-dim);
+
+  --prose-code-header-bg: var(--bg-muted);
+  --prose-code-diff-add-bg: var(--success-soft);
+  --prose-code-diff-add-text: var(--success);
+  --prose-code-diff-remove-bg: var(--error-soft);
+  --prose-code-diff-remove-text: var(--error);
+
+  --prose-code-line-highlighted-bg: rgba(120, 150, 255, 0.1);
+  --prose-code-line-highlighted-border: rgba(120, 150, 255, 0.8);
+
+  --prose-code-line-add-bg: var(--prose-code-diff-add-bg);
+  --prose-code-line-add-border: var(--prose-code-diff-add-text);
+
+  --prose-code-line-remove-bg: var(--prose-code-diff-remove-bg);
+  --prose-code-line-remove-border: var(--prose-code-diff-remove-text);
 
   /* Blockquote */
   --prose-quote-border: var(--border-strong);
@@ -105,115 +120,19 @@
   --prose-list-marker: var(--fg-dim);
   --prose-list-marker-hover: var(--fg-subtle);
 
-  /* Links di dalam artikel */
+  /* Links */
   --prose-link: var(--fg-strong);
   --prose-link-hover: var(--fg-muted);
   --prose-link-visited: var(--fg-subtle);
   --prose-link-underline: var(--border-strong);
   --prose-link-underline-hover: var(--fg-strong);
 
-  /* Callouts / Admonitions – Diikat ke semantic scale Deep Chrome */
-  --callout-note-bg: var(--bg-subtle);
-  --callout-note-border: var(--border-strong);
-  --callout-note-text: var(--fg-muted);
-  --callout-note-icon: var(--fg-muted);
-  --callout-note-title: var(--fg-strong);
-
-  --callout-info-bg: var(--accent-soft);
-  --callout-info-border: var(--border-strong);
-  --callout-info-text: var(--fg-strong);
-  --callout-info-icon: var(--fg-strong);
-  --callout-info-title: var(--fg-strong);
-
-  --callout-tip-bg: var(--success-soft);
-  --callout-tip-border: var(--success);
-  --callout-tip-text: var(--success);
-  --callout-tip-icon: var(--success);
-  --callout-tip-title: var(--success);
-
-  --callout-warning-bg: var(--warning-soft);
-  --callout-warning-border: var(--warning);
-  --callout-warning-text: var(--warning);
-  --callout-warning-icon: var(--warning);
-  --callout-warning-title: var(--warning);
-
-  --callout-danger-bg: var(--error-soft);
-  --callout-danger-border: var(--error);
-  --callout-danger-text: var(--error);
-  --callout-danger-icon: var(--error);
-  --callout-danger-title: var(--error);
-
-  --callout-important-bg: var(--bg-muted);
-  --callout-important-border: var(--fg-strong);
-  --callout-important-text: var(--fg-strong);
-  --callout-important-icon: var(--fg-strong);
-  --callout-important-title: var(--fg-strong);
-
-  --callout-caution-bg: var(--warning-soft);
-  --callout-caution-border: var(--warning);
-  --callout-caution-text: var(--warning);
-  --callout-caution-icon: var(--warning);
-  --callout-caution-title: var(--warning);
-
-  /* Details / Accordion */
-  --prose-details-bg: var(--bg-subtle);
-  --prose-details-border: var(--border);
-  --prose-details-summary: var(--fg-strong);
-  --prose-details-marker: var(--fg-dim);
-
-  /* Kbd (Keyboard tags) */
-  --prose-kbd-bg: var(--bg-subtle);
-  --prose-kbd-border: var(--border-strong);
-  --prose-kbd-text: var(--fg-strong);
-  --prose-kbd-shadow: var(--border);
-
-  /* Footnotes */
-  --prose-footnote-text: var(--fg-subtle);
-  --prose-footnote-hover: var(--fg-strong);
-  --prose-footnote-border: var(--border);
-
-  /* Image & Figure */
-  --prose-figure-caption: var(--fg-subtle);
-  --prose-image-border: var(--border);
-  --prose-image-bg: var(--bg-subtle);
-}
-
-.dark {
-  --prose-highlight-bg: var(--warning-soft);
-  --prose-highlight-border: transparent;
-  --prose-highlight-text: var(--color-void-0);
-
-  /* Block kode menggunakan Deep Cold Black terdalam (1000) */
-  --prose-code-bg: var(--color-void-1000);
-  --prose-code-border: var(--border-strong);
-  --prose-code-text: var(--color-void-50);
-  --prose-code-keyword: #ff7b72;
-  --prose-code-string: #a5d6ff;
-  --prose-code-comment: #8b949e;
-  --prose-code-function: #d2a8ff;
-  --prose-code-number: #79c0ff;
-  --prose-code-operator: #ff7b72;
-  --prose-code-punctuation: #8b949e;
-
-  --prose-hr: var(--border);
-  --prose-hr-strong: var(--border-strong);
-
-  --prose-list-marker: var(--fg-dim);
-  --prose-list-marker-hover: var(--fg-subtle);
-
-  /* Links */
-  --prose-link: var(--fg-strong);
-  --prose-link-hover: var(--fg);
-  --prose-link-visited: var(--fg-muted);
-  --prose-link-underline: var(--border-strong);
-  --prose-link-underline-hover: var(--fg-strong);
-
-  /* Callouts – Dark mode (Seamless Noir) */
+  /* Callouts */
   --callout-note-bg: transparent;
-  --callout-note-border: var(--border-strong);
+  --callout-note-border: var(--border);
   --callout-note-text: var(--fg-muted);
   --callout-note-icon: var(--fg-muted);
-  --callout-note-title: var(--fg-strong);
+  --callout-note-title: var(--fg);
 
   --callout-info-bg: transparent;
   --callout-info-border: var(--border-strong);
@@ -240,31 +159,148 @@
   --callout-danger-title: var(--error);
 
   --callout-important-bg: transparent;
-  --callout-important-border: var(--border-strong);
-  --callout-important-text: var(--fg-strong);
-  --callout-important-icon: var(--fg-strong);
-  --callout-important-title: var(--fg-strong);
+  --callout-important-border: var(--prose-code-line-highlighted-border);
+  --callout-important-text: var(--prose-code-line-highlighted-border);
+  --callout-important-icon: var(--prose-code-line-highlighted-border);
+  --callout-important-title: var(--prose-code-line-highlighted-border);
 
   --callout-caution-bg: transparent;
-  --callout-caution-border: var(--warning);
-  --callout-caution-text: var(--warning);
-  --callout-caution-icon: var(--warning);
-  --callout-caution-title: var(--warning);
+  --callout-caution-border: var(--color-chart-1);
+  --callout-caution-text: var(--color-chart-1);
+  --callout-caution-icon: var(--color-chart-1);
+  --callout-caution-title: var(--color-chart-1);
+  
+  /* Details / Accordion */
+  --prose-details-bg: var(--bg-subtle);
+  --prose-details-border: var(--border);
+  --prose-details-summary: var(--fg-strong);
+  --prose-details-marker: var(--fg-dim);
 
+  /* Kbd (Keyboard tags) */
+  --prose-kbd-bg: var(--bg-subtle);
+  --prose-kbd-border: var(--border-strong);
+  --prose-kbd-text: var(--fg-strong);
+  --prose-kbd-shadow: var(--border);
+
+  /* Footnotes */
+  --prose-footnote-text: var(--fg-subtle);
+  --prose-footnote-hover: var(--fg-strong);
+  --prose-footnote-border: var(--border);
+
+  /* Image & Figure */
+  --prose-figure-caption: var(--fg-subtle);
+  --prose-image-border: var(--border);
+  --prose-image-bg: var(--bg-subtle);
+}
+
+.dark {
+  /* Highlight / Mark */
+  --prose-highlight-bg: var(--accent-soft);
+  --prose-highlight-border: var(--accent);
+  --prose-highlight-text: var(--fg-strong);
+
+  /* Code Block */
+  --prose-code-bg: var(--color-void-1000);
+  --prose-code-border: var(--border-strong);
+  --prose-code-text: var(--color-void-50);
+
+  --prose-code-keyword: var(--color-void-0);
+  --prose-code-string: var(--color-void-400);
+  --prose-code-comment: var(--color-void-600);
+  --prose-code-function: var(--color-void-0);
+  --prose-code-number: var(--color-void-200);
+  --prose-code-operator: var(--color-void-500);
+  --prose-code-punctuation: var(--color-void-600);
+
+  --prose-code-header-bg: var(--bg-subtle);
+  --prose-code-diff-add-bg: var(--success-soft);
+  --prose-code-diff-add-text: var(--success);
+  --prose-code-diff-remove-bg: var(--error-soft);
+  --prose-code-diff-remove-text: var(--error);
+
+  --prose-code-line-highlighted-bg: rgba(120, 150, 255, 0.15);
+  --prose-code-line-highlighted-border: rgba(120, 150, 255, 0.8);
+  --prose-code-line-add-bg: var(--prose-code-diff-add-bg);
+  --prose-code-line-add-border: var(--prose-code-diff-add-text);
+  --prose-code-line-remove-bg: var(--prose-code-diff-remove-bg);
+  --prose-code-line-remove-border: var(--prose-code-diff-remove-text);
+
+  /* HR */
+  --prose-hr: var(--border);
+  --prose-hr-strong: var(--border-strong);
+
+  /* List */
+  --prose-list-marker: var(--fg-dim);
+  --prose-list-marker-hover: var(--fg-subtle);
+
+  /* Links */
+  --prose-link: var(--fg-strong);
+  --prose-link-hover: var(--fg);
+  --prose-link-visited: var(--fg-muted);
+  --prose-link-underline: var(--border-strong);
+  --prose-link-underline-hover: var(--fg-strong);
+
+  /* Callouts */
+  --callout-note-bg: transparent;
+  --callout-note-border: var(--border);
+  --callout-note-text: var(--fg-muted);
+  --callout-note-icon: var(--fg-muted);
+  --callout-note-title: var(--fg);
+
+  --callout-info-bg: transparent;
+  --callout-info-border: var(--border-strong);
+  --callout-info-text: var(--fg-strong);
+  --callout-info-icon: var(--fg-strong);
+  --callout-info-title: var(--fg-strong);
+
+  --callout-tip-bg: transparent;
+  --callout-tip-border: var(--success);
+  --callout-tip-text: var(--success);
+  --callout-tip-icon: var(--success);
+  --callout-tip-title: var(--success);
+
+  --callout-warning-bg: transparent;
+  --callout-warning-border: var(--warning);
+  --callout-warning-text: var(--warning);
+  --callout-warning-icon: var(--warning);
+  --callout-warning-title: var(--warning);
+
+  --callout-danger-bg: transparent;
+  --callout-danger-border: var(--error);
+  --callout-danger-text: var(--error);
+  --callout-danger-icon: var(--error);
+  --callout-danger-title: var(--error);
+
+  --callout-important-bg: transparent;
+  --callout-important-border: var(--prose-code-line-highlighted-border);
+  --callout-important-text: var(--prose-code-line-highlighted-border);
+  --callout-important-icon: var(--prose-code-line-highlighted-border);
+  --callout-important-title: var(--prose-code-line-highlighted-border);
+
+  --callout-caution-bg: transparent;
+  --callout-caution-border: var(--color-chart-1);
+  --callout-caution-text: var(--color-chart-1);
+  --callout-caution-icon: var(--color-chart-1);
+  --callout-caution-title: var(--color-chart-1);
+
+  /* Details */
   --prose-details-bg: var(--bg-subtle);
   --prose-details-border: var(--border-strong);
   --prose-details-summary: var(--fg-strong);
   --prose-details-marker: var(--fg-dim);
 
+  /* KBD */
   --prose-kbd-bg: var(--bg-muted);
   --prose-kbd-border: var(--border-strong);
   --prose-kbd-text: var(--fg-strong);
   --prose-kbd-shadow: var(--color-void-1000);
 
+  /* Footnote */
   --prose-footnote-text: var(--fg-subtle);
   --prose-footnote-hover: var(--fg-strong);
   --prose-footnote-border: var(--border);
 
+  /* Figure */
   --prose-figure-caption: var(--fg-subtle);
   --prose-image-border: var(--border-strong);
   --prose-image-bg: var(--bg-subtle);

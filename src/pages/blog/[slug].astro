@@ -16,7 +16,8 @@ import {
   schemaNewsArticle,
   schemaSoftwareApplication,
   schemaBreadcrumb, 
-  schemaPerson 
+  schemaPerson, 
+IMAGE
 } from "@/consts";
 
 import { slugify } from "@/lib/utils";
@@ -113,10 +114,10 @@ if (isNews) {
     description: schemaData.description,
     url: schemaData.url,
     image: schemaData.image,
-    operatingSystem: post.data.appDetails.operatingSystem,
-    applicationCategory: post.data.appDetails.applicationCategory,
-    price: post.data.appDetails.price,
-    priceCurrency: post.data.appDetails.priceCurrency
+    operatingSystem: post.data.appDetails?.operatingSystem,
+    applicationCategory: post.data.appDetails?.applicationCategory,
+    price: post.data.appDetails?.price,
+    priceCurrency: post.data.appDetails?.priceCurrency
   });
 } else {
   activeArticleSchema = schemaArticle(schemaData);

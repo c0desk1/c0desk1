@@ -30,6 +30,7 @@
 
 .prose blockquote cite::before {
   content: "— ";
+  color: var(--prose-border-strong);
 }
 
 .prose .quote {
@@ -49,8 +50,8 @@
   line-height: 1;
   margin-bottom: -2rem;
   margin-left: -0.125rem;
-  color: var(--prose-quote-text);
-  opacity: 0.2;
+  color: var(--prose-border-strong);
+  opacity: 0.6;
 }
 
 .prose .quote-body {
@@ -86,17 +87,18 @@
 }
 
 .prose .quote-name {
-  font-weight: 700;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--prose-quote-text);
+  @apply text-body-14;
+  color: var(--prose-fg-strong);
   order: 0;
+}
+
+.prose .quote-name::after {
+  content: ",";
 }
 
 .prose .quote-role {
   @apply text-body-14;
-  color: var(--prose-quote-cite);
+  color: var(--prose-fg-subtle);
   order: 1;
 }
 
@@ -108,21 +110,21 @@
 }
 
 .prose .quote-cite a {
-  color: var(--prose-quote-text);
+  color: var(--prose-fg-subtle);
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  transition: opacity 0.2s ease;
+  transition: color var(--prose-duration) var(--prose-ease-out);
 }
 
 .prose .quote-cite a:hover {
-  opacity: 0.8;
+  color: var(--prose-fg-strong);
 }
 
 @media (max-width: 48rem) {
   .prose .quote::before {
     font-size: 3rem;
-    margin-bottom: -1rem;
+    margin-bottom: -1.5rem;
   }
 
   .prose .quote-body {

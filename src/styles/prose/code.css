@@ -2,13 +2,14 @@
 
 .prose code:not(pre code) {
   @apply text-code-14;
+  padding: 0.2em 0.45em;
+  font-weight: 500;
   background-color: var(--prose-code-bg);
   color: var(--prose-code-text);
-  padding: 0.2em 0.45em;
-  border-radius: var(--prose-radius-sm);
   border: 1px solid var(--prose-code-border);
+  border-radius: var(--prose-radius-md);
   white-space: break-spaces;
-  font-weight: 500;
+  
 }
 
 .prose h1 code,
@@ -27,21 +28,18 @@
 }
 
 .prose pre {
-  background: var(--prose-code-bg) !important;
   padding: 1.25rem 1.5rem;
-  overflow-x: auto;
   margin: 0 !important;
   position: relative;
+  overflow-x: auto;
+  background: var(--prose-code-bg) !important;
   scrollbar-width: thin;
   scrollbar-color: var(--prose-border-strong) transparent;
 }
 
 .prose pre::-webkit-scrollbar { height: 4px; }
 .prose pre::-webkit-scrollbar-track { background: transparent; }
-.prose pre::-webkit-scrollbar-thumb {
-  background: var(--prose-border-strong);
-  border-radius: var(--prose-radius-full);
-}
+.prose pre::-webkit-scrollbar-thumb { background: var(--prose-border-strong); border-radius: var(--prose-radius-full);}
 
 .prose pre[data-lang]::before {
   content:        attr(data-lang);
@@ -61,10 +59,10 @@
 .prose .code-block-wrapper {
   margin: 2.5rem 0;
   overflow-x: auto;
+  overflow:       hidden;
   border-radius: var(--prose-radius-md);
   border: 1px solid var(--prose-code-border);
   background: var(--prose-code-bg) !important;
-  overflow:       hidden;
 }
 
 .prose .code-block-header {
@@ -72,8 +70,8 @@
   align-items:     center;
   justify-content: space-between;
   gap:             0.5rem;
-  border-bottom:   1px solid var(--prose-code-border);
   padding:         0.25rem 0.65rem;
+  border-bottom:   1px solid var(--prose-code-border);
   background:      var(--prose-code-header-bg) !important;
 }
 
@@ -125,8 +123,14 @@
   border-radius:  var(--prose-radius-sm);
 }
 
-.prose .diff-tag.add    { color: var(--prose-code-diff-add-text); background: var(--prose-code-diff-add-bg); }
-.prose .diff-tag.remove { color: var(--prose-code-diff-remove-text); background: var(--prose-code-diff-remove-bg); }
+.prose .diff-tag.add    { 
+  color: var(--prose-code-diff-add-text) !important; 
+  background: var(--prose-code-diff-add-bg) !important; 
+}
+.prose .diff-tag.remove { 
+  color: var(--prose-code-diff-remove-text) !important; 
+  background: var(--prose-code-diff-remove-bg) !important; 
+}
 
 .prose .copy-button {
   display:         flex;
@@ -205,11 +209,11 @@
   left:           -3.5rem;
   width:          2.75rem;
   text-align:     right;
-  color:          var(--prose-fg-dim); 
+  color:          var(--prose-code-number); 
   user-select:    none;
   pointer-events: none;
   padding-right:  0.75rem;
-  border-right:   1px solid var(--prose-border); 
+  border-right:   1px solid var(--prose-code-border); 
 }
 
 .prose pre.line-numbers .line.diff-add::before,
@@ -227,18 +231,18 @@
 }
 
 .prose pre .line.highlighted {
-  background: rgba(120, 150, 255, 0.1) !important; 
-  border-left: 3px solid rgba(120, 150, 255, 0.8);
+  background: var(--prose-code-line-highlighted-bg) !important; 
+  border-left: 3px solid var(--prose-code-line-highlighted-border) !important; 
 }
 
 .prose pre .line.diff-add {
-  background: var(--prose-code-diff-add-bg) !important;
-  border-left: 3px solid var(--prose-code-diff-add-text);
+  background: var(--prose-code-line-add-bg) !important;
+  border-left: 3px solid var(--prose-code-line-add-border) !important; 
 }
 
 .prose pre .line.diff-remove {
-  background: var(--prose-code-diff-remove-bg) !important;
-  border-left: 3px solid var(--prose-code-diff-remove-text);
+  background: var(--prose-code-line-remove-bg) !important;
+  border-left: 3px solid var(--prose-code-line-remove-border) !important; 
 }
 
 .prose pre .line.diff-add::before {

@@ -151,7 +151,7 @@
     opacity: 1;
     pointer-events: auto;
     transform: translateX(0);
-    color: var(--prose-fg-subtle);
+    color: var(--prose-fg-srtong);
   }
 }
 

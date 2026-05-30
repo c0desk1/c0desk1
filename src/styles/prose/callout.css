@@ -1,13 +1,71 @@
 /* src/styles/prose/callout.css */
 
+/* 1. Pemetaan Token Berdasarkan Tipe Callout */
+.prose [data-callout="note"] {
+  --c-bg: var(--callout-note-bg);
+  --c-border: var(--callout-note-border);
+  --c-text: var(--callout-note-text);
+  --c-icon: var(--callout-note-icon);
+  --c-title: var(--callout-note-title);
+}
+
+.prose [data-callout="info"] {
+  --c-bg: var(--callout-info-bg);
+  --c-border: var(--callout-info-border);
+  --c-text: var(--callout-info-text);
+  --c-icon: var(--callout-info-icon);
+  --c-title: var(--callout-info-title);
+}
+
+.prose [data-callout="tip"] {
+  --c-bg: var(--callout-tip-bg);
+  --c-border: var(--callout-tip-border);
+  --c-text: var(--callout-tip-text);
+  --c-icon: var(--callout-tip-icon);
+  --c-title: var(--callout-tip-title);
+}
+
+.prose [data-callout="warning"] {
+  --c-bg: var(--callout-warning-bg);
+  --c-border: var(--callout-warning-border);
+  --c-text: var(--callout-warning-text);
+  --c-icon: var(--callout-warning-icon);
+  --c-title: var(--callout-warning-title);
+}
+
+.prose [data-callout="caution"] {
+  --c-bg: var(--callout-caution-bg);
+  --c-border: var(--callout-caution-border);
+  --c-text: var(--callout-caution-text);
+  --c-icon: var(--callout-caution-icon);
+  --c-title: var(--callout-caution-title);
+}
+
+.prose [data-callout="important"] {
+  --c-bg: var(--callout-important-bg);
+  --c-border: var(--callout-important-border);
+  --c-text: var(--callout-important-text);
+  --c-icon: var(--callout-important-icon);
+  --c-title: var(--callout-important-title);
+}
+
+.prose [data-callout="danger"] {
+  --c-bg: var(--callout-danger-bg);
+  --c-border: var(--callout-danger-border);
+  --c-text: var(--callout-danger-text);
+  --c-icon: var(--callout-danger-icon);
+  --c-title: var(--callout-danger-title);
+}
+
 .prose .callout {
   display: flex;
   gap: 0;
   margin: 2.5rem 0;
-  border: 0.5px solid color-mix(in srgb, currentColor 18%, transparent);
-  border-radius: 4px;
+  background-color: var(--c-bg);
+  border: 1px solid var(--c-border);
+  border-radius: var(--prose-radius-md);
   overflow: hidden;
-  color: inherit;
+  color: var(--c-text);
 }
 
 .prose .callout-aside {
@@ -16,8 +74,8 @@
   align-items: center;
   justify-content: flex-start;
   padding: 0.875rem 0.75rem;
-  background: color-mix(in srgb, currentColor 10%, transparent);
-  border-right: 0.5px solid color-mix(in srgb, currentColor 15%, transparent);
+  background-color: rgb(from var(--c-icon) r g b / 0.05);
+  border-right: 1px solid var(--c-border);
   gap: 0.4375rem;
   min-width: 2.625rem;
   flex-shrink: 0;
@@ -27,7 +85,7 @@
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  opacity: 0.8;
+  color: var(--c-icon);
 }
 
 .prose .callout-label {
@@ -35,7 +93,8 @@
   text-transform: uppercase;
   writing-mode: vertical-rl;
   transform: rotate(180deg);
-  opacity: 1;
+  color: var(--c-title);
+  font-weight: 600;
   white-space: nowrap;
 }
 
@@ -47,8 +106,7 @@
 
 .prose .callout-content {
   @apply text-body-14;
-  color: inherit;
-  opacity: 1;
+  color: var(--c-text);
 }
 
 .prose .callout-content > *:first-child { margin-top: 0 !important; }
@@ -57,38 +115,53 @@
 .prose .callout-content p,
 .prose .callout-content ul,
 .prose .callout-content ol,
-.prose .callout-content li { color: inherit; margin-top: 0 !important; }
+.prose .callout-content li { margin-top: 0 !important; color: inherit; }
 
 .prose .callout-content p,
 .prose .callout-content ul,
 .prose .callout-content ol { margin-bottom: 0.625rem; }
 .prose .callout-content li  { margin-bottom: 0.25rem; }
 
-.prose .callout-content strong { color: var(--prose-fg); font-weight: 500; }
-.prose .callout-content em     { color: var(--prose-fg); }
-.prose .callout-content small  { font-size: 0.75rem; line-height: 1.25rem; opacity: 0.75; }
+.prose .callout-content strong { 
+  color: var(--c-title); 
+  font-weight: 600; 
+}
+
+.prose .callout-content em { 
+  color: var(--c-text); 
+}
+
+.prose .callout-content small { 
+  font-size: 0.75rem; 
+  line-height: 1.25rem; 
+  opacity: 0.75; 
+}
 
 .prose .callout-content a {
-  color: currentColor;
-  font-weight: 500;
+  color: var(--c-title);
+  font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 3px;
-  opacity: 0.85;
+  text-decoration-color: var(--c-border);
+  transition: text-decoration-color var(--prose-duration) var(--prose-ease-out);
 }
-.prose .callout-content a:hover { opacity: 1; }
-.prose .callout-content .external-icon { display: none; }
+
+.prose .callout-content a:hover { 
+  text-decoration-color: var(--c-title); 
+}
+
+.prose .callout-content .external-icon { 
+  display: none; 
+}
 
 .prose .callout-content ul,
-.prose .callout-content ol { padding-left: 1.125rem; }
-.prose .callout-content li::marker { color: currentColor; opacity: 0.5; }
+.prose .callout-content ol { 
+  padding-left: 1.125rem; 
+}
 
-.prose [data-callout="note"]      { color: var(--callout-note-icon); }
-.prose [data-callout="info"]      { color: var(--callout-info-icon); }
-.prose [data-callout="tip"]       { color: var(--callout-tip-icon); }
-.prose [data-callout="warning"]   { color: var(--callout-warning-icon); }
-.prose [data-callout="caution"]   { color: var(--callout-caution-icon); }
-.prose [data-callout="important"] { color: var(--callout-important-icon); }
-.prose [data-callout="danger"]    { color: var(--callout-danger-icon); }
+.prose .callout-content li::marker { 
+  color: var(--c-icon); 
+}
 
 @media (max-width: 48rem) {
   .prose .callout { margin: 1.75rem 0; }

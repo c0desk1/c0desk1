@@ -19,6 +19,8 @@ type FooterNav = {
 };
 
 const LOGO = "/org/c0desk1-logo.svg"
+const AUHTOR = "/images/author/placeholder-user.jpg"
+const ThumbnailPlaceHolder = `/images/placeholder.svg`
 const OGIMAGE = "/org/c0desk1-og.webp"
 
 // SITE BASE
@@ -40,12 +42,12 @@ export const SITE = {
 
 // AUTHOR / ORGANIZATION
 export const AUTHOR = {
-  name:    SITE.name,
-  url:     "/admin",
+  name:    'Author',
+  url:     "/author",
   role:    "Editor",
   bio:     SITE.description,
   email:   SITE.email,
-  avatar:  LOGO,
+  avatar:  AUHTOR,
   twitter: "@unloyd",
 } as const;
 
@@ -563,22 +565,24 @@ export const IMAGE = {
   og: {
     width:   1200,
     height:  630,
+    placeholder: OG
   },
   thumbnail: {
     width:   800,
     height:  450,
     quality: 80,
+    placeholder: ThumbnailPlaceHolder,
   },
   avatar: {
     width:   96,
     height:  96,
     quality: 80,
+    placeholder: AUHTOR
   },
   logo: {
     width:   512,
     height:  512,
   },
-  placeholder: `${SITE.url}/images/placeholder.jpg`,
 } as const;
 
 export const READING = {

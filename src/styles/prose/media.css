@@ -1,34 +1,26 @@
 /* src/styles/prose/components/media.css */
-
-.prose img {
-  height: auto;
-  display: block;
-  margin-inline: auto;
-  border-radius: var(--prose-radius-lg);
-  border: 0px solid var(--prose-image-border);
-  background-color: var(--prose-image-bg);
-  box-shadow: 0 4px 24px -6px rgba(0, 0, 0, 0.15);
-}
-
 .prose figure {
   margin: 2.5rem 0;
-  text-align: center;
 }
 
 .prose figure p {
   margin: 0;
 }
 
+.prose img,
 .prose figure img {
-  height: auto;
   display: block;
-  margin-inline: auto;
+  width: 100%;
+  height: auto;
+  margin: 0 !important;
+  border: none;
+  background-color: transparent;
 }
 
 .prose figcaption {
   @apply text-caption-14;
   text-align: center;
-  color: var(--prose-figure-caption);
+  color: var(--prose-figure-caption, var(--fg-subtle));
   margin-top: 0.75rem;
 }
 
@@ -37,11 +29,13 @@
   display: block;
   overflow: hidden;
   position: relative;
-  background-color: var(--prose-bg-subtle);
-  border-radius: var(--prose-radius-md);
-  border: 1px solid var(--prose-border-strong);
-  box-shadow: 0 4px 24px -6px rgba(0, 0, 0, 0.15);
+  background-color: var(--bg-subtle);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-md);
+  margin: 2.5rem 0;
 }
+
 
 @media (max-width: 767px) {
   .prose figure {
@@ -55,21 +49,12 @@
 
   .prose video {
     margin: 1.5rem 0;
-    border-radius: var(--prose-radius-sm);
+    border-radius: var(--radius-md);
   }
 }
 
 @media (min-width: 48rem) {
-  .prose figure {
-    margin: 2.5rem 0;
-  }
-
   .prose figcaption {
     @apply text-caption-16;
-    margin-top: 0.75rem;
-  }
-
-  .prose video {
-    margin: 2.5rem 0;
   }
 }

@@ -57,7 +57,7 @@ const displaySocials: { href: string; label: string }[] = [];
 if (Author.handle) {
   displaySocials.push({
     href: `https://twitter.com/${Author.handle.replace('@', '')}`,
-    label: `@${Author.handle.replace('@', '')}` // Mempertahankan format @handle untuk Twitter
+    label: `@${Author.handle.replace('@', '')}`
   });
 }
 if (author.data.social && author.data.social.length > 0) {
