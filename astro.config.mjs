@@ -20,7 +20,7 @@ import { satteriKbd } from './src/lib/mdx/satteri-kbd';
 import { satteriCodeBlock } from './src/lib/mdx/satteri-code-block';
 import { satteriBanner } from './src/lib/mdx/satteri-banner';
 import { satteriFigure } from './src/lib/mdx/satteri-figure';
-import { satteriFileTree } from './src/lib/satteri-filetree';
+import { satteriFileTree } from './src/lib/mdx/satteri-filetree';
 
 // https://astro.build/config
 export default defineConfig({
