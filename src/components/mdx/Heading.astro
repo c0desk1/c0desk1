@@ -38,10 +38,9 @@ const classes = headingClasses[`h${level}`] || "text-heading-20";
   {id && (
     <a 
       href={`#${id}`} 
-      class="anchor-link inline-flex items-center justify-center w-6 h-6 md:w-7 md:h-7 rounded-sm border border-(--prose-border) bg-(--prose-bg-muted) opacity-0 group-hover:opacity-100 transition-all duration-200 hover:border-(--prose-accent) hover:bg-(--prose-accent) hover:text-(--prose-fg-inverted) ml-2"
-      aria-label={anchorLabel}
-    >
-      <Icon name="link" className="w-3 h-3 md:w-3.5 md:h-3.5" />
+      class="anchor-link inline-flex items-center justify-center w-6 h-6 md:w-8 md:h-8 opacity-0 group-hover:opacity-100 transition-all duration-200 ml-2"
+      aria-label={anchorLabel}>
+      <Icon name="link" className="w-3 h-3 md:w-4 md:h-4 hover:text-strong" />
     </a>
   )}
 </Tag>

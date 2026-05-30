@@ -6,7 +6,7 @@ const { title = "Tabel" } = Astro.props;
 ---
 
 <div class="table-wrapper relative overflow-hidden">
-  <div class="table-header flex items-center justify-between bg-(--prose-table-header-bg) border-b border-(--prose-table-border) px-4 py-2">
+  <div class="table-header flex items-center justify-between bg-(--prose-table-header-bg) border-b border-(--prose-table-border) px-4 py-1">
     <div class="flex items-center gap-2 min-w-0">
       <span class="table-block-title text-label-14 font-semibold">{title}</span>
     </div>
@@ -15,10 +15,10 @@ const { title = "Tabel" } = Astro.props;
         type="button"
         aria-label="Copy table as CSV"
         title="Copy as CSV"
-        class="copy-table-button rounded-full p-2 hover:bg-muted active:bg-muted"
+        class="copy-table-button rounded-lg p-2 hover:bg-muted active:bg-muted"
       >
-        <Icon name="copy" className="copy-icon size-5 transition-colors" />
-        <Icon name="check" className="check-icon hidden size-5 text-(--fg) transition-colors" />
+        <Icon name="copy" className="copy-icon size-4 transition-colors" />
+        <Icon name="check" className="check-icon hidden size-4 text-(--fg) transition-colors" />
       </button>
     </div>
   </div>

@@ -1,15 +1,86 @@
 // src/components/ui/Icon.tsx
 
 export type IconName =
-  | 'logo' | 'sun' | 'moon' | 'search' | 'menu' | 'close' | 'plus' | 'minus' | 'code' | 'donate' | 'zoom'
-  | 'check' | 'clock' | 'calender' | 'trash' | 'note' | 'tip' | 'info' | 'danger' | 'warning' | 'caution' | 'important'
-  | 'github' | 'x' | 'twitter' | 'linkedin' | 'instagram' | 'youtube' | 'facebook' | 'tiktok' | 'telegram' | 'threads' | 'whatsapp' | 'reddit'
-  | 'dribbble' | 'behance' | 'adobestock' | 'wirestock' | 'spotify' | 'soundcloud'
-  | 'copy' | 'external' | 'link' | 'email' | 'user' | 'rss' | 'globe' | 'share' | 'sitemap' | 'cookie'
-  | 'arrow-up' | 'arrow-down' | 'arrow-right' | 'arrow-left' | 'arrow-path'
-  | 'chevron-up' |'chevron-down' | 'chevron-right' | 'chevron-left' | 'more' | 'system' | 'language'
-  | 'volume' | 'volume-mute' | 'play' | 'pause' | 'next' | 'prev' | 'music' | 'image'
-  | 'astro' | 'tailwind' | 'react' | 'typescript' | 'nodejs' | 'vercel' | 'github' | 'vscode' | 'figma';
+  | 'logo' 
+  | 'sun' 
+  | 'moon' 
+  | 'search' 
+  | 'menu' 
+  | 'close' 
+  | 'lock'
+  | 'plus' 
+  | 'minus' 
+  | 'code' 
+  | 'donate' 
+  | 'zoom'
+  | 'check' 
+  | 'clock' 
+  | 'calender' 
+  | 'trash' 
+  | 'note' 
+  | 'tip' 
+  | 'info' 
+  | 'danger' 
+  | 'warning' 
+  | 'caution' 
+  | 'important'
+  | 'github' 
+  | 'x' 
+  | 'twitter' 
+  | 'linkedin' 
+  | 'instagram' 
+  | 'youtube' 
+  | 'facebook' 
+  | 'tiktok' 
+  | 'telegram' 
+  | 'threads' 
+  | 'whatsapp' 
+  | 'reddit'
+  | 'dribbble' 
+  | 'behance' 
+  | 'adobestock' 
+  | 'wirestock' 
+  | 'spotify' 
+  | 'soundcloud'
+  | 'copy' 
+  | 'external' 
+  | 'link' 
+  | 'email' 
+  | 'user' 
+  | 'rss' 
+  | 'globe' 
+  | 'share' 
+  | 'sitemap' 
+  | 'cookie'
+  | 'arrow-up' 
+  | 'arrow-down' 
+  | 'arrow-right' 
+  | 'arrow-left' 
+  | 'arrow-path'
+  | 'chevron-up' 
+  |'chevron-down' 
+  | 'chevron-right' 
+  | 'chevron-left' 
+  | 'more' 
+  | 'system' 
+  | 'language'
+  | 'volume' 
+  | 'volume-mute' 
+  | 'play' 
+  | 'pause' 
+  | 'next' 
+  | 'prev' 
+  | 'music' 
+  | 'image'
+  | 'astro' 
+  | 'tailwind' 
+  | 'react' 
+  | 'typescript' 
+  | 'nodejs' 
+  | 'vercel' 
+  | 'github' 
+  | 'vscode' 
+  | 'figma';
 
 interface IconProps {
   name: IconName;
@@ -375,8 +446,9 @@ export default function Icon({ name, className = 'w-5 h-5' }: IconProps) {
 
     case 'user':
       return (
-        <svg {...s} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M16 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 7a4 4 0 110-8 4 4 0 010 8z" />
+        <svg {...s} fill="currentColor" stroke="none" viewBox="0 0 24 24" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M4 22C4 17.5817 7.58172 14 12 14C16.4183 14 20 17.5817 20 22H18C18 18.6863 15.3137 16 12 16C8.68629 16 6 18.6863 6 22H4ZM12 13C8.685 13 6 10.315 6 7C6 3.685 8.685 1 12 1C15.315 1 18 3.685 18 7C18 10.315 15.315 13 12 13ZM12 11C14.21 11 16 9.21 16 7C16 4.79 14.21 3 12 3C9.79 3 8 4.79 8 7C8 9.21 9.79 11 12 11Z"
+          />
         </svg>
       );
 
@@ -596,6 +668,16 @@ export default function Icon({ name, className = 'w-5 h-5' }: IconProps) {
           <path d="M12 5.424c-1.925 -1.892 -3.82 -2.766 -5 -2.084c-1.913 1.104 -1.226 5.877 1.536 10.66c.386 .67 .793 1.304 1.212 1.896" />
           <path d="M12 18.574c1.926 1.893 3.821 2.768 5 2.086c1.913 -1.104 1.226 -5.877 -1.536 -10.66c-.375 -.65 -.78 -1.283 -1.212 -1.897" />
           <path d="M11.5 12.866a1 1 0 1 0 1 -1.732a1 1 0 0 0 -1 1.732" />
+        </svg>
+      );
+
+    case 'lock':
+      return (
+        <svg {...s} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6" />
+          <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" />
+          <path d="M8 11v-4a4 4 0 1 1 8 0v4" />
         </svg>
       );
 

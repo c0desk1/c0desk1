@@ -30,8 +30,16 @@ interface Props {
 
 const { post } = Astro.props;
 
-let title = '', excerpt = '', categoryName = '', pubDateISO = '', pubDateDisplay = '';
-let authorName = '', authorAvatar = '', optimizedAvatar = '', postUrl = '';
+let 
+  title = '', 
+  excerpt = '', 
+  categoryName = '', 
+  pubDateISO = '', 
+  pubDateDisplay = '',
+  authorName = '', 
+  authorAvatar = '', 
+  optimizedAvatar = '', 
+  postUrl = '';
 
 if (post) {
   const { data } = post;

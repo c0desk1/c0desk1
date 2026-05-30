@@ -7,6 +7,7 @@ import {
 import { Image } from 'astro:assets';
 
 import Icon from '@/components/ui/Icon';
+import Container from '../ui/Container.astro';
 
 interface Props {
   src: string;
@@ -18,19 +19,58 @@ interface Props {
 
 const { src, alt, title, caption, href } = Astro.props;
 
-const optimizedSrc = src && isCdnUrl(src) ? cdnImage(src, { w: 1280, h: 720, q: 80 }) : src;
+const fallbackSrc = '/images/placeholder.svg';
+
+const optimizedSrc = src 
+  ? (isCdnUrl(src) ? cdnImage(src, { w: 1280, h: 720, q: 80 }) : src) 
+  : fallbackSrc;
+  
 const hasLink = !!href;
 const imageClass = hasLink
   ? "relative h-full w-full object-cover transition duration-500 opacity-0"
   : "zoomable-image relative h-full w-full object-cover transition duration-500 opacity-0 cursor-zoom-in";
 
-const tooltip = title || caption || alt;
+const tooltip = title;
+
+let displayUrl = 'c0desk1.my.id';
+if (href && href.startsWith('http')) {
+  try { displayUrl = new URL(href).hostname; } catch(e) {}
+} else if (title) {
+  displayUrl = title.toLowerCase().replace(/\s+/g, '-');
+}
 ---
 
-<figure class="full-width-figure my-4">
-  <div class="relative overflow-hidden rounded-(--prose-radius-lg) border border-(--prose-image-border) bg-(--prose-image-bg) p-2 shadow-sm">
-    {hasLink ? (
-      <a href={href} target="_blank" rel="nofollow noopener noreferrer" title={tooltip} class="block w-full h-full">
+<figure class="full-width-figure my-8 lg:my-12">
+  <div class="relative overflow-hidden rounded-xl border border-strong bg-ase shadow-lg dark:shadow-xl">
+    <div class="flex items-center px-4 py-3 border-b border-strong bg-subtle">
+      <div class="flex items-center gap-1.5 shrink-0 z-10">
+        <div class="w-2.5 h-2.5 rounded-full bg-[#ff5f56] border border-(--border)/10"></div>
+        <div class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e] border border-(--border)/10"></div>
+        <div class="w-2.5 h-2.5 rounded-full bg-[#27c93f] border border-(--border)/10"></div>
+      </div>
+      <div class="absolute inset-x-0 flex justify-center pointer-events-none">
+        <div class="flex items-center justify-center bg-dim border border-strong rounded-md h-6 px-8 max-w-30 md:max-w-xs w-full text-body-13 text-muted truncate">
+          <Icon name="lock" className="w-3.5 h-3.5 mr-1.5 text-subtle" />
+          {displayUrl}
+        </div>
+      </div>
+    </div>
+    <div class="relative w-full bg-base">
+      {hasLink ? (
+        <a href={href} target="_blank" rel="nofollow noopener noreferrer" title={tooltip} class="block w-full h-full">
+          <Image
+            src={optimizedSrc}
+            alt={alt}
+            title={tooltip}
+            loading="lazy"
+            decoding="async"
+            width={1200}
+            height={630}
+            class={imageClass}
+            onload="this.classList.remove('opacity-0')"
+          />
+        </a>
+      ) : (
         <Image
           src={optimizedSrc}
           alt={alt}
@@ -42,28 +82,19 @@ const tooltip = title || caption || alt;
           class={imageClass}
           onload="this.classList.remove('opacity-0')"
         />
-      </a>
-    ) : (
-      <Image
-        src={optimizedSrc}
-        alt={alt}
-        title={tooltip}
-        loading="lazy"
-        decoding="async"
-        width={1200}
-        height={630}
-        class={imageClass}
-        onload="this.classList.remove('opacity-0')"
-      />
-    )}
+      )}
+    </div>
   </div>
+
   {caption && (
-    <figcaption class="text-caption-12 text-(--prose-figure-caption) mt-4!">{caption}</figcaption>
+    <Container size="md">
+      <figcaption class="text-caption-14 text-subtle mt-4 text-center">{caption}</figcaption>
+    </Container>
   )}
 </figure>
 
 <div class="lightbox-overlay" id="lightbox-overlay" aria-hidden="true">
-  <button class="lightbox-close p-2 rounded-full bg-(--bg-muted)/10 hover:bg-(--bg-muted)/5 active:bg-(--bg-muted)/5 text-(--fg-inverted) dark:text-(--fg)" id="lightbox-close" aria-label="Close lightbox">
+  <button class="lightbox-close p-2 rounded-full bg-muted/50 hover:bg-muted active:bg-muted text-inverted" id="lightbox-close" aria-label="Close lightbox">
     <Icon name="close" className="w-6 h-6" />
   </button>
   <div class="lightbox-zoom-container">

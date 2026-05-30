@@ -1,6 +1,6 @@
 ---
+// src/components/mdx/Banner.astro
 import { Image } from "astro:assets";
-import Button from "../ui/Button.astro";
 import Link from "../ui/Link.astro";
 
 interface Props {
@@ -17,16 +17,17 @@ const {
   links,
 } = Astro.props;
 
-const parsedLinks = links
+const parsedLinks: { label: string; url: string }[] = links
   ? JSON.parse(links)
   : [];
 ---
 
-<div class="rounded-2xl border border-(--border) bg-(--bg)/50 p-4 backdrop-blur-sm my-6 lg:my-8">
-  <div class="flex items-start gap-3">
+<div class="rounded-xl border border-(--prose-border) bg-(--bg)/50 p-4 backdrop-blur-sm my-6 lg:my-8 transition-colors duration-300 hover:border-(--prose-border-strong)">
+  <div class="flex items-start gap-3 sm:gap-4">
     {
       icon && (
         <div class="relative shrink-0">
+          <div class="absolute inset-0 rounded-lg ring-1 ring-inset ring-(--prose-border-strong) opacity-20 z-10 pointer-events-none"></div>
           <Image
             src={icon}
             alt={title || "Ikon"}
@@ -35,15 +36,16 @@ const parsedLinks = links
             loading="lazy"
             fetchpriority="low"
             decoding="async"
-            class="h-8 w-8 lg:h-12 lg:w-12 rounded-lg object-cover"
+            class="h-10 w-10 lg:h-12 lg:w-12 rounded-lg object-cover"
           />
         </div>
       )
     }
+    
     <div class="min-w-0 flex-1">
       {
         title && (
-          <h3 class="text-heading-16 lg:text-heading-20 font-semibold mt-0! wrap-break-word">
+          <h3 class="text-heading-16 lg:text-heading-20 font-semibold text-(--prose-fg-strong) mt-0! mb-1! wrap-break-word">
             {title}
           </h3>
         )
@@ -51,7 +53,7 @@ const parsedLinks = links
 
       {
         description && (
-          <p class="text-body-14 text-muted! mb-0!">
+          <p class="text-body-14 text-(--prose-fg-muted) mb-0! mt-0!">
             {description}
           </p>
         )
@@ -59,10 +61,14 @@ const parsedLinks = links
 
       {
         parsedLinks.length > 0 && (
-          <div class="mt-4 flex flex-wrap gap-2 justify-end">
-            {parsedLinks.map((link: any) => (
-              <Link variant="noir" size="md" title={link.label} href={link.url} class="text-(--fg)">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <div class="mt-4 flex flex-wrap gap-2 justify-start sm:justify-end">
+            {parsedLinks.map((link) => (
+              <Link variant="noir" size="md" title={link.label} href={link.url} class="text-(--prose-fg-strong)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1.5 opacity-75">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
                 {link.label}
               </Link>
             ))}
