@@ -1,11 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><style>
-    .bg { fill: none; }
-    .icon { stroke: #ffffff; fill: none; stroke-width: 4; stroke-linecap: butt; stroke-linejoin: round; }
-    
-    @media (prefers-color-scheme: dark) {
-      .bg { fill: none; }
-      .icon { stroke: #18181b; fill: none; stroke-width: 4; stroke-linecap: butt; stroke-linejoin: round; }
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180">
+  <style>
+    .brand-bg { fill: #f4f4f5; transition: fill 0.3s ease; }
+    .brand-icon { fill: #18181b; transition: fill 0.3s ease; }
+
+    @media (prefers-color-scheme: dark) { 
+      .brand-bg { fill: #0a0a09; }
+      .brand-icon { fill: #ffffff; } 
     }
-  </style><circle cx="16" cy="16" r="16" class="bg"></circle><circle cx="16" cy="16" r="10" class="icon"></circle><line x1="5" y1="27" x2="27" y2="5" class="icon"></line><style>@media (prefers-color-scheme: light) { :root { filter: none; } }
-@media (prefers-color-scheme: dark) { :root { filter: invert(100%); } }
-</style></svg>
+  </style>
+  <rect width="180" height="180" rx="99999" class="brand-bg"/>
+  <path d="M45 28.125v78.75c0 24.851 20.149 45 45 45s45-20.149 45-45V28.125h-28.125v78.75c0 9.321-7.554 16.875-16.875 16.875s-16.875-7.554-16.875-16.875V28.125H45z" class="brand-icon"/>
+  <rect x="78.75" y="61.875" width="22.5" height="22.5" class="brand-icon"/>
+</svg>
