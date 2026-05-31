@@ -114,6 +114,7 @@ export const NAV = {
     { label: "Resource", 
       children: [
         { label: "Blog", href: ROUTES.blog, isExternal: false },
+    { label: "Guide", href: ROUTES.guide, isExternal: false },
         { label: "Kategori", href: `${ROUTES.blog}/category`, isExternal: false },
       ]
     },
