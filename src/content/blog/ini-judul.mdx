@@ -109,6 +109,348 @@ console.log("line 5")
 :::
 
 :::code
+:title[src/styles/prose/code.css]
+```css
+/* src/styles/prose/code.css */
+
+.prose code:not(pre code) {
+  @apply text-code-14;
+  padding: 0.2em 0.45em;
+  font-weight: 500;
+  background-color: var(--prose-code-bg);
+  color: var(--prose-code-text);
+  border: 1px solid var(--prose-code-border);
+  border-radius: var(--prose-radius-md);
+  white-space: break-spaces;
+  
+}
+
+.prose h1 code,
+.prose h2 code,
+.prose h3 code,
+.prose h4 code,
+.prose summary code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: inherit;
+}
+
+.prose a code {
+  color: inherit;
+}
+
+.prose pre {
+  padding: 1.25rem 1.5rem;
+  margin: 0 !important;
+  position: relative;
+  overflow-x: auto;
+  background: var(--prose-code-bg) !important;
+  scrollbar-width: thin;
+  scrollbar-color: var(--prose-border-strong) transparent;
+}
+
+.prose pre::-webkit-scrollbar { height: 4px; }
+.prose pre::-webkit-scrollbar-track { background: transparent; }
+.prose pre::-webkit-scrollbar-thumb { background: var(--prose-border-strong); border-radius: var(--prose-radius-full);}
+
+.prose pre[data-lang]::before {
+  content:        attr(data-lang);
+  position:       absolute;
+  top:            10px;
+  right:          14px;
+  text-transform: uppercase;
+  pointer-events: none;
+  user-select:    none;
+  color:          var(--prose-fg-dim);
+}
+
+.prose pre code {
+  @apply text-code-14;
+}
+
+.prose .code-block-wrapper {
+  margin: 2.5rem 0;
+  overflow-x: auto;
+  overflow:       hidden;
+  border-radius: var(--prose-radius-lg);
+  border: 1px solid var(--prose-code-border);
+  background: var(--prose-code-bg) !important;
+}
+
+.prose .code-block-header {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  gap:             0.5rem;
+  padding:         0.25rem 0.65rem;
+  border-bottom:   1px solid var(--prose-code-border);
+  background:      var(--prose-code-header-bg) !important;
+}
+
+.prose .mac-controls {
+  padding-right: 0.5rem;
+}
+
+.prose .mac-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.15); 
+}
+
+.prose .mac-dot.close {
+  background-color: #ff5f56;
+}
+
+.prose .mac-dot.minimize {
+  background-color: #ffbd2e;
+}
+
+.prose .mac-dot.maximize {
+  background-color: #27c93f;
+}
+
+.dark .prose .mac-dot {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.prose .code-block-title {
+  @apply text-label-14;
+  color:          var(--prose-fg-strong);
+  white-space:    nowrap;
+  overflow:       hidden;
+  text-overflow:  ellipsis;
+  min-width:      0;
+}
+
+.prose .code-diff-legend {
+  display:     flex;
+  align-items: center;
+  gap:         0.25rem;
+}
+
+.prose .diff-tag {
+  @apply text-label-14;
+  padding:        0.3rem;
+  border-radius:  var(--prose-radius-sm);
+}
+
+.prose .diff-tag.add    { 
+  color: var(--prose-code-diff-add-text) !important; 
+  background: var(--prose-code-diff-add-bg) !important; 
+}
+.prose .diff-tag.remove { 
+  color: var(--prose-code-diff-remove-text) !important; 
+  background: var(--prose-code-diff-remove-bg) !important; 
+}
+
+.prose .copy-button {
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  flex-shrink:     0;
+  border-radius:   var(--prose-radius-md);
+  cursor:          pointer;
+  transition:      all var(--prose-duration) var(--prose-ease-out);
+  opacity:         0;
+  color:           var(--prose-fg-muted);
+}
+
+.prose pre:hover .copy-button,
+.prose .code-block-wrapper:hover .copy-button,
+.prose .copy-button:focus-visible { 
+  opacity: 1; 
+}
+
+.prose .copy-button:hover {
+  color: var(--prose-fg-strong);
+}
+
+@media (hover: none) {
+  .prose .copy-button { opacity: 1; }
+}
+
+.prose .code-content {
+  margin: 0;
+  overflow-x: auto;
+  border-radius: 0;
+  border-style: none;
+  background: var(--prose-code-bg) !important;
+  scrollbar-width: thin;
+  scrollbar-color: var(--prose-border-strong) transparent;
+}
+
+.prose .code-content::-webkit-scrollbar        { height: 4px; }
+.prose .code-content::-webkit-scrollbar-track  { background: transparent; }
+.prose .code-content::-webkit-scrollbar-thumb  { background: var(--prose-border-strong); border-radius: 2px; }
+
+.prose .code-content pre {
+  @apply text-code-14;
+  border: none;
+  margin: 0;
+  border-radius: 0;
+  background-color: transparent !important;
+  overflow-x: visible;
+  white-space: pre;
+  word-break: normal;
+  word-wrap: normal;
+  padding:          1.125rem 1.25rem;
+}
+
+.prose .code-content pre code {
+  white-space: pre !important;
+}
+
+.prose pre.line-numbers {
+  counter-reset:  line;
+  padding-left:   3.5rem;
+}
+
+.prose pre.line-numbers .line {
+  position:       relative;
+  counter-increment: line;
+}
+
+.prose pre.line-numbers .line::before {
+  @apply text-code-14;
+  content:        counter(line);
+  position:       absolute;
+  top:            0;
+  bottom:         0;
+  height:         100%;
+  left:           -3.5rem;
+  width:          2.75rem;
+  text-align:     right;
+  color:          var(--prose-code-number); 
+  user-select:    none;
+  pointer-events: none;
+  padding-right:  0.75rem;
+  border-right:   1px solid var(--prose-code-border); 
+}
+
+.prose pre.line-numbers .line.diff-add::before,
+.prose pre.line-numbers .line.diff-remove::before {
+  left: -3.5rem; 
+}
+
+.prose pre .line.highlighted,
+.prose pre .line.diff-add,
+.prose pre .line.diff-remove {
+  display: block;
+  @apply text-code-14;
+  margin-inline: -1.25rem;
+  padding-inline: 1.25rem;
+}
+
+.prose pre .line.highlighted {
+  background: var(--prose-code-line-highlighted-bg) !important; 
+  border-left: 3px solid var(--prose-code-line-highlighted-border) !important; 
+}
+
+.prose pre .line.diff-add {
+  background: var(--prose-code-line-add-bg) !important;
+  border-left: 3px solid var(--prose-code-line-add-border) !important; 
+}
+
+.prose pre .line.diff-remove {
+  background: var(--prose-code-line-remove-bg) !important;
+  border-left: 3px solid var(--prose-code-line-remove-border) !important; 
+}
+
+.prose pre .line.diff-add::before {
+  @apply text-label-14;
+  content: "+";
+  position: absolute;
+  left: 0.35rem;
+  color: var(--prose-code-diff-add-text) !important;
+  user-select: none;
+}
+
+.prose pre .line.diff-remove::before {
+  @apply text-label-14;
+  content: "−";
+  position: absolute;
+  left: 0.35rem;
+  color: var(--prose-code-diff-remove-text) !important;
+  user-select: none;
+}
+
+.prose pre.line-numbers .line.highlighted,
+.prose pre.line-numbers .line.diff-add,
+.prose pre.line-numbers .line.diff-remove {
+  margin-left: -3.5rem; 
+  padding-left: 3.5rem; 
+}
+
+.prose pre.line-numbers .line.highlighted::before,
+.prose pre.line-numbers .line.diff-add::before,
+.prose pre.line-numbers .line.diff-remove::before {
+  left: 0 !important;
+  z-index: 2;
+}
+
+.dark .astro-code {
+  background-color: var(--prose-code-bg) !important;
+  overflow-x: auto;
+}
+
+.dark .astro-code span {
+  background-color: transparent !important;
+  color: var(--shiki-dark) !important;
+  white-space: pre;
+  word-break: normal;
+  word-wrap: normal;
+}
+
+@media (max-width: 767px) {
+  .prose code:not(pre code) {
+    padding: 0.15em 0.3em;
+  }
+
+  .prose .code-block-wrapper {
+    margin:        1.75rem 0;
+  }
+
+  .prose pre {
+    padding: 1.5rem 1rem;
+    margin: 1.5rem 0;
+    border-radius: var(--prose-radius-sm);
+  }
+
+  .prose .code-content pre {
+    padding: 1rem 0.875rem;
+  }
+
+  .prose pre.line-numbers {
+    padding-left: 3.125rem;
+  }
+
+  .prose pre.line-numbers .line::before {
+    left:  -3.125rem;
+    width: 2.375rem;
+    padding-right: 0.5rem;
+  }
+
+  .prose pre.line-numbers .line.highlighted,
+  .prose pre.line-numbers .line.diff-add,
+  .prose pre.line-numbers .line.diff-remove {
+    margin-left: -3.125rem;
+    padding-left: 3.125rem;
+  }
+
+  .prose pre.line-numbers .line.highlighted::before,
+  .prose pre.line-numbers .line.diff-add::before,
+  .prose pre.line-numbers .line.diff-remove::before {
+    left: 0 !important;
+  }
+
+  .prose .copy-button { opacity: 1; }
+}
+```
+:::
+
+:::code
 ```js
 // JavaScript example
 function testMarkdown() {
