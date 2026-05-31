@@ -1,5 +1,4 @@
 ---
-// src/components/mdx/Code.astro
 import Icon from "@/components/ui/icons/Icon.astro";
 
 interface Props {
@@ -12,16 +11,16 @@ interface Props {
 const { ins = "", del = "", mark = "", title = "" } = Astro.props;
 
 const $ = {
-  wrapper: "code-block-wrapper not-prose relative my-8 rounded-xl overflow-hidden border border-(--prose-code-border) bg-(--prose-header-bg) p-0.5",
-  header: "code-block-header grid grid-cols-[1fr_auto_1fr] items-center px-4 py-2 border-b border-(--prose-code-border) bg-(--prose-code-header-bg)",
+  wrapper: "code-block-wrapper not-prose relative rounded-xl overflow-hidden border border-(--prose-border) bg-(--prose-code-header-bg)",
+  header: "code-block-header grid grid-cols-[1fr_auto_1fr] items-center px-4 py-1.5",
   leftSlot: "header-left flex items-center justify-start gap-1.5",
   centerSlot: "header-center flex items-center justify-center min-w-0 gap-1 text-label-13",
   rightSlot: "header-right flex items-center justify-end gap-3", 
   dot: "mac-dot size-2.5 rounded-full border border-(--prose-border)/10",
   titleText: "code-block-title font-mono truncate text-(--prose-fg-muted) tracking-wide",
   diffTag: "diff-tag flex items-center justify-center size-5 rounded text-[10px] font-mono font-bold border",
-  langBadge: "lang-badge text-label-11 font-mono font-semibold text-(--prose-fg-muted) bg-(--bg) uppercase px-2 py-0.5 rounded-full",  
-  content: "code-content relative overflow-x-auto group/conten rounded-xl border border-(--prose-code-border) bg-(--prose-code-bg)",
+  langBadge: "lang-badge text-label-11 font-mono font-semibold text-(--prose-fg-muted) bg-muted uppercase px-2 py-0.5 rounded-full",  
+  content: "code-content relative m-1 bg-(--prose-code-bg)! border border-(--prose-code-border) rounded-xl overflow-x-auto group/content",
   copyBtn: "copy-button absolute top-3 right-3 z-10 flex items-center justify-center p-2 rounded-md text-(--prose-fg-muted) border border-(--prose-code-border) bg-(--prose-code-bg)/60 backdrop-blur-md opacity-0 group-hover/content:opacity-100 transition-all duration-200 hover:text-(--prose-fg-strong) hover:bg-(--prose-code-header-bg)",
 } as const;
 ---
@@ -69,7 +68,10 @@ const $ = {
 
 <style is:global>
   @reference '@/styles/utils.css';
-  .code-block-wrapper[data-focus] .line:not(.highlighted) { opacity: 0.8 !important; }
+  .code-block-wrapper[data-focus] [data-highlighted="true"] ~ span,
+  .code-block-wrapper[data-focus] span:not([data-highlighted="true"]) {
+    opacity: 1 !important;
+  }
   .code-block-wrapper.is-collapsed .code-content pre {
     max-height: 8rem;
     overflow: hidden;
@@ -103,8 +105,6 @@ const $ = {
     width: 100%;
     padding: 0.5rem;
     color: var(--prose-fg-muted);
-    background-color: var(--prose-code-bg);
-    border-top: 1px solid var(--prose-code-border);
     cursor: pointer;
     transition: color 150ms ease, background-color 150ms ease;
     @apply text-button-13;
@@ -125,16 +125,22 @@ const $ = {
 <script>
   (() => {
     const NAMES: Record<string, string> = {
-      js: "JS", ts: "TS", jsx: "JSX", tsx: "TSX", py: "PY", html: "HTML", css: "CSS", 
+      js: "JS", ts: "TS", jsx: "JSX", tsx: "TSX", py: "PY", html: "HTML", css: "CSS",
       json: "JSON", jsonc: "JSON", yaml: "YAML", toml: "TOML", bash: "BASH", sh: "SH",
       md: "MD", mdx: "MDX", astro: "ASTRO", vue: "VUE", svelte: "SVELTE", rust: "RS"
     };
 
-    const ALIASES: Record<string, string> = { javascript: "js", typescript: "ts", python: "py", shell: "sh" };
-    
+    const ALIASES: Record<string, string> = {
+      javascript: "js",
+      typescript: "ts",
+      python: "py",
+      shell: "sh"
+    };
+
     const COLLAPSE_THRESHOLD = 25;
 
-    const normalize = (l = "") => ALIASES[l.toLowerCase().trim()] ?? l.toLowerCase().trim();
+    const normalize = (l = "") =>
+      ALIASES[l.toLowerCase().trim()] ?? l.toLowerCase().trim();
 
     const getLang = (pre: Element | null): string => {
       if (!pre) return "";
@@ -146,76 +152,99 @@ const $ = {
 
     const parseRanges = (str = ""): Set<number> => {
       const set = new Set<number>();
+
       for (const part of str.split(",")) {
         const t = part.trim();
         if (!t) continue;
+
         if (t.includes("-")) {
           const [a, b] = t.split("-").map(Number);
-          if (!isNaN(a) && !isNaN(b)) for (let i = a; i <= b; i++) set.add(i);
-        } else { const n = Number(t); if (!isNaN(n) && n > 0) set.add(n); }
+
+          if (!isNaN(a) && !isNaN(b)) {
+            for (let i = a; i <= b; i++) set.add(i);
+          }
+        } else {
+          const n = Number(t);
+          if (!isNaN(n) && n > 0) set.add(n);
+        }
       }
+
       return set;
     };
 
     const updateLangBadge = (wrapper: HTMLElement, lang: string) => {
       const badge = wrapper.querySelector<HTMLElement>(".lang-badge");
       if (!badge || !lang) return;
+
       badge.textContent = NAMES[lang] ?? lang.toUpperCase();
-      badge.style.display = 'inline-flex';
+      badge.style.display = "inline-flex";
     };
 
-    const applyLineNumbers = (wrapper: HTMLElement): number => {
-      const pre = wrapper.querySelector(".code-content pre");
-      const lines = pre?.querySelectorAll("code .line");
-      if (!pre || !lines?.length || lines.length <= 1) return lines?.length ?? 0;
-      
-      pre.classList.add("line-numbers");
-      return lines.length;
+    const getLines = (pre: HTMLElement): HTMLElement[] => {
+      const code = pre.querySelector("code");
+      if (!code) return [];
+
+      return Array.from(code.children).filter(
+        (el): el is HTMLElement =>
+          el instanceof HTMLElement && el.tagName === "SPAN"
+      );
     };
 
     const applyLineClasses = (wrapper: HTMLElement) => {
-      const ins  = parseRanges(wrapper.dataset.ins);
-      const del  = parseRanges(wrapper.dataset.del);
+      const ins = parseRanges(wrapper.dataset.ins);
+      const del = parseRanges(wrapper.dataset.del);
       const mark = parseRanges(wrapper.dataset.mark);
+
       if (!ins.size && !del.size && !mark.size) return;
 
-      wrapper.querySelectorAll(".code-content pre code .line")
-        .forEach((line, i) => {
-          const n = i + 1;
-          if (ins.has(n))  line.classList.add("diff-add");
-          if (del.has(n))  line.classList.add("diff-remove");
-          if (mark.has(n)) line.classList.add("highlighted");
-        });
+      const pre = wrapper.querySelector<HTMLElement>(".code-content pre");
+      if (!pre) return;
+
+      const lines = getLines(pre);
+
+      lines.forEach((line, i) => {
+        const n = i + 1;
+
+        if (ins.has(n)) line.classList.add("diff-add");
+        if (del.has(n)) line.classList.add("diff-remove");
+
+        if (mark.has(n)) {
+          line.classList.add("highlighted");
+          line.dataset.highlighted = "true";
+        }
+      });
 
       if (mark.size) wrapper.setAttribute("data-focus", "");
     };
 
     const setupCopy = (wrapper: HTMLElement) => {
-      const btn  = wrapper.querySelector<HTMLButtonElement>(".copy-button");
+      const btn = wrapper.querySelector<HTMLButtonElement>(".copy-button");
       const code = wrapper.querySelector(".code-content pre code");
+
       if (!btn || !code) return;
 
       btn.addEventListener("click", async () => {
         const text = code.textContent?.trimEnd() ?? "";
-        
-        try { 
-          await navigator.clipboard.writeText(text); 
-          
+
+        try {
+          await navigator.clipboard.writeText(text);
+
           const copyIcon = btn.querySelector(".copy-icon");
           const checkIcon = btn.querySelector(".check-icon");
 
-          copyIcon?.classList.add("hidden"); 
+          copyIcon?.classList.add("hidden");
           checkIcon?.classList.remove("hidden");
-          btn.classList.add("copied"); 
+
+          btn.classList.add("copied");
           btn.setAttribute("aria-label", "Tersalin!");
 
           setTimeout(() => {
-            copyIcon?.classList.remove("hidden"); 
+            copyIcon?.classList.remove("hidden");
             checkIcon?.classList.add("hidden");
-            btn.classList.remove("copied"); 
+
+            btn.classList.remove("copied");
             btn.setAttribute("aria-label", "Salin kode");
           }, 2000);
-          
         } catch (err) {
           console.error("Gagal menyalin kode:", err);
         }
@@ -224,34 +253,39 @@ const $ = {
 
     const setupCollapse = (wrapper: HTMLElement, lineCount: number) => {
       if (lineCount < COLLAPSE_THRESHOLD) return;
+
       wrapper.classList.add("is-collapsed");
 
       const btn = document.createElement("button");
-      btn.className = "btn-expand"; 
+      btn.className = "btn-expand";
       btn.setAttribute("aria-label", "Tampilkan seluruh kode");
+
       btn.innerHTML = `
         <div class='flex items-center gap-2 rounded-lg hover:bg-muted active:bg-muted p-2'>
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
-          <span class="expand-label">Tampilkan ${lineCount} baris</span>
+          <span class="expand-label">Lihat semua</span>
         </div>
       `;
 
       wrapper.appendChild(btn);
+
       const pre = wrapper.querySelector(".code-content pre") as HTMLElement;
 
       btn.addEventListener("click", () => {
         const collapsed = wrapper.classList.toggle("is-collapsed");
         const label = btn.querySelector<HTMLElement>(".expand-label");
-        
+
         if (collapsed) {
-          if (label) label.textContent = `Tampilkan ${lineCount} baris`;
-          
-          if (pre) pre.style.maxHeight = ""; 
+          if (label) label.textContent = "Lihat semua";
+          if (pre) pre.style.maxHeight = "";
 
           const rect = wrapper.getBoundingClientRect();
 
           if (rect.top < 0) {
-            wrapper.scrollIntoView({ behavior: "smooth", block: "start" });
+            wrapper.scrollIntoView({
+              behavior: "smooth",
+              block: "start"
+            });
           }
         } else {
           if (label) label.textContent = "Sembunyikan";
@@ -262,22 +296,32 @@ const $ = {
 
     const init = (wrapper: HTMLElement) => {
       wrapper.classList.add("is-processed");
-      const pre       = wrapper.querySelector(".code-content pre");
-      const lang      = getLang(pre);
-      
+
+      const pre = wrapper.querySelector<HTMLElement>(".code-content pre");
+      if (!pre) return;
+
+      const lang = getLang(pre);
+
       updateLangBadge(wrapper, lang);
-      const lineCount = applyLineNumbers(wrapper);
       applyLineClasses(wrapper);
       setupCopy(wrapper);
+
+      const lineCount = getLines(pre).length;
+
       setupCollapse(wrapper, lineCount);
     };
 
-    const initAll = () => document.querySelectorAll<HTMLElement>(".code-block-wrapper:not(.is-processed)").forEach(init);
-    
-    if (document.readyState === "loading") { 
-      document.addEventListener("DOMContentLoaded", initAll); 
-    } else { 
-      initAll(); 
+    const initAll = () =>
+      document
+        .querySelectorAll<HTMLElement>(
+          ".code-block-wrapper:not(.is-processed)"
+        )
+        .forEach(init);
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initAll);
+    } else {
+      initAll();
     }
   })();
 </script>
