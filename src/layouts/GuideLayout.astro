@@ -12,7 +12,10 @@ import ScrollScript from "@/components/scripts/ScrollScript.astro";
 
 import GuideSidebar from "@/components/guide/GuideSidebar.astro";
 import GuideToc     from "@/components/guide/GuideToc.astro";
+import Container from "@/components/ui/Container.astro";
+
 import type { CollectionEntry } from "astro:content";
+
 
 interface Props {
   meta?:      Partial<ReturnType<typeof buildMeta>>;
@@ -48,12 +51,15 @@ const currentPath = new URL(Astro.request.url).pathname;
       Skip to content
     </a>
     {!hideHeader && variant !== "bare" && (<Navbar currentPath={currentPath} />)}
-    <div class:list={[
-      "flex flex-col lg:flex-row w-full max-w-360 mx-auto items-start relative px-4 lg:px-0",
-      variant !== "bare" && "pt-(--header-height)",
-      variant === "full"  && "pt-0",
-      variant === "bare"  && "pt-0",
-    ]}>
+    <Container 
+      size="xl" 
+      class:list={[
+        "flex flex-col lg:flex-row items-start relative",
+        variant !== "bare" && "pt-(--header-height)",
+        variant === "full"  && "pt-0",
+        variant === "bare"  && "pt-0",
+      ]}
+    >
       {entry && entries.length > 0 && (
         <GuideSidebar {entries} currentId={entry.id} />
       )}
@@ -65,7 +71,7 @@ const currentPath = new URL(Astro.request.url).pathname;
       {entry && toc && headings.length > 1 && (
         <GuideToc {headings} />
       )}
-    </div>
+    </Container>
     {!hideFooter && variant !== "bare" && (<Footer />)}
     <Mobile />
     <ScrollScript />
