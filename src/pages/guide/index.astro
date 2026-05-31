@@ -6,6 +6,7 @@ import { SITE, ROUTES, CATEGORIES, buildMeta, schemaCollectionPage } from "@/con
 import Layout from "@/layouts/Layout.astro";
 import GuideSidebar from "@/components/guide/GuideSidebar.astro";
 import GuideCard from "@/components/guide/GuideCard.astro";
+import Container from "@/components/ui/Container.astro";
 
 const allGuides = await getCollection("guide", ({ data }) => !data.draft);
 
@@ -40,17 +41,12 @@ const schemas = [
 ---
 
 <Layout {meta} schema={schemas} variant="full" bodyClass="bg-base">
-  <div class="flex flex-col lg:flex-row w-full max-w-360 mx-auto items-start relative px-4 lg:px-0 pt-(--header-height)">
-    
+  <Container size="xl">
+  <div class="flex flex-col lg:flex-row w-full items-start relative pt-(--header-height)">
     <GuideSidebar entries={sortedGuides} />
-
-    <main class="flex-1 min-w-0 w-full min-h-[calc(100svh-var(--header-height))] py-8 lg:py-12 lg:px-12">
+    <div class="flex-1 min-w-0 w-full min-h-[calc(100svh-var(--header-height))] py-8 lg:py-12">
       <div class="max-w-4xl">
         <header class="mb-14">
-          <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-label-11 font-medium bg-muted text-strong border border-(--border) mb-4">
-            <span class="flex h-1.5 w-1.5 rounded-full bg-(--accent)"></span>
-            {SITE.name} Docs
-          </div>
           <h1 class="text-heading-32 md:text-heading-48 font-bold tracking-tight text-strong mb-4">
             {pageTitle}
           </h1>
@@ -58,9 +54,7 @@ const schemas = [
             {pageDesc}
           </p>
         </header>
-
         <div class="h-px w-full bg-(--border) mb-12"></div>
-
         <div class="flex flex-col gap-14">
           {groupedGuides.map((group) => (
             <section class="flex flex-col gap-5">
@@ -72,7 +66,6 @@ const schemas = [
                   {group.description}
                 </p>
               </div>
-              
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {group.guides.map((guide) => (
                   <GuideCard entry={guide} />
@@ -82,6 +75,7 @@ const schemas = [
           ))}
         </div>
       </div>
-    </main>
+    </div>
   </div>
+  </Container>
 </Layout>
