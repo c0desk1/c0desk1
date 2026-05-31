@@ -67,6 +67,7 @@ export const ORG = {
 export const ROUTES = {
   home:       "/",
   blog:       "/blog",
+  guide:       "/guide",
   news:       "/news",
   game:       "/game",
   anime:      "/anime",
@@ -91,6 +92,7 @@ export const NAV = {
   navBar: [
     { label: "Resource", children: [
       { label: "Blog", href: ROUTES.blog, isExternal: false },
+      { label: "Guide", href: ROUTES.guide, isExternal: false },
       { label: "Kategori", href: `${ROUTES.blog}/category`, isExternal: false },
     ]},
     { label: "Community", 

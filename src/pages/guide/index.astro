@@ -1,0 +1,87 @@
+---
+// src/pages/guide/index.astro
+import { getCollection } from "astro:content";
+import { SITE, ROUTES, CATEGORIES, buildMeta, schemaCollectionPage } from "@/consts";
+
+import Layout from "@/layouts/Layout.astro";
+import GuideSidebar from "@/components/guide/GuideSidebar.astro";
+import GuideCard from "@/components/guide/GuideCard.astro";
+
+const allGuides = await getCollection("guide", ({ data }) => !data.draft);
+
+const sortedGuides = allGuides.sort((a, b) => {
+  const aOrder = a.data.order ?? a.data.pubDate.valueOf();
+  const bOrder = b.data.order ?? b.data.pubDate.valueOf();
+  return aOrder - bOrder;
+});
+
+const groupedGuides = CATEGORIES.map((cat) => ({
+  ...cat,
+  guides: sortedGuides.filter((g) => g.data.category === cat.slug),
+})).filter((group) => group.guides.length > 0); 
+
+const canonicalURL = new URL(ROUTES.guide, SITE.url).href;
+const pageTitle = `Documentation & Workflows`;
+const pageDesc = "Internal knowledge base. Find technical guides, workflows, and architecture documentation.";
+
+const meta = buildMeta({
+  title:       `${pageTitle} - ${SITE.name}`,
+  description: pageDesc,
+  canonical:   canonicalURL,
+});
+
+const schemas = [
+  schemaCollectionPage({
+    title:       `${pageTitle} - ${SITE.name}`,
+    description: pageDesc,
+    url:         canonicalURL,
+  }),
+];
+---
+
+<Layout {meta} schema={schemas} variant="full" bodyClass="bg-base">
+  <div class="flex flex-col lg:flex-row w-full max-w-360 mx-auto items-start relative px-4 lg:px-0 pt-(--header-height)">
+    
+    <GuideSidebar entries={sortedGuides} />
+
+    <main class="flex-1 min-w-0 w-full min-h-[calc(100svh-var(--header-height))] py-8 lg:py-12 lg:px-12">
+      <div class="max-w-4xl">
+        <header class="mb-14">
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-label-11 font-medium bg-muted text-strong border border-(--border) mb-4">
+            <span class="flex h-1.5 w-1.5 rounded-full bg-(--accent)"></span>
+            {SITE.name} Docs
+          </div>
+          <h1 class="text-heading-32 md:text-heading-48 font-bold tracking-tight text-strong mb-4">
+            {pageTitle}
+          </h1>
+          <p class="text-body-18 text-subtle max-w-2xl">
+            {pageDesc}
+          </p>
+        </header>
+
+        <div class="h-px w-full bg-(--border) mb-12"></div>
+
+        <div class="flex flex-col gap-14">
+          {groupedGuides.map((group) => (
+            <section class="flex flex-col gap-5">
+              <div class="mb-2">
+                <h2 class="text-heading-20 font-bold tracking-tight text-strong">
+                  {group.label}
+                </h2>
+                <p class="text-body-14 text-subtle mt-1">
+                  {group.description}
+                </p>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {group.guides.map((guide) => (
+                  <GuideCard entry={guide} />
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      </div>
+    </main>
+  </div>
+</Layout>

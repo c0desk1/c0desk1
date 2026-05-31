@@ -1,6 +1,10 @@
 ---
 // src/pages/[slug].astro
-import { getCollection, render } from 'astro:content';
+import { 
+  getCollection, 
+  render 
+} from 'astro:content';
+
 import { 
   SITE, 
   ROUTES, 
@@ -10,11 +14,14 @@ import {
   formatDate,
   toISOString
 } from "@/consts";
+
 import { components } from '@/components/layout/MDXComponents';
 
 import Layout from "@/layouts/Layout.astro";
 import Container from "@/components/ui/Container.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
 import Section from "@/components/ui/Section.astro";
+import BackToTop from '@/components/ui/BackToTop.astro';
 
 export async function getStaticPaths() {
   const legalPages = await getCollection("legal");
@@ -62,16 +69,24 @@ const schemas = [
   <Section size="lg">
     <Container size="md">
       <Section size="sm">
+        <Breadcrumb
+          items={[
+            { name: "Beranda", url: ROUTES.home },
+            { name: page.data.title, url: currentPath },
+          ]}
+        />
+      </Section>
+      <Section size="sm">
         <article class="prose max-w-none">
           <div class="text-center mb-12">
-            <h1 class="text-heading-32 md:text-heading-40 lg:text-heading-48 font-semibold justify-center">
+            <h1 class="text-heading-32 md:text-heading-40 lg:text-heading-56 font-semibold justify-center">
               {page.data.title}
             </h1>
             {page.data.lastUpdated && (
               <p class="text-muted! mt-4 text-body-14 justify-center">
                 Terakhir Diperbarui: 
                 <time datetime={toISOString(page.data.lastUpdated)}>
-                  {formatDate(page.data.lastUpdated)}
+                  {formatDate(page.data.lastUpdated, true)}
                 </time>
               </p>
             )}
@@ -83,4 +98,5 @@ const schemas = [
       </Section>
     </Container>
   </Section>
+  <BackToTop />
 </Layout>

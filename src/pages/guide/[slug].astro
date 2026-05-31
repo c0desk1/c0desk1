@@ -1,0 +1,92 @@
+---
+// src/pages/guide/[slug]/index.astro
+import { getCollection, render } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import { SITE, ROUTES, CATEGORIES, buildMeta, schemaWebPage } from "@/consts";
+
+import { components } from '@/components/layout/MDXComponents';
+
+import GuideLayout from "@/layouts/GuideLayout.astro";
+import GuidePager from "@/components/guide/GuidePager.astro";
+
+type Props = {
+  entry: CollectionEntry<"guide">;
+  allGuides: CollectionEntry<"guide">[];
+};
+
+export async function getStaticPaths() {
+  const allGuides = await getCollection("guide", ({ data }) => !data.draft);
+  
+  const sortedGuides = allGuides.sort((a, b) => {
+    const aOrder = a.data.order ?? a.data.pubDate.valueOf();
+    const bOrder = b.data.order ?? b.data.pubDate.valueOf();
+    return aOrder - bOrder;
+  });
+
+  return sortedGuides.map((entry) => ({
+    params: { slug: entry.id }, 
+    props: { entry, allGuides: sortedGuides },
+  }));
+}
+
+const { entry, allGuides } = Astro.props as Props;
+const { Content, headings } = await render(entry);
+
+const currentIndex = allGuides.findIndex(g => g.id === entry.id);
+const prevGuide = currentIndex > 0 ? allGuides[currentIndex - 1] : null;
+const nextGuide = currentIndex < allGuides.length - 1 ? allGuides[currentIndex + 1] : null;
+
+const catMap = Object.fromEntries(CATEGORIES.map((c) => [c.slug, c.label]));
+const categoryLabel = catMap[entry.data.category] ?? entry.data.category;
+
+const canonicalURL = new URL(`${ROUTES.guide}/${entry.id}`, SITE.url).href;
+
+const meta = buildMeta({
+  title:       `${entry.data.title} - ${SITE.name} Docs`,
+  description: entry.data.description,
+  canonical:   canonicalURL,
+});
+
+const schemas = [
+  schemaWebPage({
+    title:       entry.data.title,
+    description: entry.data.description,
+    url:         canonicalURL,
+  }),
+];
+---
+
+<GuideLayout 
+  meta={meta} 
+  schema={schemas}
+  variant="full"
+  entry={entry} 
+  entries={allGuides} 
+  headings={headings}
+>
+  <nav class="flex items-center gap-2 text-label-13 text-muted mb-8 font-medium">
+    <a href={ROUTES.guide} class="hover:text-strong transition-colors">Documentation</a>
+    <svg class="w-4 h-4 text-dim" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+    </svg>
+    <span class="text-strong truncate">{entry.data.title}</span>
+  </nav>
+  <header class="mb-10">
+    <div class="mb-4">
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-label-11 font-medium bg-muted text-strong border border-(--border)">
+        {categoryLabel}
+      </span>
+    </div>
+    <h1 class="text-heading-32 md:text-heading-48 font-bold tracking-tight text-strong mb-4">
+      {entry.data.title}
+    </h1>
+    <p class="text-body-18 text-subtle">
+      {entry.data.description}
+    </p>
+  </header>
+  <div class="h-px w-full bg-(--border) mb-10"></div>
+  <article class="prose">
+    <Content components={components} />
+  </article>
+  <GuidePager prev={prevGuide} next={nextGuide} />
+</GuideLayout>
