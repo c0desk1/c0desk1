@@ -60,7 +60,7 @@
   margin: 2.5rem 0;
   overflow-x: auto;
   overflow:       hidden;
-  border-radius: var(--prose-radius-md);
+  border-radius: var(--prose-radius-lg);
   border: 1px solid var(--prose-code-border);
   background: var(--prose-code-bg) !important;
 }
