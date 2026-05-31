@@ -95,33 +95,48 @@ Donec faucibus, risus vel luctus tincidunt, justo sapien placerat nibh, sed grav
 
 ## Kode
 
+```js
+console.log("line 1") // [!code --]
+console.log("line 2") // [!code ++]
+console.log("line 3") // [!code ++]
+console.log("line 4")
+console.log("line 5") // [!code highlight]
+```
 
 :::code
-:title[Image.astro] :mark[2] :ins[10-18] :del[4-8]
+:title[markdown.astro]
 ```astro
 ---
-import Image from 'astro:assets';
+// Astro component example // [!code highlight]
+const title = "Markdown Testing"; // [!code ++]
 ---
-<img
-  src="/org/c0desk1.webp"
-  alt="Logo"
-  class="w-full h-full object-cover"
-/>
 
-<Image
-  src="/org/c0desk1.webp"
-  alt="Logo"
-  width={16}
-  height={16}
-  loading="eager"
-  decoding="async"
-  class="w-full h-full object-cover"
-/>
+<section class="space-y-4">
+  <h2>{title}</h2>
+
+  <p> <!--[!code --]-->
+    Semua syntax markdown dan prose sedang diuji.
+  </p>
+</section>
+```
+:::
+
+:::code 
+:title[console.log]
+:del[1] 
+:ins[2-3] 
+:mark[5]
+```js
+console.log("line 1")
+console.log("line 2")
+console.log("line 3")
+console.log("line 4")
+console.log("line 5")
 ```
 :::
 
 :::code
-:title[code.css]
+:title[src/styles/prose/code.css]
 ```css
 /* src/styles/prose/code.css */
 
@@ -518,23 +533,6 @@ export function Button({ label }: ButtonProps) {
 :::
 
 :::code
-```astro
----
-// Astro component example
-const title = "Markdown Testing";
----
-
-<section class="space-y-4">
-  <h2>{title}</h2>
-
-  <p>
-    Semua syntax markdown dan prose sedang diuji.
-  </p>
-</section>
-```
-:::
-
-:::code
 ```html
 <!-- HTML example -->
 <section class="card">
@@ -800,45 +798,30 @@ Selain itu, contoh seperti <ruby>東京<rt>とうきょう</rt></ruby> dan <ruby
 ## Callout
 :::note
 ini contoh callout note yang dibuat sedikit lebih panjang untuk membantu testing padding, border, spacing internal, typography, dan rendering multiline pada komponen admonition atau callout custom di dalam prose markdown.
-
-Selain itu, konten tambahan seperti ini juga berguna untuk memastikan icon alignment, background color, serta vertical rhythm tetap konsisten pada berbagai ukuran layar dan mode tema.
 :::
 
 :::info
 ini contoh callout info yang dibuat sedikit lebih panjang untuk membantu testing background variant, border accent, typography, spacing internal, dan rendering multiline pada komponen callout custom di dalam prose markdown.
-
-Selain itu, konten tambahan seperti ini juga berguna untuk memastikan alignment icon, wrapping text, serta konsistensi visual antar variant admonition pada berbagai ukuran layar dan mode tema.
 :::
 
 :::tip
 ini contoh callout tip yang dibuat sedikit lebih panjang untuk membantu testing styling komponen tip, termasuk warna accent, icon alignment, padding internal, serta konsistensi typography pada prose custom di berbagai ukuran layar dan mode tema.
-
-Selain itu, konten tambahan seperti ini juga berguna untuk memastikan rendering multiline, spacing antar paragraf, dan visual hierarchy tetap stabil ketika digunakan bersama callout lain seperti note, info, warning, maupun danger.
 :::
 
 :::important
 ini contoh callout important yang dibuat sedikit lebih panjang untuk membantu testing styling komponen important, termasuk kontras warna, border emphasis, icon alignment, spacing internal, serta konsistensi typography pada prose custom di berbagai ukuran layar dan mode tema.
-
-Selain itu, konten tambahan seperti ini juga berguna untuk memastikan rendering multiline, visual hierarchy, dan perbedaan tingkat prioritas antar callout (note, info, tip, important, warning, danger) tetap jelas dan konsisten dalam satu sistem desain.
 :::
 
 :::warning
-
 ini contoh callout warning yang dibuat sedikit lebih panjang untuk membantu testing styling komponen warning, termasuk warna kontras, border highlight, icon alignment, spacing internal, serta konsistensi typography pada prose custom di berbagai ukuran layar dan mode tema.
-
-Selain itu, konten tambahan seperti ini juga berguna untuk memastikan rendering multiline, visual hierarchy, dan perbedaan tingkat urgency tetap jelas ketika digunakan bersama callout lain seperti note, info, tip, important, dan danger dalam satu halaman dokumentasi.
 :::
 
 :::caution
 ini contoh callout caution yang dibuat sedikit lebih panjang untuk membantu testing styling komponen caution, termasuk warna peringatan, icon alignment, spacing internal, serta konsistensi typography pada prose custom di berbagai ukuran layar dan mode tema.
-
-Selain itu, konten tambahan seperti ini juga berguna untuk memastikan perbedaan intensitas warning vs caution terlihat jelas, serta rendering multiline dan visual hierarchy tetap stabil ketika digunakan bersama callout lain seperti note, info, tip, important, warning, dan danger.
 :::
 
 :::danger
 ini contoh callout danger yang dibuat sedikit lebih panjang untuk membantu testing styling komponen danger, termasuk warna kontras tinggi, icon alignment, spacing internal, serta konsistensi typography pada prose custom di berbagai ukuran layar dan mode tema.
-
-Selain itu, konten tambahan seperti ini juga berguna untuk memastikan tingkat urgensi paling tinggi tetap jelas, serta rendering multiline, visual hierarchy, dan perbedaan dengan warning/caution tetap konsisten dalam sistem callout yang sama.
 :::
 
 ## STEPS
