@@ -7,7 +7,8 @@
 
 @theme inline {
   --font-mono: var(--font-GeistMono);
-  --font-sans: var(--font-Syne), var(--font-Geist);
+  --font-sans: var(--font-Geist);
+  --font-serif: var(--font-Syne);
 
   /* SCALE */
   --color-void-0:    #ffffff;
@@ -130,7 +131,7 @@
   color-scheme: dark;
 
   /* Global Surfaces (Dark Mode) */
-  --bg:          var(--color-void-950);
+  --bg:          var(--color-void-1000);
   --bg-subtle:   var(--color-void-900);
   --bg-muted:    var(--color-void-800);
   --bg-elevated: var(--color-void-700);
