@@ -203,8 +203,9 @@
     padding: 0.05rem 0.875rem;
     margin: 0;
   }
-  .prose .astro-code .line::before {
-    width: 1.25rem;
+  .prose .astro-code .line::before,
+  .prose .astro-code .line.diff.remove::before,
+  .prose .astro-code .line.diff.add::before {
     margin-right: 1rem;
   }
 }
