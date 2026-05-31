@@ -96,15 +96,27 @@ Donec faucibus, risus vel luctus tincidunt, justo sapien placerat nibh, sed grav
 ## Kode
 :::code 
 :title[console.log]
-:del[1] 
-:ins[2-4] 
-:mark[5]
 ```js
 console.log("line 1") // [!code --]
 console.log("line 2") // [!code ++]
 console.log("line 3") // [!code ++]
 console.log("line 4")
 console.log("line 5") // [!code highlight]
+```
+:::
+
+:::code
+:mark[1]
+:ins[2]
+:del[3]
+```astro
+---
+import Image from 'astro:assets';
+---
+
+<Image
+  src="/org/"
+/>
 ```
 :::
 
