@@ -21,30 +21,36 @@ function parseLineRanges(raw: string): Set<number> {
 }
 
 function injectCodeNotations(
-  code: string,
-  lang: string,
+  codeNode: any,
   ins: Set<number>,
   del: Set<number>,
   mark: Set<number>
-): string {
-  const lines = code.split("\n");
-  const prefix =
-    ["js", "ts", "jsx", "tsx", "java", "c", "cpp", "go", "rust", "swift"].includes(lang) ? "//" :
-    ["py", "rb", "sh", "bash", "yaml", "toml", "makefile"].includes(lang) ? "#" :
-    ["html", "xml", "svg"].includes(lang) ? "<!--" :
-    "//";
-
-  return lines
-    .map((line, idx) => {
-      const n = idx + 1;
-      let suffix = "";
-      if (ins.has(n)) suffix += ` ${prefix} [!code ++]`;
-      if (del.has(n)) suffix += ` ${prefix} [!code --]`;
-      if (mark.has(n)) suffix += ` ${prefix} [!code highlight]`;
-      return line + suffix;
-    })
-    .join("\n");
+) {
+  const lang = codeNode.lang || "";
+  
+  const sensitiveLangs = ['astro', 'mdx', 'md', 'html'];
+  
+  if (sensitiveLangs.includes(lang.toLowerCase())) {
+    const metaParts = [];
+    if (ins.size) metaParts.push(`ins="${Array.from(ins).join(',')}"`);
+    if (del.size) metaParts.push(`del="${Array.from(del).join(',')}"`);
+    if (mark.size) metaParts.push(`mark="${Array.from(mark).join(',')}"`);
+    
+    codeNode.meta = (codeNode.meta || "") + " " + metaParts.join(" ");
+  } else {
+    const lines = codeNode.value.split("\n");
+    codeNode.value = lines
+      .map((line: string, idx: number) => {
+        const n = idx + 1;
+        if (ins.has(n)) return `${line} // [!code ++]`;
+        if (del.has(n)) return `${line} // [!code --]`;
+        if (mark.has(n)) return `${line} // [!code highlight]`;
+        return line;
+      })
+      .join("\n");
+  }
 }
+
 
 export const satteriCodeBlock = defineMdastPlugin({
   name: "satteri-code-block",
