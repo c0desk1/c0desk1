@@ -6,7 +6,14 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@astrojs/react';
 import mdx from '@astrojs/mdx';
 import { satteri } from '@astrojs/markdown-satteri';
+import { 
+  transformerNotationDiff, 
+  transformerNotationHighlight, 
+  transformerNotationWordHighlight,
+  transformerNotationErrorLevel,
+  transformerMetaHighlight,
 
+} from '@shikijs/transformers'
 
 import { satteriHeading } from './src/lib/mdx/satteri-heading';
 import { satteriCallout } from './src/lib/mdx/satteri-callout';
@@ -84,8 +91,21 @@ export default defineConfig({
       
     }),
     shikiConfig: {
-      syntaxHighlight: false,
-    }
+      themes: {
+        light: 'github-light',
+        dark: 'github-dark',
+      },
+      transformers: [
+        transformerNotationHighlight(),
+        transformerNotationWordHighlight(),
+        transformerNotationErrorLevel(),
+        transformerMetaHighlight(),
+        transformerNotationDiff(),
+        
+      ],
+      wrap: false,
+    },
+    syntaxHighlight: 'shiki',
   },
   fonts: [
     {

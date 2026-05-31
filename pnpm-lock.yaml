@@ -66,6 +66,9 @@ importers:
         specifier: ^5.1.0
         version: 5.1.0
     devDependencies:
+      '@shikijs/transformers':
+        specifier: ^4.1.0
+        version: 4.1.0
       '@tailwindcss/typography':
         specifier: ^0.5.19
         version: 0.5.19(tailwindcss@4.3.0)
@@ -765,6 +768,10 @@ packages:
 
   '@shikijs/themes@4.1.0':
     resolution: {integrity: sha512-emCcTnUM7yO2wltYbaxm+yLvcCI4+h8XBKc4KmJ7EZUXoSGjcCHifkI//R4OFit9ewpg7H2/9tjOuXrT2v/Knw==}
+    engines: {node: '>=20'}
+
+  '@shikijs/transformers@4.1.0':
+    resolution: {integrity: sha512-YbuOcAA3kwqKDU9YSt00dtFLrY5lBXjKU3dWaMATyEyPSqBm9Jqblk/uVICxz7lcjwAHzYaEvIiMWX3mTpogkA==}
     engines: {node: '>=20'}
 
   '@shikijs/types@4.1.0':
@@ -3013,6 +3020,11 @@ snapshots:
 
   '@shikijs/themes@4.1.0':
     dependencies:
+      '@shikijs/types': 4.1.0
+
+  '@shikijs/transformers@4.1.0':
+    dependencies:
+      '@shikijs/core': 4.1.0
       '@shikijs/types': 4.1.0
 
   '@shikijs/types@4.1.0':
