@@ -1,6 +1,10 @@
-/* src/styles/prose/code.css - Astro + Shiki tanpa line numbers */
+/* =============================================
+   src/styles/prose/code.css
+   Astro + Shiki tanpa line numbers
+   Diff/Highlight fix: box-shadow method
+   ============================================= */
 
-/* inline code */
+/* ---------- inline code ---------- */
 .prose code:not(pre code) {
   @apply text-code-14;
   padding: 0.2em 0.45em;
@@ -27,7 +31,7 @@
   color: inherit;
 }
 
-/* wrapper */
+/* ---------- wrapper ---------- */
 .prose .code-block-wrapper {
   margin: 2.5rem 0;
   overflow-x: auto;
@@ -72,7 +76,6 @@
 
 .prose .diff-tag {
   @apply text-label-14;
-
   padding: 0.3rem;
   border-radius: var(--prose-radius-sm);
 }
@@ -109,6 +112,7 @@
   }
 }
 
+/* ---------- astro-code base ---------- */
 .prose .astro-code {
   @apply text-code-14;
   color: var(--prose-code-text);
@@ -155,7 +159,7 @@
 .prose .astro-code code {
   display: block;
   margin: 0 !important;
-  padding: 1.125rem 1.25rem;
+  padding: 1.125rem 1.25rem;         /* padding-x: 1.25rem (desktop) */
   background: transparent !important;
   border: 0 !important;
   font: inherit;
@@ -168,42 +172,48 @@
   content: none !important;
 }
 
-/* shiki line */
+/* ---------- SHIKI LINE (base) ---------- */
+/* Jadikan block agar bisa diberi latar, jaga kerapatan */
 .prose .astro-code .line {
   display: block;
   margin: 0;
   padding: 0;
+  line-height: 1.45;           /* samakan dengan .astro-code */
+  white-space: pre;
+  box-sizing: content-box;
+  position: relative;          /* untuk pseudo-element +/- */
 }
 
-/* highlighted */
+/* ---------- HIGHLIGHT (sorot) ---------- */
 .prose .astro-code .line.highlighted {
-  background: var(--prose-code-line-highlighted-bg) !important;
+  background-color: var(--prose-code-line-highlighted-bg) !important;
   border-left: 3px solid var(--prose-code-line-highlighted-border) !important;
-  margin-inline: -1.25rem;
-  padding-inline: 1.25rem;
-  width: 100%;
+  box-shadow:
+    -1.25rem 0 0 0 var(--prose-code-line-highlighted-bg),
+     1.25rem 0 0 0 var(--prose-code-line-highlighted-bg);
 }
 
-/* diff add */
+/* ---------- DIFF: ADD ---------- */
 .prose .astro-code .line.diff-add {
   position: relative;
-  background: var(--prose-code-line-add-bg) !important;
+  background-color: var(--prose-code-line-add-bg) !important;
   border-left: 3px solid var(--prose-code-line-add-border) !important;
-  margin-inline: -1.25rem;
-  padding-inline: 1.25rem;
-  width: 100%;
+  box-shadow:
+    -1.25rem 0 0 0 var(--prose-code-line-add-bg),
+     1.25rem 0 0 0 var(--prose-code-line-add-bg);
 }
 
-/* diff remove */
+/* ---------- DIFF: REMOVE ---------- */
 .prose .astro-code .line.diff-remove {
   position: relative;
-  background: var(--prose-code-line-remove-bg) !important;
+  background-color: var(--prose-code-line-remove-bg) !important;
   border-left: 3px solid var(--prose-code-line-remove-border) !important;
-  margin-inline: -1.25rem;
-  padding-inline: 1.25rem;
-  width: 100%;
+  box-shadow:
+    -1.25rem 0 0 0 var(--prose-code-line-remove-bg),
+     1.25rem 0 0 0 var(--prose-code-line-remove-bg);
 }
 
+/* Tanda +/- pada diff */
 .prose .astro-code .line.diff-add::before {
   @apply text-label-14;
   content: "+";
@@ -222,13 +232,14 @@
   color: var(--prose-code-diff-remove-text);
 }
 
+/* Reset span di dalam line */
 .prose .astro-code span {
   white-space: pre;
   word-break: normal;
   word-wrap: normal;
 }
 
-/* dark mode */
+/* ---------- Dark mode ---------- */
 .dark .astro-code {
   background: var(--prose-code-bg) !important;
 }
@@ -237,7 +248,7 @@
   color: var(--shiki-dark) !important;
 }
 
-/* responsive */
+/* ---------- Responsive ---------- */
 @media (max-width: 767px) {
   .prose code:not(pre code) {
     padding: 0.15em 0.3em;
@@ -248,10 +259,28 @@
   .prose .astro-code {
     margin: 1.5rem 0;
   }
+  /* Padding mobile: 1rem 0.875rem → pakai 0.875rem untuk box-shadow */
   .prose .astro-code code {
     padding: 1rem 0.875rem;
   }
   .prose .copy-button {
     opacity: 1;
+  }
+
+  /* Sesuaikan lebar shadow untuk diff/highlight di mobile */
+  .prose .astro-code .line.highlighted {
+    box-shadow:
+      -0.875rem 0 0 0 var(--prose-code-line-highlighted-bg),
+       0.875rem 0 0 0 var(--prose-code-line-highlighted-bg);
+  }
+  .prose .astro-code .line.diff-add {
+    box-shadow:
+      -0.875rem 0 0 0 var(--prose-code-line-add-bg),
+       0.875rem 0 0 0 var(--prose-code-line-add-bg);
+  }
+  .prose .astro-code .line.diff-remove {
+    box-shadow:
+      -0.875rem 0 0 0 var(--prose-code-line-remove-bg),
+       0.875rem 0 0 0 var(--prose-code-line-remove-bg);
   }
 }
