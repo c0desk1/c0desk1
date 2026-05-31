@@ -26,11 +26,12 @@ function injectCodeNotations(
   del: Set<number>,
   mark: Set<number>
 ) {
-  const lang = codeNode.lang || "";
-  
+  const lang = (codeNode.lang || "").toLowerCase();
+  // Bahasa sensitif yang sering merusak highlighting jika ada komentar asing
   const sensitiveLangs = ['astro', 'mdx', 'md', 'html'];
   
-  if (sensitiveLangs.includes(lang.toLowerCase())) {
+  if (sensitiveLangs.includes(lang)) {
+    // METODE META: Aman untuk semua bahasa
     const metaParts = [];
     if (ins.size) metaParts.push(`ins="${Array.from(ins).join(',')}"`);
     if (del.size) metaParts.push(`del="${Array.from(del).join(',')}"`);
@@ -38,6 +39,7 @@ function injectCodeNotations(
     
     codeNode.meta = (codeNode.meta || "") + " " + metaParts.join(" ");
   } else {
+    // METODE INJEKSI KOMENTAR: Untuk JS/TS/CSS
     const lines = codeNode.value.split("\n");
     codeNode.value = lines
       .map((line: string, idx: number) => {
@@ -50,7 +52,6 @@ function injectCodeNotations(
       .join("\n");
   }
 }
-
 
 export const satteriCodeBlock = defineMdastPlugin({
   name: "satteri-code-block",
@@ -91,13 +92,7 @@ export const satteriCodeBlock = defineMdastPlugin({
     const markSet = parseLineRanges(markRaw);
 
     if (insSet.size > 0 || delSet.size > 0 || markSet.size > 0) {
-      codeNode.value = injectCodeNotations(
-        codeNode.value,
-        codeNode.lang || "",
-        insSet,
-        delSet,
-        markSet
-      );
+      injectCodeNotations(codeNode, insSet, delSet, markSet);
     }
 
     node.children = (node.children ?? []).filter((child: any) => {
