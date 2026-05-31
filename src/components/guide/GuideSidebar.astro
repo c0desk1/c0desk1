@@ -1,0 +1,135 @@
+---
+// src/components/guide/GuideSidebar.astro
+import type { CollectionEntry } from "astro:content";
+import { CATEGORIES } from "@/consts";
+
+interface Props {
+  entries:    CollectionEntry<"guide">[];
+  currentId?: string;
+}
+
+const { entries, currentId } = Astro.props;
+
+const catMap = Object.fromEntries(CATEGORIES.map((c) => [c.slug, c.label]));
+
+const grouped = entries
+  .filter(e => !e.data.draft)
+  .sort((a, b) => {
+    const aOrder = a.data.order ?? a.data.pubDate.valueOf();
+    const bOrder = b.data.order ?? b.data.pubDate.valueOf();
+    return aOrder - bOrder;
+  })
+  .reduce<Record<string, CollectionEntry<"guide">[]>>((acc, entry) => {
+    const sec = entry.data.category ?? "general";
+    const label = catMap[sec] ?? sec;
+    (acc[label] ??= []).push(entry);
+    return acc;
+  }, {});
+
+const BADGE_LABEL: Record<string, string> = {
+  new:        "New",
+  beta:       "Beta",
+  deprecated: "Depr.",
+  updated:    "Upd.",
+};
+
+const badgeColors: Record<string, string> = {
+  new:        "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+  beta:       "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400",
+  updated:    "bg-amber-500/10 text-amber-600 dark:text-amber-400",
+  deprecated: "bg-red-500/10 text-red-600 dark:text-red-400",
+};
+---
+
+<aside 
+  class="w-full lg:w-60 shrink-0 lg:sticky lg:top-[calc(var(--header-height)+1.5rem)] lg:max-h-[calc(100svh-var(--header-height)-3rem)] overflow-y-auto lg:pr-4"
+  id="guide-sidebar"
+  style="scrollbar-width: thin; scrollbar-color: var(--border) transparent;"
+>
+  <div class="pb-12">
+    <div class="flex lg:hidden items-center justify-between py-3 mb-2 border-b border-(--border)">
+      <span class="text-label-12 font-semibold tracking-widest uppercase text-muted">
+        Dokumentasi
+      </span>
+      <button
+        class="flex items-center justify-center w-7 h-7 rounded text-muted hover:text-strong hover:bg-subtle transition-colors focus:outline-none"
+        id="sidebar-toggle"
+        aria-expanded="false"
+        aria-controls="sidebar-nav"
+        aria-label="Toggle sidebar"
+      >
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <nav class="hidden lg:flex flex-col gap-7 mt-4 lg:mt-0" id="sidebar-nav" aria-label="Guide navigation">
+      {Object.entries(grouped).map(([section, items]) => (
+        <div class="flex flex-col gap-1.5">
+          <p class="text-label-11 font-bold tracking-widest uppercase text-subtle px-2 mb-1">
+            {section}
+          </p>
+          <ul class="flex flex-col gap-px" role="list">
+            {items.map(entry => {
+              const isActive = entry.id === currentId;
+              const badge    = 'badge' in entry.data ? (entry.data as any).badge : undefined;
+              
+              return (
+                <li>
+                  <a
+                    href={`/guide/${entry.id}`}
+                    class:list={[
+                      "flex items-center justify-between gap-2 px-2 py-1.5 rounded-md text-body-13 transition-colors no-underline",
+                      isActive 
+                        ? "text-strong font-medium bg-muted" 
+                        : "text-muted hover:text-strong hover:bg-subtle"
+                    ]}
+                    aria-current={isActive ? "page" : undefined}
+                  >
+                    <span class="flex-1 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">
+                      {entry.data.title}
+                    </span>
+                    {badge && BADGE_LABEL[badge] && (
+                      <span class={`shrink-0 text-[10px] font-bold tracking-wider uppercase px-1.5 py-0.5 rounded-[3px] ${badgeColors[badge]}`}>
+                        {BADGE_LABEL[badge]}
+                      </span>
+                    )}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ))}
+    </nav>
+  </div>
+</aside>
+
+<script>
+  const initSidebar = () => {
+    const toggle = document.getElementById("sidebar-toggle");
+    const nav    = document.getElementById("sidebar-nav");
+    if (!toggle || !nav) return;
+
+    toggle.removeEventListener("click", (window as any).__sidebarToggle);
+    
+    (window as any).__sidebarToggle = () => {
+      const expanded = toggle.getAttribute("aria-expanded") === "true";
+      toggle.setAttribute("aria-expanded", String(!expanded));
+      
+      if (!expanded) {
+        nav.classList.remove("hidden");
+        nav.classList.add("flex");
+      } else {
+        nav.classList.add("hidden");
+        nav.classList.remove("flex");
+      }
+    };
+
+    toggle.addEventListener("click", (window as any).__sidebarToggle);
+  };
+
+  initSidebar();
+  document.addEventListener("astro:page-load", initSidebar);
+</script>

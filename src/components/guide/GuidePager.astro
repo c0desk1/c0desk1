@@ -1,0 +1,42 @@
+---
+// src/components/guide/GuidePager.astro
+import type { CollectionEntry } from "astro:content";
+import { ROUTES } from "@/consts";
+
+interface Props {
+  prev?: CollectionEntry<"guide"> | null;
+  next?: CollectionEntry<"guide"> | null;
+}
+
+const { prev, next } = Astro.props;
+---
+
+{(prev || next) && (
+  <nav class="mt-16 pt-8 border-t border-(--border)" aria-label="Guide pagination">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {prev ? (
+        <a href={`${ROUTES.guide}/${prev.id}`} class="group flex flex-col gap-1.5 p-4 border border-(--border) rounded-lg hover:border-strong hover:bg-subtle transition-all duration-200 no-underline text-left">
+          <span class="flex items-center gap-1 text-label-12 font-medium tracking-wider uppercase text-muted">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M7.5 9L4.5 6l3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Previous
+          </span>
+          <span class="text-body-14 font-semibold text-strong leading-snug">{prev.data.title}</span>
+        </a>
+      ) : <div />}
+
+      {next ? (
+        <a href={`${ROUTES.guide}/${next.id}`} class="group flex flex-col gap-1.5 p-4 border border-(--border) rounded-lg hover:border-strong hover:bg-subtle transition-all duration-200 no-underline text-left sm:text-right sm:items-end">
+          <span class="flex items-center gap-1 text-label-12 font-medium tracking-wider uppercase text-muted">
+            Next
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M4.5 3l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="text-body-14 font-semibold text-strong leading-snug">{next.data.title}</span>
+        </a>
+      ) : <div />}
+    </div>
+  </nav>
+)}
