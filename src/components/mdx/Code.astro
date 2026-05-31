@@ -37,12 +37,10 @@ const $ = {
       <div class:list={[$.dot, "bg-warning"]}></div>
       <div class:list={[$.dot, "bg-success"]}></div>
     </div>
-
     <div class={$.centerSlot}>
       <span class={$.langBadge} style="display: none;"></span>
       {title && <span class={$.titleText}>{title}</span>}
     </div>
-
     <div class={$.rightSlot}>
       {(ins || del) && (
         <div class="diff-legend flex items-center gap-1" aria-hidden="true">
@@ -56,7 +54,6 @@ const $ = {
       )}
     </div>
   </div>
-
   <div class={$.content}>
     <button type="button" aria-label="Salin kode" title="Salin" class={$.copyBtn}>
       <Icon name="copy" className="copy-icon w-4 h-4" />
@@ -289,7 +286,7 @@ const $ = {
           }
         } else {
           if (label) label.textContent = "Sembunyikan";
-          if (pre) pre.style.maxHeight = `${pre.scrollHeight + 16}px`;
+          if (pre) pre.style.maxHeight = `${pre.scrollHeight}px`;
         }
       });
     };
