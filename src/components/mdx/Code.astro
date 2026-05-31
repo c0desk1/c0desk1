@@ -11,17 +11,18 @@ interface Props {
 
 const { ins = "", del = "", mark = "", title = "" } = Astro.props;
 
-// ── Tailwind class consts ────────────────────────────────────────────────────
 const $ = {
-  wrapper:   "code-block not-prose relative my-8 rounded-xl overflow-hidden",
-  header:    "code-block__header flex items-center gap-3 px-4 py-2.5",
-  dots:      "flex items-center gap-1.5 shrink-0",
-  dot:       "size-2.5 rounded-full",
-  titleText: "code-block__title font-mono truncate text-[11px] tracking-wide",
-  langBadge: "code-block__lang font-mono text-[9px] font-bold tracking-[0.12em] uppercase px-2 py-0.5 rounded-full ml-auto shrink-0",
-  divider:   "code-block__divider h-px",
-  content:   "code-block__content relative overflow-x-auto",
-  copyBtn:   "code-block__copy absolute top-2.5 right-2.5 z-10 flex items-center gap-1.5 px-2 py-1 rounded-md text-[10px] font-mono font-medium transition-all duration-200 opacity-0 group-hover/content:opacity-100",
+  wrapper: "code-block-wrapper not-prose relative shadow-2xl shadow-black/20 rounded-xl overflow-hidden",
+  header: "code-block-header flex items-center justify-between px-4 py-2 border-b border-(--prose-code-border) bg-(--prose-code-header-bg)",
+  leftSlot: "flex-1 flex items-center justify-start",
+  centerSlot: "shrink-0 flex justify-center",
+  rightSlot: "flex-1 flex items-center justify-end gap-2",  
+  dots: "mac-controls flex items-center gap-1.5",
+  dot: "mac-dot size-3 rounded-full border border-black/10 dark:border-white/10",
+  titleText: "code-block-title font-mono truncate text-label-13 text-(--prose-fg-muted) tracking-wide",
+  langBadge: "font-mono text-label-11 font-bold text-(--prose-fg-muted) bg-black/5 dark:bg-white/5 uppercase px-2 py-0.5 rounded-full",
+  content: "code-content relative",
+  copyBtn: "copy-button absolute top-3 right-3 z-10 flex items-center gap-1.5 px-2.5 py-1.5 rounded-md font-mono text-label-12 text-(--prose-fg-muted) border border-(--prose-code-border) bg-(--prose-code-bg)/60 backdrop-blur-md transition-all duration-200 opacity-0 group-hover/content:opacity-100 hover:text-(--prose-fg-strong) hover:bg-(--prose-code-header-bg)",
 } as const;
 ---
 
@@ -31,33 +32,32 @@ const $ = {
   data-del={del}
   data-mark={mark}
 >
-  <!-- Header: dots + title + lang badge -->
   <div class={$.header}>
-    <div class={$.dots} aria-hidden="true">
-      <div class:list={[$.dot, "dot-close"]}></div>
-      <div class:list={[$.dot, "dot-min"]}></div>
-      <div class:list={[$.dot, "dot-max"]}></div>
+    <div class={$.leftSlot}>
+      <div class={$.dots} aria-hidden="true">
+        <div class:list={[$.dot, "bg-[#ff5f56]"]}></div>
+        <div class:list={[$.dot, "bg-[#ffbd2e]"]}></div>
+        <div class:list={[$.dot, "bg-[#27c93f]"]}></div>
+      </div>
     </div>
 
-    {title && (
-      <span class={$.titleText}>{title}</span>
-    )}
+    <div class={$.centerSlot}>
+      {title && (
+        <span class={$.titleText}>{title}</span>
+      )}
+    </div>
 
-    <!-- Diff legend pills -->
-    {(ins || del) && (
-      <div class="flex items-center gap-1 ml-auto" aria-hidden="true">
-        {ins && <span class="diff-pill ins">+</span>}
-        {del && <span class="diff-pill del">−</span>}
-      </div>
-    )}
-
-    <span class={$.langBadge}></span>
+    <div class={$.rightSlot}>
+      {(ins || del) && (
+        <div class="code-diff-legend" aria-hidden="true">
+          {ins && <span class="diff-tag add">+</span>}
+          {del && <span class="diff-tag remove">−</span>}
+        </div>
+      )}
+      <span class:list={[$.langBadge, "lang-badge"]}></span>
+    </div>
   </div>
 
-  <!-- Divider -->
-  <div class={$.divider} aria-hidden="true"></div>
-
-  <!-- Code content + floating copy button -->
   <div class:list={[$.content, "group/content"]}>
     <button
       type="button"
@@ -73,286 +73,35 @@ const $ = {
   </div>
 </div>
 
-<!-- ─── Styles ─────────────────────────────────────────────────────────────── -->
-<style>
-  /* ── Design tokens ─────────────────────────────────────────────────────── */
-  .code-block {
-    --cb-bg:          color-mix(in srgb, var(--prose-bg, #0d0d0d) 96%, #000);
-    --cb-border:      color-mix(in srgb, var(--prose-fg, #fff) 9%, transparent);
-    --cb-header-bg:   color-mix(in srgb, var(--prose-bg, #0d0d0d) 85%, #000);
-    --cb-header-fg:   color-mix(in srgb, var(--prose-fg, #fff) 35%, transparent);
-    --cb-title-fg:    color-mix(in srgb, var(--prose-fg, #fff) 55%, transparent);
-    --cb-accent:      #10b981;
-    --cb-accent-dim:  color-mix(in srgb, #10b981 14%, transparent);
-    --cb-accent-ring: color-mix(in srgb, #10b981 22%, transparent);
-
-    /* diff */
-    --cb-ins-bg:   color-mix(in srgb, #10b981 7%, transparent);
-    --cb-ins-fg:   #10b981;
-    --cb-del-bg:   color-mix(in srgb, #ef4444 7%, transparent);
-    --cb-del-fg:   #ef4444;
-    --cb-mark-bg:  color-mix(in srgb, #f59e0b 9%, transparent);
-    --cb-mark-fg:  #f59e0b;
-
-    /* line numbers */
-    --cb-ln-fg: color-mix(in srgb, var(--prose-fg, #fff) 16%, transparent);
-    --cb-ln-w:  2.5rem;
-
-    background:  var(--cb-bg) !important;
-    border:      1px solid var(--cb-border) !important;
-    box-shadow:
-      0 0 0 1px color-mix(in srgb, #10b981 3%, transparent),
-      0 2px 4px  color-mix(in srgb, #000 15%, transparent),
-      0 12px 40px color-mix(in srgb, #000 25%, transparent) !important;
+<style is:global>
+  .code-block-wrapper.is-collapsed .code-content pre {
+    max-height: 8rem;
+    overflow: hidden;
+    mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
   }
-
-  /* ── Header ───────────────────────────────────────────────────────────── */
-  .code-block__header {
-    background:  var(--cb-header-bg) !important;
-    min-height:  2.375rem !important;
-    border-bottom: none !important;
+  
+  .btn-expand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem;
+    color: var(--prose-fg-muted);
+    background-color: var(--prose-code-header-bg);
+    border-top: 1px solid var(--prose-code-border);
+    cursor: pointer;
+    transition: color 150ms ease, background-color 150ms ease;
   }
-
-  /* ── Mac dots ─────────────────────────────────────────────────────────── */
-  .dot-close { background: #ff5f57 !important; }
-  .dot-min   { background: #febc2e !important; }
-  .dot-max   { background: #28c840 !important; }
-
-  /* ── Title ────────────────────────────────────────────────────────────── */
-  .code-block__title {
-    font-family: var(--font-GeistMono, ui-monospace, monospace) !important;
-    color:       var(--cb-title-fg) !important;
-    font-size:   0.6875rem !important;
+  .btn-expand:hover {
+    color: var(--prose-fg-strong);
+    background-color: color-mix(in srgb, var(--prose-code-header-bg) 95%, #000);
   }
-
-  /* ── Lang badge ───────────────────────────────────────────────────────── */
-  .code-block__lang {
-    font-family: var(--font-GeistMono, ui-monospace, monospace) !important;
-    background:  var(--cb-accent-dim) !important;
-    color:       var(--cb-accent) !important;
-    border:      1px solid var(--cb-accent-ring) !important;
-    display:     none !important;
-  }
-  .code-block__lang:not(:empty) {
-    display: inline-flex !important;
-    align-items: center !important;
-  }
-
-  /* ── Diff pills ───────────────────────────────────────────────────────── */
-  .diff-pill {
-    display:         inline-flex !important;
-    align-items:     center !important;
-    justify-content: center !important;
-    width:           1.25rem !important;
-    height:          1.25rem !important;
-    border-radius:   4px !important;
-    font-size:       0.7rem !important;
-    font-weight:     700 !important;
-    font-family:     var(--font-GeistMono, ui-monospace, monospace) !important;
-  }
-  .diff-pill.ins {
-    background: var(--cb-ins-bg) !important;
-    color:      var(--cb-ins-fg) !important;
-    border:     1px solid color-mix(in srgb, #10b981 18%, transparent) !important;
-  }
-  .diff-pill.del {
-    background: var(--cb-del-bg) !important;
-    color:      var(--cb-del-fg) !important;
-    border:     1px solid color-mix(in srgb, #ef4444 18%, transparent) !important;
-  }
-
-  /* ── Divider ──────────────────────────────────────────────────────────── */
-  .code-block__divider {
-    background: var(--cb-border) !important;
-  }
-
-  /* ── Content scrollbar ────────────────────────────────────────────────── */
-  .code-block__content {
-    scrollbar-width: thin !important;
-    scrollbar-color: var(--cb-border) transparent !important;
-  }
-  .code-block__content::-webkit-scrollbar       { height: 3px !important; }
-  .code-block__content::-webkit-scrollbar-track  { background: transparent !important; }
-  .code-block__content::-webkit-scrollbar-thumb  {
-    background:    var(--cb-border) !important;
-    border-radius: 999px !important;
-  }
-
-  /* ── Copy button ──────────────────────────────────────────────────────── */
-  .code-block__copy {
-    background:      color-mix(in srgb, var(--prose-fg, #fff) 5%, transparent) !important;
-    color:           color-mix(in srgb, var(--prose-fg, #fff) 40%, transparent) !important;
-    border:          1px solid var(--cb-border) !important;
-    backdrop-filter: blur(8px) !important;
-    font-family:     var(--font-GeistMono, ui-monospace, monospace) !important;
-  }
-  .code-block__copy:hover {
-    background:   color-mix(in srgb, var(--prose-fg, #fff) 9%, transparent) !important;
-    color:        var(--cb-accent) !important;
-    border-color: var(--cb-accent-ring) !important;
-  }
-  .code-block__copy.copied {
-    color:        var(--cb-accent) !important;
-    border-color: var(--cb-accent-ring) !important;
-    background:   var(--cb-accent-dim) !important;
-  }
-  /* touch devices: always visible */
-  @media (hover: none) {
-    .code-block__copy { opacity: 1 !important; }
-  }
-
-  /* ── Pre / Code reset ─────────────────────────────────────────────────── */
-  .code-block__content pre {
-    margin:        0 !important;
-    padding:       1rem 0 !important;
-    background:    transparent !important;
-    border-radius: 0 !important;
-    border:        none !important;
-    box-shadow:    none !important;
-    font-family:   var(--font-GeistMono, ui-monospace, monospace) !important;
-    font-size:     0.8125rem !important;
-    line-height:   1.75 !important;
-  }
-  .code-block__content code {
-    display:    block !important;
-    width:      fit-content !important;
-    min-width:  100% !important;
-    background: transparent !important;
-    padding:    0 !important;
-    border:     none !important;
-    box-shadow: none !important;
-  }
-
-  /* ── Lines ────────────────────────────────────────────────────────────── */
-  .code-block__content .line {
-    display:        block !important;
-    padding-inline: 1.25rem !important;
-    min-height:     1.75em !important;
-    position:       relative !important;
-    transition:     background 80ms ease !important;
-  }
-
-  /* ── Line numbers ─────────────────────────────────────────────────────── */
-  .code-block__content pre.line-numbers { counter-reset: cb-line !important; }
-  .code-block__content pre.line-numbers .line {
-    padding-inline-start: calc(var(--cb-ln-w) + 1.25rem) !important;
-    counter-increment:    cb-line !important;
-  }
-  .code-block__content pre.line-numbers .line::before {
-    content:              counter(cb-line) !important;
-    position:             absolute !important;
-    left:                 0 !important;
-    width:                var(--cb-ln-w) !important;
-    text-align:           right !important;
-    padding-right:        0.875rem !important;
-    color:                var(--cb-ln-fg) !important;
-    font-variant-numeric: tabular-nums !important;
-    user-select:          none !important;
-    pointer-events:       none !important;
-    font-size:            0.6875rem !important;
-  }
-
-  /* ── INS lines ────────────────────────────────────────────────────────── */
-  .code-block__content .line.diff-add { background: var(--cb-ins-bg) !important; }
-  .code-block__content .line.diff-add::after {
-    content:        "+" !important;
-    position:       absolute !important;
-    left:           0.3rem !important;
-    top:            0 !important;
-    line-height:    1.75 !important;
-    color:          var(--cb-ins-fg) !important;
-    font-size:      0.6rem !important;
-    font-weight:    800 !important;
-    pointer-events: none !important;
-    user-select:    none !important;
-  }
-
-  /* ── DEL lines ────────────────────────────────────────────────────────── */
-  .code-block__content .line.diff-remove {
-    background: var(--cb-del-bg) !important;
-    opacity:    0.6 !important;
-  }
-  .code-block__content .line.diff-remove::after {
-    content:        "−" !important;
-    position:       absolute !important;
-    left:           0.3rem !important;
-    top:            0 !important;
-    line-height:    1.75 !important;
-    color:          var(--cb-del-fg) !important;
-    font-size:      0.6rem !important;
-    font-weight:    800 !important;
-    pointer-events: none !important;
-    user-select:    none !important;
-  }
-
-  /* ── MARK lines ───────────────────────────────────────────────────────── */
-  .code-block__content .line.highlighted { background: var(--cb-mark-bg) !important; }
-  .code-block__content .line.highlighted::before {
-    content:       "" !important;
-    position:      absolute !important;
-    left:          0 !important;
-    top:           0 !important;
-    bottom:        0 !important;
-    width:         2px !important;
-    background:    var(--cb-mark-fg) !important;
-    border-radius: 0 2px 2px 0 !important;
-    pointer-events: none !important;
-  }
-
-  /* line-numbers + diff: shift gutter marker ───────────────────────────── */
-  .code-block__content pre.line-numbers .line.diff-add::after,
-  .code-block__content pre.line-numbers .line.diff-remove::after {
-    left: calc(var(--cb-ln-w) + 0.2rem) !important;
-  }
-
-  /* ── Focus mode: dim non-marked lines ────────────────────────────────── */
-  .code-block[data-focus] .line:not(.highlighted) {
-    opacity:    0.3 !important;
-    transition: opacity 200ms ease !important;
-  }
-  .code-block[data-focus] .line:not(.highlighted):hover {
-    opacity: 0.7 !important;
-  }
-
-  /* ── Collapse ─────────────────────────────────────────────────────────── */
-  .code-block.is-collapsed .code-block__content pre {
-    max-height:           5rem !important;
-    overflow:             hidden !important;
-    mask-image:           linear-gradient(to bottom, black 20%, transparent 100%) !important;
-    -webkit-mask-image:   linear-gradient(to bottom, black 20%, transparent 100%) !important;
-  }
-  .code-block__expand {
-    display:         flex !important;
-    align-items:     center !important;
-    justify-content: center !important;
-    gap:             0.375rem !important;
-    width:           100% !important;
-    padding:         0.5rem !important;
-    font-family:     var(--font-GeistMono, ui-monospace, monospace) !important;
-    font-size:       0.6875rem !important;
-    color:           var(--cb-header-fg) !important;
-    background:      var(--cb-header-bg) !important;
-    border-top:      1px solid var(--cb-border) !important;
-    border-left:     none !important;
-    border-right:    none !important;
-    border-bottom:   none !important;
-    cursor:          pointer !important;
-    transition:      color 150ms ease, background 150ms ease !important;
-    letter-spacing:  0.04em !important;
-  }
-  .code-block__expand:hover {
-    color:      var(--cb-accent) !important;
-    background: var(--cb-accent-dim) !important;
-  }
-  .code-block__expand svg {
-    transition: transform 200ms ease !important;
-  }
-  .code-block.is-collapsed .code-block__expand svg {
-    transform: rotate(180deg) !important;
-  }
+  .btn-expand svg { transition: transform 200ms ease; }
+  .code-block-wrapper.is-collapsed .btn-expand svg { transform: rotate(180deg); }
 </style>
 
-<!-- ─── Script ─────────────────────────────────────────────────────────────── -->
 <script>
   (() => {
     const NAMES: Record<string, string> = {
@@ -372,6 +121,7 @@ const $ = {
       shell: "sh", ruby: "rb", csharp: "cs",
     };
 
+    // UBAH ANGKA INI UNTUK TESTING (misalnya ubah jadi 5 untuk tes instan)
     const COLLAPSE_THRESHOLD = 25;
 
     const normalize = (l = "") => ALIASES[l.toLowerCase().trim()] ?? l.toLowerCase().trim();
@@ -401,13 +151,14 @@ const $ = {
     };
 
     const updateLangBadge = (wrapper: HTMLElement, lang: string) => {
-      const badge = wrapper.querySelector<HTMLElement>(".code-block__lang");
+      const badge = wrapper.querySelector<HTMLElement>(".lang-badge");
       if (!badge || !lang) return;
       badge.textContent = NAMES[lang] ?? lang.toUpperCase();
+      badge.style.display = 'inline-flex';
     };
 
     const applyLineNumbers = (wrapper: HTMLElement): number => {
-      const pre   = wrapper.querySelector(".code-block__content pre");
+      const pre   = wrapper.querySelector(".code-content pre");
       const lines = pre?.querySelectorAll("code .line");
       if (!pre || !lines?.length || lines.length <= 1) return lines?.length ?? 0;
       pre.classList.add("line-numbers");
@@ -420,7 +171,7 @@ const $ = {
       const mark = parseRanges(wrapper.dataset.mark);
       if (!ins.size && !del.size && !mark.size) return;
 
-      wrapper.querySelectorAll(".code-block__content pre code .line")
+      wrapper.querySelectorAll(".code-content pre code .line")
         .forEach((line, i) => {
           const n = i + 1;
           if (ins.has(n))  line.classList.add("diff-add");
@@ -428,13 +179,12 @@ const $ = {
           if (mark.has(n)) line.classList.add("highlighted");
         });
 
-      // Focus mode aktif jika ada mark lines
       if (mark.size) wrapper.setAttribute("data-focus", "");
     };
 
     const setupCopy = (wrapper: HTMLElement) => {
-      const btn  = wrapper.querySelector<HTMLButtonElement>(".code-block__copy");
-      const code = wrapper.querySelector(".code-block__content pre code");
+      const btn  = wrapper.querySelector<HTMLButtonElement>(".copy-button");
+      const code = wrapper.querySelector(".code-content pre code");
       if (!btn || !code) return;
 
       btn.addEventListener("click", async () => {
@@ -476,10 +226,10 @@ const $ = {
       wrapper.classList.add("is-collapsed");
 
       const btn = document.createElement("button");
-      btn.className = "code-block__expand";
+      btn.className = "btn-expand text-label-13 font-mono"; 
       btn.setAttribute("aria-label", "Tampilkan seluruh kode");
       btn.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
         <span class="expand-label">Tampilkan ${lineCount} baris</span>
       `;
 
@@ -495,7 +245,7 @@ const $ = {
 
     const init = (wrapper: HTMLElement) => {
       wrapper.classList.add("is-processed");
-      const pre       = wrapper.querySelector(".code-block__content pre");
+      const pre       = wrapper.querySelector(".code-content pre");
       const lang      = getLang(pre);
       updateLangBadge(wrapper, lang);
       const lineCount = applyLineNumbers(wrapper);
@@ -505,7 +255,7 @@ const $ = {
     };
 
     const initAll = () =>
-      document.querySelectorAll<HTMLElement>(".code-block:not(.is-processed)").forEach(init);
+      document.querySelectorAll<HTMLElement>(".code-block-wrapper:not(.is-processed)").forEach(init);
 
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", initAll);
