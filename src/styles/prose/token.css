@@ -71,8 +71,10 @@
   --prose-badge-border: var(--border-strong);
 
   /* Code & Pre */
-  --prose-code-bg: var(--bg-subtle);
+  --prose-code-bg: var(--bg-dim);
+  --prose-code-header-bg: var(--bg);
   --prose-code-border: var(--border);
+
   --prose-code-text: var(--fg-strong);
 
   --prose-code-keyword: var(--fg-strong);
@@ -83,7 +85,6 @@
   --prose-code-operator: var(--fg-muted);
   --prose-code-punctuation: var(--fg-dim);
 
-  --prose-code-header-bg: var(--bg-muted);
   --prose-code-diff-add-bg: var(--success-soft);
   --prose-code-diff-add-text: var(--success);
   --prose-code-diff-remove-bg: var(--error-soft);
@@ -200,10 +201,6 @@
   --prose-highlight-text: var(--fg-strong);
 
   /* Code Block */
-  --prose-code-bg: var(--color-void-1000);
-  --prose-code-border: var(--border-strong);
-  --prose-code-text: var(--color-void-50);
-
   --prose-code-keyword: var(--color-void-0);
   --prose-code-string: var(--color-void-400);
   --prose-code-comment: var(--color-void-600);
@@ -212,7 +209,6 @@
   --prose-code-operator: var(--color-void-500);
   --prose-code-punctuation: var(--color-void-600);
 
-  --prose-code-header-bg: var(--bg-subtle);
   --prose-code-diff-add-bg: var(--success-soft);
   --prose-code-diff-add-text: var(--success);
   --prose-code-diff-remove-bg: var(--error-soft);
