@@ -1,58 +1,6 @@
 // src/lib/mdx/satteri-code-block.ts
 import { defineMdastPlugin } from "satteri";
 
-function parseLineRanges(raw: string): Set<number> {
-  const set = new Set<number>();
-  if (!raw) return set;
-  for (const part of raw.split(",")) {
-    const t = part.trim();
-    if (!t) continue;
-    if (t.includes("-")) {
-      const [a, b] = t.split("-").map(Number);
-      if (!isNaN(a) && !isNaN(b)) {
-        for (let i = a; i <= b; i++) set.add(i);
-      }
-    } else {
-      const n = Number(t);
-      if (!isNaN(n) && n > 0) set.add(n);
-    }
-  }
-  return set;
-}
-
-function injectCodeNotations(
-  codeNode: any,
-  ins: Set<number>,
-  del: Set<number>,
-  mark: Set<number>
-) {
-  const lang = (codeNode.lang || "").toLowerCase();
-  // Bahasa sensitif yang sering merusak highlighting jika ada komentar asing
-  const sensitiveLangs = ['astro', 'mdx', 'md', 'html'];
-  
-  if (sensitiveLangs.includes(lang)) {
-    // METODE META: Aman untuk semua bahasa
-    const metaParts = [];
-    if (ins.size) metaParts.push(`ins="${Array.from(ins).join(',')}"`);
-    if (del.size) metaParts.push(`del="${Array.from(del).join(',')}"`);
-    if (mark.size) metaParts.push(`mark="${Array.from(mark).join(',')}"`);
-    
-    codeNode.meta = (codeNode.meta || "") + " " + metaParts.join(" ");
-  } else {
-    // METODE INJEKSI KOMENTAR: Untuk JS/TS/CSS
-    const lines = codeNode.value.split("\n");
-    codeNode.value = lines
-      .map((line: string, idx: number) => {
-        const n = idx + 1;
-        if (ins.has(n)) return `${line} // [!code ++]`;
-        if (del.has(n)) return `${line} // [!code --]`;
-        if (mark.has(n)) return `${line} // [!code highlight]`;
-        return line;
-      })
-      .join("\n");
-  }
-}
-
 export const satteriCodeBlock = defineMdastPlugin({
   name: "satteri-code-block",
 
@@ -63,9 +11,6 @@ export const satteriCodeBlock = defineMdastPlugin({
     if (!codeNode) return;
 
     let title = "";
-    let insRaw = "";
-    let delRaw = "";
-    let markRaw = "";
 
     for (const child of node.children ?? []) {
       const directives =
@@ -76,23 +21,13 @@ export const satteriCodeBlock = defineMdastPlugin({
           : [];
 
       for (const d of directives) {
-        const value = (d.children ?? [])
-          .map((c: any) => c.value ?? "")
-          .join("")
-          .trim();
-        if (d.name === "title") title = value;
-        else if (d.name === "ins") insRaw = value;
-        else if (d.name === "del") delRaw = value;
-        else if (d.name === "mark") markRaw = value;
+        if (d.name === "title") {
+          title = (d.children ?? [])
+            .map((c: any) => c.value ?? "")
+            .join("")
+            .trim();
+        }
       }
-    }
-
-    const insSet = parseLineRanges(insRaw);
-    const delSet = parseLineRanges(delRaw);
-    const markSet = parseLineRanges(markRaw);
-
-    if (insSet.size > 0 || delSet.size > 0 || markSet.size > 0) {
-      injectCodeNotations(codeNode, insSet, delSet, markSet);
     }
 
     node.children = (node.children ?? []).filter((child: any) => {
