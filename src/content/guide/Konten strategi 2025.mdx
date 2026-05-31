@@ -1,0 +1,189 @@
+---
+title: "Konten Strategi untuk Blog Teknikal 2025"
+description: "Framework praktis untuk membuat konten teknikal yang konsisten, ditemukan di Google, dan tumbuh organik tanpa bergantung media sosial."
+pubDate: 2025-06-01
+section: "Creator"
+order: 10
+badge: "new"
+category: "creator"
+tags: ["content-strategy", "seo", "blogging", "creator"]
+author: "Author"
+cover: "/images/placeholder.svg"
+coverAlt: "Konten strategi illustration"
+toc: true
+draft: false
+---
+
+Kebanyakan blog teknikal mati bukan karena kontennya buruk — tapi karena tidak punya sistem. Artikel ditulis sporadis, topik tidak konsisten, dan tidak ada cara mengukur apakah usaha yang dikeluarkan sebanding dengan hasilnya.
+
+Panduan ini adalah framework yang bisa langsung dipakai.
+
+---
+
+## The Content Flywheel
+
+Idenya sederhana: konten yang baik menarik traffic → traffic membangun kepercayaan → kepercayaan menghasilkan subscriber → subscriber meminta konten lebih banyak.
+
+:::code
+```
+Topik riset → Artikel → SEO organic
+      ↑                        ↓
+  Feedback              Subscriber baru
+      ↑                        ↓
+  Newsletter  ←←←  Traffic yang kembali
+```
+:::
+
+Kuncinya: **jangan tulis untuk media sosial**. Tulis untuk search intent. Artikel yang menjawab pertanyaan spesifik akan terus mendatangkan traffic bertahun-tahun.
+
+---
+
+## Riset Topik
+
+### Framework 3 filter
+
+Sebelum nulis, tanya tiga pertanyaan:
+
+1. **Apakah ada yang mencarinya?** — Cek volume di Google Search Console atau Ahrefs
+2. **Apakah aku bisa otoritatif tentang ini?** — Punya pengalaman langsung > research murni
+3. **Apakah bisa evergreen?** — Hindari topik yang kadaluarsa dalam 6 bulan
+
+:::info
+Google Search Console (untuk blog yang sudah jalan), AnswerThePublic, dan Reddit/Discord komunitas teknikal adalah sumber topik paling akurat — lebih baik dari keyword tools berbayar untuk niche kecil.
+:::
+
+### Mapping ke intent
+
+| Search intent | Jenis konten | Contoh judul |
+|---------------|-------------|--------------|
+| Informational | Tutorial, explainer | "Apa itu Astro Content Collections?" |
+| Navigational | Comparison | "Astro vs Next.js 2025" |
+| Transactional | Review, guide | "Setup Cloudflare Workers — Step by Step" |
+| Commercial | Roundup | "5 Tool Deploy Terbaik untuk Astro" |
+
+---
+
+## Struktur Artikel yang Konversi
+
+**Struktur tutorial yang efektif:**
+
+1. **Hook** — masalah yang diselesaikan (2-3 kalimat)
+2. **Prasyarat** — apa yang dibutuhkan sebelum mulai
+3. **Step-by-step** — langkah bernomor dengan kode
+4. **Troubleshooting** — error umum dan solusinya
+5. **Kesimpulan + next steps** — apa yang bisa dilakukan selanjutnya
+
+> Jangan skip troubleshooting. Ini sering jadi bagian yang paling dicari.
+
+*Struktur comparison yang adil:**
+
+1. **TL;DR** — rekomendasi langsung di atas
+2. **Tabel perbandingan** — fitur key side by side
+3. **Deep dive** masing-masing opsi
+4. **Kapan pilih A, kapan pilih B**
+5. **Kesimpulan** dengan use case spesifik
+
+> Jadilah opinionated. "Tergantung" bukan jawaban yang berguna.
+
+**Struktur explainer yang jelas:**
+
+1. **Definisi singkat** — satu kalimat, tanpa jargon
+2. **Analogi** — hubungkan ke konsep yang sudah dikenal
+3. **Bagaimana cara kerjanya** — mekanisme internal
+4. **Contoh nyata** — kode atau screenshot
+5. **Kapan digunakan** — dan kapan *tidak* digunakan
+
+
+---
+
+## Konsistensi vs Kualitas
+
+Ini debat yang salah framing. Yang benar: **konsistensi membangun kualitas**.
+
+:::important
+Satu artikel per minggu selama setahun = 52 artikel. Dengan rata-rata 500 views/artikel/bulan setelah 6 bulan, itu 26.000 views bulanan dari konten yang sudah ada — tanpa nulis lebih banyak.
+:::
+
+Tapi konsistensi butuh sistem:
+
+```
+Senin   → Riset topik + outline
+Selasa  → Draft kasar (jangan edit)
+Rabu    → Edit + tambah kode/screenshot
+Kamis   → SEO check + internal linking
+Jumat   → Publish + update newsletter
+```
+
+---
+
+## SEO untuk Blog Teknikal
+
+### On-page yang penting
+
+- **Title tag**: keyword utama di depan, max 60 karakter
+- **Meta description**: 150 karakter, ada call-to-action implisit
+- **H2/H3 heading**: gunakan keyword varian, bukan copy-paste judul
+- **Internal linking**: setiap artikel tautkan ke 2-3 artikel relevan
+- **Code blocks**: pakai syntax highlighting — ini sinyal kualitas ke Google
+
+### Schema markup
+
+:::code
+```astro
+---
+// Di layout artikel
+import { schemaArticle } from "@/consts";
+const schema = schemaArticle({
+  title:         frontmatter.title,
+  description:   frontmatter.description,
+  url:           Astro.url.href,
+  image:         frontmatter.cover,
+  datePublished: frontmatter.pubDate.toISOString(),
+  dateModified:  frontmatter.updatedDate?.toISOString(),
+  authorName:    frontmatter.author,
+});
+---
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
+```
+:::
+
+---
+
+## Mengukur yang Penting
+
+Banyak kreator terobsesi metrik yang salah. Focus pada:
+
+| Metrik | Bukan | Tapi |
+|--------|-------|------|
+| **Organic search** | Total pageviews | Artikel dari Google |
+| **Avg. time on page** | Bounce rate | Apakah dibaca sampai habis |
+| **Newsletter signups** | Follower count | Email yang bisa dihubungi |
+| **Returning visitors** | New visitors | Apakah orang kembali |
+
+---
+
+## FAQ
+
+<Accordion title="Berapa panjang artikel yang ideal?">
+  Tidak ada angka ajaib. Tutorial sebaiknya sepanjang yang dibutuhkan untuk menyelesaikan masalah — biasanya 1.500–3.000 kata. Explainer bisa lebih pendek. Yang penting: jangan padding untuk mencapai angka tertentu.
+</Accordion>
+
+<Accordion title="Apakah perlu update artikel lama?">
+  Ya, ini salah satu taktik SEO paling underrated. Artikel yang di-update mendapat boost ranking. Prioritaskan artikel yang sudah dapat traffic tapi posisinya stagnan di halaman 2-3 Google.
+</Accordion>
+
+<Accordion title="Bagaimana membangun email list dari nol?">
+  Mulai dengan content upgrade — offer sesuatu yang spesifik untuk artikel tertentu (template, checklist, extended guide). Ini konversi jauh lebih baik dari generic "subscribe to newsletter". Targetkan 100 subscriber pertama sebelum optimize form atau growth hack.
+</Accordion>
+
+<Accordion title="Apakah perlu aktif di media sosial?">
+  Untuk blog teknikal, tidak wajib. SEO organic dan komunitas Discord/Reddit jauh lebih efektif untuk audiens teknikal. Media sosial bagus untuk distribusi awal artikel baru, tapi jangan jadi channel utama — algoritma bisa berubah kapan saja.
+</Accordion>
+
+---
+
+## Kesimpulan
+
+Strategi konten yang efektif bukan tentang viral — tapi tentang membangun aset yang bekerja terus menerus. Satu artikel tutorial yang menjawab pertanyaan spesifik bisa mendatangkan reader yang tepat selama bertahun-tahun.
+
+**Mulai dari yang kecil**: pilih satu topik yang kamu kuasai, tulis dengan detail, dan publish. Ulangi. Sistem akan mengikuti.

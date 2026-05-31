@@ -1,0 +1,75 @@
+---
+// src/layouts/GuideLayout.astro
+import { SITE, buildMeta } from "@/consts";
+
+import Head     from "@/components/Head.astro";
+import Navbar   from "@/components/Navbar.astro";
+import Footer   from "@/components/Footer.astro";
+import ThemeScript from "@/components/scripts/ThemeScript.astro";
+import Mobile from "@/components/Mobile.astro";
+import Search from "@/components/Search.astro";
+import ScrollScript from "@/components/scripts/ScrollScript.astro";
+
+import GuideSidebar from "@/components/guide/GuideSidebar.astro";
+import GuideToc     from "@/components/guide/GuideToc.astro";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  meta?:      Partial<ReturnType<typeof buildMeta>>;
+  schema?:    object | object[];
+  isHome?:    boolean;
+  variant?:   "default" | "full" | "bare";
+  bodyClass?: string;
+  mainClass?: string;
+  hideHeader?: boolean;
+  hideFooter?: boolean;
+  canonical?: string;
+  
+  entry?:    CollectionEntry<"guide">;
+  entries?:  CollectionEntry<"guide">[];
+  headings?: { depth: number; text: string; slug: string }[];
+  toc?:      boolean;
+}
+
+const {
+  meta, schema, isHome = false, variant = "default", bodyClass = "", mainClass = "", hideHeader = false, hideFooter = false, canonical,
+  entry, entries = [], headings = [], toc = true
+} = Astro.props;
+
+const currentPath = new URL(Astro.request.url).pathname;
+---
+
+<!DOCTYPE html>
+<html lang={SITE.lang} dir={SITE.dir}>
+  <Head {meta} {schema} {isHome} {canonical} />
+  <body class:list={[bodyClass]}>
+    <ThemeScript />
+    <a href="#main-content" class="sr-only focus:not-sr-only fixed top-4 left-4 z-9999 px-4 py-2 bg-elevated text-strong border border-strong rounded-(--radius) text-heading-24 font-semibold focus:outline-none focus:ring-2 focus:ring-(--accent) transition-all duration-150">
+      Skip to content
+    </a>
+    {!hideHeader && variant !== "bare" && (<Navbar currentPath={currentPath} />)}
+    <div class:list={[
+      "flex flex-col lg:flex-row w-full max-w-360 mx-auto items-start relative px-4 lg:px-0",
+      variant !== "bare" && "pt-(--header-height)",
+      variant === "full"  && "pt-0",
+      variant === "bare"  && "pt-0",
+    ]}>
+      {entry && entries.length > 0 && (
+        <GuideSidebar {entries} currentId={entry.id} />
+      )}
+      <main id="main-content" class:list={["flex-1 min-w-0 w-full min-h-[calc(100svh-var(--header-height))] py-8 lg:py-12 lg:px-12", mainClass]}>
+        <div class="max-w-3xl mx-auto">
+          <slot />
+        </div>
+      </main>
+      {entry && toc && headings.length > 1 && (
+        <GuideToc {headings} />
+      )}
+    </div>
+    {!hideFooter && variant !== "bare" && (<Footer />)}
+    <Mobile />
+    <ScrollScript />
+    <Search />
+    <slot name="body-end" />
+  </body>
+</html>
