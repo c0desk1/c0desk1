@@ -84,11 +84,7 @@ export default defineConfig({
       
     }),
     shikiConfig: {
-      themes: {
-        light: 'github-light',
-        dark: 'github-dark',
-      },
-      wrap: false,
+      syntaxHighlight: false,
     }
   },
   fonts: [
