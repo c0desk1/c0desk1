@@ -12,6 +12,8 @@ import {
   transformerNotationWordHighlight,
   transformerNotationErrorLevel,
   transformerMetaHighlight,
+  transformerRemoveLineBreak,
+  transformerMetaWordHighlight
 
 } from '@shikijs/transformers'
 
@@ -96,11 +98,13 @@ export default defineConfig({
         dark: 'github-dark',
       },
       transformers: [
+        transformerRemoveLineBreak(),
         transformerNotationHighlight(),
         transformerNotationWordHighlight(),
         transformerNotationErrorLevel(),
         transformerMetaHighlight(),
         transformerNotationDiff(),
+        transformerMetaWordHighlight()
         
       ],
       wrap: false,
