@@ -98,12 +98,13 @@ export default defineConfig({
         dark: 'github-dark',
       },
       transformers: [
+        transformerNotationDiff(),
         transformerRemoveLineBreak(),
         transformerNotationHighlight(),
         transformerNotationWordHighlight(),
         transformerNotationErrorLevel(),
         transformerMetaHighlight(),
-        transformerNotationDiff(),
+        
         transformerMetaWordHighlight()
         
       ],
