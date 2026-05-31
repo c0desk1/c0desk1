@@ -12,28 +12,27 @@ interface Props {
 }
 
 const { headings } = Astro.props;
-const filtered = headings.filter(h => h.depth >= 2 && h.depth <= 3);
+
+// BUGFIX: Tangkap dari H1 sampai H4 agar TOC tidak mudah menghilang
+const filtered = headings.filter(h => h.depth >= 1 && h.depth <= 4);
 ---
 
-{filtered.length > 1 && (
+{filtered.length > 0 && (
   <aside 
-    class="hidden xl:block w-56 shrink-0 sticky top-[calc(var(--header-height)+1.5rem)] max-h-[calc(100svh-var(--header-height)-3rem)] overflow-y-auto pr-2" 
+    class="order-2 lg:order-3 w-full lg:w-56 shrink-0 sticky top-(--header-height) lg:top-[calc(var(--header-height)+2rem)] z-20 bg-base lg:bg-transparent lg:max-h-[calc(100svh-var(--header-height)-4rem)] overflow-y-auto lg:pr-2 py-3 lg:py-0 border-b lg:border-b-0 border-(--border)" 
     aria-label="Table of contents"
     style="scrollbar-width: none;"
   >
-    <p class="text-label-11 font-bold tracking-widest uppercase text-subtle px-2 mb-3">
-      On This Page
-    </p>
-    <nav>
-      <ul class="flex flex-col gap-0.5 border-l border-(--border)" role="list">
+    <div class="block lg:hidden w-full px-4 sm:px-6">
+      <ul class="flex flex-row overflow-x-auto items-center gap-5 pb-1" style="scrollbar-width: none;">
+        <li class="shrink-0 text-[10px] font-bold tracking-widest uppercase text-subtle">
+          On This Page:
+        </li>
         {filtered.map(h => (
-          <li>
+          <li class="shrink-0">
             <a
               href={`#${h.slug}`}
-              class:list={[
-                "toc-link block py-1.5 pr-2 transition-colors border-l -ml-px border-transparent text-muted hover:text-strong text-body-13 no-underline",
-                h.depth === 2 ? "pl-4" : "pl-8 text-body-12"
-              ]}
+              class="toc-link block text-body-13 text-muted hover:text-strong no-underline whitespace-nowrap transition-colors"
               data-toc-slug={h.slug}
             >
               {h.text}
@@ -41,7 +40,31 @@ const filtered = headings.filter(h => h.depth >= 2 && h.depth <= 3);
           </li>
         ))}
       </ul>
-    </nav>
+    </div>
+
+    <div class="hidden lg:block">
+      <p class="text-label-11 font-bold tracking-widest uppercase text-subtle px-2 mb-3">
+        On This Page
+      </p>
+      <nav>
+        <ul class="flex flex-col gap-0.5 border-l border-(--border)" role="list">
+          {filtered.map(h => (
+            <li>
+              <a
+                href={`#${h.slug}`}
+                class:list={[
+                  "toc-link block py-1.5 pr-2 transition-colors border-l -ml-px border-transparent text-muted hover:text-strong text-body-13 no-underline",
+                  h.depth <= 2 ? "pl-4" : "pl-8 text-body-12"
+                ]}
+                data-toc-slug={h.slug}
+              >
+                {h.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
   </aside>
 )}
 
