@@ -6,9 +6,11 @@ import {
 } from "@/consts";
 
 import Head     from "@/components/Head.astro";
+import ThemeScript from "@/components/scripts/ThemeScript.astro";
 import Navbar   from "@/components/Navbar.astro";
 import Footer   from "@/components/Footer.astro";
-import ThemeScript from "@/components/scripts/ThemeScript.astro";
+import GuideSidebar from "@/components/guide/GuideSidebar.astro";
+import GuideToc     from "@/components/guide/GuideToc.astro";
 import Mobile from "@/components/Mobile.astro";
 import Search from "@/components/Search.astro";
 import ScrollScript from "@/components/scripts/ScrollScript.astro";
@@ -23,6 +25,10 @@ interface Props {
   hideHeader?: boolean;
   hideFooter?: boolean;
   canonical?: string;
+  entry?:    CollectionEntry<"guide">;
+  entries?:  CollectionEntry<"guide">[];
+  headings?: { depth: number; text: string; slug: string }[];
+  toc?:      boolean;
 }
 
 const {
@@ -35,6 +41,10 @@ const {
   hideHeader = false,
   hideFooter = false,
   canonical,
+  entry, 
+  entries = [], 
+  headings = [], 
+  toc = true
 } = Astro.props;
 
 const currentPath = new URL(Astro.request.url).pathname;
@@ -60,6 +70,8 @@ const currentPath = new URL(Astro.request.url).pathname;
       Lewati ke konten
     </a>
     {!hideHeader && variant !== "bare" && (<Navbar currentPath={currentPath} />)}
+    {entry && entries.length > 0 && (<GuideSidebar {entries} currentId={entry.id} />)}
+    {entry && toc && headings.length > 1 && (<GuideToc {headings} />)}
     <main
       id="main-content"
       class:list={[
@@ -76,7 +88,6 @@ const currentPath = new URL(Astro.request.url).pathname;
     <Mobile />
     <ScrollScript />
     <Search />
-    
     <script>
       const initShortcuts = () => {
         let lastKey = "";
@@ -88,24 +99,19 @@ const currentPath = new URL(Astro.request.url).pathname;
             (active as HTMLElement)?.isContentEditable;
 
           if (isEditing) return;
-
-          if (lastKey === "g" && e.key === "h") {
-            window.location.href = "/";
+          if (lastKey === "g" && e.key === "g") {
+            window.location.href = "/guide";
           }
-
           lastKey = e.key;
           setTimeout(() => { lastKey = ""; }, 800);
         };
-
         document.removeEventListener("keydown", (window as any).__shortcutKeyHandler);
         (window as any).__shortcutKeyHandler = handleKeydown;
         document.addEventListener("keydown", (window as any).__shortcutKeyHandler);
       };
-
       initShortcuts();
       document.addEventListener("astro:page-load", initShortcuts);
     </script>
-    
     <slot name="body-end" />
   </body>
 </html>
