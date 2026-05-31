@@ -1,7 +1,9 @@
+// src/lib/mdx/satteri-code-block.ts
 import { defineMdastPlugin } from "satteri";
 
 export const satteriCodeBlock = defineMdastPlugin({
   name: "satteri-code-block",
+
   containerDirective(node: any, ctx: any) {
     if (node.name !== "code") return;
 
@@ -10,38 +12,45 @@ export const satteriCodeBlock = defineMdastPlugin({
     );
     if (!codeNode) return;
 
-    let ins = "";
-    let del = "";
-    let mark = "";
     let title = "";
+    let ins   = "";
+    let del   = "";
+    let mark  = "";
 
-    const extractTextDirectives = (children: any[]) => {
-      for (const child of children) {
-        if (child.type === "textDirective") {
-          const value = child.children?.[0]?.value || "";
-          
-          if (child.name === "ins") ins = value;
-          if (child.name === "del") del = value;
-          if (child.name === "mark") mark = value;
-          if (child.name === "title") title = value;
-        } else if (child.children) {
-          extractTextDirectives(child.children);
+    for (const child of node.children ?? []) {
+      const candidates =
+        child.type === "textDirective"
+          ? [child]
+          : child.type === "paragraph"
+          ? (child.children ?? []).filter((c: any) => c.type === "textDirective")
+          : [];
+
+      for (const d of candidates) {
+        const value = (d.children ?? [])
+          .map((c: any) => c.value ?? "")
+          .join("")
+          .trim();
+
+        switch (d.name) {
+          case "title": title = value; break;
+          case "ins":   ins   = value; break;
+          case "del":   del   = value; break;
+          case "mark":  mark  = value; break;
         }
       }
-    };
+    }
+    const attributes = [
+      title && { type: "mdxJsxAttribute", name: "title", value: title },
+      ins   && { type: "mdxJsxAttribute", name: "ins",   value: ins   },
+      del   && { type: "mdxJsxAttribute", name: "del",   value: del   },
+      mark  && { type: "mdxJsxAttribute", name: "mark",  value: mark  },
+    ].filter(Boolean);
 
-    extractTextDirectives(node.children ?? []);
-
-    const component: any = {
+    const component = {
       type:       "mdxJsxFlowElement",
       name:       "Code",
-      attributes: [
-        { type: "mdxJsxAttribute", name: "ins",   value: ins   },
-        { type: "mdxJsxAttribute", name: "del",   value: del   },
-        { type: "mdxJsxAttribute", name: "mark",  value: mark  },
-        { type: "mdxJsxAttribute", name: "title", value: title },
-      ].filter((a) => a.value !== ""),
-      children: [codeNode],
+      attributes,
+      children:   [codeNode],
     };
 
     ctx.replaceNode(node, component);
