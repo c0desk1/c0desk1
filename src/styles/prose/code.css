@@ -55,7 +55,7 @@
   font-variant-numeric: tabular-nums;
   user-select: none;
   pointer-events: none;
-  @apply text-code-13;
+  @apply text-code-14;
 }
 
 .prose .code-content .line.diff-add { background-color: var(--prose-code-line-add-bg) !important; }
