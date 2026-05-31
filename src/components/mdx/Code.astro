@@ -12,17 +12,17 @@ interface Props {
 const { ins = "", del = "", mark = "", title = "" } = Astro.props;
 
 const $ = {
-  wrapper: "code-block-wrapper not-prose relative shadow-2xl shadow-black/20 rounded-xl overflow-hidden",
-  header: "code-block-header flex items-center justify-between px-4 py-2 border-b border-(--prose-code-border) bg-(--prose-code-header-bg)",
-  leftSlot: "flex-1 flex items-center justify-start",
-  centerSlot: "shrink-0 flex justify-center",
-  rightSlot: "flex-1 flex items-center justify-end gap-2",  
-  dots: "mac-controls flex items-center gap-1.5",
-  dot: "mac-dot size-3 rounded-full border border-black/10 dark:border-white/10",
-  titleText: "code-block-title font-mono truncate text-label-13 text-(--prose-fg-muted) tracking-wide",
-  langBadge: "font-mono text-label-11 font-bold text-(--prose-fg-muted) bg-black/5 dark:bg-white/5 uppercase px-2 py-0.5 rounded-full",
-  content: "code-content relative",
-  copyBtn: "copy-button absolute top-3 right-3 z-10 flex items-center gap-1.5 px-2.5 py-1.5 rounded-md font-mono text-label-12 text-(--prose-fg-muted) border border-(--prose-code-border) bg-(--prose-code-bg)/60 backdrop-blur-md transition-all duration-200 opacity-0 group-hover/content:opacity-100 hover:text-(--prose-fg-strong) hover:bg-(--prose-code-header-bg)",
+  wrapper:   "not-prose relative my-8 rounded-xl overflow-hidden border border-(--prose-code-border) bg-(--prose-code-bg) shadow-2xl shadow-black/20",
+  header:    "grid grid-cols-[1fr_auto_1fr] items-center px-4 py-2 border-b border-(--prose-code-border) bg-(--prose-code-header-bg)",
+  leftSlot:  "flex items-center justify-start gap-1.5",
+  centerSlot:"flex items-center justify-center min-w-0",
+  rightSlot: "flex items-center justify-end gap-3", 
+  dot:       "size-2.5 rounded-full border border-black/10 dark:border-white/10",
+  titleText: "font-mono truncate text-label-13 text-(--prose-fg-muted) tracking-wide",
+  diffTag:   "flex items-center justify-center size-5 rounded text-[10px] font-mono font-bold border",
+  langBadge: "lang-badge font-mono text-label-11 font-bold text-(--prose-fg-muted) bg-black/5 dark:bg-white/5 uppercase px-2 py-0.5 rounded-full hidden",  
+  content:   "code-content relative overflow-x-auto group/content",
+  copyBtn:   "text-label-13 absolute top-3 right-3 z-10 flex items-center gap-1.5 px-2.5 py-1.5 rounded-md font-mono text-label-12 text-(--prose-fg-muted) border border-(--prose-code-border) bg-(--prose-code-bg)/60 backdrop-blur-md opacity-0 group-hover/content:opacity-100 transition-all duration-200 hover:text-(--prose-fg-strong) hover:bg-(--prose-code-header-bg)",
 } as const;
 ---
 
@@ -33,48 +33,46 @@ const $ = {
   data-mark={mark}
 >
   <div class={$.header}>
-    <div class={$.leftSlot}>
-      <div class={$.dots} aria-hidden="true">
-        <div class:list={[$.dot, "bg-[#ff5f56]"]}></div>
-        <div class:list={[$.dot, "bg-[#ffbd2e]"]}></div>
-        <div class:list={[$.dot, "bg-[#27c93f]"]}></div>
-      </div>
+    <div class={$.leftSlot} aria-hidden="true">
+      <div class:list={[$.dot, "bg-[#ff5f56]"]}></div>
+      <div class:list={[$.dot, "bg-[#ffbd2e]"]}></div>
+      <div class:list={[$.dot, "bg-[#27c93f]"]}></div>
     </div>
 
     <div class={$.centerSlot}>
-      {title && (
-        <span class={$.titleText}>{title}</span>
-      )}
+      <span class={$.langBadge}></span>
+      {title && <span class={$.titleText}>{title}</span>}
     </div>
 
     <div class={$.rightSlot}>
       {(ins || del) && (
-        <div class="code-diff-legend" aria-hidden="true">
-          {ins && <span class="diff-tag add">+</span>}
-          {del && <span class="diff-tag remove">−</span>}
+        <div class="flex items-center gap-1" aria-hidden="true">
+          {ins && (
+            <span class:list={[$.diffTag, "bg-(--prose-code-diff-add-bg) text-(--prose-code-diff-add-text) border-(--prose-code-diff-add-text)/20"]}>+</span>
+          )}
+          {del && (
+            <span class:list={[$.diffTag, "bg-(--prose-code-diff-remove-bg) text-(--prose-code-diff-remove-text) border-(--prose-code-diff-remove-text)/20"]}>−</span>
+          )}
         </div>
       )}
-      <span class:list={[$.langBadge, "lang-badge"]}></span>
     </div>
   </div>
 
-  <div class:list={[$.content, "group/content"]}>
-    <button
-      type="button"
-      aria-label="Salin kode"
-      class={$.copyBtn}
-    >
+  <div class={$.content}>
+    <button type="button" aria-label="Salin kode" class={$.copyBtn}>
       <Icon name="copy"  className="copy-icon  w-3.5 h-3.5" />
       <Icon name="check" className="check-icon w-3.5 h-3.5 hidden" />
       <span class="copy-label">Salin</span>
     </button>
-
     <slot />
   </div>
 </div>
 
-<style is:global>
-  .code-block-wrapper.is-collapsed .code-content pre {
+<style>
+  .code-block[data-focus] .line:not(.highlighted) { opacity: 0.35 !important; }
+  .code-block[data-focus] .line:not(.highlighted):hover { opacity: 0.8 !important; }
+
+  .code-block.is-collapsed .code-content pre {
     max-height: 8rem;
     overflow: hidden;
     mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
@@ -99,29 +97,25 @@ const $ = {
     background-color: color-mix(in srgb, var(--prose-code-header-bg) 95%, #000);
   }
   .btn-expand svg { transition: transform 200ms ease; }
-  .code-block-wrapper.is-collapsed .btn-expand svg { transform: rotate(180deg); }
+  .code-block.is-collapsed .btn-expand svg { transform: rotate(180deg); }
+
+  .copy-button.copied {
+    color: var(--success) !important;
+    border-color: var(--success) !important;
+    background-color: var(--success-soft) !important;
+  }
 </style>
 
 <script>
   (() => {
     const NAMES: Record<string, string> = {
-      js: "JS", ts: "TS", jsx: "JSX", tsx: "TSX",
-      py: "PY", html: "HTML", css: "CSS", scss: "SCSS",
-      json: "JSON", jsonc: "JSON", yaml: "YAML", toml: "TOML",
-      bash: "BASH", sh: "SH", zsh: "ZSH", sql: "SQL",
-      md: "MD", mdx: "MDX", astro: "ASTRO", vue: "VUE",
-      svelte: "SVELTE", go: "GO", rust: "RS", cpp: "C++",
-      c: "C", cs: "C#", java: "JAVA", php: "PHP",
-      rb: "RB", swift: "SWIFT", kt: "KT",
-      dockerfile: "DOCKER", prisma: "PRISMA", graphql: "GQL",
+      js: "JS", ts: "TS", jsx: "JSX", tsx: "TSX", py: "PY", html: "HTML", css: "CSS", 
+      json: "JSON", jsonc: "JSON", yaml: "YAML", toml: "TOML", bash: "BASH", sh: "SH",
+      md: "MD", mdx: "MDX", astro: "ASTRO", vue: "VUE", svelte: "SVELTE", rust: "RS"
     };
 
-    const ALIASES: Record<string, string> = {
-      javascript: "js", typescript: "ts", python: "py",
-      shell: "sh", ruby: "rb", csharp: "cs",
-    };
-
-    // UBAH ANGKA INI UNTUK TESTING (misalnya ubah jadi 5 untuk tes instan)
+    const ALIASES: Record<string, string> = { javascript: "js", typescript: "ts", python: "py", shell: "sh" };
+    
     const COLLAPSE_THRESHOLD = 25;
 
     const normalize = (l = "") => ALIASES[l.toLowerCase().trim()] ?? l.toLowerCase().trim();
@@ -142,10 +136,7 @@ const $ = {
         if (t.includes("-")) {
           const [a, b] = t.split("-").map(Number);
           if (!isNaN(a) && !isNaN(b)) for (let i = a; i <= b; i++) set.add(i);
-        } else {
-          const n = Number(t);
-          if (!isNaN(n) && n > 0) set.add(n);
-        }
+        } else { const n = Number(t); if (!isNaN(n) && n > 0) set.add(n); }
       }
       return set;
     };
@@ -189,34 +180,23 @@ const $ = {
 
       btn.addEventListener("click", async () => {
         const text = code.textContent?.trimEnd() ?? "";
-        try {
-          await navigator.clipboard.writeText(text);
-        } catch {
+        try { await navigator.clipboard.writeText(text); } catch {
           const ta = document.createElement("textarea");
           ta.value = text;
           ta.style.cssText = "position:absolute;left:-9999px;top:-9999px";
-          document.body.append(ta);
-          ta.select();
-          document.execCommand("copy");
-          ta.remove();
+          document.body.append(ta); ta.select(); document.execCommand("copy"); ta.remove();
         }
 
-        const label     = btn.querySelector<HTMLElement>(".copy-label");
-        const copyIcon  = btn.querySelector(".copy-icon");
+        const label = btn.querySelector<HTMLElement>(".copy-label");
+        const copyIcon = btn.querySelector(".copy-icon");
         const checkIcon = btn.querySelector(".check-icon");
 
-        copyIcon?.classList.add("hidden");
-        checkIcon?.classList.remove("hidden");
-        btn.classList.add("copied");
-        btn.setAttribute("aria-label", "Tersalin!");
-        if (label) label.textContent = "Tersalin!";
+        copyIcon?.classList.add("hidden"); checkIcon?.classList.remove("hidden");
+        btn.classList.add("copied"); if (label) label.textContent = "Tersalin!";
 
         setTimeout(() => {
-          copyIcon?.classList.remove("hidden");
-          checkIcon?.classList.add("hidden");
-          btn.classList.remove("copied");
-          btn.setAttribute("aria-label", "Salin kode");
-          if (label) label.textContent = "Salin";
+          copyIcon?.classList.remove("hidden"); checkIcon?.classList.add("hidden");
+          btn.classList.remove("copied"); if (label) label.textContent = "Salin";
         }, 2000);
       });
     };
@@ -226,7 +206,7 @@ const $ = {
       wrapper.classList.add("is-collapsed");
 
       const btn = document.createElement("button");
-      btn.className = "btn-expand text-label-13 font-mono"; 
+      btn.className = "btn-expand"; 
       btn.setAttribute("aria-label", "Tampilkan seluruh kode");
       btn.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
@@ -234,11 +214,9 @@ const $ = {
       `;
 
       wrapper.appendChild(btn);
-
       btn.addEventListener("click", () => {
         const collapsed = wrapper.classList.toggle("is-collapsed");
         const label = btn.querySelector<HTMLElement>(".expand-label");
-        btn.setAttribute("aria-label", collapsed ? "Tampilkan seluruh kode" : "Sembunyikan kode");
         if (label) label.textContent = collapsed ? `Tampilkan ${lineCount} baris` : "Sembunyikan";
       });
     };
@@ -254,13 +232,7 @@ const $ = {
       setupCollapse(wrapper, lineCount);
     };
 
-    const initAll = () =>
-      document.querySelectorAll<HTMLElement>(".code-block-wrapper:not(.is-processed)").forEach(init);
-
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initAll);
-    } else {
-      initAll();
-    }
+    const initAll = () => document.querySelectorAll<HTMLElement>(".code-block-wrapper:not(.is-processed)").forEach(init);
+    if (document.readyState === "loading") { document.addEventListener("DOMContentLoaded", initAll); } else { initAll(); }
   })();
 </script>
