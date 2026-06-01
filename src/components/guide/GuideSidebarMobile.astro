@@ -20,13 +20,15 @@ const grouped = entries.reduce<Record<string, CollectionEntry<"guide">[]>>((acc,
 const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
 ---
 <div class="lg:hidden sticky top-(--header-height) z-40 flex items-center justify-between w-full h-12 bg-base border-b border-(--border) px-4">
-  <button id="m-sidebar-open" type="button" class="flex items-center gap-1.5 text-button-14 font-semibold text-muted hover:text-strong transition-colors py-1.5">
-    <Icon name="expanded-open" className="w-5 h-5" />
+  <div class="flex items-center gap-1.5 py-1.5 px-2">
+    <button id="m-sidebar-open" type="button" class="flex items-center p-1 text-muted hover:text-strong active:text-strong hover:bg-muted/80 active:bg-muted/80 rounded-md transition-colors">
+      <Icon name="expanded-open" className="w-5 h-5" />
+    </button>
     <span class="hidden">Menu</span>
-  </button>
+  </div>
   {filteredToc.length > 0 && (
     <details id="m-toc-details" class="group/toc">
-      <summary class="flex items-center gap-1.5 cursor-pointer list-none select-none [&::-webkit-details-marker]:hidden text-label-14 font-medium text-muted hover:text-strong py-1.5 px-2 border border-(--border) rounded-md hover:bg-muted active:bg-muted">
+      <summary class="flex items-center gap-1.5 cursor-pointer list-none select-none [&::-webkit-details-marker]:hidden text-label-14 font-medium text-muted hover:text-strong py-1.5 px-2 border border-(--border) rounded-md hover:bg-muted/80 active:bg-muted/80">
         <span id="m-toc-active-text" class="truncate max-w-35 text-right block font-medium">
           Di Halaman Ini
         </span>
@@ -50,7 +52,6 @@ const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
             </li>
           ))}
         </ul>
-        <div class="h-2" aria-hidden="true"></div> 
       </nav>
     </details>
   )}
@@ -63,7 +64,7 @@ const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
       <Icon name="expanded-close" className="w-5 h-5">
     </button>
   </div>
-  <nav class="flex-1 overflow-y-auto p-6 flex flex-col gap-6" style="scrollbar-width: thin;">
+  <nav class="flex-1 overflow-y-auto py-6 flex flex-col gap-6" style="scrollbar-width: thin;">
     {Object.entries(grouped).map(([section, items]) => (
       <div class="flex flex-col gap-1">
         <h3 class="text-heading-14 font-semibold uppercase text-subtle/80 mb-1">{section}</h3>
