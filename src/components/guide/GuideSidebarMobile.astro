@@ -19,63 +19,98 @@ const grouped = entries.reduce<Record<string, CollectionEntry<"guide">[]>>((acc,
 
 const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
 ---
+
 <div class="lg:hidden sticky top-(--header-height) z-40 flex items-center justify-between w-full h-12 bg-base border-b border-(--border) px-4">
   <div class="flex items-center gap-1.5 py-1.5">
-    <button id="m-sidebar-open" type="button" class="flex items-center p-1 text-muted hover:text-strong active:text-strong hover:bg-muted active:bg-muted rounded-md transition-colors">
+    <button id="m-sidebar-open" type="button" class="flex items-center p-1 text-muted hover:text-strong active:text-strong hover:bg-muted active:bg-muted rounded-md transition-colors" aria-label="Open Menu">
       <Icon name="expanded-open" className="w-5 h-5" />
     </button>
-    <span class="hidden">Menu</span>
   </div>
+  
   {filteredToc.length > 0 && (
-    <details id="m-toc-details" class="group/toc">
-      <summary class="flex items-center gap-1.5 cursor-pointer list-none select-none [&::-webkit-details-marker]:hidden text-label-14 font-medium text-muted hover:text-strong py-1.5 px-2 border border-(--border) rounded-md hover:bg-muted active:bg-muted">
-        <span id="m-toc-active-text" class="truncate max-w-35 text-right block font-medium">
+    <details id="m-toc-details" class="group/toc relative">
+      <summary class="flex items-center gap-2 cursor-pointer list-none select-none [&::-webkit-details-marker]:hidden text-label-14 font-medium text-muted hover:text-strong py-1.5 px-3 border border-(--border) rounded-md hover:bg-muted active:bg-muted transition-colors">
+        <svg role="progressbar" viewBox="0 0 24 24" class="w-4.5 h-4.5 shrink-0" fill="none">
+          <circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="2" opacity="0.25" />
+          <circle id="m-toc-progress-ring" cx="12" cy="12" r="11" stroke="currentColor" stroke-width="2" stroke-dasharray="69.115" stroke-dashoffset="69.115" stroke-linecap="round" transform="rotate(-90 12 12)" class="transition-all duration-150" />
+        </svg>
+        <span id="m-toc-active-text" class="truncate max-w-36 text-right block font-medium">
           Di Halaman Ini
         </span>
-        <Icon name="chevron-down" className="transition-transform duration-300 group-open/toc:rotate-180 text-muted/70 w-3.5 h-3.5" />
+        <Icon name="up-down" className="transition-transform duration-300 group-open/toc:rotate-180 text-dim/70 w-4 h-4 shrink-0" />
       </summary>
-      <nav class="absolute top-12 left-0 w-full bg-base rounded-b-xl border-b border-x border-(--border) max-h-64 overflow-y-auto px-6 py-4 shadow-sm">
-        <p class="text-label-13 font-semibold tracking-wider uppercase text-subtle/80 mb-2">Daftar Isi</p>
-        <ul class="flex flex-col gap-1" role="list">
-          {filteredToc.map(h => (
-            <li>
-              <a 
-                href={`#${h.slug}`} 
-                class:list={[
-                  "toc-mobile-link block py-1.5 transition-colors text-muted hover:text-strong text-label-13 no-underline font-medium",
-                  h.depth === 3 && "pl-4 text-label-13"
-                ]}
-                data-toc-mobile-slug={h.slug}
-              >
-                {h.text}
-              </a>
-            </li>
-          ))}
-        </ul>
+      <nav class="absolute top-full right-0 mt-2 w-[calc(100vw-2rem)] max-w-sm bg-base rounded-lg border border-(--border) max-h-[60vh] overflow-y-auto px-5 py-4 shadow-lg origin-top-right animate-in fade-in zoom-in-95 duration-200">
+        <div class="flex items-center gap-1.5 text-subtle mb-2">
+          <Icon name="toc" className="w-4 h-4" />
+          <p class="text-label-14 font-semibold">Dihalaman ini</p>
+        </div>
+        <div id="m-toc-list-container" class="relative pb-2">
+          <svg class="absolute inset-0 pointer-events-none text-(--border)" style="width: 100%; height: 100%; z-index: 0;">
+            <path id="m-toc-bg-path" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round" stroke-linecap="round" />
+          </svg>
+          <div id="m-toc-progress-mask" class="absolute top-0 left-0 w-full overflow-hidden transition-[height] duration-300 ease-out" style="height: 0px; z-index: 1;">
+            <svg id="m-toc-fg-svg" class="absolute top-0 left-0 pointer-events-none text-(--accent)" style="width: 100%;">
+              <path id="m-toc-fg-path" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round" stroke-linecap="round" />
+            </svg>
+          </div>
+          <ul id="m-toc-list" class="flex flex-col relative z-10" role="list">
+            {filteredToc.map((h) => {
+              const isSubHeading = h.depth === 3;
+              return (
+                <li class="relative">
+                  <a 
+                    href={`#${h.slug}`} 
+                    class:list={[
+                      "toc-mobile-link block py-1.5 transition-all duration-200 no-underline",
+                      isSubHeading 
+                        ? "pl-9 text-label-14 font-normal text-muted/80 hover:text-strong" 
+                        : "pl-6 text-label-14 font-medium text-muted hover:text-strong"
+                    ]}
+                    data-toc-mobile-slug={h.slug}
+                    data-is-sub={isSubHeading.toString()}
+                  >
+                    {h.text}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </nav>
     </details>
   )}
 </div>
-<div id="m-sidebar-backdrop" class="fixed inset-0 z-0 bg-black/20 hidden opacity-0 transition-opacity duration-300 ease-in-out"></div>
-<aside id="m-sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-base transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col pt-(--header-height) border-r border-(--border)">
-  <div class="flex items-center justify-between px-6 h-12 border-b border-(--border) shrink-0">
-    <span class="text-button-14 font-semibold uppercase text-muted">Navigasi</span>
-    <button id="m-sidebar-close" class="p-1 rounded-md text-muted hover:text-strong active:text-strong active:bg-muted">
-      <Icon name="expanded-close" className="w-5 h-5">
+<div id="m-sidebar-backdrop" class="fixed inset-0 z-40 bg-base/60 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300 ease-in-out"></div>
+<aside id="m-sidebar" class="fixed top-(--header-height) inset-y-0 left-0 z-50 w-72 bg-base transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col border-r border-(--border) shadow-2xl">
+  <div class="flex items-center justify-between px-5 h-14 border-b border-(--border) shrink-0 bg-subtle/30">
+    <span class="text-label-14 font-medium text-muted">Navigasi</span>
+    <button id="m-sidebar-close" class="p-1.5 rounded-md text-muted hover:text-strong hover:bg-muted active:text-strong active:bg-muted transition-colors" aria-label="Close Menu">
+      <Icon name="expanded-close" className="w-5 h-5" />
     </button>
   </div>
-  <nav class="flex-1 overflow-y-auto py-6 flex flex-col gap-6" style="scrollbar-width: thin;">
+  <nav class="flex-1 overflow-y-auto py-6 flex flex-col gap-8" style="scrollbar-width: thin;">
     {Object.entries(grouped).map(([section, items]) => (
-      <div class="flex flex-col gap-1 px-6">
-        <h3 class="text-heading-14 font-semibold uppercase text-subtle/80 mb-1">{section}</h3>
-        <ul class="flex flex-col gap-px">
-          {items.map(entry => (
-            <li>
-              <a href={`/guide/${entry.id}`} class:list={["flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-md text-label-14 no-underline border font-medium", entry.id === currentId ? "text-strong bg-muted border-(--border)" : "text-muted border-transparent hover:bg-subtle/30"]}>
-                <span class="truncate">{entry.data.title}</span>
-              </a>
-            </li>
-          ))}
+      <div class="flex flex-col gap-2 px-6">
+        <h3 class="text-label-14 font-semibold text-subtle mb-1">{section}</h3>
+        <ul class="flex flex-col gap-0.5 border-l border-(--border) ml-1">
+          {items.map(entry => {
+            const isActive = entry.id === currentId;
+            return (
+              <li>
+                <a 
+                  href={`/guide/${entry.id}`} 
+                  class:list={[
+                    "flex items-center justify-between gap-2 pl-4 pr-3 py-2 text-body-14 no-underline transition-all border-l-2 -ml-px", 
+                    isActive 
+                      ? "text-strong bg-muted/50 font-medium border-current"
+                      : "text-muted hover:text-strong hover:bg-subtle font-medium border-transparent hover:border-current/50"
+                  ]}
+                >
+                  <span class="truncate">{entry.data.title}</span>
+                </a>
+              </li>
+            );
+          })}
         </ul>
       </div>
     ))}
@@ -84,24 +119,31 @@ const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
 
 <script>
   const initMobileNavigation = () => {
+    const cleanupTasks: Array<() => void> = [];
     const openBtn = document.getElementById("m-sidebar-open");
     const closeBtn = document.getElementById("m-sidebar-close");
     const sidebar = document.getElementById("m-sidebar");
     const backdrop = document.getElementById("m-sidebar-backdrop");
     const tocDetails = document.getElementById("m-toc-details") as HTMLDetailsElement | null;
+    const tocLinks = document.querySelectorAll<HTMLAnchorElement>("[data-toc-mobile-slug]");
+    const activeText = document.getElementById("m-toc-active-text");
+    const progressRing = document.getElementById("m-toc-progress-ring") as SVGCircleElement | null;
+    const tocListContainer = document.getElementById("m-toc-list-container");
+    const tocMask = document.getElementById("m-toc-progress-mask");
+    const tocBgPath = document.getElementById("m-toc-bg-path");
+    const tocFgPath = document.getElementById("m-toc-fg-path");
+    const tocFgSvg = document.getElementById("m-toc-fg-svg");
 
     if (openBtn && sidebar && backdrop) {
       const open = () => {
         if (tocDetails) tocDetails.removeAttribute("open");
         sidebar.classList.remove("-translate-x-full");
         backdrop.classList.remove("hidden");
-        sidebar.offsetHeight;
-        backdrop.offsetHeight;
-        requestAnimationFrame(() => {
-          backdrop.classList.add("opacity-100");
-        });
+        void sidebar.offsetWidth; 
+        requestAnimationFrame(() => backdrop.classList.add("opacity-100"));
         document.body.style.overflow = "hidden";
       };
+
       const close = () => {
         sidebar.classList.add("-translate-x-full");
         backdrop.classList.remove("opacity-100");
@@ -112,73 +154,177 @@ const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
         backdrop.addEventListener("transitionend", handleTransitionEnd);
         document.body.style.overflow = "";
       };
+
       openBtn.addEventListener("click", open);
-      closeBtn?.addEventListener("click", close);
+      cleanupTasks.push(() => openBtn.removeEventListener("click", open));
+
+      if (closeBtn) {
+        closeBtn.addEventListener("click", close);
+        cleanupTasks.push(() => closeBtn.removeEventListener("click", close));
+      }
+
       backdrop.addEventListener("click", close);
-      sidebar.querySelectorAll("nav a").forEach(l => l.addEventListener("click", close));
+      cleanupTasks.push(() => backdrop.removeEventListener("click", close));
+
+      sidebar.querySelectorAll("nav a").forEach(l => {
+        l.addEventListener("click", close);
+        cleanupTasks.push(() => l.removeEventListener("click", close));
+      });
     }
 
-    const tocLinks = document.querySelectorAll<HTMLAnchorElement>("[data-toc-mobile-slug]");
-    const activeText = document.getElementById("m-toc-active-text");
-    
-    if (tocLinks.length && tocDetails && activeText) {
-      const targets = Array.from(tocLinks).map(l => document.getElementById(l.dataset.tocMobileSlug!)).filter(Boolean) as HTMLElement[];
+    if (tocLinks.length && tocDetails && activeText && tocListContainer && tocMask && tocBgPath && tocFgPath && tocFgSvg) {
+      const linksArray = Array.from(tocLinks);
+      const targets = linksArray.map(l => document.getElementById(l.dataset.tocMobileSlug!)).filter(Boolean) as HTMLElement[];
       let active = "";
+
+      const circumference = 69.115;
+      const updateRingProgress = () => {
+        if (!progressRing) return;
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight <= 0 ? 0 : Math.min(scrollTop / docHeight, 1);
+        progressRing.style.strokeDashoffset = String(circumference * (1 - progress));
+      };
+      
+      updateRingProgress();
+      window.addEventListener("scroll", updateRingProgress, { passive: true });
+      cleanupTasks.push(() => window.removeEventListener("scroll", updateRingProgress));
+
+      const OFFSET = 3; 
+
+      const drawSvgPath = () => {
+        if (tocListContainer.offsetHeight === 0) return;
+        tocFgSvg.style.height = `${tocListContainer.offsetHeight}px`;
+
+        const H2_X = 4;
+        const H3_X = 18;
+        
+        let currentX = linksArray[0].dataset.isSub === "true" ? H3_X : H2_X;
+        let currentY = OFFSET; 
+        let d = `M ${currentX} ${currentY}`;
+
+        linksArray.forEach((link) => {
+          const li = link.parentElement;
+          if (!li) return;
+
+          const isSub = link.dataset.isSub === "true";
+          const targetX = isSub ? H3_X : H2_X;
+          const yTop = li.offsetTop;
+
+          if (targetX !== currentX) {
+            const turnStartY = Math.max(currentY, yTop - 8); 
+            if (turnStartY > currentY) {
+              d += ` L ${currentX} ${turnStartY}`;
+            }
+            const turnEndY = yTop + 10;
+            d += ` L ${targetX} ${turnEndY}`;
+            currentX = targetX;
+            currentY = turnEndY;
+          }
+        });
+
+        const lastLi = linksArray[linksArray.length - 1].parentElement;
+        if (lastLi) {
+          d += ` L ${currentX} ${lastLi.offsetTop + lastLi.offsetHeight - OFFSET}`;
+        }
+
+        tocBgPath.setAttribute("d", d);
+        tocFgPath.setAttribute("d", d);
+        updateLineProgress();
+      };
+
+      const updateLineProgress = () => {
+        const activeIndex = linksArray.findIndex(l => l.dataset.tocMobileSlug === active);
+
+        if (activeIndex !== -1) {
+          const activeLink = linksArray[activeIndex];
+          const li = activeLink.parentElement;
+          if (li) {
+            const height = li.offsetTop + li.offsetHeight - OFFSET;
+            tocMask.style.height = `${height}px`;
+          }
+        } else {
+          tocMask.style.height = "0px";
+        }
+
+        linksArray.forEach((l, i) => {
+          const isSub = l.dataset.isSub === "true";
+          if (i === activeIndex) {
+            l.classList.add("text-strong");
+            l.classList.remove("text-muted", "text-muted/80");
+          } else {
+            l.classList.add(isSub ? "text-muted/80" : "text-muted");
+            l.classList.remove("text-strong");
+          }
+        });
+      };
 
       const obs = new IntersectionObserver(entries => {
         if (window.scrollY < 50) {
           active = "";
           activeText.textContent = "Di Halaman Ini";
-          tocLinks.forEach(l => {
-            l.classList.remove("text-(--accent)");
-            l.classList.add("text-muted");
-          });
+          updateLineProgress();
           return;
         }
 
         entries.forEach(e => { if (e.isIntersecting) active = e.target.id; });
         if (!active && targets.length > 0) return;
 
-        tocLinks.forEach(l => {
+        linksArray.forEach(l => {
           if (l.dataset.tocMobileSlug === active) {
-            l.classList.add("text-(--accent)");
-            l.classList.remove("text-muted");
             activeText.textContent = l.textContent?.trim() || "Di Halaman Ini";
-          } else {
-            l.classList.remove("text-(--accent)");
-            l.classList.add("text-muted");
           }
         });
+        updateLineProgress();
       }, { rootMargin: "-20% 0% -65% 0%", threshold: 0 });
 
       targets.forEach(t => obs.observe(t));
+      cleanupTasks.push(() => obs.disconnect());
 
       const handleScrollTop = () => {
         if (window.scrollY < 50) {
           active = "";
           activeText.textContent = "Di Halaman Ini";
-          tocLinks.forEach(l => {
-            l.classList.remove("text-(--accent)");
-            l.classList.add("text-muted");
-          });
+          updateLineProgress();
         }
       };
       window.addEventListener("scroll", handleScrollTop, { passive: true });
+      cleanupTasks.push(() => window.removeEventListener("scroll", handleScrollTop));
+
+      const resizeObs = new ResizeObserver(() => drawSvgPath());
+      resizeObs.observe(tocListContainer);
+      cleanupTasks.push(() => resizeObs.disconnect());
 
       const closeToc = () => tocDetails.removeAttribute("open");
-      tocLinks.forEach(l => l.addEventListener("click", closeToc));
-      openBtn?.addEventListener("click", closeToc);
+      linksArray.forEach(l => {
+        l.addEventListener("click", closeToc);
+        cleanupTasks.push(() => l.removeEventListener("click", closeToc));
+      });
+      
+      if (openBtn) {
+        openBtn.addEventListener("click", closeToc);
+        cleanupTasks.push(() => openBtn.removeEventListener("click", closeToc));
+      }
 
-      return () => {
-        obs.disconnect();
-        window.removeEventListener("scroll", handleScrollTop);
+      const handleOutsideClick = (event: MouseEvent) => {
+        if (tocDetails.hasAttribute("open") && !tocDetails.contains(event.target as Node)) {
+          closeToc();
+        }
       };
+      document.addEventListener("click", handleOutsideClick);
+      cleanupTasks.push(() => document.removeEventListener("click", handleOutsideClick));
     }
+
+    return () => cleanupTasks.forEach(cleanupFn => cleanupFn());
   };
 
-  let cleanupMobileNav: (() => void) | undefined = initMobileNavigation();
-  document.addEventListener("astro:page-load", () => {
+  let cleanupMobileNav: (() => void) | undefined;
+  
+  const runSetup = () => {
     cleanupMobileNav?.();
     cleanupMobileNav = initMobileNavigation();
-  });
+  };
+
+  runSetup();
+  document.addEventListener("astro:page-load", runSetup);
 </script>

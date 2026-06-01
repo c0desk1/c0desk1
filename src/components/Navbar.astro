@@ -8,7 +8,7 @@ import SearchBar from "./SearchBar.astro";
 ---
 
 <header id="main-header" class="fixed top-0 z-50 mx-auto w-full bg-base">
-  <Container size="xl">
+  <Container size="full">
     <div class="relative flex items-center h-(--header-height)">
       <div class="flex items-center shrink-0">
         <Logo />
@@ -22,36 +22,6 @@ import SearchBar from "./SearchBar.astro";
       </div>
     </div>
   </Container>
-  <div class="absolute bottom-0 left-0 right-0 h-px bg-(--border) opacity-0 transition-opacity duration-300" id="header-border"></div>
+  <div class="absolute bottom-0 left-0 right-0 h-px bg-(--border) transition-opacity duration-300" id="header-border"></div>
 </header>
 <div class="h-(--header-height) hidden" aria-hidden="true"></div>
-
-<style is:global>
-  #main-header.scrolled #header-border {
-    opacity: 1;
-  }
-</style>
-
-<script>
-  //@ts-nocheck
-  const initHeader = () => {
-    const header = document.getElementById('main-header');
-    if (!header) return;
-
-    const updateHeader = () => {
-      if (window.scrollY > 0) {
-        header.classList.add('scrolled');
-      } else {
-        header.classList.remove('scrolled');
-      }
-    };
-    window.removeEventListener('scroll', window.__headerScrollHandler);
-    window.__headerScrollHandler = updateHeader;
-    window.addEventListener('scroll', window.__headerScrollHandler, { passive: true });
-  
-    updateHeader();
-  };
-
-  initHeader();
-  document.addEventListener('astro:page-load', initHeader);
-</script>

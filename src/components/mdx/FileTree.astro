@@ -27,6 +27,10 @@ const extIcons = fileIcons;
     padding: 0 !important;
   }
 
+  .file-tree {
+    min-width: max-content;
+  }
+
   .file-tree li::marker,
   .file-tree ul::marker,
   .file-tree ol::marker,
@@ -69,32 +73,41 @@ const extIcons = fileIcons;
     color: var(--prose-fg-muted);
     font-size: 0.875rem;
     transition: color var(--prose-duration) var(--prose-ease-out);
+    white-space: nowrap;
   }
 
   .file-tree-folder > .file-tree-label {
-    color: var(--prose-fg-strong);
-    font-weight: 600;
+    color: var(--prose-fg-muted);
+    font-weight: 500;
     cursor: pointer;
   }
 
-  .file-tree-label:hover {
+  .file-tree-folder.open > .file-tree-label {
     color: var(--prose-fg-strong);
+    font-weight: 600;
+  }
+
+  .file-tree-label:hover {
+    color: var(--prose-fg-dim);
   }
 
   .icon {
     display: inline-flex;
     align-items: center;
     flex-shrink: 0;
-    color: var(--prose-fg-dim);
     transition: color var(--prose-duration) var(--prose-ease-out);
   }
 
   .file-tree-folder > .file-tree-label > .folder-icon {
-    color: var(--prose-border-strong);
+    color: var(--prose-fg-dim);
+  }
+
+  .file-tree-folder.open > .file-tree-label > .folder-icon {
+    color: var(--prose-fg);
   }
 
   .file-tree-folder > .file-tree-label:hover > .folder-icon {
-    color: var(--prose-fg-strong);
+    color: var(--prose-fg-dim);
   }
 
   .file-tree-label.is-highlighted {
@@ -159,6 +172,7 @@ const extIcons = fileIcons;
       const ext = filename.split(".").pop()?.toLowerCase() || "";
       return extIcons[ext] ?? svg.file;
     }
+    
     function refreshFolderIcon(folderItem) {
       const label = folderItem.querySelector(':scope > .file-tree-label');
       const iconEl = label?.querySelector('.folder-icon');
@@ -261,5 +275,7 @@ const extIcons = fileIcons;
     } else {
       init();
     }
+
+    document.addEventListener("astro:page-load", init);
   })();
 </script>
