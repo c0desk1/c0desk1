@@ -3,71 +3,135 @@
 import { getCollection } from "astro:content";
 import GuideLayout from "@/layouts/GuideLayout.astro";
 import Container from "@/components/ui/Container.astro";
-import GuideCard from "@/components/guide/GuideCard.astro"; // Import komponen Anda
+import GuideCard from "@/components/guide/GuideCard.astro";
 import { buildMeta } from "@/consts";
 
-// 1. Ambil semua entri panduan dari koleksi
-const allEntries = await getCollection("guide");
+const allTutorials = await getCollection("guide");
 
-// 2. Kelompokkan dokumen secara otomatis berdasarkan properti 'section' (Kategori)
-const categoriesMap = new Map<string, typeof allEntries>();
+const activeTutorials = allTutorials
+  .filter((e) => !e.data.draft)
+  .sort(
+    (a, b) =>
+      b.data.pubDate.valueOf() -
+      a.data.pubDate.valueOf()
+  );
 
-allEntries.forEach((entry) => {
-  if (entry.data.draft) return; // Lewati draf dokumen
-  const sectionName = entry.data.section || "General";
-  
-  if (!categoriesMap.has(sectionName)) {
-    categoriesMap.set(sectionName, []);
-  }
-  categoriesMap.get(sectionName)?.push(entry);
-});
+const featuredTutorial =
+  activeTutorials[0];
 
-// Urutkan artikel di dalam kategori berdasarkan properti 'order'
-const categories = Array.from(categoriesMap.entries()).map(([name, docs]) => ({
-  name,
-  docs: docs.sort((a, b) => (a.data.order || 0) - (b.data.order || 0)),
-}));
+const remainingTutorials =
+  activeTutorials.slice(1);
+
+const categories = Array.from(
+  new Set(
+    activeTutorials
+      .map((t) => t.data.category)
+      .filter(Boolean)
+  )
+);
 
 const meta = buildMeta({
-  title: "Pusat Panduan & Dokumentasi",
-  description: "Temukan seluruh referensi komponen, tutorial integrasi, dan dokumentasi proyek.",
+  title: "Tutorial & Panduan Praktis",
+  description:
+    "Kumpulan artikel tutorial mendalam, tips optimasi, dan panduan langkah-demi-langkah.",
 });
 ---
 
 <GuideLayout {meta} isHome={true}>
-  <Container size="xl" class="py-12 lg:py-20">
-    <header class="mb-16 pb-10 max-w-3xl">
-      <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-muted/60 border border-(--border) text-[11px] font-semibold text-accent tracking-wide uppercase mb-4 select-none">
-        Dokumentasi Resmi
-      </div>
-      <h1 class="text-heading-32 md:text-heading-40 lg:text-heading-56 font-bold text-strong tracking-tight mb-4">
-        Pusat Panduan & Referensi
+  <Container
+    size="xl"
+    class="py-12 lg:py-20"
+  >
+    <header class="max-w-3xl mb-12">
+      <p class="m-0 mb-3 text-[11px] font-semibold tracking-[0.16em] uppercase text-subtle">
+        Guide
+      </p>
+
+      <h1 class="m-0 text-heading-32 md:text-heading-40 lg:text-heading-56 font-semibold tracking-tight text-strong">
+        Tutorial & Hub Kreatif
       </h1>
-      <p class="text-body-16 md:text-body-18 text-muted leading-relaxed m-0">
-        Pelajari cara mengonfigurasi proyek, menggunakan komponen MDX kustom siap pakai, serta menerapkan praktik terbaik pengoptimalan situs Anda.
+
+      <p class="mt-4 mb-0 text-body-16 md:text-body-18 text-muted leading-relaxed">
+        Jelajahi panduan langkah-demi-langkah,
+        teknik kustomisasi mendalam,
+        dan artikel praktis untuk
+        membangun proyek lebih cepat
+        dan lebih rapi.
       </p>
     </header>
-    <div class="flex flex-col gap-16 w-full">
-      {categories.map((category) => (
-        <section class="flex flex-col gap-6 w-full">
-          <div class="flex items-center gap-2.5 pb-2 border-b border-(--border)/60 w-full">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="text-accent">
-              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-            </svg>
-            <h2 class="text-[12px] font-bold text-strong tracking-wider uppercase m-0">
-              {category.name}
-            </h2>
-            <span class="text-[11px] text-muted font-medium ml-1">
-              ({category.docs.length})
-            </span>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-            {category.docs.map((doc) => (
-              <GuideCard entry={doc} />
-            ))}
-          </div>
-        </section>
-      ))}
-    </div>
+
+    {activeTutorials.length > 0 ? (
+      <>
+        <nav
+          class="flex items-center gap-2 overflow-x-auto pb-5 mb-12 border-b border-(--border)/60"
+          style="scrollbar-width:none;"
+        >
+          <a
+            href="/guide"
+            class="shrink-0 rounded-full border border-(--border) bg-base px-3 py-1.5 text-[13px] font-medium text-strong no-underline transition-colors hover:bg-elevated/40"
+          >
+            Semua
+          </a>
+
+          {categories.map((cat) => (
+            <button
+              type="button"
+              class="shrink-0 rounded-full border border-(--border) bg-base px-3 py-1.5 text-[13px] font-medium text-muted transition-colors hover:text-strong hover:bg-elevated/40"
+            >
+              {cat}
+            </button>
+          ))}
+        </nav>
+
+        {featuredTutorial && (
+          <section class="mb-16">
+            <div class="mb-4 flex items-center gap-2">
+              <span class="h-1 w-1 rounded-full bg-accent" />
+
+              <span class="text-[11px] font-semibold tracking-[0.14em] uppercase text-subtle">
+                Terbaru
+              </span>
+            </div>
+
+            <div class="rounded-2xl border border-(--border)/70 bg-base p-1">
+              <GuideCard
+                entry={featuredTutorial}
+              />
+            </div>
+          </section>
+        )}
+
+        {remainingTutorials.length > 0 && (
+          <section>
+            <div class="mb-6 flex items-center justify-between gap-4 border-b border-(--border)/60 pb-3">
+              <h2 class="m-0 text-[12px] font-semibold tracking-[0.14em] uppercase text-subtle">
+                Semua Tutorial
+              </h2>
+
+              <span class="text-[12px] text-muted">
+                {remainingTutorials.length}
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {remainingTutorials.map(
+                (tutorial) => (
+                  <GuideCard
+                    entry={tutorial}
+                  />
+                )
+              )}
+            </div>
+          </section>
+        )}
+      </>
+    ) : (
+      <div class="rounded-2xl border border-dashed border-(--border) py-20 text-center">
+        <p class="m-0 text-body-15 text-muted">
+          Belum ada artikel tutorial
+          yang diterbitkan.
+        </p>
+      </div>
+    )}
   </Container>
 </GuideLayout>
