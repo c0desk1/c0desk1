@@ -1,14 +1,19 @@
 ---
 // src/pages/guide/[slug].astro
-import { getCollection, render } from "astro:content";
+import { 
+  getCollection, 
+  render 
+} from "astro:content";
+import { 
+  buildMeta, 
+  ROUTES 
+} from "@/consts";
+
 import GuideLayout from "@/layouts/GuideLayout.astro";
 import Container from "@/components/ui/Container.astro";
-import { buildMeta, ROUTES } from "@/consts";
-import { components } from '@/components/layout/MDXComponents';
-
 import Section from "@/components/ui/Section.astro";
+import { components } from '@/components/layout/MDXComponents';
 import Breadcrumb from "@/components/Breadcrumb.astro";
-
 import GuideSidebarDesktop from "@/components/guide/GuideSidebarDesktop.astro";
 import GuideTocDesktop from "@/components/guide/GuideTocDesktop.astro";
 import GuideSidebarMobile from "@/components/guide/GuideSidebarMobile.astro";
@@ -42,7 +47,7 @@ const meta = buildMeta({
 <GuideLayout {meta}>
   <GuideSidebarMobile {entries} currentId={entry.id} {headings} />
   <Container size="full">
-    <div class="grid grid-cols-1 lg:grid-cols-[16rem_minmax(0,1fr)_14rem] gap-0 lg:gap-6 w-full max-w-full">
+    <div class="grid grid-cols-1 lg:grid-cols-[16rem_minmax(0,1fr)_14rem] gap-0 lg:gap-x-8 w-full max-w-full px-4">
       <GuideSidebarDesktop {entries} currentId={entry.id} />
       <Section size="sm">
         <div class="flex-1 min-w-0">
