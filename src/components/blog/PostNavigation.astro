@@ -15,11 +15,11 @@ const nextUrl = nextPost ? `/blog/${nextPost.data.slug || slugify(nextPost.data.
 
 {(prevPost || nextPost) && (
   <nav aria-label="Pagination">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
         {prevPost ? (
-          <a href={prevUrl} class="group block text-left">
-            <span class="flex items-center gap-1.5 text-label-12 text-muted uppercase tracking-widest mb-2">
+          <a href={prevUrl} class="group block text-left truncate">
+            <span class="flex items-center gap-1.5 justify-start text-label-13 text-subtle mb-2">
               <Icon name="arrow-left" className="w-3.5 h-3.5" />
               {'Sebelumnya'}
             </span>
@@ -33,12 +33,12 @@ const nextUrl = nextPost ? `/blog/${nextPost.data.slug || slugify(nextPost.data.
       </div>
       <div class="text-right md:text-right">
         {nextPost && (
-          <a href={nextUrl} class="group block">
-            <span class="flex items-center justify-end gap-1.5 text-label-12 text-muted uppercase tracking-widest mb-2">
+          <a href={nextUrl} class="group block truncate">
+            <span class="flex items-center justify-end gap-1.5 text-label-13 text-subtle mb-2">
               {'Selanjutnya'}
               <Icon name="arrow-right" className="w-3.5 h-3.5" />
             </span>
-            <span class="text-body-14 md:text-body-16 font-medium text-fg group-hover:text-strong transition-colors duration-200 truncate">
+            <span class="text-body-14 md:text-body-16 font-medium text-(--fg) group-hover:text-strong transition-colors duration-200 truncate">
               {nextPost.data.title}
             </span>
           </a>
