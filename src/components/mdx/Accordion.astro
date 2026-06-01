@@ -1,152 +1,58 @@
 ---
 import Icon from '@/components/ui/icons/Icon.astro';
 
-// src/components/mdx/Accordion.astro
-interface Item {
-  question: string;
-  answer: string;
-}
 interface Props {
-  items: Item[];
-  allowMultiple?: boolean;
+  title: string;
 }
-const { items = [], allowMultiple = false } = Astro.props;
+
+const { title } = Astro.props;
 ---
 
-<div
-  class="accordion not-prose mx-auto max-w-3xl my-8"
-  data-allow-multiple={allowMultiple ? "true" : "false"}
->
-  {items.map((item, i) => (
-    <div class="accordion-item" data-index={i}>
-      <button
-        class="accordion-trigger"
-        aria-expanded="false"
-        aria-controls={`accordion-panel-${i}`}
-        id={`accordion-btn-${i}`}
-      >
-        <span class="accordion-question">{item.question}</span>
-        <Icon name="chevron-down" className="accordion-chevron"/>
-      </button>
-      <div
-        class="accordion-panel"
-        id={`accordion-panel-${i}`}
-        role="region"
-        aria-labelledby={`accordion-btn-${i}`}
-        hidden
-      >
-        <div class="accordion-body">
-          <p set:html={item.answer} />
-        </div>
-      </div>
+<div class="accordion not-prose border border-(--prose-border) rounded-lg overflow-hidden my-4">
+  <button type="button" class="accordion-trigger flex items-center justify-between w-full px-5 py-4 text-left text-heading-16 font-semibold bg-muted/40 hover:bg-muted/60 active:bg-muted transition-colors">
+    <span>{title}</span>
+    <Icon name="chevron-down" className="accordion-icon w-5 h-5 transition-transform duration-300" />
+  </button>
+  <div class="accordion-content-wrapper overflow-hidden transition-all duration-300" style="max-height: 0;">
+    <div class="accordion-content-inner px-5 pb-5 pt-1 text-body-14">
+      <slot />
     </div>
-  ))}
+  </div>
 </div>
 
-<style is:global>
-  .accordion {
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md, 8px);
-    overflow: hidden;
-    divide-y: 1px;
-  }
-
-  .accordion-item {
-    border-bottom: 1px solid var(--border);
-  }
-  .accordion-item:last-child { border-bottom: none; }
-
-  .accordion-trigger {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 1rem 1.25rem;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    text-align: left;
-    transition: background-color 150ms ease;
-  }
-
-  .accordion-trigger:hover {
-    background-color: var(--bg-subtle);
-  }
-
-  .accordion-trigger:focus-visible {
-    outline: 2px solid var(--accent, #10b981);
-    outline-offset: -2px;
-  }
-
-  .accordion-question {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--fg);
-    line-height: 1.4;
-  }
-
-  .accordion-chevron {
-    flex-shrink: 0;
-    color: var(--fg-subtle);
-    transition: transform 200ms ease;
-  }
-
-  .accordion-trigger[aria-expanded="true"] .accordion-chevron {
-    transform: rotate(180deg);
-  }
-
-  .accordion-panel {
-    overflow: hidden;
-  }
-  .accordion-panel[hidden] { display: none; }
-
-  .accordion-body {
-    padding: 0 1.25rem 1rem;
-  }
-
-  .accordion-body p {
-    font-size: 0.875rem;
-    color: var(--fg-muted);
-    line-height: 1.7;
-    margin: 0;
-  }
-</style>
-
 <script>
-  const initAccordion = () => {
-    document.querySelectorAll<HTMLElement>('.accordion').forEach(root => {
-      const allowMultiple = root.dataset.allowMultiple === 'true';
-      const triggers = root.querySelectorAll<HTMLButtonElement>('.accordion-trigger');
+  function setupAccordions() {
+    document.querySelectorAll('.accordion:not(.is-initialized)').forEach((el) => {
+      const accordion = el as HTMLElement;
+      accordion.classList.add('is-initialized');
 
-      const open = (trigger: HTMLButtonElement) => {
-        const panelId = trigger.getAttribute('aria-controls')!;
-        const panel = document.getElementById(panelId);
-        trigger.setAttribute('aria-expanded', 'true');
-        panel?.removeAttribute('hidden');
-      };
+      const trigger = accordion.querySelector('.accordion-trigger');
+      const wrapper = accordion.querySelector<HTMLElement>('.accordion-content-wrapper');
+      const icon = accordion.querySelector<HTMLElement>('.accordion-icon');
 
-      const close = (trigger: HTMLButtonElement) => {
-        const panelId = trigger.getAttribute('aria-controls')!;
-        const panel = document.getElementById(panelId);
-        trigger.setAttribute('aria-expanded', 'false');
-        panel?.setAttribute('hidden', '');
-      };
+      if (!trigger || !wrapper || !icon) return;
 
-      triggers.forEach(trigger => {
-        trigger.addEventListener('click', () => {
-          const isOpen = trigger.getAttribute('aria-expanded') === 'true';
-
-          if (!allowMultiple) {
-            triggers.forEach(t => { if (t !== trigger) close(t); });
-          }
-
-          isOpen ? close(trigger) : open(trigger);
-        });
+      trigger.addEventListener('click', () => {
+        const isOpen = accordion.classList.contains('open');
+        if (isOpen) {
+          wrapper.style.maxHeight = '0';
+          icon.style.transform = 'rotate(0deg)';
+          accordion.classList.remove('open');
+        } else {
+          const inner = wrapper.querySelector<HTMLElement>('.accordion-content-inner');
+          if (!inner) return;
+          wrapper.style.maxHeight = 'none';
+          const contentHeight = inner.offsetHeight;
+          wrapper.style.maxHeight = '0';
+          wrapper.offsetHeight;
+          wrapper.style.maxHeight = `${contentHeight + 32}px`;
+          icon.style.transform = 'rotate(180deg)';
+          accordion.classList.add('open');
+        }
       });
     });
-  };
+  }
 
-  initAccordion();
-  document.addEventListener('astro:after-swap', initAccordion);
+  document.addEventListener('astro:page-load', setupAccordions);
+  setupAccordions();
 </script>

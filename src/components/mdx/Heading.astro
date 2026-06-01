@@ -1,15 +1,13 @@
 ---
-// src/components/mdx/Heading.astro
 import Icon from '@/components/ui/icons/Icon.astro';
 
 interface Props {
   id?: string;
-  'data-level'?: string;
   class?: string;
+  level: number;
 }
 
-const { id, 'data-level': levelStr, class: className } = Astro.props;
-const level = parseInt(levelStr || '2');
+const { id, class: className, level } = Astro.props as Props;
 const Tag = `h${level}` as any;
 
 const anchorLabel = 'Link to this heading';
@@ -31,30 +29,17 @@ const classes = headingClasses[`h${level}`] || "text-heading-20";
     "heading-group has-anchor",
     "relative inline-flex items-baseline flex-wrap gap-x-1 text-balance font-bold tracking-tight",
     classes,
-    className
+    className,
   ]}
 >
-  <span class="heading-text-content"><slot /></span>
+  <span class:list={["heading-text-content"]}><slot /></span>
   {id && (
-    <a 
-      href={`#${id}`} 
+    <a
+      href={`#${id}`}
       class="anchor-link inline-flex items-center justify-center w-6 h-6 md:w-8 md:h-8 opacity-0 group-hover:opacity-100 transition-all duration-200 ml-2"
-      aria-label={anchorLabel}>
+      aria-label={anchorLabel}
+    >
       <Icon name="link" className="w-3 h-3 md:w-4 md:h-4 hover:text-strong" />
     </a>
   )}
 </Tag>
-
-<style>
-  .heading-group.has-anchor {
-    scroll-margin-top: var(--prose-scroll-margin, 5rem);
-  }
-
-  .anchor-link {
-    backdrop-filter: blur(4px);
-  }
-  
-  .heading-group:hover .heading-text-content {
-    color: var(--prose-fg-strong);
-  }
-</style>
