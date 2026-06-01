@@ -32,7 +32,7 @@ const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
         <span id="m-toc-active-text" class="truncate max-w-35 text-right block font-medium">
           Di Halaman Ini
         </span>
-        <Icon name="chevron-down" className="transition-transform duration-150 group-open/toc:rotate-180 text-muted/70 w-3.5 h-3.5" />
+        <Icon name="chevron-down" className="transition-transform duration-300 group-open/toc:rotate-180 text-muted/70 w-3.5 h-3.5" />
       </summary>
       <nav class="absolute top-12 left-0 w-full bg-base rounded-b-xl border-b border-x border-(--border) max-h-64 overflow-y-auto px-6 py-4 shadow-sm">
         <p class="text-label-13 font-semibold tracking-wider uppercase text-subtle/80 mb-2">Daftar Isi</p>
@@ -56,8 +56,8 @@ const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
     </details>
   )}
 </div>
-<div id="m-sidebar-backdrop" class="fixed inset-0 z-0 bg-black/20 hidden opacity-0 transition-opacity duration-150"></div>
-<aside id="m-sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-base transform -translate-x-full transition-transform duration-150 ease-in-out flex flex-col pt-(--header-height) border-r border-(--border)">
+<div id="m-sidebar-backdrop" class="fixed inset-0 z-0 bg-black/20 hidden opacity-0 transition-opacity duration-300 ease-in-out"></div>
+<aside id="m-sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-base transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col pt-(--header-height) border-r border-(--border)">
   <div class="flex items-center justify-between px-6 h-12 border-b border-(--border) shrink-0">
     <span class="text-button-14 font-semibold uppercase text-muted">Navigasi</span>
     <button id="m-sidebar-close" class="p-1 rounded-md text-muted hover:text-strong active:text-strong active:bg-muted">
@@ -95,13 +95,21 @@ const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
         if (tocDetails) tocDetails.removeAttribute("open");
         sidebar.classList.remove("-translate-x-full");
         backdrop.classList.remove("hidden");
-        setTimeout(() => backdrop.classList.add("opacity-100"), 10);
+        sidebar.offsetHeight;
+        backdrop.offsetHeight;
+        requestAnimationFrame(() => {
+          backdrop.classList.add("opacity-100");
+        });
         document.body.style.overflow = "hidden";
       };
       const close = () => {
         sidebar.classList.add("-translate-x-full");
         backdrop.classList.remove("opacity-100");
-        setTimeout(() => backdrop.classList.add("hidden"), 150);
+        const handleTransitionEnd = () => {
+          backdrop.classList.add("hidden");
+          backdrop.removeEventListener("transitionend", handleTransitionEnd);
+        };
+        backdrop.addEventListener("transitionend", handleTransitionEnd);
         document.body.style.overflow = "";
       };
       openBtn.addEventListener("click", open);
