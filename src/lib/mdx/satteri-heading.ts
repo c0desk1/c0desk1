@@ -1,4 +1,3 @@
-// src/lib/mdx/satteri-heading-anchor.ts
 import { defineMdastPlugin } from 'satteri';
 import type { Heading } from 'mdast';
 
@@ -13,7 +12,7 @@ function sluggify(text: string): string {
 
 export const satteriHeading = defineMdastPlugin({
   name: 'satteri-heading-anchor',
-  heading(node: Heading, ctx) {
+  heading(node: Heading) {
     let text = '';
     const collectText = (nodes: any[]) => {
       for (const child of nodes) {
@@ -22,22 +21,14 @@ export const satteriHeading = defineMdastPlugin({
       }
     };
     collectText(node.children);
-    
+
     const id = sluggify(text);
     if (!id) return;
 
-    const tagName = `h${node.depth}`;
-
-    const component: any = {
-      type: 'mdxJsxFlowElement',
-      name: tagName,
-      attributes: [
-        { type: 'mdxJsxAttribute', name: 'id', value: id },
-        { type: 'mdxJsxAttribute', name: 'data-level', value: String(node.depth) },
-      ],
-      children: node.children,
+    node.data = node.data || {};
+    node.data.hProperties = {
+      id,
+      'data-level': String(node.depth),
     };
-    
-    ctx.replaceNode(node, component);
   },
 });

@@ -15,7 +15,7 @@ import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import PostCard from "@/components/blog/PostCard.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
-import Icon from "@/components/ui/icons/Icon.astro"; // <-- Import Icon
+import Icon from "@/components/ui/icons/Icon.astro";
 
 export async function getStaticPaths() {
   const allPosts = await getCollection("blog");
