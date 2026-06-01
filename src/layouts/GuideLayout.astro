@@ -1,6 +1,9 @@
 ---
 // src/layouts/GuideLayout.astro
-import { SITE, buildMeta } from "@/consts";
+import { 
+  SITE, 
+  buildMeta 
+} from "@/consts";
 
 import Head     from "@/components/Head.astro";
 import Navbar   from "@/components/Navbar.astro";
@@ -9,13 +12,6 @@ import ThemeScript from "@/components/scripts/ThemeScript.astro";
 import Mobile from "@/components/Mobile.astro";
 import Search from "@/components/Search.astro";
 import ScrollScript from "@/components/scripts/ScrollScript.astro";
-
-import GuideSidebar from "@/components/guide/GuideSidebar.astro";
-import GuideToc     from "@/components/guide/GuideToc.astro";
-import Container from "@/components/ui/Container.astro";
-
-import type { CollectionEntry } from "astro:content";
-
 
 interface Props {
   meta?:      Partial<ReturnType<typeof buildMeta>>;
@@ -27,16 +23,10 @@ interface Props {
   hideHeader?: boolean;
   hideFooter?: boolean;
   canonical?: string;
-  
-  entry?:    CollectionEntry<"guide">;
-  entries?:  CollectionEntry<"guide">[];
-  headings?: { depth: number; text: string; slug: string }[];
-  toc?:      boolean;
 }
 
 const {
   meta, schema, isHome = false, variant = "default", bodyClass = "", mainClass = "", hideHeader = false, hideFooter = false, canonical,
-  entry, entries = [], headings = [], toc = true
 } = Astro.props;
 
 const currentPath = new URL(Astro.request.url).pathname;
@@ -51,27 +41,19 @@ const currentPath = new URL(Astro.request.url).pathname;
       Skip to content
     </a>
     {!hideHeader && variant !== "bare" && (<Navbar currentPath={currentPath} />)}
-    <Container 
-      size="xl" 
+    
+    <main id="main-content"
       class:list={[
-        "flex flex-col lg:flex-row items-start relative",
+        "min-h-[calc(100svh-var(--header-height))]",
         variant !== "bare" && "pt-(--header-height)",
-        variant === "full"  && "pt-0",
-        variant === "bare"  && "pt-0",
+        variant === "full"  && "min-h-svh pt-0",
+        variant === "bare"  && "min-h-svh pt-0",
+        mainClass,
       ]}
     >
-      {entry && entries.length > 0 && (
-        <GuideSidebar {entries} currentId={entry.id} />
-      )}
-      <main id="main-content" class:list={["flex-1 min-w-0 w-full min-h-[calc(100svh-var(--header-height))] py-8 lg:py-12 lg:px-12", mainClass]}>
-        <div class="max-w-3xl mx-auto">
-          <slot />
-        </div>
-      </main>
-      {entry && toc && headings.length > 1 && (
-        <GuideToc {headings} />
-      )}
-    </Container>
+      <slot />
+    </main>
+    
     {!hideFooter && variant !== "bare" && (<Footer />)}
     <Mobile />
     <ScrollScript />
