@@ -7,63 +7,90 @@ interface Props {
   title: string;
   pubDate: Date;
   description?: string;
-  tags?: string[];
   authorName?: string;
+  authorAvatar?: string;
+  authorRole?: string;
+  authorSlug?: string;
   heroImage?: {
     src: string;
     alt: string;
   };
+  tags?: string[];
 }
 
 const {
   title,
   pubDate,
   description,
-  tags = [],
   authorName,
+  authorAvatar,
+  authorRole,
+  authorSlug = "",
   heroImage,
+  tags = [],
 } = Astro.props;
 ---
 
-<header class="mb-10">
+<header class="w-full max-w-3xl mx-auto">
+  <div class="flex flex-col items-center text-center gap-5 md:gap-6">
+    <!-- Judul -->
+    <h1 class="text-heading-32 md:text-heading-40 lg:text-heading-48 font-bold text-balance tracking-tight">
+      {title}
+    </h1>
 
-  <h1 class="text-heading-24 md:text-heading-32 lg:text-heading-48 font-semibold text-strong mt-0! mb-4">
-    {title}
-  </h1>
-  <div class="flex flex-wrap items-center gap-3 text-label-13 text-muted mb-4">
-    {authorName && (
-      <span class="flex items-center gap-1.5">
-        <Icon name="user" className="w-3.5 h-3.5" />
-        {authorName}
-      </span>
+    {description && (
+      <p class="text-body-16 md:text-body-18 text-muted max-w-2xl leading-relaxed">
+        {description}
+      </p>
     )}
-    <time datetime={pubDate.toISOString()}>
-      {formatDate(pubDate)}
-    </time>
-  </div>
+    <div class="flex flex-col items-center gap-4 w-full">
+      {authorName && (
+        <div class="flex items-center gap-3">
+          {authorAvatar && (
+            <img
+              src={authorAvatar}
+              alt={authorName}
+              class="w-8 h-8 rounded-full object-cover border border-(--border)"
+            />
+          )}
+          <div class="flex flex-col items-start text-left">
+            <a
+              href={`/author/${authorSlug}`}
+              class="text-label-14 font-semibold text-strong no-underline hover:underline"
+            >
+              {authorName}
+            </a>
+            {authorRole && (
+              <span class="text-label-12 text-muted">{authorRole}</span>
+            )}
+          </div>
+        </div>
+      )}
 
-  {description && (
-    <p class="text-body-16 text-muted leading-relaxed max-w-3xl">
-      {description}
-    </p>
-  )}
-
-  {tags.length > 0 && (
-    <div class="flex flex-wrap gap-2 mt-4">
-      {tags.map(tag => (
-        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-muted/50 text-subtle border border-(--border)">
-          {tag}
-        </span>
-      ))}
+      <div class="flex items-center gap-2 text-label-13 text-muted">
+        <Icon name="progress" className="w-3.5 h-3.5" />
+        <time datetime={pubDate.toISOString()}>
+          {formatDate(pubDate)}
+        </time>
+      </div>
     </div>
-  )}
-
+    <hr class="w-16 border-t-4 border-(--border) rounded-full opacity-40" />
+    {tags.length > 0 && (
+      <div class="flex flex-wrap justify-center gap-2">
+        {tags.map(tag => (
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-medium bg-muted/40 text-subtle border border-(--border)">
+            {tag}
+          </span>
+        ))}
+      </div>
+    )}
+  </div>
   {heroImage && (
-    <figure class="mt-8 -mx-4 md:mx-0">
+    <figure class="mt-10 -mx-4 md:-mx-0">
       <img
         src={heroImage.src}
         alt={heroImage.alt || title}
-        class="w-full rounded-xl border border-(--border)"
+        class="w-full rounded-xl border border-(--border) object-cover"
         loading="eager"
       />
     </figure>
