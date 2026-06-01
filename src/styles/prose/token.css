@@ -241,13 +241,13 @@
   --callout-note-border: var(--border);
   --callout-note-text: var(--fg-muted);
   --callout-note-icon: var(--fg-muted);
-  --callout-note-title: var(--fg);
+  --callout-note-title: var(--fg-muted);
 
   --callout-info-bg: transparent;
-  --callout-info-border: var(--border-strong);
-  --callout-info-text: var(--fg-strong);
-  --callout-info-icon: var(--fg-strong);
-  --callout-info-title: var(--fg-strong);
+  --callout-info-border: var(--border);
+  --callout-info-text: var(--fg-subtle);
+  --callout-info-icon: var(--fg-subtle);
+  --callout-info-title: var(--fg-subtle);
 
   --callout-tip-bg: transparent;
   --callout-tip-border: var(--success);
