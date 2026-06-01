@@ -12,35 +12,41 @@
 }
 
 .prose h1 {
+  @apply-text-heading-24;
   color: var(--prose-fg-strong);
   margin-bottom: 24px;
 }
 
 .prose h2 {
+  @apply-text-heading-24;
   color: var(--prose-fg-strong);
   margin-top: 56px;
   margin-bottom: 20px;
 }
 
 .prose h3 {
+  @apply-text-heading-20;
   color: var(--prose-fg-strong);
   margin-top: 40px;
   margin-bottom: 16px;
 }
 
 .prose h4 {
+  @apply-text-heading-18;
   color: var(--prose-fg-strong);
   margin-top: 32px;
   margin-bottom: 12px;
 }
 
 .prose h5 {
+  @apply-text-heading-16;
   color: var(--prose-fg-muted);
   margin-top: 24px;
   margin-bottom: 12px;
 }
 
 .prose h6 {
+  @apply-text-heading-14;
   color: var(--prose-fg-subtle);
   margin-top: 24px;
   margin-bottom: 12px;
@@ -72,6 +78,7 @@
 
 
 .prose p {
+  @apply text-body-16;
   margin-top: 0;
   margin-bottom: 20px;
   color: var(--prose-fg);
@@ -80,7 +87,7 @@
 
 .prose .lead,
 .prose p.lead {
-  @apply text-body-18;
+  @apply text-body-14;
   color: var(--prose-fg-muted);
   margin-bottom: 32px;
 }
@@ -142,8 +149,8 @@
 
 @media (max-width: 767px) {
   .prose .anchor-link {
-    width: 1rem;
-    height: 1rem;
+    width: 1.25rem;
+    height: 1.25rem;
   }
 
   .prose .anchor-link.anchor-link-active,
@@ -156,6 +163,12 @@
 }
 
 @media (min-width: 768px) {
+  .prose h1 {
+    @apply text-heading-32;
+  }
+}
+
+@media (min-width: 1024px) {
   .prose .heading-group.has-anchor:hover .anchor-link {
     opacity: 1;
     pointer-events: auto;
@@ -163,12 +176,21 @@
     color: var(--prose-fg-subtle);
   }
 
-  .prose .lead,
-  .prose p.lead {
-    @apply text-body-20;
-  }
-
   .prose .anchor-link:hover {
     color: var(--prose-fg-strong);
+  }
+  
+  .prose h1 {
+    @apply text-heading-48;
+  }
+  
+  .prose .lead,
+  .prose p.lead {
+    @apply text-body-16;
+    color: var(--prose-fg-muted);
+  }
+  
+  .prose p {
+    @apply text-body-18;
   }
 }
