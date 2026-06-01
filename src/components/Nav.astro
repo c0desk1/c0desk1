@@ -18,9 +18,11 @@ const navItems = NAV.navBar;
     if (hasChildren) {
       return (
         <div class="relative group/dropdown">
-          <button aria-expanded="false" aria-haspopup="menu" class="relative inline-flex items-center gap-1 px-4 py-1.5 text-label-14 font-medium rounded-lg duration-200 text-muted hover:text-(--fg) hover:bg-muted focus:outline-none focus:ring-2 focus:ring-(--border-strong)">
-            {item.label}
-            <Icon name="chevron-down" className="w-3 h-3 transition-all duration-200 group-hover/dropdown:rotate-180 group-focus-within/dropdown:rotate-180"/>
+          <button aria-expanded="false" aria-haspopup="menu" class="relative inline-flex items-center gap-1.5 px-4 py-1.5 text-label-14 font-medium rounded-lg duration-200 text-muted hover:text-(--fg) hover:bg-muted focus:outline-none focus:ring-2 focus:ring-(--border-strong)">
+            <span>{item.label}</span>
+            <span class="shrink-0 inline-flex items-center justify-center w-4 h-4">
+              <Icon name="chevron-down" className="w-full h-full transition-all duration-200 group-hover/dropdown:rotate-180 group-focus-within/dropdown:rotate-180"/>
+            </span>
           </button>
           <div class="absolute left-0 top-full pt-4 invisible opacity-0 group-hover/dropdown:visible group-hover/dropdown:opacity-100 group-focus-within/dropdown:visible group-focus-within/dropdown:opacity-100 transition-transform duration-200 z-50">
             <div class="min-w-45 rounded-xl border border-(--border) bg-base shadow-lg p-1 backdrop-blur-sm">
