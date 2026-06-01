@@ -4,19 +4,13 @@ import type { CollectionEntry } from "astro:content";
 import Icon from "../ui/icons/Icon.astro";
 
 interface Props {
-  entries:    CollectionEntry<"guide">[];
-  currentId?: string;
-  headings:   { depth: number; text: string; slug: string }[];
+  entries:      CollectionEntry<"guide">[];
+  currentId?:   string;
+  headings:     { depth: number; text: string; slug: string }[];
+  sectionLabel: string;
 }
 
-const { entries, currentId, headings } = Astro.props;
-
-const grouped = entries.reduce<Record<string, CollectionEntry<"guide">[]>>((acc, entry) => {
-  const sec = entry.data.section || "General";
-  (acc[sec] ??= []).push(entry);
-  return acc;
-}, {});
-
+const { entries, currentId, headings, sectionLabel } = Astro.props;
 const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
 ---
 
@@ -82,38 +76,38 @@ const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
 </div>
 <div id="m-sidebar-backdrop" class="fixed inset-0 z-40 bg-base/60 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300 ease-in-out"></div>
 <aside id="m-sidebar" class="fixed top-(--header-height) inset-y-0 left-0 z-50 w-72 bg-base transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col border-r border-(--border) shadow-2xl">
-  <div class="flex items-center justify-between px-5 h-14 border-b border-(--border) shrink-0 bg-subtle/30">
-    <span class="text-label-14 font-medium text-muted">Navigasi</span>
+  <div class="flex items-center justify-between px-4 h-14 border-b border-(--border) shrink-0 bg-subtle/30">
+    <div class="flex items-center gap-1.5 text-muted">
+      <span class="inline-flex shrink-0 items-center justify-center w-5 h-5">
+        <Icon name="brain" className="w-full h-full text-subtle" />
+      </span>
+      <span class="text-heading-14 font-medium items-center">{sectionLabel}</span>
+    </div>
     <button id="m-sidebar-close" class="p-1.5 rounded-md text-muted hover:text-strong hover:bg-muted active:text-strong active:bg-muted transition-colors" aria-label="Close Menu">
       <Icon name="expanded-close" className="w-5 h-5" />
     </button>
   </div>
-  <nav class="flex-1 overflow-y-auto py-6 flex flex-col gap-8" style="scrollbar-width: thin;">
-    {Object.entries(grouped).map(([section, items]) => (
-      <div class="flex flex-col gap-2 px-6">
-        <h3 class="text-label-14 font-semibold text-subtle mb-1">{section}</h3>
-        <ul class="flex flex-col gap-0.5 border-l border-(--border) ml-1">
-          {items.map(entry => {
-            const isActive = entry.id === currentId;
-            return (
-              <li>
-                <a 
-                  href={`/guide/${entry.id}`} 
-                  class:list={[
-                    "flex items-center justify-between gap-2 pl-4 pr-3 py-2 text-body-14 no-underline transition-all border-l-2 -ml-px", 
-                    isActive 
-                      ? "text-strong bg-muted/50 font-medium border-current"
-                      : "text-muted hover:text-strong hover:bg-subtle font-medium border-transparent hover:border-current/50"
-                  ]}
-                >
-                  <span class="truncate">{entry.data.title}</span>
-                </a>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-    ))}
+  <nav class="flex-1 overflow-y-auto py-6 flex flex-col gap-0.5" style="scrollbar-width: thin;">
+    <ul class="flex flex-col gap-0.5 px-4">
+      {entries.map(entry => {
+        const isActive = entry.id === currentId;
+        return (
+          <li>
+            <a 
+              href={`/guide/${entry.id}`} 
+              class:list={[
+                "flex items-center justify-between gap-2 pl-4 pr-3 py-2 text-body-14 no-underline transition-all border-l-2 -ml-px rounded-r-md", 
+                isActive 
+                  ? "text-strong bg-muted/50 font-medium border-(--accent)"
+                  : "text-muted hover:text-strong hover:bg-subtle/40 font-medium border-transparent hover:border-current/50"
+              ]}
+            >
+              <span class="truncate">{entry.data.title}</span>
+            </a>
+          </li>
+        );
+      })}
+    </ul>
   </nav>
 </aside>
 
