@@ -1,42 +1,65 @@
 ---
 // src/pages/guide/[slug].astro
-import { 
-  getCollection, 
-  render 
-} from "astro:content";
-import { 
-  buildMeta, 
-  ROUTES 
-} from "@/consts";
-
+import { getCollection, render } from "astro:content";
+import { buildMeta, ROUTES, CATEGORIES } from "@/consts";
 import GuideLayout from "@/layouts/GuideLayout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import { components } from '@/components/layout/MDXComponents.astro';
-import Breadcrumb from "@/components/Breadcrumb.astro";
 import GuideSidebarDesktop from "@/components/guide/GuideSidebarDesktop.astro";
 import GuideTocDesktop from "@/components/guide/GuideTocDesktop.astro";
 import GuideSidebarMobile from "@/components/guide/GuideSidebarMobile.astro";
 import GuidePager from "@/components/guide/GuidePager.astro";
+import GuideHeader from "@/components/guide/GuideHeader.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
 
 export async function getStaticPaths() {
-  const entries = await getCollection("guide");
-  const activeEntries = entries
-    .filter((e) => !e.data.draft)
-    .sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
+  const entries = await getCollection("guide", ({ data }) => !data.draft);
+  const sorted = entries.sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  );
 
-  return activeEntries.map((entry, index) => {
-    const prevEntry = index > 0 ? activeEntries[index - 1] : null;
-    const nextEntry = index < activeEntries.length - 1 ? activeEntries[index + 1] : null;
+  return sorted.map((entry, index) => {
+    const prevEntry = index > 0 ? sorted[index - 1] : null;
+    const nextEntry = index < sorted.length - 1 ? sorted[index + 1] : null;
     return {
       params: { slug: entry.id },
-      props: { entry, entries: activeEntries, prevEntry, nextEntry },
+      props: { entry, entries: sorted, prevEntry, nextEntry },
     };
   });
 }
 
-const { entry, entries, prevEntry, nextEntry } = Astro.props;
+const { entry, entries } = Astro.props;
 const { Content, headings } = await render(entry);
+
+let authorName = "";
+let authorAvatar = "";
+let authorRole = "";
+let authorSlug = "";
+
+if (entry.data.author) {
+  try {
+    const authorEntry = await getEntry(entry.data.author);
+    if (authorEntry) {
+      authorName = authorEntry.data.name;
+      authorAvatar = authorEntry.data.avatar || "";
+      authorRole = authorEntry.data.role || "";
+      authorSlug = authorEntry.data.slug || entry.data.author.id;
+    }
+  } catch {}
+}
+
+
+const sectionSlug = entry.data.section || 'general';
+const sectionArticles = entries
+  .filter(e => (e.data.section || 'general') === sectionSlug)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const currentIndex = sectionArticles.findIndex(e => e.id === entry.id);
+const prevInSection = currentIndex > 0 ? sectionArticles[currentIndex - 1] : null;
+const nextInSection = currentIndex < sectionArticles.length - 1 ? sectionArticles[currentIndex + 1] : null;
+
+const sectionLabel = CATEGORIES.find(c => c.slug === sectionSlug)?.label || sectionSlug;
 
 const meta = buildMeta({
   title: entry.data.title,
@@ -45,36 +68,51 @@ const meta = buildMeta({
 ---
 
 <GuideLayout {meta}>
-  <GuideSidebarMobile {entries} currentId={entry.id} {headings} />
-  <Container size="full">
-    <div class="grid grid-cols-1 lg:grid-cols-[16rem_minmax(0,1fr)_14rem] gap-0 lg:gap-x-8 w-full max-w-full px-2 lg:px-4">
-      <GuideSidebarDesktop {entries} currentId={entry.id} />
-      <Section size="sm">
-        <div class="flex-1 min-w-0">
-          <Section size="sm">
-            <div class="flex justify-start items-start">
-              <Breadcrumb
-                items={[
-                  { name: "Guide", url: ROUTES.guide },
-                  { name: entry.data.section },
-                ]}
-              />
-            </div>
-          </Section>
-          <article class="prose max-w-full w-full">
-            <header class="mb-8">
-              <h1 class="text-heading-24 md:text-heading-32 lg:text-heading-48 font-semibold">
-                {entry.data.title}
-              </h1>
-            </header>
-            <Section size="sm">
-              <Content components={components} />
-            </Section>
-          </article>
-          <GuidePager prev={prevEntry} next={nextEntry} />
+  <GuideSidebarMobile
+    entries={sectionArticles}
+    currentId={entry.id}
+    headings={headings}
+    sectionLabel={sectionLabel}
+  />
+  <Container size="xl">
+    <div class="grid grid-cols-1 lg:grid-cols-[16rem_1fr_14rem] gap-0 lg:gap-x-8">
+      <div class="hidden lg:block">
+        <GuideSidebarDesktop
+          entries={sectionArticles}
+          currentId={entry.id}
+          sectionLabel={sectionLabel}
+        />
+      </div>
+      <Container size="none" class="px-0! pt-12">
+        <div class="flex items-center justify-start">
+          <Breadcrumb
+            items={[
+              { name: "Guide", url: ROUTES.guide },
+              { name: sectionLabel },
+            ]}
+          />
         </div>
-      </Section>
-      <GuideTocDesktop {headings} />
+        <Section size="sm">
+          <article class="prose max-w-none min-w-0"> 
+            <GuideHeader
+              title={entry.data.title}
+              pubDate={entry.data.pubDate}
+              description={entry.data.description}
+              authorName={authorName}
+              authorAvatar={authorAvatar}
+              authorRole={authorRole}
+              authorSlug={authorSlug}
+              heroImage={entry.data.heroImage}
+              tags={entry.data.tags}
+            />
+            <Content components={components} />
+            <GuidePager prev={prevInSection} next={nextInSection} />
+          </article>
+        </Section>
+      </Container>
+      <div class="hidden lg:block">
+        <GuideTocDesktop {headings} />
+      </div>
     </div>
   </Container>
 </GuideLayout>
