@@ -9,17 +9,22 @@ import { buildMeta, CATEGORIES } from "@/consts";
 
 const allGuides = await getCollection("guide", ({ data }) => !data.draft);
 
+// Kelompokkan berdasarkan section
 const grouped = allGuides.reduce((acc, entry) => {
-  const section = entry.data.section || "general";
-  if (!acc[section]) acc[section] = [];
-  acc[section].push(entry);
+  const sec = entry.data.section || "general";
+  if (!acc[sec]) acc[sec] = [];
+  acc[sec].push(entry);
   return acc;
 }, {} as Record<string, typeof allGuides>);
 
+// Urutkan artikel di setiap section: terbaru di atas
 for (const sec in grouped) {
-  grouped[sec].sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+  grouped[sec].sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  );
 }
 
+// Urutkan section sesuai urutan di CATEGORIES, hanya yang punya artikel
 const orderedSections = CATEGORIES
   .filter(cat => grouped[cat.slug]?.length)
   .map(cat => ({
@@ -33,43 +38,62 @@ const orderedSections = CATEGORIES
 const totalArticles = allGuides.length;
 
 const meta = buildMeta({
-  title: "Guide",
-  description: "Kumpulan artikel tutorial mendalam, tips optimasi, dan panduan langkah-demi-langkah.",
+  title: "Tutorial & Panduan Praktis",
+  description:
+    "Kumpulan artikel tutorial mendalam, tips optimasi, dan panduan langkah-demi-langkah.",
 });
 ---
 
 <GuideLayout {meta} isHome={true}>
   <Container size="xl" class="py-12 lg:py-20">
+    <!-- Hero Section -->
     <div class="relative mb-20">
-      <div class="absolute inset-0 bg-gradient-to-b from-accent/5 via-transparent to-transparent rounded-3xl -z-10" />
+      <div
+        class="absolute inset-0 bg-gradient-to-b from-accent/5 via-transparent to-transparent rounded-3xl -z-10"
+      ></div>
       <div class="max-w-3xl mx-auto text-center py-12 lg:py-16">
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-(--border) bg-base text-[11px] font-semibold tracking-[0.16em] uppercase text-subtle mb-6">
+        <div
+          class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-(--border) bg-base text-[11px] font-semibold tracking-[0.16em] uppercase text-subtle mb-6"
+        >
           <span class="relative flex h-2 w-2">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
+            <span
+              class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"
+            ></span>
+            <span
+              class="relative inline-flex rounded-full h-2 w-2 bg-accent"
+            ></span>
           </span>
           Panduan
         </div>
-        
-        <h1 class="text-heading-32 md:text-heading-40 lg:text-heading-56 font-bold tracking-tight text-strong mb-4">
+
+        <h1
+          class="text-heading-32 md:text-heading-40 lg:text-heading-56 font-bold tracking-tight text-strong mb-4"
+        >
           Tutorial & Hub Kreatif
         </h1>
-        
-        <p class="text-body-16 md:text-body-18 text-muted leading-relaxed max-w-2xl mx-auto">
+
+        <p
+          class="text-body-16 md:text-body-18 text-muted leading-relaxed max-w-2xl mx-auto"
+        >
           Jelajahi panduan langkah-demi-langkah, teknik kustomisasi mendalam,
           dan artikel praktis untuk membangun proyek lebih cepat dan lebih rapi.
         </p>
 
+        <!-- Stats -->
         <div class="flex items-center justify-center gap-8 mt-8">
           <div class="text-center">
-            <div class="text-heading-24 md:text-heading-32 font-bold text-strong">
+            <div
+              class="text-heading-24 md:text-heading-32 font-bold text-strong"
+            >
               {totalArticles}
             </div>
             <div class="text-label-13 text-muted mt-1">Artikel</div>
           </div>
-          <div class="w-px h-10 bg-(--border)" />
+          <div class="w-px h-10 bg-(--border)"></div>
           <div class="text-center">
-            <div class="text-heading-24 md:text-heading-32 font-bold text-strong">
+            <div
+              class="text-heading-24 md:text-heading-32 font-bold text-strong"
+            >
               {orderedSections.length}
             </div>
             <div class="text-label-13 text-muted mt-1">Kategori</div>
@@ -77,18 +101,23 @@ const meta = buildMeta({
         </div>
       </div>
     </div>
+
+    <!-- Daftar Section -->
     {orderedSections.length > 0 ? (
       <div class="space-y-16">
         {orderedSections.map((section, index) => (
           <section>
-            {/* Section Header */}
             <div class="flex items-center gap-4 mb-8">
-              <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-accent/10 text-accent">
+              <div
+                class="flex items-center justify-center w-10 h-10 rounded-xl bg-accent/10 text-accent"
+              >
                 <Icon name="brain" className="w-5 h-5" />
               </div>
               <div class="flex-1">
                 <div class="flex items-baseline gap-3">
-                  <h2 class="text-heading-20 md:text-heading-24 font-semibold text-strong">
+                  <h2
+                    class="text-heading-20 md:text-heading-24 font-semibold text-strong"
+                  >
                     {section.label}
                   </h2>
                   <span class="text-label-14 text-muted">
@@ -110,22 +139,16 @@ const meta = buildMeta({
               </a>
             </div>
 
-            {section.articles[0] && (
-              <div class="mb-6">
-                <div class="rounded-2xl border border-(--border)/70 bg-base hover:border-strong hover:shadow-sm transition-all duration-300">
-                  <GuideCard entry={section.articles[0]} />
-                </div>
-              </div>
-            )}
+            <!-- Semua artikel dalam grid -->
+            <div
+              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+            >
+              {section.articles.map(entry => (
+                <GuideCard entry={entry} />
+              ))}
+            </div>
 
-            {section.articles.length > 1 && (
-              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {section.articles.slice(1, 4).map(entry => (
-                  <GuideCard entry={entry} />
-                ))}
-              </div>
-            )}
-
+            <!-- Mobile "Lihat semua" link jika artikel banyak -->
             {section.articles.length > 4 && (
               <a
                 href={`/guide/section/${section.slug}`}
@@ -135,15 +158,21 @@ const meta = buildMeta({
                 <Icon name="arrow-right" className="w-3.5 h-3.5" />
               </a>
             )}
+
             {index < orderedSections.length - 1 && (
-              <div class="mt-16 border-t border-(--border)/40" />
+              <div class="mt-16 border-t border-(--border)/40"></div>
             )}
           </section>
         ))}
       </div>
     ) : (
-      <div class="rounded-2xl border border-dashed border-(--border) py-20 text-center">
-        <div class="flex items-center justify-center w-16 h-16 rounded-2xl bg-muted/30 mx-auto mb-4">
+      <!-- Empty State -->
+      <div
+        class="rounded-2xl border border-dashed border-(--border) py-20 text-center"
+      >
+        <div
+          class="flex items-center justify-center w-16 h-16 rounded-2xl bg-muted/30 mx-auto mb-4"
+        >
           <Icon name="brain" className="w-8 h-8 text-muted/40" />
         </div>
         <p class="m-0 text-body-15 text-muted">
