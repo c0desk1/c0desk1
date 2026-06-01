@@ -76,7 +76,7 @@ export default defineConfig({
         frontmatter: true,
       },
       mdastPlugins: [
-        satteriHeading,
+        // satteriHeading,
         satteriFigure,
         satteriQuote,
         satteriCodeBlock,
@@ -100,10 +100,10 @@ export default defineConfig({
       transformers: [
         transformerMetaHighlight(),
         transformerMetaWordHighlight(),
-        transformerNotationDiff(),
-        transformerNotationHighlight(),
-        transformerNotationWordHighlight(),
-        transformerNotationErrorLevel(),
+        transformerNotationDiff({matchAlgorithm: 'v3', }),
+        transformerNotationHighlight({matchAlgorithm: 'v3', }),
+        transformerNotationWordHighlight({matchAlgorithm: 'v3', }),
+        transformerNotationErrorLevel({matchAlgorithm: 'v3', }),
         transformerRemoveLineBreak(),
       ],
       wrap: false,
