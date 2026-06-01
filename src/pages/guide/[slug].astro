@@ -6,13 +6,13 @@ import Container from "@/components/ui/Container.astro";
 import { buildMeta, ROUTES } from "@/consts";
 import { components } from '@/components/layout/MDXComponents';
 
+import Section from "@/components/ui/Section.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+
 import GuideSidebarDesktop from "@/components/guide/GuideSidebarDesktop.astro";
 import GuideTocDesktop from "@/components/guide/GuideTocDesktop.astro";
 import GuideSidebarMobile from "@/components/guide/GuideSidebarMobile.astro";
 import GuidePager from "@/components/guide/GuidePager.astro";
-import Section from "@/components/ui/Section.astro";
-import Breadcrumb from "@/components/Breadcrumb.astro";
-
 
 export async function getStaticPaths() {
   const entries = await getCollection("guide");
