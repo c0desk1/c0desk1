@@ -1,6 +1,5 @@
-/* ---------- INLINE CODE ---------- */
+/* INLINE CODE */
 .prose :not(pre) > code {
-  @apply text-code-14;
   padding: 0.2em 0.45em;
   font-weight: 500;
   background-color: var(--prose-code-bg);
@@ -29,14 +28,14 @@
   @apply text-code-14;
 }
 
-/* ---------- WRAPPER ---------- */
+/* Custom Codeblock WRAPPER */
 .prose .code-block-wrapper {
   margin: 2.5rem 0;
   overflow-x: auto;
   scroll-margin-top: var(--prose-scroll-margin, 100px);
 }
 
-/* ---------- HEADER ---------- */
+/* Custom Codeblock HEADER */
 .prose .code-block-header {
   justify-content: space-between;
 }
@@ -51,7 +50,7 @@
   min-width: 0;
 }
 
-/* ---------- COPY BUTTON ---------- */
+/* Custom Codeblock COPY BUTTON */
 .prose .copy-button {
   display: flex;
   justify-content: center;
@@ -70,7 +69,7 @@
   .prose .copy-button { opacity: 1; }
 }
 
-/* ---------- ASTRO-CODE ---------- */
+/* ASTRO-CODE */
 .prose .astro-code {
   @apply text-code-14;
   margin: 1.5rem 0;
@@ -91,7 +90,7 @@
   content: none;
 }
 
-/* ---------- PRE & CODE ---------- */
+/* PRE & CODE */
 .prose .astro-code pre {
   margin: 0 !important;
   padding: 1.125rem 1.25rem;
@@ -113,7 +112,7 @@
   content: none !important;
 }
 
-/* ---------- LINE ---------- */
+/* LINE */
 .prose .astro-code .line {
   display: block;
   margin: 0;
@@ -128,7 +127,7 @@
   content: counter(line);
   display: inline-block;
   margin-right: 1.5rem;
-  text-align: ledt;
+  text-align: left;
   color: var(--prose-code-number);
   user-select: none;
   white-space: nowrap;
@@ -141,7 +140,7 @@
   word-wrap: normal;
 }
 
-/* ---------- DIFF & HIGHLIGHT ---------- */
+/* DIFF & HIGHLIGHT */
 .prose .astro-code .line.diff.add {
   background-color: rgba(74, 222, 128, 0.2) !important;
   box-shadow: inset 3px 0 0 0 var(--success) !important;
@@ -199,7 +198,7 @@
     padding: 1rem 0.875rem;
   }
   .prose .astro-code .line {
-    @apply text-code-12;
+    @apply text-code-14;
     padding: 0.05rem 0.875rem;
     margin: 0;
   }
