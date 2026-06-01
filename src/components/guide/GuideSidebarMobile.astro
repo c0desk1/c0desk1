@@ -1,0 +1,174 @@
+---
+// src/components/guide/mobile/GuideSidebarMobile.astro
+import type { CollectionEntry } from "astro:content";
+import Icon from "../ui/icons/Icon.astro";
+
+interface Props {
+  entries:    CollectionEntry<"guide">[];
+  currentId?: string;
+  headings:   { depth: number; text: string; slug: string }[];
+}
+
+const { entries, currentId, headings } = Astro.props;
+
+const grouped = entries.reduce<Record<string, CollectionEntry<"guide">[]>>((acc, entry) => {
+  const sec = entry.data.section || "General";
+  (acc[sec] ??= []).push(entry);
+  return acc;
+}, {});
+
+const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
+---
+<div class="lg:hidden sticky top-(--header-height) z-40 flex items-center justify-between w-full h-12 bg-base border-b border-(--border) px-4">
+  <button id="m-sidebar-open" type="button" class="flex items-center gap-1.5 text-button-14 font-semibold text-muted hover:text-strong transition-colors py-1.5">
+    <Icon name="expanded-open" className="w-5 h-5" />
+    <span>Menu</span>
+  </button>
+  {filteredToc.length > 0 && (
+    <details id="m-toc-details" class="group/toc">
+      <summary class="flex items-center gap-1 cursor-pointer list-none select-none [&::-webkit-details-marker]:hidden text-label-14 font-medium text-muted hover:text-strong py-1.5 px-2 border border-(--border) rounded-md hover:bg-muted active:bg-muted">
+        <span id="m-toc-active-text" class="truncate max-w-35 text-right block font-medium">
+          Di Halaman Ini
+        </span>
+        <Icon name="chevron-down" className="transition-transform duration-150 group-open/toc:rotate-180 text-muted/70 w-4 h-4" />
+      </summary>
+      <nav class="absolute top-12 left-0 w-full bg-base rounded-b-xl border-b-2 border-(--border) max-h-64 overflow-y-auto px-6 py-4 shadow-sm">
+        <p class="text-label-13 font-semibold tracking-wider uppercase text-subtle/80 mb-2">Daftar Isi</p>
+        <ul class="flex flex-col gap-1" role="list">
+          {filteredToc.map(h => (
+            <li>
+              <a 
+                href={`#${h.slug}`} 
+                class:list={[
+                  "toc-mobile-link block py-1.5 transition-colors text-muted hover:text-strong text-label-13 no-underline font-medium",
+                  h.depth === 3 && "pl-4 text-label-13"
+                ]}
+                data-toc-mobile-slug={h.slug}
+              >
+                {h.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </details>
+  )}
+</div>
+<div id="m-sidebar-backdrop" class="fixed inset-0 z-0 bg-black/20 hidden opacity-0 transition-opacity duration-150"></div>
+<aside id="m-sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-base transform -translate-x-full transition-transform duration-150 ease-in-out flex flex-col pt-(--header-height) border-r border-(--border)">
+  <div class="flex items-center justify-between px-6 h-12 border-b border-(--border) shrink-0">
+    <span class="text-[11px] font-bold tracking-wider uppercase text-muted">Navigasi</span>
+    <button id="m-sidebar-close" class="p-1 rounded-md text-muted hover:text-strong">
+      <Icon name="expanded-close" className="w-5 h-5">
+    </button>
+  </div>
+  <nav class="flex-1 overflow-y-auto px-6 py-6 flex flex-col gap-6" style="scrollbar-width: thin;">
+    {Object.entries(grouped).map(([section, items]) => (
+      <div class="flex flex-col gap-1">
+        <h3 class="text-[11px] font-bold tracking-wider uppercase text-subtle/80 px-2 mb-1">{section}</h3>
+        <ul class="flex flex-col gap-px">
+          {items.map(entry => (
+            <li>
+              <a href={`/guide/${entry.id}`} class:list={["flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-md text-[13px] no-underline border font-medium", entry.id === currentId ? "text-strong bg-muted border-(--border)" : "text-muted border-transparent hover:bg-subtle/30"]}>
+                <span class="truncate">{entry.data.title}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </nav>
+</aside>
+
+<script>
+  const initMobileNavigation = () => {
+    const openBtn = document.getElementById("m-sidebar-open");
+    const closeBtn = document.getElementById("m-sidebar-close");
+    const sidebar = document.getElementById("m-sidebar");
+    const backdrop = document.getElementById("m-sidebar-backdrop");
+    const tocDetails = document.getElementById("m-toc-details") as HTMLDetailsElement | null;
+
+    if (openBtn && sidebar && backdrop) {
+      const open = () => {
+        if (tocDetails) tocDetails.removeAttribute("open");
+        sidebar.classList.remove("-translate-x-full");
+        backdrop.classList.remove("hidden");
+        setTimeout(() => backdrop.classList.add("opacity-100"), 10);
+        document.body.style.overflow = "hidden";
+      };
+      const close = () => {
+        sidebar.classList.add("-translate-x-full");
+        backdrop.classList.remove("opacity-100");
+        setTimeout(() => backdrop.classList.add("hidden"), 150);
+        document.body.style.overflow = "";
+      };
+      openBtn.addEventListener("click", open);
+      closeBtn?.addEventListener("click", close);
+      backdrop.addEventListener("click", close);
+      sidebar.querySelectorAll("nav a").forEach(l => l.addEventListener("click", close));
+    }
+
+    const tocLinks = document.querySelectorAll<HTMLAnchorElement>("[data-toc-mobile-slug]");
+    const activeText = document.getElementById("m-toc-active-text");
+    
+    if (tocLinks.length && tocDetails && activeText) {
+      const targets = Array.from(tocLinks).map(l => document.getElementById(l.dataset.tocMobileSlug!)).filter(Boolean) as HTMLElement[];
+      let active = "";
+
+      const obs = new IntersectionObserver(entries => {
+        if (window.scrollY < 50) {
+          active = "";
+          activeText.textContent = "Di Halaman Ini";
+          tocLinks.forEach(l => {
+            l.classList.remove("text-(--accent)");
+            l.classList.add("text-muted");
+          });
+          return;
+        }
+
+        entries.forEach(e => { if (e.isIntersecting) active = e.target.id; });
+        if (!active && targets.length > 0) return;
+
+        tocLinks.forEach(l => {
+          if (l.dataset.tocMobileSlug === active) {
+            l.classList.add("text-(--accent)");
+            l.classList.remove("text-muted");
+            activeText.textContent = l.textContent?.trim() || "Di Halaman Ini";
+          } else {
+            l.classList.remove("text-(--accent)");
+            l.classList.add("text-muted");
+          }
+        });
+      }, { rootMargin: "-20% 0% -65% 0%", threshold: 0 });
+
+      targets.forEach(t => obs.observe(t));
+
+      const handleScrollTop = () => {
+        if (window.scrollY < 50) {
+          active = "";
+          activeText.textContent = "Di Halaman Ini";
+          tocLinks.forEach(l => {
+            l.classList.remove("text-(--accent)");
+            l.classList.add("text-muted");
+          });
+        }
+      };
+      window.addEventListener("scroll", handleScrollTop, { passive: true });
+
+      const closeToc = () => tocDetails.removeAttribute("open");
+      tocLinks.forEach(l => l.addEventListener("click", closeToc));
+      openBtn?.addEventListener("click", closeToc);
+
+      return () => {
+        obs.disconnect();
+        window.removeEventListener("scroll", handleScrollTop);
+      };
+    }
+  };
+
+  let cleanupMobileNav: (() => void) | undefined = initMobileNavigation();
+  document.addEventListener("astro:page-load", () => {
+    cleanupMobileNav?.();
+    cleanupMobileNav = initMobileNavigation();
+  });
+</script>

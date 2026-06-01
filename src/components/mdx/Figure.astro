@@ -32,8 +32,8 @@ if (href && href.startsWith('http')) {
 
 const figureClass    = "full-width-figure my-8 lg:my-12";
 const browserWindow  = "relative overflow-hidden rounded-xl border border-strong bg-base shadow-lg dark:shadow-xl";
-const browserHeader  = "flex items-center px-4 py-3 border-b border-strong bg-subtle";
-const trafficLights  = "flex items-center gap-1.5 shrink-0 z-10";
+const browserHeader  = "flex items-center px-4 py-3 border-b border-(--border)";
+const trafficLights  = "flex items-center justify-start gap-1.5";
 const urlBarWrapper  = "absolute inset-x-0 flex justify-center pointer-events-none";
 const urlBar         = "flex items-center justify-center bg-dim border border-strong rounded-md h-6 px-8 max-w-30 md:max-w-xs w-full text-body-13 text-muted truncate";
 const imageContainer = "relative w-full bg-base";
@@ -49,9 +49,9 @@ const captionClass = "text-caption-14! text-muted mt-4 text-center max-w-2xl mx-
   <div class={browserWindow}>
     <div class={browserHeader}>
       <div class={trafficLights}>
-        <div class="w-2.5 h-2.5 rounded-full bg-[#ff5f56] border border-strong/10"></div>
-        <div class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e] border border-strong/10"></div>
-        <div class="w-2.5 h-2.5 rounded-full bg-[#27c93f] border border-strong/10"></div>
+        <div class="size-2.5 rounded-full border border-(--prose-border)/10 bg-error"></div>
+        <div class="size-2.5 rounded-full border border-(--prose-border)/10 bg-warning"></div>
+        <div class="size-2.5 rounded-full border border-(--prose-border)/10 bg-success"></div>
       </div>
       <div class={urlBarWrapper}>
         <div class={urlBar}>

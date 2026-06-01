@@ -1,0 +1,55 @@
+---
+// src/components/guide/desktop/GuideTocDesktop.astro
+import Section from "@/components/ui/Section.astro";
+
+interface Props { headings: { depth: number; text: string; slug: string }[]; }
+const { headings } = Astro.props;
+const filtered = headings.filter(h => h.depth >= 2 && h.depth <= 3);
+---
+{filtered.length > 0 && (
+  <aside class="hidden lg:block w-56 shrink-0 sticky top-(--header-height) h-[calc(100svh-var(--header-height))] overflow-y-auto pl-4" style="scrollbar-width: none;">
+    <Section size="sm">
+      <p class="text-[11px] font-bold tracking-wider uppercase text-muted/80 px-2 mb-3">Di halaman ini.</p>
+      <nav>
+        <ul class="flex flex-col gap-0.5 border-l border-(--border)">
+          {filtered.map(h => (
+            <li>
+              <a href={`#${h.slug}`} class:list={["toc-desktop-link block py-1 pr-2 transition-colors border-l -ml-px border-transparent text-muted hover:text-strong text-[13px] no-underline font-medium", h.depth === 2 ? "pl-3" : "pl-6 text-[12px]"]} data-toc-desktop-slug={h.slug}>
+                {h.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </Section>
+  </aside>
+)}
+
+<script>
+  const initDesktopToc = () => {
+    const links = document.querySelectorAll<HTMLAnchorElement>("[data-toc-desktop-slug]");
+    if (!links.length) return;
+    const targets = Array.from(links).map(l => document.getElementById(l.dataset.tocDesktopSlug!)).filter(Boolean) as HTMLElement[];
+    let active = "";
+
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) active = e.target.id; });
+      if (!active && targets.length > 0) return;
+      links.forEach(l => {
+        if (l.dataset.tocDesktopSlug === active) {
+          l.classList.add("text-strong", "border-(--accent)");
+          l.classList.remove("text-muted", "border-transparent");
+        } else {
+          l.classList.remove("text-strong", "border-(--accent)");
+          l.classList.add("text-muted", "border-transparent");
+        }
+      });
+    }, { rootMargin: "-15% 0% -75% 0%", threshold: 0 });
+
+    targets.forEach(t => obs.observe(t));
+    return () => obs.disconnect();
+  };
+
+  let cleanup: (() => void) | undefined = initDesktopToc();
+  document.addEventListener("astro:page-load", () => { cleanup?.(); cleanup = initDesktopToc(); });
+</script>

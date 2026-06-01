@@ -7,7 +7,7 @@ import Menu from "./Menu.astro";
 import SearchBar from "./SearchBar.astro";
 ---
 
-<header id="main-header" class="fixed top-0 z-50 mx-auto w-full">
+<header id="main-header" class="fixed top-0 z-50 mx-auto w-full bg-base">
   <Container size="xl">
     <div class="relative flex items-center h-(--header-height)">
       <div class="flex items-center shrink-0">
@@ -27,14 +27,6 @@ import SearchBar from "./SearchBar.astro";
 <div class="h-(--header-height) hidden" aria-hidden="true"></div>
 
 <style is:global>
-  #main-header {
-    background-color: transparent;
-  }
-  
-  #main-header.scrolled {
-    background-color: var(--bg);
-  }
-  
   #main-header.scrolled #header-border {
     opacity: 1;
   }

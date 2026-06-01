@@ -1,269 +1,151 @@
 ---
 // src/components/mdx/FileTree.astro
+import { fileIcons } from '@/components/ui/icons/file';
 
-import Icon from '@/components/ui/icons/Icon.astro';
-
-const svg = {
-  folder: `
-    <svg 
-      width="24"
-      height="24"
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor"
-      stroke-width="2" 
-      stroke-linecap="round" 
-      stroke-linejoin="round"
-      aria-hidden="true"
-      class="w-4.5 h-4.5"
-    >
-      <path 
-        d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776"
-      />
-    </svg>
-  `,
-
-  file: `
-    <svg 
-      width="24"
-      height="24"
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor"
-      stroke-width="2" 
-      stroke-linecap="round" 
-      stroke-linejoin="round"
-      aria-hidden="true"
-      class="w-4.5 h-4.5"
-    >
-      <path 
-        d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" 
-      />
-    </svg>
-  `,
-};
-
-const extIcons: Record<string, string> = {
-  astro: `
-    <svg 
-      width="24"
-      height="24"
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor"
-      stroke-width="2" 
-      stroke-linecap="round" 
-      stroke-linejoin="round"
-      aria-hidden="true"
-      class="w-4.5 h-4.5"
-    >
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M14.972 3.483c.163 .196 .247 .46 .413 .987l3.64 11.53a15.5 15.5 0 0 0 -4.352 -1.42l-2.37 -7.723a.31 .31 0 0 0 -.296 -.213a.31 .31 0 0 0 -.295 .214l-2.342 7.718a15.5 15.5 0 0 0 -4.37 1.422l3.657 -11.53c.168 -.527 .251 -.79 .415 -.986c.144 -.172 .331 -.306 .544 -.388c.242 -.094 .527 -.094 1.099 -.094h2.612c.572 0 .858 0 1.1 .094c.213 .082 .4 .217 .545 .39" />
-      <path d="M9 18c0 1.5 2 3 3 4c1 -1 3 -3 3 -4q -3 1.5 -6 0" />
-    </svg>
-  `,
-   css: `
-    <svg 
-      width="24"
-      height="24"
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor"
-      stroke-width="2" 
-      stroke-linecap="round" 
-      stroke-linejoin="round"
-      aria-hidden="true"
-      class="w-4.5 h-4.5"
-    >
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M20 4l-2 14.5l-6 2l-6 -2l-2 -14.5l16 0" />
-      <path d="M8.5 8h7l-4.5 4h4l-.5 3.5l-2.5 .75l-2.5 -.75l-.1 -.5" />
-    </svg>
-  `,
-   md: `
-    <svg 
-      width="24"
-      height="24"
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor"
-      stroke-width="2" 
-      stroke-linecap="round" 
-      stroke-linejoin="round"
-      aria-hidden="true"
-      class="w-4.5 h-4.5"
-    >
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10" />
-      <path d="M7 15v-6l2 2l2 -2v6" />
-      <path d="M14 13l2 2l2 -2m-2 2v-6" />
-    </svg>
-  `,
-  tsx: `
-    <svg 
-      width="24"
-      height="24"
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor"
-      stroke-width="2" 
-      stroke-linecap="round" 
-      stroke-linejoin="round"
-      aria-hidden="true"
-      class="w-4.5 h-4.5"
-    >
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4" />
-      <path d="M14 3v4a1 1 0 0 0 1 1h4" />
-      <path d="M16 15l4 6" />
-      <path d="M16 21l4 -6" />
-      <path d="M10 20.25c0 .414 .336 .75 .75 .75h1.25a1 1 0 0 0 1 -1v-1a1 1 0 0 0 -1 -1h-1a1 1 0 0 1 -1 -1v-1a1 1 0 0 1 1 -1h1.25a.75 .75 0 0 1 .75 .75" />
-      <path d="M4.5 15h3" />
-      <path d="M6 15v6" />
-    </svg>
-  `,
-  ts: `
-    <svg 
-      width="24"
-      height="24"
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor"
-      stroke-width="2" 
-      stroke-linecap="round" 
-      stroke-linejoin="round"
-      aria-hidden="true"
-      class="w-4.5 h-4.5"
-    >
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M14 3v4a1 1 0 0 0 1 1h4" />
-      <path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2h-1" />
-      <path d="M14 3v4a1 1 0 0 0 1 1h4" />
-      <path d="M9 20.25c0 .414 .336 .75 .75 .75h1.25a1 1 0 0 0 1 -1v-1a1 1 0 0 0 -1 -1h-1a1 1 0 0 1 -1 -1v-1a1 1 0 0 1 1 -1h1.25a.75 .75 0 0 1 .75 .75" />
-      <path d="M3.5 15h3" />
-      <path d="M5 15v6" />
-    </svg>
-  `,
-  apk: `
-    <svg 
-      width="24"
-      height="24"
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor"
-      stroke-width="2" 
-      stroke-linecap="round" 
-      stroke-linejoin="round"
-      aria-hidden="true"
-      class="w-4.5 h-4.5"
-    >
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M4 10l0 6" />
-      <path d="M20 10l0 6" />
-      <path d="M7 9h10v8a1 1 0 0 1 -1 1h-8a1 1 0 0 1 -1 -1v-8a5 5 0 0 1 10 0" />
-      <path d="M8 3l1 2" />
-      <path d="M16 3l-1 2" />
-      <path d="M9 18l0 3" />
-      <path d="M15 18l0 3" />
-    </svg>
-  `,
-  zip: `
-    <svg 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor"
-      stroke-width="2" 
-      stroke-linecap="round" 
-      stroke-linejoin="round"
-      aria-hidden="true"
-      class="w-4.5 h-4.5"
-    >
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M6 20.735a2 2 0 0 1 -1 -1.735v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2h-1" />
-      <path d="M11 17a2 2 0 0 1 2 2v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-2a2 2 0 0 1 2 -2" />
-      <path d="M11 5l-1 0" />
-      <path d="M13 7l-1 0" />
-      <path d="M11 9l-1 0" />
-      <path d="M13 11l-1 0" />
-      <path d="M11 13l-1 0" />
-      <path d="M13 15l-1 0" />
-    </svg>
-  `,
-  jpg: `
-    <svg 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor"
-      stroke-width="2" 
-      stroke-linecap="round" 
-      stroke-linejoin="round"
-      aria-hidden="true"
-      class="w-4.5 h-4.5"
-    >
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M4 6a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2l0 -12" />
-      <path d="M4 16l16 0" />
-      <path d="M4 12l3 -3c.928 -.893 2.072 -.893 3 0l4 4" />
-      <path d="M13 12l2 -2c.928 -.893 2.072 -.893 3 0l2 2" />
-      <path d="M14 7l.01 0" />
-    </svg>
-  `,
-  jpeg: `
-    <svg 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor"
-      stroke-width="2" 
-      stroke-linecap="round" 
-      stroke-linejoin="round"
-      aria-hidden="true"
-      class="w-4.5 h-4.5"
-    >
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M4 6a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2l0 -12" />
-      <path d="M4 16l16 0" />
-      <path d="M4 12l3 -3c.928 -.893 2.072 -.893 3 0l4 4" />
-      <path d="M13 12l2 -2c.928 -.893 2.072 -.893 3 0l2 2" />
-      <path d="M14 7l.01 0" />
-    </svg>
-  `,
-  png: `
-    <svg 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor"
-      stroke-width="2" 
-      stroke-linecap="round" 
-      stroke-linejoin="round"
-      aria-hidden="true"
-      class="w-4.5 h-4.5"
-    >
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M4 6a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2l0 -12" />
-      <path d="M4 16l16 0" />
-      <path d="M4 12l3 -3c.928 -.893 2.072 -.893 3 0l4 4" />
-      <path d="M13 12l2 -2c.928 -.893 2.072 -.893 3 0l2 2" />
-      <path d="M14 7l.01 0" />
-    </svg>
-  `,
-  mp4: `
-    <svg 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor"
-      stroke-width="2" 
-      stroke-linecap="round" 
-      stroke-linejoin="round"
-      aria-hidden="true"
-      class="w-4.5 h-4.5"
-    >
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M15 10l4.553 -2.276a1 1 0 0 1 1.447 .894v6.764a1 1 0 0 1 -1.447 .894l-4.553 -2.276v-4" />
-      <path d="M3 8a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2l0 -8" />
-    </svg>
-  `,
-};
+const svg = fileIcons;
+const extIcons = fileIcons;
 ---
+
+<style is:global>
+  .file-tree-container {
+    margin: 2.5rem 0;
+    background-color: var(--prose-code-bg);
+    border: 1px solid var(--prose-code-border);
+    border-radius: var(--prose-radius-md);
+    padding: 1.25rem;
+    overflow-x: auto;
+    font-family: var(--prose-font-mono);
+  }
+
+  .file-tree,
+  .file-tree ul,
+  .file-tree ol,
+  .file-tree li,
+  .file-tree-list {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .file-tree li::marker,
+  .file-tree ul::marker,
+  .file-tree ol::marker,
+  .file-tree li::before,
+  .file-tree ul::before,
+  .file-tree ol::before,
+  .file-tree li::after,
+  .file-tree ul::after,
+  .file-tree ol::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  .file-tree li + li {
+    margin-top: 0.35rem !important;
+  }
+
+  .file-tree-children {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease;
+    margin-left: 0.45rem !important;
+    padding-left: 0.85rem !important;
+    border-left: 1px solid var(--prose-border-strong);
+  }
+
+  .file-tree-folder.open > .file-tree-children {
+    grid-template-rows: 1fr;
+  }
+
+  .file-tree-children > ul,
+  .file-tree-children > ol {
+    overflow: hidden;
+  }
+
+  .file-tree-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--prose-fg-muted);
+    font-size: 0.875rem;
+    transition: color var(--prose-duration) var(--prose-ease-out);
+  }
+
+  .file-tree-folder > .file-tree-label {
+    color: var(--prose-fg-strong);
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .file-tree-label:hover {
+    color: var(--prose-fg-strong);
+  }
+
+  .icon {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    color: var(--prose-fg-dim);
+    transition: color var(--prose-duration) var(--prose-ease-out);
+  }
+
+  .file-tree-folder > .file-tree-label > .folder-icon {
+    color: var(--prose-border-strong);
+  }
+
+  .file-tree-folder > .file-tree-label:hover > .folder-icon {
+    color: var(--prose-fg-strong);
+  }
+
+  .file-tree-label.is-highlighted {
+    color: var(--prose-fg-strong);
+    background-color: var(--prose-bg-muted);
+    border: 1px solid transparent;
+    padding: 0.125rem 0.5rem 0.125rem 0.35rem;
+    margin-left: -0.35rem;
+    margin-top: 0.15rem;
+    margin-bottom: 0.15rem;
+    border-radius: var(--prose-radius-sm);
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  }
+
+  .file-tree-label.is-highlighted .icon {
+    color: var(--prose-fg-strong) !important;
+  }
+
+  .file-tree-label.is-highlighted:hover {
+    background-color: var(--prose-bg-subtle);
+  }
+
+  .file-tree-label.is-removed {
+    color: var(--error);
+    background-color: var(--error-soft);
+    border: 1px dashed var(--error);
+    opacity: 0.8;
+    padding: 0.125rem 0.5rem 0.125rem 0.35rem;
+    margin-left: -0.35rem;
+    margin-top: 0.15rem;
+    margin-bottom: 0.15rem;
+    border-radius: var(--prose-radius-sm);
+  }
+
+  .file-tree-label.is-removed .icon {
+    color: var(--error) !important;
+    opacity: 0.8;
+  }
+
+  .file-tree-label.is-removed .file-name {
+    text-decoration: line-through;
+    text-decoration-color: var(--error);
+    opacity: 0.7;
+  }
+
+  .file-tree-label.is-removed:hover {
+    opacity: 1;
+    background-color: color-mix(in srgb, var(--error-soft) 100%, transparent);
+  }
+</style>
 
 <div class="file-tree-container">
   <div class="file-tree">
@@ -277,10 +159,20 @@ const extIcons: Record<string, string> = {
       const ext = filename.split(".").pop()?.toLowerCase() || "";
       return extIcons[ext] ?? svg.file;
     }
+    function refreshFolderIcon(folderItem) {
+      const label = folderItem.querySelector(':scope > .file-tree-label');
+      const iconEl = label?.querySelector('.folder-icon');
+      if (!iconEl) return;
+
+      const isOpen = folderItem.classList.contains('open');
+      iconEl.innerHTML = isOpen
+        ? (svg['folder-open'] || svg.folder)
+        : svg.folder;
+    }
 
     const init = () => {
       const trees = document.querySelectorAll(".file-tree:not(.is-processed)");
-      
+
       trees.forEach((root) => {
         root.classList.add("is-processed");
 
@@ -293,19 +185,21 @@ const extIcons: Record<string, string> = {
             let rawText = "";
             let isHighlighted = false;
             let isRemoved = false;
+            const childNodesToRemove = [];
 
             for (const node of item.childNodes) {
               if (node.nodeName === 'UL' || node.nodeName === 'OL') break;
-              
+
               if (node.nodeName === 'STRONG' || node.nodeName === 'B' || node.nodeName === 'MARK') {
                 isHighlighted = true;
               }
-              
+
               if (node.nodeName === 'DEL' || node.nodeName === 'S' || node.nodeName === 'STRIKE') {
                 isRemoved = true;
               }
-              
+
               rawText += node.textContent;
+              childNodesToRemove.push(node);
             }
 
             rawText = rawText.trim();
@@ -314,31 +208,44 @@ const extIcons: Record<string, string> = {
             const isFolder = rawText.endsWith("/");
             const label = document.createElement("div");
             label.className = "file-tree-label";
-            
+
             if (isRemoved) {
               label.classList.add("is-removed");
             } else if (isHighlighted) {
               label.classList.add("is-highlighted");
             }
 
+            childNodesToRemove.forEach(n => n.remove());
+
             if (isFolder) {
               const name = rawText.slice(0, -1);
               item.classList.add("file-tree-folder");
+              item.classList.add("open");
+
               label.innerHTML = `
-                <span class="icon folder-icon">${svg.folder}</span>
+                <span class="icon folder-icon">${svg['folder-open'] || svg.folder}</span>
                 <span class="file-name">${name}</span>
               `;
+
+              label.addEventListener('click', () => {
+                item.classList.toggle('open');
+                refreshFolderIcon(item);
+              });
+
+              const childrenContainer = document.createElement('div');
+              childrenContainer.className = 'file-tree-children';
+
+              while (item.firstChild && (item.firstChild.nodeName === 'UL' || item.firstChild.nodeName === 'OL')) {
+                childrenContainer.appendChild(item.firstChild);
+              }
+
+              item.appendChild(childrenContainer);
             } else {
               item.classList.add("file-tree-file");
               label.innerHTML = `
                 <span class="icon file-icon">${getIcon(rawText)}</span>
                 <span class="file-name">${rawText}</span>
               `;
-            }
-
-            while (item.firstChild) {
-              if (item.firstChild.nodeName === 'UL' || item.firstChild.nodeName === 'OL') break;
-              item.removeChild(item.firstChild);
             }
 
             item.prepend(label);
@@ -356,139 +263,3 @@ const extIcons: Record<string, string> = {
     }
   })();
 </script>
-
-<style is:inline>
-.file-tree-container {
-  margin: 2.5rem 0;
-  background-color: var(--prose-code-bg);
-  border: 1px solid var(--prose-code-border);
-  border-radius: var(--prose-radius-md);
-  padding: 1.25rem;
-  overflow-x: auto;
-  font-family: var(--prose-font-mono);
-}
-
-.file-tree,
-.file-tree ul,
-.file-tree ol,
-.file-tree li,
-.file-tree-list {
-  list-style: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-.prose .file-tree li::marker,
-.prose .file-tree ul::marker,
-.prose .file-tree ol::marker,
-.file-tree li::marker,
-.file-tree ul::marker,
-.file-tree ol::marker,
-.file-tree li::before,
-.file-tree ul::before,
-.file-tree ol::before,
-.file-tree li::after,
-.file-tree ul::after,
-.file-tree ol::after {
-  content: none !important;
-  display: none !important;
-}
-
-.file-tree-list {
-  list-style: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-.file-tree li + li {
-  margin-top: 0.35rem !important;
-}
-
-.file-tree li > ul,
-.file-tree li > ol {
-  margin-left: 0.45rem !important;
-  padding-left: 0.85rem !important;
-  border-left: 1px solid var(--prose-border-strong);
-  margin-top: 0.35rem !important;
-}
-
-.file-tree-label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--prose-fg-muted);
-  font-size: 0.875rem;
-  transition: color var(--prose-duration) var(--prose-ease-out);
-}
-
-.file-tree-folder > .file-tree-label {
-  color: var(--prose-fg-strong);
-  font-weight: 600;
-}
-
-.file-tree-label:hover {
-  color: var(--prose-fg-strong);
-}
-
-.icon {
-  display: inline-flex;
-  align-items: center;
-  flex-shrink: 0;
-  color: var(--prose-fg-dim);
-  transition: color var(--prose-duration) var(--prose-ease-out);
-}
-
-.file-tree-folder > .file-tree-label > .folder-icon {
-  color: var(--prose-border-strong);
-}
-
-.file-tree-folder > .file-tree-label:hover > .folder-icon {
-  color: var(--prose-fg-strong);
-}
-.file-tree-label.is-highlighted {
-  color: var(--prose-fg-strong);
-  background-color: var(--prose-bg-muted);
-  border: 1px solid transparent;
-  padding: 0.125rem 0.5rem 0.125rem 0.35rem;
-  margin-left: -0.35rem; 
-  margin-top: 0.15rem;
-  margin-bottom: 0.15rem;
-  border-radius: var(--prose-radius-sm);
-  font-weight: 600;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-}
-
-.file-tree-label.is-highlighted .icon {
-  color: var(--prose-fg-strong) !important;
-}
-
-.file-tree-label.is-highlighted:hover {
-  background-color: var(--prose-bg-subtle);
-}
-.file-tree-label.is-removed {
-  color: var(--error);
-  background-color: var(--error-soft);
-  border: 1px dashed var(--error);
-  opacity: 0.8; 
-  padding: 0.125rem 0.5rem 0.125rem 0.35rem;
-  margin-left: -0.35rem; 
-  margin-top: 0.15rem;
-  margin-bottom: 0.15rem;
-  border-radius: var(--prose-radius-sm);
-}
-
-.file-tree-label.is-removed .icon {
-  color: var(--error) !important;
-  opacity: 0.8;
-}
-
-.file-tree-label.is-removed .file-name {
-  text-decoration: line-through;
-  text-decoration-color: var(--error); 
-  opacity: 0.7;
-}
-
-.file-tree-label.is-removed:hover {
-  opacity: 1;
-  background-color: color-mix(in srgb, var(--error-soft) 100%, transparent);
-}
-</style>

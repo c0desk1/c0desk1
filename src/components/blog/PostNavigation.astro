@@ -19,11 +19,11 @@ const nextUrl = nextPost ? `/blog/${nextPost.data.slug || slugify(nextPost.data.
       <div>
         {prevPost ? (
           <a href={prevUrl} class="group block text-left">
-            <span class="flex items-center gap-1.5 text-label-12 text-(--prose-fg-muted) uppercase tracking-widest mb-2">
+            <span class="flex items-center gap-1.5 text-label-12 text-muted uppercase tracking-widest mb-2">
               <Icon name="arrow-left" className="w-3.5 h-3.5" />
               {'Sebelumnya'}
             </span>
-            <span class="text-body-14 md:text-body-16 font-medium text-(--prose-fg) group-hover:text-(--prose-accent) transition-colors duration-200 line-clamp-2">
+            <span class="text-body-14 md:text-body-16 font-medium text-(--fg) group-hover:text-strong transition-colors duration-200 truncate">
               {prevPost.data.title}
             </span>
           </a>
@@ -34,11 +34,11 @@ const nextUrl = nextPost ? `/blog/${nextPost.data.slug || slugify(nextPost.data.
       <div class="text-right md:text-right">
         {nextPost && (
           <a href={nextUrl} class="group block">
-            <span class="flex items-center justify-end gap-1.5 text-label-12 text-(--prose-fg-muted) uppercase tracking-widest mb-2">
+            <span class="flex items-center justify-end gap-1.5 text-label-12 text-muted uppercase tracking-widest mb-2">
               {'Selanjutnya'}
               <Icon name="arrow-right" className="w-3.5 h-3.5" />
             </span>
-            <span class="text-body-14 md:text-body-16 font-medium text-(--prose-fg) group-hover:text-(--prose-accent) transition-colors duration-200 line-clamp-2">
+            <span class="text-body-14 md:text-body-16 font-medium text-fg group-hover:text-strong transition-colors duration-200 truncate">
               {nextPost.data.title}
             </span>
           </a>

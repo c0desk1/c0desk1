@@ -4,6 +4,7 @@ import { uiIcons } from './ui';
 import { brandIcons } from './brands'
 import { techIcons } from './tech';
 import { codeIcons } from './code';
+import { fileIcons } from './file';
 
 export type IconData = 
   | string 
@@ -18,7 +19,8 @@ export const ICONS = {
   ...uiIcons,
   ...brandIcons,
   ...techIcons,
-  ...codeIcons
+  ...codeIcons,
+  ...fileIcons
 } as const;
 
 export type UiIcon = keyof typeof uiIcons;
