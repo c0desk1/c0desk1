@@ -73,6 +73,11 @@
   vertical-align: top;
 }
 
+.prose td code,
+.prose th code {
+  white-space: nowrap;
+}
+
 .prose tbody td {
   color: var(--prose-table-text);
   border-bottom: 1px solid var(--prose-table-border);
