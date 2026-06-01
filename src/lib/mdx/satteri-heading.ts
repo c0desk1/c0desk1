@@ -26,15 +26,18 @@ export const satteriHeading = defineMdastPlugin({
     const id = sluggify(text);
     if (!id) return;
 
+    const tagName = `h${node.depth}`;
+
     const component: any = {
       type: 'mdxJsxFlowElement',
-      name: 'Heading',
+      name: tagName,
       attributes: [
         { type: 'mdxJsxAttribute', name: 'id', value: id },
         { type: 'mdxJsxAttribute', name: 'data-level', value: String(node.depth) },
       ],
       children: node.children,
     };
+    
     ctx.replaceNode(node, component);
   },
 });
