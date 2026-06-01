@@ -41,8 +41,8 @@ const meta = buildMeta({
 
 <GuideLayout {meta}>
   <GuideSidebarMobile {entries} currentId={entry.id} {headings} />
-  <Container size="xl">
-    <div class="grid grid-cols-1 lg:grid-cols-[16rem_minmax(0,1fr)_14rem] gap-0 lg:gap-10 w-full max-w-full">
+  <Container size="full">
+    <div class="grid grid-cols-1 lg:grid-cols-[16rem_minmax(0,1fr)_14rem] gap-0 lg:gap-6 w-full max-w-full">
       <GuideSidebarDesktop {entries} currentId={entry.id} />
       <Section size="sm">
         <div class="flex-1 min-w-0">
@@ -51,7 +51,7 @@ const meta = buildMeta({
               <Breadcrumb
                 items={[
                   { name: "Guide", url: ROUTES.guide },
-                  { name: entry.data.section, url: `${entry.data.section}` },
+                  { name: entry.data.section },
                 ]}
               />
             </div>
@@ -62,7 +62,9 @@ const meta = buildMeta({
                 {entry.data.title}
               </h1>
             </header>
-            <Content components={components} />
+            <Section size="sm">
+              <Content components={components} />
+            </Section>
           </article>
           <GuidePager prev={prevEntry} next={nextEntry} />
         </div>
