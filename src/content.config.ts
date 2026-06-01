@@ -74,21 +74,22 @@ const blog = defineCollection({
 const guide = defineCollection({
   loader: glob({ base: './src/content/guide', pattern: '**/*.{md,mdx}' }),
   schema: z.object({
-    title:       z.string().max(80),
-    description: z.string().max(200),
-    pubDate:     z.coerce.date(),
-    updatedDate: z.coerce.date().optional(),
-    category:    z.string().optional().default("general"),
-    tags:        z.array(z.string()).default([]),
-    author:      z.string().optional(),
-    order:       z.number().int().optional().default(0),
-    section:     z.string().optional(),
-    badge:       z.enum(["new", "beta", "deprecated", "updated"]).optional(),
-    cover:       z.string().optional(),
-    coverAlt:    z.string().optional(),
     seo: seoSchema.optional(),
+    ...metadataSchema.shape,
+    heroImage: z.object({
+      src: z.string(),
+      alt: z.string(),
+    }).optional(),
     draft:       z.boolean().default(false),
-    toc:         z.boolean().default(true),
+    section:    z.string().optional().default("general"),
+    tags:        z.array(z.string()).default([]),
+    author: reference("authors"),
+    appDetails: z.object({
+      operatingSystem: z.string().optional(),
+      applicationCategory: z.string().optional(),
+      price: z.string().optional(),
+      priceCurrency: z.string().optional(),
+    }).optional(),
   }),
 })
 
