@@ -1,5 +1,10 @@
 // @ts-check
-import { defineConfig, fontProviders, passthroughImageService } from 'astro/config';
+import { 
+  defineConfig, 
+  fontProviders, 
+  passthroughImageService 
+} from 'astro/config';
+
 import { SITE } from './src/consts';
 import sitemap, {ChangeFreqEnum } from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
@@ -76,7 +81,7 @@ export default defineConfig({
         frontmatter: true,
       },
       mdastPlugins: [
-        // satteriHeading,
+        satteriHeading,
         satteriFigure,
         satteriQuote,
         satteriCodeBlock,
