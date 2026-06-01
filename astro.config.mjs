@@ -35,6 +35,8 @@ import { satteriCodeBlock } from './src/lib/mdx/satteri-code-block';
 import { satteriBanner } from './src/lib/mdx/satteri-banner';
 import { satteriFigure } from './src/lib/mdx/satteri-figure';
 import { satteriFileTree } from './src/lib/mdx/satteri-filetree';
+import { remarkHeadingId } from './src/lib/mdx/remark-heading-id';
+import { satteriAccordion } from './src/lib/mdx/satteri-accordion';
 
 // https://astro.build/config
 export default defineConfig({
@@ -81,7 +83,8 @@ export default defineConfig({
         frontmatter: true,
       },
       mdastPlugins: [
-        satteriHeading,
+        //satteriHeading,
+        remarkHeadingId,
         satteriFigure,
         satteriQuote,
         satteriCodeBlock,
@@ -94,6 +97,7 @@ export default defineConfig({
         satteriBadge,
         satteriBanner,
         satteriFileTree,
+        satteriAccordion,
       ]
       
     }),
