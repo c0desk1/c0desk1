@@ -81,7 +81,7 @@ const guide = defineCollection({
       alt: z.string(),
     }).optional(),
     draft:       z.boolean().default(false),
-    section:    z.string().optional().default("general"),
+    section: z.enum(categorySlugs),
     tags:        z.array(z.string()).default([]),
     author: reference("authors"),
     appDetails: z.object({
