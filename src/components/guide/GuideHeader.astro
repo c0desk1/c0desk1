@@ -1,13 +1,14 @@
 ---
 // src/components/guide/GuideHeader.astro
 import PostAuthor from "@/components/blog/PostAuthor.astro";
+import PostMeta from "@/components/blog/PostMeta.astro";
 import HeroImage from "@/components/blog/PostHeroImage.astro";
 import Icon from "@/components/ui/icons/Icon.astro";
-import { formatDate } from "@/consts";
 
 interface Props {
   title: string;
   pubDate: Date;
+  content: string;
   description?: string;
   authorName?: string;
   authorAvatar?: string;
@@ -23,6 +24,7 @@ interface Props {
 const {
   title,
   pubDate,
+  content,
   description,
   authorName,
   authorAvatar,
@@ -50,15 +52,8 @@ const {
           slug={authorSlug || ""}
         />
       )}
-
-      <div class="flex items-center justify-center gap-1.5 text-label-14 font-medium text-muted">
-        <Icon name="clock" className="w-4 h-4" />
-        <time datetime={pubDate.toISOString()}>
-          {formatDate(pubDate)}
-        </time>
-      </div>
+      <PostMeta pubDate={pubDate} content={content} />
     </div>
-    <hr class="w-16 border-t-4 border-(--border) rounded-full opacity-40" />
     {tags.length > 0 && (
       <div class="flex flex-wrap justify-center gap-2 mt-2">
         {tags.map(tag => (
@@ -68,6 +63,7 @@ const {
         ))}
       </div>
     )}
+    <hr class="w-16 border-t-4 border-(--border) rounded-full opacity-40" />
   </div>
   {heroImage && (
     <HeroImage
