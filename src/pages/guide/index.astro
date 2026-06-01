@@ -3,19 +3,26 @@
 import { getCollection } from "astro:content";
 import GuideLayout from "@/layouts/GuideLayout.astro";
 import Container from "@/components/ui/Container.astro";
+import GuideCard from "@/components/guide/GuideCard.astro"; // Import komponen Anda
 import { buildMeta } from "@/consts";
 
+// 1. Ambil semua entri panduan dari koleksi
 const allEntries = await getCollection("guide");
+
+// 2. Kelompokkan dokumen secara otomatis berdasarkan properti 'section' (Kategori)
 const categoriesMap = new Map<string, typeof allEntries>();
 
 allEntries.forEach((entry) => {
+  if (entry.data.draft) return; // Lewati draf dokumen
   const sectionName = entry.data.section || "General";
+  
   if (!categoriesMap.has(sectionName)) {
     categoriesMap.set(sectionName, []);
   }
   categoriesMap.get(sectionName)?.push(entry);
 });
 
+// Urutkan artikel di dalam kategori berdasarkan properti 'order'
 const categories = Array.from(categoriesMap.entries()).map(([name, docs]) => ({
   name,
   docs: docs.sort((a, b) => (a.data.order || 0) - (b.data.order || 0)),
@@ -23,46 +30,42 @@ const categories = Array.from(categoriesMap.entries()).map(([name, docs]) => ({
 
 const meta = buildMeta({
   title: "Pusat Panduan & Dokumentasi",
-  description: "Temukan seluruh referensi komponen dan dokumentasi integrasi.",
+  description: "Temukan seluruh referensi komponen, tutorial integrasi, dan dokumentasi proyek.",
 });
 ---
 
 <GuideLayout {meta} isHome={true}>
-  <Container size="xl" class="py-10 lg:py-16">
-    <header class="mb-12 text-center lg:text-left max-w-2xl">
-      <h1 class="text-heading-40 font-bold text-strong tracking-tight mb-3">
-        Dokumentasi & Panduan
+  <Container size="xl" class="py-12 lg:py-20">
+    <header class="mb-16 pb-10 max-w-3xl">
+      <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-muted/60 border border-(--border) text-[11px] font-semibold text-accent tracking-wide uppercase mb-4 select-none">
+        Dokumentasi Resmi
+      </div>
+      <h1 class="text-heading-32 md:text-heading-40 lg:text-heading-56 font-bold text-strong tracking-tight mb-4">
+        Pusat Panduan & Referensi
       </h1>
-      <p class="text-body-16 text-muted leading-relaxed">
-        Pusat informasi, petunjuk instalasi, serta referensi komponen kustom siap pakai untuk proyek Anda.
+      <p class="text-body-16 md:text-body-18 text-muted leading-relaxed m-0">
+        Pelajari cara mengonfigurasi proyek, menggunakan komponen MDX kustom siap pakai, serta menerapkan praktik terbaik pengoptimalan situs Anda.
       </p>
     </header>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="flex flex-col gap-16 w-full">
       {categories.map((category) => (
-        <section class="flex flex-col p-6 bg-elevated border border-(--border) rounded-(--radius) transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm">
-          <div class="flex items-center gap-2.5 mb-4 pb-3 border-b border-(--border)/50">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="text-(--accent)">
+        <section class="flex flex-col gap-6 w-full">
+          <div class="flex items-center gap-2.5 pb-2 border-b border-(--border)/60 w-full">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="text-accent">
               <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
             </svg>
-            <h2 class="text-body-15 font-bold text-strong tracking-wide uppercase">
+            <h2 class="text-[12px] font-bold text-strong tracking-wider uppercase m-0">
               {category.name}
             </h2>
+            <span class="text-[11px] text-muted font-medium ml-1">
+              ({category.docs.length})
+            </span>
           </div>
-          
-          <ul class="flex flex-col gap-1.5" role="list">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
             {category.docs.map((doc) => (
-              <li>
-                <a href={`/guide/${doc.id}`} class="group flex items-center justify-between py-1 text-body-14 text-muted hover:text-(--accent) no-underline transition-colors">
-                  <span class="truncate pr-4">{doc.data.title}</span>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
-                </a>
-              </li>
+              <GuideCard entry={doc} />
             ))}
-          </ul>
+          </div>
         </section>
       ))}
     </div>
