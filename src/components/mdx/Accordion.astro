@@ -9,12 +9,14 @@ const { title } = Astro.props;
 ---
 
 <div class="accordion not-prose border border-(--prose-border) rounded-lg overflow-hidden my-4">
-  <button type="button" class="accordion-trigger flex items-center justify-between w-full px-5 py-4 text-left text-heading-16 font-semibold bg-muted/40 hover:bg-muted/60 active:bg-muted transition-colors">
-    <span>{title}</span>
-    <Icon name="chevron-down" className="accordion-icon w-5 h-5 transition-transform duration-300" />
+  <button type="button" class="accordion-trigger flex items-center justify-between w-full px-5 py-4 text-left bg-muted/40 hover:bg-subtle active:bg-subtle transition-colors">
+    <span class="text-heading-14 md:text-heading-16 font-semibold text-(--fg)">{title}</span>
+    <span class="shrink-0 inline-flex justify-center items-center w-4 h-4 text-muted">
+      <Icon name="chevron-down" className="accordion-icon w-full h-full transition-transform duration-300" />
+    </span>
   </button>
   <div class="accordion-content-wrapper overflow-hidden transition-all duration-300" style="max-height: 0;">
-    <div class="accordion-content-inner px-5 pb-5 pt-1 text-body-14">
+    <div class="accordion-content-inner m-4 pt-1 text-body-14">
       <slot />
     </div>
   </div>
