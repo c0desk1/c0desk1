@@ -1,62 +1,57 @@
 ---
 // src/components/guide/desktop/GuideSidebarDesktop.astro
 import type { CollectionEntry } from "astro:content";
+import Icon from "../ui/icons/Icon.astro";
 
-interface Props { 
-  entries: CollectionEntry<"guide">[]; 
-  currentId?: string; 
+interface Props {
+  entries: CollectionEntry<"guide">[];
+  currentId?: string;
+  sectionLabel: string;
 }
 
-const { entries, currentId } = Astro.props;
-
-// Pengelompokan dokumen berdasarkan seksi/kategori
-const grouped = entries.reduce<Record<string, CollectionEntry<"guide">[]>>((acc, entry) => {
-  const sec = entry.data.section || "General";
-  (acc[sec] ??= []).push(entry);
-  return acc;
-}, {});
+const { entries, currentId, sectionLabel } = Astro.props;
 ---
 
-<aside 
+<aside
   id="guide-sidebar-desktop"
-  class="hidden lg:flex flex-col w-64 shrink-0 sticky top-(--header-height) h-[calc(100svh-var(--header-height))] overflow-y-auto py-8 border-x border-(--border)" 
+  class="hidden lg:flex flex-col w-64 shrink-0 sticky top-(--header-height) h-[calc(100svh-var(--header-height))] overflow-y-auto py-8 border-x border-(--border)"
   style="scrollbar-width: thin; scrollbar-color: var(--border) transparent;"
 >
-  <nav class="flex flex-col gap-6 w-full" role="list">
-    {Object.entries(grouped).map(([section, items]) => (
-      <div class="flex flex-col gap-1">
-        <div class="flex items-center border-y border-(--border)">
-          <h3 class="text-label-13 font-semibold uppercase text-muted/60 px-3 py-2 select-none">
-            {section}
-          </h3>
-        </div>
-        <ul class="flex flex-col gap-px" role="list">
-          {items.map(entry => {
-            const isActive = entry.id === currentId;
-            
-            return (
-              <li>
-                <a 
-                  href={`/guide/${entry.id}`} 
-                  class:list={[
-                    "sidebar-desktop-link group flex items-center justify-between gap-2 px-3 py-1.5 text-label-14 no-underline font-medium transition-colors border-l-2 -ml-px", 
-                    isActive 
-                      ? "text-strong bg-muted/80 border-(--accent)" 
-                      : "text-muted hover:text-strong hover:bg-subtle/40 border-transparent"
-                  ]}
-                  aria-current={isActive ? "page" : undefined}
-                  data-active-sidebar={isActive ? "true" : "false"}
-                >
-                  <span class="truncate transition-transform duration-150 group-hover:translate-x-0.5">
-                    {entry.data.title}
-                  </span>
-                </a>
-              </li>
-            );
-          })}
-        </ul>
+  <nav class="flex flex-col gap-6 w-full">
+    <div class="flex flex-col gap-1">
+      <div class="flex items-center border-y border-(--border) px-3 py-2 gap-1.5 text-muted">
+        <span class="inline-flex shrink-0 items-center justify-center w-4 h-4">
+          <Icon name="bot" className="w-full h-full text-subtle" />
+        </span>
+        <h3 class="text-heading-14 font-semibold select-none">
+          {sectionLabel}
+        </h3>
       </div>
-    ))}
+      <ul class="flex flex-col gap-px">
+        {entries.map(entry => {
+          const isActive = entry.id === currentId;
+          return (
+            <li>
+              <a
+                href={`/guide/${entry.id}`}
+                class:list={[
+                  "sidebar-desktop-link group flex items-center justify-between gap-2 px-3 py-1.5 text-label-14 no-underline font-medium transition-colors border-l-2 -ml-px",
+                  isActive
+                    ? "text-strong bg-muted/80 border-(--accent)"
+                    : "text-muted hover:text-strong hover:bg-subtle/40 border-transparent"
+                ]}
+                aria-current={isActive ? "page" : undefined}
+                data-active-sidebar={isActive ? "true" : "false"}
+              >
+                <span class="truncate transition-transform duration-150 group-hover:translate-x-0.5">
+                  {entry.data.title}
+                </span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   </nav>
 </aside>
 
@@ -74,6 +69,5 @@ const grouped = entries.reduce<Record<string, CollectionEntry<"guide">[]>>((acc,
   };
 
   scrollSidebarToActiveItem();
-  
   document.addEventListener("astro:page-load", scrollSidebarToActiveItem);
 </script>
