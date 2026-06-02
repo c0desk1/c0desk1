@@ -12,6 +12,7 @@ import GuideSidebarMobile from "@/components/guide/GuideSidebarMobile.astro";
 import GuidePager from "@/components/guide/GuidePager.astro";
 import GuideHeader from "@/components/guide/GuideHeader.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
+import BackToTop from "@/components/ui/BackToTop.astro";
 
 export async function getStaticPaths() {
   const entries = await getCollection("guide", ({ data }) => !data.draft);
@@ -73,46 +74,42 @@ const meta = buildMeta({
     headings={headings}
     sectionLabel={sectionLabel}
   />
-  <Container size="xl">
-    <div class="grid grid-cols-1 lg:grid-cols-[16rem_1fr_14rem] gap-0 lg:gap-x-8">
-      <div class="hidden lg:block">
+  <Container size="full">
+    <div class="grid grid-cols-1 lg:grid-cols-[16rem_1fr_14rem] gap-0">
+      <div class="hidden lg:block lg:gap-x-8">
         <GuideSidebarDesktop
           entries={sectionArticles}
           currentId={entry.id}
           sectionLabel={sectionLabel}
         />
       </div>
-      <Container size="none" class="px-0! pt-12">
-        <div class="flex items-center justify-center">
-          <Breadcrumb
-            items={[
-              { name: "Guide", url: ROUTES.guide },
-              { name: sectionLabel },
-            ]}
+      <Section size="md" class="w-full max-w-3xl mx-auto">
+        <Section size="sm" class="px-0 sm:px-4">
+          <GuideHeader
+            title={entry.data.title}
+            pubDate={entry.data.pubDate}
+            description={entry.data.description}
+            authorName={authorName}
+            authorAvatar={authorAvatar}
+            authorRole={authorRole}
+            authorSlug={authorSlug}
+            heroImage={entry.data.heroImage}
+            content={entry.body}
           />
-        </div>
-        <Section size="sm">
-          <article class="prose max-w-none min-w-0"> 
-            <GuideHeader
-			  title={entry.data.title}
-  			pubDate={entry.data.pubDate}
-  			description={entry.data.description}
-  			authorName={authorName}
-  			authorAvatar={authorAvatar}
-  			authorRole={authorRole}
-  			authorSlug={authorSlug}
-  			heroImage={entry.data.heroImage}
-  			tags={entry.data.tags}
-     content={entry.body}
-			/>
-            <Content components={components} />
-            <GuidePager prev={prevInSection} next={nextInSection} />
-          </article>
+          <Section size="md">
+            <article class="prose max-w-none min-w-0"> 
+              <Content components={components} />
+            </article>
+          </Section>
+          <GuidePager prev={prevInSection} next={nextInSection} />
         </Section>
-      </Container>
-      <div class="hidden lg:block">
+      </Section>
+      <div class="hidden lg:block lg:gap-x-8">
         <GuideTocDesktop {headings} />
       </div>
     </div>
   </Container>
+  <div class="sm:hidden">
+    <BackToTop />
+  </div>
 </GuideLayout>

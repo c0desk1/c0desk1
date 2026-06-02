@@ -28,14 +28,12 @@
   @apply text-code-14;
 }
 
-/* Custom Codeblock WRAPPER */
 .prose .code-block-wrapper {
   margin: 2.5rem 0;
   overflow-x: auto;
   scroll-margin-top: var(--prose-scroll-margin, 100px);
 }
 
-/* Custom Codeblock HEADER */
 .prose .code-block-header {
   justify-content: space-between;
 }
@@ -50,7 +48,6 @@
   min-width: 0;
 }
 
-/* Custom Codeblock COPY BUTTON */
 .prose .copy-button {
   display: flex;
   justify-content: center;
@@ -69,7 +66,6 @@
   .prose .copy-button { opacity: 1; }
 }
 
-/* ASTRO-CODE */
 .prose .astro-code {
   @apply text-code-14;
   margin: 1.5rem 0;
@@ -90,7 +86,6 @@
   content: none;
 }
 
-/* PRE & CODE */
 .prose .astro-code pre {
   margin: 0 !important;
   padding: 1.125rem 1.25rem;
@@ -112,7 +107,6 @@
   content: none !important;
 }
 
-/* LINE */
 .prose .astro-code .line {
   display: block;
   margin: 0;
@@ -122,7 +116,6 @@
   counter-increment: line;
 }
 
-/* Line number */
 .prose .astro-code .line::before {
   content: counter(line);
   display: inline-block;
@@ -140,7 +133,6 @@
   word-wrap: normal;
 }
 
-/* DIFF & HIGHLIGHT */
 .prose .astro-code .line.diff.add {
   background-color: rgba(74, 222, 128, 0.2) !important;
   box-shadow: inset 3px 0 0 0 var(--success) !important;

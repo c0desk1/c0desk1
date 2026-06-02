@@ -3,6 +3,8 @@
   display: block;
   width: 100%;
   height: auto;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
 }
 
 .prose figure {
@@ -17,9 +19,8 @@
   display: block;
   width: 100%;
   height: auto;
-  margin: 0 !important;
-  border: none;
-  background-color: transparent;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
 }
 
 .prose figcaption {
@@ -39,6 +40,7 @@
   border: 1px solid var(--border);
   box-shadow: var(--shadow-md);
   margin: 2.5rem 0;
+  overflow: hidden;
 }
 
 
@@ -58,7 +60,7 @@
   }
 }
 
-@media (min-width: 48rem) {
+@media (min-width: 768px) {
   .prose figcaption {
     @apply text-caption-16;
   }

@@ -3,9 +3,12 @@ title: "i18n Multi-bahasa dengan Astro"
 description: "Implementasi internasionalisasi di Astro routing berbasis locale, fallback content, dan manajemen terjemahan tanpa library eksternal."
 pubDate: 2025-04-20T08:08
 updatedDate: 2025-05-15T08:08
-section: "tutorial"
+section: "tutorial"
+
+
 tags: ["astro", "i18n", "multilingual", "routing"]
-author: "bima-akbar"
+author: "bima-akbar"
+
 draft: false
 ---
 
@@ -42,15 +45,15 @@ export default defineConfig({
   - src/
     - pages/
       - blog/
-        - index.astro          ← default locale (id)
+        - **index.astro** ← default locale (id)
         - [slug].astro
       - [...locale]/
         - blog/
-          - index.astro        ← en, ru
+          - **index.astro** ← en, ru
           - [slug].astro
     - content/
       - blog/
-        - my-post.id.mdx       ← atau sub-folder per locale
+        - **my-post.id.mdx** ← atau sub-folder per locale
         - my-post.en.mdx
     - i18n/
       - id.json
@@ -145,47 +148,49 @@ const t      = useTranslations(locale);
 ## Content per Locale
 Naming convention dengan suffix locale:
 
-:::code
-```
-    src/content/blog/
-    ├── setup-astro.id.mdx
-    ├── setup-astro.en.mdx
-    └── setup-astro.ru.mdx
-    ```
+:::filetree
+- src/content/blog/
+  - setup-astro.id.mdx
+  - setup-astro.en.mdx
+  - etup-astro.ru.mdx
+:::
 
-    Di `content.config.ts`:
-    ```ts
-    const blog = defineCollection({
-      loader: glob({
-        pattern: "**/*.{md,mdx}",
-        base: "./src/content/blog"
-      }),
-      schema: z.object({
-        lang: z.enum(["id", "en", "ru"]).default("id"),
-        // ... field lainnya
-      }),
-    });
+Di `content.config.ts`:
+
+:::code
+```ts
+const blog = defineCollection({
+  loader: glob({
+    pattern: "**/*.{md,mdx}",
+    base: "./src/content/blog"
+  }),
+  schema: z.object({
+    lang: z.enum(["id", "en", "ru"]).default("id"),
+    // ... field lainnya
+  }),
+});
 ```
 :::
 
 Subfolder per locale:
 
-:::code
-```
-    src/content/blog/
-    ├── id/
-    │   └── setup-astro.mdx
-    ├── en/
-    │   └── setup-astro.mdx
-    └── ru/
-        └── setup-astro.mdx
-    ```
+:::filetree
+- src/content/blog/
+  - id/
+    - setup-astro.mdx
+  - en/
+    - setup-astro.mdx
+  - ru/
+    - setup-astro.mdx
+:::
 
-    Query berdasarkan folder:
-    ```ts
-    const posts = await getCollection("blog",
-      ({ id }) => id.startsWith(`${locale}/`)
-    );
+Query berdasarkan folder:
+
+:::code
+ ```ts
+const posts = await getCollection("blog",
+  ({ id }) => id.startsWith(`${locale}/`)
+);
 ```
 :::
 

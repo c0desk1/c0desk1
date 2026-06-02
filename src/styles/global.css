@@ -140,9 +140,9 @@
   /* Global Foreground (Dark Mode) */
   --fg:          var(--color-void-50);
   --fg-strong:   var(--color-void-0);
-  --fg-muted:    var(--color-void-300);
-  --fg-subtle:   var(--color-void-400);
-  --fg-dim:      var(--color-void-500);
+  --fg-muted:    var(--color-void-400);
+  --fg-subtle:   var(--color-void-500);
+  --fg-dim:      var(--color-void-600);
   --fg-disabled: var(--color-void-700);
   --fg-inverted: var(--color-void-950);
 
@@ -160,7 +160,7 @@
   --chart-5: var(--color-chart-5);
 
   /* Accent */
-  --accent:        var(--color-accent);
+  --accent:        var(--color-success);
   --accent-dim:    var(--color-accent-dim);
   --accent-soft:   var(--color-accent-soft);
   --accent-ring:   var(--color-accent-ring);

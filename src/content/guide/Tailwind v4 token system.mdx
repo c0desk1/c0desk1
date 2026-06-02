@@ -3,9 +3,11 @@ title: "Tailwind CSS v4 Design Token System"
 description: "Membangun design token system yang scalable dengan Tailwind v4 — warna, tipografi, spacing, dan dark mode dari satu sumber kebenaran."
 pubDate: 2025-05-10T08:17
 updatedDate: 2025-05-25T08:17
-section: "workflow"
+section: "workflow"
+
 tags: ["tailwindcss", "design-tokens", "css", "dark-mode"]
-author: "bima-akbar"
+author: "bima-akbar"
+
 draft: false
 ---
 
@@ -122,11 +124,13 @@ Dengan `@utility`, kamu bisa daftarkan utility class yang merujuk token:
 
 Lalu pakai di HTML:
 
+:::code
 ```html
 <button class="btn btn-primary px-4 py-2 text-sm">
   Deploy
 </button>
 ```
+:::
 
 ---
 
@@ -134,13 +138,13 @@ Lalu pakai di HTML:
 
 :::code
 ```css
-    /* global.css */
-    @custom-variant dark (&:is(.dark *));
+/* global.css */
+@custom-variant dark (&:is(.dark *));
 
-    .dark {
-      --bg: var(--color-void-950);
-      --fg: var(--color-void-50);
-    }
+.dark {
+  --bg: var(--color-void-950);
+  --fg: var(--color-void-50);
+}
 ```
 :::
 
@@ -148,18 +152,18 @@ Toggle di JS:
 
 :::code
 ```ts
-    document.documentElement.classList.toggle("dark");
+document.documentElement.classList.toggle("dark");
 ```
 :::
 
 :::code
  ```css
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: var(--color-void-950);
-        --fg: var(--color-void-50);
-      }
-    }
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: var(--color-void-950);
+    --fg: var(--color-void-50);
+  }
+}
 ```
 :::
 

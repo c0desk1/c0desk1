@@ -122,11 +122,11 @@
   --prose-list-marker-hover: var(--fg-subtle);
 
   /* Links */
-  --prose-link: var(--fg-strong);
-  --prose-link-hover: var(--fg-muted);
-  --prose-link-visited: var(--fg-subtle);
-  --prose-link-underline: var(--border-strong);
-  --prose-link-underline-hover: var(--fg-strong);
+  --prose-link: var(--accent);
+  --prose-link-hover: var(--accent-dim);
+  --prose-link-visited: var(--accent-fg);
+  --prose-link-underline: var(--accent);
+  --prose-link-underline-hover: var(--accent-dim);
 
   /* Callouts */
   --callout-note-bg: transparent;
@@ -228,13 +228,6 @@
   /* List */
   --prose-list-marker: var(--fg-dim);
   --prose-list-marker-hover: var(--fg-subtle);
-
-  /* Links */
-  --prose-link: var(--fg-strong);
-  --prose-link-hover: var(--fg);
-  --prose-link-visited: var(--fg-muted);
-  --prose-link-underline: var(--border-strong);
-  --prose-link-underline-hover: var(--fg-strong);
 
   /* Callouts */
   --callout-note-bg: transparent;

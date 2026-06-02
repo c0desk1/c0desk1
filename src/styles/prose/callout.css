@@ -1,6 +1,5 @@
 /* src/styles/prose/callout.css */
 
-/* 1. Pemetaan Token Berdasarkan Tipe Callout */
 .prose [data-callout="note"] {
   --c-bg: var(--callout-note-bg);
   --c-border: var(--callout-note-border);
@@ -63,7 +62,6 @@
   margin: 2.5rem 0;
   background-color: var(--c-bg);
   border: 1px solid var(--c-border);
-  border-radius: var(--prose-radius-md);
   overflow: hidden;
   color: var(--c-text);
 }
@@ -73,7 +71,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 0.875rem 0.75rem;
   background-color: rgb(from var(--c-icon) r g b / 0.05);
   border-right: 1px solid var(--c-border);
   gap: 0.4375rem;
@@ -101,13 +98,17 @@
 .prose .callout-body {
   flex: 1;
   min-width: 0;
-  padding: 0.875rem 1rem;
+
 }
 
-.prose .callout-content {
+.prose .callout-content * {
   @apply text-body-14;
   color: var(--c-text);
 }
+
+.prose .callout :not(pre) > code {
+    @apply text-code-12;
+  }
 
 .prose .callout-content > *:first-child { margin-top: 0 !important; }
 .prose .callout-content > *:last-child  { margin-bottom: 0 !important; }
@@ -163,10 +164,16 @@
   color: var(--c-icon); 
 }
 
-@media (max-width: 48rem) {
+@media (min-width: 768px) {
   .prose .callout { margin: 1.75rem 0; }
-  .prose .callout-aside { min-width: 2.25rem; padding: 0.75rem 0.5625rem; }
+  .prose .callout-aside { min-width: 2.25rem; }
   .prose .callout-label { display: none; }
-  .prose .callout-body  { padding: 0.75rem 0.875rem; }
-  .prose .callout-content { @apply text-body-16; }
+  .prose .callout-body  { padding: 0.85rem 0.875rem; }
+  .prose .callout-content * {
+    @apply text-body-16;
+  }
+
+  .prose .callout :not(pre) > code {
+    @apply text-code-14;
+  }
 }

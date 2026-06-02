@@ -163,12 +163,14 @@ if (isNews) {
             authorSlug={Author.slug}
             overviewItems={post.data.overview}
           />
-          {post.data.heroImage && (
-            <HeroImage
-              image={post.data.heroImage.src}
-              alt={post.data.heroImage.alt || post.data.title}
-            />
-          )}
+          <Section size="sm">
+            {post.data.heroImage && (
+              <HeroImage
+                image={post.data.heroImage.src}
+                alt={post.data.heroImage.alt || post.data.title}
+              />
+            )}
+          </Section>
           <div class="prose max-w-none my-8">
             <Content components={components} />
           </div>
