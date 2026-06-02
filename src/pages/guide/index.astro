@@ -9,7 +9,6 @@ import { buildMeta, CATEGORIES } from "@/consts";
 
 const allGuides = await getCollection("guide", ({ data }) => !data.draft);
 
-// Kelompokkan berdasarkan section
 const grouped = allGuides.reduce((acc, entry) => {
   const sec = entry.data.section || "general";
   if (!acc[sec]) acc[sec] = [];
@@ -17,14 +16,12 @@ const grouped = allGuides.reduce((acc, entry) => {
   return acc;
 }, {} as Record<string, typeof allGuides>);
 
-// Urutkan artikel di setiap section: terbaru di atas
 for (const sec in grouped) {
   grouped[sec].sort(
     (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
   );
 }
 
-// Urutkan section sesuai urutan di CATEGORIES, hanya yang punya artikel
 const orderedSections = CATEGORIES
   .filter(cat => grouped[cat.slug]?.length)
   .map(cat => ({
@@ -38,7 +35,7 @@ const orderedSections = CATEGORIES
 const totalArticles = allGuides.length;
 
 const meta = buildMeta({
-  title: "Tutorial & Panduan Praktis",
+  title: "Guide",
   description:
     "Kumpulan artikel tutorial mendalam, tips optimasi, dan panduan langkah-demi-langkah.",
 });
@@ -46,7 +43,6 @@ const meta = buildMeta({
 
 <GuideLayout {meta} isHome={true}>
   <Container size="xl" class="py-12 lg:py-20">
-    <!-- Hero Section -->
     <div class="relative mb-20">
       <div
         class="absolute inset-0 bg-gradient-to-b from-accent/5 via-transparent to-transparent rounded-3xl -z-10"
@@ -78,8 +74,6 @@ const meta = buildMeta({
           Jelajahi panduan langkah-demi-langkah, teknik kustomisasi mendalam,
           dan artikel praktis untuk membangun proyek lebih cepat dan lebih rapi.
         </p>
-
-        <!-- Stats -->
         <div class="flex items-center justify-center gap-8 mt-8">
           <div class="text-center">
             <div
@@ -101,8 +95,6 @@ const meta = buildMeta({
         </div>
       </div>
     </div>
-
-    <!-- Daftar Section -->
     {orderedSections.length > 0 ? (
       <div class="space-y-16">
         {orderedSections.map((section, index) => (
@@ -138,8 +130,6 @@ const meta = buildMeta({
                 <Icon name="arrow-right" className="w-3.5 h-3.5" />
               </a>
             </div>
-
-            <!-- Semua artikel dalam grid -->
             <div
               class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
             >
@@ -147,8 +137,6 @@ const meta = buildMeta({
                 <GuideCard entry={entry} />
               ))}
             </div>
-
-            <!-- Mobile "Lihat semua" link jika artikel banyak -->
             {section.articles.length > 4 && (
               <a
                 href={`/guide/section/${section.slug}`}
@@ -166,7 +154,6 @@ const meta = buildMeta({
         ))}
       </div>
     ) : (
-      <!-- Empty State -->
       <div
         class="rounded-2xl border border-dashed border-(--border) py-20 text-center"
       >
