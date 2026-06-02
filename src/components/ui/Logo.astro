@@ -6,8 +6,12 @@ import Icon from '@/components/ui/icons/Icon.astro';
 
 <a href={ROUTES.home} class="nav-logo group flex items-center justify-center gap-2.5 duration-200 hover:opacity-80">
   <div class="flex items-center gap-2 transition-colors">
-    <Icon name="logo" className="logo-icon text-(--fg)" />
-    {SITE.name}
+    <span class="inline-flex shrink-0 items-center">
+      <Icon name="logo" className="logo-icon text-(--fg)" />
+    </span>
+    <span class="hidden items-center sm:inline-flex">
+      {SITE.name}
+    </span>
   </div>
 </a>
 
