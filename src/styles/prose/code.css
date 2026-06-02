@@ -100,7 +100,6 @@
   border: 0 !important;
   font-family: inherit;
   line-height: inherit;
-  counter-reset: line;
 }
 .prose .astro-code code::before,
 .prose .astro-code code::after {
@@ -113,18 +112,6 @@
   padding: 0.1rem 1.25rem;
   line-height: inherit;
   white-space: pre;
-  counter-increment: line;
-}
-
-.prose .astro-code .line::before {
-  content: counter(line);
-  display: inline-block;
-  margin-right: 1.5rem;
-  text-align: left;
-  color: var(--prose-code-number);
-  user-select: none;
-  white-space: nowrap;
-  opacity: 0.5;
 }
 
 .prose .astro-code .line > span {
@@ -194,7 +181,6 @@
     padding: 0.05rem 0.875rem;
     margin: 0;
   }
-  .prose .astro-code .line::before,
   .prose .astro-code .line.diff.remove::before,
   .prose .astro-code .line.diff.add::before {
     margin-right: 1rem;
