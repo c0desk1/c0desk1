@@ -1,27 +1,33 @@
 ---
 // src/pages/index.astro
-import { 
-  SITE, 
-  CATEGORIES, 
-  ROUTES, 
-  buildMeta, 
-  schemaWebPage 
+import {
+  SITE,
+  CATEGORIES,
+  ROUTES,
+  buildMeta,
+  schemaWebPage,
 } from "@/consts";
 
 import { sortByDate } from "@/lib/utils";
 import { getCollection } from "astro:content";
 
 import Layout from "@/layouts/Layout.astro";
-import Section from "@/components/ui/Section.astro";
+
 import Container from "@/components/ui/Container.astro";
-import Hero from "@/components/ui/Hero.astro";
-import PostCard from "@/components/blog/PostCard.astro";
+import Section from "@/components/ui/Section.astro";
 import Link from "@/components/ui/Link.astro";
+import Hero from "@/components/ui/Hero.astro";
 
-const posts = await getCollection('blog', ({ data }) => !data.draft);
+import PostCard from "@/components/blog/PostCard.astro";
+import GuideCard from "@/components/guide/GuideCard.astro";
+
+const posts = await getCollection("blog", ({ data }) => !data.draft);
 const sortedPosts = sortByDate(posts).slice(0, 10);
-
 const [latestPost, ...restPosts] = sortedPosts;
+
+const latestGuides = (await getCollection("guide", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
 
 const meta = buildMeta({
   description: SITE.description,
@@ -35,21 +41,17 @@ const homepageSchema = schemaWebPage({
   type: "WebPage",
 });
 
-const heroCTA = { 
-  label: "Blog", 
-  href: ROUTES.blog 
+const heroCTA = {
+  label: "Blog",
+  href: ROUTES.blog,
 };
-const heroCTA2 = { 
-  label: "Konten Terbaru", 
-  href: "#article" 
+const heroCTA2 = {
+  label: "Guide",
+  href: "ROUTES.guide",
 };
 ---
 
-<Layout
-  {meta}
-  isHome={true} 
-  schema={homepageSchema}
-  >
+<Layout {meta} isHome={true} schema={homepageSchema}>
   <Hero
     title="UN"
     subTitle="LOYD"
@@ -60,18 +62,21 @@ const heroCTA2 = {
   <Section size="sm">
     <div class="marquee-wrap">
       <div class="marquee-track">
-        {[...CATEGORIES, ...CATEGORIES].map((cat, i) => (
-          <>
-            <span class="marquee-item">{cat.label}</span>
-            <span class="marquee-dot" />
-          </>
+        {[...CATEGORIES, ...CATEGORIES].map((cat) => (
+          <span class="marquee-item">{cat.label}</span>
+        ))}
+        {[...CATEGORIES].map((cat) => (
+          <span class="marquee-item">{cat.label}</span>
         ))}
       </div>
     </div>
   </Section>
   <Section size="sm">
     <Container size="xl">
-      <h2 id="article" class="text-heading-24 lg:text-heading-32 text-(--fg) font-semibold py-4 lg:py-6">
+      <h2
+        id="article"
+        class="text-heading-24 lg:text-heading-32 text-(--fg) font-semibold py-4 lg:py-6"
+      >
         {"Terbaru."}
       </h2>
       {latestPost ? (
@@ -95,10 +100,29 @@ const heroCTA2 = {
   {restPosts.length > 0 && (
     <Section size="sm">
       <Container size="xl">
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
+        >
+          {restPosts.map((post) => <PostCard post={post} />)}
+        </div>
+      </Container>
+    </Section>
+  )}
+  {latestGuides.length > 0 && (
+    <Section size="sm">
+      <Container size="xl">
+        <h2
+          class="text-heading-24 lg:text-heading-32 text-(--fg) font-semibold py-4 lg:py-6"
+        >
+          {"Guide."}
+        </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {restPosts.map((post) => (
-            <PostCard post={post} />
-          ))}
+          {latestGuides.map((guide) => <GuideCard entry={guide} />)}
+        </div>
+        <div class="flex justify-center py-8">
+          <Link href={ROUTES.guide} variant="secondary" size="sm">
+            {"Lihat semua"}
+          </Link>
         </div>
       </Container>
     </Section>
@@ -123,7 +147,7 @@ const heroCTA2 = {
   }
 
   .marquee-item {
-    font-family: var(--font-mono), 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
     letter-spacing: 0.15em;
     color: var(--fg);
