@@ -75,7 +75,7 @@ const captionClass = "text-caption-14! text-muted mt-4 text-center max-w-2xl mx-
       </div>
       <div class={urlBarWrapper}>
         <div class={urlBar}>
-          <span class="inline-flex shrink-0 w-3.5 h-3.5 items-center justify-center">
+          <span class="inline-flex shrink-0 w-3.5 h-3.5 items-center justify-start">
             <Icon name="lock" className="w-full h-full text-muted" />
           </span>
           <span class="truncate">
@@ -84,7 +84,6 @@ const captionClass = "text-caption-14! text-muted mt-4 text-center max-w-2xl mx-
         </div>
       </div>
     </div>
-
     <div class={imageContainer}>
       {hasLink ? (
         <a href={href} target="_blank" rel="nofollow noopener noreferrer" title={tooltip} class="block w-full h-full">
@@ -115,7 +114,6 @@ const captionClass = "text-caption-14! text-muted mt-4 text-center max-w-2xl mx-
       )}
     </div>
   </div>
-
   {caption && (
     <figcaption class={captionClass}>{caption}</figcaption>
   )}
@@ -140,12 +138,7 @@ const captionClass = "text-caption-14! text-muted mt-4 text-center max-w-2xl mx-
     max-width: 56rem;
     padding: 0 1rem;
   }
-  @media (min-width: 768px) {
-    .full-width-figure { padding: 0 1.5rem; }
-  }
-  @media (min-width: 1024px) {
-    .full-width-figure { padding: 0 2rem; }
-  }
+  
   .full-width-figure .relative { width: 100%; }
 
   .lightbox-overlay {
@@ -221,6 +214,14 @@ const captionClass = "text-caption-14! text-muted mt-4 text-center max-w-2xl mx-
       justify-content: center;
       color: var(--fg-inverted);
     }
+  }
+  
+  @media (min-width: 768px) {
+    .full-width-figure { padding: 0 1.5rem; }
+  }
+  
+  @media (min-width: 1024px) {
+    .full-width-figure { padding: 0 2rem; }
   }
 </style>
 
