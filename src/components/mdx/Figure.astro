@@ -1,11 +1,14 @@
 ---
 // src/components/ui/Figure.astro
+
 import { 
   cdnImage, 
   isCdnUrl 
 } from '@/lib/utils';
+
 import { Image } from 'astro:assets';
 import { IMAGE } from '@/consts';
+
 import Icon from '@/components/ui/icons/Icon.astro';
 
 interface Props {
@@ -16,7 +19,13 @@ interface Props {
   href?: string;
 }
 
-const { src, alt = '', title, caption, href } = Astro.props;
+const { 
+  src, 
+  alt = '', 
+  title, 
+  caption, 
+  href 
+} = Astro.props;
 
 const isPlaceholder = !src || src === '';
 
@@ -108,12 +117,12 @@ const captionClass = "text-caption-14! text-muted mt-4 text-center max-w-2xl mx-
   )}
 </figure>
 
-<div class="lightbox-overlay" id="lightbox-overlay" aria-hidden="true">
-  <button class="lightbox-close p-2 rounded-full bg-subtle/50 hover:bg-muted active:bg-strong text-inverted" id="lightbox-close" aria-label="Close lightbox">
+<div id="lightbox-overlay" aria-hidden="true" class="lightbox-overlay">
+  <button id="lightbox-close" aria-label="Close lightbox" class="lightbox-close p-2 rounded-full bg-subtle/50 hover:bg-muted active:bg-muted">
     <Icon name="close" className="w-6 h-6" />
   </button>
   <div class="lightbox-zoom-container">
-    <img src="" alt="" class="lightbox-image" id="lightbox-image" />
+    <img id="lightbox-image" src="" alt="" class="lightbox-image" />
   </div>
 </div>
 
@@ -189,6 +198,7 @@ const captionClass = "text-caption-14! text-muted mt-4 text-center max-w-2xl mx-
     font-size: 2rem;
     cursor: pointer;
     z-index: 1000;
+    color: var(--fg-inverted);
   }
 
   @media (max-width: 767px) {
@@ -205,6 +215,7 @@ const captionClass = "text-caption-14! text-muted mt-4 text-center max-w-2xl mx-
       display: flex;
       align-items: center;
       justify-content: center;
+      color: var(--fg-inverted);
     }
   }
 </style>
