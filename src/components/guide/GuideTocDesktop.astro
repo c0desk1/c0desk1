@@ -2,6 +2,8 @@
 // src/components/guide/desktop/GuideTocDesktop.astro
 import Section from "@/components/ui/Section.astro";
 import Icon from "../ui/icons/Icon.astro";
+import ScrollToTop from "../ui/ScrollToTop.astro";
+import RssSubscribe from "../ui/RssSubscribe.astro";
 
 interface Props { headings: { depth: number; text: string; slug: string }[]; }
 const { headings } = Astro.props;
@@ -9,19 +11,19 @@ const filtered = headings.filter(h => h.depth >= 2 && h.depth <= 3);
 ---
 
 {filtered.length > 0 && (
-  <aside class="hidden lg:block w-60 shrink-0 sticky top-(--header-height) h-[calc(100svh-var(--header-height))] overflow-y-auto pl-4" style="scrollbar-width: none;">
+  <aside class="hidden lg:block w-56 mx-auto shrink-0 sticky top-(--header-height) h-[calc(100svh-var(--header-height))] overflow-y-auto px-4" style="scrollbar-width: none;">
     <Section size="sm">
-      <div class="flex items-center gap-1.5 text-dim mb-2">
+      <div class="flex items-center gap-1.5 text-muted mb-2">
         <Icon name="toc" className="w-4 h-4" />
         <p class="text-label-13 font-semibold">Dihalaman ini</p>
       </div>
       <nav id="toc-desktop-nav" class="relative">
         <svg class="absolute inset-0 pointer-events-none text-(--border)" style="width: 100%; height: 100%; z-index: 0;">
-          <path id="toc-bg-path" stroke="currentColor" stroke-width="1" fill="none" stroke-linejoin="round" stroke-linecap="round" />
+          <path id="toc-bg-path" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round" />
         </svg>
         <div id="toc-progress-mask" class="absolute top-0 left-0 w-full overflow-hidden transition-[height] duration-300 ease-out" style="height: 0px; z-index: 1;">
           <svg id="toc-fg-svg" class="absolute top-0 left-0 pointer-events-none text-(--accent)" style="width: 100%;">
-            <path id="toc-fg-path" stroke="currentColor" stroke-width="1" fill="none" stroke-linejoin="round" stroke-linecap="round" />
+            <path id="toc-fg-path" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round" />
           </svg>
         </div>
         <ul id="toc-desktop-list" class="flex flex-col relative z-10">
@@ -34,7 +36,7 @@ const filtered = headings.filter(h => h.depth >= 2 && h.depth <= 3);
                   class:list={[
                     "toc-desktop-link block py-1.5 transition-all duration-200 no-underline",
                     isSubHeading 
-                      ? "pl-9 text-label-14 font-normal text-muted/80 hover:text-strong" 
+                      ? "pl-9 text-label-14 font-normal text-muted hover:text-strong" 
                       : "pl-6 text-label-14 font-medium text-muted hover:text-strong"
                   ]} 
                   data-toc-desktop-slug={h.slug}
@@ -48,8 +50,29 @@ const filtered = headings.filter(h => h.depth >= 2 && h.depth <= 3);
         </ul>
       </nav>
     </Section>
+    <Section size="none" class="border-t border-(--border) gap-4">
+      <div class="grid grid-cols-1 items-center gap-y-2 py-2">
+        <ScrollToTop />
+        <RssSubscribe />
+      </div>
+    </Section>
   </aside>
 )}
+
+<style is:global>
+  .toc-desktop-link {
+    color: var(--fg-muted);
+  }
+
+  .toc-desktop-link.text-strong {
+    color: var(--fg-strong) !important;
+  }
+
+  .toc-desktop-link.text-muted,
+  .toc-desktop-link.text-muted\/80 {
+    color: var(--fg-muted) !important;
+  }
+</style>
 
 <script>
   const initDesktopToc = () => {
@@ -66,7 +89,7 @@ const filtered = headings.filter(h => h.depth >= 2 && h.depth <= 3);
     const targets = linksArray.map(l => document.getElementById(l.dataset.tocDesktopSlug!)).filter(Boolean) as HTMLElement[];
     let active = "";
 
-    const OFFSET = 3; 
+    const OFFSET = 3;
 
     const drawSvgPath = () => {
       if (nav.offsetHeight === 0) return;
@@ -74,10 +97,9 @@ const filtered = headings.filter(h => h.depth >= 2 && h.depth <= 3);
 
       const H2_X = 4;
       const H3_X = 18;
-      
+
       let currentX = linksArray[0].dataset.isSub === "true" ? H3_X : H2_X;
-      
-      let currentY = OFFSET; 
+      let currentY = OFFSET;
       let d = `M ${currentX} ${currentY}`;
 
       linksArray.forEach((link) => {
@@ -89,7 +111,7 @@ const filtered = headings.filter(h => h.depth >= 2 && h.depth <= 3);
         const yTop = li.offsetTop;
 
         if (targetX !== currentX) {
-          const turnStartY = Math.max(currentY, yTop - 8); 
+          const turnStartY = Math.max(currentY, yTop - 8);
           if (turnStartY > currentY) {
             d += ` L ${currentX} ${turnStartY}`;
           }
@@ -136,10 +158,25 @@ const filtered = headings.filter(h => h.depth >= 2 && h.depth <= 3);
       });
     };
 
+    // Observer dengan logika pemilihan heading teratas (sama seperti mobile)
     const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) active = e.target.id; });
+      const visible = entries
+        .filter(e => e.isIntersecting)
+        .map(e => targets.find(t => t.id === e.target.id))
+        .filter(Boolean) as HTMLElement[];
+
+      if (visible.length > 0) {
+        const topMost = visible.reduce((a, b) => {
+          const aTop = a.getBoundingClientRect().top;
+          const bTop = b.getBoundingClientRect().top;
+          return aTop <= bTop ? a : b;
+        });
+        active = topMost.id;
+      } else if (window.scrollY < 50) {
+        active = "";
+      }
       updateProgress();
-    }, { rootMargin: "-15% 0% -75% 0%", threshold: 0 });
+    }, { rootMargin: "-10% 0% -70% 0%", threshold: 0 });
 
     targets.forEach(t => obs.observe(t));
 
@@ -164,12 +201,12 @@ const filtered = headings.filter(h => h.depth >= 2 && h.depth <= 3);
   };
 
   let cleanup: (() => void) | undefined;
-  
-  const runSetup = () => { 
-    cleanup?.(); 
-    cleanup = initDesktopToc(); 
+
+  const runSetup = () => {
+    cleanup?.();
+    cleanup = initDesktopToc();
   };
-  
+
   runSetup();
   document.addEventListener("astro:page-load", runSetup);
 </script>

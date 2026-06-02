@@ -2,6 +2,9 @@
 // src/components/guide/desktop/GuideSidebarDesktop.astro
 import type { CollectionEntry } from "astro:content";
 import Icon from "../ui/icons/Icon.astro";
+import Section from "../ui/Section.astro";
+import Breadcrumb from "../Breadcrumb.astro";
+import { ROUTES } from "@/consts";
 
 interface Props {
   entries: CollectionEntry<"guide">[];
@@ -14,19 +17,19 @@ const { entries, currentId, sectionLabel } = Astro.props;
 
 <aside
   id="guide-sidebar-desktop"
-  class="hidden lg:flex flex-col w-64 shrink-0 sticky top-(--header-height) h-[calc(100svh-var(--header-height))] overflow-y-auto py-8 border-x border-(--border)"
+  class="hidden lg:flex flex-col w-64 shrink-0 sticky top-(--header-height) h-[calc(100svh-var(--header-height))] overflow-y-auto border-x border-(--border)"
   style="scrollbar-width: thin; scrollbar-color: var(--border) transparent;"
 >
-  <nav class="flex flex-col gap-6 w-full">
-    <div class="flex flex-col gap-1">
-      <div class="flex items-center border-y border-(--border) px-3 py-2 gap-1.5 text-muted">
-        <span class="inline-flex shrink-0 items-center justify-center w-4 h-4">
-          <Icon name="bot" className="w-full h-full text-subtle" />
-        </span>
-        <h3 class="text-heading-14 font-semibold select-none">
-          {sectionLabel}
-        </h3>
-      </div>
+  <Section size="sm">
+    <div class="flex items-center px-3 text-muted mb-4">
+      <Breadcrumb
+        items={[
+          { name: "Guide", url: ROUTES.guide },
+          { name: sectionLabel },
+        ]}
+       />
+    </div>
+    <nav class="flex flex-col gap-6 w-full"> 
       <ul class="flex flex-col gap-px">
         {entries.map(entry => {
           const isActive = entry.id === currentId;
@@ -37,7 +40,7 @@ const { entries, currentId, sectionLabel } = Astro.props;
                 class:list={[
                   "sidebar-desktop-link group flex items-center justify-between gap-2 px-3 py-1.5 text-label-14 no-underline font-medium transition-colors border-l-2 -ml-px",
                   isActive
-                    ? "text-strong bg-muted/80 border-(--accent)"
+                    ? "text-strong bg-muted/80 border-(--fg)"
                     : "text-muted hover:text-strong hover:bg-subtle/40 border-transparent"
                 ]}
                 aria-current={isActive ? "page" : undefined}
@@ -51,8 +54,8 @@ const { entries, currentId, sectionLabel } = Astro.props;
           );
         })}
       </ul>
-    </div>
-  </nav>
+    </nav>
+  </Section>
 </aside>
 
 <script>

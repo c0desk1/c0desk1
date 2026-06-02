@@ -38,10 +38,10 @@ const optimizedAvatar = Author.avatar && isCdnUrl(Author.avatar)
 const authorPath = `/author/${Author.slug}`;
 ---
 
-<div class="flex items-center justify-center gap-3">
-  <a href={authorPath} rel="author" aria-label={`Penulis: ${Author.name}`} class="flex items-center gap-3 no-underline group">
+<div class="inline-flex items-center gap-3">
+  <a href={authorPath} rel="author" aria-label={`Penulis: ${Author.name}`} class="flex items-center justify-center gap-3 no-underline group">
     {Author.avatar && (
-      <span class="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border border-(--border) shrink-0 transition-shadow group-hover:ring-2 group-hover:ring-(--accent-ring)">
+      <span class="w-6 md:h-6 rounded-full overflow-hidden border border-(--border) shrink-0 transition-shadow group-hover:ring-2 group-hover:ring-(--accent-ring)">
         <Image
           src={optimizedAvatar}
           alt={Author.name}
@@ -53,12 +53,12 @@ const authorPath = `/author/${Author.slug}`;
         />
       </span>
     )}
-    <div class="flex flex-col text-start">
-      <span class="text-body-14 md:text-body-16 font-semibold text-(--fg)">{Author.name}</span>
+    <div class="inline-flex items-center justify-center gap-1.5">
+      <span class="text-body-14 font-medium text-(--fg)">{Author.name}</span>
       {Author.role && (
-        <span class="text-label-12 md:text-label-13 text-muted uppercase">{Author.role}</span>
+        <span class="text-label-14 text-muted">{Author.role}</span>
       )}
     </div>
   </a>
-  <Contribution />
+  <!--<Contribution />-->
 </div>

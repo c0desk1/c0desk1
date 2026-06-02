@@ -2,6 +2,8 @@
 // src/components/guide/mobile/GuideSidebarMobile.astro
 import type { CollectionEntry } from "astro:content";
 import Icon from "../ui/icons/Icon.astro";
+import Breadcrumb from "../Breadcrumb.astro";
+import { ROUTES } from "@/consts";
 
 interface Props {
   entries:      CollectionEntry<"guide">[];
@@ -16,22 +18,26 @@ const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
 
 <div class="lg:hidden sticky top-(--header-height) z-40 flex items-center justify-between w-full h-12 bg-base border-b border-(--border) px-4">
   <div class="flex items-center gap-1.5 py-1.5">
-    <button id="m-sidebar-open" type="button" class="flex items-center p-1 text-muted hover:text-strong active:text-strong hover:bg-muted active:bg-muted rounded-md transition-colors" aria-label="Open Menu">
+    <button id="m-sidebar-open" type="button" class="flex items-center p-1.5 text-muted hover:text-strong active:text-strong hover:bg-subtle active:bg-subtle rounded-md transition-colors" aria-label="Open Menu">
       <Icon name="expanded-open" className="w-5 h-5" />
     </button>
   </div>
   
   {filteredToc.length > 0 && (
     <details id="m-toc-details" class="group/toc relative">
-      <summary class="flex items-center gap-2 cursor-pointer list-none select-none [&::-webkit-details-marker]:hidden text-label-14 font-medium text-muted hover:text-strong py-1.5 px-3 border border-(--border) rounded-md hover:bg-muted active:bg-muted transition-colors">
-        <svg role="progressbar" viewBox="0 0 24 24" class="w-4.5 h-4.5 shrink-0" fill="none">
-          <circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="2" opacity="0.25" />
-          <circle id="m-toc-progress-ring" cx="12" cy="12" r="11" stroke="currentColor" stroke-width="2" stroke-dasharray="69.115" stroke-dashoffset="69.115" stroke-linecap="round" transform="rotate(-90 12 12)" class="transition-all duration-150" />
-        </svg>
+      <summary class="flex items-center gap-2 cursor-pointer list-none select-none [&::-webkit-details-marker]:hidden text-body-14 font-medium text-muted hover:text-strong py-1.5 px-3 border border-(--border) rounded-md hover:bg-subtle active:bg-subtle transition-colors">
+        <span class="inline-flex shrink-0 items-center justify-center">
+          <svg role="progressbar" viewBox="0 0 24 24" class="w-4 h-4 shrink-0" fill="none">
+            <circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="2" opacity="0.25" />
+            <circle id="m-toc-progress-ring" cx="12" cy="12" r="11" stroke="currentColor" stroke-width="2" stroke-dasharray="69.115" stroke-dashoffset="69.115" stroke-linecap="round" transform="rotate(-90 12 12)" class="transition-all duration-150 text-(--accent)" />
+          </svg>
+        </span>
         <span id="m-toc-active-text" class="truncate max-w-36 text-right block font-medium">
           Di Halaman Ini
         </span>
-        <Icon name="up-down" className="transition-transform duration-300 group-open/toc:rotate-180 text-dim/70 w-4 h-4 shrink-0" />
+        <span class="inline-flex shrink-0 items-center justify-center">
+          <Icon name="up-down" className="transition-transform duration-300 group-open/toc:rotate-180 text-dim/70 w-4 h-4 shrink-0" />
+        </span>
       </summary>
       <nav class="absolute top-full right-0 mt-2 w-[calc(100vw-2rem)] max-w-sm bg-base rounded-lg border border-(--border) max-h-[60vh] overflow-y-auto px-5 py-4 shadow-lg origin-top-right animate-in fade-in zoom-in-95 duration-200">
         <div class="flex items-center gap-1.5 text-subtle mb-2">
@@ -57,7 +63,7 @@ const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
                     class:list={[
                       "toc-mobile-link block py-1.5 transition-all duration-200 no-underline",
                       isSubHeading 
-                        ? "pl-9 text-label-14 font-normal text-muted/80 hover:text-strong" 
+                        ? "pl-9 text-label-14 font-normal text-muted hover:text-strong" 
                         : "pl-6 text-label-14 font-medium text-muted hover:text-strong"
                     ]}
                     data-toc-mobile-slug={h.slug}
@@ -76,14 +82,18 @@ const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
 </div>
 <div id="m-sidebar-backdrop" class="fixed inset-0 z-40 bg-base/60 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300 ease-in-out"></div>
 <aside id="m-sidebar" class="fixed top-(--header-height) inset-y-0 left-0 z-50 w-72 bg-base transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col border-r border-(--border) shadow-2xl">
-  <div class="flex items-center justify-between px-4 h-14 border-b border-(--border) shrink-0 bg-subtle/30">
-    <div class="flex items-center gap-1.5 text-muted">
-      <span class="inline-flex shrink-0 items-center justify-center w-5 h-5">
-        <Icon name="brain" className="w-full h-full text-subtle" />
-      </span>
-      <span class="text-heading-14 font-medium items-center">{sectionLabel}</span>
+  <div class="flex items-center justify-between px-4 py-2 border-b border-(--border) shrink-0 bg-subtle/30">
+    <div class="flex items-center text-muted">
+      <div class="inline-flex shrink-0 items-center justify-center">
+        <Breadcrumb
+          items={[
+            { name: "Guide", url: ROUTES.guide },
+            { name: sectionLabel },
+          ]}
+        />
+      </div>
     </div>
-    <button id="m-sidebar-close" class="p-1.5 rounded-md text-muted hover:text-strong hover:bg-muted active:text-strong active:bg-muted transition-colors" aria-label="Close Menu">
+    <button id="m-sidebar-close" class="p-1.5 rounded-md text-muted hover:text-strong hover:bg-subtle active:text-strong active:bg-subtle transition-colors" aria-label="Close Menu">
       <Icon name="expanded-close" className="w-5 h-5" />
     </button>
   </div>
@@ -254,23 +264,32 @@ const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
       };
 
       const obs = new IntersectionObserver(entries => {
-        if (window.scrollY < 50) {
+        const visible = entries
+          .filter(e => e.isIntersecting)
+          .map(e => targets.find(t => t.id === e.target.id))
+          .filter(Boolean) as HTMLElement[];
+
+        if (visible.length > 0) {
+          const topMost = visible.reduce((a, b) => {
+            const aTop = a.getBoundingClientRect().top;
+            const bTop = b.getBoundingClientRect().top;
+            return aTop <= bTop ? a : b;
+          });
+          active = topMost.id;
+        } else if (window.scrollY < 50) {
           active = "";
           activeText.textContent = "Di Halaman Ini";
-          updateLineProgress();
-          return;
         }
 
-        entries.forEach(e => { if (e.isIntersecting) active = e.target.id; });
-        if (!active && targets.length > 0) return;
-
-        linksArray.forEach(l => {
-          if (l.dataset.tocMobileSlug === active) {
-            activeText.textContent = l.textContent?.trim() || "Di Halaman Ini";
+        if (active) {
+          const activeLink = linksArray.find(l => l.dataset.tocMobileSlug === active);
+          if (activeLink) {
+            activeText.textContent = activeLink.textContent?.trim() || "Di Halaman Ini";
           }
-        });
+        }
+
         updateLineProgress();
-      }, { rootMargin: "-20% 0% -65% 0%", threshold: 0 });
+      }, { rootMargin: "-10% 0% -70% 0%", threshold: 0 });
 
       targets.forEach(t => obs.observe(t));
       cleanupTasks.push(() => obs.disconnect());
@@ -322,3 +341,18 @@ const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
   runSetup();
   document.addEventListener("astro:page-load", runSetup);
 </script>
+
+<style>
+  .toc-mobile-link {
+    color: var(--fg-muted);
+  }
+
+  .toc-mobile-link.text-strong {
+    color: var(--fg-strong) !important;
+  }
+
+  .toc-mobile-link.text-muted,
+  .toc-mobile-link.text-muted\/80 {
+    color: var(--fg-muted) !important;
+  }
+</style>

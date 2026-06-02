@@ -1,0 +1,24 @@
+---
+import Icon from '@/components/ui/icons/Icon.astro';
+import { ROUTES } from '@/consts';
+
+interface Props {
+  href?: string;
+  label?: string;
+  className?: string;
+}
+
+const { href = ROUTES.feed, label = 'Feed', className = '' } = Astro.props;
+---
+
+<a
+  href={href}
+  class:list={[
+    'inline-flex items-center gap-2 text-label-13 font-medium text-muted hover:text-strong transition-colors no-underline',
+    className,
+  ]}
+  aria-label={label}
+>
+  <Icon name="rss" className="w-4 h-4 shrink-0" />
+  <span>{label}</span>
+</a>

@@ -21,14 +21,18 @@ const {
 const isPlaceholder = !image || image === '';
 
 const optimizedSrc = !isPlaceholder && isCdnUrl(image)
-  ? cdnImage(image, { w: IMAGE.thumbnail.width, h: IMAGE.thumbnail.height, q: IMAGE.thumbnail.quality })
+  ? cdnImage(image, { 
+    w: IMAGE.thumbnail.width, 
+    h: IMAGE.thumbnail.height, 
+    q: IMAGE.thumbnail.quality 
+  })
   : image || IMAGE.thumbnail.placeholder;
 ---
 
-<figure class="w-full max-w-4xl mx-auto my-8 md:my-10">
+<figure class="w-full max-w-4xl mx-auto">
   <div class:list={[
     "relative overflow-hidden rounded-(--prose-radius-lg)",
-    isPlaceholder ? "bg-muted/10 border border-(--border) shadow-md" : "shadow-2xl bg-base"
+    isPlaceholder ? "bg-muted/10 border border-(--border)" : "bg-base"
   ]}>
     
     {!isPlaceholder && (

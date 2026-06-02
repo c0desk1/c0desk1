@@ -10,7 +10,7 @@ const currentPath = Astro.url.pathname;
 const navItems = NAV.navBar;
 ---
 
-<nav class="hidden sm:inline-flex items-center rounded-xl border border-(--border) bg-base backdrop-blur p-1 gap-2">
+<nav class="hidden sm:inline-flex items-center rounded-lg border border-(--border) bg-base backdrop-blur p-1 gap-2">
   {navItems.map((item) => {
     const children = item.children;
     const hasChildren = children && children.length > 0;
@@ -18,27 +18,23 @@ const navItems = NAV.navBar;
     if (hasChildren) {
       return (
         <div class="relative group/dropdown">
-          <button aria-expanded="false" aria-haspopup="menu" class="relative inline-flex items-center gap-1.5 px-4 py-1.5 text-label-14 font-medium rounded-lg duration-200 text-muted hover:text-(--fg) hover:bg-muted focus:outline-none focus:ring-2 focus:ring-(--border-strong)">
-            <span>{item.label}</span>
-            <span class="shrink-0 inline-flex items-center justify-center w-4 h-4">
+          <button aria-expanded="false" aria-haspopup="menu" class="relative inline-flex items-center gap-1.5 px-4 py-1.5 text-label-14 font-medium rounded-md duration-200 text-muted hover:text-(--fg) hover:bg-muted focus:outline-none focus:ring-2 focus:ring-(--border-strong)">
+            <span class="inline-flex items-center">{item.label}</span>
+            <span class="shrink-0 inline-flex items-center justify-center w-3.5 h-3.5">
               <Icon name="chevron-down" className="w-full h-full transition-all duration-200 group-hover/dropdown:rotate-180 group-focus-within/dropdown:rotate-180"/>
             </span>
           </button>
           <div class="absolute left-0 top-full pt-4 invisible opacity-0 group-hover/dropdown:visible group-hover/dropdown:opacity-100 group-focus-within/dropdown:visible group-focus-within/dropdown:opacity-100 transition-transform duration-200 z-50">
-            <div class="min-w-45 rounded-xl border border-(--border) bg-base shadow-lg p-1 backdrop-blur-sm">
+            <div class="min-w-45 rounded-lg border border-(--border) bg-base shadow-lg p-1 backdrop-blur-sm">
               {children.map((child) => {
                 const isActive = normalizePath(currentPath) === normalizePath(child.href || "");
                 const isExternal = child.isExternal === true;
                 return (
-                  <a
-                    href={child.href}
-                    aria-label={child.label}
-                    target={isExternal ? "_blank" : undefined}
-                    rel={isExternal ? "noopener noreferrer" : undefined}
+                  <a href={child.href} aria-label={child.label} target={isExternal ? "_blank" : undefined} rel={isExternal ? "noopener noreferrer" : undefined}
                     class:list={[
-                      "flex items-center justify-between gap-2 px-3 py-2 text-label-14 rounded-lg focus:outline-none focus:bg-subtle",
+                      "flex items-center justify-between gap-2 px-3 py-2 text-label-14 rounded-md focus:outline-none focus:bg-subtle",
                       isActive
-                        ? "text-(--fg) bg-muted"
+                        ? "text-(--f) bg-muted"
                         : "text-muted hover:text-(--fg) hover:bg-subtle"
                     ]}>
                     <span class="transition-colors">{child.label}</span>

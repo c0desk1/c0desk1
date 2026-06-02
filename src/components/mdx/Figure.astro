@@ -36,14 +36,14 @@ const optimizedSrc = !isPlaceholder && isCdnUrl(src)
   ? cdnImage(src, { 
     w: IMAGE.thumbnail.width, 
     h: IMAGE.thumbnail.height, 
-    q: IMAGE.thumbnail.qulity 
+    q: IMAGE.thumbnail.quality 
   }) 
   : src || IMAGE.thumbnail.placeholder;
   
 const hasLink = !!href;
 const tooltip = title;
 
-let displayUrl = SITE.url;
+let displayUrl = SITE.url as string;
 
 if (href && href.startsWith('http')) {
   try { 
@@ -58,13 +58,13 @@ const imageClass = hasLink
   : `zoomable-image relative h-full w-full object-cover transition duration-500 cursor-zoom-in ${isPlaceholder ? 'opacity-100' : 'opacity-0'}`;
 
 const figureClass    = "full-width-figure my-8 lg:my-12";
-const browserWindow  = "relative overflow-hidden rounded-xl border border-(--border) bg-base shadow-lg dark:shadow-xl";
-const browserHeader  = "flex items-center px-4 py-3 border-b border-(--border)";
-const trafficLights  = "flex items-center justify-start gap-1.5";
-const urlBarWrapper  = "absolute inset-x-0 flex justify-center pointer-events-none";
-const urlBar         = "flex items-center justify-center bg-dim border border-(--border) rounded-md h-6 px-2 max-w-30 gap-1.5 md:max-w-xs w-full text-body-13 text-muted truncate";
-const imageContainer = "relative w-full bg-base";
-const captionClass = "text-caption-14! text-muted mt-4 text-center max-w-2xl mx-auto px-4 text-pretty";
+const browserWindow  = "relative overflow-hidden rounded-xl border border-(--border) shadow-lg dark:shadow-xl bg-subtle";
+const browserHeader  = "flex items-center px-4 py-1.5 justify-between";
+const trafficLights  = "flex flex-1 items-center justify-start gap-1.5";
+const urlBarWrapper  = "flex justify-center pointer-events-none";
+const urlBar         = "flex items-center border border-(--border) bg-muted rounded-md px-2 max-w-30 gap-1.5 md:max-w-xs w-full text-body-13 text-muted truncate";
+const imageContainer = "relative bg-base px-2 pb-2 bg-subtle";
+const captionClass   = "text-caption-14! text-muted mt-4 text-center max-w-2xl mx-auto px-4 text-pretty";
 ---
 
 <figure class={figureClass}>
@@ -199,7 +199,7 @@ const captionClass = "text-caption-14! text-muted mt-4 text-center max-w-2xl mx-
     font-size: 2rem;
     cursor: pointer;
     z-index: 1000;
-    color: var(--fg-inverted);
+    color: var(--fg);
   }
 
   @media (max-width: 767px) {
@@ -216,7 +216,7 @@ const captionClass = "text-caption-14! text-muted mt-4 text-center max-w-2xl mx-
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--fg-inverted);
+      color: var(--fg);
     }
   }
   
@@ -274,7 +274,6 @@ const captionClass = "text-caption-14! text-muted mt-4 text-center max-w-2xl mx-
     const overlays = document.querySelectorAll('.lightbox-overlay');
     if (overlays.length === 0) return;
 
-
     overlay = overlays[0] as HTMLElement;
     for (let i = 1; i < overlays.length; i++) {
       overlays[i].remove();
@@ -291,6 +290,9 @@ const captionClass = "text-caption-14! text-muted mt-4 text-center max-w-2xl mx-
     overlay.removeEventListener('click', handleOverlayClick);
     overlay.addEventListener('click', handleOverlayClick);
 
+    lightboxImg.removeEventListener('click', closeLightbox);
+    lightboxImg.addEventListener('click', closeLightbox);
+
     document.querySelectorAll('.zoomable-image').forEach(img => {
       img.removeEventListener('click', handleImageClick);
       img.addEventListener('click', handleImageClick);
@@ -299,6 +301,6 @@ const captionClass = "text-caption-14! text-muted mt-4 text-center max-w-2xl mx-
     document.removeEventListener('keydown', handleKeyDown);
     document.addEventListener('keydown', handleKeyDown);
   }
-
+  initLightbox()
   document.addEventListener('astro:page-load', initLightbox);
 </script>

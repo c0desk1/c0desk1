@@ -19,7 +19,7 @@ const ariaLabel = "Breadcrumb";
     {items.map((item, i) => (
       <li class="flex items-center gap-1">
         {i > 0 && (
-          <span class="text-muted opacity-50" aria-hidden="true">
+          <span class="text-muted opacity-50 font-medium" aria-hidden="true">
             /
           </span>
         )}
@@ -31,7 +31,7 @@ const ariaLabel = "Breadcrumb";
         ) : (
           <a
             href={item.url}
-            class="text-muted hover:text-(--fg) active:text-(--fg) no-underline whitespace-nowrap transition-colors"
+            class="text-muted hover:text-(--fg) active:text-(--fg) font-medium no-underline whitespace-nowrap transition-colors"
           >
             {item.name}
           </a>

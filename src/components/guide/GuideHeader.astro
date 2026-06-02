@@ -3,12 +3,11 @@
 import PostAuthor from "@/components/blog/PostAuthor.astro";
 import PostMeta from "@/components/blog/PostMeta.astro";
 import HeroImage from "@/components/blog/PostHeroImage.astro";
-import Icon from "@/components/ui/icons/Icon.astro";
 
 interface Props {
   title: string;
   pubDate: Date;
-  content: string;
+  content?: string;
   description?: string;
   authorName?: string;
   authorAvatar?: string;
@@ -18,32 +17,29 @@ interface Props {
     src: string;
     alt: string;
   };
-  tags?: string[];
 }
 
 const {
   title,
   pubDate,
-  content,
+  content = '',
   description,
   authorName,
   authorAvatar,
   authorRole,
   authorSlug,
   heroImage,
-  tags = [],
 } = Astro.props;
 ---
 
-<header class="w-full max-w-3xl mx-auto">
-  <div class="flex flex-col items-center text-center gap-2 md:gap-6">
-    <h1 class="text-heading-32 md:text-heading-40 lg:text-heading-48 font-semibold text-balance">
-      {title}
-    </h1>
-    {description && (
-      <p class="lead text-(--prose-fg-dim)/80 max-w-2xl">{description}</p>
-    )}
-    <div class="flex flex-col items-center gap-4 w-full">
+<header class="w-full mx-auto">
+  <div class="flex flex-col items-center text-start justify-start gap-y-4 md:gap-y-6">
+    <div class="flex items-center text-start sm:text-center justify-center">
+      <h1 class="text-heading-32 md:text-heading-48 font-semibold text-balance">
+        {title}
+      </h1>
+    </div>
+    <div class="flex items-center self-start sm:self-center">
       {authorName && (
         <PostAuthor
           name={authorName}
@@ -52,23 +48,21 @@ const {
           slug={authorSlug || ""}
         />
       )}
+    </div>
+    <div class="flex items-center self-start sm:self-center">
       <PostMeta pubDate={pubDate} content={content} />
     </div>
-    {tags.length > 0 && (
-      <div class="flex flex-wrap justify-center gap-2 mt-2 hidden">
-        {tags.map(tag => (
-          <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-medium bg-muted/40 text-subtle border border-(--border)">
-            {tag}
-          </span>
-        ))}
-      </div>
+    <div class="flex items-center text-start sm:text-center">
+       {description && (
+        <p class="lead text-(--prose-fg-muted)">{description}</p>
+      )}
+    </div>
+    {heroImage && (
+      <HeroImage
+        image={heroImage.src}
+        alt={heroImage.alt || title}
+      />
     )}
-    <hr class="w-screen border-dashed border-t-4 border-(--border) rounded-full opacity-40 overflow-hidden"/>
+    <hr class="w-16 border-t-4 border-(--border) rounded-full opacity-40" />
   </div>
-  {heroImage && (
-    <HeroImage
-      image={heroImage.src}
-      alt={heroImage.alt || title}
-    />
-  )}
 </header>
