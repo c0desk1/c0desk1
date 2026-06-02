@@ -1,23 +1,32 @@
 ---
 // src/components/ui/Figure.astro
-import { cdnImage, isCdnUrl } from '@/lib/utils';
+import { 
+  cdnImage, 
+  isCdnUrl 
+} from '@/lib/utils';
 import { Image } from 'astro:assets';
+import { IMAGE } from '@/consts';
 import Icon from '@/components/ui/icons/Icon.astro';
 
 interface Props {
-  src: string;
-  alt: string;
+  src?: string;
+  alt?: string;
   title?: string;
   caption?: string;
   href?: string;
 }
 
-const { src, alt, title, caption, href } = Astro.props;
+const { src, alt = '', title, caption, href } = Astro.props;
 
-const fallbackSrc = '/images/placeholder.svg';
-const optimizedSrc = src 
-  ? (isCdnUrl(src) ? cdnImage(src, { w: 1280, h: 720, q: 80 }) : src) 
-  : fallbackSrc;
+const isPlaceholder = !src || src === '';
+
+const optimizedSrc = !isPlaceholder && isCdnUrl(src) 
+  ? cdnImage(src, { 
+    w: IMAGE.thumbnail.width, 
+    h: IMAGE.thumbnail.height, 
+    q: IMAGE.thumbnail.qulity 
+  }) 
+  : src || IMAGE.thumbnail.placeholder;
   
 const hasLink = !!href;
 const tooltip = title;
@@ -25,7 +34,9 @@ const tooltip = title;
 let displayUrl = 'c0desk1.my.id';
 
 if (href && href.startsWith('http')) {
-  try { displayUrl = new URL(href).hostname; } catch(e) {}
+  try { 
+    displayUrl = new URL(href).hostname; 
+  } catch(e) {}
 } else if (title) {
   displayUrl = title.toLowerCase().replace(/\s+/g, '-');
 }
@@ -39,8 +50,8 @@ const urlBar         = "flex items-center justify-center bg-dim border border-(-
 const imageContainer = "relative w-full bg-base";
 
 const imageClass = hasLink
-  ? "relative h-full w-full object-cover transition duration-500 opacity-0"
-  : "zoomable-image relative h-full w-full object-cover transition duration-500 opacity-0 cursor-zoom-in";
+  ? `relative h-full w-full object-cover transition duration-500 ${isPlaceholder ? 'opacity-100' : 'opacity-0'}`
+  : `zoomable-image relative h-full w-full object-cover transition duration-500 cursor-zoom-in ${isPlaceholder ? 'opacity-100' : 'opacity-0'}`;
 
 const captionClass = "text-caption-14! text-muted mt-4 text-center max-w-2xl mx-auto px-4 text-pretty";
 ---
@@ -66,27 +77,27 @@ const captionClass = "text-caption-14! text-muted mt-4 text-center max-w-2xl mx-
         <a href={href} target="_blank" rel="nofollow noopener noreferrer" title={tooltip} class="block w-full h-full">
           <Image
             src={optimizedSrc}
-            alt={alt}
+            alt={isPlaceholder ? "No image available" : alt}
             title={tooltip}
             loading="lazy"
             decoding="async"
             width={1200}
             height={630}
             class={imageClass}
-            onload="this.classList.remove('opacity-0')"
+            onload={!isPlaceholder ? "this.classList.remove('opacity-0')" : undefined}
           />
         </a>
       ) : (
         <Image
           src={optimizedSrc}
-          alt={alt}
+          alt={isPlaceholder ? "No image available" : alt}
           title={tooltip}
           loading="lazy"
           decoding="async"
           width={1200}
           height={630}
           class={imageClass}
-          onload="this.classList.remove('opacity-0')"
+          onload={!isPlaceholder ? "this.classList.remove('opacity-0')" : undefined}
         />
       )}
     </div>
@@ -96,15 +107,6 @@ const captionClass = "text-caption-14! text-muted mt-4 text-center max-w-2xl mx-
     <figcaption class={captionClass}>{caption}</figcaption>
   )}
 </figure>
-
-<div class="lightbox-overlay" id="lightbox-overlay" aria-hidden="true">
-  <button class="lightbox-close p-2 rounded-full bg-subtle/50 hover:bg-muted active:bg-strong text-inverted" id="lightbox-close" aria-label="Close lightbox">
-    <Icon name="close" className="w-6 h-6" />
-  </button>
-  <div class="lightbox-zoom-container">
-    <img src="" alt="" class="lightbox-image" id="lightbox-image" />
-  </div>
-</div>
 
 <style is:inline>
   .full-width-figure {
