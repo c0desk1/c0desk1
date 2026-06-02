@@ -10,10 +10,9 @@ const { title = "" } = Astro.props;
 const $ = {
   wrapper: "code-block-wrapper not-prose relative rounded-xl overflow-hidden border border-(--prose-border) bg-(--prose-code-header-bg)",
   header: "code-block-header grid grid-cols-[1fr_auto_1fr] items-center px-4 pt-2",
-  leftSlot: "header-left flex items-center justify-start gap-1.5",
-  centerSlot: "header-center flex items-center justify-center min-w-0 gap-1 text-label-13",
+  leftSlot: "header-left flex items-center justify-start gap-1 text-label-13",
+  centerSlot: "header-center flex items-center justify-center min-w-0",
   rightSlot: "header-right flex items-center justify-end gap-3",
-  dot: "mac-dot size-2.5 rounded-full border border-(--prose-border)/10",
   titleText: "code-block-title text-label-12 sm:text-label-14 truncate text-(--prose-fg-muted) tracking-wide",
   langBadge: "lang-badge text-label-11 font-mono font-semibold text-(--prose-fg-muted) bg-muted! uppercase px-2 py-0.5 rounded-full",
   content: "code-content text-code-14 md:text-code-16 relative m-1.5 bg-(--prose-code-bg)! border border-(--prose-code-border)! rounded-xl overflow-x-auto group/content",
@@ -23,14 +22,10 @@ const $ = {
 
 <div class={$.wrapper}>
   <div class={$.header}>
-    <div class={$.leftSlot} aria-hidden="true">
-      <div class:list={[$.dot, "bg-error"]}></div>
-      <div class:list={[$.dot, "bg-warning"]}></div>
-      <div class:list={[$.dot, "bg-success"]}></div>
-    </div>
-    <div class={$.centerSlot}>
+    <div class={$.leftSlot}>
       {title && <span class={$.titleText}>{title}</span>}
     </div>
+    <div class={$.centerSlot}></div>
     <div class={$.rightSlot}>
       <span class={$.langBadge} style="display: none;"></span>
     </div>
@@ -100,9 +95,25 @@ const $ = {
 <script>
   (() => {
     const NAMES: Record<string, string> = {
-      js: "JS", ts: "TS", jsx: "JSX", tsx: "TSX", py: "PY", html: "HTML", css: "CSS",
-      json: "JSON", jsonc: "JSON", yaml: "YAML", toml: "TOML", bash: "BASH", sh: "SH",
-      md: "MD", mdx: "MDX", astro: "ASTRO", vue: "VUE", svelte: "SVELTE", rust: "RS"
+      js: "JS", 
+      ts: "TS", 
+      jsx: "JSX", 
+      tsx: "TSX", 
+      py: "PY", 
+      html: "HTML", 
+      css: "CSS",
+      json: "JSON", 
+      jsonc: "JSON", 
+      yaml: "YAML", 
+      toml: "TOML", 
+      bash: "BASH", 
+      sh: "SH",
+      md: "MD", 
+      mdx: "MDX", 
+      astro: "ASTRO", 
+      vue: "VUE", 
+      svelte: "SVELTE", 
+      rust: "RS"
     };
 
     const ALIASES: Record<string, string> = {
