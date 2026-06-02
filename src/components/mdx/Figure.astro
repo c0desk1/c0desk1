@@ -7,7 +7,10 @@ import {
 } from '@/lib/utils';
 
 import { Image } from 'astro:assets';
-import { IMAGE } from '@/consts';
+import { 
+  SITE, 
+  IMAGE 
+} from '@/consts';
 
 import Icon from '@/components/ui/icons/Icon.astro';
 
@@ -40,7 +43,7 @@ const optimizedSrc = !isPlaceholder && isCdnUrl(src)
 const hasLink = !!href;
 const tooltip = title;
 
-let displayUrl = 'c0desk1.my.id';
+let displayUrl = SITE.url;
 
 if (href && href.startsWith('http')) {
   try { 
@@ -50,6 +53,10 @@ if (href && href.startsWith('http')) {
   displayUrl = title.toLowerCase().replace(/\s+/g, '-');
 }
 
+const imageClass = hasLink
+  ? `relative h-full w-full object-cover transition duration-500 ${isPlaceholder ? 'opacity-100' : 'opacity-0'}`
+  : `zoomable-image relative h-full w-full object-cover transition duration-500 cursor-zoom-in ${isPlaceholder ? 'opacity-100' : 'opacity-0'}`;
+
 const figureClass    = "full-width-figure my-8 lg:my-12";
 const browserWindow  = "relative overflow-hidden rounded-xl border border-(--border) bg-base shadow-lg dark:shadow-xl";
 const browserHeader  = "flex items-center px-4 py-3 border-b border-(--border)";
@@ -57,11 +64,6 @@ const trafficLights  = "flex items-center justify-start gap-1.5";
 const urlBarWrapper  = "absolute inset-x-0 flex justify-center pointer-events-none";
 const urlBar         = "flex items-center justify-center bg-dim border border-(--border) rounded-md h-6 px-8 max-w-30 gap-1.5 md:max-w-xs w-full text-body-13 text-muted truncate";
 const imageContainer = "relative w-full bg-base";
-
-const imageClass = hasLink
-  ? `relative h-full w-full object-cover transition duration-500 ${isPlaceholder ? 'opacity-100' : 'opacity-0'}`
-  : `zoomable-image relative h-full w-full object-cover transition duration-500 cursor-zoom-in ${isPlaceholder ? 'opacity-100' : 'opacity-0'}`;
-
 const captionClass = "text-caption-14! text-muted mt-4 text-center max-w-2xl mx-auto px-4 text-pretty";
 ---
 
@@ -75,7 +77,7 @@ const captionClass = "text-caption-14! text-muted mt-4 text-center max-w-2xl mx-
       </div>
       <div class={urlBarWrapper}>
         <div class={urlBar}>
-          <span class="inline-flex shrink-0 w-3.5 h-3.5 items-center justify-start">
+          <span class="inline-flex shrink-0 w-3.5 h-3.5 items-center">
             <Icon name="lock" className="w-full h-full text-muted" />
           </span>
           <span class="truncate">
@@ -139,7 +141,9 @@ const captionClass = "text-caption-14! text-muted mt-4 text-center max-w-2xl mx-
     padding: 0 1rem;
   }
   
-  .full-width-figure .relative { width: 100%; }
+  .full-width-figure .relative { 
+    width: 100%; 
+  }
 
   .lightbox-overlay {
     display: flex;
@@ -217,76 +221,84 @@ const captionClass = "text-caption-14! text-muted mt-4 text-center max-w-2xl mx-
   }
   
   @media (min-width: 768px) {
-    .full-width-figure { padding: 0 1.5rem; }
+    .full-width-figure { 
+      padding: 0 1.5rem; 
+    }
   }
   
   @media (min-width: 1024px) {
-    .full-width-figure { padding: 0 2rem; }
+    .full-width-figure { 
+      padding: 0 2rem; 
+    }
   }
 </style>
 
 <script>
+  let overlay: HTMLElement | null = null;
+  let lightboxImg: HTMLImageElement | null = null;
+
+  const openLightbox = (src: string, alt: string) => {
+    if (!overlay || !lightboxImg) return;
+    lightboxImg.src = src;
+    lightboxImg.alt = alt;
+    overlay.classList.add('active');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeLightbox = () => {
+    if (!overlay) return;
+    overlay.classList.remove('active');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  };
+
+  const handleImageClick = (e: Event) => {
+    const target = e.currentTarget as HTMLImageElement;
+    openLightbox(target.src, target.alt);
+  };
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape' && overlay?.classList.contains('active')) {
+      closeLightbox();
+    }
+  };
+
+  const handleOverlayClick = (e: MouseEvent) => {
+    if (e.target === overlay) closeLightbox();
+  };
+
   function initLightbox() {
+    document.body.style.overflow = '';
+
     const overlays = document.querySelectorAll('.lightbox-overlay');
     if (overlays.length === 0) return;
 
-    if (overlays.length > 1) {
-      for (let i = 1; i < overlays.length; i++) {
-        overlays[i].remove();
-      }
+
+    overlay = overlays[0] as HTMLElement;
+    for (let i = 1; i < overlays.length; i++) {
+      overlays[i].remove();
     }
 
-    const overlay = document.getElementById('lightbox-overlay') as HTMLElement;
-    const lightboxImg = document.getElementById('lightbox-image') as HTMLImageElement;
-    const closeBtn = document.getElementById('lightbox-close') as HTMLButtonElement;
+    lightboxImg = overlay.querySelector('.lightbox-image') as HTMLImageElement;
+    const closeBtn = overlay.querySelector('.lightbox-close') as HTMLButtonElement;
 
     if (!overlay || !lightboxImg || !closeBtn) return;
 
-    const openLightbox = (src: string, alt: string) => {
-      lightboxImg.src = src;
-      lightboxImg.alt = alt;
-      overlay.classList.add('active');
-      overlay.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-    };
+    closeBtn.removeEventListener('click', closeLightbox);
+    closeBtn.addEventListener('click', closeLightbox);
 
-    const closeLightbox = () => {
-      overlay.classList.remove('active');
-      overlay.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
-    };
+    overlay.removeEventListener('click', handleOverlayClick);
+    overlay.addEventListener('click', handleOverlayClick);
 
     document.querySelectorAll('.zoomable-image').forEach(img => {
-      img.removeEventListener('click', handleImageClick as EventListener);
-      img.addEventListener('click', handleImageClick as EventListener);
+      img.removeEventListener('click', handleImageClick);
+      img.addEventListener('click', handleImageClick);
     });
 
-    function handleImageClick(e: Event) {
-      const target = e.target as HTMLImageElement;
-      openLightbox(target.src, target.alt);
-    }
-
-    lightboxImg.onclick = closeLightbox;
-    closeBtn.onclick = closeLightbox;
-    
-    overlay.onclick = (e: MouseEvent) => {
-      if (e.target === overlay) closeLightbox();
-    };
-
-    document?.removeEventListener('keydown', handleKeyDown);
+    document.removeEventListener('keydown', handleKeyDown);
     document.addEventListener('keydown', handleKeyDown);
-
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape' && overlay?.classList.contains('active')) {
-        closeLightbox();
-      }
-    }
   }
 
   document.addEventListener('astro:page-load', initLightbox);
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initLightbox);
-  } else {
-    initLightbox();
-  }
 </script>
