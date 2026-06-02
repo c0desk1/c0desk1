@@ -2,85 +2,15 @@
 // src/components/mdx/Table.astro
 import Icon from '@/components/ui/icons/Icon.astro';
 
-const { title = "Tabel" } = Astro.props;
 ---
 
-<div class="table-wrapper relative overflow-hidden">
-  <div class="table-header flex items-center justify-between bg-(--prose-table-header-bg) border-b border-(--prose-table-border) px-4 py-1">
-    <div class="flex items-center gap-2 min-w-0">
-      <span class="table-block-title text-label-14 font-semibold">{title}</span>
-    </div>
-    <div class="flex items-center gap-2 shrink-0">
-      <button
-        type="button"
-        aria-label="Copy table as CSV"
-        title="Copy as CSV"
-        class="copy-table-button rounded-lg p-2 hover:bg-muted active:bg-muted"
-      >
-        <Icon name="copy" className="copy-icon size-4 transition-colors" />
-        <Icon name="check" className="check-icon hidden size-4 text-(--fg) transition-colors" />
-      </button>
-    </div>
-  </div>
+<div class="table-wrapper relative overflow-hidden"> 
   <div class="table-content overflow-x-auto">
     <table class="min-w-full border-collapse">
       <slot />
     </table>
   </div>
 </div>
-
-<script>
-  (() => {
-    function tableToCSV(table: HTMLTableElement) {
-      const rows = Array.from(table.querySelectorAll('tr'));
-      const csvRows = rows.map(row => {
-        const cells = Array.from(row.querySelectorAll('th, td'));
-        const csvCells = cells.map(cell => {
-          let text = cell.textContent?.trim() || '';
-          
-          text = text.replace(/"/g, '""');
-          
-          if (text.search(/("|,|\n)/g) >= 0) {
-            text = `"${text}"`;
-          }
-          return text;
-        });
-        return csvCells.join(',');
-      });
-      return csvRows.join('\n');
-    }
-
-    document.querySelectorAll('.table-wrapper').forEach((wrapper) => {
-      const copyBtn = wrapper.querySelector('.copy-table-button');
-      const table = wrapper.querySelector('table');
-      
-      if (!table || !copyBtn) return;
-
-      copyBtn.addEventListener('click', async () => {
-        const csvData = tableToCSV(table);
-        try {
-          await navigator.clipboard.writeText(csvData);
-          
-          const copyIcon = copyBtn.querySelector('.copy-icon');
-          const checkIcon = copyBtn.querySelector('.check-icon');
-          
-          copyIcon?.classList.add('hidden');
-          checkIcon?.classList.remove('hidden');
-          copyBtn.setAttribute('aria-label', 'Copied!');
-          
-          setTimeout(() => {
-            copyIcon?.classList.remove('hidden');
-            checkIcon?.classList.add('hidden');
-            copyBtn.setAttribute('aria-label', 'Copy table as CSV');
-          }, 2000);
-          
-        } catch (err) {
-          console.error("Gagal menyalin CSV:", err);
-        }
-      });
-    });
-  })();
-</script>
 
 <style>
   .table-wrapper th,
