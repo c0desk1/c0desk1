@@ -108,6 +108,15 @@ const captionClass = "text-caption-14! text-muted mt-4 text-center max-w-2xl mx-
   )}
 </figure>
 
+<div class="lightbox-overlay" id="lightbox-overlay" aria-hidden="true">
+  <button class="lightbox-close p-2 rounded-full bg-subtle/50 hover:bg-muted active:bg-strong text-inverted" id="lightbox-close" aria-label="Close lightbox">
+    <Icon name="close" className="w-6 h-6" />
+  </button>
+  <div class="lightbox-zoom-container">
+    <img src="" alt="" class="lightbox-image" id="lightbox-image" />
+  </div>
+</div>
+
 <style is:inline>
   .full-width-figure {
     width: 100vw;
