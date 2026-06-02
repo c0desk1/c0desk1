@@ -1,9 +1,10 @@
 ---
 // src/components/guide/mobile/GuideSidebarMobile.astro
 import type { CollectionEntry } from "astro:content";
+import { ROUTES } from "@/consts";
+
 import Icon from "../ui/icons/Icon.astro";
 import Breadcrumb from "../Breadcrumb.astro";
-import { ROUTES } from "@/consts";
 
 interface Props {
   entries:      CollectionEntry<"guide">[];
@@ -12,7 +13,13 @@ interface Props {
   sectionLabel: string;
 }
 
-const { entries, currentId, headings, sectionLabel } = Astro.props;
+const { 
+  entries, 
+  currentId, 
+  headings, 
+  sectionLabel 
+} = Astro.props;
+
 const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
 ---
 
@@ -32,7 +39,7 @@ const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
             <circle id="m-toc-progress-ring" cx="12" cy="12" r="11" stroke="currentColor" stroke-width="2" stroke-dasharray="69.115" stroke-dashoffset="69.115" stroke-linecap="round" transform="rotate(-90 12 12)" class="transition-all duration-150 text-(--accent)" />
           </svg>
         </span>
-        <span id="m-toc-active-text" class="truncate max-w-36 text-right block font-medium">
+        <span id="m-toc-active-text" class="truncate max-w-36 text-right block font-medium text-body-13">
           Di Halaman Ini
         </span>
         <span class="inline-flex shrink-0 items-center justify-center">
@@ -42,7 +49,7 @@ const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
       <nav class="absolute top-full right-0 mt-2 w-[calc(100vw-2rem)] max-w-sm bg-base rounded-lg border border-(--border) max-h-[60vh] overflow-y-auto px-5 py-4 shadow-lg origin-top-right animate-in fade-in zoom-in-95 duration-200">
         <div class="flex items-center gap-1.5 text-subtle mb-2">
           <Icon name="toc" className="w-4 h-4" />
-          <p class="text-label-14 font-semibold">Dihalaman ini</p>
+          <p class="text-body-13 font-semibold">Dihalaman ini</p>
         </div>
         <div id="m-toc-list-container" class="relative pb-2">
           <svg class="absolute inset-0 pointer-events-none text-(--border)" style="width: 100%; height: 100%; z-index: 0;">
@@ -63,8 +70,8 @@ const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
                     class:list={[
                       "toc-mobile-link block py-1.5 transition-all duration-200 no-underline",
                       isSubHeading 
-                        ? "pl-9 text-label-14 font-normal text-muted hover:text-strong" 
-                        : "pl-6 text-label-14 font-medium text-muted hover:text-strong"
+                        ? "pl-9 text-body-13 font-normal text-muted hover:text-strong" 
+                        : "pl-6 text-body-13 font-medium text-muted hover:text-strong"
                     ]}
                     data-toc-mobile-slug={h.slug}
                     data-is-sub={isSubHeading.toString()}
@@ -83,15 +90,13 @@ const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
 <div id="m-sidebar-backdrop" class="fixed inset-0 z-40 bg-base/60 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300 ease-in-out"></div>
 <aside id="m-sidebar" class="fixed top-(--header-height) inset-y-0 left-0 z-50 w-72 bg-base transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col border-r border-(--border) shadow-2xl">
   <div class="flex items-center justify-between px-4 py-2 border-b border-(--border) shrink-0 bg-subtle/30">
-    <div class="flex items-center text-muted">
-      <div class="inline-flex shrink-0 items-center justify-center">
-        <Breadcrumb
-          items={[
-            { name: "Guide", url: ROUTES.guide },
-            { name: sectionLabel },
-          ]}
-        />
-      </div>
+    <div class="flex items-center text-body-13 font-medium">
+      <Breadcrumb
+        items={[
+          { name: "Guide", url: ROUTES.guide },
+          { name: sectionLabel },
+        ]}
+      />
     </div>
     <button id="m-sidebar-close" class="p-1.5 rounded-md text-muted hover:text-strong hover:bg-subtle active:text-strong active:bg-subtle transition-colors" aria-label="Close Menu">
       <Icon name="expanded-close" className="w-5 h-5" />
