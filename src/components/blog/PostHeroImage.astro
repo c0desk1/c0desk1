@@ -1,37 +1,53 @@
 ---
 // src/components/blog/HeroImage.astro
 import { Image } from 'astro:assets';
+import { IMAGE } from '@/consts';
+
 import { 
   cdnImage, 
   isCdnUrl 
 } from '@/lib/utils';
-import { IMAGE } from '@/consts';
 
 interface Props {
   image?: any;
   alt?: string;
 }
 
-const { image, alt = '' } = Astro.props;
+const { 
+  image, 
+  alt = '' 
+} = Astro.props;
 
-const optimizedSrc = image && isCdnUrl(image)
+const isPlaceholder = !image || image === '';
+
+const optimizedSrc = !isPlaceholder && isCdnUrl(image)
   ? cdnImage(image, { w: IMAGE.thumbnail.width, h: IMAGE.thumbnail.height, q: IMAGE.thumbnail.quality })
-  : image ?? '';
+  : image || IMAGE.thumbnail.placeholder;
 ---
 
 <figure class="w-full max-w-4xl mx-auto my-8 md:my-10">
-  <div class="relative overflow-hidden rounded-(--prose-radius-lg) shadow-2xl">
-    <div class="absolute inset-0 bg-base animate-pulse" aria-hidden="true"></div>
+  <div class:list={[
+    "relative overflow-hidden rounded-(--prose-radius-lg)",
+    isPlaceholder ? "bg-muted/10 border border-(--border) shadow-md" : "shadow-2xl bg-base"
+  ]}>
+    
+    {!isPlaceholder && (
+      <div class="absolute inset-0 bg-base animate-pulse" aria-hidden="true"></div>
+    )}
+
     <Image
-      src={optimizedSrc || IMAGE.thumbnail.placeholder}
-      alt={alt}
+      src={optimizedSrc}
+      alt={isPlaceholder ? "No image available" : alt}
       width={IMAGE.thumbnail.width}
       height={IMAGE.thumbnail.height}
       loading="eager"
       decoding="async"
       fetchpriority='high'
-      class="relative z-10 h-full w-full object-cover aspect-video transition duration-500 opacity-0"
-      onload="this.classList.remove('opacity-0')"
+      class:list={[
+        "relative z-10 h-full w-full object-cover aspect-video transition duration-500",
+        isPlaceholder ? "opacity-100" : "opacity-0"
+      ]}
+      onload={!isPlaceholder ? "this.classList.remove('opacity-0')" : undefined}
     />
   </div>
 </figure>
