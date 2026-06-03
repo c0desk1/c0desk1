@@ -12,8 +12,7 @@ import {
   PAGINATION, 
   buildMeta, 
   schemaCollectionPage, 
-  schemaBreadcrumb,
-  SERIES
+  schemaBreadcrumb
 } from "@/consts";
 
 import { 
@@ -88,17 +87,19 @@ const pageNums = getPageNums(page.currentPage, page.lastPage);
     </Section>
   )}
   <Section size="md" aria-label="Panduan terbaru">
-    <Container size="xl">
-      <h2 id="latest" class="text-heading-24 lg:text-heading-32 text-(--fg) font-semibold py-4 lg:py-6">
-        Terbaru
-      </h2>
+    <Container size="xl"> 
       {page.data.length > 0 ? (
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {page.data.map((guide) => <GuideCard entry={guide} />)}
-        </div>
+        <>
+          <h2 id="latest" class="text-heading-24 lg:text-heading-32 text-(--fg-strong) font-semibold py-4 lg:py-6">
+            Terbaru
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {page.data.map((guide) => <GuideCard entry={guide} />)}
+          </div>
+        </>
       ) : (
         <div class="text-center py-12">
-          <p class="text-muted text-body-16">Belum ada panduan.</p>
+          <p class="text-(--fg-muted) text-body-16">Belum ada panduan.</p>
         </div>
       )}
       {page.lastPage > 1 && (
@@ -114,10 +115,10 @@ const pageNums = getPageNums(page.currentPage, page.lastPage);
                   href={n === 1 ? ROUTES.guide : getPageUrl(n as number)}
                   aria-current={n === page.currentPage ? "page" : undefined}
                   class:list={[
-                    "flex items-center justify-center w-6 h-6 rounded-md text-label-14 transition-colors",
+                    "flex items-center justify-center w-8 h-8 rounded-md text-label-14 transition-colors", // w-6 h-6 diubah ke w-8 h-8 agar area klik lebih nyaman (standar a11y)
                     n === page.currentPage
                       ? "bg-(--fg) text-(--bg) pointer-events-none font-medium"
-                      : "text-subtle hover:bg-muted hover:text-(--fg)",
+                      : "text-(--fg-subtle) hover:bg-[var(--bg-muted)] hover:text-(--fg-strong)", // Disesuaikan dengan CSS Variable
                   ]}
                 >
                   {n}
