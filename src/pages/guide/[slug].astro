@@ -1,7 +1,24 @@
 ---
 // src/pages/guide/[slug].astro
-import { getCollection, getEntry, render } from "astro:content";
-import { buildMeta, CATEGORIES } from "@/consts";
+import { 
+  getCollection, 
+  getEntry, 
+  render 
+} from "astro:content";
+
+import { 
+  SITE, 
+  ROUTES, 
+  AUTHOR, 
+  CATEGORIES, 
+  buildMeta, 
+  schemaArticle, 
+  schemaBreadcrumb, 
+  schemaSoftwareApplication, 
+  schemaPerson 
+} from "@/consts";
+
+import { slugify } from "@/lib/utils";
 import GuideLayout from "@/layouts/GuideLayout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
@@ -15,9 +32,7 @@ import BackToTop from "@/components/ui/BackToTop.astro";
 
 export async function getStaticPaths() {
   const entries = await getCollection("guide", ({ data }) => !data.draft);
-  const sorted = entries.sort(
-    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-  );
+  const sorted = entries.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
   return sorted.map((entry, index) => {
     const prevEntry = index > 0 ? sorted[index - 1] : null;
@@ -32,22 +47,12 @@ export async function getStaticPaths() {
 const { entry, entries } = Astro.props;
 const { Content, headings } = await render(entry);
 
-let authorName = "";
-let authorAvatar = "";
-let authorRole = "";
-let authorSlug = "";
-
-if (entry.data.author) {
-  try {
-    const authorEntry = await getEntry(entry.data.author);
-    if (authorEntry) {
-      authorName = authorEntry.data.name;
-      authorAvatar = authorEntry.data.avatar || "";
-      authorRole = authorEntry.data.role || "";
-      authorSlug = authorEntry.data.slug || entry.data.author.id;
-    }
-  } catch {}
-}
+const authorEntry = await getEntry(entry.data.author);
+const authorName = authorEntry?.data?.name ?? AUTHOR.name;
+const authorAvatar = authorEntry?.data?.avatar ?? AUTHOR.avatar;
+const authorRole = authorEntry?.data?.role ?? AUTHOR.role;
+const authorSlug = authorEntry?.data?.slug ?? slugify(authorName);
+const authorHandle = authorEntry?.data?.twitter ?? '';
 
 const sectionSlug = entry.data.section || 'general';
 const sectionArticles = entries
@@ -60,13 +65,70 @@ const nextInSection = currentIndex < sectionArticles.length - 1 ? sectionArticle
 
 const sectionLabel = CATEGORIES.find(c => c.slug === sectionSlug)?.label || sectionSlug;
 
+const canonicalURL = new URL(Astro.url.href).href;
+const datePub = entry.data.pubDate.toISOString();
+const dateMod = (entry.data.updatedDate ?? entry.data.pubDate).toISOString();
+const mainImage = entry.data.heroImage?.src || entry.data.seo?.ogImage || SITE.ogImage;
+const hasAppDetails = entry.data.appDetails !== undefined;
+
 const meta = buildMeta({
+  title: entry.data.seo?.title || entry.data.title,
+  description: entry.data.seo?.description || entry.data.description,
+  canonical: canonicalURL,
+  ogImage: mainImage,
+  ogType: 'article',
+  datePublished: datePub,
+  dateModified: dateMod,
+  authorName: authorName,
+  keywords: entry.data.tags,
+});
+
+const schemaData = {
   title: entry.data.title,
   description: entry.data.description,
-});
+  url: canonicalURL,
+  image: mainImage,
+  datePublished: datePub,
+  dateModified: dateMod,
+  authorName: authorName,
+  authorUrl: new URL(`/author/${authorSlug}`, SITE.url).href,
+  category: sectionLabel,
+  tags: entry.data.tags,
+};
+
+const activeArticleSchema = hasAppDetails
+  ? schemaSoftwareApplication({
+      name: schemaData.title,
+      description: schemaData.description,
+      url: schemaData.url,
+      image: schemaData.image,
+      operatingSystem: entry.data.appDetails?.operatingSystem,
+      applicationCategory: entry.data.appDetails?.applicationCategory,
+      price: entry.data.appDetails?.price,
+      priceCurrency: entry.data.appDetails?.priceCurrency,
+    })
+  : schemaArticle(schemaData);
+
+const schemas = [
+  activeArticleSchema,
+  schemaBreadcrumb([
+    { name: "Beranda", url: SITE.url },
+    { name: "Guide", url: new URL(ROUTES.guide, SITE.url).href },
+    { name: sectionLabel, url: new URL(`${ROUTES.guide}/section/${sectionSlug}`, SITE.url).href },
+    { name: entry.data.title, url: canonicalURL },
+  ]),
+  schemaPerson({
+    name: authorName,
+    url: new URL(`/author/${authorSlug}`, SITE.url).href,
+    jobTitle: authorRole,
+    image: authorAvatar,
+    description: authorEntry?.data?.bio,
+    sameAs: authorHandle ? [`https://twitter.com/${authorHandle.replace('@', '')}`] : undefined,
+  }),
+];
 ---
 
-<GuideLayout {meta}>
+<GuideLayout {meta} schema={schemas}>
   <GuideSidebarMobile
     entries={sectionArticles}
     currentId={entry.id}
@@ -96,11 +158,11 @@ const meta = buildMeta({
           />
         </Section>
         <Section size="md">
-          <article class="prose max-w-none min-w-0"> 
+          <article class="prose max-w-none min-w-0">
             <Content components={components} />
           </article>
         </Section>
-        <GuidePager prev={prevInSection} next={nextInSection} />  
+        <GuidePager prev={prevInSection} next={nextInSection} />
       </Section>
       <div class="hidden lg:block lg:gap-x-8">
         <GuideTocDesktop {headings} />
