@@ -1,5 +1,6 @@
 ---
 // src/pages/blog/[...page].astro
+
 import type { Page } from "astro";
 import { 
   getCollection, 
@@ -14,6 +15,7 @@ import {
   schemaCollectionPage, 
   schemaBreadcrumb 
 } from "@/consts";
+
 import { 
   getPageNums, 
   getPageUrl, 
@@ -76,6 +78,18 @@ const pageNums = getPageNums(page.currentPage, page.lastPage);
 ---
 
 <Layout {meta} schema={schemas}>
+  <Section size="sm">
+    <Container size="xl">
+      <div class="flex items-center justify-between">
+        <h2 class="text-heading-24 lg:text-heading-32 text-strong font-semibold">
+          Blog
+        </h2>
+        <a href={ROUTES.rss} aria-label="Rss feed" class="w-8 h-8 inline-flex shrink-0 items-center justify-center p-1.5 rounded-full border border-(--border) hover:bg-subtle active:bg-subtle text-strong no-underline">
+          <Icon name="rss" class="w-full h-full transition-colors" />
+        </a>
+      </div>
+    </Container>
+  </Section> 
   {page.currentPage === 1 && featuredPosts.length > 0 && (
     <Section size="md" aria-label="Postingan unggulan">
       <Container size="xl">
@@ -90,7 +104,7 @@ const pageNums = getPageNums(page.currentPage, page.lastPage);
       {page.data.length > 0 ? (
         <>
           <h2 id="latest" class="text-heading-24 lg:text-heading-32 text-strong font-semibold py-4 lg:py-6">
-            Terbaru
+            Terbaru.
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
             {page.data.map((post) => <PostCard post={post} />)}
@@ -107,7 +121,6 @@ const pageNums = getPageNums(page.currentPage, page.lastPage);
             <Icon name="arrow-left" className="w-4 h-4" />
             <span class="hidden sm:inline text-button-14">Sebelumnya</span>
           </Button>
-
           <ol class="hidden sm:flex items-center gap-0.5">
             {pageNums.map((n) => (
               <li>
