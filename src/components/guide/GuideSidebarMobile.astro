@@ -21,14 +21,15 @@ const {
 } = Astro.props;
 
 const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
+const seriesLabel = SERIES.find(c => c.slug === series)?.label || series;
 ---
 
 <div class="lg:hidden sticky top-(--header-height) z-40 flex items-center justify-between w-full h-12 bg-base border-b border-(--border) px-4">
   <div class="flex items-center py-1.5">
     <button id="m-sidebar-open" type="button" class="flex items-center p-1.5 gap-1.5 text-muted hover:text-strong active:text-strong hover:bg-subtle active:bg-subtle rounded-md transition-colors" aria-label="Open Menu">
       <Icon name="expanded-open" className="w-5 h-5" />
-      <span class="inline-flex text-left font-medium text-(--fg) text-body-13 capitalize">
-        {series}
+      <span class="inline-flex text-left font-medium text-(--fg) text-body-13">
+        {seriesLabel}
       </span>
     </button>
   </div>
@@ -96,7 +97,7 @@ const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
       <Breadcrumb
         items={[
           { name: "Guide", url: ROUTES.guide },
-          { name: series },
+          { name: seriesLabel },
         ]}
       />
     </div>
