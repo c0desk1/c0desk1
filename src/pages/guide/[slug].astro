@@ -20,7 +20,7 @@ import {
 } from "@/consts";
 
 import { slugify, isCdnUrl, cdnImage } from "@/lib/utils";
-import GuideLayout from "@/layouts/GuideLayout.astro";
+import Layout from "@/layouts/Layout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import { components } from '@/components/layout/MDXComponents.astro';
@@ -137,7 +137,7 @@ const schemas = [
 ];
 ---
 
-<GuideLayout {meta} schema={schemas}>
+<Layout {meta} schema={schemas}>
   <GuideSidebarMobile
     entries={seriesArticles}
     currentId={entry.id}
@@ -184,4 +184,4 @@ const schemas = [
   <div class="sm:hidden">
     <BackToTop />
   </div>
-</GuideLayout>
+</Layout>
