@@ -25,18 +25,18 @@ const { title, subTitle, description, cta, cta2 } = Astro.props;
   <Container size="xl">
     <div class="flex flex-col items-center justify-center min-h-[50vh] text-center px-4 relative z-10">
       <Section size="none">
-        <p class="text-mono-label-13 text-subtle uppercase mb-4 font-semibold text-start sm:text-center hero-tag">
+        <p class="text-mono-label-13 text-subtle uppercase mb-4 font-semibold text-center hero-tag">
           {SITE.tagline}
         </p>
-        <div class="flex items-center justify-start sm:justify-center">
+        <div class="flex items-center justify-center">
           <h1 class="flex flex-wrap hero-title text-heading-32 lg:text-heading-56 font-extrabold mb-6">
             {title}<span>{subTitle}</span>
           </h1>
         </div>
-        <p class="hero-sub text-body-16 lg:text-body-18 text-start sm:text-center text-pretty text-muted mb-6 mx-auto max-w-xl">
+        <p class="hero-sub text-body-16 lg:text-body-18 text-center text-pretty text-muted mb-6 mx-auto max-w-xl">
           {description}
         </p>
-        <div class="hero-cta flex items-center justify-start sm:justify-center gap-6">
+        <div class="hero-cta flex items-center justify-center gap-6">
           {cta && (
             <Link href={cta.href} variant="noir" size="lg" class="text-button-14">
               {cta.label}
