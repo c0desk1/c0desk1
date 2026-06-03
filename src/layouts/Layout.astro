@@ -42,7 +42,7 @@ const currentPath = new URL(Astro.request.url).pathname;
 <!DOCTYPE html>
 <html lang={SITE.lang} dir={SITE.dir}>
   <Head {meta} {schema} {isHome} {canonical}>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4943136052113535" crossorigin="anonymous"></script>
+    <!--<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4943136052113535" crossorigin="anonymous"></script>
     <script is:inline>
       (function (w, d, s, l, i) {
         w[l] = w[l] || [];
@@ -65,18 +65,18 @@ const currentPath = new URL(Astro.request.url).pathname;
           clientOptions: { theme: "dark", lang: "id" },
         });
       });
-    </script>
+    </script>-->
   </Head>
   <body class:list={[bodyClass]}>
     <ThemeScript />
-    <noscript>
+    <!--<noscript>
       <iframe
         src="https://www.googletagmanager.com/ns.html?id=GTM-NJJPZV2M"
         height="0"
         width="0"
         style="display:none;visibility:hidden"
       ></iframe>
-    </noscript>
+    </noscript>-->
     <a href="#main-content"
       class="
         sr-only focus:not-sr-only
@@ -107,7 +107,6 @@ const currentPath = new URL(Astro.request.url).pathname;
     {!hideFooter && variant !== "bare" && (<Footer />)}
     <ScrollScript />
     <Search />
-    
     <script>
       const initShortcuts = () => {
         let lastKey = "";
