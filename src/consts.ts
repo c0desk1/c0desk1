@@ -90,9 +90,8 @@ export const ROUTES = {
 
 export const NAV = {
   navBar: [
-    { label: "Blog", href: ROUTES.blog, isExternal: false },
     { label: "Guide", href: ROUTES.guide, isExternal: false },
-
+    { label: "Blog", href: ROUTES.blog, isExternal: false },
     { label: "Resource", children: [
       { label: "Series", href: `${ROUTES.guide}/series`, isExternal: false },
       { label: "Kategori", href: `${ROUTES.blog}/category`, isExternal: false },
@@ -101,14 +100,6 @@ export const NAV = {
       children: [
         { label: "Tentang", href: ROUTES.about, isExternal: false },
         { label: "Hubungi Kami", href: ROUTES.contact, isExternal: false },
-      ]
-    },
-    {
-      label: "Legal",
-      children: [
-        { label: "Kebijakan Privasi", href: ROUTES.privacy, isExternal: false },
-        { label: "Ketentuan Layanan", href: ROUTES.terms, isExternal: false },
-        { label: "Kebijakan Cookie", href: ROUTES.cookie, isExternal: false }
       ]
     },
   ] as NavItem[],
