@@ -78,7 +78,7 @@ const pageNums = getPageNums(page.currentPage, page.lastPage);
 ---
 
 <Layout {meta} schema={schemas}>
-  <Section size="sm">
+  <Section size="sm" aria-label="Header Blog">
     <Container size="xl">
       <div class="flex items-center justify-between">
         <h2 class="text-heading-24 lg:text-heading-32 text-strong font-semibold">
@@ -91,7 +91,7 @@ const pageNums = getPageNums(page.currentPage, page.lastPage);
     </Container>
   </Section> 
   {page.currentPage === 1 && featuredPosts.length > 0 && (
-    <Section size="md" aria-label="Postingan unggulan">
+    <Section size="sm" aria-label="Postingan unggulan">
       <Container size="xl">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {featuredPosts.map((post) => <PostCardFeatured post={post} />)}
