@@ -1,9 +1,12 @@
 ---
-// src/components/Search.astro
-import { ROUTES } from "@/consts";
+// src/components/SearchModal.astro
+import { ROUTES, CATEGORIES, SERIES } from "@/consts";
 import Icon from '@/components/ui/icons/Icon.astro';
 
 const searchRoute = ROUTES.search;
+
+const topCategories = CATEGORIES.slice(0, 4);
+const topSeries = SERIES.slice(0, 4);
 ---
 
 <div
@@ -22,32 +25,86 @@ const searchRoute = ROUTES.search;
   <div class="relative flex min-h-full items-start justify-center p-4 sm:pt-32">
     <div
       id="search-panel"
-      class="w-full max-w-2xl overflow-hidden rounded-xl border border-(--border) bg-[var(--bg-elevated)] shadow-[var(--shadow-xl)] opacity-0 scale-95 transition-all duration-200"
+      class="w-full max-w-2xl overflow-hidden rounded-xl border border-(--border) bg-[var(--bg-elevated)] shadow-[var(--shadow-xl)] opacity-0 scale-95 transition-all duration-200 flex flex-col max-h-[85vh]"
     >
-      <div class="flex items-center gap-3 px-4">
+      <form id="search-form" action={searchRoute} class="flex items-center gap-3 px-4 shrink-0">
         <Icon name="search" className="h-5 w-5 shrink-0 text-(--fg-subtle)" />
 
         <input
           id="search-input"
-          type="text"
+          type="search"
+          name="q"
           placeholder="Cari sesuatu..."
           aria-label="Cari postingan"
           autocomplete="off"
           spellcheck="false"
-          class="flex-1 min-w-0 border-none bg-transparent py-4 sm:py-5 text-body-16 text-(--fg-strong) outline-none placeholder:text-(--fg-subtle)"
+          class="flex-1 min-w-0 border-none bg-transparent py-4 sm:py-5 text-body-16 text-(--fg-strong) outline-none placeholder:text-(--fg-subtle) [&::-webkit-search-cancel-button]:hidden"
         />
         
         <button
           id="search-clear"
+          type="button"
           aria-label="Tutup atau bersihkan"
-          class="hidden h-7 w-7 shrink-0 items-center justify-center rounded-md text-(--fg-muted) hover:bg-[var(--bg-muted)] hover:text-(--fg-strong) transition-colors">
+          class="hidden h-7 w-7 shrink-0 items-center justify-center rounded-md text-(--fg-muted) hover:bg-[var(--bg-muted)] hover:text-(--fg-strong) transition-colors"
+        >
           <Icon name="close" className="h-4 w-4" />
         </button>
         
         <kbd class="hidden sm:inline-flex items-center rounded-md border border-(--border) bg-[var(--bg-muted)] px-1.5 py-0.5 text-[11px] text-(--fg-muted) font-mono font-medium ml-1">
           ESC
         </kbd>
+      </form>
+
+      <div id="search-suggestions" class="border-t border-(--border) p-2 overflow-y-auto">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          
+          {topCategories.length > 0 && (
+            <div>
+              <h3 class="px-3 py-2 text-[11px] font-semibold text-(--fg-subtle) uppercase tracking-wider">
+                Kategori Blog
+              </h3>
+              <ul class="flex flex-col gap-0.5">
+                {topCategories.map(c => (
+                  <li>
+                    <button 
+                      type="button" 
+                      class="suggestion-btn flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-body-14 text-(--fg-muted) transition-colors hover:bg-[var(--bg-muted)] hover:text-(--fg-strong)" 
+                      data-query={c.label}
+                    >
+                      <span class="text-(--fg-subtle) text-lg leading-none font-mono opacity-70">#</span>
+                      <span class="truncate">{c.label}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {topSeries.length > 0 && (
+            <div>
+              <h3 class="px-3 py-2 text-[11px] font-semibold text-(--fg-subtle) uppercase tracking-wider">
+                Seri Guide
+              </h3>
+              <ul class="flex flex-col gap-0.5">
+                {topSeries.map(s => (
+                  <li>
+                    <button 
+                      type="button" 
+                      class="suggestion-btn flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-body-14 text-(--fg-muted) transition-colors hover:bg-[var(--bg-muted)] hover:text-(--fg-strong)" 
+                      data-query={s.label}
+                    >
+                      <Icon name="search" className="h-3.5 w-3.5 text-(--fg-subtle) opacity-70" />
+                      <span class="truncate">{s.label}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+        </div>
       </div>
+      
     </div>
   </div>
 </div>
@@ -56,13 +113,16 @@ const searchRoute = ROUTES.search;
   const initSearchModal = () => {
     const $ = (id) => document.getElementById(id);
 
-    const modal    = $("search-modal");
-    const backdrop = $("search-backdrop");
-    const panel    = $("search-panel");
-    const input    = $("search-input");
-    const clearBtn = $("search-clear");
+    const modal       = $("search-modal");
+    const backdrop    = $("search-backdrop");
+    const panel       = $("search-panel");
+    const form        = $("search-form");
+    const input       = $("search-input");
+    const clearBtn    = $("search-clear");
+    const suggestions = $("search-suggestions");
+    const suggestBtns = document.querySelectorAll(".suggestion-btn");
 
-    if (!modal || !input) return;
+    if (!modal || !input || !form) return;
 
     let prevFocus = null;
 
@@ -84,6 +144,8 @@ const searchRoute = ROUTES.search;
         panel.style.opacity    = "1";
         panel.style.transform  = "scale(1)";
         input.focus();
+
+        if (suggestions) suggestions.style.display = input.value.trim() ? "none" : "block";
       });
     };
 
@@ -98,6 +160,7 @@ const searchRoute = ROUTES.search;
         input.value = "";
         clearBtn?.classList.add("hidden");
         clearBtn?.classList.remove("flex");
+        if (suggestions) suggestions.style.display = "block";
         prevFocus?.focus();
       }, 200);
     };
@@ -112,6 +175,13 @@ const searchRoute = ROUTES.search;
       if (input.value) {
         input.value = "";
         input.focus();
+
+        if (suggestions) suggestions.style.display = "block";
+        
+        if (window.innerWidth >= 640) {
+          clearBtn.classList.add("hidden");
+          clearBtn.classList.remove("flex");
+        }
       } else {
         closeModal();
       }
@@ -119,6 +189,7 @@ const searchRoute = ROUTES.search;
 
     input.addEventListener("input", () => {
       const q = input.value.trim();
+      
       if (q || window.innerWidth < 640) {
         clearBtn?.classList.remove("hidden");
         clearBtn?.classList.add("flex");
@@ -126,10 +197,22 @@ const searchRoute = ROUTES.search;
         clearBtn?.classList.add("hidden");
         clearBtn?.classList.remove("flex");
       }
+
+      if (suggestions) {
+        suggestions.style.display = q ? "none" : "block";
+      }
     });
 
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") { e.preventDefault(); submit(); }
+    form.addEventListener("submit", (e) => {
+      e.preventDefault(); 
+      submit();
+    });
+
+    suggestBtns.forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        input.value = e.currentTarget.dataset.query;
+        submit();
+      });
     });
 
     document.removeEventListener("keydown", window.__searchKeyHandler);
@@ -149,9 +232,9 @@ const searchRoute = ROUTES.search;
     };
     document.addEventListener("keydown", window.__searchKeyHandler);
 
-    if (window.innerWidth < 640) {
-      clearBtn?.classList.remove("hidden");
-      clearBtn?.classList.add("flex");
+    if (window.innerWidth < 640 && clearBtn) {
+      clearBtn.classList.remove("hidden");
+      clearBtn.classList.add("flex");
     }
   };
 
