@@ -31,7 +31,7 @@ const canonicalURL = new URL(ROUTES.search, SITE.url).href;
 
 const meta = buildMeta({
   title:       "Cari",
-  description: "Cari artikel, guide, dan pembaruan terbaru di Unloyd.",
+  description: "Cari artikel, panduan, dan pembaruan terbaru.",
   canonical:   canonicalURL,
   noindex:     true,
 });
@@ -39,7 +39,7 @@ const meta = buildMeta({
 const schemas = [
   schemaWebPage({
     title:       "Cari",
-    description: "Cari artikel, guide, dan pembaruan terbaru di Unloyd.",
+    description: "Cari artikel, panduan, dan pembaruan terbaru.",
     url:         canonicalURL,
   }),
 ];
@@ -53,42 +53,42 @@ const totalPosts = allContent.length;
 
       <header class="mb-12 max-w-2xl mx-auto w-full">
         <div class="text-center mb-8">
-          <h1 class="text-heading-32 md:text-heading-48 font-extrabold tracking-tighter text-strong mb-3">
-            Cari
+          <h1 class="text-heading-32 md:text-heading-48 font-extrabold tracking-tighter text-(--fg-strong) mb-3">
+            Pencarian
           </h1>
-          <p class="text-body-16 text-muted">
-            Gunakan kata kunci untuk menemukan artikel, guide, atau referensi spesifik.
+          <p class="text-body-16 text-(--fg-muted)">
+            Gunakan kata kunci untuk menemukan artikel, panduan, atau referensi spesifik.
           </p>
         </div>
         
         <div class="relative w-full group shadow-sm transition-shadow focus-within:shadow-md rounded-lg">
-          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-muted group-focus-within:text-strong transition-colors">
+          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-(--fg-muted) group-focus-within:text-(--fg-strong) transition-colors">
             <Icon name="search" className="w-4 h-4" />
           </div>
           <input
             type="text"
             id="search-input"
             placeholder="Ketik judul, kategori, atau topik..."
-            class="w-full bg-subtle border border-(--border) text-strong placeholder:text-subtle rounded-lg py-3 pl-11 pr-12 text-body-14 sm:text-body-16 focus:outline-none focus:ring-2 focus:ring-(--border-strong) focus:bg-base transition-all duration-300"
+            class="w-full bg-[var(--bg-subtle)] border border-(--border) text-(--fg-strong) placeholder:text-(--fg-subtle) rounded-lg py-3 pl-11 pr-12 text-body-14 sm:text-body-16 focus:outline-none focus:ring-2 focus:ring-(--border-strong) focus:bg-[var(--bg)] transition-all duration-300"
             autocomplete="off"
             spellcheck="false"
           />
           <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-            <kbd class="hidden sm:inline-flex items-center justify-center bg-muted border border-(--border) rounded px-1.5 py-0.5 text-label-11 text-muted font-mono font-medium shadow-[0_1px_0_var(--border)]">
+            <kbd class="hidden sm:inline-flex items-center justify-center bg-[var(--bg-muted)] border border-(--border) rounded px-1.5 py-0.5 text-label-11 text-(--fg-muted) font-mono font-medium shadow-[0_1px_0_var(--border)]">
               /
             </kbd>
           </div>
         </div>
-        <p id="search-count" class="mt-3 text-label-13 text-subtle text-center h-5 transition-opacity duration-200"></p>
+        <p id="search-count" class="mt-3 text-label-13 text-(--fg-subtle) text-center h-5 transition-opacity duration-200"></p>
       </header>
 
       <div
         id="search-grid"
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
+        class="grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
+        style="display: none;"
       >
         {allContent.map((item) => {
           const isBlog = item.collection === "blog";
-          
           let groupSlug = "";
           let groupLabel = "";
 
@@ -109,7 +109,7 @@ const totalPosts = allContent.length;
 
           return (
             <div
-              class="search-item"
+              class="search-item hidden"
               data-search={dataSearch}
               data-title={item.data.title.toLowerCase()}
               data-desc={(item.data.description ?? "").toLowerCase()}
@@ -128,16 +128,16 @@ const totalPosts = allContent.length;
 
       <div
         id="empty-state"
-        class="hidden flex-col items-center justify-center py-24 px-4 text-center border border-dashed border-strong rounded-xl bg-subtle mt-8"
+        class="flex flex-col items-center justify-center py-24 px-4 text-center border border-dashed border-(--border-strong) rounded-xl bg-[var(--bg-subtle)] mt-8"
       >
-        <svg class="w-10 h-10 text-dim mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+        <svg id="empty-icon" class="w-10 h-10 text-(--fg-dim) mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
           <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
         </svg>
-        <p class="text-body-16 text-muted font-medium mb-1">
-          Konten tidak ditemukan.
+        <p id="empty-title" class="text-body-16 text-(--fg-muted) font-medium mb-1">
+          Mulai mencari...
         </p>
-        <p class="text-label-14 text-subtle">
-          Coba kata kunci lain atau lihat <a href={ROUTES.blog} class="text-strong hover:underline underline-offset-4 decoration-(--border-strong) hover:decoration-(--fg-strong) transition-colors">blog</a> dan <a href={ROUTES.guide} class="text-strong hover:underline underline-offset-4 decoration-(--border-strong) hover:decoration-(--fg-strong) transition-colors">panduan</a> kami.
+        <p id="empty-desc" class="text-label-14 text-(--fg-subtle)">
+          Ketik kata kunci di atas untuk menampilkan hasil.
         </p>
       </div>
 
@@ -150,8 +150,10 @@ const totalPosts = allContent.length;
     const input     = document.getElementById("search-input");
     const grid      = document.getElementById("search-grid");
     const empty     = document.getElementById("empty-state");
+    const emptyTitle= document.getElementById("empty-title");
+    const emptyDesc = document.getElementById("empty-desc");
     const countEl   = document.getElementById("search-count");
-    const items     = document.querySelectorAll(".search-item");
+    const items     = Array.from(document.querySelectorAll(".search-item"));
 
     if (!input || !grid || !empty) return;
 
@@ -160,60 +162,65 @@ const totalPosts = allContent.length;
     const searchInput = newBtn;
 
     const score = (el, q) => {
-      const title    = el.dataset.title    ?? "";
-      const desc     = el.dataset.desc     ?? "";
-      const cat      = el.dataset.cat      ?? "";
-      const catSlug  = el.dataset.catSlug  ?? "";
-      if (title === q)          return 100;
+      const title    = el.dataset.title    || "";
+      const desc     = el.dataset.desc     || "";
+      const cat      = el.dataset.cat      || "";
+      const catSlug  = el.dataset.catSlug  || "";
+      
+      if (title === q) return 100;
       if (title.startsWith(q)) return 80;
-      if (title.includes(q))   return 60;
-      if (desc.includes(q))    return 40;
+     
+      const words = q.split(/\s+/).filter(Boolean);
+      const allWordsInTitle = words.every(w => title.includes(w));
+      if (allWordsInTitle) return 60;
+
+      const allWordsInDesc = words.every(w => desc.includes(w));
+      if (allWordsInDesc) return 40;
+
       if (cat.includes(q) || catSlug.includes(q)) return 30;
       
-      let qi = 0;
-      for (let i = 0; i < title.length && qi < q.length; i++)
-        if (title[i] === q[qi]) qi++;
-      return qi === q.length ? 10 : 0;
+      return 0;
     };
 
     const updateCount = (visible, query) => {
       if (!countEl) return;
       if (!query) {
-        countEl.textContent = `${totalPosts} konten tersedia`;
-      } else if (visible === 0) {
-        countEl.textContent = "";
+        countEl.textContent = `Menelusuri dari ${totalPosts} total konten`;
       } else {
-        countEl.textContent = `${visible} dari ${totalPosts} konten`;
+        countEl.textContent = `${visible} hasil ditemukan`;
       }
     };
 
     const filterPosts = (query) => {
       const q = query.toLowerCase().trim();
-      let visible = 0;
 
       if (!q) {
-        items.forEach((el) => { el.style.display = "block"; });
-        visible = items.length;
-        grid.style.display  = "grid";
-        empty.classList.add("hidden");
-        empty.classList.remove("flex");
-        updateCount(visible, "");
+        items.forEach((el) => { el.style.display = "none"; });
+        grid.style.display  = "none";
+        empty.classList.remove("hidden");
+        empty.classList.add("flex");
+        
+        emptyTitle.textContent = "Mulai mencari...";
+        emptyDesc.innerHTML = "Ketik kata kunci di atas untuk menampilkan hasil.";
+        updateCount(0, "");
         return;
       }
 
-      const scored = Array.from(items).map((el) => ({
+      const scoredItems = items.map((el) => ({
         el,
         s: score(el, q),
-      }));
+      })).filter(item => item.s > 0);
 
-      scored.forEach(({ el, s }) => {
-        if (s > 0) {
-          el.style.display = "block";
-          visible++;
-        } else {
-          el.style.display = "none";
-        }
+      scoredItems.sort((a, b) => b.s - a.s);
+
+      items.forEach((el) => { el.style.display = "none"; });
+
+      scoredItems.forEach(({ el }) => {
+        el.style.display = "block";
+        grid.appendChild(el);
       });
+
+      const visible = scoredItems.length;
 
       if (visible > 0) {
         grid.style.display = "grid";
@@ -223,6 +230,9 @@ const totalPosts = allContent.length;
         grid.style.display = "none";
         empty.classList.remove("hidden");
         empty.classList.add("flex");
+        
+        emptyTitle.textContent = "Konten tidak ditemukan.";
+        emptyDesc.innerHTML = `Coba kata kunci lain atau periksa ejaan Anda.`;
       }
 
       updateCount(visible, q);
@@ -238,7 +248,7 @@ const totalPosts = allContent.length;
         searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
       }, 50);
     } else {
-      updateCount(items.length, "");
+      filterPosts("");
     }
 
     searchInput.addEventListener("input", (e) => {
