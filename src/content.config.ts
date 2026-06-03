@@ -61,6 +61,12 @@ const blog = defineCollection({
     category: z.enum(categorySlugs),
     tags: z.array(z.string()).default([]),
     overview: z.array(z.string()).optional(),
+    appDetails: z.object({
+      operatingSystem: z.string().optional(),
+      applicationCategory: z.string().optional(),
+      price: z.string().optional(),
+      priceCurrency: z.string().optional(),
+    }).optional(),
     seo: seoSchema,
   }),
 });

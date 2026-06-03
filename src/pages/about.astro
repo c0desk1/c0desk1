@@ -154,17 +154,16 @@ const stack: { name: string; description: string; icon: IconName }[] = [
               <Icon name="email" className="w-4 h-4 items-baseline" />
               {SITE.email}
             </a>
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-1.5">
               {SOCIAL.map((s) => (
                 <a
                   href={s.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="flex items-center gap-2 text-body-14 text-muted hover:text-accent transition-colors"
+                  class="flex items-center rounded-full p-1.5 hover:bg-muted text-body-14 text-muted hover:text-accent transition-colors"
                   aria-label={s.name}
                 >
-                  <Icon name={s.name.toLocaleLowerCase() as any} className="w-4 h-4 items-baseline" />
-                  {s.name}
+                  <Icon name={s.name.toLocaleLowerCase() as any} className="w-5 h-5 items-baseline" />
                 </a>
               ))}
             </div>

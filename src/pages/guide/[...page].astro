@@ -90,7 +90,7 @@ const pageNums = getPageNums(page.currentPage, page.lastPage);
     <Container size="xl"> 
       {page.data.length > 0 ? (
         <>
-          <h2 id="latest" class="text-heading-24 lg:text-heading-32 text-(--fg-strong) font-semibold py-4 lg:py-6">
+          <h2 id="latest" class="text-heading-24 lg:text-heading-32 text-strong font-semibold py-4 lg:py-6">
             Terbaru
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
@@ -99,7 +99,7 @@ const pageNums = getPageNums(page.currentPage, page.lastPage);
         </>
       ) : (
         <div class="text-center py-12">
-          <p class="text-(--fg-muted) text-body-16">Belum ada panduan.</p>
+          <p class="text-muted text-body-16">Belum ada panduan.</p>
         </div>
       )}
       {page.lastPage > 1 && (
@@ -115,10 +115,10 @@ const pageNums = getPageNums(page.currentPage, page.lastPage);
                   href={n === 1 ? ROUTES.guide : getPageUrl(n as number)}
                   aria-current={n === page.currentPage ? "page" : undefined}
                   class:list={[
-                    "flex items-center justify-center w-8 h-8 rounded-md text-label-14 transition-colors", // w-6 h-6 diubah ke w-8 h-8 agar area klik lebih nyaman (standar a11y)
+                    "flex items-center justify-center w-8 h-8 rounded-md text-label-14 transition-colors",
                     n === page.currentPage
                       ? "bg-(--fg) text-(--bg) pointer-events-none font-medium"
-                      : "text-(--fg-subtle) hover:bg-[var(--bg-muted)] hover:text-(--fg-strong)", // Disesuaikan dengan CSS Variable
+                      : "text-subtle hover:bg-muted hover:text-strong",
                   ]}
                 >
                   {n}

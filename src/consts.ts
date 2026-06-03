@@ -19,8 +19,8 @@ type FooterNav = {
 };
 
 const LOGO = "/org/c0desk1-logo.svg"
-const AUHTOR = "/images/author/placeholder-user.jpg"
-const ThumbnailPlaceHolder = `/images/placeholder.svg`
+const AUHTOR = "/org/placeholder-user.jpg"
+const ThumbnailPlaceHolder = `/org/placeholder.svg`
 const OGIMAGE = "/org/c0desk1-og.webp"
 
 // SITE BASE
@@ -28,7 +28,7 @@ export const SITE = {
   name:        "Unloyd",
   tagline:     "Beyond the Void",
   description: "Platform kuratif untuk pop culture, game, anime, tutorial, dan modding.",
-  url:         "https://unloyd.web.id",
+  url:         "https://c0desk1.my.id",
   ogImage:      OGIMAGE,
   locale:      "id_ID",
   lang:        "id",
@@ -36,7 +36,7 @@ export const SITE = {
   charset:     "utf-8",
   themeColor:  "#0a0a09",
   bgColor:     "#0a0a09",
-  email:       "hello@unloyd.web.id",
+  email:       "hello@c0desk1.my.id",
   foundingYear: 2025,
 } as const;
 
@@ -48,18 +48,18 @@ export const AUTHOR = {
   bio:     SITE.description,
   email:   SITE.email,
   avatar:  AUHTOR,
-  twitter: "@unloyd",
+  twitter: "@c0desk1",
 } as const;
 
 export const ORG = {
-  name:        "Unloyd",
+  name:        "C0desk1",
   url:         SITE.url,
   logo:        LOGO,
   sameAs: [
-    "https://twitter.com/unloyd",
-    "https://whatsapp.com/unloyd",
-    "https://facebook.com/@unloyd",
-    "https://tiktok.com/@unloyd",
+    "https://twitter.com/c0deks1",
+    "https://whatsapp.com/c0deks1",
+    "https://facebook.com/@c0deks1Page",
+    "https://tiktok.com/@c0deks1",
   ],
 } as const;
 
@@ -67,7 +67,7 @@ export const ORG = {
 export const ROUTES = {
   home:       "/",
   blog:       "/blog",
-  guide:       "/guide",
+  guide:      "/guide",
   news:       "/news",
   game:       "/game",
   anime:      "/anime",
@@ -113,27 +113,12 @@ export const NAV = {
     },
   ] as NavItem[],
   MobileBar: [
-    { label: "Resource", 
-      children: [
-        { label: "Blog", href: ROUTES.blog, isExternal: false },
-    { label: "Guide", href: ROUTES.guide, isExternal: false },
-        { label: "Kategori", href: `${ROUTES.blog}/category`, isExternal: false },
-      ]
-    },
-    { label: "Community", 
+    { label: SITE.name, 
       children: [
         { label: "Tentang", href: ROUTES.about, isExternal: false },
         { label: "Hubungi Kami", href: ROUTES.contact, isExternal: false },
       ]
-    },
-    {
-      label: "Legal",
-      children: [
-        { label: "Kebijakan Privasi", href: ROUTES.privacy, isExternal: false },
-        { label: "Ketentuan Layanan", href: ROUTES.terms, isExternal: false },
-        { label: "Kebijakan Cookie", href: ROUTES.cookie, isExternal: false }
-      ]
-    },
+    }
   ] as MobileNav[],
   footerBar: [
     {
@@ -160,7 +145,7 @@ export const CATEGORIES = [
 ] as const;
 
 export const SERIES = [
-  { slug: "general",   label: "Umum",        description: "Artikel panduan umum." },
+  { slug: "guide",   label: "Guide",        description: "Artikel panduan umum." },
   { slug: "tutorial",  label: "Tutorial",    description: "Panduan langkah demi langkah untuk berbagai skill digital." },
   { slug: "modding",   label: "Modding",     description: "Dunia modding game — dari cara mulai hingga mod terbaik." },
   { slug: "tech",      label: "Teknologi",   description: "Teknologi yang relevan untuk gamer dan kreator konten." },
@@ -184,8 +169,8 @@ export const SEO = {
   ogImageAlt:      `${SITE.name} — ${SITE.tagline}`,
 
   twitterCard:     "summary_large_image" as const,
-  twitterSite:     "@unloyd",
-  twitterCreator:  "@unloyd",
+  twitterSite:     "@c0deks1",
+  twitterCreator:  "@c0deks1",
 
   robots: {
     index:            true,
@@ -201,9 +186,12 @@ export const SEO = {
   },
 
   verification: {
-    google:  "",
+    google:  "ZxoHYWipAMoGhvwVi5nxolWsZOntrYkNkVcG9HTfFZQ",
+    adsene: "ca-pub-4943136052113535",
+    gtm: "GTM-NJJPZV2M",
     bing:    "",
-    yandex:  "",
+    yandex:  "1878480c0d7b5510",
+    yandexPartner: "R-A-19179231"
   },
 } as const;
 
@@ -560,10 +548,10 @@ export function buildMeta(opts: {
 }
 
 export const SOCIAL = [
-  { name: "X",            url: "https://twitter.com/unloyd",        handle: "@unloyd" },
-  { name: "Facebook",     url: "https://facebook.com/unloyd",        handle: "@unloyd" },
-  { name: "Whatsapp",     url: "https://facebook.com/unloyd",        handle: "@unloyd" },
-  { name: "Instagram",    url: "https://instagram.com/unloyd",      handle: "@unloyd" },
+  { name: "X",            url: "https://twitter.com/c0desk1",        handle: "@c0desk1" },
+  { name: "Facebook",     url: "https://facebook.com/c0desk1Page",        handle: "@c0desk1" },
+  { name: "Whatsapp",     url: "https://facebook.com/c0desk1",        handle: "@c0desk1" },
+  { name: "Instagram",    url: "https://instagram.com/c0desk1",      handle: "@c0desk1" },
 ] as const;
 
 export const PAGINATION = {
