@@ -15,41 +15,144 @@ export interface Props {
 
 const { title, subTitle, description, cta, cta2 } = Astro.props;
 ---
-<Container size="xl">
-  <div class="flex flex-col items-center justify-center min-h-[80vh] text-center px-4">
-    <Section size="none">
-      <p class="text-mono-label-13 text-subtle uppercase mb-4 font-semibold text-start sm:text-center hero-tag">{SITE.tagline}</p>
-      <div class="flex items-center justify-start sm:justify-center">
-        <h1 class="flex flex-wrap hero-title text-heading-32 lg:text-heading-56 font-extrabold mb-6">
-          {title}<span>{subTitle}</span>
-        </h1>
-      </div>
-      <p class="hero-sub text-body-16 lg:text-body-18 text-start sm:text-center text-pretty text-muted mb-6 mx-auto max-w-xl">
-        {description}
-      </p>
-      <div class="hero-cta flex items-center justify-start sm:justify-center gap-6">
-        {cta && (
-          <Link 
-            href={cta.href}
-            variant="noir"
-            size='lg'
-            class="text-button-14">
-            {cta.label}
-          </Link>
-        )}
-        {cta2 && (
-          <Link 
-            href={cta2.href}
-            variant='secondary'
-            size='lg'
-            class="text-button-14">
-            {cta2.label}
-          </Link>
-        )}
-      </div>
-    </Section>
-  </div>
-</Container>
+
+<div class="relative overflow-hidden">
+  <canvas
+    id="hero-particle-canvas"
+    class="absolute inset-0 w-full h-full pointer-events-none opacity-20"
+  ></canvas>
+
+  <Container size="xl">
+    <div class="flex flex-col items-center justify-center min-h-[50vh] text-center px-4 relative z-10">
+      <Section size="none">
+        <p class="text-mono-label-13 text-subtle uppercase mb-4 font-semibold text-start sm:text-center hero-tag">
+          {SITE.tagline}
+        </p>
+        <div class="flex items-center justify-start sm:justify-center">
+          <h1 class="flex flex-wrap hero-title text-heading-32 lg:text-heading-56 font-extrabold mb-6">
+            {title}<span>{subTitle}</span>
+          </h1>
+        </div>
+        <p class="hero-sub text-body-16 lg:text-body-18 text-start sm:text-center text-pretty text-muted mb-6 mx-auto max-w-xl">
+          {description}
+        </p>
+        <div class="hero-cta flex items-center justify-start sm:justify-center gap-6">
+          {cta && (
+            <Link href={cta.href} variant="noir" size="lg" class="text-button-14">
+              {cta.label}
+            </Link>
+          )}
+          {cta2 && (
+            <Link href={cta2.href} variant="secondary" size="lg" class="text-button-14">
+              {cta2.label}
+            </Link>
+          )}
+        </div>
+      </Section>
+    </div>
+  </Container>
+</div>
+
+<script>
+  const initParticleNetwork = () => {
+    const canvas = document.getElementById('hero-particle-canvas') as HTMLCanvasElement | null;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const style = getComputedStyle(document.documentElement);
+    const accentColor = style.getPropertyValue('--accent').trim() || '#a3a3a3';
+
+    let width = canvas.offsetWidth;
+    let height = canvas.offsetHeight;
+    canvas.width = width;
+    canvas.height = height;
+
+    const PARTICLE_COUNT = 30;
+    const CONNECTION_DIST = 120;
+    const PARTICLE_SPEED = 0.3;
+
+    interface Particle {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+    }
+
+    const particles: Particle[] = [];
+
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * PARTICLE_SPEED,
+        vy: (Math.random() - 0.5) * PARTICLE_SPEED,
+      });
+    }
+
+    const draw = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
+        ctx.fillStyle = accentColor;
+        ctx.fill();
+      }
+
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < CONNECTION_DIST) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = accentColor;
+            ctx.lineWidth = 0.5;
+            ctx.globalAlpha = 1 - dist / CONNECTION_DIST;
+            ctx.stroke();
+            ctx.globalAlpha = 1;
+          }
+        }
+      }
+
+      requestAnimationFrame(draw);
+    };
+
+    draw();
+
+    const handleResize = () => {
+      width = canvas.offsetWidth;
+      height = canvas.offsetHeight;
+      canvas.width = width;
+      canvas.height = height;
+    };
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  };
+
+  let cleanup: (() => void) | undefined;
+  const runSetup = () => {
+    cleanup?.();
+    cleanup = initParticleNetwork();
+  };
+  runSetup();
+  document.addEventListener('astro:page-load', runSetup);
+</script>
 
 <style is:global>
   .hero-tag {

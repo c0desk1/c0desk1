@@ -1,0 +1,198 @@
+---
+// src/components/MobileNav.astro
+import { 
+  NAV, 
+  ROUTES 
+} from "@/consts";
+
+import Icon from '@/components/ui/icons/Icon.astro';
+import Theme from "./Theme.astro";
+
+interface NavChild {
+  label: string;
+  href: string;
+  isExternal?: boolean;
+}
+interface NavItem {
+  label: string;
+  href?: string;
+  isExternal?: boolean;
+  children?: NavChild[];
+}
+
+const navItems: NavItem[] = NAV.MobileBar;
+---
+
+<button
+  id="mnav-trigger"
+  aria-label="Buka Menu"
+  aria-expanded="false"
+  class="inline-flex lg:hidden shrink-0 h-8 w-8 p-1.5 items-center justify-center rounded-full border border-(--border) text-muted hover:bg-subtle active:bg-subtle hover:text-strong active:text-strong focus:outline-none focus:ring-2 focus:ring-(--border-strong)"
+>
+  <Icon name="menu" className="w-full h-full transition-colors" />
+</button>
+
+<div
+  id="mnav-overlay"
+  class="fixed inset-0 z-50 bg-base flex flex-col opacity-0 pointer-events-none transition-opacity duration-300"
+>
+  <div class="flex items-center justify-between px-4 py-3 shrink-0">
+    <span class="inline-flex shrink-0 items-center justify-center"></span>
+    <button
+      id="mnav-close"
+      class="inline-flex lg:hidden shrink-0 h-8 w-8 p-1.5 items-center justify-center rounded-full border border-(--border) text-muted hover:bg-subtle active:bg-subtle hover:text-strong active:text-strong focus:outline-none focus:ring-2 focus:ring-(--border-strong)"
+      aria-label="Tutup menu"
+    >
+      <Icon name="close" className="w-5 h-5" />
+    </button>
+  </div>
+  <nav class="flex-1 overflow-y-auto px-4 py-6">
+    <div class="grid grid-cols-1 gap-2 px-2">
+      <a href={ROUTES.home} class="flex justify-between items-center gap-2 py-2 text-body-14 text-(--fg) hover:text-strong rounded-md hover:bg-subtle transition-colors">
+        <span class="text-body-14 font-medium text-strong">Beranda</span>
+        <Icon name="home" className="w-4 h-4" />
+      </a>
+      <a href={ROUTES.blog} class="flex justify-between items-center gap-2 py-2 text-body-14 text-(--fg) hover:text-strong rounded-md hover:bg-subtle transition-colors">
+        <span class="text-body-14 font-medium text-strong">Blog</span>
+        <Icon name="blog" className="w-4 h-4" />
+      </a>
+      <a href={ROUTES.guide} class="flex justify-between items-center gap-2 py-2 text-body-14 text-(--fg) hover:text-strong rounded-md hover:bg-subtle transition-colors">
+        <span class="text-body-14 font-medium text-strong">Guide</span>
+        <Icon name="brain" className="w-4 h-4" />
+      </a>
+      <a href={ROUTES.search} class="flex justify-between items-center gap-2 py-2 text-body-14 text-(--fg) hover:text-strong rounded-md hover:bg-subtle transition-colors">
+        <span class="text-body-14 font-medium text-strong">Cari</span>
+        <Icon name="search" className="w-4 h-4" />
+      </a>
+      <div class="flex items-center justify-between py-2">
+        <span class="text-body-14 font-medium text-strong">Tema</span>
+        <Theme />
+      </div>
+    </div>
+    <div class="grid grid-cols-1 gap-2 mt-8 pt-6 border-t border-(--border)">
+      {navItems.map((item) => {
+        const hasChildren = item.children && item.children.length > 0;
+
+        if (hasChildren) {
+          return (
+            <div class="submenu-card rounded-xl border border-(--border)/60 bg-base/50 hover:border-strong transition-all duration-300">
+              <button
+                type="button"
+                class="submenu-toggle w-full text-left flex items-center justify-between p-4"
+              >
+                <h3 class="text-body-14 font-medium text-strong">{item.label}</h3>
+                <Icon name="chevron-down" className="submenu-chevron w-4 h-4 text-muted transition-transform duration-200" />
+              </button>
+              <div class="submenu-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                <div class="flex flex-col gap-1 px-5 pb-5 pt-0">
+                  {item.children!.map((child) => (
+                    <a
+                      href={child.href}
+                      target={child.isExternal ? "_blank" : undefined}
+                      rel={child.isExternal ? "noopener noreferrer" : undefined}
+                      class="block py-2 px-3 text-body-14 text-muted hover:text-strong rounded-md hover:bg-subtle transition-colors"
+                    >
+                      {child.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        const href = item.href || '#';
+        const isExternal = item.isExternal ?? false;
+        return (
+          <a
+            href={href}
+            target={isExternal ? "_blank" : undefined}
+            rel={isExternal ? "noopener noreferrer" : undefined}
+            class="flex items-center justify-between p-4 rounded-xl border border-(--border)/60 bg-base/50 hover:bg-base/80 hover:border-strong transition-all duration-300 no-underline"
+          >
+            <h3 class="text-body-14 font-semibold text-strong">{item.label}</h3>
+            <Icon name="arrow-right" className="w-4 h-4 text-muted" />
+          </a>
+        );
+      })}
+    </div>
+  </nav>
+</div>
+
+<script>
+  const init = () => {
+    const trigger = document.getElementById('mnav-trigger') as HTMLButtonElement;
+    const overlay = document.getElementById('mnav-overlay') as HTMLElement;
+    const closeBtn = document.getElementById('mnav-close') as HTMLButtonElement;
+    if (!trigger || !overlay || !closeBtn) return;
+
+    let open = false;
+
+    const openMenu = () => {
+      if (open) return;
+      open = true;
+      overlay.classList.remove('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = 'hidden';
+      trigger.setAttribute('aria-expanded', 'true');
+    };
+
+    const closeMenu = () => {
+      if (!open) return;
+      open = false;
+      overlay.classList.add('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = '';
+      trigger.setAttribute('aria-expanded', 'false');
+    };
+
+    trigger.addEventListener('click', openMenu);
+    closeBtn.addEventListener('click', closeMenu);
+    document.addEventListener('mnav:open', openMenu);
+
+    overlay.querySelectorAll('a[href]').forEach(link => {
+      link.addEventListener('click', () => setTimeout(closeMenu, 200));
+    });
+
+    overlay.querySelectorAll('.submenu-toggle').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const card = btn.closest('.submenu-card') as HTMLElement;
+        const content = card.querySelector('.submenu-content') as HTMLElement;
+        const chevron = card.querySelector('.submenu-chevron') as HTMLElement;
+
+        const isOpen = content.classList.contains('submenu-open');
+
+        overlay.querySelectorAll('.submenu-content.submenu-open').forEach(el => {
+          if (el !== content) {
+            (el as HTMLElement).style.maxHeight = '0px';
+            el.classList.remove('submenu-open');
+            const otherCard = el.closest('.submenu-card');
+            const otherChevron = otherCard?.querySelector('.submenu-chevron') as HTMLElement;
+            if (otherChevron) otherChevron.style.transform = 'rotate(0deg)';
+          }
+        });
+
+        if (isOpen) {
+          content.style.maxHeight = '0px';
+          content.classList.remove('submenu-open');
+          chevron.style.transform = 'rotate(0deg)';
+        } else {
+          content.style.maxHeight = `${content.scrollHeight}px`;
+          content.classList.add('submenu-open');
+          chevron.style.transform = 'rotate(180deg)';
+        }
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && open) closeMenu();
+    });
+
+    const mq = window.matchMedia('(min-width: 1024px)');
+    mq.addEventListener('change', (e) => {
+      if (e.matches) closeMenu();
+    });
+  };
+
+  document.addEventListener('astro:page-load', init);
+  init();
+</script>

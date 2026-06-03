@@ -1,0 +1,99 @@
+---
+// src/components/blog/PostCardFeatured.astro
+import { 
+    getEntry, 
+    type CollectionEntry 
+} from 'astro:content';
+
+import { 
+    AUTHOR, 
+    ROUTES, 
+    IMAGE, 
+    CATEGORIES, 
+    formatDate, 
+    toISOString 
+} from '@/consts';
+
+import { 
+    generateExcerpt, 
+    cdnImage, 
+    isCdnUrl, 
+    slugify 
+} from '@/lib/utils';
+
+import { Image } from 'astro:assets';
+import { SITE } from '@/consts';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { data } = post;
+
+const title = data.title;
+const excerpt = generateExcerpt(post.body || '', 140);
+const categoryName = CATEGORIES.find(c => c.slug === data.category)?.label || '';
+const pubDateISO = toISOString(data.pubDate);
+const pubDateDisplay = formatDate(data.pubDate, true);
+
+const authorEntry = data.author ? await getEntry(data.author) : null;
+const authorName = authorEntry?.data?.name || AUTHOR.name;
+const authorAvatar = authorEntry?.data?.avatar || AUTHOR.avatar;
+const optimizedAvatar = isCdnUrl(authorAvatar)
+  ? cdnImage(authorAvatar, { w: 48, h: 48, q: IMAGE.avatar.quality })
+  : authorAvatar;
+
+const autoSlug = data.slug || slugify(title);
+const postUrl = `${ROUTES.blog}/${autoSlug}`;
+
+const imageSrc = data.heroImage?.src || data.seo?.ogImage || SITE.ogImage;
+const imageAlt = data.heroImage?.alt || title;
+---
+
+<a href={postUrl} class="group flex flex-col rounded-xl border border-(--border) bg-base overflow-hidden hover:shadow-md transition-all duration-300 no-underline">
+  <div class="aspect-video overflow-hidden bg-muted">
+    <Image
+        src={imageSrc}
+        alt={imageAlt}
+        width={1200}
+        height={630}
+        class="w-full h-full object-cover"
+        loading="lazy"
+        fetchpriority="low"
+        decoding="async"
+    />
+  </div>
+
+  <div class="flex flex-col flex-1 p-4 lg:p-6">
+    <div class="flex items-center justify-between mb-4 text-label-14 text-muted group-hover:text-(--fg) active:text-(--fg)">
+      <span>{categoryName}</span>
+      <time datetime={pubDateISO}>{pubDateDisplay}</time>
+    </div>
+    <div class="flex flex-col gap-4 flex-1">
+      <h3 class="text-heading-16 lg:text-heading-18 text-(--fg) font-semibold line-clamp-3">
+        {title}
+      </h3>
+      <p class="text-body-14 md:text-body-16 font-medium text-muted line-clamp-3 group-hover:text-(--fg) active:text-(--fg)">
+        {excerpt}
+      </p>
+      <div class="mt-auto flex items-center gap-2 text-label-14 text-muted group-hover:text-(--fg) active:text-(--fg)">
+        {authorAvatar && (
+          <div class="w-5 h-5 shrink-0 rounded-full overflow-hidden flex items-center justify-center border border-(--border)">
+            <Image
+              src={optimizedAvatar}
+              alt={`Avatar ${authorName}`}
+              width={48}
+              height={48}
+              loading='lazy'
+              decoding='async'
+              fetchpriority='low'
+              class="h-full w-full object-cover"
+            />
+          </div>
+        )}
+        <span>{authorName}</span>
+      </div>
+    </div>
+  </div>
+</a>

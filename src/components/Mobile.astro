@@ -5,253 +5,115 @@ import Icon from '@/components/ui/icons/Icon.astro';
 import Theme from "./Theme.astro";
 
 const navItems = NAV.MobileBar;
-
-// ==========================================
-// Computed Classes
-// ==========================================
-// Menggunakan latar hitam transparan dengan efek blur kaca
-const backdropClass = "fixed inset-0 z-100 bg-black/60 backdrop-blur-sm";
-const sheetClass    = "fixed bottom-0 left-0 right-0 z-200 bg-base border-t border-strong rounded-t-xl shadow-[0_-8px_40px_rgba(0,0,0,0.12)] max-h-[75dvh] pb-[env(safe-area-inset-bottom)] will-change-transform";
-const handleWrapper = "flex h-8 justify-center pt-4 pb-1";
-const handleBar     = "w-9 h-1 rounded-full bg-muted";
-const navClass      = "flex flex-col px-3 pt-2 pb-4 gap-3 overflow-y-auto max-h-[calc(75dvh-120px)]";
-
-// Interaksi Menu
-const accordionBtn  = "accordion-trigger flex items-center justify-between w-full px-3 py-2 text-body-16 font-medium text-strong rounded-lg active:bg-subtle hover:bg-subtle transition-colors";
-const childLink     = "mnav-link flex items-center gap-2 px-3 py-1.5 text-body-16 text-strong rounded-lg active:bg-subtle hover:bg-subtle transition-colors";
-const singleLink    = "mnav-link flex items-center gap-2 px-3 py-2 text-body-16 font-medium text-strong active:bg-subtle hover:bg-subtle rounded-lg transition-colors";
-
-const footerClass   = "flex items-center justify-between px-5 py-4 border-t border-strong gap-4";
 ---
 
+<!-- Backdrop -->
 <div
   id="mnav-backdrop"
-  class={backdropClass}
-  style="display: none; opacity: 0; transition: opacity 0.25s ease;"
-  aria-hidden="true"
+  class="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"
 ></div>
 
+<!-- Sheet -->
 <div
   id="mnav-sheet"
-  role="dialog"
-  aria-modal="true"
-  aria-label="Menu mobile"
-  class={sheetClass}
-  style="display: none; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);"
-  inert>
-  
-  <div id="mnav-handle" class={handleWrapper}>
-    <div class={handleBar}></div>
+  class="fixed bottom-0 left-0 right-0 z-50 bg-base border-t border-(--border) rounded-t-xl shadow-xl max-h-[80vh] overflow-y-auto pb-safe transform translate-y-full transition-transform duration-300 ease-out"
+>
+  <!-- Handle -->
+  <div class="flex justify-center pt-3 pb-2">
+    <div class="w-10 h-1.5 rounded-full bg-muted"></div>
   </div>
 
-  <nav class={navClass}>
+  <!-- Navigasi -->
+  <nav class="px-4 pb-6 space-y-1">
     {navItems.map((item) => {
       const hasChildren = item.children && item.children.length > 0;
+      
       if (hasChildren) {
         return (
-          <div class="accordion-item" data-accordion>
-            <button aria-expanded="false" class={accordionBtn}>
-              <span>{item.label}</span>
-              <Icon name="chevron-right" className="chevron-icon w-4 h-4 transition-transform duration-200" />
-            </button>
-            <div class="accordion-content">
-              <div class="flex flex-col gap-0.5 pt-1 pb-2">
-                {item.children?.map((child) => {
-                  const isExternal = child.isExternal === true;
-                  return (
-                    <a
-                      href={child.href}
-                      target={isExternal ? "_blank" : undefined}
-                      rel={isExternal ? "noopener noreferrer" : undefined}
-                      class={childLink}>
-                      {child.label}
-                      {isExternal && (
-                        <Icon name="external" className="w-3 h-3 shrink-0 opacity-80" />
-                      )}
-                    </a>
-                  );
-                })}
-              </div>
+          <details class="group">
+            <summary class="flex items-center justify-between py-3 px-2 text-body-16 font-medium text-strong cursor-pointer list-none">
+              {item.label}
+              <Icon name="chevron-down" className="w-4 h-4 transition-transform duration-200 group-open:rotate-180" />
+            </summary>
+            <div class="pl-4 space-y-1 pb-2">
+              {item.children?.map((child) => (
+                <a
+                  href={child.href}
+                  class="block py-2 px-2 text-body-16 text-muted hover:text-strong rounded-md transition-colors"
+                >
+                  {child.label}
+                </a>
+              ))}
             </div>
-          </div>
-        );
-      } else {
-        return (
-          <a href={item.href} class={singleLink}>
-            {item.label}
-            {item.isExternal && (
-              <Icon name="external" className="w-3 h-3 shrink-0 opacity-80" />
-            )}
-          </a>
+          </details>
         );
       }
+      
+      return (
+        <a
+          href={item.href}
+          class="block py-3 px-2 text-body-16 font-medium text-strong hover:bg-subtle rounded-md transition-colors"
+        >
+          {item.label}
+        </a>
+      );
     })}
   </nav>
-  
-  <div class={footerClass}>
+
+  <!-- Footer -->
+  <div class="flex items-center justify-between px-5 py-4 border-t border-(--border)">
     <Icon name="logo" className="w-8 h-8 text-strong" />
     <Theme />
   </div>
 </div>
 
-<style is:global>
-  .accordion-trigger .chevron-icon {
-    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .accordion-trigger[aria-expanded="true"] .chevron-icon {
-    transform: rotate(90deg);
-  }
-  
-  .accordion-content {
-    height: 0;
-    overflow: hidden;
-    transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: height;
-  }
-</style>
-
 <script>
-  const initMobileMenu = () => {
-    const sheet    = document.getElementById('mnav-sheet') as HTMLElement | null;
-    const backdrop = document.getElementById('mnav-backdrop') as HTMLElement | null;
-    const handle   = document.getElementById('mnav-handle') as HTMLElement | null;
-    
-    if (!sheet || !backdrop || !handle) return;
+  const init = () => {
+    const sheet = document.getElementById('mnav-sheet') as HTMLElement;
+    const backdrop = document.getElementById('mnav-backdrop') as HTMLElement;
+    if (!sheet || !backdrop) return;
 
     let open = false;
-    let startY = 0, currentY = 0, dragging = false;
 
     const openSheet = () => {
       if (open) return;
       open = true;
-      
-      sheet.style.display = 'block';
-      backdrop.style.display = 'block';
-      void sheet.offsetHeight; 
-      
-      sheet.style.transform = 'translateY(0)';
-      backdrop.style.opacity = '1';
-      sheet.removeAttribute('inert');
+      sheet.classList.remove('translate-y-full');
+      backdrop.classList.remove('opacity-0', 'pointer-events-none');
       document.body.style.overflow = 'hidden';
-      
-      const btn = document.getElementById('mnav-btn');
-      if (btn) btn.setAttribute('aria-expanded', 'true');
     };
 
     const closeSheet = () => {
       if (!open) return;
       open = false;
-      
-      sheet.style.transform = 'translateY(100%)';
-      backdrop.style.opacity = '0';
+      sheet.classList.add('translate-y-full');
+      backdrop.classList.add('opacity-0', 'pointer-events-none');
       document.body.style.overflow = '';
-      
-      setTimeout(() => {
-        if (!open) {
-          sheet.style.display = 'none';
-          backdrop.style.display = 'none';
-          sheet.setAttribute('inert', '');
-        }
-      }, 300);
-      
-      const btn = document.getElementById('mnav-btn');
-      if (btn) btn.setAttribute('aria-expanded', 'false');
     };
-    const mediaQuery = window.matchMedia('(min-width: 768px)');
-    
-    const handleResize = (e: MediaQueryListEvent | MediaQueryList) => {
-      if (e.matches && open) {
-        closeSheet();
-      }
-    };
-    
-    mediaQuery.addEventListener('change', handleResize);
-
-    const win = window as any;
-
-    document.removeEventListener('mnav:open', win.__mnavOpenHandler);
-    win.__mnavOpenHandler = openSheet;
-    document.addEventListener('mnav:open', win.__mnavOpenHandler);
 
     backdrop.addEventListener('click', closeSheet);
-    
-    document.removeEventListener('keydown', win.__mnavKeyHandler);
-    win.__mnavKeyHandler = (e: KeyboardEvent) => {
+    document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && open) closeSheet();
-    };
-    document.addEventListener('keydown', win.__mnavKeyHandler);
-
-    document.querySelectorAll('.mnav-link').forEach(link => {
-      link.addEventListener('click', closeSheet);
     });
 
-    handle.addEventListener('touchstart', (e: TouchEvent) => {     
-      startY = e.touches[0].clientY;
-      currentY = startY; 
-      dragging = true;
-      sheet.style.transition = 'none';
-    }, { passive: true });
-
-    handle.addEventListener('touchmove', (e: TouchEvent) => {
-      if (!dragging || !open) return;
-      currentY = e.touches[0].clientY;
-      const delta = Math.max(0, currentY - startY);  
-      
-      if (delta > 0 && e.cancelable) {
-        e.preventDefault(); 
-      }
-      
-      sheet.style.transform = `translateY(${delta}px)`;
-    }, { passive: false });
-
-    handle.addEventListener('touchend', () => {
-      dragging = false;
-      sheet.style.transition = 'transform 0.3s cubic-bezier(0.32, 0.72, 0, 1)';
-      const delta = currentY - startY;
-      
-      if (delta > 80) {
-        closeSheet();
-      } else {
-        sheet.style.transform = 'translateY(0)';
-      }
-    });
-
-    const accordionTriggers = document.querySelectorAll('.accordion-trigger');
-    accordionTriggers.forEach(trigger => {
-      trigger.addEventListener('click', (e: Event) => {
-        e.stopPropagation();
-        const accordionItem = trigger.closest('.accordion-item');
-        if (!accordionItem) return;
-
-        const content = accordionItem.querySelector('.accordion-content') as HTMLElement | null;
-        if (!content) return;
-
-        const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
-        
-        if (isExpanded) {
-          content.style.height = `${content.scrollHeight}px`;
-          
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              content.style.height = '0px';
-              trigger.setAttribute('aria-expanded', 'false');
-            });
-          });
-        } else {
-          content.style.height = `${content.scrollHeight}px`;
-          trigger.setAttribute('aria-expanded', 'true');
-
-          const onTransitionEnd = () => {
-            if (trigger.getAttribute('aria-expanded') === 'true') {
-              content.style.height = 'auto';
-            }
-            content.removeEventListener('transitionend', onTransitionEnd);
-          };
-          content.addEventListener('transitionend', onTransitionEnd);
-        }
+    // External trigger
+    (window as any).__mnavOpen = openSheet;
+    document.addEventListener('mnav:open', openSheet);
+    
+    // Tutup otomatis saat klik link
+    sheet.querySelectorAll('a[href]').forEach(link => {
+      link.addEventListener('click', () => {
+        setTimeout(closeSheet, 150);
       });
     });
+
+    // Resize: tutup saat layar besar
+    const mq = window.matchMedia('(min-width: 768px)');
+    mq.addEventListener('change', (e) => {
+      if (e.matches) closeSheet();
+    });
   };
-  initMobileMenu();
-  document.addEventListener('astro:page-load', initMobileMenu);
+
+  document.addEventListener('astro:page-load', init);
+  init();
 </script>

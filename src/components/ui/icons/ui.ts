@@ -11,6 +11,23 @@ export const uiIcons = {
     `
   },
 
+  home: `
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <path d="M11.162 2.457l-7.846 12.954a1.988 1.988 0 0 0 .267 2.483l2.527 2.523c.374 .373 .88 .583 1.408 .583h8.964c.528 0 1.034 -.21 1.408 -.583l2.527 -2.523a1.988 1.988 0 0 0 .267 -2.483l-7.846 -12.954a.996 .996 0 0 0 -1.676 0" />
+    <path d="M12 2l-5 18.9" />
+    <path d="M12 2l5 18.9" />
+  `,
+
+  blog: `
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <path d="M14 6a2 2 0 1 0 -4 0a2 2 0 0 0 4 0" />
+    <path d="M7 18a2 2 0 1 0 -4 0a2 2 0 0 0 4 0" />
+    <path d="M21 18a2 2 0 1 0 -4 0a2 2 0 0 0 4 0" />
+    <path d="M7 18h10" />
+    <path d="M18 16l-5 -8" />
+    <path d="M11 8l-5 8" />
+  `,
+
   clock: `
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
       <path d="M21 12.3a9 9 0 1 0 -8.683 8.694" />

@@ -46,7 +46,7 @@ const { entries, currentId, sectionLabel } = Astro.props;
                 aria-current={isActive ? "page" : undefined}
                 data-active-sidebar={isActive ? "true" : "false"}
               >
-                <span class="truncate transition-transform duration-150 group-hover:translate-x-0.5">
+                <span class="wrap transition-transform duration-150 group-hover:translate-x-0.5">
                   {entry.data.title}
                 </span>
               </a>

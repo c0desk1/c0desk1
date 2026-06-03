@@ -24,12 +24,14 @@ const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
 ---
 
 <div class="lg:hidden sticky top-(--header-height) z-40 flex items-center justify-between w-full h-12 bg-base border-b border-(--border) px-4">
-  <div class="flex items-center gap-1.5 py-1.5">
-    <button id="m-sidebar-open" type="button" class="flex items-center p-1.5 text-muted hover:text-strong active:text-strong hover:bg-subtle active:bg-subtle rounded-md transition-colors" aria-label="Open Menu">
+  <div class="flex items-center py-1.5">
+    <button id="m-sidebar-open" type="button" class="flex items-center p-1.5 gap-1.5 text-muted hover:text-strong active:text-strong hover:bg-subtle active:bg-subtle rounded-md transition-colors" aria-label="Open Menu">
       <Icon name="expanded-open" className="w-5 h-5" />
+      <span class="inline-flex text-left font-medium text-(--fg) text-body-13">
+        {sectionLabel}
+      </span>
     </button>
   </div>
-  
   {filteredToc.length > 0 && (
     <details id="m-toc-details" class="group/toc relative">
       <summary class="flex items-center gap-2 cursor-pointer list-none select-none [&::-webkit-details-marker]:hidden text-body-14 font-medium text-muted hover:text-strong py-1.5 px-3 border border-(--border) rounded-md hover:bg-subtle active:bg-subtle transition-colors">
@@ -39,7 +41,7 @@ const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
             <circle id="m-toc-progress-ring" cx="12" cy="12" r="11" stroke="currentColor" stroke-width="2" stroke-dasharray="69.115" stroke-dashoffset="69.115" stroke-linecap="round" transform="rotate(-90 12 12)" class="transition-all duration-150 text-(--accent)" />
           </svg>
         </span>
-        <span id="m-toc-active-text" class="truncate max-w-36 text-right block font-medium text-body-13">
+        <span id="m-toc-active-text" class="truncate max-w-32 text-right block font-medium text-body-13">
           Di Halaman Ini
         </span>
         <span class="inline-flex shrink-0 items-center justify-center">

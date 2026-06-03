@@ -1,129 +1,69 @@
 ---
-// src/components/ui/BackToTop.astro
-import Icon from '@/components/ui/icons/Icon.astro';
-
-const backToTop = "Kembali ke atas";
+// src/components/ui/FloatingScrollToTop.astro
 ---
 
 <button
-  id="back-to-top"
-  aria-label={backToTop}
-  title={backToTop}
-  class="fixed mb-[env(safe-area-inset-bottom)] bottom-12 right-8 z-50 group
-         flex items-center justify-center
-         w-12 h-12 p-2
-         rounded-full bg-base backdrop-blur-sm
-         border border-(--border) shadow-lg
-         text-muted text-label-12
-         hover:bg-subtle hover:text-(--fg) active:text-(--fg)
-         transition-all duration-300
-         opacity-0 invisible translate-y-4
-         focus-visible:opacity-100 focus-visible:visible
-         focus-visible:translate-y-0">
-  <svg 
-    id="progress-svg"
-    class="absolute top-0 left-0 w-full h-full pointer-events-none -rotate-90"
-    viewBox="0 0 48 48"
+  id="floating-scroll-top"
+  aria-label="Scroll to top"
+  class="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-3 py-2 rounded-md border border-(--border) bg-base text-muted hover:text-strong active:text-strong hover:bg-subtle active:bg-subtle shadow-sm opacity-0 translate-y-2 pointer-events-none transition-all duration-300"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="w-4 h-4 shrink-0"
+    aria-hidden="true"
   >
-    <circle
-      id="progress-ring-bg"
-      class="stroke-(--border)/10"
-      stroke-width="2"
-      fill="none"
-      cx="24"
-      cy="24"
-      r="23"
-    />
-    <circle
-      id="progress-ring"
-      class="stroke-(--accent)"
-      stroke-width="2"
-      fill="none"
-      cx="24"
-      cy="24"
-      r="23"
-      stroke-dasharray="0 289"
-      stroke-linecap="round"
-      style="transition: stroke-dasharray 0.15s ease-out;"
-    />
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+    <path d="M12 8l-4 4" />
+    <path d="M12 8v8" />
+    <path d="M16 12l-4 -4" />
   </svg>
-  <div class="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
-    <div class="absolute inset-0 bg-noise opacity-20 mix-blend-overlay"></div>
-  </div>
-  <span class="relative z-10 transition-transform duration-300 group-hover:-translate-y-1 active:-translate-y-1 flex items-center">
-    <Icon name="arrow-move-up" className="w-5 h-5" />
-  </span>
+  <span class="text-label-14 font-medium">Kembali ke atas</span>
 </button>
 
-<style is:global>
-  .bg-noise {
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.5'/%3E%3C/svg%3E");
-    background-repeat: repeat;
-    background-size: 80px;
-  }
-  
-  .scroll-show {
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: translateY(0) !important;
-  }
-</style>
-
 <script>
-  const initBackToTop = () => {
-    const btn = document.getElementById('back-to-top');
-    const ring = document.getElementById('progress-ring');
-    const content = document.querySelector('article') || document.querySelector('main');
-    
+  const initFloatingScrollTop = () => {
+    const btn = document.getElementById("floating-scroll-top");
     if (!btn) return;
 
-    const circumference = 2 * Math.PI * 23;
-    if (ring) {
-      ring.style.strokeDasharray = `0 ${circumference}`;
-    }
-
-    let ticking = false;
-
-    const onScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          if (window.scrollY > 300) {
-            btn.classList.add('scroll-show');
-          } else {
-            btn.classList.remove('scroll-show');
-          }
-
-          if (ring && content) {
-            const rect = content.getBoundingClientRect();
-            const windowHeight = window.innerHeight;
-            const scrolled = windowHeight - rect.top;
-            const total = content.offsetHeight;    
-            const progress = Math.min(Math.max(scrolled / total, 0), 1);
-            const dash = progress * circumference;
-            
-            ring.style.strokeDasharray = `${dash} ${circumference}`;
-          }
-          
-          ticking = false;
-        });
-        ticking = true;
+    const toggle = () => {
+      if (window.scrollY > 300) {
+        btn.classList.remove("opacity-0", "translate-y-2", "pointer-events-none");
+        btn.classList.add("opacity-100", "translate-y-0", "pointer-events-auto");
+      } else {
+        btn.classList.add("opacity-0", "translate-y-2", "pointer-events-none");
+        btn.classList.remove("opacity-100", "translate-y-0", "pointer-events-auto");
       }
     };
 
-    window.removeEventListener('scroll', (window as any).__bttScrollHandler);
-    (window as any).__bttScrollHandler = onScroll;
-    window.addEventListener('scroll', (window as any).__bttScrollHandler, { passive: true });
-
-    btn.removeEventListener('click', (window as any).__bttClickHandler);
-    (window as any).__bttClickHandler = (e: MouseEvent) => {
-      e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    const scrollToTop = () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
     };
-    btn.addEventListener('click', (window as any).__bttClickHandler);
 
-    onScroll();
+    window.addEventListener("scroll", toggle, { passive: true });
+    btn.addEventListener("click", scrollToTop);
+
+    toggle();
+
+    return () => {
+      window.removeEventListener("scroll", toggle);
+      btn.removeEventListener("click", scrollToTop);
+    };
   };
 
-  initBackToTop();
-  document.addEventListener("astro:page-load", initBackToTop);
+  let cleanup: (() => void) | undefined;
+
+  const runSetup = () => {
+    cleanup?.();
+    cleanup = initFloatingScrollTop();
+  };
+
+  runSetup();
+  document.addEventListener("astro:page-load", runSetup);
 </script>

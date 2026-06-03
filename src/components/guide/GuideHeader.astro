@@ -8,7 +8,6 @@ interface Props {
   title: string;
   pubDate: Date;
   content?: string;
-  description?: string;
   authorName?: string;
   authorAvatar?: string;
   authorRole?: string;
@@ -23,7 +22,6 @@ const {
   title,
   pubDate,
   content = '',
-  description,
   authorName,
   authorAvatar,
   authorRole,
@@ -33,12 +31,10 @@ const {
 ---
 
 <header class="w-full mx-auto">
-  <div class="flex flex-col items-center text-start justify-start gap-y-4 md:gap-y-6">
-    <div class="flex items-center text-start sm:text-center justify-center">
-      <h1 class="text-heading-32 md:text-heading-48 font-semibold text-balance">
-        {title}
-      </h1>
-    </div>
+  <div class="flex flex-col items-center text-start justify-start gap-y-4 md:gap-y-6 w-full">
+    <h1 class="text-heading-32 md:text-heading-48 font-semibold text-balance text-start sm:text-center self-start sm:self-center">
+      {title}
+    </h1>
     <div class="flex items-center self-start sm:self-center">
       {authorName && (
         <PostAuthor
@@ -51,11 +47,6 @@ const {
     </div>
     <div class="flex items-center self-start sm:self-center">
       <PostMeta pubDate={pubDate} content={content} />
-    </div>
-    <div class="flex items-center text-start sm:text-center">
-       {description && (
-        <p class="lead text-(--prose-fg-muted)">{description}</p>
-      )}
     </div>
     {heroImage && (
       <HeroImage
