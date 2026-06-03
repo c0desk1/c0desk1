@@ -14,7 +14,7 @@ import Layout from "@/layouts/Layout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
-import ContactForm from "@/components/ContactForm.astro";
+import ContactForm from "@/components/ContactForm.tsx";
 import Icon from '@/components/ui/icons/Icon.astro';
 
 const pageTitle = "Kontak";
@@ -66,48 +66,56 @@ const email = SITE.email;
             {pageDesc}
           </p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-[1fr_220px] gap-10 items-start">
-          <ContactForm />
-          <aside class="flex flex-col gap-6 p-6 rounded-md border border-(--border) bg-subtle">
+        <div class="grid grid-cols-1 md:grid-cols-[1fr_260px] lg:grid-cols-[1fr_300px] gap-8 items-start">
+          <ContactForm client:visible />
+
+          <aside class="flex flex-col gap-8 p-6 sm:p-8 rounded-xl border border-(--border) bg-elevated shadow-sm">
+            
             <div>
-              <p class="text-overline-12 text-muted mb-3 uppercase tracking-widest">
+              <p class="text-[11px] font-semibold text-subtle uppercase tracking-wider mb-3">
                 Status
               </p>
-              <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-(--error) shrink-0" />
-                <span class="text-body-13 text-muted">Sibuk</span>
+              <div class="flex items-center gap-2.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-red-500 shrink-0" />
+                <span class="text-body-14 font-medium text-strong">Sibuk</span>
               </div>
             </div>
+
+            <div class="w-full h-px bg-(--border)/50" />
+
             <div>
-              <p class="text-overline-12 text-muted mb-3 uppercase tracking-widest">
+              <p class="text-[11px] font-semibold text-subtle uppercase tracking-wider mb-3">
                 Email
               </p>
               <a
                 href={`mailto:${email}`}
-                class="text-body-14 text-(--fg) flex items-center gap-2 hover:text-(--accent) transition-colors">
-                <Icon name="email" className="w-4 h-4" />
-                {email}
+                class="text-body-14 font-medium text-muted flex items-center gap-2 hover:text-strong transition-colors"
+              >
+                <Icon name="email" className="w-4.5 h-4.5 shrink-0" />
+                <span class="truncate">{email}</span>
               </a>
             </div>
+            <div class="w-full h-px bg-(--border)/50" />
             <div>
-              <p class="text-overline-12 text-muted mb-3 uppercase tracking-widest">
+              <p class="text-[11px] font-semibold text-subtle uppercase tracking-wider mb-3">
                 Sosial
               </p>
-              <div class="flex flex-col gap-2.5">
+              <div class="flex flex-col gap-3">
                 {SOCIAL.map((s) => (
                   <a
                     href={s.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="flex items-center gap-2 text-body-14 text-muted hover:text-(--accent) transition-colors"
+                    class="flex items-center gap-2.5 text-body-14 font-medium text-muted hover:text-strong transition-colors"
                     aria-label={s.name}
                   >
-                    <Icon name={s.name.toLocaleLowerCase() as any} className="w-4.5 h-4.5" />
+                    <Icon name={s.name.toLocaleLowerCase() as any} className="w-4.5 h-4.5 shrink-0" />
                     {s.name}
                   </a>
                 ))}
               </div>
             </div>
+
           </aside>
         </div>
       </Container>
