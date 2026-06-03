@@ -23,27 +23,17 @@ interface NavItem {
 const navItems: NavItem[] = NAV.MobileBar;
 ---
 
-<button
-  id="mnav-trigger"
-  aria-label="Buka Menu"
-  aria-expanded="false"
-  class="inline-flex lg:hidden shrink-0 h-8 w-8 p-1.5 items-center justify-center rounded-full border border-(--border) text-muted hover:bg-subtle active:bg-subtle hover:text-strong active:text-strong focus:outline-none focus:ring-2 focus:ring-(--border-strong)"
->
+<button id="mnav-trigger" aria-label="Buka Menu" aria-expanded="false" class="inline-flex lg:hidden shrink-0 h-8 w-8 p-1.5 items-center justify-center rounded-full border border-(--border) text-strong hover:bg-subtle active:bg-subtle focus:outline-none focus:ring-2 focus:ring-(--border-strong)">
   <Icon name="menu" className="w-full h-full transition-colors" />
 </button>
-
-<div
-  id="mnav-overlay"
-  class="fixed inset-0 z-50 bg-base flex flex-col opacity-0 pointer-events-none transition-opacity duration-300"
->
+<div id="mnav-overlay" class="fixed inset-0 z-50 bg-base flex flex-col opacity-0 pointer-events-none transition-opacity duration-300">
   <div class="flex items-center justify-between px-4 py-3 shrink-0">
     <span class="inline-flex shrink-0 items-center justify-center"></span>
     <button
       id="mnav-close"
-      class="inline-flex lg:hidden shrink-0 h-8 w-8 p-1.5 items-center justify-center rounded-full border border-(--border) text-muted hover:bg-subtle active:bg-subtle hover:text-strong active:text-strong focus:outline-none focus:ring-2 focus:ring-(--border-strong)"
-      aria-label="Tutup menu"
-    >
-      <Icon name="close" className="w-5 h-5" />
+      class="inline-flex lg:hidden shrink-0 h-8 w-8 p-1.5 items-center justify-center rounded-full border border-(--border) text-strong hover:bg-subtle active:bg-subtle focus:outline-none focus:ring-2 focus:ring-(--border-strong)"
+      aria-label="Tutup menu">
+      <Icon name="close" className="w-full h-full transition-colors" />
     </button>
   </div>
   <nav class="flex-1 overflow-y-auto px-4 py-6">
