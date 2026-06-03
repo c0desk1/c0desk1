@@ -9,7 +9,7 @@ import Head     from "@/components/Head.astro";
 import Navbar   from "@/components/Navbar.astro";
 import Footer   from "@/components/Footer.astro";
 import ThemeScript from "@/components/scripts/ThemeScript.astro";
-import Search from "@/components/Search.astro";
+
 import ScrollScript from "@/components/scripts/ScrollScript.astro";
 
 interface Props {
@@ -65,18 +65,18 @@ const currentPath = new URL(Astro.request.url).pathname;
           clientOptions: { theme: "dark", lang: "id" },
         });
       });
-    </script>-->
+    </script>-->
   </Head>
   <body class:list={[bodyClass]}>
     <ThemeScript />
-    <!--<noscript>
+     <!--<noscript>
       <iframe
         src="https://www.googletagmanager.com/ns.html?id=GTM-NJJPZV2M"
         height="0"
         width="0"
         style="display:none;visibility:hidden"
       ></iframe>
-    </noscript>-->
+    </noscript>-->
     <a href="#main-content"
       class="
         sr-only focus:not-sr-only
@@ -106,7 +106,8 @@ const currentPath = new URL(Astro.request.url).pathname;
     </main>
     {!hideFooter && variant !== "bare" && (<Footer />)}
     <ScrollScript />
-    <Search />
+
+    
     <script>
       const initShortcuts = () => {
         let lastKey = "";
