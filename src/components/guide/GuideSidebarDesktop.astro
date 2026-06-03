@@ -1,9 +1,10 @@
 ---
 // src/components/guide/desktop/GuideSidebarDesktop.astro
 import type { CollectionEntry } from "astro:content";
+import { ROUTES } from "@/consts";
+
 import Section from "../ui/Section.astro";
 import Breadcrumb from "../Breadcrumb.astro";
-import { ROUTES } from "@/consts";
 
 interface Props {
   entries: CollectionEntry<"guide">[];
@@ -16,11 +17,11 @@ const { entries, currentId, series } = Astro.props;
 
 <aside
   id="guide-sidebar-desktop"
-  class="hidden lg:flex flex-col w-64 shrink-0 sticky top-(--header-height) h-[calc(100svh-var(--header-height))] overflow-y-auto border-x border-(--border)"
+  class="hidden lg:flex flex-col w-64 shrink-0 sticky top-(--header-height) h-[calc(100svh-var(--header-height))] overflow-y-auto border-r border-(--border)"
   style="scrollbar-width: thin; scrollbar-color: var(--border) transparent;"
 >
   <Section size="sm">
-    <div class="flex items-center px-3 text-muted mb-4">
+    <div class="flex items-center px-3 text-(--fg-muted) mb-4">
       <Breadcrumb
         items={[
           { name: "Guide", url: ROUTES.guide },
@@ -37,15 +38,15 @@ const { entries, currentId, series } = Astro.props;
               <a
                 href={`/guide/${entry.id}`}
                 class:list={[
-                  "sidebar-desktop-link group flex items-center justify-between gap-2 px-3 py-1.5 text-label-14 no-underline font-medium transition-colors border-l-2 -ml-px",
+                  "sidebar-desktop-link group flex items-center justify-between gap-2 px-3 py-1.5 text-label-14 no-underline transition-all duration-200 border-l-2 -ml-px",
                   isActive
-                    ? "text-strong bg-muted/80 border-(--fg)"
-                    : "text-muted hover:text-strong hover:bg-subtle/40 border-transparent"
+                    ? "text-(--fg-strong) font-medium bg-[var(--bg-muted)] border-(--fg-strong)" // Border indikator hitam/putih pekat
+                    : "text-(--fg-muted) font-normal hover:text-(--fg-strong) hover:bg-[var(--bg-subtle)] border-transparent"
                 ]}
                 aria-current={isActive ? "page" : undefined}
                 data-active-sidebar={isActive ? "true" : "false"}
               >
-                <span class="wrap transition-transform duration-150 group-hover:translate-x-0.5">
+                <span class="transition-transform duration-200 group-hover:translate-x-0.5 line-clamp-2">
                   {entry.data.title}
                 </span>
               </a>
@@ -65,11 +66,16 @@ const { entries, currentId, series } = Astro.props;
     if (sidebar && activeLink) {
       activeLink.scrollIntoView({ 
         behavior: 'instant', 
-        block: 'nearest' 
+        block: 'center'
       });
     }
   };
 
-  scrollSidebarToActiveItem();
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', scrollSidebarToActiveItem);
+  } else {
+    scrollSidebarToActiveItem();
+  }
   document.addEventListener("astro:page-load", scrollSidebarToActiveItem);
 </script>
