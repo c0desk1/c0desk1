@@ -1,5 +1,5 @@
 ---
-// src/layouts/GuideLayout.astro
+
 import { 
   SITE, 
   buildMeta 
@@ -25,7 +25,15 @@ interface Props {
 }
 
 const {
-  meta, schema, isHome = false, variant = "default", bodyClass = "", mainClass = "", hideHeader = false, hideFooter = false, canonical,
+  meta,
+  schema,
+  isHome    = false,
+  variant   = "default",
+  bodyClass = "",
+  mainClass = "",
+  hideHeader = false,
+  hideFooter = false,
+  canonical,
 } = Astro.props;
 
 const currentPath = new URL(Astro.request.url).pathname;
@@ -33,15 +41,59 @@ const currentPath = new URL(Astro.request.url).pathname;
 
 <!DOCTYPE html>
 <html lang={SITE.lang} dir={SITE.dir}>
-  <Head {meta} {schema} {isHome} {canonical} />
+  <Head {meta} {schema} {isHome} {canonical}>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4943136052113535" crossorigin="anonymous"></script>
+    <script is:inline>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+          j.async = true;
+          j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+          f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-NJJPZV2M");
+    </script>
+    <script async src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
+    <script is:inline>
+      (self.SWG_BASIC = self.SWG_BASIC || []).push((basicSubscriptions) => {
+        basicSubscriptions.init({
+          type: "NewsArticle",
+          isPartOfType: ["Product"],
+          isPartOfProductId: "CAow3NjGDA:openaccess",
+          clientOptions: { theme: "dark", lang: "id" },
+        });
+      });
+    </script>
+  </Head>
   <body class:list={[bodyClass]}>
     <ThemeScript />
-    <a href="#main-content" class="sr-only focus:not-sr-only fixed top-4 left-4 z-9999 px-4 py-2 bg-elevated text-strong border border-strong rounded-(--radius) text-heading-24 font-semibold focus:outline-none focus:ring-2 focus:ring-(--accent) transition-all duration-150">
-      Skip to content
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-NJJPZV2M"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+      ></iframe>
+    </noscript>
+    <a href="#main-content"
+      class="
+        sr-only focus:not-sr-only
+        fixed top-4 left-4 z-9999
+        px-4 py-2
+        bg-elevated text-strong
+        border border-strong
+        rounded-(--radius)
+        text-heading-24 font-semibold
+        focus:outline-none focus:ring-2 focus:ring-(--accent)
+        transition-all duration-150
+      ">
+      Lewati ke konten
     </a>
     {!hideHeader && variant !== "bare" && (<Navbar currentPath={currentPath} />)}
-    
-    <main id="main-content"
+    <main
+      id="main-content"
       class:list={[
         "min-h-[calc(100svh-var(--header-height))]",
         variant !== "bare" && "pt-(--header-height)",
@@ -52,10 +104,38 @@ const currentPath = new URL(Astro.request.url).pathname;
     >
       <slot />
     </main>
-    
     {!hideFooter && variant !== "bare" && (<Footer />)}
     <ScrollScript />
     <Search />
+    <script>
+      const initShortcuts = () => {
+        let lastKey = "";
+        const handleKeydown = (e: KeyboardEvent) => {
+          const active = document.activeElement;
+          const isEditing =
+            active instanceof HTMLInputElement  ||
+            active instanceof HTMLTextAreaElement ||
+            (active as HTMLElement)?.isContentEditable;
+
+          if (isEditing) return;
+
+          if (lastKey === "g" && e.key === "h") {
+            window.location.href = "/";
+          }
+
+          lastKey = e.key;
+          setTimeout(() => { lastKey = ""; }, 800);
+        };
+
+        document.removeEventListener("keydown", (window as any).__shortcutKeyHandler);
+        (window as any).__shortcutKeyHandler = handleKeydown;
+        document.addEventListener("keydown", (window as any).__shortcutKeyHandler);
+      };
+
+      initShortcuts();
+      document.addEventListener("astro:page-load", initShortcuts);
+    </script>
+    
     <slot name="body-end" />
   </body>
 </html>

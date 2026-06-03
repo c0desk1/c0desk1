@@ -41,9 +41,42 @@ const currentPath = new URL(Astro.request.url).pathname;
 
 <!DOCTYPE html>
 <html lang={SITE.lang} dir={SITE.dir}>
-  <Head {meta} {schema} {isHome} {canonical} />
+  <Head {meta} {schema} {isHome} {canonical}>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4943136052113535" crossorigin="anonymous"></script>
+    <script is:inline>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+          j.async = true;
+          j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+          f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-NJJPZV2M");
+    </script>
+    <script async src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
+    <script is:inline>
+      (self.SWG_BASIC = self.SWG_BASIC || []).push((basicSubscriptions) => {
+        basicSubscriptions.init({
+          type: "NewsArticle",
+          isPartOfType: ["Product"],
+          isPartOfProductId: "CAow3NjGDA:openaccess",
+          clientOptions: { theme: "dark", lang: "id" },
+        });
+      });
+    </script>
+  </Head>
   <body class:list={[bodyClass]}>
     <ThemeScript />
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-NJJPZV2M"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+      ></iframe>
+    </noscript>
     <a href="#main-content"
       class="
         sr-only focus:not-sr-only

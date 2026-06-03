@@ -49,7 +49,7 @@ const optimizedAvatar = !isAvatarPlaceholder && isCdnUrl(rawAvatar)
 const autoSlug = data.slug || slugify(title);
 const guideUrl = `${ROUTES.guide}/${autoSlug}`;
 
-const seriesLabel = SERIES.find(c => c.slug === series)?.label || series || 'General';
+const seriesLabel = SERIES.find(c => c.slug === series)?.label || series || 'Guide';
 const excerpt = generateExcerpt(entry.body || '', 200);
 ---
 

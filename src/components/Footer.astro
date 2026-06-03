@@ -78,9 +78,9 @@ const footerNav = [
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={s.name}
-                    class="flex items-center justify-center w-8 h-8 rounded-md border border-(--border) text-muted hover:text-strong hover:bg-muted active:scale-95 transition-all duration-200"
+                    class="flex items-center justify-center w-8 h-8 rounded-md border border-(--border) text-muted hover:text-strong hover:bg-muted active:scale-95"
                   >
-                    <Icon name={s.name.toLowerCase() as any} className="w-4 h-4" />
+                    <Icon name={s.name.toLowerCase() as any} className="w-4 h-4 transition-colors duration-200" />
                   </a>
                 ))}
               </div>
@@ -117,7 +117,7 @@ const footerNav = [
     <Container size="xl">
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4 py-6">
         <p class="text-label-13 text-subtle">
-          &copy; {currentYear} {SITE.name}. All rights reserved.
+          &copy; {currentYear} {ORG.name}. All rights reserved.
         </p>
         <div class="flex items-center gap-4">
           <a

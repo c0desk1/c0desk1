@@ -41,7 +41,7 @@ const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
         <span class="inline-flex shrink-0 items-center justify-center">
           <svg role="progressbar" viewBox="0 0 24 24" class="w-4 h-4 shrink-0" fill="none">
             <circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="2" opacity="0.25" />
-            <circle id="m-toc-progress-ring" cx="12" cy="12" r="11" stroke="currentColor" stroke-width="2" stroke-dasharray="69.115" stroke-dashoffset="69.115" stroke-linecap="round" transform="rotate(-90 12 12)" class="transition-all duration-150 text-(--accent)" />
+            <circle id="m-toc-progress-ring" cx="12" cy="12" r="11" stroke="currentColor" stroke-width="2" stroke-dasharray="69.115" stroke-dashoffset="69.115" stroke-linecap="round" transform="rotate(-90 12 12)" class="transition-all duration-150 text-accent" />
           </svg>
         </span>
         <span id="m-toc-active-text" class="truncate max-w-32 text-right block font-medium text-body-13">
@@ -61,7 +61,7 @@ const filteredToc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
             <path id="m-toc-bg-path" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round" stroke-linecap="round" />
           </svg>
           <div id="m-toc-progress-mask" class="absolute top-0 left-0 w-full overflow-hidden transition-[height] duration-300 ease-out" style="height: 0px; z-index: 1;">
-            <svg id="m-toc-fg-svg" class="absolute top-0 left-0 pointer-events-none text-(--accent)" style="width: 100%;">
+            <svg id="m-toc-fg-svg" class="absolute top-0 left-0 pointer-events-none text-accent" style="width: 100%;">
               <path id="m-toc-fg-path" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round" stroke-linecap="round" />
             </svg>
           </div>

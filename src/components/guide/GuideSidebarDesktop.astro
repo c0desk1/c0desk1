@@ -21,7 +21,7 @@ const { entries, currentId, series } = Astro.props;
   style="scrollbar-width: thin; scrollbar-color: var(--border) transparent;"
 >
   <Section size="sm">
-    <div class="flex items-center px-3 text-(--fg-muted) mb-4">
+    <div class="flex items-center px-3 text-muted mb-4">
       <Breadcrumb
         items={[
           { name: "Guide", url: ROUTES.guide },
@@ -40,8 +40,8 @@ const { entries, currentId, series } = Astro.props;
                 class:list={[
                   "sidebar-desktop-link group flex items-center justify-between gap-2 px-3 py-1.5 text-label-14 no-underline transition-all duration-200 border-l-2 -ml-px",
                   isActive
-                    ? "text-(--fg-strong) font-medium bg-[var(--bg-muted)] border-(--fg-strong)" // Border indikator hitam/putih pekat
-                    : "text-(--fg-muted) font-normal hover:text-(--fg-strong) hover:bg-[var(--bg-subtle)] border-transparent"
+                    ? "text-strong font-medium bg-muted border-(--fg-strong)"
+                    : "text-muted font-normal hover:text-strong hover:bg-subtle border-transparent"
                 ]}
                 aria-current={isActive ? "page" : undefined}
                 data-active-sidebar={isActive ? "true" : "false"}

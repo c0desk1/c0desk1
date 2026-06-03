@@ -19,16 +19,16 @@ const topSeries = SERIES.slice(0, 4);
 >
   <div
     id="search-backdrop"
-    class="absolute inset-0 bg-[var(--bg-overlay)] backdrop-blur-sm opacity-0 transition-opacity duration-200"
+    class="absolute inset-0 bg-overlay backdrop-blur-sm opacity-0 transition-opacity duration-200"
   ></div>
   
   <div class="relative flex min-h-full items-start justify-center p-4 sm:pt-32">
     <div
       id="search-panel"
-      class="w-full max-w-2xl overflow-hidden rounded-xl border border-(--border) bg-[var(--bg-elevated)] shadow-[var(--shadow-xl)] opacity-0 scale-95 transition-all duration-200 flex flex-col max-h-[85vh]"
+      class="w-full max-w-2xl overflow-hidden rounded-xl border border-(--border) bg-elevated shadow-(--shadow-xl) opacity-0 scale-95 transition-all duration-200 flex flex-col max-h-[85vh]"
     >
       <form id="search-form" action={searchRoute} class="flex items-center gap-3 px-4 shrink-0">
-        <Icon name="search" className="h-5 w-5 shrink-0 text-(--fg-subtle)" />
+        <Icon name="search" className="h-5 w-5 shrink-0 text-subtle" />
 
         <input
           id="search-input"
@@ -38,19 +38,21 @@ const topSeries = SERIES.slice(0, 4);
           aria-label="Cari postingan"
           autocomplete="off"
           spellcheck="false"
-          class="flex-1 min-w-0 border-none bg-transparent py-4 sm:py-5 text-body-16 text-(--fg-strong) outline-none placeholder:text-(--fg-subtle) [&::-webkit-search-cancel-button]:hidden"
+          class="flex-1 min-w-0 border-none bg-transparent py-4 sm:py-5 text-body-16 text-strong outline-none placeholder:text-subtle [&::-webkit-search-cancel-button]:hidden"
         />
+        
+        <button type="submit" class="hidden" aria-hidden="true" tabindex="-1">Cari</button>
         
         <button
           id="search-clear"
           type="button"
           aria-label="Tutup atau bersihkan"
-          class="hidden h-7 w-7 shrink-0 items-center justify-center rounded-md text-(--fg-muted) hover:bg-[var(--bg-muted)] hover:text-(--fg-strong) transition-colors"
+          class="hidden h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted hover:bg-muted hover:text-strong transition-colors"
         >
           <Icon name="close" className="h-4 w-4" />
         </button>
         
-        <kbd class="hidden sm:inline-flex items-center rounded-md border border-(--border) bg-[var(--bg-muted)] px-1.5 py-0.5 text-[11px] text-(--fg-muted) font-mono font-medium ml-1">
+        <kbd class="hidden sm:inline-flex items-center rounded-md border border-(--border) bg-muted px-1.5 py-0.5 text-[11px] text-muted font-mono font-medium ml-1">
           ESC
         </kbd>
       </form>
@@ -60,7 +62,7 @@ const topSeries = SERIES.slice(0, 4);
           
           {topCategories.length > 0 && (
             <div>
-              <h3 class="px-3 py-2 text-[11px] font-semibold text-(--fg-subtle) uppercase tracking-wider">
+              <h3 class="px-3 py-2 text-[11px] font-semibold text-subtle uppercase tracking-wider">
                 Kategori Blog
               </h3>
               <ul class="flex flex-col gap-0.5">
@@ -68,10 +70,10 @@ const topSeries = SERIES.slice(0, 4);
                   <li>
                     <button 
                       type="button" 
-                      class="suggestion-btn flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-body-14 text-(--fg-muted) transition-colors hover:bg-[var(--bg-muted)] hover:text-(--fg-strong)" 
+                      class="suggestion-btn flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-body-14 text-muted transition-colors hover:bg-muted hover:text-strong" 
                       data-query={c.label}
                     >
-                      <span class="text-(--fg-subtle) text-lg leading-none font-mono opacity-70">#</span>
+                      <span class="text-subtle text-lg leading-none font-mono opacity-70">#</span>
                       <span class="truncate">{c.label}</span>
                     </button>
                   </li>
@@ -82,7 +84,7 @@ const topSeries = SERIES.slice(0, 4);
 
           {topSeries.length > 0 && (
             <div>
-              <h3 class="px-3 py-2 text-[11px] font-semibold text-(--fg-subtle) uppercase tracking-wider">
+              <h3 class="px-3 py-2 text-[11px] font-semibold text-subtle uppercase tracking-wider">
                 Seri Guide
               </h3>
               <ul class="flex flex-col gap-0.5">
@@ -90,10 +92,10 @@ const topSeries = SERIES.slice(0, 4);
                   <li>
                     <button 
                       type="button" 
-                      class="suggestion-btn flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-body-14 text-(--fg-muted) transition-colors hover:bg-[var(--bg-muted)] hover:text-(--fg-strong)" 
+                      class="suggestion-btn flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-body-14 text-muted transition-colors hover:bg-muted hover:text-strong" 
                       data-query={s.label}
                     >
-                      <Icon name="search" className="h-3.5 w-3.5 text-(--fg-subtle) opacity-70" />
+                      <Icon name="search" className="h-3.5 w-3.5 text-subtle opacity-70" />
                       <span class="truncate">{s.label}</span>
                     </button>
                   </li>

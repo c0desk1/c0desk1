@@ -39,8 +39,8 @@ const {
   seo 
 } = entry.data;
 
-const seriesLabel = SERIES.find(c => c.slug === series)?.label || series || 'General';
-const excerpt = generateExcerpt(entry.body || '', 200);
+const seriesLabel = SERIES.find(c => c.slug === series)?.label || series || 'Guide';
+const excerpt = generateExcerpt(entry.body || '', 250);
 
 const authorEntry = data.author ? await getEntry(data.author) : null;
 const authorName = authorEntry?.data?.name || AUTHOR.name;
