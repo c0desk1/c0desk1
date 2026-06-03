@@ -37,12 +37,6 @@
 .prose .code-block-header {
   justify-content: space-between;
 }
-.prose .mac-dot {
-  border-radius: 50%;
-}
-.prose .mac-dot.close  { background-color: var(--error); }
-.prose .mac-dot.minimize { background-color: var(--warning); }
-.prose .mac-dot.maximize { background-color: var(--success); }
 
 .prose .code-block-title {
   min-width: 0;
@@ -88,7 +82,7 @@
 
 .prose .astro-code pre {
   margin: 0 !important;
-  padding: 1.125rem 1.25rem;
+  padding: 1.125rem 1.25rem 1important;
   border: none;
   background: var(--bg-muted) !important;
   overflow: visible;
