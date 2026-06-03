@@ -84,7 +84,6 @@ const stack: { name: string; description: string; icon: IconName }[] = [
     </Section>
     <Section size="lg">
       <Container size="lg">
-        
         <Section size="none">
           <div class="max-w-2xl">
             <h1 class="text-heading-32 md:text-heading-40 lg:text-heading-56 font-bold text-strong text-balance mb-6">
@@ -104,18 +103,18 @@ const stack: { name: string; description: string; icon: IconName }[] = [
 
         <Section size="sm">
           <div class="mt-12">
-            <p class="text-overline-12 text-muted mb-6 uppercase tracking-widest">
+            <p class="text-[11px] font-semibold text-subtle uppercase tracking-wider mb-6">
               Topik Pembahasan
             </p>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-px bg-border-strong rounded-md overflow-hidden">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
               {topics.map(({ icon, label, desc }) => (
-                <div class="bg-subtle p-6 flex flex-col gap-4 group hover:bg-muted transition-colors">
-                  <div class="text-muted w-6 h-6 transition-colors group-hover:text-strong">
-                    <Icon name={icon} className="w-full h-full" />
+                <div class="bg-elevated border border-(--border) rounded-xl p-6 flex flex-col gap-4 group hover:border-strong hover:bg-subtle/50 transition-all shadow-sm">
+                  <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-base border border-(--border) text-muted group-hover:text-strong group-hover:border-strong transition-colors">
+                    <Icon name={icon} className="h-5 w-5" />
                   </div>
                   <div>
-                    <p class="text-label-14 font-semibold text-strong mb-1">{label}</p>
-                    <p class="text-body-13 text-muted">{desc}</p>
+                    <p class="text-body-16 font-semibold text-strong mb-1">{label}</p>
+                    <p class="text-body-14 text-muted">{desc}</p>
                   </div>
                 </div>
               ))}
@@ -125,19 +124,19 @@ const stack: { name: string; description: string; icon: IconName }[] = [
 
         <Section size="sm">
           <div class="mt-12">
-            <p class="text-overline-12 text-muted mb-6 uppercase tracking-widest">
+            <p class="text-[11px] font-semibold text-subtle uppercase tracking-wider mb-6">
               Dibangun dengan
             </p>
             <div class="marquee-root">
               <div class="marquee-track">
                 {[...stack, ...stack].map(({ name, description, icon }) => (
-                  <div class="marquee-item rounded-md border border-(--border) bg-subtle hover:border-accent transition-colors">
+                  <div class="marquee-item rounded-xl border border-(--border) bg-elevated shadow-sm hover:border-strong transition-colors">
                     <div class="marquee-icon text-muted shrink-0">
                       <Icon name={icon} className="w-full h-full" viewBox="0 0 128 128" />
                     </div>
                     <div>
-                      <p class="text-label-13 text-strong font-medium mb-1">{name}</p>
-                      <p class="text-caption-11 text-muted">{description}</p>
+                      <p class="text-label-13 text-strong font-medium mb-0.5">{name}</p>
+                      <p class="text-[11px] text-muted">{description}</p>
                     </div>
                   </div>
                 ))}
@@ -147,11 +146,11 @@ const stack: { name: string; description: string; icon: IconName }[] = [
         </Section>
 
         <Section size="sm">
-          <div class="border-t border-strong pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div class="border-t border-(--border)/50 pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <a
               href={`mailto:${SITE.email}`}
-              class="flex items-center gap-2 text-body-14 text-muted hover:text-accent transition-colors">
-              <Icon name="email" className="w-4 h-4 items-baseline" />
+              class="flex items-center gap-2 text-body-14 font-medium text-muted hover:text-strong transition-colors">
+              <Icon name="email" className="w-4.5 h-4.5 items-baseline" />
               {SITE.email}
             </a>
             <div class="flex items-center gap-1.5">
@@ -160,7 +159,7 @@ const stack: { name: string; description: string; icon: IconName }[] = [
                   href={s.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="flex items-center rounded-full p-1.5 hover:bg-muted text-body-14 text-muted hover:text-accent transition-colors"
+                  class="flex items-center rounded-lg p-2 text-muted hover:text-strong hover:bg-subtle transition-colors"
                   aria-label={s.name}
                 >
                   <Icon name={s.name.toLocaleLowerCase() as any} className="w-5 h-5 items-baseline" />
@@ -184,9 +183,9 @@ const stack: { name: string; description: string; icon: IconName }[] = [
 
   .marquee-track {
     display: flex;
-    gap: 12px;
+    gap: 20px;
     width: max-content;
-    animation: marquee 20s linear infinite;
+    animation: marquee 25s linear infinite;
   }
 
   .marquee-track:hover {
@@ -201,8 +200,8 @@ const stack: { name: string; description: string; icon: IconName }[] = [
   .marquee-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
+    gap: 16px;
+    padding: 16px 20px;
     flex-shrink: 0;
     white-space: nowrap;
   }
