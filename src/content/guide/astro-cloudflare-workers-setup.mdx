@@ -1,0 +1,251 @@
+---
+title: "Astro + Cloudflare Workers: Setup Production-Ready"
+description: "Deploy Astro ke Cloudflare Workers dari nol — routing, environment variables, KV storage, dan CI/CD pipeline lengkap."
+pubDate: 2025-05-15T08:18
+updatedDate: 2025-05-28T08:18
+series: "workflow"
+tags: ["astro", "cloudflare", "deploy", "devops"]
+author: "bima-akbar"
+heroImage:
+  src: "/images/placeholder.svg"
+  alt: "Astro + Cloudflare Workers banner"
+draft: false
+---
+
+
+import Accordion   from "@/components/mdx/Accordion.astro";
+
+import FileTree    from "@/components/mdx/FileTree.astro";
+import Video       from "@/components/mdx/Video.astro";
+
+Cloudflare Workers adalah edge runtime yang menjalankan kode JavaScript di 300+ lokasi di seluruh dunia. Dikombinasikan dengan Astro, kamu bisa punya SSR yang cepat, murah, dan scalable — tanpa server tradisional.
+
+## Prasyarat
+
+Sebelum mulai, pastikan sudah punya:
+
+- Node.js **v18+** dan `npm` / `pnpm`
+- Akun [Cloudflare](https://cloudflare.com) (gratis)
+- Wrangler CLI terinstall global
+- Project Astro yang sudah berjalan secara lokal
+
+---
+
+## Instalasi & Konfigurasi
+
+### 1. Install adapter Cloudflare
+
+:::code
+```bash
+npm install @astrojs/cloudflare
+```
+:::
+
+### 2. Update `astro.config.ts`
+
+:::code
+```ts
+// astro.config.ts
+import { defineConfig } from "astro/config";
+import cloudflare from "@astrojs/cloudflare";
+
+export default defineConfig({
+  output: "server",
+  adapter: cloudflare({
+    mode: "directory",
+    functionPerRoute: false,
+  }),
+});
+```
+:::
+
+:::note
+Mode `directory` menghasilkan struktur `functions/` yang kompatibel dengan Cloudflare Pages. Gunakan `advanced` jika deploy ke Workers langsung.
+:::
+
+### 3. Buat `wrangler.toml`
+
+:::code
+```toml
+name        = "my-astro-site"
+main        = "dist/_worker.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+PUBLIC_SITE_URL = "https://example.com"
+
+[[kv_namespaces]]
+binding = "CACHE"
+id      = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+```
+:::
+
+---
+
+## Struktur Folder
+
+:::filetree
+  - src/
+    - pages/
+      - index.astro
+      - blog/
+        - [slug].astro
+    - layouts/
+      - BaseLayout.astro
+    - content/
+      - blog/
+        - my-post.mdx
+  - public/
+  - wrangler.toml
+  - astro.config.ts
+  - package.json
+:::
+
+---
+
+## Environment Variables
+
+Cloudflare Workers membedakan antara **build-time** dan **runtime** env vars.
+
+:::warning
+Variabel dengan prefix `PUBLIC_` tersedia di client. Tanpa prefix hanya tersedia di server-side (SSR). Jangan pernah expose secret ke client.
+:::
+
+Akses runtime env di Astro:
+
+:::code
+```ts
+// src/pages/api/hello.ts
+import type { APIRoute } from "astro";
+
+export const GET: APIRoute = ({ locals }) => {
+  const env = locals.runtime.env;
+  const secret = env.MY_SECRET; // dari wrangler.toml atau CF dashboard
+  return new Response(JSON.stringify({ ok: true }));
+};
+```
+:::
+
+---
+
+## KV Storage
+
+Cloudflare KV adalah key-value store global. Cocok untuk cache, session, dan data statis.
+
+### Bind KV ke Worker
+
+:::code
+```toml
+# wrangler.toml
+[[kv_namespaces]]
+binding = "MY_KV"
+id      = "abc123..."
+```
+:::
+
+### Baca & tulis dari Astro
+
+:::code
+```ts
+// src/pages/api/cache.ts
+import type { APIRoute } from "astro";
+
+export const GET: APIRoute = async ({ locals, url }) => {
+  const kv  = locals.runtime.env.MY_KV;
+  const key = url.searchParams.get("key") ?? "default";
+
+  const cached = await kv.get(key);
+  if (cached) return new Response(cached);
+
+  const fresh = await fetch("https://api.example.com/data").then(r => r.text());
+  await kv.put(key, fresh, { expirationTtl: 3600 }); // cache 1 jam
+
+  return new Response(fresh);
+};
+```
+:::
+
+---
+
+## Deploy
+
+### Deploy manual
+
+:::code
+```bash
+# Build dulu
+npm run build
+
+# Deploy ke Cloudflare
+npx wrangler deploy
+```
+:::
+
+### CI/CD dengan GitHub Actions
+
+:::code
+```yaml
+# .github/workflows/deploy.yml
+name: Deploy to Cloudflare Workers
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm run build
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+```
+:::
+
+---
+
+## Tips & Troubleshooting
+
+<Accordion title="Error: Cannot read properties of undefined (locals.runtime)">
+  Pastikan `output: "server"` di `astro.config.ts` dan adapter Cloudflare sudah terpasang dengan benar. Mode `static` tidak punya runtime context.
+</Accordion>
+
+<Accordion title="Build lambat karena banyak routes">
+  Aktifkan `functionPerRoute: false` di config adapter. Ini menggabungkan semua routes ke satu Worker bundle — lebih cepat cold start.
+</Accordion>
+
+<Accordion title="Environment variable tidak terbaca saat build">
+  Cloudflare membedakan *build vars* (dari `.env`) dan *runtime vars* (dari `wrangler.toml` / dashboard). Untuk nilai yang dibutuhkan saat build, definisikan di `.env`. Untuk runtime, gunakan `locals.runtime.env`.
+</Accordion>
+
+<Accordion title="Custom domain tidak jalan">
+  Pastikan DNS record sudah pointing ke Cloudflare dan Workers route sudah dikonfigurasi di dashboard. Propagasi DNS bisa butuh hingga 24 jam.
+</Accordion>
+
+---
+
+## Video Walkthrough
+
+<Video
+  src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+  title="Deploy Astro ke Cloudflare Workers — Full Tutorial"
+/>
+
+---
+
+## Kesimpulan
+
+Deploy Astro ke Cloudflare Workers memberikan keuntungan:
+
+1. **Edge SSR** — render di lokasi terdekat user
+2. **Zero cold start** — Workers pakai V8 isolate, bukan container
+3. **KV & D1** — storage native tanpa server tambahan
+4. **Gratis** sampai 100.000 request/hari di free tier
+
+Untuk project production, pertimbangkan juga [Cloudflare D1](https://developers.cloudflare.com/d1/) untuk database SQL dan [R2](https://developers.cloudflare.com/r2/) untuk object storage.

@@ -6,9 +6,10 @@ import {
 import { glob } from "astro/loaders";
 import { z } from 'astro/zod';
 
-import { CATEGORIES } from './consts';
+import { CATEGORIES, SERIES } from './consts';
 
 const categorySlugs = CATEGORIES.map((c) => c.slug) as [string, ...string[]];
+const seriesSlugs = SERIES.map((c) => c.slug) as [string, ...string[]];
 
 const seoSchema = z.object({
   title: z.string(),
@@ -56,17 +57,10 @@ const blog = defineCollection({
       alt: z.string(),
     }).optional(),
     draft: z.boolean().default(false),
-	  featured: z.boolean().default(false),
     author: reference("authors"),
     category: z.enum(categorySlugs),
     tags: z.array(z.string()).default([]),
     overview: z.array(z.string()).optional(),
-    appDetails: z.object({
-      operatingSystem: z.string().optional(),
-      applicationCategory: z.string().optional(),
-      price: z.string().optional(),
-      priceCurrency: z.string().optional(),
-    }).optional(),
     seo: seoSchema,
   }),
 });
@@ -74,22 +68,23 @@ const blog = defineCollection({
 const guide = defineCollection({
   loader: glob({ base: './src/content/guide', pattern: '**/*.{md,mdx}' }),
   schema: z.object({
-    seo: seoSchema.optional(),
     ...metadataSchema.shape,
     heroImage: z.object({
       src: z.string(),
       alt: z.string(),
     }).optional(),
     draft:       z.boolean().default(false),
-    section: z.enum(categorySlugs),
+    series: z.enum(seriesSlugs),
     tags:        z.array(z.string()).default([]),
     author: reference("authors"),
+    overview: z.array(z.string()).optional(),
     appDetails: z.object({
       operatingSystem: z.string().optional(),
       applicationCategory: z.string().optional(),
       price: z.string().optional(),
       priceCurrency: z.string().optional(),
     }).optional(),
+    seo: seoSchema.optional(),
   }),
 })
 

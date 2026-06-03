@@ -90,9 +90,11 @@ export const ROUTES = {
 
 export const NAV = {
   navBar: [
+    { label: "Blog", href: ROUTES.blog, isExternal: false },
+    { label: "Guide", href: ROUTES.guide, isExternal: false },
+
     { label: "Resource", children: [
-      { label: "Blog", href: ROUTES.blog, isExternal: false },
-      { label: "Guide", href: ROUTES.guide, isExternal: false },
+      { label: "Series", href: `${ROUTES.guide}/series`, isExternal: false },
       { label: "Kategori", href: `${ROUTES.blog}/category`, isExternal: false },
     ]},
     { label: "Community", 
@@ -147,18 +149,24 @@ export const NAV = {
 } as const;
 
 export const CATEGORIES = [
-  { slug: "general",  label: "General",   description: "General articles"       },
-  { slug: "news",     label: "News",      description: "Berita terbaru dari dunia pop culture, game, anime, dan tech." },
-  { slug: "game",     label: "Game",      description: "Review, preview, dan segala hal tentang video game."           },
-  { slug: "anime",    label: "Anime",     description: "Ulasan, rekomendasi, dan berita seputar anime."                },
-  { slug: "tutorial", label: "Tutorial",  description: "Panduan langkah demi langkah untuk berbagai skill digital."    },
-  { slug: "modding",  label: "Modding",   description: "Dunia modding game — dari cara mulai hingga mod terbaik."      },
-  { slug: "tech",     label: "Tech",      description: "Teknologi yang relevan untuk gamer dan kreator konten."        },
-  { slug: "workflow", label: "Workflow",  description: "Workflow optimization, productivity, and project management."  },
-  { slug: "creator",  label: "Creator",   description: "Guide to becoming a content creator, editing tools, and content strategy." },
-  { slug: "lifestyle",label: "Lifestyle", description: "Collection of articles about lifestyle." },
-  { slug: "tips",     label: "Tips",      description: "Quick tips and tricks to increase coding productivity." },
-  { slug: "tools",    label: "Tools",     description: "A collection of tools and software to increase the productivity of digital creators." },
+  { slug: "general",   label: "Umum",        description: "Artikel umum dan tidak terkategori." },
+  { slug: "news",      label: "News",        description: "Berita terbaru dari dunia pop culture, game, anime, dan tech." },
+  { slug: "game",      label: "Game",        description: "Review, preview, dan segala hal tentang video game." },
+  { slug: "anime",     label: "Anime",       description: "Ulasan, rekomendasi, dan berita seputar anime." },
+  { slug: "tech",      label: "Teknologi",   description: "Teknologi yang relevan untuk gamer dan kreator konten." },
+  { slug: "creator",   label: "Kreator",     description: "Panduan menjadi content creator, alat editing, dan strategi konten." },
+  { slug: "lifestyle", label: "Gaya Hidup",  description: "Kumpulan artikel seputar gaya hidup digital." },
+  { slug: "tips",      label: "Tips",        description: "Tips dan trik cepat untuk meningkatkan produktivitas." },
+] as const;
+
+export const SERIES = [
+  { slug: "general",   label: "Umum",        description: "Artikel panduan umum." },
+  { slug: "tutorial",  label: "Tutorial",    description: "Panduan langkah demi langkah untuk berbagai skill digital." },
+  { slug: "modding",   label: "Modding",     description: "Dunia modding game — dari cara mulai hingga mod terbaik." },
+  { slug: "tech",      label: "Teknologi",   description: "Teknologi yang relevan untuk gamer dan kreator konten." },
+  { slug: "workflow",  label: "Workflow",    description: "Optimasi workflow, produktivitas, dan manajemen proyek." },
+  { slug: "creator",   label: "Kreator",     description: "Panduan menjadi content creator, alat editing, dan strategi konten." },
+  { slug: "tools",     label: "Alat",        description: "Koleksi alat dan software untuk meningkatkan produktivitas kreator digital." },
 ] as const;
 
 export type CategorySlug = typeof CATEGORIES[number]["slug"];
