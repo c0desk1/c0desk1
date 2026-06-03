@@ -22,7 +22,6 @@ import {
 
 } from '@shikijs/transformers'
 
-import { satteriHeading } from './src/lib/mdx/satteri-heading';
 import { satteriCallout } from './src/lib/mdx/satteri-callout';
 import { satteriQuote } from './src/lib/mdx/satteri-blockquote';
 import { satteriSteps } from './src/lib/mdx/satteri-steps';
@@ -51,6 +50,8 @@ export default defineConfig({
     inlineStylesheets: 'auto'
   },
   integrations: [
+    react(),
+    mdx(),
     sitemap({
       filter: (page) => !page.match(/\/(401|403|404|500)$/),
       serialize(item) {
@@ -70,9 +71,6 @@ export default defineConfig({
         return item;
       },
     }),
-
-    mdx(), 
-    react(),
   ],
   markdown: {
     processor: satteri({
