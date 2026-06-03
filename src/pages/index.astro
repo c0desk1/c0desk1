@@ -69,7 +69,7 @@ const heroCTA2 = { label: "Blog Terbaru", href: "#blog" };
             {regularGuides.map((guide) => <GuideCard entry={guide} />)}
           </div>
         )}
-        <div class="flex justify-center mt-8 sm:hidden">
+        <div class="flex justify-center mt-8">
           <Link href={ROUTES.guide} variant="noir" size="sm">Lihat semua</Link>
         </div>
       </Container>
@@ -92,7 +92,7 @@ const heroCTA2 = { label: "Blog Terbaru", href: "#blog" };
             {regularPosts.map((post) => <PostCard post={post} />)}
           </div>
         )}
-        <div class="flex justify-center mt-8 sm:hidden">
+        <div class="flex justify-center mt-8">
           <Link href={ROUTES.blog} variant="noir" size="sm">Lihat semua</Link>
         </div>
       </Container>
