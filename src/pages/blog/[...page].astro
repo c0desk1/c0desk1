@@ -85,23 +85,22 @@ const pageNums = getPageNums(page.currentPage, page.lastPage);
       </Container>
     </Section>
   )}
-
   <Section size="md" aria-label="Postingan terbaru">
     <Container size="xl">
-      <h2 id="latest" class="text-heading-24 lg:text-heading-32 text-(--fg) font-semibold py-4 lg:py-6">
-        Terbaru
-      </h2>
-
       {page.data.length > 0 ? (
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-          {page.data.map((post) => <PostCard post={post} />)}
-        </div>
+        <>
+          <h2 id="latest" class="text-heading-24 lg:text-heading-32 text-(--fg-strong) font-semibold py-4 lg:py-6">
+            Terbaru
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            {page.data.map((post) => <PostCard post={post} />)}
+          </div>
+        </>
       ) : (
         <div class="text-center py-12">
-          <p class="text-muted text-body-16">Belum ada postingan.</p>
+          <p class="text-(--fg-muted) text-body-16">Belum ada postingan.</p>
         </div>
       )}
-
       {page.lastPage > 1 && (
         <div class="flex items-center justify-between gap-2 py-8 mt-4">
           <Button href={page.url.prev} disabled={!page.url.prev} variant="secondary" size="sm" class="gap-1.5" aria-label="Sebelumnya">
@@ -116,10 +115,10 @@ const pageNums = getPageNums(page.currentPage, page.lastPage);
                   href={n === 1 ? ROUTES.blog : getPageUrl(n as number)}
                   aria-current={n === page.currentPage ? "page" : undefined}
                   class:list={[
-                    "flex items-center justify-center w-6 h-6 rounded-md text-label-14 transition-colors",
+                    "flex items-center justify-center w-8 h-8 rounded-md text-label-14 transition-colors", // w-8 h-8 untuk aksesibilitas jempol
                     n === page.currentPage
                       ? "bg-(--fg) text-(--bg) pointer-events-none font-medium"
-                      : "text-subtle hover:bg-muted hover:text-(--fg)",
+                      : "text-(--fg-subtle) hover:bg-[var(--bg-muted)] hover:text-(--fg-strong)", // Full CSS Variables support
                   ]}
                 >
                   {n}
@@ -127,7 +126,6 @@ const pageNums = getPageNums(page.currentPage, page.lastPage);
               </li>
             ))}
           </ol>
-
           <Button href={page.url.next} disabled={!page.url.next} variant="secondary" size="sm" class="gap-1.5" aria-label="Berikutnya">
             <span class="hidden sm:inline text-button-14">Berikutnya</span>
             <Icon name="arrow-right" className="w-4 h-4" />
