@@ -1,5 +1,7 @@
 ---
 // src/pages/index.astro
+import { getCollection } from "astro:content";
+
 import {
   SITE, 
   CATEGORIES,
@@ -10,7 +12,7 @@ import {
 } from "@/consts";
 
 import { sortByDate } from "@/lib/utils";
-import { getCollection } from "astro:content";
+
 import Layout from "@/layouts/Layout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
@@ -58,9 +60,6 @@ const heroCTA2 = { label: "Blog Terbaru", href: "#blog" };
             <h2 id="guide" class="text-heading-24 lg:text-heading-32 text-strong font-semibold">Guide</h2>
             <p class="text-body-14 text-muted mt-2 max-w-xl">Tutorial langkah-demi-langkah, teknik kustomisasi, dan panduan praktis.</p>
           </div>
-          <Link href={ROUTES.guide} variant="ghost" size="sm" class="hidden sm:inline-flex items-center gap-1.5">
-            Lihat semua <span aria-hidden="true">→</span>
-          </Link>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-8">
           {featuredGuides.map((guide) => <GuideCardFeatured entry={guide} />)}
@@ -84,9 +83,6 @@ const heroCTA2 = { label: "Blog Terbaru", href: "#blog" };
             <h2 id="blog" class="text-heading-24 lg:text-heading-32 text-strong font-semibold">Blog</h2>
             <p class="text-body-14 text-muted mt-2 max-w-xl">Berita, opini, dan update seputar pop culture, game, anime, dan teknologi.</p>
           </div>
-          <Link href={ROUTES.blog} variant="ghost" size="sm" class="hidden sm:inline-flex items-center gap-1.5">
-            Lihat semua <span aria-hidden="true">→</span>
-          </Link>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-8">
           {featuredPosts.map((post) => <PostCardFeatured post={post} />)}
