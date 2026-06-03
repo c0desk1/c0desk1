@@ -27,7 +27,7 @@ const navItems: NavItem[] = NAV.MobileBar;
   <Icon name="menu" className="w-full h-full transition-colors" />
 </button>
 <div id="mnav-overlay" class="fixed inset-0 z-50 bg-base flex flex-col opacity-0 pointer-events-none transition-opacity duration-300">
-  <div class="flex items-center justify-between px-4 py-3 shrink-0">
+  <div class="flex items-center justify-between px-4 h-14 shrink-0">
     <span class="inline-flex shrink-0 items-center justify-center"></span>
     <button
       id="mnav-close"
@@ -40,19 +40,19 @@ const navItems: NavItem[] = NAV.MobileBar;
     <div class="grid grid-cols-1 gap-2 px-2">
       <a href={ROUTES.home} class="flex justify-between items-center gap-2 py-2 text-body-14 text-(--fg) hover:text-strong rounded-md hover:bg-subtle transition-colors">
         <span class="text-body-14 font-medium text-strong">Beranda</span>
-        <Icon name="home" className="w-4 h-4" />
+        <Icon name="home" className="w-4.5 h-4.5" />
       </a>
       <a href={ROUTES.blog} class="flex justify-between items-center gap-2 py-2 text-body-14 text-(--fg) hover:text-strong rounded-md hover:bg-subtle transition-colors">
         <span class="text-body-14 font-medium text-strong">Blog</span>
-        <Icon name="blog" className="w-4 h-4" />
+        <Icon name="blog" className="w-4.5 h-4.5" />
       </a>
       <a href={ROUTES.guide} class="flex justify-between items-center gap-2 py-2 text-body-14 text-(--fg) hover:text-strong rounded-md hover:bg-subtle transition-colors">
         <span class="text-body-14 font-medium text-strong">Guide</span>
-        <Icon name="brain" className="w-4 h-4" />
+        <Icon name="brain" className="w-4.5 h-4.5" />
       </a>
       <a href={ROUTES.search} class="flex justify-between items-center gap-2 py-2 text-body-14 text-(--fg) hover:text-strong rounded-md hover:bg-subtle transition-colors">
         <span class="text-body-14 font-medium text-strong">Cari</span>
-        <Icon name="search" className="w-4 h-4" />
+        <Icon name="search" className="w-4.5 h-4.5" />
       </a>
       <div class="flex items-center justify-between py-2">
         <span class="text-body-14 font-medium text-strong">Tema</span>
