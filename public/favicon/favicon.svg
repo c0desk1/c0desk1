@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180"><style>
+    .brand-bg { fill: #f4f4f5; transition: fill 0.3s ease; }
+    .brand-icon { fill: #18181b; transition: fill 0.3s ease; }
+
+    @media (prefers-color-scheme: dark) { 
+      .brand-bg { fill: #0a0a09; }
+      .brand-icon { fill: #ffffff; } 
+    }
+  </style>
+  <rect width="180" height="180" rx="99999" class="brand-bg"></rect>
+  <path d="M45 28.125v78.75c0 24.851 20.149 45 45 45s45-20.149 45-45V28.125h-28.125v78.75c0 9.321-7.554 16.875-16.875 16.875s-16.875-7.554-16.875-16.875V28.125H45z" class="brand-icon"></path>
+  <rect x="78.75" y="61.875" width="22.5" height="22.5" class="brand-icon"></rect>
+  <style>
+    @media (prefers-color-scheme: light) { :root { filter: contrast(1) brightness(1); } }
+    @media (prefers-color-scheme: dark) { :root { filter: contrast(1) brightness(1); } }
+  </style>
+</svg>
