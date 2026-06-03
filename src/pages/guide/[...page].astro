@@ -57,7 +57,7 @@ const meta = buildMeta({
 const schemas = [
   schemaBreadcrumb([
     { name: "Beranda", url: SITE.url },
-    { name: "Panduan", url: new URL(ROUTES.guide, SITE.url).href },
+    { name: "Guide", url: new URL(ROUTES.guide, SITE.url).href },
   ]),
   schemaCollectionPage({
     title: pageTitle,
@@ -99,13 +99,11 @@ const pageNums = getPageNums(page.currentPage, page.lastPage);
       </Container>
     </Section>
   )}
-
   <Section size="lg" aria-label="Panduan terbaru">
     <Container size="xl">
       <h2 id="latest" class="text-heading-24 lg:text-heading-32 text-(--fg) font-semibold py-4 lg:py-6">
         Terbaru
       </h2>
-
       {page.data.length > 0 ? (
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {page.data.map((guide) => <GuideCard entry={guide} />)}
@@ -115,14 +113,12 @@ const pageNums = getPageNums(page.currentPage, page.lastPage);
           <p class="text-muted text-body-16">Belum ada panduan.</p>
         </div>
       )}
-
       {page.lastPage > 1 && (
         <div class="flex items-center justify-between gap-2 py-8 mt-4">
           <Button href={page.url.prev} disabled={!page.url.prev} variant="secondary" size="sm" class="gap-1.5" aria-label="Sebelumnya">
             <Icon name="arrow-left" className="w-4 h-4" />
             <span class="hidden sm:inline text-button-14">Sebelumnya</span>
           </Button>
-
           <ol class="hidden sm:flex items-center gap-0.5">
             {pageNums.map((n) => (
               <li>
@@ -141,7 +137,6 @@ const pageNums = getPageNums(page.currentPage, page.lastPage);
               </li>
             ))}
           </ol>
-
           <Button href={page.url.next} disabled={!page.url.next} variant="secondary" size="sm" class="gap-1.5" aria-label="Berikutnya">
             <span class="hidden sm:inline text-button-14">Berikutnya</span>
             <Icon name="arrow-right" className="w-4 h-4" />
