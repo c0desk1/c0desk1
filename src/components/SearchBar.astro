@@ -7,14 +7,16 @@ import Icon from '@/components/ui/icons/Icon.astro';
   <button 
     type="button"
     class="js-search-trigger flex lg:hidden items-center justify-center rounded-full border border-(--border) text-strong w-8 h-8 p-1.5 hover:bg-subtle hover:text-strong active:bg-subtle active:text-strong focus:outline-none focus:ring-2 focus:ring-(--border-strong)"
-    aria-label="Buka Pencarian">
+    aria-label="Buka Pencarian"
+    onclick="window.dispatchEvent(new Event('open-search'))">
     <Icon name="search" className="h-full w-full transition-colors" />
   </button>
 
   <button 
     type="button"
     class="js-search-trigger hidden lg:flex relative items-center w-56 group hover:bg-subtle border border-(--border) rounded-lg py-1.5 pl-3 pr-2 focus:outline-none focus:ring-2 focus:ring-(--border-strong)"
-    aria-label="Buka Pencarian (Tekan /)">
+    aria-label="Buka Pencarian (Tekan /)"
+    onclick="window.dispatchEvent(new Event('open-search'))">
     <Icon name="search" className="h-4 w-4 text-muted group-hover:text-strong transition-colors mr-2 shrink-0" />
     <span class="text-body-14 text-muted flex-1 text-left truncate transition-colors">Cari...</span>
     
@@ -29,7 +31,7 @@ import Icon from '@/components/ui/icons/Icon.astro';
   //@ts-nocheck
   const initSearchButton = () => {
     const openSearch = () => {
-      document.dispatchEvent(new CustomEvent("open-search"));
+      window.dispatchEvent(new CustomEvent("open-search"));
     };
 
     const btns = document.querySelectorAll(".js-search-trigger");

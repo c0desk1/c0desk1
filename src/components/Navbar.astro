@@ -3,11 +3,13 @@
 import Container from "./ui/Container.astro";
 import Logo from "./ui/Logo.astro";
 import Nav from "./Nav.astro";
-import MenuNavbar from "./MenuNavbar.astro";
+import MenuNavbar from "./MenuNavbar.tsx";
 import SearchBar from "./SearchBar.astro";
+import Search from "./Search.tsx";
+import Theme from "./Theme.astro";
 ---
 
-<header id="main-header" class="fixed top-0 z-50 mx-auto w-full bg-base">
+<header id="main-header" class="fixed top-0 z-50 mx-auto w-full bg-subtle">
   <Container size="full">
     <div class="relative flex items-center h-(--header-height)">
       <div class="flex items-center shrink-0 gap-4">
@@ -16,10 +18,13 @@ import SearchBar from "./SearchBar.astro";
       </div>
       <div class="ml-auto flex items-center gap-2 lg:gap-3 order-3">
         <SearchBar />
-        <MenuNavbar />
+        <MenuNavbar client:media="(max-width: 1024px)">
+          <Theme />
+        </MenuNavbar>
       </div>
     </div>
   </Container>
   <div class="absolute bottom-0 left-0 right-0 h-px bg-(--border) transition-opacity duration-300" id="header-border"></div>
 </header>
 <div class="h-(--header-height) hidden" aria-hidden="true"></div>
+<Search client:load />

@@ -22,6 +22,7 @@ import {
 } from '@/lib/utils';
 
 import { Image } from 'astro:assets';
+import Link from '../ui/Link.astro';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -31,7 +32,7 @@ const { post } = Astro.props;
 const { data } = post;
 
 const title = data.title;
-const excerpt = generateExcerpt(post.body || '', 140);
+const excerpt = generateExcerpt(post.body || '', 250);
 const categoryName = CATEGORIES.find(c => c.slug === data.category)?.label || '';
 const pubDateISO = toISOString(data.pubDate);
 const pubDateDisplay = formatDate(data.pubDate, true);
@@ -58,7 +59,7 @@ const optimizedImage = !isPlaceholder && isCdnUrl(rawImage)
 const imageAlt = data.heroImage?.alt || title;
 ---
 
-<a href={postUrl} class="group flex flex-col rounded-xl border border-(--border) bg-base overflow-hidden hover:shadow-md transition-all duration-300 no-underline">
+<article class="group relative flex flex-col rounded-lg border border-(--border) bg-base overflow-hidden hover:shadow-md transition-all duration-300 no-underline">
   <div class="relative aspect-video overflow-hidden bg-muted">
     {!isPlaceholder && (
       <div class="absolute inset-0 bg-base animate-pulse" aria-hidden="true"></div>
@@ -78,38 +79,37 @@ const imageAlt = data.heroImage?.alt || title;
       onload={!isPlaceholder ? "this.classList.remove('opacity-0')" : undefined}
     />
   </div>
-
   <div class="flex flex-col flex-1 p-4">
-    <div class="flex items-center justify-between mb-4 text-label-14 text-muted group-hover:text-(--fg) active:text-(--fg)">
+    <div class="flex items-center justify-between mb-2 text-label-14 text-muted">
       <span>{categoryName}</span>
-      <time datetime={pubDateISO}>{pubDateDisplay}</time>
-    </div>
-    <div class="flex flex-col gap-4 flex-1">
-      <h3 class="text-heading-16 lg:text-heading-18 text-(--fg) font-semibold line-clamp-3">
-        {title}
-      </h3>
-      <p class="text-body-14 md:text-body-16 font-medium text-muted line-clamp-3 group-hover:text-(--fg) active:text-(--fg)">
-        {excerpt}
-      </p>
-      <div class="mt-auto flex items-center gap-2 text-label-14 text-muted group-hover:text-(--fg) active:text-(--fg)">
-        <div class="w-5 h-5 shrink-0 rounded-full overflow-hidden flex items-center justify-center border border-(--border) bg-muted/50">
+      <div class="flex items-center gap-1.5 text-label-14 text-subtle">
+        <time datetime={pubDateISO}>{pubDateDisplay}</time>
+        <div class="w-6 h-6 shrink-0 rounded-full overflow-hidden flex items-center justify-center border border-(--border)">
           <Image
             src={optimizedAvatar}
             alt={`Avatar ${authorName}`}
             width={IMAGE.avatar.width}
             height={IMAGE.avatar.height}
-            loading="eager"
-            decoding="async"
-            fetchpriority="low"
-            class:list={[
-              "h-full w-full object-cover transition duration-300",
-              isAvatarPlaceholder ? "opacity-100 grayscale" : "opacity-0"
-            ]}
-            onload={!isAvatarPlaceholder ? "this.classList.remove('opacity-0')" : undefined}
+            loading='lazy'
+            decoding='async'
+            fetchpriority='low'
+            class="h-full w-full object-cover"
           />
         </div>
-        <span>{authorName}</span>
+      </div>
+    </div>
+    <div class="flex flex-col gap-4 flex-1">
+      <h3 class="text-heading-16 lg:text-heading-18 text-(--fg) font-semibold line-clamp-3">
+        {title}
+      </h3>
+      <p class="text-body-14 font-medium text-muted line-clamp-6">
+        {excerpt}
+      </p>
+      <div class="mt-auto flex items-center justify-between">
+        <Link href={postUrl} size="md" variant="secondary" class="flex flex-col rounded-md w-full text-label-14">
+          <span>Baca selengkapnya</span>
+        </Link>
       </div>
     </div>
   </div>
-</a>
+</article>
