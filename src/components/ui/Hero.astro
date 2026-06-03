@@ -36,7 +36,7 @@ const { title, subTitle, description, cta, cta2 } = Astro.props;
         <p class="hero-sub text-body-16 lg:text-body-18 text-center text-pretty text-muted mb-6 mx-auto max-w-xl">
           {description}
         </p>
-        <div class="hero-cta flex items-center justify-center gap-6">
+        <div class="hero-cta flex items-center justify-center gap-4 md:gap-6">
           {cta && (
             <Link href={cta.href} variant="noir" size="lg" class="text-button-14">
               {cta.label}
