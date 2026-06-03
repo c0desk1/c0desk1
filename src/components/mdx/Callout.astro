@@ -20,14 +20,14 @@ const icons = {
 const label = type.charAt(0).toUpperCase() + type.slice(1);
 ---
 
-<aside class="callout rounded-lg" data-callout={type} role="note" aria-label={label}>
-  <div class="callout-aside px-2! py-2.5">
+<aside class="callout" data-callout={type} role="note" aria-label={label}>
+  <div class="callout-aside">
     <span class="callout-icon" aria-hidden="true">
-      <Icon name={icons[type] as any} className="w-4 h-4" />
+      <Icon name={icons[type] as any} className="w-5 h-5" />
     </span>
-    <span class="callout-label hidden" aria-hidden="true">{label}</span>
+    <span class="callout-label" aria-hidden="true">{label}</span>
   </div>
-  <div class="callout-body py-1.5! px-2">
+  <div class="callout-body">
     <div class="callout-content">
       <slot />
     </div>
