@@ -1,7 +1,7 @@
 ---
+// src/components/Search.astro
 import { ROUTES } from "@/consts";
 import Icon from '@/components/ui/icons/Icon.astro';
-import Link from "./ui/Link.astro";
 
 const searchRoute = ROUTES.search;
 ---
@@ -16,57 +16,37 @@ const searchRoute = ROUTES.search;
 >
   <div
     id="search-backdrop"
-    class="absolute inset-0 bg-[color-mix(in_srgb,var(--bg)_50%,transparent)] backdrop-blur-sm opacity-0 transition-opacity duration-200"
+    class="absolute inset-0 bg-[var(--bg-overlay)] backdrop-blur-sm opacity-0 transition-opacity duration-200"
   ></div>
-  <div class="relative flex min-h-full items-start justify-center p-4 sm:pt-20">
+  
+  <div class="relative flex min-h-full items-start justify-center p-4 sm:pt-32">
     <div
       id="search-panel"
-      class="w-full max-w-2xl overflow-hidden rounded-xl border border-(--border) bg-base shadow-(--shadow-lg) opacity-0 scale-95 transition-all duration-200"
+      class="w-full max-w-2xl overflow-hidden rounded-xl border border-(--border) bg-[var(--bg-elevated)] shadow-[var(--shadow-xl)] opacity-0 scale-95 transition-all duration-200"
     >
-      <div class="flex items-center gap-2 px-3.5">
-        <Icon name="search" className="h-5 w-5 shrink-0 text-dim" />
+      <div class="flex items-center gap-3 px-4">
+        <Icon name="search" className="h-5 w-5 shrink-0 text-(--fg-subtle)" />
 
         <input
           id="search-input"
           type="text"
-          placeholder="Cari artikel..."
+          placeholder="Cari sesuatu..."
           aria-label="Cari postingan"
           autocomplete="off"
           spellcheck="false"
-          class="flex-1 min-w-0 border-none bg-transparent py-4 text-body-14 sm:text-body-16 text-muted outline-none placeholder:text-dim"
+          class="flex-1 min-w-0 border-none bg-transparent py-4 sm:py-5 text-body-16 text-(--fg-strong) outline-none placeholder:text-(--fg-subtle)"
         />
+        
         <button
           id="search-clear"
-          aria-label="Hapus"
-          tabindex="-1"
-          class="hidden h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted hover:bg-muted hover:text-(--fg) transition-colors"
-        >
-          <Icon name="trash" className="h-5 w-5" />
+          aria-label="Tutup atau bersihkan"
+          class="hidden h-7 w-7 shrink-0 items-center justify-center rounded-md text-(--fg-muted) hover:bg-[var(--bg-muted)] hover:text-(--fg-strong) transition-colors">
+          <Icon name="close" className="h-4 w-4" />
         </button>
-        <button
-          id="search-close-mobile"
-          aria-label="Tutup"
-          class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted hover:bg-muted hover:text-(--fg) transition-colors sm:hidden"
-        >
-          <Icon name="close" className="h-5 w-5" />
-        </button>
-        <kbd class="hidden sm:inline-flex items-center rounded-md border border-(--prose-kbd-border) bg-(--prose-kbd-bg) px-1.5 py-0.5 text-xs text-(--prose-kbd-text)">
+        
+        <kbd class="hidden sm:inline-flex items-center rounded-md border border-(--border) bg-[var(--bg-muted)] px-1.5 py-0.5 text-[11px] text-(--fg-muted) font-mono font-medium ml-1">
           ESC
         </kbd>
-      </div>
-      <div class="flex items-center justify-between border-t border-(--border) bg-subtle px-3.5 py-2">
-        <span class="text-body-14 text-muted">
-          Tekan
-          <kbd class="mx-0.5 inline-flex items-center rounded border border-(--prose-kbd-border) bg-(--prose-kbd-bg) px-1 py-0.5 text-xs">↵</kbd>
-          untuk mencari
-        </span>
-        <Link
-          id="search-browse"
-          href={searchRoute}
-          variant="noir"
-          size="sm">
-          Lihat semua
-        </Link>
       </div>
     </div>
   </div>
@@ -81,7 +61,6 @@ const searchRoute = ROUTES.search;
     const panel    = $("search-panel");
     const input    = $("search-input");
     const clearBtn = $("search-clear");
-    const closeMob = $("search-close-mobile");
 
     if (!modal || !input) return;
 
@@ -128,19 +107,25 @@ const searchRoute = ROUTES.search;
     document.addEventListener("open-search", window.__openSearchHandler);
 
     backdrop.addEventListener("click", closeModal);
-    closeMob?.addEventListener("click", closeModal);
 
     clearBtn?.addEventListener("click", () => {
-      input.value = "";
-      clearBtn.classList.add("hidden");
-      clearBtn.classList.remove("flex");
-      input.focus();
+      if (input.value) {
+        input.value = "";
+        input.focus();
+      } else {
+        closeModal();
+      }
     });
 
     input.addEventListener("input", () => {
       const q = input.value.trim();
-      clearBtn?.classList.toggle("hidden", !q);
-      clearBtn?.classList.toggle("flex", !!q);
+      if (q || window.innerWidth < 640) {
+        clearBtn?.classList.remove("hidden");
+        clearBtn?.classList.add("flex");
+      } else {
+        clearBtn?.classList.add("hidden");
+        clearBtn?.classList.remove("flex");
+      }
     });
 
     input.addEventListener("keydown", (e) => {
@@ -152,7 +137,7 @@ const searchRoute = ROUTES.search;
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
         if (onSearchPage()) {
-          document.getElementById("search-input")?.focus();
+          $("search-input")?.focus();
           return;
         }
         modal.style.display === "none" ? openModal() : closeModal();
@@ -163,8 +148,17 @@ const searchRoute = ROUTES.search;
       }
     };
     document.addEventListener("keydown", window.__searchKeyHandler);
+
+    if (window.innerWidth < 640) {
+      clearBtn?.classList.remove("hidden");
+      clearBtn?.classList.add("flex");
+    }
   };
 
-  initSearchModal();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSearchModal);
+  } else {
+    initSearchModal();
+  }
   document.addEventListener("astro:page-load", initSearchModal);
 </script>
