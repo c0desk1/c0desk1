@@ -1,0 +1,138 @@
+---
+// src/pages/guide/section/[slug].astro
+import { getCollection } from "astro:content";
+import { SITE, ROUTES, CATEGORIES, buildMeta, schemaCollectionPage, schemaBreadcrumb } from "@/consts";
+import GuideLayout from "@/layouts/GuideLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import GuideCard from "@/components/guide/GuideCard.astro";
+import GuideCardFeatured from "@/components/guide/GuideCardFeatured.astro";
+import Icon from "@/components/ui/icons/Icon.astro";
+import Link from "@/components/ui/Link.astro";
+
+export async function getStaticPaths() {
+  const allGuides = await getCollection("guide", ({ data }) => !data.draft);
+  const sections = [...new Set(allGuides.map(g => g.data.section))];
+  
+  return sections.map(section => ({
+    params: { slug: section },
+  }));
+}
+
+const { slug } = Astro.params;
+const allGuides = await getCollection("guide", ({ data }) => !data.draft && data.section === slug);
+
+const sortedGuides = allGuides.sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const sectionInfo = CATEGORIES.find(c => c.slug === slug);
+const sectionName = sectionInfo?.label || slug;
+const sectionDesc = sectionInfo?.description || "";
+
+const featuredGuides = sortedGuides.slice(0, 3);
+const regularGuides = sortedGuides.slice(3);
+
+const canonicalURL = new URL(`${ROUTES.guide}/section/${slug}`, SITE.url).href;
+
+const meta = buildMeta({
+  title: `${sectionName} - Guide`,
+  description: sectionDesc || `Kumpulan guide ${sectionName} di ${SITE.name}.`,
+  canonical: canonicalURL,
+});
+
+const schemas = [
+  schemaCollectionPage({
+    title: `${sectionName} - Panduan`,
+    description: sectionDesc || `Kumpulan panduan ${sectionName} di ${SITE.name}.`,
+    url: canonicalURL,
+  }),
+  schemaBreadcrumb([
+    { name: "Beranda", url: SITE.url },
+    { name: "Guide", url: new URL(ROUTES.guide, SITE.url).href },
+    { name: sectionName, url: canonicalURL },
+  ]),
+];
+---
+
+<GuideLayout {meta} schema={schemas}>
+  <Container size="xl" class="py-12 lg:py-20">
+    <!-- Breadcrumb & Header -->
+    <div class="mb-12">
+      <div class="flex items-center gap-2 text-label-13 text-muted mb-4">
+        <a href={ROUTES.guide} class="hover:text-strong transition-colors no-underline">
+          Panduan
+        </a>
+        <Icon name="chevron-right" className="w-3 h-3" />
+        <span class="text-subtle">{sectionName}</span>
+      </div>
+      
+      <div class="flex items-center gap-4 mb-6">
+        <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-accent/10 text-accent">
+          <Icon name="brain" className="w-6 h-6" />
+        </div>
+        <div>
+          <h1 class="text-heading-32 md:text-heading-40 lg:text-heading-48 font-bold tracking-tight text-strong">
+            {sectionName}
+          </h1>
+          {sectionDesc && (
+            <p class="text-body-16 text-muted mt-2 max-w-2xl">
+              {sectionDesc}
+            </p>
+          )}
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-4 text-label-14 text-muted">
+        <span class="font-mono">{sortedGuides.length} artikel</span>
+        <span class="opacity-20">|</span>
+        <Link href={ROUTES.guide} variant="ghost" size="sm" class="inline-flex items-center gap-1.5">
+          <Icon name="arrow-left" className="w-3.5 h-3.5" />
+          Semua Panduan
+        </Link>
+      </div>
+    </div>
+
+    <!-- Konten -->
+    {sortedGuides.length > 0 ? (
+      <div class="space-y-8">
+        {/* Featured Articles */}
+        {featuredGuides.length > 0 && (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {featuredGuides.map(entry => (
+              <GuideCardFeatured entry={entry} />
+            ))}
+          </div>
+        )}
+
+        {/* Regular Articles */}
+        {regularGuides.length > 0 && (
+          <div>
+            {featuredGuides.length > 0 && (
+              <h2 class="text-heading-20 font-semibold text-strong mb-6 mt-8">
+                Artikel Lainnya
+              </h2>
+            )}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {regularGuides.map(entry => (
+                <GuideCard entry={entry} />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    ) : (
+      <div class="rounded-2xl border border-dashed border-(--border) py-20 text-center">
+        <div class="flex items-center justify-center w-16 h-16 rounded-2xl bg-muted/30 mx-auto mb-4">
+          <Icon name="brain" className="w-8 h-8 text-dim/40" />
+        </div>
+        <p class="m-0 text-body-15 text-muted">
+          Belum ada artikel di section ini.
+        </p>
+        <Link href={ROUTES.guide} variant="secondary" size="sm" class="mt-4 inline-flex">
+          Kembali ke Guide
+        </Link>
+      </div>
+    )}
+  </Container>
+</GuideLayout>
