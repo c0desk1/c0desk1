@@ -122,7 +122,7 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={status === 'loading'}
-          className="inline-flex items-center justify-center gap-2 rounded-lg bg-base border border-(--border) text-button-14 font-medium h-9 px-5 hover:opacity-90 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed transition-all shrink-0"
+          className="inline-flex items-center justify-center gap-2 rounded-md bg-(--accent) border border-(--border) text-button-14 text-(--fg-inverted) font-medium h-9 px-5 hover:opacity-90 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed transition-all shrink-0"
         >
           {status === 'loading' ? (
             <>
