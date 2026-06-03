@@ -1,28 +1,27 @@
 ---
 // src/components/blog/PostCardFeatured.astro
 import { 
-    getEntry, 
-    type CollectionEntry 
+  getEntry, 
+  type CollectionEntry 
 } from 'astro:content';
 
 import { 
-    AUTHOR, 
-    ROUTES, 
-    IMAGE, 
-    CATEGORIES, 
-    formatDate, 
-    toISOString 
+  AUTHOR, 
+  ROUTES, 
+  IMAGE, 
+  CATEGORIES, 
+  formatDate, 
+  toISOString
 } from '@/consts';
 
 import { 
-    generateExcerpt, 
-    cdnImage, 
-    isCdnUrl, 
-    slugify 
+  generateExcerpt, 
+  cdnImage, 
+  isCdnUrl, 
+  slugify 
 } from '@/lib/utils';
 
 import { Image } from 'astro:assets';
-import { SITE } from '@/consts';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -39,33 +38,48 @@ const pubDateDisplay = formatDate(data.pubDate, true);
 
 const authorEntry = data.author ? await getEntry(data.author) : null;
 const authorName = authorEntry?.data?.name || AUTHOR.name;
-const authorAvatar = authorEntry?.data?.avatar || AUTHOR.avatar;
-const optimizedAvatar = isCdnUrl(authorAvatar)
-  ? cdnImage(authorAvatar, { w: 48, h: 48, q: IMAGE.avatar.quality })
-  : authorAvatar;
+const rawAvatar = authorEntry?.data?.avatar;
+const isAvatarPlaceholder = !rawAvatar || rawAvatar === '';
+const optimizedAvatar = !isAvatarPlaceholder && isCdnUrl(rawAvatar)
+  ? cdnImage(rawAvatar, { w: IMAGE.avatar.width, h: IMAGE.avatar.height, q: IMAGE.avatar.quality })
+  : rawAvatar || IMAGE.avatar.placeholder;
 
 const autoSlug = data.slug || slugify(title);
 const postUrl = `${ROUTES.blog}/${autoSlug}`;
 
-const imageSrc = data.heroImage?.src || data.seo?.ogImage || SITE.ogImage;
+const rawImage = data.heroImage?.src || data.seo?.ogImage;
+
+const isPlaceholder = !rawImage || rawImage === '';
+
+const optimizedImage = !isPlaceholder && isCdnUrl(rawImage)
+  ? cdnImage(rawImage, { w: IMAGE.thumbnail.width, h: IMAGE.thumbnail.height, q: IMAGE.thumbnail.quality })
+  : rawImage || IMAGE.thumbnail.placeholder;
+
 const imageAlt = data.heroImage?.alt || title;
 ---
 
 <a href={postUrl} class="group flex flex-col rounded-xl border border-(--border) bg-base overflow-hidden hover:shadow-md transition-all duration-300 no-underline">
-  <div class="aspect-video overflow-hidden bg-muted">
+  <div class="relative aspect-video overflow-hidden bg-muted">
+    {!isPlaceholder && (
+      <div class="absolute inset-0 bg-base animate-pulse" aria-hidden="true"></div>
+    )}
     <Image
-        src={imageSrc}
-        alt={imageAlt}
-        width={1200}
-        height={630}
-        class="w-full h-full object-cover"
-        loading="lazy"
-        fetchpriority="low"
-        decoding="async"
+      src={optimizedImage}
+      alt={imageAlt}
+      width={IMAGE.thumbnail.width}
+      height={IMAGE.thumbnail.height}
+      class:list={[
+        "relative z-10 w-full h-full object-cover transition duration-500",
+        isPlaceholder ? "opacity-100" : "opacity-0"
+      ]}
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+      onload={!isPlaceholder ? "this.classList.remove('opacity-0')" : undefined}
     />
   </div>
 
-  <div class="flex flex-col flex-1 p-4 lg:p-6">
+  <div class="flex flex-col flex-1 p-4">
     <div class="flex items-center justify-between mb-4 text-label-14 text-muted group-hover:text-(--fg) active:text-(--fg)">
       <span>{categoryName}</span>
       <time datetime={pubDateISO}>{pubDateDisplay}</time>
@@ -78,20 +92,22 @@ const imageAlt = data.heroImage?.alt || title;
         {excerpt}
       </p>
       <div class="mt-auto flex items-center gap-2 text-label-14 text-muted group-hover:text-(--fg) active:text-(--fg)">
-        {authorAvatar && (
-          <div class="w-5 h-5 shrink-0 rounded-full overflow-hidden flex items-center justify-center border border-(--border)">
-            <Image
-              src={optimizedAvatar}
-              alt={`Avatar ${authorName}`}
-              width={48}
-              height={48}
-              loading='lazy'
-              decoding='async'
-              fetchpriority='low'
-              class="h-full w-full object-cover"
-            />
-          </div>
-        )}
+        <div class="w-5 h-5 shrink-0 rounded-full overflow-hidden flex items-center justify-center border border-(--border) bg-muted/50">
+          <Image
+            src={optimizedAvatar}
+            alt={`Avatar ${authorName}`}
+            width={IMAGE.avatar.width}
+            height={IMAGE.avatar.height}
+            loading="eager"
+            decoding="async"
+            fetchpriority="low"
+            class:list={[
+              "h-full w-full object-cover transition duration-300",
+              isAvatarPlaceholder ? "opacity-100 grayscale" : "opacity-0"
+            ]}
+            onload={!isAvatarPlaceholder ? "this.classList.remove('opacity-0')" : undefined}
+          />
+        </div>
         <span>{authorName}</span>
       </div>
     </div>

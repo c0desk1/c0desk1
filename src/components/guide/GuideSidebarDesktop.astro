@@ -1,7 +1,6 @@
 ---
 // src/components/guide/desktop/GuideSidebarDesktop.astro
 import type { CollectionEntry } from "astro:content";
-import Icon from "../ui/icons/Icon.astro";
 import Section from "../ui/Section.astro";
 import Breadcrumb from "../Breadcrumb.astro";
 import { ROUTES } from "@/consts";
@@ -9,10 +8,10 @@ import { ROUTES } from "@/consts";
 interface Props {
   entries: CollectionEntry<"guide">[];
   currentId?: string;
-  sectionLabel: string;
+  series: string;
 }
 
-const { entries, currentId, sectionLabel } = Astro.props;
+const { entries, currentId, series } = Astro.props;
 ---
 
 <aside
@@ -25,7 +24,7 @@ const { entries, currentId, sectionLabel } = Astro.props;
       <Breadcrumb
         items={[
           { name: "Guide", url: ROUTES.guide },
-          { name: sectionLabel },
+          { name: series },
         ]}
        />
     </div>

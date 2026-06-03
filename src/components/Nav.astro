@@ -10,7 +10,7 @@ const currentPath = Astro.url.pathname;
 const navItems = NAV.navBar;
 ---
 
-<nav class="hidden sm:inline-flex items-center rounded-lg border border-(--border) bg-base backdrop-blur p-1 gap-2">
+<nav class="hidden sm:inline-flex items-center">
   {navItems.map((item) => {
     const children = item.children;
     const hasChildren = children && children.length > 0;
@@ -18,7 +18,7 @@ const navItems = NAV.navBar;
     if (hasChildren) {
       return (
         <div class="relative group/dropdown">
-          <button aria-expanded="false" aria-haspopup="menu" class="relative inline-flex items-center gap-1.5 px-4 py-1.5 text-label-14 font-medium rounded-md duration-200 text-muted hover:text-(--fg) hover:bg-muted focus:outline-none focus:ring-2 focus:ring-(--border-strong)">
+          <button aria-expanded="false" aria-haspopup="menu" class="relative inline-flex items-center gap-1.5 px-3 py-1.5 text-label-14 font-medium rounded-full duration-200 text-muted hover:text-(--fg) hover:bg-subtle focus:outline-none focus:ring-2 focus:ring-(--border-strong)">
             <span class="inline-flex items-center">{item.label}</span>
             <span class="shrink-0 inline-flex items-center justify-center w-3.5 h-3.5">
               <Icon name="chevron-down" className="w-full h-full transition-all duration-200 group-hover/dropdown:rotate-180 group-focus-within/dropdown:rotate-180"/>

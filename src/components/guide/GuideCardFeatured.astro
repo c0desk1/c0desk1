@@ -1,80 +1,128 @@
 ---
 // src/components/guide/GuideCardFeatured.astro
-import type { CollectionEntry } from "astro:content";
+import { 
+  getEntry, 
+  type CollectionEntry 
+} from 'astro:content'
+
 import { Image } from 'astro:assets';
 
 import { 
-    formatDate, 
-    ROUTES, 
-    CATEGORIES, 
-    SITE 
+  AUTHOR,
+  formatDate, 
+  ROUTES, 
+  SERIES,
+  IMAGE
 } from "@/consts";
+
+import { 
+  generateExcerpt, 
+  cdnImage, 
+  isCdnUrl, 
+  slugify 
+} from '@/lib/utils'
+
+import Link from "../ui/Link.astro";
 
 interface Props {
   entry: CollectionEntry<"guide">;
 }
 
 const { entry } = Astro.props;
+const { data } = entry;
 
 const { 
-    title, 
-    description, 
-    pubDate, 
-    section, 
-    heroImage, 
-    seo 
+  title, 
+  pubDate, 
+  series, 
+  heroImage, 
+  seo 
 } = entry.data;
 
-const imageSrc = heroImage?.src || seo?.ogImage || SITE.ogImage;
+const seriesLabel = SERIES.find(c => c.slug === series)?.label || series || 'General';
+const excerpt = generateExcerpt(entry.body || '', 200);
+
+const authorEntry = data.author ? await getEntry(data.author) : null;
+const authorName = authorEntry?.data?.name || AUTHOR.name;
+const rawAvatar = authorEntry?.data?.avatar;
+const isAvatarPlaceholder = !rawAvatar || rawAvatar === '';
+const optimizedAvatar = !isAvatarPlaceholder && isCdnUrl(rawAvatar)
+  ? cdnImage(rawAvatar, { w: IMAGE.avatar.width, h: IMAGE.avatar.height, q: IMAGE.avatar.quality })
+  : rawAvatar || IMAGE.avatar.placeholder;
+
+const autoSlug = data.slug || slugify(title);
+const guideUrl = `${ROUTES.guide}/${autoSlug}`;
+
+const rawImage = heroImage?.src || seo?.ogImage;
+const isPlaceholder = !rawImage || rawImage === '';
+
+const optimizedImage = !isPlaceholder && isCdnUrl(rawImage)
+  ? cdnImage(rawImage, { w: IMAGE.thumbnail.width, h: IMAGE.thumbnail.height, q: IMAGE.thumbnail.quality })
+  : rawImage || IMAGE.thumbnail.placeholder;
+
 const imageAlt = heroImage?.alt || title;
-const sectionLabel = CATEGORIES.find(c => c.slug === section)?.label || section || 'General';
 ---
 
-<a
-  href={`${ROUTES.guide}/${entry.id}`}
-  class="group relative flex flex-col rounded-xl border border-(--border) bg-base overflow-hidden hover:shadow-md transition-all duration-300 no-underline"
->
-  <div class="aspect-video overflow-hidden bg-muted">
+<article class="group relative flex flex-col rounded-lg border border-(--border) bg-base overflow-hidden hover:shadow-md transition-all duration-300 no-underline">
+  <div class="relative aspect-video overflow-hidden bg-muted">
+    {!isPlaceholder && (
+      <div class="absolute inset-0 bg-base animate-pulse" aria-hidden="true"></div>
+    )}
     <Image
-        src={imageSrc}
-        alt={imageAlt}
-        width={1200}
-        height={630}
-        class="w-full h-full object-cover"
-        loading="lazy"
-        fetchpriority="low"
-        decoding="async"
+      src={optimizedImage}
+      alt={imageAlt}
+      width={IMAGE.thumbnail.width}
+      height={IMAGE.thumbnail.height}
+      class:list={[
+        "relative z-10 w-full h-full object-cover transition duration-500",
+        isPlaceholder ? "opacity-100" : "opacity-0"
+      ]}
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+      onload={!isPlaceholder ? "this.classList.remove('opacity-0')" : undefined}
     />
   </div>
-  </div>
-  <div class="flex flex-col flex-1 p-4 lg:p-6">
-    <div class="absolute top-3 left-3 w-5 h-5 border-t border-l border-(--accent)/20 rounded-tl-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-    <div class="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-(--accent)/20 rounded-br-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-    <div class="absolute inset-0 rounded-xl bg-linear-to-br from-(--accent)/5 via-transparent to-(--accent)/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-    <div class="flex items-center justify-between mb-4 relative z-10">
-      <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-label-13 font-medium text-muted bg-muted/40 border border-(--border)/40 group-hover:border-(--accent)/20 group-hover:text-strong transition-colors duration-300">
-        <span class="w-1 h-1 rounded-full bg-(--accent)/60 group-hover:bg-(--accent) transition-colors duration-300"></span>
-        {sectionLabel}
-      </span>
-      <span class="inline-flex items-center justify-center w-6 h-6 rounded-full border border-(--border)/40 text-dim group-hover:text-(--accent) group-hover:border-(--accent)/30 transition-all duration-300">
-        <svg class="w-3 h-3 transition-transform duration-300 group-hover:translate-x-px group-hover:-translate-y-px" viewBox="0 0 14 14" fill="none">
-          <path d="M3 11L11 3M11 3H5M11 3v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </span>
-    </div>
-    <h3 class="text-heading-16 lg:text-heading-18 font-semibold text-strong leading-snug line-clamp-2 mb-2 relative z-10">
-      {title}
-    </h3>
-    <p class="text-body-14 text-muted leading-relaxed mb-0 flex-1 line-clamp-3 group-hover:text-strong transition-colors duration-300 relative z-10">
-      {description}
+  
+  <div class="flex flex-col flex-1 p-4">
+    <header>
+      <div class="flex items-center justify-between mb-4">
+        <time class="text-label-14 text-muted" datetime={pubDate.toISOString()}>
+          {formatDate(pubDate, true)}
+        </time>
+        <div class="flex items-center gap-1.5">
+          <span class="text-label-14 text-muted capitalize">
+            {seriesLabel}
+          </span>
+          <div class="w-6 h-6 shrink-0 rounded-full overflow-hidden flex items-center justify-center bg-muted/50">
+            <Image
+              src={optimizedAvatar}
+              alt={`Avatar ${authorName}`}
+              width={IMAGE.avatar.width}
+              height={IMAGE.avatar.height}
+              loading="eager"
+              decoding="async"
+              fetchpriority="low"
+              class:list={[
+                "h-full w-full object-cover transition duration-300",
+                isAvatarPlaceholder ? "opacity-100 grayscale" : "opacity-0"
+              ]}
+              onload={!isAvatarPlaceholder ? "this.classList.remove('opacity-0')" : undefined}
+            />
+          </div>
+        </div>
+      </div>
+      <h3 class="text-heading-16 lg:text-heading-18 font-semibold text-strong leading-snug line-clamp-2 mb-4">
+        {title}
+      </h3>
+    </header>
+    <p class="text-body-14 text-muted mb-0 flex-1">
+      {excerpt}
     </p>
-    <footer class="flex items-center justify-between gap-2 mt-5 relative z-10">
-      <time class="text-label-13 text-muted tracking-tight" datetime={pubDate.toISOString()}>
-        {formatDate(pubDate, true)}
-      </time>
-      <span class="text-label-13 text-muted opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        //baca
-      </span>
+    <footer class="flex items-center justify-between gap-2 mt-4">
+      <Link href={`${ROUTES.guide}/${entry.id}`} size="md" variant="primary" class="flex flex-col rounded-md w-full text-label-14">
+        <span>Baca selengkapnya</span>
+      </Link>
     </footer>
   </div>
-</a>
+</article>

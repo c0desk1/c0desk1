@@ -4,9 +4,8 @@ import { Image } from "astro:assets";
 import { 
   ORG, 
   SITE, 
-  NAV, 
+  IMAGE, 
   ROUTES, 
-  CATEGORIES, 
   SOCIAL 
 } from "@/consts";
 
@@ -43,11 +42,9 @@ const footerNav = [
     ],
   },
 ];
-
-const popularCategories = CATEGORIES.slice(0, 6);
 ---
 
-<footer class="border-t border-(--border) bg-dim">
+<footer class="border-t border-(--border) bg-subtle">
   <Section size="none">
     <Container size="xl">
       <div class="py-12 lg:py-16">
@@ -59,11 +56,11 @@ const popularCategories = CATEGORIES.slice(0, 6);
                   <Image
                     src={ORG.logo}
                     alt={SITE.name}
-                    width={48}
-                    height={48}
+                    width={IMAGE.logo.width}
+                    height={IMAGE.logo.height}
                     loading="lazy"
                     fetchpriority="low"
-                    class="w-10 h-10 object-contain"
+                    class="w-10 h-10 object-contain transition-all duration-300"
                   />
                 </div>
                 <span class="text-heading-24 font-semibold tracking-wider uppercase text-strong">
@@ -81,7 +78,7 @@ const popularCategories = CATEGORIES.slice(0, 6);
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={s.name}
-                    class="flex items-center justify-center w-8 h-8 rounded-md border border-(--border) text-muted hover:text-strong transition-colors"
+                    class="flex items-center justify-center w-8 h-8 rounded-md border border-(--border) text-muted hover:text-strong hover:bg-muted active:scale-95 transition-all duration-200"
                   >
                     <Icon name={s.name.toLowerCase() as any} className="w-4 h-4" />
                   </a>
@@ -89,10 +86,11 @@ const popularCategories = CATEGORIES.slice(0, 6);
               </div>
             </div>
           </div>
+          
           <div class="grid grid-cols-3 gap-8">
             {footerNav.map((group) => (
               <div>
-                <h3 class="text-label-13 font-semibold uppercase tracking-wider text-strong mb-4">
+                <h3 class="text-mono-label-13 font-semibold uppercase tracking-wider text-strong mb-4">
                   {group.title}
                 </h3>
                 <ul class="flex flex-col gap-2.5">
@@ -100,7 +98,7 @@ const popularCategories = CATEGORIES.slice(0, 6);
                     <li>
                       <a
                         href={item.href}
-                        class="text-body-14 text-muted hover:text-strong transition-colors no-underline"
+                        class="text-body-14 text-muted hover:text-strong transition-colors duration-200 no-underline"
                       >
                         {item.label}
                       </a>
@@ -114,22 +112,23 @@ const popularCategories = CATEGORIES.slice(0, 6);
       </div>
     </Container>
   </Section>
-  <Section size="none" class="border-t border-(--border) border-dashed">
+  
+  <Section size="none" class="border-t border-(--border)">
     <Container size="xl">
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 py-5">
-        <p class="text-label-12 text-dim">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 py-6">
+        <p class="text-label-13 text-subtle">
           &copy; {currentYear} {SITE.name}. All rights reserved.
         </p>
         <div class="flex items-center gap-4">
           <a
             href={ROUTES.sitemap}
-            class="text-label-12 text-dim hover:text-muted transition-colors no-underline"
+            class="text-label-13 text-subtle hover:text-muted transition-colors duration-200 no-underline"
           >
             Sitemap
           </a>
           <a
             href={ROUTES.feed}
-            class="text-label-12 text-dim hover:text-muted transition-colors no-underline"
+            class="text-label-13 text-subtle hover:text-muted transition-colors duration-200 no-underline"
           >
             Feed
           </a>

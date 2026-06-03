@@ -29,10 +29,10 @@ const ariaCurrentValue = ("Halaman") as "page";
   rel={rel}
   aria-current={current ? ariaCurrentValue : undefined}
   class:list={[
-    "relative inline-flex items-center gap-1 px-4 py-1.5 text-label-14 uppercase font-medium rounded-lg transition-all duration-200",
+    "relative inline-flex items-center gap-1 px-3 py-1.5 text-label-14 font-medium rounded-full transition-all duration-200",
     current
-      ? "text-(--fg) bg-muted"
-      : "text-muted hover:text-(--fg) hover:bg-muted",
+      ? "text-(--accent) bg-none"
+      : "text-muted hover:text-strong hover:bg-subtle",
     className,
   ]}
 >

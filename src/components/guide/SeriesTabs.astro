@@ -1,0 +1,39 @@
+---
+// src/components/guide/SeriesTabs.astro
+import { ROUTES } from "@/consts";
+
+interface Props {
+  series: { slug: string; label: string }[];
+  active?: string;
+  baseUrl?: string;
+}
+
+const { series, active, baseUrl = `${ROUTES.guide}/series` } = Astro.props;
+---
+
+<nav class="flex items-center gap-2 overflow-x-auto pb-2 mb-8 scrollbar-none">
+  <a
+    href={ROUTES.guide}
+    class:list={[
+      "shrink-0 rounded-full px-4 py-1.5 text-label-14 font-medium no-underline transition-colors border",
+      !active
+        ? "bg-(--fg) text-(--bg) border-(--fg)"
+        : "text-muted hover:text-strong border-(--border) hover:bg-subtle",
+    ]}
+  >
+    Semua
+  </a>
+  {series.map((s) => (
+    <a
+      href={`${baseUrl}/${s.slug}`}
+      class:list={[
+        "shrink-0 rounded-full px-4 py-1.5 text-label-14 font-medium no-underline transition-colors border",
+        active === s.slug
+          ? "bg-(--fg) text-(--bg) border-(--fg)"
+          : "text-muted hover:text-strong border-(--border) hover:bg-subtle",
+      ]}
+    >
+      {s.label}
+    </a>
+  ))}
+</nav>

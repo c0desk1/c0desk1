@@ -1,0 +1,119 @@
+---
+// src/components/Mobile.astro
+import { NAV } from "@/consts";
+import Icon from '@/components/ui/icons/Icon.astro';
+import Theme from "./Theme.astro";
+
+const navItems = NAV.MobileBar;
+---
+
+<!-- Backdrop -->
+<div
+  id="mnav-backdrop"
+  class="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"
+></div>
+
+<!-- Sheet -->
+<div
+  id="mnav-sheet"
+  class="fixed bottom-0 left-0 right-0 z-50 bg-base border-t border-(--border) rounded-t-xl shadow-xl max-h-[80vh] overflow-y-auto pb-safe transform translate-y-full transition-transform duration-300 ease-out"
+>
+  <!-- Handle -->
+  <div class="flex justify-center pt-3 pb-2">
+    <div class="w-10 h-1.5 rounded-full bg-muted"></div>
+  </div>
+
+  <!-- Navigasi -->
+  <nav class="px-4 pb-6 space-y-1">
+    {navItems.map((item) => {
+      const hasChildren = item.children && item.children.length > 0;
+      
+      if (hasChildren) {
+        return (
+          <details class="group">
+            <summary class="flex items-center justify-between py-3 px-2 text-body-16 font-medium text-strong cursor-pointer list-none">
+              {item.label}
+              <Icon name="chevron-down" className="w-4 h-4 transition-transform duration-200 group-open:rotate-180" />
+            </summary>
+            <div class="pl-4 space-y-1 pb-2">
+              {item.children?.map((child) => (
+                <a
+                  href={child.href}
+                  class="block py-2 px-2 text-body-16 text-muted hover:text-strong rounded-md transition-colors"
+                >
+                  {child.label}
+                </a>
+              ))}
+            </div>
+          </details>
+        );
+      }
+      
+      return (
+        <a
+          href={item.href}
+          class="block py-3 px-2 text-body-16 font-medium text-strong hover:bg-subtle rounded-md transition-colors"
+        >
+          {item.label}
+        </a>
+      );
+    })}
+  </nav>
+
+  <!-- Footer -->
+  <div class="flex items-center justify-between px-5 py-4 border-t border-(--border)">
+    <Icon name="logo" className="w-8 h-8 text-strong" />
+    <Theme />
+  </div>
+</div>
+
+<script>
+  const init = () => {
+    const sheet = document.getElementById('mnav-sheet') as HTMLElement;
+    const backdrop = document.getElementById('mnav-backdrop') as HTMLElement;
+    if (!sheet || !backdrop) return;
+
+    let open = false;
+
+    const openSheet = () => {
+      if (open) return;
+      open = true;
+      sheet.classList.remove('translate-y-full');
+      backdrop.classList.remove('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = 'hidden';
+    };
+
+    const closeSheet = () => {
+      if (!open) return;
+      open = false;
+      sheet.classList.add('translate-y-full');
+      backdrop.classList.add('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = '';
+    };
+
+    backdrop.addEventListener('click', closeSheet);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && open) closeSheet();
+    });
+
+    // External trigger
+    (window as any).__mnavOpen = openSheet;
+    document.addEventListener('mnav:open', openSheet);
+    
+    // Tutup otomatis saat klik link
+    sheet.querySelectorAll('a[href]').forEach(link => {
+      link.addEventListener('click', () => {
+        setTimeout(closeSheet, 150);
+      });
+    });
+
+    // Resize: tutup saat layar besar
+    const mq = window.matchMedia('(min-width: 768px)');
+    mq.addEventListener('change', (e) => {
+      if (e.matches) closeSheet();
+    });
+  };
+
+  document.addEventListener('astro:page-load', init);
+  init();
+</script>
