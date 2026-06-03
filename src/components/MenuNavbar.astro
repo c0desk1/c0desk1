@@ -27,7 +27,7 @@ const navItems: NavItem[] = NAV.MobileBar;
   <Icon name="menu" className="w-full h-full transition-colors" />
 </button>
 <div id="mnav-overlay" class="fixed inset-0 z-50 bg-base flex flex-col opacity-0 pointer-events-none transition-opacity duration-300">
-  <div class="flex items-center justify-between px-4 h-14 shrink-0">
+  <header class="flex items-center justify-between px-4 h-(--header-height) shrink-0">
     <span class="inline-flex shrink-0 items-center justify-center"></span>
     <button
       id="mnav-close"
@@ -35,7 +35,7 @@ const navItems: NavItem[] = NAV.MobileBar;
       aria-label="Tutup menu">
       <Icon name="close" className="w-full h-full transition-colors" />
     </button>
-  </div>
+  </header>
   <nav class="flex-1 overflow-y-auto px-4 py-6">
     <div class="grid grid-cols-1 gap-2 px-2">
       <a href={ROUTES.home} class="flex justify-between items-center gap-2 py-2 text-body-14 text-(--fg) hover:text-strong rounded-md hover:bg-subtle transition-colors">
