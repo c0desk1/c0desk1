@@ -9,7 +9,6 @@ import Head     from "@/components/Head.astro";
 import Navbar   from "@/components/Navbar.astro";
 import Footer   from "@/components/Footer.astro";
 import ThemeScript from "@/components/scripts/ThemeScript.astro";
-import Mobile from "@/components/Mobile.astro";
 import Search from "@/components/Search.astro";
 import ScrollScript from "@/components/scripts/ScrollScript.astro";
 
@@ -55,7 +54,6 @@ const currentPath = new URL(Astro.request.url).pathname;
     </main>
     
     {!hideFooter && variant !== "bare" && (<Footer />)}
-    <Mobile />
     <ScrollScript />
     <Search />
     <slot name="body-end" />
