@@ -21,7 +21,7 @@ import {
   sortByDate 
 } from "@/lib/utils";
 
-import GuideLayout from "@/layouts/GuideLayout.astro";
+import Layout from "@/layouts/Layout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import GuideCard from "@/components/guide/GuideCard.astro";
@@ -76,7 +76,7 @@ if (page.currentPage === 1) {
 const pageNums = getPageNums(page.currentPage, page.lastPage);
 ---
 
-<GuideLayout {meta} schema={schemas}>
+<Layout {meta} schema={schemas}>
   {page.currentPage === 1 && featuredGuides.length > 0 && (
     <Section size="md" aria-label="Guide unggulan">
       <Container size="xl">
@@ -134,4 +134,4 @@ const pageNums = getPageNums(page.currentPage, page.lastPage);
       )}
     </Container>
   </Section>
-</GuideLayout>
+</Layout>
