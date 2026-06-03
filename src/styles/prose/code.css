@@ -56,13 +56,15 @@
 .prose .copy-button:hover {
   color: var(--prose-fg-strong);
 }
+
 @media (hover: none) {
   .prose .copy-button { opacity: 1; }
 }
 
 .prose .astro-code {
   @apply text-code-14;
-  margin: 1.5rem 0;
+  padding: 1.5rem 0;
+  margin: 0 !important;
   color: var(--prose-code-text);
   overflow-x: auto;
   line-height: 1.45;
@@ -82,7 +84,6 @@
 
 .prose .astro-code pre {
   margin: 0 !important;
-  padding: 1.125rem 1.25rem 1important;
   border: none;
   background: var(--bg-muted) !important;
   overflow: visible;
@@ -91,19 +92,14 @@
 .prose .astro-code code {
   display: block;
   background: none !important;
-  border: 0 !important;
   font-family: inherit;
   line-height: inherit;
-}
-.prose .astro-code code::before,
-.prose .astro-code code::after {
-  content: none !important;
 }
 
 .prose .astro-code .line {
   display: block;
-  margin: 0;
-  padding: 0.1rem 1.25rem;
+  margin: 0 !important;
+  padding: 0.1rem 1.25rem !important;
   line-height: inherit;
   white-space: pre;
 }

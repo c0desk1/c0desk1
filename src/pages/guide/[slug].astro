@@ -1,7 +1,7 @@
 ---
 // src/pages/guide/[slug].astro
 import { getCollection, getEntry, render } from "astro:content";
-import { buildMeta, ROUTES, CATEGORIES } from "@/consts";
+import { buildMeta, CATEGORIES } from "@/consts";
 import GuideLayout from "@/layouts/GuideLayout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
@@ -11,7 +11,6 @@ import GuideTocDesktop from "@/components/guide/GuideTocDesktop.astro";
 import GuideSidebarMobile from "@/components/guide/GuideSidebarMobile.astro";
 import GuidePager from "@/components/guide/GuidePager.astro";
 import GuideHeader from "@/components/guide/GuideHeader.astro";
-import Breadcrumb from "@/components/Breadcrumb.astro";
 import BackToTop from "@/components/ui/BackToTop.astro";
 
 export async function getStaticPaths() {
@@ -88,7 +87,6 @@ const meta = buildMeta({
           <GuideHeader
             title={entry.data.title}
             pubDate={entry.data.pubDate}
-            description={entry.data.description}
             authorName={authorName}
             authorAvatar={authorAvatar}
             authorRole={authorRole}
@@ -96,13 +94,13 @@ const meta = buildMeta({
             heroImage={entry.data.heroImage}
             content={entry.body}
           />
-          <Section size="md">
-            <article class="prose max-w-none min-w-0"> 
-              <Content components={components} />
-            </article>
-          </Section>
-          <GuidePager prev={prevInSection} next={nextInSection} />
         </Section>
+        <Section size="md">
+          <article class="prose max-w-none min-w-0"> 
+            <Content components={components} />
+          </article>
+        </Section>
+        <GuidePager prev={prevInSection} next={nextInSection} />  
       </Section>
       <div class="hidden lg:block lg:gap-x-8">
         <GuideTocDesktop {headings} />

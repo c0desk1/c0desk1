@@ -1,128 +1,101 @@
 ---
 // src/pages/index.astro
 import {
-  SITE,
-  CATEGORIES,
-  ROUTES,
-  buildMeta,
+  SITE, 
+  CATEGORIES, 
+  ROUTES, 
+  buildMeta, 
   schemaWebPage,
 } from "@/consts";
 
 import { sortByDate } from "@/lib/utils";
 import { getCollection } from "astro:content";
-
 import Layout from "@/layouts/Layout.astro";
-
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import Link from "@/components/ui/Link.astro";
 import Hero from "@/components/ui/Hero.astro";
-
 import PostCard from "@/components/blog/PostCard.astro";
+import PostCardFeatured from "@/components/blog/PostCardFeatured.astro";
 import GuideCard from "@/components/guide/GuideCard.astro";
+import GuideCardFeatured from "@/components/guide/GuideCardFeatured.astro";
 
-const posts = await getCollection("blog", ({ data }) => !data.draft);
-const sortedPosts = sortByDate(posts).slice(0, 10);
-const [latestPost, ...restPosts] = sortedPosts;
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const allGuides = await getCollection("guide", ({ data }) => !data.draft);
 
-const latestGuides = (await getCollection("guide", ({ data }) => !data.draft))
+const sortedPosts = sortByDate(allPosts).slice(0, 6);
+const featuredPosts = sortedPosts.slice(0, 3);
+const regularPosts = sortedPosts.slice(3, 6);
+const sortedGuides = allGuides
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 3);
+  .slice(0, 6);
+const featuredGuides = sortedGuides.slice(0, 3);
+const regularGuides = sortedGuides.slice(3, 6);
 
-const meta = buildMeta({
-  description: SITE.description,
-  canonical: SITE.url,
-});
+const meta = buildMeta({ description: SITE.description, canonical: SITE.url });
+const homepageSchema = schemaWebPage({ title: SITE.name, description: SITE.description, url: SITE.url, type: "WebPage" });
 
-const homepageSchema = schemaWebPage({
-  title: SITE.name,
-  description: SITE.description,
-  url: SITE.url,
-  type: "WebPage",
-});
-
-const heroCTA = {
-  label: "Blog",
-  href: ROUTES.blog,
-};
-const heroCTA2 = {
-  label: "Guide",
-  href: ROUTES.guide,
-};
+const heroCTA = { label: "Jelajahi Guide", href: ROUTES.guide };
+const heroCTA2 = { label: "Blog Terbaru", href: "#blog" };
 ---
 
 <Layout {meta} isHome={true} schema={homepageSchema}>
-  <Hero
-    title="UN"
-    subTitle="LOYD"
-    description={SITE.description}
-    cta={heroCTA}
-    cta2={heroCTA2}
-  />
-  <Section size="sm">
+  <Hero title="UN" subTitle="LOYD" description={SITE.description} cta={heroCTA} cta2={heroCTA2} />
+  <Section size="none">
     <div class="marquee-wrap">
       <div class="marquee-track">
-        {[...CATEGORIES, ...CATEGORIES].map((cat) => (
-          <span class="marquee-item">{cat.label}</span>
-        ))}
-        {[...CATEGORIES].map((cat) => (
-          <span class="marquee-item">{cat.label}</span>
-        ))}
+        {[...CATEGORIES, ...CATEGORIES].map((cat) => <span class="marquee-item">{cat.label}</span>)}
       </div>
     </div>
   </Section>
-  <Section size="sm">
-    <Container size="xl">
-      <h2
-        id="article"
-        class="text-heading-24 lg:text-heading-32 text-(--fg) font-semibold py-4 lg:py-6"
-      >
-        {"Terbaru."}
-      </h2>
-      {latestPost ? (
-        <div class="pb-8">
-          <PostCard post={latestPost} />
-        </div>
-      ) : (
-        <div class="py-12 text-center">
-          <p class="text-body-16 md:text-body-18 text-muted">
-            {"Tidak ada postingan"}
-          </p>
-        </div>
-      )}
-      <div class="flex justify-center py-8">
-        <Link href={ROUTES.blog} variant="secondary" size="sm">
-          {"Lihat semua"}
-        </Link>
-      </div>
-    </Container>
-  </Section>
-  {restPosts.length > 0 && (
-    <Section size="sm">
+  {sortedGuides.length > 0 && (
+    <Section size="lg">
       <Container size="xl">
-        <div
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
-        >
-          {restPosts.map((post) => <PostCard post={post} />)}
+        <div class="flex items-end justify-between mb-8">
+          <div>
+            <h2 class="text-heading-24 lg:text-heading-32 text-strong font-semibold">Guide</h2>
+            <p class="text-body-14 text-muted mt-2 max-w-xl">Tutorial langkah-demi-langkah, teknik kustomisasi, dan panduan praktis.</p>
+          </div>
+          <Link href={ROUTES.guide} variant="ghost" size="sm" class="hidden sm:inline-flex items-center gap-1.5">
+            Lihat semua <span aria-hidden="true">→</span>
+          </Link>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-8">
+          {featuredGuides.map((guide) => <GuideCardFeatured entry={guide} />)}
+        </div>
+        {regularGuides.length > 0 && (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {regularGuides.map((guide) => <GuideCard entry={guide} />)}
+          </div>
+        )}
+        <div class="flex justify-center mt-8 sm:hidden">
+          <Link href={ROUTES.guide} variant="noir" size="sm">Lihat semua</Link>
         </div>
       </Container>
     </Section>
   )}
-  {latestGuides.length > 0 && (
-    <Section size="sm">
+  {sortedPosts.length > 0 && (
+    <Section size="lg" id="blog">
       <Container size="xl">
-        <h2
-          class="text-heading-24 lg:text-heading-32 text-(--fg) font-semibold py-4 lg:py-6"
-        >
-          {"Guide."}
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {latestGuides.map((guide) => <GuideCard entry={guide} />)}
-        </div>
-        <div class="flex justify-center py-8">
-          <Link href={ROUTES.guide} variant="secondary" size="sm">
-            {"Lihat semua"}
+        <div class="flex items-end justify-between mb-8">
+          <div>
+            <h2 class="text-heading-24 lg:text-heading-32 text-strong font-semibold">Blog</h2>
+            <p class="text-body-14 text-muted mt-2 max-w-xl">Berita, opini, dan update seputar pop culture, game, anime, dan teknologi.</p>
+          </div>
+          <Link href={ROUTES.blog} variant="ghost" size="sm" class="hidden sm:inline-flex items-center gap-1.5">
+            Lihat semua <span aria-hidden="true">→</span>
           </Link>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-8">
+          {featuredPosts.map((post) => <PostCardFeatured post={post} />)}
+        </div>
+        {regularPosts.length > 0 && (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {regularPosts.map((post) => <PostCard post={post} />)}
+          </div>
+        )}
+        <div class="flex justify-center mt-8 sm:hidden">
+          <Link href={ROUTES.blog} variant="noir" size="sm">Lihat semua</Link>
         </div>
       </Container>
     </Section>
@@ -137,7 +110,6 @@ const heroCTA2 = {
     padding: 16px 0;
     background: var(--bg-subtle);
   }
-
   .marquee-track {
     display: flex;
     align-items: center;
@@ -145,24 +117,12 @@ const heroCTA2 = {
     animation: marquee 20s linear infinite;
     white-space: nowrap;
   }
-
   .marquee-item {
     font-family: var(--font-mono);
     font-size: 11px;
     letter-spacing: 0.15em;
     color: var(--fg);
     text-transform: uppercase;
-    flex-shrink: 0;
-  }
-
-  .marquee-dot {
-    display: inline-block;
-    width: 4px;
-    height: 4px;
-    background: var(--accent);
-    border-radius: 50%;
-    margin: 0 24px;
-    vertical-align: middle;
     flex-shrink: 0;
   }
 </style>

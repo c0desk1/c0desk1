@@ -24,6 +24,7 @@ import Layout from "@/layouts/Layout.astro";
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import PostCard from "@/components/blog/PostCard.astro";
+import PostCardFeatured from "@/components/blog/PostCardFeatured.astro";
 import Button from "@/components/ui/Button.astro";
 import Icon from '@/components/ui/icons/Icon.astro';
 import Hero from "@/components/ui/Hero.astro";
@@ -87,7 +88,7 @@ const pageNums = getPageNums(page.currentPage, page.lastPage);
           Unggulan
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {featuredPosts.map((post) => <PostCard post={post} />)}
+          {featuredPosts.map((post) => <PostCardFeatured post={post} />)}
         </div>
       </Container>
     </Section>
