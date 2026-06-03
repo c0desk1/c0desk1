@@ -27,7 +27,6 @@ import PostCard from "@/components/blog/PostCard.astro";
 import PostCardFeatured from "@/components/blog/PostCardFeatured.astro";
 import Button from "@/components/ui/Button.astro";
 import Icon from '@/components/ui/icons/Icon.astro';
-import Hero from "@/components/ui/Hero.astro";
 
 export async function getStaticPaths({ paginate }: { paginate: Function }) {
   const allPosts = await getCollection("blog", ({ data }) => !data.draft);
@@ -65,28 +64,21 @@ const schemas = [
 ];
 
 let featuredPosts: CollectionEntry<"blog">[] = [];
+
 if (page.currentPage === 1) {
-  const allPosts = await getCollection("blog", ({ data }) => !data.draft && data.featured === true);
-  featuredPosts = sortByDate(allPosts);
+  const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+  featuredPosts = allPosts
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+    .slice(0, 3);
 }
 
 const pageNums = getPageNums(page.currentPage, page.lastPage);
 ---
 
 <Layout {meta} schema={schemas}>
-  <Section size="none">
-    <Hero
-      title="BL"
-      subTitle="OG"
-      description="Jelajahi postingan dan pembaruan Blog kami. Catatan di balik layar tentang sistem, kreativitas, dan menjelajahi dunia digital modern."
-    />
-  </Section>
   {page.currentPage === 1 && featuredPosts.length > 0 && (
     <Section size="md" aria-label="Postingan unggulan">
       <Container size="xl">
-        <h2 id="featured" class="text-heading-24 lg:text-heading-32 text-(--fg) font-semibold py-4 lg:py-6">
-          Unggulan
-        </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {featuredPosts.map((post) => <PostCardFeatured post={post} />)}
         </div>
@@ -94,7 +86,7 @@ const pageNums = getPageNums(page.currentPage, page.lastPage);
     </Section>
   )}
 
-  <Section size="lg" aria-label="Postingan terbaru">
+  <Section size="md" aria-label="Postingan terbaru">
     <Container size="xl">
       <h2 id="latest" class="text-heading-24 lg:text-heading-32 text-(--fg) font-semibold py-4 lg:py-6">
         Terbaru

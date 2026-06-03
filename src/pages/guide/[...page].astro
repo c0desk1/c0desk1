@@ -2,24 +2,24 @@
 // src/pages/guide/[...page].astro
 import type { Page } from "astro";
 import { 
-    getCollection, 
-    type CollectionEntry 
+  getCollection, 
+  type CollectionEntry 
 } from "astro:content";
 
 import { 
-    SITE, 
-    ROUTES, 
-    PAGINATION, 
-    buildMeta, 
-    schemaCollectionPage, 
-    schemaBreadcrumb, 
-    CATEGORIES 
+  SITE, 
+  ROUTES, 
+  PAGINATION, 
+  buildMeta, 
+  schemaCollectionPage, 
+  schemaBreadcrumb,
+  SERIES
 } from "@/consts";
 
 import { 
-    getPageNums, 
-    getPageUrl, 
-    sortByDate 
+  getPageNums, 
+  getPageUrl, 
+  sortByDate 
 } from "@/lib/utils";
 
 import GuideLayout from "@/layouts/GuideLayout.astro";
@@ -29,7 +29,6 @@ import GuideCard from "@/components/guide/GuideCard.astro";
 import GuideCardFeatured from "@/components/guide/GuideCardFeatured.astro";
 import Button from "@/components/ui/Button.astro";
 import Icon from '@/components/ui/icons/Icon.astro';
-import Hero from "@/components/ui/Hero.astro";
 
 export async function getStaticPaths({ paginate }: { paginate: Function }) {
   const allGuides = await getCollection("guide", ({ data }) => !data.draft);
@@ -79,27 +78,16 @@ const pageNums = getPageNums(page.currentPage, page.lastPage);
 ---
 
 <GuideLayout {meta} schema={schemas}>
-  <Section size="none">
-    <Hero
-      title="GU"
-      subTitle="IDE"
-      description="Jelajahi panduan langkah-demi-langkah, teknik kustomisasi mendalam, dan artikel praktis untuk membangun proyek lebih cepat dan lebih rapi."
-    />
-  </Section>
-
   {page.currentPage === 1 && featuredGuides.length > 0 && (
-    <Section size="md" aria-label="Panduan unggulan">
+    <Section size="md" aria-label="Guide unggulan">
       <Container size="xl">
-        <h2 id="featured" class="text-heading-24 lg:text-heading-32 text-(--fg) font-semibold py-4 lg:py-6">
-          Unggulan
-        </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {featuredGuides.map((guide) => <GuideCardFeatured entry={guide} />)}
         </div>
       </Container>
     </Section>
   )}
-  <Section size="lg" aria-label="Panduan terbaru">
+  <Section size="md" aria-label="Panduan terbaru">
     <Container size="xl">
       <h2 id="latest" class="text-heading-24 lg:text-heading-32 text-(--fg) font-semibold py-4 lg:py-6">
         Terbaru

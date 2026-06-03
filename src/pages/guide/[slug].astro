@@ -10,7 +10,7 @@ import {
   SITE, 
   ROUTES, 
   AUTHOR, 
-  CATEGORIES, 
+  SERIES, 
   buildMeta, 
   schemaArticle, 
   schemaBreadcrumb, 
@@ -54,16 +54,16 @@ const authorRole = authorEntry?.data?.role ?? AUTHOR.role;
 const authorSlug = authorEntry?.data?.slug ?? slugify(authorName);
 const authorHandle = authorEntry?.data?.twitter ?? '';
 
-const sectionSlug = entry.data.section || 'general';
-const sectionArticles = entries
-  .filter(e => (e.data.section || 'general') === sectionSlug)
+const seriesSlug = entry.data.series || 'general';
+const seriesArticles = entries
+  .filter(e => (e.data.series || 'general') === seriesSlug)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-const currentIndex = sectionArticles.findIndex(e => e.id === entry.id);
-const prevInSection = currentIndex > 0 ? sectionArticles[currentIndex - 1] : null;
-const nextInSection = currentIndex < sectionArticles.length - 1 ? sectionArticles[currentIndex + 1] : null;
+const currentIndex = seriesArticles.findIndex(e => e.id === entry.id);
+const prevInSection = currentIndex > 0 ? seriesArticles[currentIndex - 1] : null;
+const nextInSection = currentIndex < seriesArticles.length - 1 ? seriesArticles[currentIndex + 1] : null;
 
-const sectionLabel = CATEGORIES.find(c => c.slug === sectionSlug)?.label || sectionSlug;
+const series = SERIES.find(c => c.slug === seriesSlug)?.label || seriesSlug;
 
 const canonicalURL = new URL(Astro.url.href).href;
 const datePub = entry.data.pubDate.toISOString();
@@ -92,7 +92,7 @@ const schemaData = {
   dateModified: dateMod,
   authorName: authorName,
   authorUrl: new URL(`/author/${authorSlug}`, SITE.url).href,
-  category: sectionLabel,
+  category: series,
   tags: entry.data.tags,
 };
 
@@ -114,7 +114,7 @@ const schemas = [
   schemaBreadcrumb([
     { name: "Beranda", url: SITE.url },
     { name: "Guide", url: new URL(ROUTES.guide, SITE.url).href },
-    { name: sectionLabel, url: new URL(`${ROUTES.guide}/section/${sectionSlug}`, SITE.url).href },
+    { name: series, url: new URL(`${ROUTES.guide}/series/${seriesSlug}`, SITE.url).href },
     { name: entry.data.title, url: canonicalURL },
   ]),
   schemaPerson({
@@ -130,18 +130,18 @@ const schemas = [
 
 <GuideLayout {meta} schema={schemas}>
   <GuideSidebarMobile
-    entries={sectionArticles}
+    entries={seriesArticles}
     currentId={entry.id}
     headings={headings}
-    sectionLabel={sectionLabel}
+    series={seriesSlug}
   />
   <Container size="full">
-    <div class="grid grid-cols-1 lg:grid-cols-[16rem_1fr_14rem] gap-0">
+    <div class="grid grid-cols-1 lg:grid-cols-[16rem_1fr_14rem] gap-0 px-0 lg:px-4">
       <div class="hidden lg:block lg:gap-x-8">
         <GuideSidebarDesktop
-          entries={sectionArticles}
+          entries={seriesArticles}
           currentId={entry.id}
-          sectionLabel={sectionLabel}
+          series={seriesSlug}
         />
       </div>
       <Section size="md" class="w-full max-w-3xl mx-auto">

@@ -2,7 +2,8 @@
 // src/pages/index.astro
 import {
   SITE, 
-  CATEGORIES, 
+  CATEGORIES,
+  SERIES,
   ROUTES, 
   buildMeta, 
   schemaWebPage,
@@ -26,6 +27,7 @@ const allGuides = await getCollection("guide", ({ data }) => !data.draft);
 const sortedPosts = sortByDate(allPosts).slice(0, 6);
 const featuredPosts = sortedPosts.slice(0, 3);
 const regularPosts = sortedPosts.slice(3, 6);
+
 const sortedGuides = allGuides
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 6);
@@ -35,7 +37,7 @@ const regularGuides = sortedGuides.slice(3, 6);
 const meta = buildMeta({ description: SITE.description, canonical: SITE.url });
 const homepageSchema = schemaWebPage({ title: SITE.name, description: SITE.description, url: SITE.url, type: "WebPage" });
 
-const heroCTA = { label: "Jelajahi Guide", href: ROUTES.guide };
+const heroCTA = { label: "Jelajahi Guide", href: "#guide" };
 const heroCTA2 = { label: "Blog Terbaru", href: "#blog" };
 ---
 
@@ -53,7 +55,7 @@ const heroCTA2 = { label: "Blog Terbaru", href: "#blog" };
       <Container size="xl">
         <div class="flex items-end justify-between mb-8">
           <div>
-            <h2 class="text-heading-24 lg:text-heading-32 text-strong font-semibold">Guide</h2>
+            <h2 id="guide" class="text-heading-24 lg:text-heading-32 text-strong font-semibold">Guide</h2>
             <p class="text-body-14 text-muted mt-2 max-w-xl">Tutorial langkah-demi-langkah, teknik kustomisasi, dan panduan praktis.</p>
           </div>
           <Link href={ROUTES.guide} variant="ghost" size="sm" class="hidden sm:inline-flex items-center gap-1.5">
@@ -79,7 +81,7 @@ const heroCTA2 = { label: "Blog Terbaru", href: "#blog" };
       <Container size="xl">
         <div class="flex items-end justify-between mb-8">
           <div>
-            <h2 class="text-heading-24 lg:text-heading-32 text-strong font-semibold">Blog</h2>
+            <h2 id="blog" class="text-heading-24 lg:text-heading-32 text-strong font-semibold">Blog</h2>
             <p class="text-body-14 text-muted mt-2 max-w-xl">Berita, opini, dan update seputar pop culture, game, anime, dan teknologi.</p>
           </div>
           <Link href={ROUTES.blog} variant="ghost" size="sm" class="hidden sm:inline-flex items-center gap-1.5">
