@@ -1,71 +1,73 @@
 ---
-title: Cookie Policy
+title: Kebijakan Cookie
 slug: 'cookie-policy'
-description: Information about the use of cookies on the c0desk1 website and how you can manage them.
-lastUpdated: 2026-04-30T17:23Z
+description: Informasi tentang penggunaan cookie di situs c0desk1 dan cara mengelolanya.
+lastUpdated: 2026-08-05T02:50Z
 seo:
-  title: Cookie Policy
-  description: Explanations about cookies, the types of cookies used, and how to manage your cookie preferences.
+  title: Kebijakan Cookie
+  description: Penjelasan tentang cookie, jenis cookie yang digunakan, dan cara mengatur preferensi cookie Anda.
   noIndex: false
 ---
-The **c0desk1** website uses cookies to enhance user experience, analyze traffic, and display advertisements.
+
+Situs **c0desk1** menggunakan cookie untuk meningkatkan pengalaman pengguna, menganalisis lalu lintas, dan menampilkan iklan.
 
 ---
 
-## 1. What Are Cookies?
+## 1. Apa Itu Cookie?
 
-Cookies are small text files stored on your device (computer, smartphone, tablet) when you visit a website. Cookies help the website:
+Cookie adalah file teks kecil yang disimpan di perangkat Anda (komputer, ponsel, tablet) saat Anda mengunjungi situs web. Cookie membantu situs untuk:
 
-- Remember your preferences
-- Understand how you use the website
-- Display relevant content
+- Mengingat preferensi Anda
+- Memahami cara Anda menggunakan situs
+- Menampilkan konten yang relevan
 
-## 2. Cookies We Use
+## 2. Cookie yang Kami Gunakan
 
-| Type of Cookie | Function | Duration |
-| -------------------- | -------------------------------------------------------------------------- | --------- |
-| **Essential Cookies** | Store theme preferences (dark/light mode) | 1 year |
-| **Analytics Cookies** | Measure traffic and visitor behavior (Google Analytics, Yandex Metrica) | 2 years |
-| **Advertising Cookies** | Display relevant ads (Google AdSense, Yandex Ads) | 1-2 years |
+| Jenis Cookie | Fungsi | Durasi |
+| :--- | :--- | :--- |
+| **Cookie Esensial** | Menyimpan preferensi tema (gelap/terang) | 1 tahun |
+| **Cookie Analitik** | Mengukur lalu lintas dan perilaku pengunjung (melalui Google Tag Manager / Google Analytics) | 2 tahun |
+| **Cookie Iklan** | Menampilkan iklan yang relevan (Google AdSense, Monetag) | 1–2 tahun |
+| **Cookie Langganan** | Mendukung fitur langganan/donasi (Google Reader Revenue Manager) | 1 tahun |
 
-## 3. Third-Party Cookies
+## 3. Cookie Pihak Ketiga
 
-We use third-party services that place cookies:
+Kami menggunakan layanan pihak ketiga yang menempatkan cookie:
 
-| Service | Function | Policy |
-| -------------------- | --------------- | -------------------------------------------------------------------- |
-| **Google Analytics** | Traffic analysis | [Google Policy](https://policies.google.com/technologies/cookies) |
-| **Yandex Metrica** | Traffic analysis | [Yandex Policy](https://yandex.com/legal/cookies_policy/) |
-| **Google AdSense** | Advertising | [Google Policy](https://policies.google.com/technologies/ads) |
-| **Yandex Ads** | Advertising | [Yandex Policy](https://yandex.com/legal/advertising/) |
+| Layanan | Fungsi | Kebijakan |
+| :--- | :--- | :--- |
+| **Google Tag Manager / Analytics** | Analisis lalu lintas dan pelacakan | [Kebijakan Google](https://policies.google.com/technologies/cookies) |
+| **Google AdSense** | Iklan | [Kebijakan Google](https://policies.google.com/technologies/ads) |
+| **Monetag** | Iklan (pop-under / native) | [Kebijakan Monetag](https://monetag.com/privacy-policy) |
+| **Google Reader Revenue Manager** | Fitur langganan dan donasi | [Kebijakan Google](https://policies.google.com/technologies/cookies) |
 
-## 4. How to Manage Cookies
+## 4. Cara Mengelola Cookie
 
-You can manage cookies through your browser settings:
+Anda dapat mengelola cookie melalui pengaturan peramban:
 
-| Browser | Method |
-| ----------- | ----------------------------------------- |
-| **Chrome** | Settings → Privacy and Security → Cookies |
-| **Firefox** | Options → Privacy & Security → Cookies |
-| **Safari** | Preferences → Privacy → Cookies |
-| **Edge** | Settings → Privacy & Security → Cookies |
+| Peramban | Cara |
+| :--- | :--- |
+| **Chrome** | Pengaturan → Privasi dan Keamanan → Cookie |
+| **Firefox** | Opsi → Privasi & Keamanan → Cookie |
+| **Safari** | Preferensi → Privasi → Cookie |
+| **Edge** | Pengaturan → Privasi & Keamanan → Cookie |
 
-Disabling cookies may affect website functionality, such as:
+Menonaktifkan cookie dapat mempengaruhi fungsionalitas situs, seperti:
 
-- Theme preferences not being saved
-- Some features may not work optimally
+- Preferensi tema tidak tersimpan
+- Beberapa fitur mungkin tidak berjalan optimal
 
-## 5. Advertising Cookies and Preferences
+## 5. Iklan dan Preferensi
 
-You can manage your advertising preferences through:
+Anda dapat mengelola preferensi iklan melalui:
 
-- [Google Ad Settings](https://adssettings.google.com/)
-- [Yandex Ad Settings](https://yandex.com/support/ad-settings/)
+- [Pengaturan Iklan Google](https://adssettings.google.com/)
+- (Untuk Monetag, iklan dapat dikelola melalui pengaturan peramban atau dengan menonaktifkan cookie pihak ketiga)
 
-## 6. Changes to the Cookie Policy
+## 6. Perubahan Kebijakan Cookie
 
-We may update this cookie policy at any time. Changes will take effect after being published.
+Kami dapat memperbarui kebijakan cookie ini sewaktu-waktu. Perubahan akan berlaku setelah dipublikasikan.
 
-## 7. Contact
+## 7. Kontak
 
-If you have any questions about this cookie policy, please contact at [Contact](/contact)
+Jika Anda memiliki pertanyaan tentang kebijakan cookie ini, silakan hubungi kami melalui [Halaman Kontak](/contact).
