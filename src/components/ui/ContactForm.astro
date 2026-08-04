@@ -64,7 +64,7 @@ import Card from "./Card.astro"
 
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
         <div class="flex items-center gap-2">
-            <Icon name="info" class="size-4.5 fill text-(--info)" />
+            <Icon name="info" fill class="size-4.5 text-(--info)" />
             <span class="text-label-14 text-(--info-fg)" set:text="Biasanya membalas dalam waktu 24 jam." />
         </div>
         <Button
@@ -79,7 +79,7 @@ import Card from "./Card.astro"
 
     <Card id="error-message" padding='sm' radius='sm' class="hidden mt-4 bg-error/10 ring-(--error-soft)! text-error text-label-13 text-center">
         <div class="flex items-center gap-2">
-            <Icon name="warning" class="size-4.5" />
+            <Icon name="warning" fill class="size-4.5" />
             <span set:text="Terjadi kesalahan jaringan. Silakan periksa koneksi Anda dan coba lagi." />
         </div>
     </Card>
