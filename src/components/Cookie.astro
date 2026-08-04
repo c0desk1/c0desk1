@@ -7,7 +7,7 @@ import Icon from "@ui/Icons.astro";
 <div id="cookie-banner" class="cookie-banner" role="dialog" aria-label="Cookie Consent">
   <div class="cookie-banner__inner">
     <div class="cookie-banner__text">
-      <p class="cookie-banner__message">
+      <p class="cookie-banner__message text-body-14">
         Situs ini menggunakan cookie untuk meningkatkan pengalaman, analitik, dan iklan.
         Dengan mengklik "Setuju", Anda menyetujui penggunaan cookie sesuai
         <a href="/cookie-policy" class="cookie-banner__link" target="_blank" rel="noopener noreferrer">
@@ -15,10 +15,6 @@ import Icon from "@ui/Icons.astro";
         </a>
         kami.
       </p>
-      <p class="cookie-banner__more">
-        <a href="/cookie-policy" class="cookie-banner__link" target="_blank" rel="noopener noreferrer">
-          Baca selengkapnya tentang cookie yang kami gunakan
-        </a>
       </p>
     </div>
     <div class="cookie-banner__actions">
@@ -132,18 +128,8 @@ import Icon from "@ui/Icons.astro";
   }
 
   .cookie-banner__message {
-    margin: 0;
-    font-size: 0.875rem;
-    line-height: 1.6;
+    margin: 0; 
     color: var(--fg-muted);
-    font-weight: 450;
-  }
-
-  .cookie-banner__more {
-    margin: 0;
-    font-size: 0.8rem;
-    line-height: 1.5;
-    color: var(--fg-subtle);
   }
 
   .cookie-banner__link {
@@ -165,19 +151,6 @@ import Icon from "@ui/Icons.astro";
     align-items: center;
   }
 
-  .cookie-banner__btn {
-    padding: 0.5rem 1.25rem;
-    border-radius: 9999px;
-    font-size: 0.875rem;
-    font-weight: 550;
-    line-height: 1.5;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    border: 1px solid transparent;
-    background: transparent;
-    color: var(--fg);
-  }
-
   /* Responsive */
   @media (max-width: 640px) {
     .cookie-banner {
@@ -192,20 +165,11 @@ import Icon from "@ui/Icons.astro";
       min-width: unset;
     }
     .cookie-banner__message {
-      font-size: 0.8rem;
       text-align: center;
-    }
-    .cookie-banner__more {
-      text-align: center;
-      font-size: 0.75rem;
     }
     .cookie-banner__actions {
       justify-content: center;
       gap: 0.5rem;
-    }
-    .cookie-banner__btn {
-      padding: 0.4rem 1rem;
-      font-size: 0.8rem;
     }
   }
 </style>
