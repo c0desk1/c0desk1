@@ -27,7 +27,7 @@ export const SITE = {
   name: "Unloyd",
   tagline: "Beyond the Void",
   description: "Platform kuratif untuk pop culture, game, anime, tutorial, dan modding.",
-  url: "https://adogendocs.pages.dev",
+  url: "https://c0desk1.my.id",
   ogImage: Thumbnails.src,
   locale: "id_ID",
   lang: "id",
