@@ -48,7 +48,6 @@ import Icon from "@ui/Icons.astro";
 
       scripts.forEach((oldScript) => {
         const newScript = document.createElement("script");
-.
         Array.from(oldScript.attributes).forEach((attr) => {
           if (
             attr.name !== "type" &&
