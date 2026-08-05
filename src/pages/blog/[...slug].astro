@@ -92,7 +92,8 @@ const meta = buildMeta({
   datePublished: entry.data.pubDate?.toISOString(),
   dateModified: entry.data.lastUpdated?.toISOString(),
   authorName: author,
-  noindex: entry.data.seo.noIndex
+  noindex: entry.data.seo.noIndex,
+  keywords: entry.data.tags || [],
 });
 
 const schema = [
