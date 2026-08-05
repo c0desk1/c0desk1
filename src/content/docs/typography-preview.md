@@ -8,7 +8,7 @@ order: 2
 seo:
   title: "Typography & Markdown Preview"
   description: "Preview seluruh elemen typography dan Markdown."
-  noIndex: false
+  noIndex: true
 ---
 
 Halaman ini digunakan untuk menguji tampilan **typography**, komponen Markdown, dan fitur Satteri yang digunakan di website.
@@ -33,8 +33,6 @@ Tujuannya sederhana: semua elemen yang tersedia dapat dilihat dalam satu halaman
 
 Heading juga memiliki anchor yang dapat digunakan untuk membagikan URL langsung ke bagian tertentu.
 
----
-
 ## Paragraph
 
 Ini adalah contoh paragraf biasa. Typography sebaiknya tetap nyaman dibaca baik pada layar desktop maupun perangkat mobile.
@@ -42,8 +40,6 @@ Ini adalah contoh paragraf biasa. Typography sebaiknya tetap nyaman dibaca baik 
 Markdown memungkinkan kita menggunakan **bold text**, *italic text*, ~~strikethrough~~, dan kombinasi seperti ***bold italic***.
 
 Kita juga dapat menggunakan `inline code` di dalam paragraf.
-
----
 
 ## Links
 
@@ -54,8 +50,6 @@ Contoh [link eksternal](https://example.com).
 Contoh URL langsung:
 
 https://example.com
-
----
 
 ## Lists
 
@@ -85,15 +79,11 @@ https://example.com
 - [ ] Callout selesai
 - [ ] Dokumentasi selesai
 
----
-
 ## Blockquote
 
 > Ini adalah blockquote biasa.
 >
 > Blockquote dapat terdiri dari beberapa paragraf dan digunakan untuk menampilkan kutipan atau informasi tambahan.
-
----
 
 ## Callout
 
