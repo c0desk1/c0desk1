@@ -42,7 +42,7 @@ const $ = {
     >
       <div class={$.grid}>
         {prev ? (
-          <a
+          <a rel="prev"
             href={getHref(prev)}
             class:list={[
               "text-start",
@@ -68,11 +68,11 @@ const $ = {
             )}
           </a>
         ) : (
-          <div />
+          <div aria-hidden="true" />
         )}
 
         {next ? (
-            <a
+            <a rel="next"
               href={getHref(next)}
               class:list={[
                 "text-end",
@@ -101,7 +101,7 @@ const $ = {
               )}
             </a>
         ) : (
-          <div />
+          <div aria-hidden="true" />
         )}
       </div>
     </nav>
