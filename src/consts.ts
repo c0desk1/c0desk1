@@ -250,7 +250,7 @@ export function schemaWebPage(opts: {
   title: string;
   description: string;
   url: string;
-  type?: "WebPage" | "AboutPage" | "ContactPage" | "CollectionPage";
+  type?: "WebPage" | "AboutPage" | "ContactPage" | "CollectionPage" | "PrivacyPolicy" | "TermsOfService";
   dateModified?: string;
   image?: {
     url: string;
