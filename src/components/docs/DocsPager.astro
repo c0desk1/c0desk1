@@ -51,7 +51,7 @@ const $ = {
     >
       <div class={$.peginationGroup}>
         {prev ? (
-          <a href={getHref(prev)} 
+          <a rel="prev" href={getHref(prev)} 
             class:list={[
               "text-start justify-start",
               $.pegination
@@ -68,10 +68,10 @@ const $ = {
             </span>
           </a>
         ) : (
-          <div />
+          <div aria-hidden="true" />
         )}
         {next ? (
-          <a href={getHref(next)} 
+          <a rel="next" href={getHref(next)} 
             class:list={[
               "text-end justify-end",
               $.pegination
@@ -88,7 +88,7 @@ const $ = {
             </span>
           </a>
         ) : (
-          <div />
+          <div aria-hidden="true" />
         )}
       </div>
     </nav>
