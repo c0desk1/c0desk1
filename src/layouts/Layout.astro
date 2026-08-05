@@ -1,49 +1,86 @@
 ---
-// src/layouts/BlogLayout.astro
+// src/layouts/Layout.astro
+import { 
+  SITE, 
+  type buildMeta as BuildMetaFn 
+} from "@/consts";
 
-import Layout from "./Layout.astro";
-import PageFrame from "@/components/PageFrame.astro";
-import ScrollToTop from "@docs/mobile/ScrollToTop.astro";
-import { type buildMeta as BuildMetaFn } from "@/consts";
+import Head from "@components/Head.astro";
+import ThemeProvider from "@components/ThemeProvider.astro";
+import Cookie from "@/components/Cookie.astro";
+import SkipLink from "@components/SkipLink.astro";
+import Search from "@components/Search.astro";
+import Drawer from "@/components/ui/Drawer.astro";
+import AiAsk from "@/components/AiAsk.astro";
+import Page from "@/components/Page.astro";
+import Alert from "@/components/ui/Alert.astro";
+import Header from "@components/Header.astro";
+import Footer from "@/components/Footer.astro";
 
 interface Props {
   meta?: Partial<ReturnType<typeof BuildMetaFn>>;
   schema?: object | object[];
   isHome?: boolean;
   canonical?: string;
+  hideHeader?: boolean;
+  hideFooter?: boolean;
   author?: string;
   publisher?: string;
 }
 
-const { meta, schema, isHome = false, canonical, author, publisher } = Astro.props;
-
-const $ = {
-  main: "w-full min-w-0 flex-1",
-  left: [
-    "w-full min-w-0 px-2 pb-(--safe-bottom) lg:h-[calc(100vh-var(--header-height))]",
-    "sticky top-(--header-height)",
-    "hidden lg:block",
-    "overflow-y-auto"
-  ].join(" "),
-  right: [
-    "w-full min-w-0 px-2 pb-(--safe-bottom) lg:h-[calc(100vh-var(--header-height))]",
-    "sticky top-(--header-height)",
-    "hidden lg:block",
-    "overflow-y-auto"
-  ].join(" "),
-}
+const {
+  meta,
+  schema,
+  isHome = false,
+  canonical,
+  hideHeader = false,
+  hideFooter = false,
+  author,
+  publisher,
+} = Astro.props;
 ---
-<Layout {meta} {schema} {isHome} {canonical} author={author} publisher={publisher}>
-  <PageFrame>
-    <aside class={$.left}>
-      <slot name="left" />
-    </aside>
-    <main id="main-content" class={$.main}>
+
+<!doctype html>
+<html lang={SITE.lang} dir={SITE.dir}>
+  <Head {meta} {schema} {isHome} {canonical} {author} {publisher}>
+    <ThemeProvider />
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4943136052113535" crossorigin="anonymous"></script>
+    <script type="text/plain" data-consent="required" is:inline>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+          j.async = true;
+          j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+          f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-NJJPZV2M");
+    </script>
+    <script type="text/plain" data-consent="required" async src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
+    <script type="text/plain" data-consent="required" is:inline>
+      (self.SWG_BASIC = self.SWG_BASIC || []).push((basicSubscriptions) => {
+        basicSubscriptions.init({
+          type: "NewsArticle",
+          isPartOfType: ["Product"],
+          isPartOfProductId: "CAow3NjGDA:openaccess",
+          clientOptions: { theme: "dark", lang: "id" },
+        });
+      });
+    </script>
+    <script type="text/plain" data-consent="required" src="https://quge5.com/88/tag.min.js" data-zone="266896" async data-cfasync="false"></script>
+  </Head>
+  <body>
+    <Cookie />
+    <SkipLink />
+    <Search />
+    <Drawer id="ai-assistant-drawer">
+      <AiAsk />
+    </Drawer>
+    <Page>
+      {!hideHeader && <Header />}
       <slot />
-    </main>
-    <aside class={$.right}>
-      <slot name="right" />
-    </aside>
-  </PageFrame>
-  <ScrollToTop />
-</Layout>
+      {!hideFooter && <Footer />}
+    </Page>
+  </body>
+</html>
