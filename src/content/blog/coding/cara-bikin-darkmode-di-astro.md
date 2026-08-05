@@ -1,19 +1,29 @@
 ---
-title: "Dark Mode di Astro: Implementasi Mulus dengan Data Attribute dan CSS Variables"
+title: "Dark Mode di Astro dengan Data Attribute dan CSS Variables"
 description: "Panduan lengkap membangun dark mode di Astro tanpa flicker, dengan custom element, localStorage, dan integrasi Tailwind. Berbasis kode produksi Unloyd."
-pubDate: 2026-08-05T22:30Z
-lastUpdated: 2026-08-05T22:30Z
+pubDate: 2026-08-06T01:52Z
+lastUpdated: 2026-08-06T01:52Z
+cover:
+  src: "https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAAOtanOFh6xAGJn2RviaSrCqeO6YsI8AAmIRaxvfO6BXQSyqzQ8AAcDBAQADAgADeQADPQQ"
+  alt: "Cover panduan darkmode di Astro"
 author:
   name: "Tim Unloyd"
   role: "Developer"
   avatar: "https://ui-avatars.com/api/?name=Unloyd&background=0a0a0a&color=ffffff&size=64"
 category: "Tutorial"
-tags: ["astro", "darkmode", "tailwind", "css-variables", "webdev"]
+tags: [
+  "astro", 
+  "darkmode", 
+  "tailwind", 
+  "css-variables", 
+  "webdev"
+]
 draft: false
 seo:
   title: "Dark Mode di Astro dengan Data Attribute dan CSS Variables"
   description: "Panduan lengkap dark mode di Astro tanpa flicker, pakai custom element, localStorage, dan Tailwind."
-  ogImage: "/images/og-darkmode.jpg"
+  ogImage: "https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAAOtanOFh6xAGJn2RviaSrCqeO6YsI8AAmIRaxvfO6BXQSyqzQ8AAcDBAQADAgADeQADPQQ"
+  noIndex: false
 ---
 
 Pernah nggak sih kamu buka website tengah malam, tiba-tiba layar memancarkan cahaya putih kayak lampu sorot stadion? Rasanya mata langsung perih, dan kamu hampir menutup tab sebelum konten sempat terbaca.
