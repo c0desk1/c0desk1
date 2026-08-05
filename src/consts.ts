@@ -264,6 +264,7 @@ export function schemaArticle(opts: {
           author: {
             "@type": "Person",
             name: opts.authorName,
+            url: SITE.url,
           },
           publisher: {
             "@type": "Organization",
