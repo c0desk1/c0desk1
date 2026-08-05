@@ -202,7 +202,10 @@ export const schemaOrganization = {
   },
 } as const;
 
-export function schemaBreadcrumb(items: { name: string; url: string }[]) {
+export function schemaBreadcrumb(items: { 
+  name: string; 
+  url: string 
+}[]) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -212,7 +215,7 @@ export function schemaBreadcrumb(items: { name: string; url: string }[]) {
       name: item.name,
       item: item.url,
     })),
-  };
+  } as const;
 }
 
 export function schemaWebPage(opts: {
@@ -234,7 +237,7 @@ export function schemaWebPage(opts: {
       "@id": `${SITE.url}/#website`,
     },
     ...(opts.dateModified ? { dateModified: opts.dateModified } : {}),
-  };
+  } as const;
 }
 
 export function schemaArticle(opts: {
@@ -274,7 +277,7 @@ export function schemaArticle(opts: {
           },
         }
       : {}),
-  };
+  } as const;
 }
 
 export function schemaSoftwareApplication(opts: {
@@ -301,7 +304,7 @@ export function schemaSoftwareApplication(opts: {
       price: opts.price || "0",
       priceCurrency: opts.priceCurrency || "USD",
     },
-  };
+  } as const;
 }
 
 export function schemaFAQ(items: { question: string; answer: string }[]) {
@@ -316,7 +319,7 @@ export function schemaFAQ(items: { question: string; answer: string }[]) {
         text: item.answer,
       },
     })),
-  };
+  } as const;
 }
 
 // ----------------------------------------------------------------------------
@@ -388,7 +391,7 @@ export function buildMeta(opts: {
       image: ogImage,
       imageAlt: ogImageAlt,
     },
-  };
+  } as const;
 }
 
 // ----------------------------------------------------------------------------
