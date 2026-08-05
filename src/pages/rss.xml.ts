@@ -1,12 +1,7 @@
 // src/pages/rss.xml.ts
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
-import { 
-  SITE, 
-  ROUTES, 
-  PAGINATION 
-} from '@/consts';
-
+import { SITE, ROUTES, PAGINATION } from '@/consts';
 import type { APIRoute } from 'astro';
 
 function getCoverUrl(cover: any, baseUrl: string): string | null {
@@ -65,13 +60,17 @@ export const GET: APIRoute = async (context) => {
 
   const sortedItems = feedItems
     .sort((a, b) => b.date.getTime() - a.date.getTime())
-    .slice(0, PAGINATION.postsPerFeed); 
+    .slice(0, PAGINATION.postsPerFeed);
 
   return rss({
     title: `${SITE.name} | ${SITE.tagline}`,
     description: SITE.description,
     site: baseUrl,
     trailingSlash: true,
+
+    xmlns: {
+      atom: "http://www.w3.org/2005/Atom",
+    },
 
     customData: `
       <language>${SITE.lang}</language>
