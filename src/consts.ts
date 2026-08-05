@@ -161,6 +161,36 @@ export const TWITTER = {
   creator: SEO.twitterCreator,
 } as const;
 
+export const IMAGE = {
+  og: {
+    width: 1200,
+    height: 630,
+    placeholder: OG,
+  },
+  thumbnail: {
+    width: 600,
+    height: 400,
+    quality: 80,
+    placeholder: Thumbnails,
+  },
+  avatar: {
+    width: 96,
+    height: 96,
+    quality: 80,
+    placeholder: Avatar,
+  },
+  logo: {
+    width: 512,
+    height: 512,
+  },
+} as const;
+
+export const PAGINATION = {
+  postsPerPage: 9,
+  postsPerFeed: 20,
+  postsPerSitemap: 1000,
+} as const;
+
 // ----------------------------------------------------------------------------
 //  STRUCTURED DATA
 // ----------------------------------------------------------------------------
@@ -190,8 +220,8 @@ export const schemaOrganization = {
   logo: {
     "@type": "ImageObject",
     url: ORG.logo,
-    width: 512,
-    height: 512,
+    width: IMAGE.logo.width,
+    height: IMAGE.logo.height,
   },
   sameAs: ORG.sameAs,
   contactPoint: {
@@ -202,7 +232,7 @@ export const schemaOrganization = {
   },
 } as const;
 
-export function schemaBreadcrumb(items: { name: string; url?: string }[]) {
+export function schemaBreadcrumb(items: { name: string; url: string }[]) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -210,7 +240,7 @@ export function schemaBreadcrumb(items: { name: string; url?: string }[]) {
       "@type": "ListItem",
       position: i + 1,
       name: item.name,
-      ...(item.url ? { item: item.url } : {}),
+      item: item.url,
     })),
   } as const;
 }
@@ -241,7 +271,12 @@ export function schemaArticle(opts: {
   title: string;
   description: string;
   url: string;
-  image?: string;
+  image?: {
+    url: string;
+    width?: number;
+    height?: number;
+    caption?: string;
+  };
   datePublished?: string;
   dateModified?: string;
   authorName?: string;
@@ -257,7 +292,17 @@ export function schemaArticle(opts: {
       "@type": "WebSite",
       "@id": `${SITE.url}/#website`,
     },
-    ...(opts.image ? { image: opts.image } : {}),
+    ...(opts.image
+      ? {
+          image: {
+            "@type": "ImageObject",
+            url: opts.image.url,
+            ...(opts.image.width ? { width: opts.image.width } : {}),
+            ...(opts.image.height ? { height: opts.image.height } : {}),
+            ...(opts.image.caption ? { caption: opts.image.caption } : {}),
+          },
+        }
+      : {}),
     ...(opts.datePublished ? { datePublished: opts.datePublished } : {}),
     ...(opts.dateModified ? { dateModified: opts.dateModified } : {}),
     ...(opts.authorName
@@ -271,6 +316,12 @@ export function schemaArticle(opts: {
             "@type": "Organization",
             name: SITE.name,
             url: SITE.url,
+            logo: {
+              "@type": "ImageObject",
+              url: Logo.src,
+              width: IMAGE.logo.width,
+              height: IMAGE.logo.height
+            }
           },
         }
       : {}),
@@ -390,39 +441,3 @@ export function buildMeta(opts: {
     },
   } as const;
 }
-
-// ----------------------------------------------------------------------------
-//  PAGINATION
-// ----------------------------------------------------------------------------
-export const PAGINATION = {
-  postsPerPage: 9,
-  postsPerFeed: 20,
-  postsPerSitemap: 1000,
-} as const;
-
-// ----------------------------------------------------------------------------
-//  IMAGE DEFAULTS (for website, not for processing)
-// ----------------------------------------------------------------------------
-export const IMAGE = {
-  og: {
-    width: 1200,
-    height: 630,
-    placeholder: OG,
-  },
-  thumbnail: {
-    width: 600,
-    height: 400,
-    quality: 80,
-    placeholder: Thumbnails,
-  },
-  avatar: {
-    width: 96,
-    height: 96,
-    quality: 80,
-    placeholder: Avatar,
-  },
-  logo: {
-    width: 512,
-    height: 512,
-  },
-} as const;
