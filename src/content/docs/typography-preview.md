@@ -104,11 +104,6 @@ Callout mendukung dua syntax.
 > [!note]
 > Ini adalah callout note.
 
-### Info
-
-> [!INFO]
-> Ini adalah callout info.
-
 ### Tip
 
 > [!TIP]
