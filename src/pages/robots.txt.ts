@@ -9,6 +9,10 @@ export const GET: APIRoute = ({ site }) => {
   const pureHost = baseUrl.replace(/^https?:\/\//, '');
 
   const robotsTxt = `
+# ============================================================
+# ROBOTS.TXT — ${SITE.name}
+# ============================================================
+
 User-agent: *
 ${isIndexable ? 'Allow: /' : 'Disallow: /'}
 
@@ -17,13 +21,18 @@ Disallow: /api/
 Disallow: /404/
 Disallow: /_astro/
 
-# Perlindungan SEO: Cegah indexing pada URL dengan Parameter (Duplicate Content)
+# Cegah Indexing URL dengan Parameter (hindari duplicate content)
 Disallow: /*?*
+
+# Blokir file JSON
 Disallow: /*.json$
 
-# ----------------------------------------------------
-# (Opsional) BLOKIR AI CRAWLERS / SCRAPERS
-# ----------------------------------------------------
+# (Opsional) Batasi kecepatan crawl
+Crawl-delay: 1
+
+# ============================================================
+# BLOKIR AI CRAWLERS (Opsional)
+# ============================================================
 # User-agent: GPTBot
 # Disallow: /
 # User-agent: ChatGPT-User
@@ -32,18 +41,23 @@ Disallow: /*.json$
 # Disallow: /
 # User-agent: anthropic-ai
 # Disallow: /
+# User-agent: Google-Extended
+# Disallow: /
 
-# Sitemap Resmi
+# ============================================================
+# SITEMAP
+# ============================================================
 Sitemap: ${sitemapUrl}
 
-# Direktif khusus untuk Yandex
+# ============================================================
+# KHUSUS YANDEX
+# ============================================================
 Host: ${pureHost}
 `.trim();
 
   return new Response(robotsTxt, {
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',
-      // Cache yang lebih panjang karena robots.txt sangat jarang berubah
       'Cache-Control': 'public, max-age=86400',
     },
   });
