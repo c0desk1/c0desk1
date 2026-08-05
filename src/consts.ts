@@ -37,12 +37,13 @@ export const SITE = {
   bgColor: "#000000",
   email: "hello@c0desk1.my.id",
   foundingYear: 2026,
+  logo: Logo.src
 } as const;
 
 export const ORG = {
   name: SITE.name,
   url: SITE.url,
-  logo: Logo.src,
+  logo: SITE.logo,
   sameAs: [] as string[],
 } as const;
 
@@ -110,9 +111,9 @@ export const SEO = {
   description: SITE.description,
   descriptionMaxLength: 160,
   canonical: SITE.url,
-  ogImage: Thumbnails.src,
+  ogImage: SITE.ogImage,
   ogImageWidth: 1200,
-  ogImageHeight: 630,
+  ogImageHeight: 600,
   ogImageAlt: SITE.name,
   twitterCard: "summary_large_image" as const,
   twitterSite: "@adogen_tool",
@@ -251,7 +252,16 @@ export function schemaWebPage(opts: {
   url: string;
   type?: "WebPage" | "AboutPage" | "ContactPage" | "CollectionPage";
   dateModified?: string;
+  image?: {
+    url: string;
+    width?: number;
+    height?: number;
+    caption?: string;
+  };
 }) {
+  const LogoUrl = SITE.logo.startsWith('http') 
+    ? SITE.logo 
+    : `${SITE.url.replace(/\/$/, "")}${SITE.logo}`;
   return {
     "@context": "https://schema.org",
     "@type": opts.type ?? "WebPage",
@@ -264,6 +274,28 @@ export function schemaWebPage(opts: {
       "@id": `${SITE.url}/#website`,
     },
     ...(opts.dateModified ? { dateModified: opts.dateModified } : {}),
+    ...(opts.image
+      ? {
+          image: {
+            "@type": "ImageObject",
+            url: opts.image.url,
+            ...(opts.image.width ? { width: opts.image.width } : {}),
+            ...(opts.image.height ? { height: opts.image.height } : {}),
+            ...(opts.image.caption ? { caption: opts.image.caption } : {}),
+          },
+        }
+      : {}),
+      publisher: {
+        "@type": "Organization",
+        name: SITE.name,
+        url: SITE.url,
+        logo: {
+          "@type": "ImageObject",
+          url: LogoUrl,
+          width: IMAGE.logo.width,
+          height: IMAGE.logo.height
+        }
+      }
   } as const;
 }
 
@@ -318,7 +350,9 @@ export function schemaArticle(opts: {
             url: SITE.url,
             logo: {
               "@type": "ImageObject",
-              url: Logo.src,
+              url: SITE.logo.startsWith('http') 
+                ? SITE.logo 
+                : `${SITE.url.replace(/\/$/, "")}${SITE.logo}`,
               width: IMAGE.logo.width,
               height: IMAGE.logo.height
             }
