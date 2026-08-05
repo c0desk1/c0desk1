@@ -41,7 +41,7 @@ export const GET: APIRoute = async (context) => {
   const baseUrl = (context.site?.toString() ?? SITE.url).replace(/\/$/, '');
 
   const blog = await getCollection('blog', ({ data }) => !data.draft && !data.seo?.noIndex);
-  const docs = await getCollection('docs', ({ data }) => !data draft && !data.seo?.noIndex);
+  const docs = await getCollection('docs', ({ data }) => !data.draft && !data.seo?.noIndex);
 
   const rawItems = [
     ...blog.map((post) => {
