@@ -168,6 +168,7 @@ export const schemaWebSite = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: SITE.name,
+  alternateName: SITE.name,
   url: SITE.url,
   description: SITE.description,
   inLanguage: SITE.lang,
