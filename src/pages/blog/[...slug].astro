@@ -11,6 +11,7 @@ import {
   buildMeta, 
   schemaArticle,
   schemaBreadcrumb,
+IMAGE,
 } from "@/consts";
 
 import { components } from "@components/mdx/MDXComponents";
@@ -97,10 +98,17 @@ const schema = [
     title: entry.data.title,
     description: entry.data.description || SITE.description,
     url: currentUrl,
-    image: entry.data.seo.ogImage,
     datePublished: entry.data.pubDate?.toISOString(),
     dateModified: entry.data.lastUpdated?.toISOString(),
     authorName: entry.data.author?.name || SITE.name,
+    image: entry.data.cover ? {
+      url: typeof entry.data.cover === 'string' 
+        ? entry.data.cover 
+        : entry.data.cover.src,
+      width: IMAGE.og.width,
+      height: IMAGE.og.height,
+      caption: entry.data.title
+    } : undefined
   }),
   schemaBreadcrumb([
     { name: "Beranda", url: `${baseUrl}/` },
