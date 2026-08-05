@@ -20,6 +20,8 @@ interface Props {
   schema?: object | object[];
   isHome?: boolean;
   canonical?: string;
+  author?: string;
+  publisher?: string;
 }
 
 const {
@@ -27,11 +29,16 @@ const {
   schema,
   isHome = false,
   canonical: canonicalOverride,
+  author: authorProp,
+  publisher: publisherProp,
 } = Astro.props;
 
 const title = meta?.title ?? SEO.titleDefault;
 const description = meta?.description ?? SEO.description;
 const canonical = canonicalOverride ?? meta?.canonical ?? SEO.canonical;
+const authorName = authorProp ?? meta?.og?.author ?? SITE.name;
+const publisherName = publisherProp ?? SITE.name;
+
 const robots =
   meta?.robots ??
   "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1";
@@ -101,12 +108,14 @@ const faviconBase = "/favicon";
   <meta name="robots" content={robots} />
   <meta name="googlebot" content={robots} />
   <link rel="canonical" href={canonical} />
-  <meta name="author" content={SITE.name} />
-  <meta name="publisher" content={SITE.name} />
+  <meta name="author" content={authorName} />
+  <meta name="publisher" content={publisherName} />
+  
   <meta
     name="copyright"
     content={`© ${new Date().getFullYear()} ${SITE.name}`}
   />
+  
   <meta name="language" content={SITE.lang} />
   <meta http-equiv="content-language" content={SITE.lang} />
   <meta name="generator" content={Astro.generator} />
@@ -256,8 +265,12 @@ const faviconBase = "/favicon";
       <meta name="google-adsense-account" content={SEO.ads.google} />
     )
   }
-
-<meta name="monetag" content="98464dea950ab2405c90bcb6fc2f1226">
+  
+  {
+    SEO.ads.monetag && (
+      <meta name="monetag" content={SEO.ads.monetag} />
+    )
+  }  
 
   {jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
 
