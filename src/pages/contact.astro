@@ -29,7 +29,7 @@ const meta = buildMeta({
   ogType: "website", 
 });
 
-const schemas = [
+const schema = [
   schemaWebPage({ 
     title: pageTitle, 
     description: pageDesc, 
@@ -49,7 +49,7 @@ const breadcrumbItems = [
 ];
 ---
 
-<Layout {meta} schema={schemas}>
+<Layout {meta} {schema}>
   <Section size="md">
     <Section size="sm">
       <Container size="lg">
