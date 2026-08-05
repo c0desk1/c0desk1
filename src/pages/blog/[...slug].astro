@@ -1,5 +1,4 @@
 ---
-// src/pages/blog/[...slug].astro
 import { 
   getCollection,
   render 
@@ -11,7 +10,7 @@ import {
   buildMeta, 
   schemaArticle,
   schemaBreadcrumb,
-IMAGE,
+  IMAGE,
 } from "@/consts";
 
 import { components } from "@components/mdx/MDXComponents";
@@ -81,6 +80,9 @@ const breadcrumbItems = [
     : []),
 ];
 
+const author = entry.data.author?.name || SITE.name;
+const publisher = SITE.name;
+
 const meta = buildMeta({
   title: entry.data.seo.title,
   description: entry.data.seo.description ?? entry.data.description,
@@ -89,7 +91,7 @@ const meta = buildMeta({
   ogType: "article",
   datePublished: entry.data.pubDate?.toISOString(),
   dateModified: entry.data.lastUpdated?.toISOString(),
-  authorName: entry.data.author?.name || SITE.name,
+  authorName: author,
   noindex: entry.data.seo.noIndex
 });
 
@@ -100,7 +102,7 @@ const schema = [
     url: currentUrl,
     datePublished: entry.data.pubDate?.toISOString(),
     dateModified: entry.data.lastUpdated?.toISOString(),
-    authorName: entry.data.author?.name || SITE.name,
+    authorName: author,
     image: entry.data.cover ? {
       url: typeof entry.data.cover === 'string' 
         ? entry.data.cover 
@@ -118,7 +120,12 @@ const schema = [
 ];
 ---
 
-<BlogLayout meta={meta} schema={schema}>
+<BlogLayout 
+  meta={meta} 
+  schema={schema}
+  author={author}
+  publisher={publisher}
+>
   <div data-pagefind-weight="3" class="hidden" />
   <MobileToc title={entry.data.title} headings={headings} />
   <Fragment slot="left">
