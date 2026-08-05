@@ -168,17 +168,17 @@ export const schemaWebSite = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: SITE.name,
-  alternateName: SITE.name,
+  alternateName: [SITE.name, "c0desk1"],
   url: SITE.url,
   description: SITE.description,
-  inLanguage: SITE.lang,
+  inLanguage: SITE.lang || "id-ID",
   potentialAction: {
     "@type": "SearchAction",
     target: {
       "@type": "EntryPoint",
-      urlTemplate: `${SITE.url}/search?q={search_term_string}`,
+      urlTemplate: `https://google.com{SITE.url.replace(/^https?:\/\//, "")}+{search_term_string}`,
     },
-    "query-input": "required name=search_term_string",
+    "query-input": "required name=search_term_string"
   },
 } as const;
 
