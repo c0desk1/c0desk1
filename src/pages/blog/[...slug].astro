@@ -105,9 +105,6 @@ const schema = [
   schemaBreadcrumb([
     { name: "Beranda", url: `${baseUrl}/` },
     { name: "Blog", url: `${baseUrl}${ROUTES.blog}/` },
-    ...(entry.data.category
-      ? [{ name: entry.data.category }] 
-      : []),
     { name: entry.data.title, url: currentUrl }, 
   ]),
 ];
