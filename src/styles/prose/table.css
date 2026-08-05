@@ -1,6 +1,6 @@
 /* src/styles/prose/components/table.css */
 .prose table {
-  display: block;
+  display: table;
   width: 100%;
   min-width: 100%;
   color: var(--fg);
