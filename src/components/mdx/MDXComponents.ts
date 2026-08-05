@@ -1,6 +1,5 @@
 // src/components/layout/MDXComponents.ts
 import Blockquote from "./Blockquote.astro";
-import Callout from "./Callout.astro";
 import Changelog from "./Changelog.astro";
 import Code from "./Code.astro";
 import Figure from "./Figure.astro";
@@ -14,7 +13,6 @@ import Tabs from "./Tabs.astro";
 import CardGrid from "./CardGrid.astro";
 
 export const components = {
-  Callout,
   ChangelogContainer: Changelog,
   ChangelogItem: Changelog,
   Steps,
