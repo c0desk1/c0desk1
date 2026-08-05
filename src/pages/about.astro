@@ -1,0 +1,263 @@
+---
+import { 
+  SITE, 
+  ROUTES, 
+  buildMeta, 
+  schemaWebPage, 
+  schemaBreadcrumb, 
+IMAGE
+} from "@/consts";
+
+import Layout from "@/layouts/Layout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import Button from "@/components/ui/Button.astro";
+import Icons from "@/components/ui/Icons.astro";
+import Card from "@/components/ui/Card.astro";
+
+const pageTitle = "About Us";
+const pageDesc = "Mengenal lebih dekat platform kuratif Unloyd beserta misi kami dalam mengulas pop culture, game, anime, dan tutorial.";
+
+const baseUrl = SITE.url.replace(/\/$/, "");
+const currentUrl = `${baseUrl}${ROUTES.about || "/about"}/`;
+
+const meta = buildMeta({
+  title: pageTitle,
+  description: pageDesc,
+  canonical: currentUrl,
+  ogType: "website",
+  keywords: [
+    "tentang", 
+    "about", 
+    "unloyd", 
+    "platform", 
+    "kuratif", 
+    "pop culture", 
+    "game", 
+    "anime", 
+    "tutorial", 
+    "modding"],
+});
+
+const schema = [
+  schemaWebPage({ 
+    title: pageTitle, 
+    description: pageDesc, 
+    url: currentUrl, 
+    type: "AboutPage", 
+    image: {
+      url: SITE.logo.startsWith('http') ? SITE.logo : `${baseUrl}${SITE.logo}`,
+      width: 500,
+      height: 500,
+      caption: pageTitle
+    }
+  }),
+  schemaBreadcrumb([
+    { name: "Beranda", url: `${baseUrl}/` },
+    { name: pageTitle, url: currentUrl },
+  ]),
+];
+
+const features = [
+  {
+    icon: "sparkle",
+    title: "Kurasi Berkualitas",
+    description: "Setiap konten di Unloyd melewati proses kurasi untuk memastikan kualitas, relevansi, dan nilai edukasi bagi komunitas.",
+  },
+  {
+    icon: "users",
+    title: "Komunitas Aktif",
+    description: "Kami membangun ruang kolaboratif di mana para kreator, modder, dan penggemar dapat berbagi ide dan saling menginspirasi.",
+  },
+  {
+    icon: "rocket",
+    title: "Kreativitas Tanpa Batas",
+    description: "Dari modding game hingga tutorial anime, Unloyd menjadi wadah bagi setiap ide kreatif untuk berkembang.",
+  },
+];
+
+const teamMembers = [
+  {
+    name: "C0desk1",
+    role: "Founder & Developer",
+    avatar: "https://ui-avatars.com/api/?name=C0desk1&background=0a0a0a&color=ffffff&size=88&bold=true",
+    social: "https://github.com/c0desk1",
+  },
+  {
+    name: "Unloyd Team",
+    role: "Content Curator",
+    avatar: "https://ui-avatars.com/api/?name=Unloyd&background=0a0a0a&color=ffffff&size=88&bold=true",
+    social: ROUTES.home,
+  },
+  {
+    name: "Community",
+    role: "Contributor",
+    avatar: "https://ui-avatars.com/api/?name=Community&background=0a0a0a&color=ffffff&size=88&bold=true",
+    social: ROUTES.home,
+  },
+];
+
+const stats = [
+  { label: "Artikel & Tutorial", value: "20+" },
+  { label: "Kategori Konten", value: "5" },
+  { label: "Komunitas Aktif", value: "100+" },
+  { label: "Update Rutin", value: "Mingguan" },
+];
+---
+
+<Layout {meta} {schema}>
+  <main id="main-content" class="w-full min-w-0 flex-1">
+    <div class="relative flex w-full flex-1 flex-col items-center pb-(--safe-bottom)">
+        <Container size="xl">
+            <Section size="lg" class="pt-16 md:pt-24 lg:pt-32 pb-12 md:pb-20 lg:pb-28">
+            <div class="grid grid-cols-12 gap-x-6 gap-y-8 lg:gap-y-10">
+                <div class="col-span-full lg:col-span-7 flex flex-col gap-4">
+                <h1 class="text-heading-32 md:text-heading-48 lg:text-heading-64 text-balance font-medium text-(--fg-strong) max-w-[14ch]">
+                    Membangun Ekosistem Kreatif untuk Pop Culture, Game, dan Anime
+                </h1>
+                </div>
+                <div class="col-span-full lg:col-span-5 flex flex-col gap-8 lg:py-2">
+                <p class="text-body-16 md:text-body-18 text-balance text-(--fg-muted) max-w-[48ch]">
+                    Unloyd adalah platform kuratif yang menghubungkan komunitas penggemar pop culture, game, anime, dan modding. Kami percaya bahwa kreativitas tumbuh subur dalam lingkungan yang terbuka dan kolaboratif.
+                </p>
+                <div class="flex flex-wrap items-start gap-4">
+                    <Button
+                    href={ROUTES.blog}
+                    variant="primary"
+                    size="lg"
+                    suffix={<Icons name="arrow-right" class="size-4.5" />}
+                    >
+                    Jelajahi Konten
+                    </Button>
+                    <Button
+                    href={ROUTES.docs}
+                    variant="ghost"
+                    size="lg"
+                    >
+                    Pelajari Lebih Lanjut
+                    </Button>
+                </div>
+                </div>
+            </div>
+            </Section>
+        </Container>
+        <Container size="xl">
+            <Section size="sm" class="py-8 md:py-12">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 divide-y md:divide-y-0 divide-(--border-subtle)/60">
+                    {stats.map((stat) => (
+                    <div class="flex flex-col items-center justify-center text-center pt-6 md:pt-0 first:pt-0 md:border-r last:border-r-0 border-(--border-subtle)/60">
+                        <span class="text-heading-32 md:text-heading-40 font-semibold text-(--fg-strong)">
+                        {stat.value}
+                        </span>
+                        <span class="text-body-14 text-(--fg-muted) mt-1">
+                        {stat.label}
+                        </span>
+                    </div>
+                    ))}
+                </div>
+            </Section>
+        </Container>
+        <Container size="xl">
+            <Section size="lg" class="py-12 md:py-16 lg:py-24">
+                <div class="grid grid-cols-12 gap-x-6 gap-y-6 mb-12 md:mb-16">
+                    <h2 class="text-heading-28 md:text-heading-40 font-medium text-(--fg-strong) col-span-full md:col-span-8 text-balance">
+                    Mengapa Unloyd?
+                    </h2>
+                </div>
+                <ul class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 list-none">
+                    {features.map((feature, index) => (
+                        <Card padding="sm" radius="sm" variant="outline">
+                            <li class="flex flex-col gap-4">
+                                <div class="flex items-center gap-3">
+                                    <span class="flex size-10 items-center justify-center rounded-full bg-(--accent)/10 text-(--accent)">
+                                        <Icons name={feature.icon} class="size-5" />
+                                    </span>
+                                    <span class="text-label-14 font-medium text-(--fg-strong)">
+                                        {feature.title}
+                                    </span>
+                                </div>
+                                <p class="text-body-14 text-(--fg-muted) leading-relaxed text-balance">
+                                    {feature.description}
+                                </p>
+                            </li>
+                    </Card>
+                    ))}
+                </ul>
+            </Section>
+        </Container>
+        <Container size="xl">
+            <Section size="lg" class="py-12 md:py-16 lg:py-24">
+                <div class="grid grid-cols-12 gap-x-6 gap-y-6 mb-12 md:mb-16">
+                    <h2 class="text-heading-28 md:text-heading-40 font-medium text-(--fg-strong) col-span-full">
+                    Dibalik Layar
+                    </h2>
+                    <p class="text-body-16 text-(--fg-muted) col-span-full md:col-span-8 text-balance">
+                    Unloyd dibangun oleh para kreator, untuk para kreator. Kenali tim dan kontributor di balik platform ini.
+                    </p>
+                </div>
+                <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 list-none">
+                    {teamMembers.map((member) => (
+                    <li class="flex flex-col items-center text-center gap-4">
+                        <a
+                        href={member.social}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="group block relative"
+                        >
+                        <span class="block size-24 rounded-full overflow-hidden border-2 border-(--border-subtle)/60 group-hover:border-(--accent) transition-colors grayscale group-hover:grayscale-0">
+                            <img
+                            src={member.avatar}
+                            alt={member.name}
+                            width={IMAGE.avatar.width}
+                            height={IMAGE.avatar.height}
+                            loading="lazy"
+                            decoding="async"
+                            fetchpriority="high"
+                            class="size-full object-cover"
+                            />
+                        </span>
+                        </a>
+                        <div>
+                        <h3 class="text-heading-18 font-medium text-(--fg-strong)">
+                            {member.name}
+                        </h3>
+                        <p class="text-body-14 text-(--fg-muted) mt-0.5">
+                            {member.role}
+                        </p>
+                        </div>
+                    </li>
+                    ))}
+                </ul>
+            </Section>
+        </Container>
+        <Container size="xl">
+            <Section size="lg" class="py-12 md:py-16 lg:py-24">
+                <div class="grid grid-cols-12 gap-x-6 gap-y-6">
+                    <div class="col-span-full flex flex-col items-center justify-center gap-8 md:gap-10 lg:flex-row lg:gap-12">
+                    <h2 class="text-heading-28 md:text-heading-40 lg:text-heading-48 font-medium text-(--fg-strong) text-center lg:text-left text-balance max-w-[16ch]">
+                        Gabung Bersama Kami
+                    </h2>
+                    <div class="flex flex-wrap items-center justify-center gap-4">
+                        <Button
+                        href={ROUTES.blog}
+                        variant="primary"
+                        size="lg"
+                        suffix={<Icons name="arrow-right" class="size-4.5" />}
+                        >
+                        Mulai Berkarya
+                        </Button>
+                        <Button
+                        href={ROUTES.contact}
+                        variant="ghost"
+                        size="lg"
+                        >
+                        Hubungi Kami
+                        </Button>
+                    </div>
+                    </div>
+                </div>
+            </Section>
+        </Container>
+    </div>
+  </main>
+</Layout>
