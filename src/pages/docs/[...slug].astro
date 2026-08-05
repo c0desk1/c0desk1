@@ -10,7 +10,8 @@ import {
   schemaWebPage,
   schemaBreadcrumb,
   SITE,
-  ROUTES 
+  ROUTES, 
+ORG
 } from "@/consts";
 
 import { components } from "@components/mdx/MDXComponents";
@@ -24,6 +25,7 @@ import DocsHeader from "@docs/DocsHeader.astro";
 import ScrollToTop from "@docs/ScrollToTop.astro";
 import DocsFooter from "@docs/DocsFooter.astro";
 import CopyCode from "@/components/CopyCode.astro";
+import { IMAGE } from "@/consts";
 
 export async function getStaticPaths() {
   const docsEntries = await getCollection("docs", ({ data }) => !data.seo?.noIndex);
@@ -70,6 +72,12 @@ const nextEntry =
     ? sidebarItems[currentIndex + 1]
     : null;
 
+const docsImage = entry.data.seo?.ogImage || SITE.logo;
+
+const absoluteDocsImage = docsImage.startsWith('http') 
+  ? docsImage 
+  : `${baseUrl}${docsImage}`;
+
 const meta = buildMeta({
   title: entry.data.seo.title,
   description: entry.data.seo.description ?? entry.data.description,
@@ -87,6 +95,12 @@ const schema = [
     title: entry.data.title,
     description: entry.data.description || SITE.description,
     url: currentUrl,
+    image: {
+      url: absoluteDocsImage,
+      width: IMAGE.og.width,
+      height: IMAGE.og.width,
+      caption: entry.data.title
+    },
   }),
   schemaBreadcrumb([
     { name: "Beranda", url: `${baseUrl}/` },
