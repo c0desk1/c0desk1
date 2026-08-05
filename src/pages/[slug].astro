@@ -1,5 +1,5 @@
 ---
-// src/pages/[slug].astro
+// src/pages/[slug].astro untuk page /privacy-policy dan lainnya.
 import { 
   getCollection, 
   render 
@@ -7,6 +7,7 @@ import {
 
 import { 
   buildMeta, 
+  IMAGE, 
   schemaWebPage, 
   SITE 
 } from "@/consts";
@@ -38,6 +39,13 @@ const { Content } = await render(entry);
 const currentSlug = entry.data.slug || entry.id.replace(/\.(md|mdx)$/, '');
 const currentUrl = `${SITE.url}/${currentSlug}/`;
 
+let legalPageType: "PrivacyPolicy" | "TermsOfService" | "WebPage" = "WebPage";
+if (currentSlug.includes("privacy")) {
+  legalPageType = "PrivacyPolicy";
+} else if (currentSlug.includes("terms") || currentSlug.includes("service")) {
+  legalPageType = "TermsOfService";
+}
+
 const metaProps = buildMeta({
   title: entry.data.title,
   description: entry.data.description || SITE.description,
@@ -49,6 +57,14 @@ const pageSchema = schemaWebPage({
   title: entry.data.title,
   description: entry.data.description || SITE.description,
   url: currentUrl,
+  type: legalPageType,
+  dateModified: entry.data.lastUpdated?.toISOString(),
+  image: {
+    url: SITE.logo.startsWith('http') ? SITE.logo : `${SITE.url.replace(/\/$/, "")}${SITE.logo}`,
+    width: IMAGE.logo.width,
+    height: IMAGE.logo.height,
+    caption: entry.data.title
+  }
 });
 
 const $ = {
