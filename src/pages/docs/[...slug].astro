@@ -28,7 +28,7 @@ import CopyCode from "@/components/CopyCode.astro";
 import { IMAGE } from "@/consts";
 
 export async function getStaticPaths() {
-  const docsEntries = await getCollection("docs", ({ data }) => !data.seo?.noIndex);
+  const docsEntries = await getCollection("docs", ({ data }) => !data.draft);
 
   const sorted = [...docsEntries].sort(
     (a, b) => (a.data.order ?? 999) - (b.data.order ?? 999),
@@ -54,7 +54,7 @@ if (!entry) {
 
 const { Content, headings } = await render(entry);
 
-const allDocs = await getCollection("docs", ({ data }) => !data.seo?.noIndex);
+const allDocs = await getCollection("docs", ({ data }) => !data.draft);
 const sidebarItems = allDocs.sort(
   (a, b) => (a.data.order ?? 999) - (b.data.order ?? 999),
 );
