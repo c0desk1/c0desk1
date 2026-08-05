@@ -7,6 +7,8 @@ import {
   PAGINATION,
   buildMeta,
   schemaWebPage,
+  schemaBreadcrumb,
+ROUTES
 } from "@/consts";
 
 import Layout from "@/layouts/Layout.astro";
@@ -62,8 +64,8 @@ const {
 const displayPosts = currentPage === 1 ? pagePosts.slice(3) : pagePosts;
 
 const currentUrl = currentPage === 1
-  ? `${SITE.url}/blog`
-  : `${SITE.url}/blog/${currentPage}`;
+  ? `${SITE.url}${ROUTES.blog}/`
+  : `${SITE.url}${ROUTES.blog}/${currentPage}`;
 
 const blog = {
   title: "Blog",
@@ -71,16 +73,22 @@ const blog = {
 }
 
 const meta = buildMeta({
-  title: blog.title,
-  description: blog.description,
+  ...blog,
   canonical: currentUrl
 });
 
-const schema = schemaWebPage({
-  title: blog.title,
-  description: blog.description,
-  url: currentUrl
-});
+const schema = [ 
+  schemaWebPage({
+    ...blog,
+    url: currentUrl,
+    type: "CollectionPage",
+    
+  }),
+  schemaBreadcrumb([
+    { name: "Beranda", url: `${SITE.url}${ROUTES.home}` },
+    { name: "Blog", url: `${SITE.url}${ROUTES.blog}/` },
+  ])
+];
 ---
 
 <Layout meta={meta} schema={schema}>
@@ -122,7 +130,7 @@ const schema = schemaWebPage({
               currentPage={currentPage}
               totalPages={totalPages}
               href={(page) =>
-                page === 1 ? "/blog" : `/blog/${page}`
+                page === 1 ? `${ROUTES.blog}/` : `${ROUTES.blog}/${page}/`
               }
             />
           </div>
