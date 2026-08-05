@@ -207,7 +207,7 @@ export const schemaWebSite = {
     "@type": "SearchAction",
     target: {
       "@type": "EntryPoint",
-      urlTemplate: `https://google.com{SITE.url.replace(/^https?:\/\//, "")}+{search_term_string}`,
+      "urlTemplate": `https://google.com{SITE.url.replace(/^https?:\/\//, "")}+{search_term_string}`
     },
     "query-input": "required name=search_term_string"
   },
@@ -229,7 +229,7 @@ export const schemaOrganization = {
     "@type": "ContactPoint",
     email: SITE.email,
     contactType: "customer support",
-    availableLanguage: ["English"],
+    "availableLanguage": ["Indonesian", "English"]
   },
 } as const;
 
