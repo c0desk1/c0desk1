@@ -30,7 +30,12 @@ const meta = buildMeta({
 });
 
 const schemas = [
-  schemaWebPage({ title: pageTitle, description: pageDesc, url: canonicalURL, type: "ContactPage" }),
+  schemaWebPage({ 
+    title: pageTitle, 
+    description: pageDesc, 
+    url: canonicalURL, 
+    type: "ContactPage" 
+  }),
   schemaOrganization,
   schemaBreadcrumb([
     { name: "Beranda", url: `${SITE.url}/` },
