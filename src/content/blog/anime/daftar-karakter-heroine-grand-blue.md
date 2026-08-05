@@ -2,8 +2,8 @@
 slug: "daftar-karakter-heroine-grand-blue"
 title: "Daftar Karakter Heroine di Grand Blue dan Perannya dalam Cerita"
 description: "Mengenal karakter-karakter heroine di Grand Blue, mulai dari Chisa Kotegawa hingga Aina Yoshiwara, lengkap dengan kepribadian dan peran mereka dalam cerita."
-pubDate: 2026-08-04T00:08Z
-lastUpdated: 2026-08-04T00:08Z
+pubDate: 2026-08-05T15:48Z
+lastUpdated: 2026-08-05T15:48Z
 cover:
   src: "https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAAOnanLymyptoeTTfA03MCmeok3eRbQAAjkRaxvfO5hXul-6s1t0uYABAAMCAAN5AAM9BA"
   alt: "Karakter heroine Grand Blue"
@@ -37,7 +37,7 @@ Berikut adalah beberapa karakter heroine yang paling penting dalam *Grand Blue*.
 
 ## Chisa Kotegawa
 
-[!Chisa Kotegawa](https://i.pinimg.com/736x/23/49/e6/2349e682cacc3ab2b9370a22d54fba2f.jpg)
+![Chisa Kotegawa](https://i.pinimg.com/736x/23/49/e6/2349e682cacc3ab2b9370a22d54fba2f.jpg)
 
 **Chisa Kotegawa** merupakan salah satu heroine utama *Grand Blue* dan memiliki hubungan yang cukup dekat dengan Iori.
 
@@ -49,15 +49,19 @@ Chisa juga menjadi salah satu karakter yang paling sering menjadi penyeimbang di
 
 Hubungannya dengan Iori berkembang seiring berjalannya cerita, terutama karena keduanya semakin sering menghabiskan waktu bersama dalam lingkungan diving.
 
-**Kepribadian:** Tenang, serius, sedikit dingin, tetapi sebenarnya peduli.
+<dl>
+  <dt>Kepribadian</dt>
+  <dd>Tenang, serius, sedikit dingin, tetapi sebenarnya peduli.</dd>
 
-**Peran:** Heroine utama dan salah satu karakter yang menghubungkan Iori dengan dunia diving.
+  <dt>Peran</dt>
+  <dd>Heroine utama dan salah satu karakter yang menghubungkan Iori dengan dunia diving.</dd>
+</dl>
 
 ---
 
 ## Aina Yoshiwara
 
-[!Aina Yoshiwara](https://m.media-amazon.com/images/M/MV5BMWU1OGQ4ZjUtNmZhMi00MWQ1LTgzNDMtOGQzNjA2ZjkzMDUyXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg)
+![Aina Yoshiwara](https://m.media-amazon.com/images/M/MV5BMWU1OGQ4ZjUtNmZhMi00MWQ1LTgzNDMtOGQzNjA2ZjkzMDUyXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg)
 
 **Aina Yoshiwara** adalah anggota Peek-a-Boo yang memiliki kepribadian jauh lebih pemalu dibandingkan Chisa.
 
@@ -71,15 +75,19 @@ Ia juga memiliki sisi kompetitif dan dapat menunjukkan keberanian ketika berada 
 
 Hubungannya dengan Iori menjadi salah satu bagian penting dari perkembangan karakternya.
 
-**Kepribadian:** Pemalu, mudah gugup, baik hati, dan cukup emosional.
+<dl>
+  <dt>Kepribadian</dt>
+  <dd>Pemalu, mudah gugup, baik hati, dan cukup emosional.</dd>
 
-**Peran:** Anggota Peek-a-Boo dan salah satu heroine yang memiliki hubungan dekat dengan Iori.
+  <dt>Peran</dt>
+  <dd>Anggota Peek-a-Boo dan salah satu heroine yang memiliki hubungan dekat dengan Iori.</dd>
+<dl/>
 
 ---
 
 ## Azusa Hamaoka
 
-[!Azusa Hamaoka](https://pbs.twimg.com/media/ECfwkSDXUAA2IjL.jpg)
+![Azusa Hamaoka](https://pbs.twimg.com/media/ECfwkSDXUAA2IjL.jpg)
 
 **Azusa Hamaoka** merupakan salah satu senior di Peek-a-Boo.
 
@@ -91,15 +99,19 @@ Azusa juga cukup berpengalaman dalam kehidupan klub diving dan sering ikut menye
 
 Meski begitu, ia sebenarnya cukup dewasa ketika menghadapi persoalan tertentu dan memiliki kepedulian terhadap anggota klub lainnya.
 
-**Kepribadian:** Percaya diri, santai, terbuka, dan suka menggoda orang lain.
-
-**Peran:** Senior Peek-a-Boo yang sering menjadi sumber maupun penggerak berbagai kejadian dalam cerita.
+<dl>
+  <dt>Kepribadian</dt>
+  <dd>Percaya diri, santai, terbuka, dan suka menggoda orang lain.</dd>
+  
+  <dt>Peran</dt>
+  <dd>Senior Peek-a-Boo yang sering menjadi sumber maupun penggerak berbagai kejadian dalam cerita.</dd>
+</dl>
 
 ---
 
 ## Nanaka Kotegawa
 
-[!Nanaka Kotegawa](https://i.ytimg.com/vi/JXulMaOFgn8/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDxYnk3ll9GwUfnzcpeXB4CeyUXUg)
+![Nanaka Kotegawa](https://i.ytimg.com/vi/JXulMaOFgn8/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDxYnk3ll9GwUfnzcpeXB4CeyUXUg)
 
 **Nanaka Kotegawa** adalah kakak dari Chisa dan juga merupakan salah satu karakter perempuan penting dalam cerita.
 
@@ -111,15 +123,18 @@ Kepribadiannya terlihat jauh lebih dewasa daripada Chisa, tetapi hubungan dekatn
 
 Nanaka juga memiliki perhatian khusus terhadap hubungan Chisa dengan Iori.
 
-**Kepribadian:** Dewasa, perhatian, lembut, tetapi bisa sangat protektif.
+<dl>
+  <dt>Kepribadian<dt/>
+  <dd>Dewasa, perhatian, lembut, tetapi bisa sangat protektif.</dd>
 
-**Peran:** Kakak Chisa dan salah satu karakter yang memiliki hubungan dekat dengan dunia diving.
-
+  <dt>Peran</dt>
+  <dd>Kakak Chisa dan salah satu karakter yang memiliki hubungan dekat dengan dunia diving.</dd>
+</dl>
 ---
 
 ## Sakurako Busujima
 
-[!Sakurako Busujima](https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAAOpanL06vXMS9mGIsv2gsI5txASm88AAkwRaxvfO5hXewS8fAZPhS8BAAMCAAN5AAM9BA)
+![Sakurako Busujima](https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAAOpanL06vXMS9mGIsv2gsI5txASm88AAkwRaxvfO5hXewS8fAZPhS8BAAMCAAN5AAM9BA)
 
 **Sakurako Busujima** merupakan salah satu karakter perempuan yang muncul dalam perkembangan cerita *Grand Blue*.
 
@@ -129,10 +144,13 @@ Sakurako juga memiliki sisi kompetitif dan dapat menunjukkan pendekatan yang cuk
 
 Kehadirannya menambah dinamika baru dalam hubungan antar-karakter, terutama ketika berhubungan dengan Iori.
 
-**Kepribadian:** Percaya diri, kompetitif, dan cukup terus terang.
+<dl>
+  <dt>Kepribadian</dt>
+  <dd>Percaya diri, kompetitif, dan cukup terus terang.</dd>
 
-**Peran:** Karakter perempuan yang menambah dinamika hubungan dan konflik romantis dalam cerita.
-
+  <dt>Peran</dt>
+  <dd>Karakter perempuan yang menambah dinamika hubungan dan konflik romantis dalam cerita.</dd>
+</dl>
 ---
 
 ## Siapa heroine utama Grand Blue?
