@@ -32,6 +32,7 @@ export const GET: APIRoute = async (context) => {
         url: `${ROUTES.blog}/${slug}/`,
         date: post.data.pubDate || post.data.lastUpdated || new Date(0),
         cover: post.data.cover,
+        author: post.data.author,
       };
     }),
     ...docs.map((doc) => {
@@ -41,6 +42,7 @@ export const GET: APIRoute = async (context) => {
         url: `${ROUTES.docs}/${slug}/`,
         date: doc.data.pubDate || doc.data.lastUpdated || new Date(0),
         cover: doc.data.cover,
+        author: doc.data.author,
       };
     }),
   ];
@@ -64,7 +66,6 @@ export const GET: APIRoute = async (context) => {
     
     items: sortedItems.map((item) => {
       const coverUrl = getCoverUrl(item.cover, baseUrl);
-      
       const coverHtml = coverUrl 
         ? `<img src="${coverUrl}" alt="${item.title}" style="max-width:100%;margin-bottom:10px;border-radius:4px;" />`
         : '';
@@ -74,21 +75,22 @@ export const GET: APIRoute = async (context) => {
         <p>${item.description || `Baca ${item.title} di ${SITE.name}.`}</p>
       `.trim();
       
+      const authorName = item.author?.name || SITE.name;
+      const authorEmail = SITE.email;
+      const author = `${authorEmail} (${authorName})`;
+      
       return {
         title: item.title,
         pubDate: item.date,
         description: description,
         link: new URL(item.url, baseUrl).toString(),
-        author: item.author?.name || SITE.name,
+        author: author,
         categories: item.category ? [item.category] : [],
-        
-        ...(coverUrl && {
-          enclosure: {
-            url: coverUrl,
-            length: 0,
-            type: 'image/jpeg',
-          },
-        }),
+        enclosure: coverUrl ? {
+          url: coverUrl,
+          length: 0,
+          type: 'image/jpeg',
+        } : undefined,
       };
     }),
   });
