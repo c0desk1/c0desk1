@@ -10,6 +10,7 @@ cover:
 author:
   name: "Bima Akbar"
   role: "Writer"
+  url: "https://github.com/bimaakbar-dev"
 category: "Anime"
 tags:
   - "KonoSuba"
