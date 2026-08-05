@@ -118,17 +118,20 @@ const breadcrumbItems = [
   { label: "Archive", href: canonicalURL },
 ];
 
-const meta = buildMeta({
+const page = {
   title: "Archive",
   description: "Arsip lengkap seluruh artikel blog berdasarkan tahun dan bulan terbit.",
+}
+
+const meta = buildMeta({
+  ...page,
   canonical: canonicalURL,
   ogType: "website",
 });
 
 const schema = [
   schemaWebPage({
-    title: "Archive",
-    description: "Arsip lengkap seluruh artikel blog berdasarkan tahun dan bulan terbit.",
+    ...page,
     url: canonicalURL,
     type: "CollectionPage"
   }),
@@ -140,7 +143,7 @@ const schema = [
 ];
 ---
 
-<Layout {meta} {schema}>
+<Layout meta={meta} schema={schema}>
   <Section size="md">
     <Container size="lg">
       <Section size="sm">
