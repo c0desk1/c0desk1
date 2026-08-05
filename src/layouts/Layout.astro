@@ -33,7 +33,7 @@ const $ = {
   ].join(" "),
 }
 ---
-<Layout {meta} {schema} {isHome} {canonical} {author} {publisher}>
+<Layout {meta} {schema} {isHome} {canonical} author={author} publisher={publisher}>
   <PageFrame>
     <aside class={$.left}>
       <slot name="left" />
