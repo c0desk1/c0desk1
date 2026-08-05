@@ -1,7 +1,11 @@
 // src/pages/feed.atom.ts
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
-import { SITE, ROUTES, PAGINATION } from '@/consts';
+import { 
+  SITE, 
+  ROUTES, 
+  PAGINATION 
+} from '@/consts';
 
 const escapeXml = (str: string): string => {
   return str
@@ -23,6 +27,20 @@ const getCoverUrl = (cover: any, baseUrl: string): string | null => {
   return null;
 };
 
+const getImageType = (url: string): string => {
+  const ext = url.split('.').pop()?.toLowerCase() || '';
+  const types: Record<string, string> = {
+    'png': 'image/png',
+    'webp': 'image/webp',
+    'svg': 'image/svg+xml',
+    'gif': 'image/gif',
+    'avif': 'image/avif',
+    'jpg': 'image/jpeg',
+    'jpeg': 'image/jpeg',
+  };
+  return types[ext] || 'image/jpeg';
+};
+
 export const GET: APIRoute = async (context) => {
   const baseUrl = (context.site?.toString() ?? SITE.url).replace(/\/$/, '');
   
@@ -39,7 +57,7 @@ export const GET: APIRoute = async (context) => {
         updated: post.data.lastUpdated || post.data.pubDate || new Date(0),
         cover: post.data.cover,
         author: post.data.author?.name || SITE.name,
-        authorEmail: SITE.email,
+        authorEmail: post.data.author?.email || SITE.email,
         type: 'blog',
         slug: slug,
       };
@@ -53,7 +71,7 @@ export const GET: APIRoute = async (context) => {
         updated: doc.data.lastUpdated || doc.data.pubDate || new Date(0),
         cover: doc.data.cover,
         author: doc.data.author?.name || SITE.name,
-        authorEmail: SITE.email,
+        authorEmail: doc.data.author?.email || SITE.email,
         type: 'docs',
         slug: slug,
       };
@@ -73,7 +91,7 @@ export const GET: APIRoute = async (context) => {
   <updated>${new Date().toISOString()}</updated>
   <id>tag:${baseUrl.replace(/^https?:\/\//, '')},${new Date().getFullYear()}:feed</id>
   <rights>&#xA9; ${new Date().getFullYear()} ${escapeXml(SITE.name)}</rights>
-  <generator uri="${baseUrl}" version="1.0">Unloyd Engine</generator>
+  <generator uri="${baseUrl}" version="1.0">Astro</generator>
   
   ${sortedItems
     .map((item) => {
@@ -86,8 +104,9 @@ export const GET: APIRoute = async (context) => {
         content = `<img src="${coverUrl}" alt="${escapedTitle}" style="max-width:100%;border-radius:4px;margin-bottom:10px;" />\n${content}`;
       }
       
+      const imageType = coverUrl ? getImageType(coverUrl) : 'image/jpeg';
       const enclosure = coverUrl 
-        ? `    <link rel="enclosure" href="${coverUrl}" length="0" type="image/jpeg" />\n`
+        ? `    <link rel="enclosure" href="${coverUrl}" length="0" type="${imageType}" />\n`
         : '';
       
       return `  <entry>
