@@ -89,6 +89,7 @@ const meta = buildMeta({
   datePublished: entry.data.pubDate?.toISOString(),
   dateModified: entry.data.lastUpdated?.toISOString(),
   authorName: author,
+  authorUrl: entry.data.author?.url || SITE.url,
   noindex: entry.data.seo.noIndex
 });
 
