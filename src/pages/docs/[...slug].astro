@@ -35,7 +35,7 @@ export async function getStaticPaths() {
 
   return docsEntries.map((entry) => {
     const cleanSlug = entry.data.slug || entry.id.replace(/\.(md|mdx)$/, '');
-    const isRoot = entry.id === root;
+    const isRoot =  entry.data.slug === root || entry.id === root;
 
     return {
       params: { slug: isRoot ? undefined : cleanSlug },
@@ -70,7 +70,7 @@ const nextEntry =
     ? sidebarItems[currentIndex + 1]
     : null;
 
-const metaProps = buildMeta({
+const meta = buildMeta({
   title: entry.data.seo.title,
   description: entry.data.seo.description ?? entry.data.description,
   canonical: currentUrl,
@@ -78,7 +78,8 @@ const metaProps = buildMeta({
   ogType: "article",
   datePublished: entry.data.pubDate?.toISOString(),
   dateModified: entry.data.lastUpdated?.toISOString(),
-  authorName: "Bima Akbar",
+  authorName: entry.data.author?.name || SITE.name,
+  noindex: entry.data.seo.noIndex
 });
 
 const schema = [
@@ -89,10 +90,15 @@ const schema = [
   }),
   schemaBreadcrumb([
     { name: "Beranda", url: `${baseUrl}/` },
-    { name: "Dokumentasi", url: `${baseUrl}${ROUTES.docs}/` },
     ...(cleanSlug
-      ? [{ name: entry.data.title, url: currentUrl }]
-      : []),
+      ? [
+          { name: "Dokumentasi", url: `${baseUrl}${ROUTES.docs}/` },
+          { name: entry.data.title, url: currentUrl }
+        ]
+      : [
+          { name: entry.data.title || "Dokumentasi", url: currentUrl }
+        ]
+    )
   ]),
 ];
 
@@ -108,7 +114,7 @@ ${entry.body}`;
 const fullMarkdownContent = markdown;
 ---
 
-<DocsLayout meta={metaProps} schema={schema}>
+<DocsLayout meta={meta} schema={schema}>
   <div data-pagefind-weight="2" class="hidden" />
   <MobileToc title={entry.data.title} headings={headings} />
   <Fragment>
