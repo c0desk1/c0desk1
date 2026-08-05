@@ -5,10 +5,10 @@ import DocsNavbar from "@docs/DocsNavbar.astro";
 import DocsNavbarMobile from "@docs/DocsNavbar.astro";
 import DocsNavigation from "@docs/DocsNavigation.astro"; 
 import PageFrame from "@/components/PageFrame.astro";
-import Sidebar from "@/components/ui/Sidebar.astro";
+import Sidebar from "@ui/Sidebar.astro";
 import MobileHeader from "@/components/MobileHeader.astro";
 import ScrollToTop from "@docs/mobile/ScrollToTop.astro";
-import Card from "@/components/ui/Card.astro";
+import Card from "@ui/Card.astro";
 import Socials from "@/components/Socials.astro";
 import Theme from "@/components/Theme.astro";
 import { type buildMeta as BuildMetaFn } from "@/consts";
@@ -18,11 +18,28 @@ interface Props {
   schema?: object | object[];
   isHome?: boolean;
   canonical?: string;
+  author?: string;
+  publisher?: string;
 }
 
-const { meta, schema, isHome = false, canonical } = Astro.props;
+const { 
+  meta, 
+  schema, 
+  isHome = false, 
+  canonical,
+  author,
+  publisher,
+} = Astro.props;
 ---
-<Layout hideHeader {meta} {schema} {isHome} {canonical}>
+<Layout 
+  hideHeader 
+  {meta} 
+  {schema} 
+  {isHome} 
+  {canonical}
+  {author}
+  {publisher}
+>
   <MobileHeader>
     <DocsNavbarMobile />
     <div class="flex-1 overflow-y-auto mb-0 scrollbar-hide">
