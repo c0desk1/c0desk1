@@ -21,8 +21,9 @@ import {
   transformerRemoveLineBreak,
 } from "@shikijs/transformers";
 
-import { satteriQuote } from "./src/lib/mdx/satteri-blockquote";
+import { satteriHeadingAnchor } from "./src/lib/mdx/satteri-heading-anchor";
 import { satteriCallout } from "./src/lib/mdx/satteri-callout";
+import { satteriQuote } from "./src/lib/mdx/satteri-blockquote";
 import { satteriChangelog } from "./src/lib/mdx/satteri-changelog";
 import { satteriCodeBlock } from "./src/lib/mdx/satteri-code-block";
 import { satteriDetails } from "./src/lib/mdx/satteri-details";
@@ -47,7 +48,7 @@ export default defineConfig({
         directive: true,
         gfm: {
           footnotes: {
-            label: "Catatan kaki",
+            label: "Referensi",
             backContent: "↑",
             backLabel: "Kembali ke referensi {reference}",
           },
@@ -60,7 +61,8 @@ export default defineConfig({
         subscript: true,
       },
       hastPlugins: [
-        satteriHeadingIdsPlugin()
+        satteriHeadingIdsPlugin(),
+        satteriHeadingAnchor
       ],
       mdastPlugins: [
         satteriFigure,
