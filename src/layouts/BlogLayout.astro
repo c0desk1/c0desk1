@@ -11,9 +11,18 @@ interface Props {
   schema?: object | object[];
   isHome?: boolean;
   canonical?: string;
+  author?: string;
+  publisher?: string;
 }
 
-const { meta, schema, isHome = false, canonical } = Astro.props;
+const { 
+  meta, 
+  schema, 
+  isHome = false, 
+  canonical,
+  author,
+  publisher,
+} = Astro.props;
 
 const $ = {
   main: "w-full min-w-0 flex-1",
@@ -31,7 +40,7 @@ const $ = {
   ].join(" "),
 }
 ---
-<Layout {meta} {schema} {isHome} {canonical}>
+<Layout {meta} {schema} {isHome} {canonical} {author} {publisher}>
   <PageFrame>
     <aside class={$.left}>
       <slot name="left" />
