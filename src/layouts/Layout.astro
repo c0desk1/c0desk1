@@ -26,6 +26,8 @@ interface Props {
   hideFooter?: boolean;
   author?: string;
   publisher?: string;
+  next?: string;
+  prev?: string;
 }
 
 const {
@@ -37,12 +39,14 @@ const {
   hideFooter = false,
   author,
   publisher,
+  next,
+  prev,
 } = Astro.props;
 ---
 
 <!doctype html>
 <html lang={SITE.lang} dir={SITE.dir}>
-  <Head {meta} {schema} {isHome} {canonical} {author} {publisher}>
+  <Head {meta} {schema} {isHome} {canonical} {author} {publisher} {next} {prev}>
     <ThemeProvider />
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4943136052113535" crossorigin="anonymous"></script>
     <script type="text/plain" data-consent="required" is:inline>
