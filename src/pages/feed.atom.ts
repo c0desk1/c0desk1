@@ -1,22 +1,18 @@
 // src/pages/feed.atom.ts
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
-import { 
-  SITE, 
-  ROUTES, 
-  PAGINATION 
-} from '@/consts';
+import { SITE, ROUTES, PAGINATION } from '@/consts';
 
-const escapeXml = (str: string): string => {
+function escapeXml(str: string): string {
   return str
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&apos;');
-};
+}
 
-const getCoverUrl = (cover: any, baseUrl: string): string | null => {
+function getCoverUrl(cover: any, baseUrl: string): string | null {
   if (!cover) return null;
   if (typeof cover === 'string') {
     return cover.startsWith('http') ? cover : `${baseUrl}${cover}`;
@@ -25,28 +21,28 @@ const getCoverUrl = (cover: any, baseUrl: string): string | null => {
     return cover.src.startsWith('http') ? cover.src : `${baseUrl}${cover.src}`;
   }
   return null;
-};
+}
 
-const getImageType = (url: string): string => {
+function getImageType(url: string): string {
   const ext = url.split('.').pop()?.toLowerCase() || '';
   const types: Record<string, string> = {
-    'png': 'image/png',
-    'webp': 'image/webp',
-    'svg': 'image/svg+xml',
-    'gif': 'image/gif',
-    'avif': 'image/avif',
-    'jpg': 'image/jpeg',
-    'jpeg': 'image/jpeg',
+    png: 'image/png',
+    webp: 'image/webp',
+    svg: 'image/svg+xml',
+    gif: 'image/gif',
+    avif: 'image/avif',
+    jpg: 'image/jpeg',
+    jpeg: 'image/jpeg',
   };
   return types[ext] || 'image/jpeg';
-};
+}
 
 export const GET: APIRoute = async (context) => {
   const baseUrl = (context.site?.toString() ?? SITE.url).replace(/\/$/, '');
-  
+
   const blog = await getCollection('blog', ({ data }) => !data.draft && !data.seo?.noIndex);
-  const docs = await getCollection('docs', ({ data }) => !data.draft && !data.seo?.noIndex);
-  
+  const docs = await getCollection('docs', ({ data }) => !data draft && !data.seo?.noIndex);
+
   const rawItems = [
     ...blog.map((post) => {
       const slug = post.data.slug || post.id.replace(/\.(md|mdx)$/, '');
@@ -77,7 +73,7 @@ export const GET: APIRoute = async (context) => {
       };
     }),
   ];
-  
+
   const sortedItems = rawItems
     .sort((a, b) => b.date.getTime() - a.date.getTime())
     .slice(0, PAGINATION.postsPerFeed);
@@ -92,27 +88,29 @@ export const GET: APIRoute = async (context) => {
   <id>tag:${baseUrl.replace(/^https?:\/\//, '')},${new Date().getFullYear()}:feed</id>
   <rights>&#xA9; ${new Date().getFullYear()} ${escapeXml(SITE.name)}</rights>
   <generator uri="${baseUrl}" version="1.0">Astro</generator>
-  
+
   ${sortedItems
-    .map((item) => {
+    .map((item, index) => {
       const coverUrl = getCoverUrl(item.cover, baseUrl);
       const escapedTitle = escapeXml(item.title);
       const escapedDescription = escapeXml(item.description || `Baca ${item.title} di ${SITE.name}.`);
-      
+
       let content = `<p>${escapedDescription}</p>`;
       if (coverUrl) {
-        content = `<img src="${coverUrl}" alt="${escapedTitle}" style="max-width:100%;border-radius:4px;margin-bottom:10px;" />\n${content}`;
+        content = `<img src="${coverUrl}" alt="${escapedTitle}" />\n${content}`;
       }
-      
+
       const imageType = coverUrl ? getImageType(coverUrl) : 'image/jpeg';
-      const enclosure = coverUrl 
+      const enclosure = coverUrl
         ? `    <link rel="enclosure" href="${coverUrl}" length="0" type="${imageType}" />\n`
         : '';
-      
+
+      const id = `tag:${baseUrl.replace(/^https?:\/\//, '')},${new Date(item.date).getFullYear()}:${item.type}:${item.slug}`;
+
       return `  <entry>
     <title>${escapedTitle}</title>
     <link href="${item.url}" rel="alternate" type="text/html"/>
-    <id>tag:${baseUrl.replace(/^https?:\/\//, '')},${new Date(item.date).getFullYear()}:${item.type}:${item.slug}</id>
+    <id>${id}</id>
     <updated>${new Date(item.updated).toISOString()}</updated>
     <published>${new Date(item.date).toISOString()}</published>
     <summary type="text">${escapedDescription}</summary>
