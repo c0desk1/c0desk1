@@ -323,6 +323,7 @@ export function schemaArticle(opts: {
   datePublished?: string;
   dateModified?: string;
   authorName?: string;
+  authorUrl?: string;
 }) {
   return {
     "@context": "https://schema.org",
@@ -353,7 +354,7 @@ export function schemaArticle(opts: {
           author: {
             "@type": "Person",
             name: opts.authorName,
-            url: SITE.url,
+            url: opts.authorUrl || SITE.url,
           },
           publisher: {
             "@type": "Organization",
