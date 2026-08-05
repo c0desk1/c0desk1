@@ -32,11 +32,13 @@ const $ = {
         <NavLink />
       </div>
       <div class={$.right}>
-        <div class="items-center flex md:hidden gap-1">
+        <div class="items-center flex md:hidden">
           <SearchBar iconOnly />
         </div>
-        <div class="items-center hidden md:flex gap-1">
-          <SearchBar class="min-w-42" />
+        <div class="items-center hidden md:flex">
+          <SearchBar class="min-w-64" />
+        </div>
+        <div class="items-center hidden md:flex">
           <Theme />
         </div>
         <Mobile />
