@@ -40,8 +40,8 @@ const {
 <html lang={SITE.lang} dir={SITE.dir}>
   <Head {meta} {schema} {isHome} {canonical}>
     <ThemeProvider />
-    <script data-consent="required" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4943136052113535" crossorigin="anonymous"></script>
-    <script data-consent="required" is:inline>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4943136052113535" crossorigin="anonymous"></script>
+    <script type="text/plain" data-consent="required" is:inline>
       (function (w, d, s, l, i) {
         w[l] = w[l] || [];
         w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
@@ -53,8 +53,8 @@ const {
           f.parentNode.insertBefore(j, f);
       })(window, document, "script", "dataLayer", "GTM-NJJPZV2M");
     </script>
-    <script data-consent="required" async src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
-    <script data-consent="required" is:inline>
+    <script type="text/plain" data-consent="required" async src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
+    <script type="text/plain" data-consent="required" is:inline>
       (self.SWG_BASIC = self.SWG_BASIC || []).push((basicSubscriptions) => {
         basicSubscriptions.init({
           type: "NewsArticle",
@@ -64,17 +64,17 @@ const {
         });
       });
     </script>
-    <script data-consent="required" src="https://quge5.com/88/tag.min.js" data-zone="266896" async data-cfasync="false"></script>
+    <script type="text/plain" data-consent="required" src="https://quge5.com/88/tag.min.js" data-zone="266896" async data-cfasync="false"></script>
   </Head>
   <body>
-    <noscript>
+    <!--<noscript>
       <iframe
         src="https://www.googletagmanager.com/ns.html?id=GTM-NJJPZV2M"
         height="0"
         width="0"
         style="display:none;visibility:hidden"
       ></iframe>
-    </noscript>
+    </noscript>-->
     <Cookie />
     <SkipLink />
     <Search />
