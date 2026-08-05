@@ -1,5 +1,4 @@
 ---
-// src/pages/docs/[...slug].astro
 import { 
   getCollection, 
   render 
@@ -11,7 +10,8 @@ import {
   schemaBreadcrumb,
   SITE,
   ROUTES, 
-ORG
+  ORG,
+  IMAGE,
 } from "@/consts";
 
 import { components } from "@components/mdx/MDXComponents";
@@ -25,7 +25,6 @@ import DocsHeader from "@docs/DocsHeader.astro";
 import ScrollToTop from "@docs/ScrollToTop.astro";
 import DocsFooter from "@docs/DocsFooter.astro";
 import CopyCode from "@/components/CopyCode.astro";
-import { IMAGE } from "@/consts";
 
 export async function getStaticPaths() {
   const docsEntries = await getCollection("docs", ({ data }) => !data.draft);
@@ -37,7 +36,7 @@ export async function getStaticPaths() {
 
   return docsEntries.map((entry) => {
     const cleanSlug = entry.data.slug || entry.id.replace(/\.(md|mdx)$/, '');
-    const isRoot =  entry.data.slug === root || entry.id === root;
+    const isRoot = entry.data.slug === root || entry.id === root;
 
     return {
       params: { slug: isRoot ? undefined : cleanSlug },
@@ -78,6 +77,9 @@ const absoluteDocsImage = docsImage.startsWith('http')
   ? docsImage 
   : `${baseUrl}${docsImage}`;
 
+const author = entry.data.author?.name || SITE.name;
+const publisher = SITE.name;
+
 const meta = buildMeta({
   title: entry.data.seo.title,
   description: entry.data.seo.description ?? entry.data.description,
@@ -86,7 +88,7 @@ const meta = buildMeta({
   ogType: "article",
   datePublished: entry.data.pubDate?.toISOString(),
   dateModified: entry.data.lastUpdated?.toISOString(),
-  authorName: entry.data.author?.name || SITE.name,
+  authorName: author,
   noindex: entry.data.seo.noIndex
 });
 
@@ -98,7 +100,7 @@ const schema = [
     image: {
       url: absoluteDocsImage,
       width: IMAGE.og.width,
-      height: IMAGE.og.width,
+      height: IMAGE.og.height,
       caption: entry.data.title
     },
   }),
@@ -128,7 +130,12 @@ ${entry.body}`;
 const fullMarkdownContent = markdown;
 ---
 
-<DocsLayout meta={meta} schema={schema}>
+<DocsLayout 
+  meta={meta} 
+  schema={schema}
+  author={author}
+  publisher={publisher}
+>
   <div data-pagefind-weight="2" class="hidden" />
   <MobileToc title={entry.data.title} headings={headings} />
   <Fragment>
