@@ -13,8 +13,6 @@ interface Props {
   canonical?: string;
   author?: string;
   publisher?: string;
-  next?: string;
-  prev?: string;
 }
 
 const { 
@@ -24,8 +22,6 @@ const {
   canonical,
   author,
   publisher,
-  next,
-  prev,
 } = Astro.props;
 
 const $ = {
@@ -44,7 +40,7 @@ const $ = {
   ].join(" "),
 }
 ---
-<Layout {meta} {schema} {isHome} {canonical} {author} {publisher} {next} {prev}>
+<Layout {meta} {schema} {isHome} {canonical} {author} {publisher}>
   <PageFrame>
     <aside class={$.left}>
       <slot name="left" />
