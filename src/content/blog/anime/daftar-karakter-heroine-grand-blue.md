@@ -35,7 +35,7 @@ Mereka memiliki kepribadian yang berbeda-beda. Ada yang serius, ada yang pemalu,
 
 Berikut adalah beberapa karakter heroine yang paling penting dalam *Grand Blue*.
 
-## Chisa Kotegawa
+## Chisa Kotegawa {#chisa-kotegawa}
 
 ![Chisa Kotegawa](https://i.pinimg.com/736x/23/49/e6/2349e682cacc3ab2b9370a22d54fba2f.jpg)
 
@@ -59,7 +59,7 @@ Hubungannya dengan Iori berkembang seiring berjalannya cerita, terutama karena k
 
 ---
 
-## Aina Yoshiwara
+## Aina Yoshiwara {#aina-yoshiwara}
 
 ![Aina Yoshiwara](https://m.media-amazon.com/images/M/MV5BMWU1OGQ4ZjUtNmZhMi00MWQ1LTgzNDMtOGQzNjA2ZjkzMDUyXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg)
 
@@ -85,7 +85,7 @@ Hubungannya dengan Iori menjadi salah satu bagian penting dari perkembangan kara
 
 ---
 
-## Azusa Hamaoka
+## Azusa Hamaoka {#azusa-hamaoka}
 
 ![Azusa Hamaoka](https://pbs.twimg.com/media/ECfwkSDXUAA2IjL.jpg)
 
@@ -109,7 +109,7 @@ Meski begitu, ia sebenarnya cukup dewasa ketika menghadapi persoalan tertentu da
 
 ---
 
-## Nanaka Kotegawa
+## Nanaka Kotegawa {#nanaka-kotegawa}
 
 ![Nanaka Kotegawa](https://i.ytimg.com/vi/JXulMaOFgn8/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDxYnk3ll9GwUfnzcpeXB4CeyUXUg)
 
@@ -132,7 +132,7 @@ Nanaka juga memiliki perhatian khusus terhadap hubungan Chisa dengan Iori.
 </dl>
 ---
 
-## Sakurako Busujima
+## Sakurako Busujima {#sakurako-busujima}
 
 ![Sakurako Busujima](https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAAOpanL06vXMS9mGIsv2gsI5txASm88AAkwRaxvfO5hXewS8fAZPhS8BAAMCAAN5AAM9BA)
 
