@@ -104,6 +104,7 @@ const schema = [
     datePublished: entry.data.pubDate?.toISOString(),
     dateModified: entry.data.lastUpdated?.toISOString(),
     authorName: author,
+    authorUrl: entry.data.author?.url ||SITE.url,
     image: entry.data.cover ? {
       url: typeof entry.data.cover === 'string' 
         ? entry.data.cover 
