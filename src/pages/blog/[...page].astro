@@ -1,6 +1,4 @@
 ---
-// src/pages/blog/[...page].astro
-
 import { getCollection } from "astro:content";
 import {
   SITE,
@@ -8,7 +6,7 @@ import {
   buildMeta,
   schemaWebPage,
   schemaBreadcrumb,
-ROUTES
+  ROUTES
 } from "@/consts";
 
 import Layout from "@/layouts/Layout.astro";
@@ -63,35 +61,55 @@ const {
 
 const displayPosts = currentPage === 1 ? pagePosts.slice(3) : pagePosts;
 
+const baseUrl = SITE.url.replace(/\/$/, "");
+const blogUrl = `${baseUrl}${ROUTES.blog}/`;
+
 const currentUrl = currentPage === 1
-  ? `${SITE.url}${ROUTES.blog}/`
-  : `${SITE.url}${ROUTES.blog}/${currentPage}/`;
+  ? blogUrl
+  : `${baseUrl}${ROUTES.blog}/${currentPage}/`;
+
+const prevPageUrl = currentPage > 2
+  ? `${baseUrl}${ROUTES.blog}/${currentPage - 1}/`
+  : currentPage === 2
+    ? blogUrl
+    : null;
+
+const nextPageUrl = currentPage < totalPages
+  ? `${baseUrl}${ROUTES.blog}/${currentPage + 1}/`
+  : null;
+
+const isFirstPage = currentPage === 1;
 
 const blog = {
   title: "Blog",
   description: "Latest articles, tutorials and updates."
-}
+};
 
 const meta = buildMeta({
   ...blog,
-  canonical: currentUrl
+  canonical: currentUrl,
+  noindex: !isFirstPage,
 });
 
-const schema = [ 
+const schema = [
   schemaWebPage({
     ...blog,
     url: currentUrl,
     type: "CollectionPage",
-    
   }),
   schemaBreadcrumb([
-    { name: "Beranda", url: `${SITE.url}${ROUTES.home}` },
-    { name: "Blog", url: `${SITE.url}${ROUTES.blog}/` },
+    { name: "Beranda", url: `${baseUrl}${ROUTES.home}` },  // 🔥 pakai baseUrl
+    { name: "Blog", url: blogUrl },                        // 🔥 pakai blogUrl
   ])
 ];
 ---
 
-<Layout meta={meta} schema={schema}>
+<Layout 
+  meta={meta} 
+  schema={schema} 
+  prev={prevPageUrl} 
+  next={nextPageUrl}
+>
   <Section size="md">
     <Container size="lg">
       <Section size="none" class="pb-4 md:pb-6">
