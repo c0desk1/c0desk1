@@ -76,11 +76,11 @@ const breadcrumbItems = [
   { label: "Beranda", href: `${baseUrl}${ROUTES.home}` },
   { label: "Blog", href: `${baseUrl}${ROUTES.blog}/` },
   ...(entry.data.category
-    ? [{ label: entry.data.category, href: currentUrl }]
+    ? [{ label: entry.data.category, href: "" }]
     : []),
 ];
 
-const metaProps = buildMeta({
+const meta = buildMeta({
   title: entry.data.seo.title,
   description: entry.data.seo.description ?? entry.data.description,
   canonical: currentUrl,
@@ -88,7 +88,8 @@ const metaProps = buildMeta({
   ogType: "article",
   datePublished: entry.data.pubDate?.toISOString(),
   dateModified: entry.data.lastUpdated?.toISOString(),
-  authorName: entry.data.author?.name,
+  authorName: entry.data.author?.name || SITE.name,
+  noindex: entry.data.seo.noIndex
 });
 
 const schema = [
@@ -99,19 +100,20 @@ const schema = [
     image: entry.data.seo.ogImage,
     datePublished: entry.data.pubDate?.toISOString(),
     dateModified: entry.data.lastUpdated?.toISOString(),
-    authorName: entry.data.author?.name,
+    authorName: entry.data.author?.name || SITE.name,
   }),
   schemaBreadcrumb([
     { name: "Beranda", url: `${baseUrl}/` },
     { name: "Blog", url: `${baseUrl}${ROUTES.blog}/` },
     ...(entry.data.category
-      ? [{ name: entry.data.category, url: currentUrl }]
+      ? [{ name: entry.data.category }] 
       : []),
+    { name: entry.data.title, url: currentUrl }, 
   ]),
 ];
 ---
 
-<BlogLayout meta={metaProps} schema={schema}>
+<BlogLayout meta={meta} schema={schema}>
   <div data-pagefind-weight="3" class="hidden" />
   <MobileToc title={entry.data.title} headings={headings} />
   <Fragment slot="left">
