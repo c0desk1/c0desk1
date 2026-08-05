@@ -5,6 +5,7 @@ import {
   buildMeta,
   schemaWebPage,
   schemaBreadcrumb,
+  schemaWebSite,
   ROUTES,
   SITE,
 } from "@/consts";
@@ -38,6 +39,7 @@ const meta = buildMeta({
 });
 
 const schema = [
+  schemaWebSite,
   schemaWebPage({
     title: SITE.name,
     description: SITE.description,
