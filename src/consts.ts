@@ -85,7 +85,8 @@ export const NAV = {
         { label: "Documentation", href: ROUTES.docs },
         { label: "Blog", href: ROUTES.blog },
         { label: "Archive", href: ROUTES.archive },
-        { label: "Contact", href: ROUTES.contact }
+        { label: "Contact", href: ROUTES.contact },
+        { label: "About", href: ROUTES.about }
       ],
     },
     {
