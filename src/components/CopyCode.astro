@@ -3,7 +3,6 @@
 
 import Icon from "@ui/Icons.astro";
 import Button from "@ui/Button.astro";
-
 ---
 
 <template id="copy-btn-template">
@@ -12,7 +11,8 @@ import Button from "@ui/Button.astro";
     variant="icon" 
     aria-label="Salin kode" 
     title="Salin" 
-    class="copy-button relative backdrop-blur-md bg-(--bg)/80! hover:bg-(--bg-muted)!">
+    class="copy-button relative backdrop-blur-md bg-(--bg)/80! hover:bg-(--bg-muted)!"
+  >
     <Icon name="copy" class="copy-icon size-4.5" />
     <Icon name="check" class="check-icon hidden size-4.5 text-(--accent)" />
   </Button>
@@ -20,9 +20,13 @@ import Button from "@ui/Button.astro";
 
 <script>
   (() => {
-    const setupCopyButton = (btn: HTMLButtonElement, code: HTMLElement) => {
+    const setupCopyButton = (
+      btn: HTMLButtonElement,
+      code: HTMLElement
+    ) => {
       btn.addEventListener("click", async () => {
         const text = code.textContent?.trimEnd() ?? "";
+
         try {
           await navigator.clipboard.writeText(text);
         } catch {
@@ -33,12 +37,15 @@ import Button from "@ui/Button.astro";
           document.execCommand("copy");
           document.body.removeChild(ta);
         }
+
         const copyIcon = btn.querySelector(".copy-icon");
         const checkIcon = btn.querySelector(".check-icon");
+
         if (copyIcon && checkIcon) {
           copyIcon.classList.add("hidden");
           checkIcon.classList.remove("hidden");
           btn.classList.add("copied");
+
           setTimeout(() => {
             copyIcon.classList.remove("hidden");
             checkIcon.classList.add("hidden");
@@ -48,25 +55,38 @@ import Button from "@ui/Button.astro";
       });
     };
 
-    const setupPlainCodeBlock = (pre: HTMLElement, code: HTMLElement) => {
-      if (pre.querySelector(".copy-button")) return;
+    const setupPlainCodeBlock = (
+      pre: HTMLElement,
+      code: HTMLElement
+    ) => {
+      if (pre.closest(".code-block-wrapper")) return;
 
       if (getComputedStyle(pre).overflowX === "visible") {
         pre.style.overflowX = "auto";
       }
 
       const wrapper = document.createElement("div");
+
+      wrapper.className = "code-block-wrapper";
       wrapper.style.position = "relative";
       wrapper.style.display = "block";
 
       if (pre.parentNode) {
         pre.parentNode.replaceChild(wrapper, pre);
       }
+
       wrapper.appendChild(pre);
 
-      const template = document.getElementById("copy-btn-template") as HTMLTemplateElement;
+      const template = document.getElementById(
+        "copy-btn-template"
+      ) as HTMLTemplateElement | null;
+
       if (!template) return;
-      const btn = template.content.firstElementChild as HTMLButtonElement;
+
+      const btn = template.content
+        .firstElementChild
+        ?.cloneNode(true) as HTMLButtonElement | null;
+
       if (!btn) return;
 
       btn.style.position = "absolute";
@@ -75,13 +95,18 @@ import Button from "@ui/Button.astro";
       btn.style.zIndex = "10";
 
       wrapper.appendChild(btn);
+
       setupCopyButton(btn, code);
     };
 
     const initAll = () => {
       document.querySelectorAll("pre > code").forEach((code) => {
-        const pre = code.parentNode as HTMLElement | null;
-        if (pre && pre instanceof HTMLElement && !pre.closest(".code-block-wrapper")) {
+        const pre = code.parentNode;
+
+        if (
+          pre instanceof HTMLElement &&
+          !pre.closest(".code-block-wrapper")
+        ) {
           setupPlainCodeBlock(pre, code as HTMLElement);
         }
       });
