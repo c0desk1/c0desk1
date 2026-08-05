@@ -30,6 +30,7 @@ const AUTHOR = z.object({
     name: z.string(),
     role: z.string().optional(),
     avatar: z.string().optional(),
+    url: z.url().optional(),
   }).optional()
 });
 
