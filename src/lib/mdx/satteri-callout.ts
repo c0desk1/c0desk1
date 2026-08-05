@@ -1,28 +1,79 @@
+// src/lib/mdx/satteri-callout.ts
+
 import { defineMdastPlugin } from "satteri";
 
-const VALID_TYPES = new Set([
-  "note",
-  "info",
-  "tip",
-  "warning",
-  "danger",
-  "important",
-  "caution",
-]);
+const CALLOUT_TYPES = {
+  NOTE: "note",
+  TIP: "tip",
+  IMPORTANT: "important",
+  WARNING: "warning",
+  CAUTION: "caution",
+  DANGER: "danger"
+} as const;
+
+type CalloutType = keyof typeof CALLOUT_TYPES;
+
+const CALLOUT_PATTERN =
+  /^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION|DANGER)\]\s*/i;
 
 export const satteriCallout = defineMdastPlugin({
   name: "satteri-callout",
-  containerDirective(node, ctx) {
-    const type = node.name;
-    if (!VALID_TYPES.has(type)) return;
 
-    const component: any = {
-      type: "mdxJsxFlowElement",
-      name: "Callout",
-      attributes: [{ type: "mdxJsxAttribute", name: "type", value: type }],
-      children: node.children,
+  blockquote(node, ctx) {
+    const firstChild = node.children[0];
+
+    if (!firstChild || firstChild.type !== "paragraph") {
+      return;
+    }
+
+    const firstText = firstChild.children[0];
+
+    if (!firstText || firstText.type !== "text") {
+      return;
+    }
+
+    const match = firstText.value.match(CALLOUT_PATTERN);
+
+    if (!match) {
+      return;
+    }
+
+    const rawType = match[1].toUpperCase() as CalloutType;
+    const type = CALLOUT_TYPES[rawType];
+
+    const remainingText = firstText.value.slice(match[0].length);
+
+    const newChildren = [...firstChild.children];
+
+    if (remainingText) {
+      newChildren[0] = {
+        ...firstText,
+        value: remainingText,
+      };
+    } else {
+      newChildren.shift();
+    }
+
+    const newParagraph = {
+      ...firstChild,
+      children: newChildren,
     };
 
-    ctx.replaceNode(node, component);
+    const newNode = {
+      ...node,
+      children: [
+        newParagraph,
+        ...node.children.slice(1),
+      ],
+      data: {
+        ...node.data,
+        hProperties: {
+          ...node.data?.hProperties,
+          "data-callout": type,
+        },
+      },
+    };
+
+    ctx.replaceNode(node, newNode);
   },
 });
