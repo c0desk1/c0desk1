@@ -2,8 +2,8 @@
 slug: "daftar-karakter-heroine-grand-blue"
 title: "Daftar Karakter Heroine di Grand Blue dan Perannya dalam Cerita"
 description: "Mengenal karakter-karakter heroine di Grand Blue, mulai dari Chisa Kotegawa hingga Aina Yoshiwara, lengkap dengan kepribadian dan peran mereka dalam cerita."
-pubDate: 2026-08-05T15:48Z
-lastUpdated: 2026-08-05T15:48Z
+pubDate: 2026-08-05T15:51Z
+lastUpdated: 2026-08-05T15:51Z
 cover:
   src: "https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAAOnanLymyptoeTTfA03MCmeok3eRbQAAjkRaxvfO5hXul-6s1t0uYABAAMCAAN5AAM9BA"
   alt: "Karakter heroine Grand Blue"
@@ -81,7 +81,7 @@ Hubungannya dengan Iori menjadi salah satu bagian penting dari perkembangan kara
 
   <dt>Peran</dt>
   <dd>Anggota Peek-a-Boo dan salah satu heroine yang memiliki hubungan dekat dengan Iori.</dd>
-<dl/>
+</dl>
 
 ---
 
@@ -124,7 +124,7 @@ Kepribadiannya terlihat jauh lebih dewasa daripada Chisa, tetapi hubungan dekatn
 Nanaka juga memiliki perhatian khusus terhadap hubungan Chisa dengan Iori.
 
 <dl>
-  <dt>Kepribadian<dt/>
+  <dt>Kepribadian</dt>
   <dd>Dewasa, perhatian, lembut, tetapi bisa sangat protektif.</dd>
 
   <dt>Peran</dt>
