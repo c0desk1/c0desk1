@@ -35,50 +35,74 @@ import Icon from "@ui/Icons.astro";
 
 <script is:inline>
   (function () {
-    const CONSENT_KEY = 'c0desk1-consent';
+    const CONSENT_KEY = "c0desk1-consent";
+
+    const banner = document.getElementById("cookie-banner");
+    const accept = document.getElementById("cookie-accept");
+    const decline = document.getElementById("cookie-decline");
+
+    function loadScripts() {
+      const scripts = document.querySelectorAll(
+        'script[type="text/plain"][data-consent="required"]'
+      );
+
+      scripts.forEach((oldScript) => {
+        const newScript = document.createElement("script");
+.
+        Array.from(oldScript.attributes).forEach((attr) => {
+          if (
+            attr.name !== "type" &&
+            attr.name !== "data-consent"
+          ) {
+            newScript.setAttribute(attr.name, attr.value);
+          }
+        });
+
+        newScript.type = "text/javascript";
+
+        // Inline script
+        if (oldScript.textContent) {
+          newScript.textContent = oldScript.textContent;
+        }
+
+        oldScript.parentNode?.replaceChild(newScript, oldScript);
+      });
+    }
+
+    function setConsent(value) {
+      localStorage.setItem(CONSENT_KEY, value);
+    }
 
     const consent = localStorage.getItem(CONSENT_KEY);
 
+    // Sudah pernah memilih
     if (consent !== null) {
-      document.getElementById('cookie-banner')?.remove();
-      if (consent === 'accepted') {
+      banner?.remove();
+
+      if (consent === "accepted") {
         loadScripts();
       }
+
       return;
     }
 
-    // Tampilkan banner
-    const banner = document.getElementById('cookie-banner');
+    // Belum memilih
     if (banner) {
-      banner.style.display = 'block';
+      banner.style.display = "block";
     }
 
-    // Tombol Setuju
-    document.getElementById('cookie-accept')?.addEventListener('click', function () {
-      localStorage.setItem(CONSENT_KEY, 'accepted');
+    // Setuju
+    accept?.addEventListener("click", () => {
+      setConsent("accepted");
       banner?.remove();
       loadScripts();
     });
 
-    // Tombol Tolak
-    document.getElementById('cookie-decline')?.addEventListener('click', function () {
-      localStorage.setItem(CONSENT_KEY, 'declined');
+    // Tolak
+    decline?.addEventListener("click", () => {
+      setConsent("declined");
       banner?.remove();
     });
-
-    function loadScripts() {
-      const scripts = document.querySelectorAll('script[data-consent="required"]');
-      scripts.forEach((oldScript) => {
-        const newScript = document.createElement('script');
-        Array.from(oldScript.attributes).forEach((attr) => {
-          newScript.setAttribute(attr.name, attr.value);
-        });
-        if (oldScript.innerHTML) {
-          newScript.innerHTML = oldScript.innerHTML;
-        }
-        oldScript.parentNode?.replaceChild(newScript, oldScript);
-      });
-    }
   })();
 </script>
 
