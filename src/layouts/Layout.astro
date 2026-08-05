@@ -1,17 +1,20 @@
 ---
 // src/layouts/Layout.astro
-import Page from "@/components/Page.astro";
-import Alert from "@/components/ui/Alert.astro";
+import { 
+  SITE, 
+  type buildMeta as BuildMetaFn 
+} from "@/consts";
+
+import Head from "@components/Head.astro";
+import ThemeProvider from "@components/ThemeProvider.astro";
+import Cookie from "@/components/Cookie.astro";
+import SkipLink from "@components/SkipLink.astro";
 import Search from "@components/Search.astro";
 import Drawer from "@/components/ui/Drawer.astro";
 import AiAsk from "@/components/AiAsk.astro";
-import { SITE, type buildMeta as BuildMetaFn } from "@/consts";
-
-import Head from "@components/Head.astro";
-import Cookie from "@components/Cookie.astro";
+import Page from "@/components/Page.astro";
+import Alert from "@/components/ui/Alert.astro";
 import Header from "@components/Header.astro";
-import SkipLink from "@components/SkipLink.astro";
-import ThemeProvider from "@components/ThemeProvider.astro";
 import Footer from "@/components/Footer.astro";
 
 interface Props {
@@ -38,7 +41,7 @@ const {
   <Head {meta} {schema} {isHome} {canonical}>
     <ThemeProvider />
     <script data-consent="required" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4943136052113535" crossorigin="anonymous"></script>
-    <script is:inline data-consent="required">
+    <script data-consent="required" is:inline>
       (function (w, d, s, l, i) {
         w[l] = w[l] || [];
         w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
@@ -51,7 +54,7 @@ const {
       })(window, document, "script", "dataLayer", "GTM-NJJPZV2M");
     </script>
     <script data-consent="required" async src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
-    <script is:inline data-consent="required">
+    <script data-consent="required" is:inline>
       (self.SWG_BASIC = self.SWG_BASIC || []).push((basicSubscriptions) => {
         basicSubscriptions.init({
           type: "NewsArticle",
@@ -65,7 +68,8 @@ const {
   </Head>
   <body>
     <noscript>
-      <iframe       src="https://www.googletagmanager.com/ns.html?id=GTM-NJJPZV2M"
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-NJJPZV2M"
         height="0"
         width="0"
         style="display:none;visibility:hidden"
