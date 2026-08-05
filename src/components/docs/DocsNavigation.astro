@@ -5,7 +5,7 @@ import { ROUTES } from '@/consts';
 import SidebarGroup from '@/components/ui/SidebarGroup.astro';
 import SidebarLink from '@/components/ui/SidebarLink.astro';
 
-const allDocs = await getCollection('docs', ({ data }) => !data.seo?.noIndex);
+const allDocs = await getCollection('docs', ({ data }) => !data.draft);
 
 const sortedDocs = [...allDocs].sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999));
 const primaryRootId = sortedDocs[0]?.id;
