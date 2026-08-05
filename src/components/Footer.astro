@@ -23,7 +23,7 @@ const baseUrl = SITE.url.replace(/\/$/, "");
 
 const $ = {
   wrapper: "relative mt-auto shrink-0 border-t border-(--border-subtle)/80",
-  group: "grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3",
+  group: "grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4",
   navigation: "flex flex-col gap-3 items-start",
   label: "text-label-14 font-medium uppercase font-mono text-(--fg-strong)",
   title: "text-body-14 text-(--fg-muted) font-medium hover:text-(--fg-strong) active:text-(--fg-strong)",
@@ -34,12 +34,9 @@ const $ = {
 
 <footer class={$.wrapper}>
   <Particles />
-  <Section size="sm">
+  <Section size="md">
     <Container size="lg">
       <div class={$.group}>
-        <div class="flex items-start">
-          <Logo />
-        </div>
         {NAV.footerBar.map((section) => (
           <div class={$.navigation}>
             <h3 class={$.label} set:html={section.title} />
@@ -61,6 +58,9 @@ const $ = {
             </ul>
           </div>
         ))}
+        <div class="flex items-start">
+          <Logo />
+        </div>
       </div>
       <div class={$.meta}>
         Copyright {SITE.name} {copyrightYear}. All rights reserved.
