@@ -82,11 +82,14 @@ export const NAV = {
     {
       title: "Resource",
       items: [
-        { label: "Documentation", href: ROUTES.docs },
-        { label: "Blog", href: ROUTES.blog },
-        { label: "Archive", href: ROUTES.archive },
-        { label: "Contact", href: ROUTES.contact },
-        { label: "About", href: ROUTES.about }
+        { label: "Docs", href: ROUTES.docs },
+        { label: "Blog", href: ROUTES.blog }
+      ],
+    },
+    {
+      title: "Explore",
+      items: [
+        { label: "Archive", href: ROUTES.archive }
       ],
     },
     {
@@ -95,6 +98,13 @@ export const NAV = {
         { label: "Cookie Policy", href: ROUTES.cookie },
         { label: "Privacy Policy", href: ROUTES.privacy },
         { label: "Terms of Service", href: ROUTES.terms },
+      ],
+    },
+    {
+      title: "Company",
+      items: [
+        { label: "About", href: ROUTES.about },
+        { label: "Contact", href: ROUTES.contact }
       ],
     },
   ] as FooterNav[],
