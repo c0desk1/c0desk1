@@ -202,10 +202,7 @@ export const schemaOrganization = {
   },
 } as const;
 
-export function schemaBreadcrumb(items: { 
-  name: string; 
-  url: string 
-}[]) {
+export function schemaBreadcrumb(items: { name: string; url?: string }[]) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -213,7 +210,7 @@ export function schemaBreadcrumb(items: {
       "@type": "ListItem",
       position: i + 1,
       name: item.name,
-      item: item.url,
+      ...(item.url ? { item: item.url } : {}),
     })),
   } as const;
 }
