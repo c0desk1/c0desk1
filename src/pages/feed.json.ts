@@ -59,7 +59,7 @@ export const GET: APIRoute = async (context) => {
         date: doc.data.pubDate || doc.data.lastUpdated || new Date(0),
         cover: doc.data.cover,
         author: doc.data.author,
-        tags: doc.data.tags || [],
+        tags: doc.data.category ? [doc.data.category] : [],
         type: 'docs',
       };
     }),
@@ -69,11 +69,6 @@ export const GET: APIRoute = async (context) => {
     .sort((a, b) => b.date.getTime() - a.date.getTime())
     .slice(0, PAGINATION.postsPerFeed);
 
-  const firstItem = sortedItems[0];
-  const authorName = firstItem?.author?.name || SITE.name;
-  const authorEmail = firstItem?.author?.email || SITE.email;
-  const authorUrl = firstItem?.author?.url || SITE.url;
-
   const feed = {
     version: 'https://jsonfeed.org/version/1.1',
     title: SITE.name,
@@ -82,13 +77,14 @@ export const GET: APIRoute = async (context) => {
     description: SITE.description,
     authors: [
       {
-        name: authorName,
+        name: SITE.name,
+        url: SITE.url,
       },
     ],
     language: SITE.lang,
     items: sortedItems.map((item) => {
       const coverUrl = getCoverUrl(item.cover, baseUrl);
-      const tags = item.tags.length > 0 ? item.tags : (item.category ? [item.category] : []);
+      const tags = item.tags.length > 0 ? item.tags : [];
       const authorObj = item.author
         ? {
             name: item.author.name || SITE.name,
@@ -111,7 +107,7 @@ export const GET: APIRoute = async (context) => {
       }
 
       if (authorObj) {
-        feedItem.author = authorObj;
+        feedItem.authors = [authorObj];
       }
 
       if (coverUrl) {
