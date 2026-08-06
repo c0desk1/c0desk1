@@ -7,7 +7,11 @@ import {
 
 import { SITE } from "./src/consts";
 
-import { satteri, satteriHeadingIdsPlugin } from "@astrojs/markdown-satteri";
+import { 
+  satteri, 
+  satteriHeadingIdsPlugin 
+} from "@astrojs/markdown-satteri";
+
 import mdx from "@astrojs/mdx";
 import tailwindcss from "@tailwindcss/vite";
 
@@ -22,6 +26,7 @@ import {
 } from "@shikijs/transformers";
 
 import { satteriHeadingAnchor } from "./src/lib/mdx/satteri-heading-anchor";
+import { satteriExternalLink } from "./src/lib/mdx/satteri-external-link";
 import { satteriCallout } from "./src/lib/mdx/satteri-callout";
 import { satteriQuote } from "./src/lib/mdx/satteri-blockquote";
 import { satteriChangelog } from "./src/lib/mdx/satteri-changelog";
@@ -34,7 +39,9 @@ import { satteriSteps } from "./src/lib/mdx/satteri-steps";
 import { satteriTabs } from "./src/lib/mdx/satteri-tabs";
 
 import pagefind from "astro-pagefind";
-import sitemap from "@astrojs/sitemap";
+
+// import sitemap from "@astrojs/sitemap";
+
 
 // https://astro.build/config
 export default defineConfig({
@@ -46,6 +53,8 @@ export default defineConfig({
     processor: satteri({
       features: {
         directive: true,
+        headingAttributes: true,
+        smartPunctuation: true,
         gfm: {
           footnotes: {
             label: "Referensi",
@@ -53,16 +62,17 @@ export default defineConfig({
             backLabel: "Kembali ke referensi {reference}",
           },
         },
-        math: { singleDollarTextMath: false },
-        headingAttributes: true,
-        smartPunctuation: true,
         wikilinks: true,
         superscript: true,
         subscript: true,
+        math: { 
+          singleDollarTextMath: false 
+        },
       },
       hastPlugins: [
         satteriHeadingIdsPlugin(),
-        satteriHeadingAnchor
+        satteriHeadingAnchor,
+        satteriExternalLink,
       ],
       mdastPlugins: [
         satteriFigure,
