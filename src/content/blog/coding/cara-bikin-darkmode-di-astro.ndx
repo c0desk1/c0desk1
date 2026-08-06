@@ -1,0 +1,322 @@
+---
+slug: "cara-bikin-darkmode-di-astro"
+title: "Dark Mode di Astro dengan Data Attribute dan CSS Variables"
+description: "Panduan lengkap membangun dark mode di Astro tanpa flicker, dengan custom element, localStorage, dan integrasi Tailwind. Berbasis kode produksi Unloyd."
+pubDate: 2026-08-06T01:52Z
+lastUpdated: 2026-08-06T01:55Z
+cover:
+  src: "https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAAOtanOFh6xAGJn2RviaSrCqeO6YsI8AAmIRaxvfO6BXQSyqzQ8AAcDBAQADAgADeQADPQQ"
+  alt: "Cover panduan darkmode di Astro"
+author:
+  name: "Tim Unloyd"
+  role: "Developer"
+  avatar: "https://ui-avatars.com/api/?name=Unloyd&background=0a0a0a&color=ffffff&size=64"
+category: "Tutorial"
+tags:
+  - "Astro"
+  - "Darkmode"
+  - "Tailwind"
+  - "css-variables"
+  - "Webdev"
+draft: false
+seo:
+  title: "Dark Mode di Astro dengan Data Attribute dan CSS Variables"
+  description: "Panduan lengkap dark mode di Astro tanpa flicker, pakai custom element, localStorage, dan Tailwind."
+  ogImage: "https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAAOtanOFh6xAGJn2RviaSrCqeO6YsI8AAmIRaxvfO6BXQSyqzQ8AAcDBAQADAgADeQADPQQ"
+  noIndex: true
+---
+
+Pernah nggak sih kamu buka website tengah malam, tiba-tiba layar memancarkan cahaya putih kayak lampu sorot stadion? Rasanya mata langsung perih, dan kamu hampir menutup tab sebelum konten sempat terbaca.
+
+Atau sebaliknya, kamu baca artikel di siang hari, tapi temanya gelap gulita—teks kabur, kontras rendah, kepala mulai pusing.
+
+Dark mode bukan sekadar tren. Ini tentang **kenyamanan**, **empati**, dan **respek** terhadap pengguna. Di Unloyd, kami menerapkan dark mode dengan pendekatan yang sederhana namun kuat: **data attribute** di elemen `<html>`, ditambah sedikit sihir JavaScript agar transisi terasa mulus.
+
+Artikel ini akan membedah filosofi dan teknik di balik implementasi dark mode di Astro, berdasarkan kode produksi kami. Kamu akan belajar:
+
+- Mengapa `data-theme` lebih baik daripada class `.dark`
+- Cara menyusun CSS variables untuk dua tema sekaligus
+- Script inline untuk menghilangkan *flash of wrong theme*
+- Custom element `<theme-toggle>` yang reusable dan pintar
+- Integrasi dengan Tailwind CSS tanpa ribet
+
+Mari kita mulai.
+
+---
+
+## Mengapa `data-theme` Lebih Baik Daripada Class?
+
+Bayangkan kamu punya 100 komponen, masing-masing dengan warna latar, teks, border, dan shadow. Jika kamu menggunakan class `.dark-mode` di `<body>`, maka kamu harus menulis ulang selector untuk setiap elemen:
+
+```css
+body.dark-mode .card { background: #1a1a1a; }
+body.dark-mode .button { background: #333; }
+body.dark-mode .footer { border-color: #444; }
+/* ... dan seterusnya */
+```
+
+Itu berantakan, sulit dipelihara, dan rawan lupa.
+
+Dengan `data-theme`, kita memindahkan semua logika warna ke **CSS variables**. Cukup ubah satu atribut di root, semua elemen yang menggunakan variabel tersebut akan beradaptasi secara otomatis. Ini adalah prinsip **DRY (Don't Repeat Yourself)** yang sebenarnya.
+
+```css
+html[data-theme="dark"] {
+  --bg-primary: #0a0a0a;
+  --text-primary: #f0f0f0;
+  /* hanya perlu didefinisikan sekali */
+}
+```
+Kode kamu menjadi lebih bersih, lebih cepat, dan lebih mudah di-debug.
+
+## Fondasi CSS Variables
+
+Di Unloyd, kami mendefinisikan seluruh palet warna di file CSS global. Perhatikan struktur berikut—ini adalah potongan dari kode produksi yang kami gunakan:
+
+```css
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Tema terang (default) */
+[data-theme='light'] {
+  color-scheme: light;
+
+  --bg: #eceae7;
+  --bg-subtle: #e0ddd8;
+  --bg-muted: #d3cfc8;
+  --bg-elevated: #f4f2ef;
+
+  --fg: #1f1e1c;
+  --fg-strong: #0c0b0a;
+  --fg-muted: #5c584f;
+  --fg-subtle: #837e73;
+  --fg-disabled: #c4bfb3;
+  --fg-inverted: #eceae7;
+
+  --border: #c2bcae;
+  --border-strong: #9c968a;
+  --border-subtle: #d6d1c6;
+
+  --accent: #a9822d;
+  --accent-dim: rgba(169, 130, 45, 0.3);
+  --accent-soft: rgba(169, 130, 45, 0.12);
+  --accent-ring: rgba(169, 130, 45, 0.25);
+
+  --shadow-sm: 0 1px 2px rgba(31,30,28,0.05);
+  --shadow-md: 0 4px 12px -2px rgba(31,30,28,0.08);
+  /* ... dan seterusnya */
+}
+
+/* Tema gelap */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --bg: #0a0a0a;
+  --bg-subtle: #121212;
+  --bg-muted: #1a1a1a;
+  --bg-elevated: #1f1f1f;
+
+  --fg: #eae6da;
+  --fg-strong: #ffffff;
+  --fg-muted: #a39d8c;
+  --fg-subtle: #7d7768;
+  --fg-disabled: #3a382f;
+  --fg-inverted: #0a0a0a;
+
+  --border: #2e2b23;
+  --border-subtle: #211f1a;
+  --border-strong: #1a1812;
+
+  --accent: #d4af6a;
+  --accent-dim: rgba(212, 175, 106, 0.4);
+  --accent-soft: rgba(212, 175, 106, 0.15);
+  --accent-ring: var(--border-subtle);
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.8);
+  --shadow-md: 0 6px 20px rgba(0,0,0,0.6);
+  /* ... dan seterusnya */
+}
+```
+
+Poin penting:
+- `color-scheme` diatur agar browser tahu preferensi (mempengaruhi scrollbar, form input, dll).
+- Semua variabel didefinisikan di dalam blok `[data-theme='light']` dan `:root[data-theme='dark']`.
+- Kami menggunakan dua set variabel untuk setiap properti `(--bg, --bg-subtle, dst.)` sehingga konsisten di seluruh komponen.
+- Warna aksen (accent) memiliki beberapa turunan: `accent`, `accent-dim`, `accent-soft`, `accent-ring`. Ini memudahkan pembuatan efek hover, fokus, dan latar belakang transparan.
+
+> [!NOTE]
+> `:root[data-theme='dark']` digunakan untuk memastikan spesifisitas selector lebih tinggi daripada `[data-theme='light']` jika terjadi konflik. Namun karena di kode kami, `[data-theme='light']` didefinisikan tanpa `:root`, urutan deklarasi sudah cukup. Kami memakai kedua pendekatan untuk fleksibilitas.
+
+## Integrasi dengan Tailwind
+
+Kami menggunakan Tailwind CSS dengan custom variant untuk mendukung tema gelap. Di file CSS global, kami tambahkan:
+
+```css
+@custom-variant dark (&:is(.dark *));
+```
+
+Namun, karena kami menggunakan `data-theme` alih-alih class `.dark`, kami tidak memakai variant `dark:` bawaan Tailwind. Sebaliknya, seluruh warna diambil dari CSS variables yang sudah didefinisikan. Dengan begitu, komponen Tailwind tetap bisa menggunakan `bg-(--bg)` atau `text-(--fg)` — dan nilainya akan otomatis berubah saat data-theme berganti.
+
+Contoh penggunaan di komponen Astro:
+
+```astro
+<div class="bg-(--bg) text-(--fg) border border-(--border-subtle)">
+  Konten yang responsif terhadap tema
+</div>
+```
+
+Ini lebih bersih dan tidak memerlukan variant `dark:` di setiap kelas.
+
+## Script Inline: Mengalahkan Flash of Wrong Theme
+
+FOWT terjadi karena JavaScript tema dijalankan setelah halaman mulai dirender. Solusinya: jalankan script sebelum konten apa pun ditampilkan.
+
+Di Layout Astro, kami menaruh script ini di dalam komponen `<ThemeProvider />` yang ditempatkan di `<head>`:
+
+```astro
+<!-- ThemeProvider.astro (dipanggil di <head>) -->
+<script is:inline>
+  (() => {
+    const stored = localStorage.getItem("a0-theme");
+    const theme = stored || 
+      (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme;
+  })();
+</script>
+```
+
+Keunggulan:
+- `is:inline` membuat script dieksekusi segera, tanpa menunggu bundling.
+- Prioritas: preferensi tersimpan > preferensi OS > fallback `'light'`.
+- `style.colorScheme` juga diatur agar elemen native browser (seperti scrollbar, input date) ikut menyesuaikan.
+
+Hasilnya: pengguna tidak pernah melihat tampilan yang salah, bahkan saat halaman pertama kali dimuat.
+
+## Custom Element untuk Tombol Toggle
+
+Kami membungkus logika tombol toggle dalam custom element `<theme-toggle>`. Ini memungkinkan reusabilitas dan enkapsulasi.
+
+```astro
+---
+// src/components/Theme.astro
+import Button from "@ui/Button.astro";
+import Icon from "@ui/Icons.astro";
+---
+
+<theme-toggle>
+  <Button variant="icon" size="md" class="theme-btn">
+    <Icon name="moon" fill class="icon-moon hidden" />
+    <Icon name="sun" fill class="icon-sun hidden" />
+  </Button>
+</theme-toggle>
+
+<style is:global>
+  [data-theme='dark'] .icon-sun { display: flex; }
+  [data-theme='light'] .icon-moon { display: flex; }
+</style>
+
+<script>
+  class ThemeToggle extends HTMLElement {
+    constructor() {
+      super();
+      const btn = this.querySelector('.theme-btn');
+      
+      const updateTheme = (newTheme) => {
+        document.documentElement.dataset.theme = newTheme;
+        document.documentElement.style.colorScheme = newTheme;
+        localStorage.setItem('a0-theme', newTheme);
+      };
+
+      btn?.addEventListener('click', () => {
+        const current = document.documentElement.dataset.theme;
+        const next = current === 'dark' ? 'light' : 'dark';
+        updateTheme(next);
+        // Kirim event agar komponen lain bisa bereaksi
+        window.dispatchEvent(new CustomEvent('theme-changed', { 
+          detail: { theme: next } 
+        }));
+      });
+
+      // Sinkronisasi jika tema diubah dari luar
+      window.addEventListener('theme-changed', (e) => {
+        if (e.detail.theme !== document.documentElement.dataset.theme) {
+          updateTheme(e.detail.theme);
+        }
+      });
+    }
+  }
+  customElements.define('theme-toggle', ThemeToggle);
+</script>
+```
+
+Mengapa custom element?
+
+- Reusable: Bisa dipasang di header, footer, atau mobile menu tanpa duplikasi kode.
+- Isolated: Logika internal tidak bocor ke komponen lain.
+- Event-driven: Memicu event `theme-changed` yang bisa didengarkan oleh komponen lain (misalnya, untuk analytics atau animasi).
+
+## Menempatkan di Layout
+
+Di Layout.astro, kita pasang ThemeProvider di dalam `<head>` dan `<theme-toggle>` di navbar (melalui komponen `Header`).
+
+```astro
+---
+// Layout.astro
+import ThemeProvider from "@components/ThemeProvider.astro";
+import Header from "@components/Header.astro";
+---
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <!-- ... -->
+    <ThemeProvider />  <!-- script inline berjalan di sini -->
+  </head>
+  <body>
+    <Header />  <!-- di dalamnya ada <theme-toggle> -->
+    <slot />
+  </body>
+</html>
+```
+
+Dengan struktur ini, **script anti-flicker** sudah berjalan sebelum halaman dirender, dan tombol toggle siap digunakan di seluruh halaman.
+
+## Bonus
+
+Agar pergantian tema terasa mulus, tambahkan transisi pada properti yang sering berubah:
+
+```css
+/* global.css */
+* {
+  transition: 
+    background-color 0.2s ease,
+    color 0.15s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+```
+
+> [!CAUTION]
+> Jangan terlalu banyak elemen yang ditransisi untuk menjaga performa di perangkat rendah.
+
+## Ringkasan Arsitektur
+
+| Lapisan | Komponen | Fungsi |
+|:--- | :--- | :--- |
+| CSS Variables | `[data-theme='light']` dan `:root[data-theme='dark']` | Menyimpan seluruh warna dan shadow |
+| Script Inline	| `ThemeProvider` di `<head>` |	Menerapkan tema sebelum rendering, mencegah FOWT |
+| Custom Element | `<theme-toggle>` |	Tombol interaktif dengan penyimpanan localStorage dan event `theme-changed` |
+| CSS Global	| Transisi, `color-scheme`, scrollbar |	Pengalaman visual yang konsisten |
+| Tailwind Integration |	`bg-(--bg)`, `text-(--fg)` |	Komponen Tailwind menggunakan CSS variables, bukan utility kelas statis |
+
+## Penutup
+
+Dark mode di Unloyd bukan sekadar "ganti warna latar". Kami membangunnya dengan perhatian pada detail: mulai dari mencegah flicker, menyimpan preferensi pengguna, hingga memastikan setiap komponen merespons dengan mulus.
+
+Kode yang kami bagikan di sini adalah hasil iterasi dan pengalaman nyata di produksi. Semoga bisa menginspirasi kamu untuk menerapkan dark mode yang nyaman, cepat, dan manusiawi di proyek Astro kamu.
+
+Terang atau gelap, yang penting pengguna betah. 😊
+
+> [!IMPORTANT]
+> Artikel ini ditulis berdasarkan pengalaman tim Unloyd dalam mengembangkan dark mode untuk website kami. Jika kamu punya pertanyaan atau saran, jangan ragu untuk berdiskusi di kolom komentar atau hubungi kami melalui [halaman kontak](/contact/).
