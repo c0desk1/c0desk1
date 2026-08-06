@@ -5,8 +5,6 @@ import Code from "./Code.astro";
 import Figure from "./Figure.astro";
 import FileTree from "./FileTree.astro";
 import Kbd from "./KBD.astro";
-import Link from "./Link.astro";
-import Steps from "./Steps.astro";
 import Video from "./Video.astro";
 import LinkCard from "./LinkCard.astro";
 import Tabs from "./Tabs.astro";
@@ -15,8 +13,6 @@ import CardGrid from "./CardGrid.astro";
 export const components = {
   ChangelogContainer: Changelog,
   ChangelogItem: Changelog,
-  Steps,
-  a: Link,
   FileTree,
   Code,
   Kbd,
