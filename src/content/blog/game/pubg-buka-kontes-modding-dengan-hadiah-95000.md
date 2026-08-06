@@ -3,7 +3,7 @@ slug: "pubg-buka-kontes-modding-dengan-hadiah-95000"
 title: "PUBG Buka Kontes UGC dengan Hadiah US$95.000"
 description: "KRAFTON meluncurkan PUBG: Playgrounds dan menggelar kontes UGC global bersama CurseForge dengan total hadiah US$95.000."
 pubDate: 2026-08-05T00:08Z
-lastUpdated: 2026-08-05T00:08Z
+lastUpdated: 2026-08-05T00:10Z
 cover:
   src: "https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAAOjanIpYTDH9eUhNtBKK2LGcTzn9_0AAlsQaxvfO5hXDRn3ZtqWcEoBAAMCAAN5AAM9BA"
   alt: "PUBG: Playgrounds dan konten buatan komunitas"
