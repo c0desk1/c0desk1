@@ -75,9 +75,8 @@ export const GET: APIRoute = async (context) => {
     customData: `
       <language>${SITE.lang}</language>
       <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
-      <generator>Astro via Unloyd Engine</generator>
       <atom:link href="${baseUrl}${ROUTES.rss}" rel="self" type="application/rss+xml" />
-    `,
+    `.trim(),
 
     items: sortedItems.map((item) => {
       const coverUrl = getCoverUrl(item.cover, baseUrl);
@@ -85,10 +84,13 @@ export const GET: APIRoute = async (context) => {
       const coverHtml = coverUrl
         ? `<img src="${coverUrl}" alt="${item.title}" style="max-width:100%;margin-bottom:10px;border-radius:4px;" />`
         : '';
-      const descriptionHtml = `
+        
+      const rawDescription = `
         ${coverHtml}
-        <p>${item.description || `Baca ${item.title} di ${SITE.name}.`}</p>
+        ${item.description || `Baca ${item.title} di ${SITE.name}.`}
       `.trim();
+
+      const descriptionHtml = `<![CDATA[${rawDescription}]]>`;
 
       const authorName = item.author?.name || SITE.name;
       const authorEmail = item.author?.email || SITE.email;
