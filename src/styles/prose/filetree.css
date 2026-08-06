@@ -9,10 +9,10 @@
   overflow-x: auto;
 }
 
-.prose .file-tree :first-child {
+.prose .file-tree * :first-child {
   margin-top: 0;
 }
-.prose .file-tree :last-child {
+.prose .file-tree * :last-child {
   margin-bottom: 0;
 }
 
@@ -26,27 +26,43 @@
 .prose .file-tree ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .prose .file-tree ul ul {
-  padding-inline-start: 1.25rem;
-  margin-inline-start: 0.5rem;
-  border-inline-start: 1px solid rgb(from var(--border) r g b / 0.7);
+  margin: 0;
+  padding-inline-start: 1.5rem;
 }
 
 .prose .file-tree li {
   position: relative;
-  margin-block-start: 0.25rem;
+  margin: 0;
+  padding-block: 0.15rem;
 }
 
 .prose .file-tree ul ul > li::before {
   content: "";
   position: absolute;
+  left: -1rem;
   top: 0.75rem;
-  inset-inline-start: -1.25rem;
-  width: 1rem;
-  height: 1px;
-  background-color: rgb(from var(--border) r g b / 0.7);
+  width: 0.75rem;
+  border-bottom: 1.5px solid rgb(from var(--border) r g b / 0.85);
+
+}
+
+.prose .file-tree ul ul > li::after {
+  content: "";
+  position: absolute;
+  left: -1rem;
+  top: 0;
+  bottom: 0;
+  width: 1.5px;
+  height: 100%;
+  border-left: 1.5px solid rgb(from var(--border) r g b / 0.85);
+}
+
+.prose .file-tree ul ul > li:last-child::after {
+  height: 0.75rem;
 }
 
 .prose .file-tree .tree-label,
@@ -56,6 +72,7 @@
   gap: 4px;
   margin: 0 !important;
   color: var(--fg-strong);
+  padding-block: 0.15rem;
 }
 
 .prose .file-tree details {
@@ -70,7 +87,6 @@
   display: list-item;
   cursor: pointer;
   user-select: none;
-  transition: color var(--duration, 0.15s) var(--ease-out, ease);
 }
 
 .prose .file-tree details > summary::-webkit-details-marker,
@@ -107,7 +123,6 @@
   color: var(--fg-muted);
 }
 
-/* === HIGHLIGHT === */
 .prose .file-tree li.tree-file.tree-highlight > .tree-label,
 .prose .file-tree li.tree-highlight > details > summary {
   display: flex;
@@ -142,7 +157,6 @@
   color: var(--accent);
 }
 
-/* === PLACEHOLDER === */
 .prose .file-tree li.tree-placeholder {
   display: inline-flex;
   align-items: center;
@@ -156,7 +170,6 @@
   display: none !important;
 }
 
-/* === COMMENT === */
 .prose .file-tree .tree-comment {
   color: var(--fg-muted);
   margin-left: 0.25rem;
