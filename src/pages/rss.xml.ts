@@ -43,6 +43,15 @@ function getImageType(url: string): string {
   return types[ext] ?? "image/jpeg";
 }
 
+function escapeHtmlAttr(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 export const GET: APIRoute = async (context) => {
   const baseUrl = (context.site?.toString() ?? SITE.url).replace(/\/$/, "");
 
@@ -102,19 +111,16 @@ export const GET: APIRoute = async (context) => {
 
     items: items.map((item) => {
       const coverUrl = getCoverUrl(item.cover, baseUrl);
-
       const authorName = item.author?.name || SITE.name;
       const authorEmail = item.author?.email || SITE.email;
-
+      const safeTitle = escapeHtmlAttr(item.title);
       const html = `
         ${
           coverUrl
-            ? `<p><img src="${coverUrl}" alt="${item.title}" /></p>`
+            ? `<p><img src="${coverUrl}" alt="${safeTitle}" /></p>`
             : ""
         }
-
         <p>${item.description ?? ""}</p>
-
         <p>
           <a href="${new URL(item.url, baseUrl)}">
             Baca selengkapnya →
@@ -124,29 +130,16 @@ export const GET: APIRoute = async (context) => {
 
       return {
         title: item.title,
-
         link: new URL(item.url, baseUrl).toString(),
-
         pubDate: item.date,
-
         description:
           item.description ??
           `Baca ${item.title} di ${SITE.name}.`,
-
         author: `${authorEmail} (${authorName})`,
-
         categories: item.category
           ? [item.category]
           : [],
-
-        enclosure: coverUrl
-          ? {
-              url: coverUrl,
-              type: getImageType(coverUrl),
-              length: 0,
-            }
-          : undefined,
-
+        enclosure: undefined,
         customData: `
           ${
             coverUrl
@@ -157,7 +150,6 @@ export const GET: APIRoute = async (context) => {
                  />`
               : ""
           }
-
           <content:encoded><![CDATA[
             ${html}
           ]]></content:encoded>
