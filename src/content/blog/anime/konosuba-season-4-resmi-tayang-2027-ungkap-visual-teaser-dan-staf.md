@@ -3,7 +3,7 @@ slug: "konosuba-season-4-resmi-tayang-2027-ungkap-visual-teaser-dan-staf"
 title: "KonoSuba Season 4 Resmi Tayang pada 2027, Visual Teaser dan Staf Produksi Terungkap"
 description: "KonoSuba Season 4 dipastikan tayang pada 2027. Pengumuman terbaru juga mengungkap visual teaser serta jajaran staf utama yang akan menggarap musim keempat."
 pubDate: 2026-08-05T00:08Z
-lastUpdated: 2026-08-05T00:08Z
+lastUpdated: 2026-08-05T00:10Z
 cover:
   src: "https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAAOlanIqrikr-sgIOSFPZfwnBbuTn6wAAmEQaxvfO5hXc5V9gf8z7IIBAAMCAAN5AAM9BA"
   alt: "Visual teaser KonoSuba Season 4"
