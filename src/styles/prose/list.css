@@ -35,28 +35,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
-    
   width: 1.65rem;
   height: 1.65rem;
   aspect-ratio: 1/1;
   border-radius: var(--radius-full);
-  border: 1.5px solid rgb(from var(--bg) r g b / 0.6);
-  background-color: var(--bg-subtle);
-  color: var(--fg-strong);
-  box-shadow: 0 0 0 1.5px var(--bg-muted);
   padding: 0 !important;
+  color: var(--fg-strong);
+  border: 1.5px solid rgb(from var(--border) r g b / 0.6);
+  background-color: var(--bg-subtle);
+  box-shadow: 0 0 0 1.5px var(--bg-muted);
 }
 
 .prose .steps > li::after {
   content: "";
   position: absolute;
-  inset-inline-start: 0.735rem;
+  inset-inline-start: 0.825rem;
   top: 2rem;
   bottom: 0;
-  width: 1px;
+  width: 0.5px;
+  background-color: rgb(from var(--border) r g b / 0.8);;
   transform: translateX(-50%);
-  border-right: 1px solid rgb(from var(--border) r g b / 0.5);
-  background-color: var(--accent);
 }
 
 .prose .steps > li:last-child::after {
