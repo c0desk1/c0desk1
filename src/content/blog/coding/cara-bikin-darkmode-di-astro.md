@@ -68,7 +68,7 @@ html[data-theme="dark"] {
 ```
 Kode kamu menjadi lebih bersih, lebih cepat, dan lebih mudah di-debug.
 
-## Fondasi CSS Variables (dari Kode Nyata Unloyd)
+## Fondasi CSS Variables
 
 Di Unloyd, kami mendefinisikan seluruh palet warna di file CSS global. Perhatikan struktur berikut—ini adalah potongan dari kode produksi yang kami gunakan:
 
