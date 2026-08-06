@@ -4,15 +4,15 @@
   background-color: var(--bg-subtle);
   border: 1px solid rgb(from var(--border) r g b / 0.5);
   border-radius: var(--radius-md);
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 2rem;
   margin: 2rem 0;
   overflow-x: auto;
 }
 
-.prose .file-tree * :first-child {
+.prose .file-tree *:first-child {
   margin-top: 0;
 }
-.prose .file-tree * :last-child {
+.prose .file-tree *:last-child {
   margin-bottom: 0;
 }
 
@@ -34,6 +34,10 @@
   padding-inline-start: 1.5rem;
 }
 
+.prose .file-tree ul ul > li {
+  padding-inline-start: 1rem;
+}
+
 .prose .file-tree li {
   position: relative;
   margin: 0;
@@ -44,8 +48,8 @@
   content: "";
   position: absolute;
   left: -1rem;
-  top: 0.75rem;
-  width: 0.75rem;
+  top: 0.9rem;
+  width: 0.5rem;
   border-bottom: 1.5px solid rgb(from var(--border) r g b / 0.85);
 
 }
@@ -62,12 +66,12 @@
 }
 
 .prose .file-tree ul ul > li:last-child::after {
-  height: 0.75rem;
+  height: 0.9rem;
 }
 
 .prose .file-tree .tree-label,
 .prose .file-tree details > summary {
-  display: flex;
+  display: list-item;
   align-items: center;
   gap: 4px;
   margin: 0 !important;
@@ -82,19 +86,18 @@
   border: none;
 }
 
-.prose .file-tree details > summary {
-  list-style: none;
-  display: list-item;
-  cursor: pointer;
-  user-select: none;
+.prose .file-tree details > summary::-webkit-details-marker {
+  display: initial !important;
+  color: inherit;
 }
 
-.prose .file-tree details > summary::-webkit-details-marker,
-.prose .file-tree details > summary::marker,
+.prose .file-tree details > summary::marker {
+  content: normal !important;
+  color: inherit;
+}
+
 .prose .file-tree details > summary::before {
   display: none;
-  content: none;
-  color: transparent;
 }
 
 .prose .file-tree details > summary:hover {
@@ -110,6 +113,7 @@
   vertical-align: middle;
   width: 1.125rem;
   height: 1.125rem;
+  aspect-ratio: 1/1;
 }
 
 .prose .file-tree .tree-icon {
@@ -117,12 +121,14 @@
   width: 100%;
   height: 100%;
   color: currentColor;
+  object-fit: cover;
 }
 
 .prose .file-tree .tree-folder > details > summary .tree-icon {
   color: var(--fg-muted);
 }
 
+/* === HIGHLIGHT === */
 .prose .file-tree li.tree-file.tree-highlight > .tree-label,
 .prose .file-tree li.tree-highlight > details > summary {
   display: flex;
@@ -133,7 +139,6 @@
   color: var(--accent);
   background-color: color-mix(in srgb, var(--accent) 5%, transparent);
   border-radius: var(--radius-sm);
-  transition: background-color var(--duration, 0.15s) var(--ease-out, ease);
 }
 
 .prose .file-tree li.tree-highlight > details > summary {
@@ -157,6 +162,7 @@
   color: var(--accent);
 }
 
+/* === PLACEHOLDER === */
 .prose .file-tree li.tree-placeholder {
   display: inline-flex;
   align-items: center;
@@ -170,6 +176,7 @@
   display: none !important;
 }
 
+/* === COMMENT === */
 .prose .file-tree .tree-comment {
   color: var(--fg-muted);
   margin-left: 0.25rem;
