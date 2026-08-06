@@ -3,7 +3,7 @@ slug: "rezero-season4-part2-tayang-agustus"
 title: "Subaru Kembali Terjebak di Menara Maut! Re:Zero Season 4 Part 2 Siap Tayang 12 Agustus"
 description: "Bagian kedua Re:Zero Season 4 berjudul Arc Penaklukan resmi tayang 12 Agustus 2026. Subaru kehilangan ingatan di menara misterius. Simak sinopsis, jadwal, dan lagu tema!"
 pubDate: 2026-08-04T02:18Z
-lastUpdated: 2026-08-02T02:18Z
+lastUpdated: 2026-08-02T02:20Z
 cover:
   src: "https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAAOcanDyacCk0zewLOhVZ_LJcD8usGwAAlkQaxuCFIhXZz9I0SG3LIgBAAMCAAN5AAM9BA"
   alt: "Visual Arc Penaklukan Re:Zero Season 4"
