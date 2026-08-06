@@ -3,7 +3,7 @@ slug: "membuat-callout-keren-di-astro-dengan-satteri"
 title: "Membuat Callout Keren di Astro dengan Satteri"
 description: "Panduan santai membuat custom callout di Astro pakai Satteri. Tukar blockquote biasa jadi kotak info yang cantik dengan satu baris kode."
 pubDate: 2026-08-06T13:00Z
-lastUpdated: 2026-08-06T13:17Z
+lastUpdated: 2026-08-06T16:00Z
 cover:
   src: "https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAAOvanRJsM0xq2EWOLXxrhqjjk3BmtQAArQQaxuBg6FXyp7Cq3sPJMMBAAMCAAN5AAM9BA"
   alt: "Visual cover ilustrasi cara membuat Callout kustom MDX Components"
@@ -23,7 +23,7 @@ seo:
   title: "Custom Callout di Astro dengan Satteri"
   description: "Panduan membuat callout custom di Astro pakai Satteri. Ubah blockquote jadi kotak info cantik tanpa ribet."
   ogImage: "https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAAOvanRJsM0xq2EWOLXxrhqjjk3BmtQAArQQaxuBg6FXyp7Cq3sPJMMBAAMCAAN5AAM9BA"
-  noIndex: true
+  noIndex: false
 ---
 
 Pernah nggak sih kamu baca dokumentasi terus nemuin kotak-kotak warna-warni kayak gini?
@@ -199,15 +199,134 @@ Bayangin: kamu lagi nulis artikel, pengen kasih tips. Daripada buka komponen, im
 
 4. ### Langkah 4: Kasih Baju (CSS)
 
-  Biar callout-nya cantik, kita butuh CSS. Kamu sudah punya file `src/styles/prose/callout.css` yang lengkap. Cukup import di layout utama atau di `global.css`:
+  Biar callout-nya cantik, kita perlu styling. Buat file `src/styles/prose/callout.css` dan isi dengan kode di bawah ini:
+
+  ```css
+  /* src/styles/prose/callout.css */
+
+  :root {
+    --callout-icon-note: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJjdXJyZW50Q29sb3IiIGNsYXNzPSJpY29uIGljb24tdGFibGVyIGljb25zLXRhYmxlci1maWxsZWQgaWNvbi10YWJsZXItaW5mby1jaXJjbGUiPjxwYXRoIHN0cm9rZT0ibm9uZSIgZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIgLz48cGF0aCBkPSJNMTIgMmM1LjUyMyAwIDEwIDQuNDc3IDEwIDEwYTEwIDEwIDAgMCAxIC0xOS45OTUgLjMyNGwtLjAwNSAtLjMyNGwuMDA0IC0uMjhjLjE0OCAtNS4zOTMgNC41NjYgLTkuNzIgOS45OTYgLTkuNzJ6bTAgOWgtMWwtLjExNyAuMDA3YTEgMSAwIDAgMCAwIDEuOTg2bC4xMTcgLjAwN3YzbC4wMDcgLjExN2ExIDEgMCAwIDAgLjg3NiAuODc2bC4xMTcgLjAwN2gxbC4xMTcgLS4wMDdhMSAxIDAgMCAwIC44NzYgLS44NzZsLjAwNyAtLjExN2wtLjAwNyAtLjExN2ExIDEgMCAwIDAgLS43NjQgLS44NTdsLS4xMTIgLS4wMmwtLjExNyAtLjAwNnYtM2wtLjAwNyAtLjExN2ExIDEgMCAwIDAgLS44NzYgLS44NzZsLS4xMTcgLS4wMDd6bS4wMSAtM2wtLjEyNyAuMDA3YTEgMSAwIDAgMCAwIDEuOTg2bC4xMTcgLjAwN2wuMTI3IC0uMDA3YTEgMSAwIDAgMCAwIC0xLjk4NmwtLjExNyAtLjAwN3oiIC8+PC9zdmc+");
+    --callout-icon-tip: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJjdXJyZW50Q29sb3IiIGNsYXNzPSJpY29uIGljb24tdGFibGVyIGljb25zLXRhYmxlci1maWxsZWQgaWNvbi10YWJsZXItZmxhbWUiPjxwYXRoIHN0cm9rZT0ibm9uZSIgZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIgLz48cGF0aCBkPSJNMTAgMmMwIC0uODggMS4wNTYgLTEuMzMxIDEuNjkyIC0uNzIyYzEuOTU4IDEuODc2IDMuMDk2IDUuOTk1IDEuNzUgOS4xMmwtLjA4IC4xNzRsLjAxMiAuMDAzYy42MjUgLjEzMyAxLjIwMyAtLjQzIDIuMzAzIC0yLjE3M2wuMTQgLS4yMjRhMSAxIDAgMCAxIDEuNTgyIC0uMTUzYzEuMzM0IDEuNDM1IDIuNjAxIDQuMzc3IDIuNjAxIDYuMjdjMCA0LjI2NSAtMy41OTEgNy43MDUgLTggNy43MDVzLTggLTMuNDQgLTggLTcuNzA2YzAgLTIuMjUyIDEuMDIyIC00LjcxNiAyLjYzMiAtNi4zMDFsLjYwNSAtLjU4OWMuMjQxIC0uMjM2IC40MzQgLS40MyAuNjE4IC0uNjI0YzEuNDMgLTEuNTEyIDIuMTQ1IC0yLjkyNCAyLjE0NSAtNC43OCIgLz48L3N2Zz4=");
+    --callout-icon-important: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJjdXJyZW50Q29sb3IiIGNsYXNzPSJpY29uIGljb24tdGFibGVyIGljb25zLXRhYmxlci1maWxsZWQgaWNvbi10YWJsZXItbGFiZWwtaW1wb3J0YW50Ij48cGF0aCBzdHJva2U9Im5vbmUiIGQ9Ik0wIDBoMjR2MjRIMHoiIGZpbGw9Im5vbmUiIC8+PHBhdGggZD0iTTE2LjUyIDZhMiAyIDAgMCAxIDEuNTYxIC43NWwzLjcgNC42MjVhMSAxIDAgMCAxIDAgMS4yNWwtMy43IDQuNjI0YTIgMiAwIDAgMSAtMS41NjEgLjc1MWgtMTIuNTJhMSAxIDAgMCAxIC0uNzggLTEuNjI1bDMuNSAtNC4zNzVsLTMuNSAtNC4zNzVhMSAxIDAgMCAxIC42NjggLTEuNjJsLjExMiAtLjAwNXoiIC8+PC9zdmc+");
+    --callout-icon-warning: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJjdXJyZW50Q29sb3IiIGNsYXNzPSJpY29uIGljb24tdGFibGVyIGljb25zLXRhYmxlci1maWxsZWQgaWNvbi10YWJsZXItYWxlcnQtdHJpYW5nbGUiPjxwYXRoIHN0cm9rZT0ibm9uZSIgZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIgLz48cGF0aCBkPSJNMTIgMS42N2MuOTU1IDAgMS44NDUgLjQ2NyAyLjM5IDEuMjQ3bC4xMDUgLjE2bDguMTE0IDEzLjU0OGEyLjkxNCAyLjkxNCAwIDAgMSAtMi4zMDcgNC4zNjNsLS4xOTUgLjAwOGgtMTYuMjI1YTIuOTE0IDIuOTE0IDAgMCAxIC0yLjU4MiAtNC4ybC4wOTkgLS4xODVsOC4xMSAtMTMuNTM4YTIuOTE0IDIuOTE0IDAgMCAxIDIuNDkxIC0xLjQwM3ptLjAxIDEzLjMzbC0uMTI3IC4wMDdhMSAxIDAgMCAwIDAgMS45ODZsLjExNyAuMDA3bC4xMjcgLS4wMDdhMSAxIDAgMCAwIDAgLTEuOTg2bC0uMTE3IC0uMDA3em0tLjAxIC03YTEgMSAwIDAgMCAtLjk5MyAuODgzbC0uMDA3IC4xMTd2NGwuMDA3IC4xMTdhMSAxIDAgMCAwIDEuOTg2IDBsLjAwNyAtLjExN3YtNGwtLjAwNyAtLjExN2ExIDEgMCAwIDAgLS45OTMgLS44ODN6IiAvPjwvc3ZnPg==");
+    --callout-icon-caution: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJjdXJyZW50Q29sb3IiIGNsYXNzPSJpY29uIGljb24tdGFibGVyIGljb25zLXRhYmxlci1maWxsZWQgaWNvbi10YWJsZXItZmxhZyI+PHBhdGggc3Ryb2tlPSJub25lIiBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIiAvPjxwYXRoIGQ9Ik00IDVhMSAxIDAgMCAxIC4zIC0uNzE0YTYgNiAwIDAgMSA4LjIxMyAtLjE3NmwuMzUxIC4zMjhhNCA0IDAgMCAwIDUuMjcyIDBsLjI0OSAtLjIyN2MuNjEgLS40ODMgMS41MjcgLS4wOTcgMS42MSAuNjc2bC4wMDUgLjExM3Y5YTEgMSAwIDAgMSAtLjMgLjcxNGE2IDYgMCAwIDEgLTguMjEzIC4xNzZsLS4zNTEgLS4zMjhhNCA0IDAgMCAwIC01LjEzNiAtLjExNHY2LjU1MmExIDEgMCAwIDEgLTEuOTkzIC4xMTdsLS4wMDcgLS4xMTd2LTE2eiIgLz48L3N2Zz4=");
+    --callout-icon-danger: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJjdXJyZW50Q29sb3IiIGNsYXNzPSJpY29uIGljb24tdGFibGVyIGljb25zLXRhYmxlci1maWxsZWQgaWNvbi10YWJsZXItYWxlcnQtY2lyY2xlIj48cGF0aCBzdHJva2U9Im5vbmUiIGQ9Ik0wIDBoMjR2MjRIMHoiIGZpbGw9Im5vbmUiIC8+PHBhdGggZD0iTTEyIDJjNS41MjMgMCAxMCA0LjQ3NyAxMCAxMGExMCAxMCAwIDAgMSAtMTkuOTk1IC4zMjRsLS4wMDUgLS4zMjRsLjAwNCAtLjI4Yy4xNDggLTUuMzkzIDQuNTY2IC05LjcyIDkuOTk2IC05Ljcyem0uMDEgMTNsLS4xMjcgLjAwN2ExIDEgMCAwIDAgMCAxLjk4NmwuMTE3IC4wMDdsLjEyNyAtLjAwN2ExIDEgMCAwIDAgMCAtMS45ODZsLS4xMTcgLS4wMDd6bS0uMDEgLThhMSAxIDAgMCAwIC0uOTkzIC44ODNsLS4wMDcgLjExN3Y0bC4wMDcgLjExN2ExIDEgMCAwIDAgMS45ODYgMGwuMDA3IC0uMTE3di00bC0uMDA3IC0uMTE3YTEgMSAwIDAgMCAtLjk5MyAtLjg4M3oiIC8+PC9zdmc+");
+  }
+
+  .prose blockquote[data-callout] {
+    @apply text-body-14;
+    --callout-color: var(--fg-muted);
+    display: block;
+    box-sizing: border-box;
+    position: relative;
+    margin: 1.75rem 0;
+    padding: 0.5rem 1rem 0.5rem 3.5rem;
+    background: var(--bg-subtle);
+    border: 1px solid rgb(from var(--border) r g b / 0.4);
+    border-radius: var(--radius-md);
+    color: var(--fg);
+  }
+
+  .prose blockquote[data-callout]::before {
+    content: "";
+    position: absolute;
+    inset-block: 0.5rem;
+    inset-inline-start: 0.5rem;
+    width: 3px;
+    background-color: var(--callout-color) !important;
+    border-radius: var(--radius-full);
+  }
+
+  .prose blockquote[data-callout]::after {
+    content: "";
+    position: absolute;
+    inset-block-start: 0.55rem;
+    inset-inline-start: 1.5rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    background-color: var(--callout-color) !important;
+    mask: var(--callout-icon) center / contain no-repeat;
+    -webkit-mask: var(--callout-icon) center / contain no-repeat;
+    pointer-events: none;
+  }
+
+  .prose blockquote[data-callout="note"] {
+    --callout-color: var(--fg-muted);
+    --callout-icon: var(--callout-icon-note);
+  }
+  .prose blockquote[data-callout="tip"] {
+    --callout-color: var(--accent);
+    --callout-icon: var(--callout-icon-tip);
+  }
+  .prose blockquote[data-callout="important"] {
+    --callout-color: #8b5cf6;
+    --callout-icon: var(--callout-icon-important);
+  }
+  .prose blockquote[data-callout="warning"] {
+    --callout-color: var(--color-warning);
+    --callout-icon: var(--callout-icon-warning);
+  }
+  .prose blockquote[data-callout="caution"] {
+    --callout-color: #f97316;
+    --callout-icon: var(--callout-icon-caution);
+  }
+  .prose blockquote[data-callout="danger"] {
+    --callout-color: var(--color-error);
+    --callout-icon: var(--callout-icon-danger);
+ }
+
+  .prose blockquote[data-callout] *:first-child {
+    margin-top: 0 !important;
+  }
+  .prose blockquote[data-callout] *:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  .prose blockquote[data-callout] > * + * {
+    margin-block-start: 0.75rem;
+  }
+
+  .prose blockquote[data-callout] ul,
+  .prose blockquote[data-callout] ol {
+    padding-inline-start: 1.5rem;
+    margin-block: 0.5rem 0;
+   }
+  .prose blockquote[data-callout] li {
+    margin-block-start: 0.375rem;
+  }
+  .prose blockquote[data-callout] li::marker {
+    color: var(--callout-color);
+  }
+
+  .prose blockquote[data-callout] a {
+    color: var(--fg-strong);
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-color: var(--callout-color);
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1.5px;
+  }
+
+  .prose blockquote[data-callout] :not(pre) > code {
+    font-size: 0.875em;
+    color: var(--fg-strong);
+    background: color-mix(in srgb, var(--callout-color) 10%, var(--bg-subtle));
+    border: 1px solid color-mix(in srgb, var(--callout-color) 15%, transparent);
+    padding: 0.15em 0.4em;
+    border-radius: 0.25rem;
+    font-weight: 500;
+  }
+  ```
+  
+  Setelah file CSS dibuat, jangan lupa import di layout utama:
 
   ```css
   /* src/styles/global.css */
   @import './prose/callout.css';
   ```
-  
-  Atau di layout:
-  
+
+  Atau langsung di layout:
+
   ```astro
   ---
   // src/layouts/Layout.astro
