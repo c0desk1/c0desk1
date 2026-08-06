@@ -1,6 +1,6 @@
 
 import { defineMdastPlugin } from 'satteri';
-import { fileIcons } from '@/assets/icons/file';
+import { fileIcons } from '../../assets/icons/file';
 
 function splitComment(raw: string): { name: string; comment: string } {
   const idx = raw.search(/\s#\s?/);
