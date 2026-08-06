@@ -8,6 +8,24 @@
   counter-reset: step;
 }
 
+.prose .steps h2,
+.prose .steps h3,
+.prose .steps h4 {
+  @apply text-heading-16;
+  color: var(--fg-strong);
+}
+
+.prose .steps * .heading-anchor {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
+.prose .steps ul,
+.prose .steps ol,
+.prose .steps p {
+  @apply text-body-16;
+}
+
 .prose .steps > li,
 .prose .steps-container > ol > li,
 .prose .steps-container > ul > li {
