@@ -58,6 +58,7 @@ export const GET: APIRoute = async (context) => {
         cover: post.data.cover,
         author: post.data.author?.name || SITE.name,
         authorEmail: post.data.author?.email || SITE.email,
+        tags: post.data.tags || [],
         type: 'blog',
         slug: slug,
       };
@@ -72,6 +73,7 @@ export const GET: APIRoute = async (context) => {
         cover: doc.data.cover,
         author: doc.data.author?.name || SITE.name,
         authorEmail: doc.data.author?.email || SITE.email,
+        tags: doc.data.category ? [doc.data.category] : [],
         type: 'docs',
         slug: slug,
       };
@@ -111,10 +113,12 @@ export const GET: APIRoute = async (context) => {
       const escapedDescription = escapeXml(item.description || `Baca ${item.title} di ${SITE.name}.`);
       const summary = item.description ?? `Baca ${item.title}`;
 
+      const coverAlt = escapeXml(item.cover?.alt || item.title);
+
       let rawContent = `<p>${summary}</p>`;
 
       if (coverUrl) {
-        rawContent = `<p><img src="${coverUrl}" alt="${escapedTitle}" /></p>\n${rawContent}`;
+        rawContent = `<p><img src="${coverUrl}" alt="${coverAlt}" /></p>\n${rawContent}`;
       }
 
       const imageType = coverUrl ? getImageType(coverUrl) : 'image/jpeg';
@@ -139,6 +143,10 @@ export const GET: APIRoute = async (context) => {
     </author>
     <category term="${escapeXml(item.type)}" />
     ${item.category ? `    <category term="${escapeXml(item.category)}" />\n` : ''}
+    ${(item.tags || [])
+      .filter((tag: string) => tag !== item.category)
+      .map((tag: string) => `    <category term="${escapeXml(tag)}" />`)
+      .join('\n')}
     ${enclosure}
   </entry>`;
     })
