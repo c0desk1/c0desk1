@@ -109,7 +109,7 @@ export const GET: APIRoute = async (context) => {
 
       let rawContent = `<p>${escapedDescription}</p>`;
       if (coverUrl) {
-        rawContent = `<img src="${coverUrl}" alt="${escapedTitle}" style="max-width:100%;margin-bottom:10px;border-radius:4px;" />\n${rawContent}`;
+        rawContent = `<p><img src="${coverUrl}" alt="${escapedTitle}" style="max-width:100%;margin-bottom:10px;border-radius:4px;"></p>\n${rawContent}`;
       }
 
       const imageType = coverUrl ? getImageType(coverUrl) : 'image/jpeg';
