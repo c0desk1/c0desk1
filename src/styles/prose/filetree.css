@@ -18,7 +18,8 @@
 
 .prose .file-tree details > summary,
 .prose .file-tree ul,
-.prose .file-tree li {
+.prose .file-tree li,
+.prose .file-tree p {
   @apply text-code-14;
 }
 
@@ -72,13 +73,13 @@
   transition: color var(--duration, 0.15s) var(--ease-out, ease);
 }
 
-/* .prose .file-tree details > summary::-webkit-details-marker,
+.prose .file-tree details > summary::-webkit-details-marker,
 .prose .file-tree details > summary::marker,
 .prose .file-tree details > summary::before {
   display: none;
   content: none;
   color: transparent;
-} */
+}
 
 .prose .file-tree details > summary:hover {
   color: var(--accent);
@@ -107,23 +108,30 @@
 }
 
 /* === HIGHLIGHT === */
-.prose .file-tree li.tree-highlight > .tree-label,
+.prose .file-tree li.tree-file.tree-highlight,
 .prose .file-tree li.tree-highlight > details > summary {
   display: inline-flex;
   align-items: center;
   background-color: color-mix(in srgb, var(--accent) 15%, transparent);
   border-radius: var(--radius-sm);
-  padding-inline: 0.4rem;
-  padding-block: 0.15rem;
 }
 
-.prose .file-tree li.tree-highlight > .tree-label strong,
+.prose .file-tree li.tree-file.tree-highlight {
+  padding-inline: 0.4rem;
+
+}
+.prose .file-tree li.tree-highlight > details > summary {
+  padding-inline: 0.4rem;
+  padding-block: 0.35rem;
+}
+
+.prose .file-tree li.tree-file.tree-highlight strong,
 .prose .file-tree li.tree-highlight > details > summary strong {
   color: var(--accent);
   font-weight: 600;
 }
 
-.prose .file-tree li.tree-highlight > .tree-label .tree-icon,
+.prose .file-tree li.tree-file.tree-highlight .tree-icon,
 .prose .file-tree li.tree-highlight > details > summary .tree-icon {
   color: var(--accent);
 }
@@ -135,10 +143,6 @@
   color: var(--fg-muted);
   opacity: 0.6;
   padding-left: 0.25rem;
-}
-
-.prose .file-tree li.tree-placeholder > p {
-  margin: 0 !important;
 }
 
 .prose .file-tree li.tree-placeholder > .tree-label .tree-icon-wrapper,
