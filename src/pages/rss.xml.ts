@@ -109,7 +109,7 @@ export const GET: APIRoute = async (context) => {
       const html = `
         ${
           coverUrl
-            ? `<p><img src="${coverUrl}" alt="${item.title}" style="max-width:100%;border-radius:6px;" /></p>`
+            ? `<p><img src="${coverUrl}" alt="${item.title}" /></p>`
             : ""
         }
 
