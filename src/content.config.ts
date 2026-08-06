@@ -63,6 +63,7 @@ const legal = defineCollection({
   loader: glob({ base: "./src/content/legal", pattern: "**/*.{md,mdx}", deferRender: true }),
   schema: z.object({
   ...METADATA.shape,
+  draft: z.boolean().default(false),
   seo: SEO,
   }),
 });
