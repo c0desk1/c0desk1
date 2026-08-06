@@ -78,7 +78,7 @@
 
 .prose .astro-code .line {
   display: block;
-  padding: 0 1.5rem !important;
+  padding: 0 1rem !important;
   line-height: inherit;
   white-space: pre;
 }
