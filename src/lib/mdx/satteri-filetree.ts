@@ -33,7 +33,6 @@ export const satteriFileTree = defineMdastPlugin({
   },
 
   listItem(node, ctx) {
-    // cek apakah di dalam filetree
     let currentNode: any = node;
     let isInsideFileTree = false;
     while (true) {
@@ -66,7 +65,7 @@ export const satteriFileTree = defineMdastPlugin({
           if (textChild?.type === 'text') {
             fileName = (textChild.value as string).trim();
           }
-          // pertahankan node <strong>
+
           nameNode = first;
 
           const rest = children.slice(1);
@@ -153,7 +152,7 @@ export const satteriFileTree = defineMdastPlugin({
     const finalClassName = [...existingClasses, typeClass, highlightClass].filter(Boolean);
 
     if (isFolder && hasNestedList) {
-      // folder dengan anak list → pakai <details><summary>
+
       const summaryNode = {
         type: 'paragraph',
         data: { hName: 'summary', hProperties: { className: ['tree-label'] } },
@@ -167,7 +166,6 @@ export const satteriFileTree = defineMdastPlugin({
       };
       ctx.setProperty(node, 'children', [detailsNode as any]);
     } else {
-      // file / placeholder → selalu bungkus dengan .tree-label
       const labelNode = {
         type: 'paragraph',
         data: {
