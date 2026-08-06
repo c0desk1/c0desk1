@@ -63,7 +63,7 @@ export const GET: APIRoute = async (context) => {
     .slice(0, PAGINATION.postsPerFeed);
 
   return rss({
-    title: `${SITE.name} | ${SITE.tagline}`,
+    title: `${SITE.name}` || `${SITE.name} | ${SITE.tagline}`,
     description: SITE.description,
     site: baseUrl,
     trailingSlash: true,
@@ -82,12 +82,12 @@ export const GET: APIRoute = async (context) => {
       const coverUrl = getCoverUrl(item.cover, baseUrl);
 
       const coverHtml = coverUrl
-        ? `<img src="${coverUrl}" alt="${item.title}" style="max-width:100%;margin-bottom:10px;border-radius:4px;" />`
+        ? `<p><img src="${coverUrl}" alt="${item.title}" style="max-width:100%;margin-bottom:10px;border-radius:4px;" /></p>`
         : '';
-        
+
       const rawDescription = `
         ${coverHtml}
-        ${item.description || `Baca ${item.title} di ${SITE.name}.`}
+        <p>${item.description || `Baca ${item.title} di ${SITE.name}.`}</p>
       `.trim();
 
       const descriptionHtml = `<![CDATA[${rawDescription}]]>`;
