@@ -53,8 +53,8 @@ export const GET: APIRoute = async (context) => {
       return {
         ...post.data,
         url: `${baseUrl}${ROUTES.blog}/${slug}/`,
-        date: post.data.pubDate || post.data.lastUpdated || new Date(0),
-        updated: post.data.lastUpdated || post.data.pubDate || new Date(0),
+        date: post.data.pubDate ?? post.data.lastUpdated ?? new Date(0),
+        updated: post.data.lastUpdated ?? post.data.pubDate ?? new Date(0),
         cover: post.data.cover,
         author: post.data.author?.name || SITE.name,
         authorEmail: post.data.author?.email || SITE.email,
@@ -67,8 +67,8 @@ export const GET: APIRoute = async (context) => {
       return {
         ...doc.data,
         url: `${baseUrl}${ROUTES.docs}/${slug}/`,
-        date: doc.data.pubDate || doc.data.lastUpdated || new Date(0),
-        updated: doc.data.lastUpdated || doc.data.pubDate || new Date(0),
+        date: doc.data.pubDate ?? doc.data.lastUpdated ?? new Date(0),
+        updated: doc.data.lastUpdated ?? doc.data.pubDate ?? new Date(0),
         cover: doc.data.cover,
         author: doc.data.author?.name || SITE.name,
         authorEmail: doc.data.author?.email || SITE.email,
@@ -82,19 +82,22 @@ export const GET: APIRoute = async (context) => {
     .sort((a, b) => b.date.getTime() - a.date.getTime())
     .slice(0, PAGINATION.postsPerFeed);
 
-  const feedYear = "2026"; 
+  const feedUpdated = sortedItems[0]?.updated ?? new Date();
+
+  const feedYear = String(feedUpdated.getFullYear());
   const feedId = `tag:${baseUrl.replace(/^https?:\/\//, '')},${feedYear}:feed`;
 
   const atomFeed = `<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://w3.org">
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="${SITE.lang}">
   <title>${escapeXml(SITE.name)}</title>
   <subtitle>${escapeXml(SITE.description)}</subtitle>
   <link href="${baseUrl}${ROUTES.feedAtom}" rel="self" type="application/atom+xml"/>
   <link href="${baseUrl}/" rel="alternate" type="text/html"/>
-  <updated>${new Date().toISOString()}</updated>
+  <updated>${feedUpdated.toISOString()}</updated>
   <id>${feedId}</id>
   <rights>&#xA9; ${new Date().getFullYear()} ${escapeXml(SITE.name)}</rights>
   <generator uri="${baseUrl}" version="1.0">Astro</generator>
+  <icon>${baseUrl}/favicon/favicon.ico</icon>
   
   <author>
     <name>${escapeXml(SITE.name)}</name>
@@ -106,15 +109,17 @@ export const GET: APIRoute = async (context) => {
       const coverUrl = getCoverUrl(item.cover, baseUrl);
       const escapedTitle = escapeXml(item.title);
       const escapedDescription = escapeXml(item.description || `Baca ${item.title} di ${SITE.name}.`);
+      const summary = item.description ?? `Baca ${item.title}`;
 
-      let rawContent = `<p>${escapedDescription}</p>`;
+      let rawContent = `<p>${summary}</p>`;
+
       if (coverUrl) {
-        rawContent = `<p><img src="${coverUrl}" alt="${escapedTitle}" style="max-width:100%;margin-bottom:10px;border-radius:4px;"></p>\n${rawContent}`;
+        rawContent = `<p><img src="${coverUrl}" alt="${escapedTitle}" /></p>\n${rawContent}`;
       }
 
       const imageType = coverUrl ? getImageType(coverUrl) : 'image/jpeg';
       const enclosure = coverUrl
-        ? `    <link rel="enclosure" href="${coverUrl}" length="0" type="${imageType}" />\n`
+        ? `    <link rel="enclosure" href="${coverUrl}" type="${imageType}" />\n`
         : '';
 
       const entryYear = new Date(item.date).getFullYear();
