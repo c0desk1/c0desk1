@@ -3,7 +3,7 @@ slug: "cara-bikin-darkmode-di-astro"
 title: "Dark Mode di Astro dengan Data Attribute dan CSS Variables"
 description: "Panduan lengkap membangun dark mode di Astro tanpa flicker, dengan custom element, localStorage, dan integrasi Tailwind. Berbasis kode produksi Unloyd."
 pubDate: 2026-08-06T01:52Z
-lastUpdated: 2026-08-06T01:52Z
+lastUpdated: 2026-08-06T01:55Z
 cover:
   src: "https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAAOtanOFh6xAGJn2RviaSrCqeO6YsI8AAmIRaxvfO6BXQSyqzQ8AAcDBAQADAgADeQADPQQ"
   alt: "Cover panduan darkmode di Astro"
