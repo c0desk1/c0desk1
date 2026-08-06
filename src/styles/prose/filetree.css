@@ -67,6 +67,7 @@
 
 .prose .file-tree details > summary {
   list-style: none;
+  display: list-item;
   cursor: pointer;
   user-select: none;
   transition: color var(--duration, 0.15s) var(--ease-out, ease);
