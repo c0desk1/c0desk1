@@ -1,4 +1,4 @@
-
+// src/lib/mdx/satteri-filetree.ts
 import { defineMdastPlugin } from 'satteri';
 import { fileIcons } from '../../assets/icons/file';
 
@@ -35,15 +35,22 @@ export const satteriFileTree = defineMdastPlugin({
   listItem(node, ctx) {
     let currentNode: any = node;
     let isInsideFileTree = false;
+
+    // Pengecekan ketat: pastikan parent terdekatnya benar-benar containerDirective dengan nama 'filetree'
     while (true) {
       const parent = ctx.parent(currentNode);
       if (!parent) break;
-      if (parent.type === 'containerDirective' && (parent as any).name === 'filetree') {
-        isInsideFileTree = true;
-        break;
+      
+      // Jika ketemu kontainer lain terlebih dahulu (seperti steps atau list biasa), batalkan!
+      if (parent.type === 'containerDirective') {
+        if ((parent as any).name === 'filetree') {
+          isInsideFileTree = true;
+        }
+        break; // Berhenti mencari ke atas jika sudah membentur container directive lain
       }
       currentNode = parent;
     }
+    
     if (!isInsideFileTree) return;
 
     const firstChild = node.children[0];
@@ -152,7 +159,6 @@ export const satteriFileTree = defineMdastPlugin({
     const finalClassName = [...existingClasses, typeClass, highlightClass].filter(Boolean);
 
     if (isFolder && hasNestedList) {
-
       const summaryNode = {
         type: 'paragraph',
         data: { hName: 'summary', hProperties: { className: ['tree-label'] } },
