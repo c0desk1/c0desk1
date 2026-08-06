@@ -150,10 +150,9 @@ export const GET: APIRoute = async (context) => {
       <email>${escapeXml(item.authorEmail)}</email>
     </author>
 ${categoryLines}
-${enclosure ? '    ' + enclosure.trim() : ''}
+${enclosure ? '' + enclosure.trim() : ''}
   </entry>`;
-    })
-    .join('\n')}
+  }).join('\n')}
 </feed>`;
 
   return new Response(atomFeed.trim(), {
