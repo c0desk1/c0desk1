@@ -31,6 +31,7 @@ const AUTHOR = z.object({
     role: z.string().optional(),
     avatar: z.string().optional(),
     url: z.url().optional(),
+    email: z.email().optional(),
   }).optional()
 });
 
