@@ -47,7 +47,9 @@ export const GET: APIRoute = async (context) => {
         date: post.data.pubDate || post.data.lastUpdated || new Date(0),
         cover: post.data.cover,
         author: post.data.author,
-        tags: post.data.tags || [],
+        tags: post.data.category
+          ? [...new Set([post.data.category, ...(post.data.tags || [])])]
+          : post.data.tags || [],
         type: 'blog',
       };
     }),
@@ -119,7 +121,7 @@ export const GET: APIRoute = async (context) => {
           {
             url: coverUrl,
             mime_type: getImageType(coverUrl),
-            title: `Cover for ${item.title}`,
+            title: item.cover?.alt || `Cover for ${item.title}`,
           },
         ];
       }
