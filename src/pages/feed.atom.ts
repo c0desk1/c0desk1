@@ -1,7 +1,11 @@
 // src/pages/feed.atom.ts
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
-import { SITE, ROUTES, PAGINATION } from '@/consts';
+import { 
+  SITE, 
+  ROUTES, 
+  PAGINATION 
+} from '@/consts';
 
 function escapeXml(str: string): string {
   return str
@@ -78,26 +82,34 @@ export const GET: APIRoute = async (context) => {
     .sort((a, b) => b.date.getTime() - a.date.getTime())
     .slice(0, PAGINATION.postsPerFeed);
 
+  const feedYear = "2026"; 
+  const feedId = `tag:${baseUrl.replace(/^https?:\/\//, '')},${feedYear}:feed`;
+
   const atomFeed = `<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
+<feed xmlns="http://w3.org">
   <title>${escapeXml(SITE.name)}</title>
   <subtitle>${escapeXml(SITE.description)}</subtitle>
   <link href="${baseUrl}${ROUTES.feedAtom}" rel="self" type="application/atom+xml"/>
   <link href="${baseUrl}/" rel="alternate" type="text/html"/>
   <updated>${new Date().toISOString()}</updated>
-  <id>tag:${baseUrl.replace(/^https?:\/\//, '')},${new Date().getFullYear()}:feed</id>
+  <id>${feedId}</id>
   <rights>&#xA9; ${new Date().getFullYear()} ${escapeXml(SITE.name)}</rights>
   <generator uri="${baseUrl}" version="1.0">Astro</generator>
+  
+  <author>
+    <name>${escapeXml(SITE.name)}</name>
+    <email>${escapeXml(SITE.email)}</email>
+  </author>
 
   ${sortedItems
-    .map((item, index) => {
+    .map((item) => {
       const coverUrl = getCoverUrl(item.cover, baseUrl);
       const escapedTitle = escapeXml(item.title);
       const escapedDescription = escapeXml(item.description || `Baca ${item.title} di ${SITE.name}.`);
 
-      let content = `<p>${escapedDescription}</p>`;
+      let rawContent = `<p>${escapedDescription}</p>`;
       if (coverUrl) {
-        content = `<img src="${coverUrl}" alt="${escapedTitle}" />\n${content}`;
+        rawContent = `<img src="${coverUrl}" alt="${escapedTitle}" style="max-width:100%;margin-bottom:10px;border-radius:4px;" />\n${rawContent}`;
       }
 
       const imageType = coverUrl ? getImageType(coverUrl) : 'image/jpeg';
@@ -105,16 +117,17 @@ export const GET: APIRoute = async (context) => {
         ? `    <link rel="enclosure" href="${coverUrl}" length="0" type="${imageType}" />\n`
         : '';
 
-      const id = `tag:${baseUrl.replace(/^https?:\/\//, '')},${new Date(item.date).getFullYear()}:${item.type}:${item.slug}`;
+      const entryYear = new Date(item.date).getFullYear();
+      const entryId = `tag:${baseUrl.replace(/^https?:\/\//, '')},${entryYear}:${item.type}:${item.slug}`;
 
       return `  <entry>
     <title>${escapedTitle}</title>
     <link href="${item.url}" rel="alternate" type="text/html"/>
-    <id>${id}</id>
+    <id>${entryId}</id>
     <updated>${new Date(item.updated).toISOString()}</updated>
     <published>${new Date(item.date).toISOString()}</published>
     <summary type="text">${escapedDescription}</summary>
-    <content type="html">${escapeXml(content)}</content>
+    <content type="html"><![CDATA[${rawContent.trim()}]]></content>
     <author>
       <name>${escapeXml(item.author)}</name>
       <email>${escapeXml(item.authorEmail)}</email>
