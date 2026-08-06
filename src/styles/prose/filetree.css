@@ -1,127 +1,162 @@
-/* src/styles/prose/components/file-tree.css */
+/* src/styles/prose/filetree.css */
+
+.prose .file-tree {
+  background-color: var(--bg-subtle);
+  border: 1px solid rgb(from var(--border) r g b / 0.5);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  margin: 2rem 0;
+  overflow-x: auto;
+}
+
+.prose .file-tree :first-child {
+  margin-top: 0;
+}
+.prose .file-tree :last-child {
+  margin-bottom: 0;
+}
+
+.prose .file-tree details > summary,
+.prose .file-tree ul,
+.prose .file-tree li {
+  @apply text-code-14;
+}
+
+.prose .file-tree ul {
+  list-style: none;
+  padding: 0;
+}
+
+.prose .file-tree ul ul {
+  padding-inline-start: 1.25rem;
+  margin-inline-start: 0.5rem;
+  border-inline-start: 1px solid rgb(from var(--border) r g b / 0.7);
+}
+
+.prose .file-tree li {
+  position: relative;
+  margin-block-start: 0.25rem;
+}
+
+.prose .file-tree ul ul > li::before {
+  content: "";
+  position: absolute;
+  top: 0.75rem;
+  inset-inline-start: -1.25rem;
+  width: 1rem;
+  height: 1px;
+  background-color: rgb(from var(--border) r g b / 0.7);
+}
+
+/* Label untuk file dan summary untuk folder */
+.prose .file-tree .tree-label,
+.prose .file-tree details > summary {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 !important;
+  color: var(--fg-strong);
+}
 
 .prose .file-tree details {
-  padding: 0 !important;
-  margin: 0 !important;
-  gap: 0;
+  margin: 0;
+  padding: 0;
+  background: none;
   border: none;
 }
 
-.prose .file-tree summary::before {
-  display: none;
-  content: none;
-  color: transparent
-}
-
-.prose .file-tree {
-  min-width: max-content;
-}
-
-.prose .file-tree,
-.prose .file-tree-list,
-.prose .file-tree-list ul,
-.prose .file-tree-list ol,
-.prose .file-tree-list li {
-  margin: 0;
-  padding: 0;
+.prose .file-tree details > summary {
   list-style: none;
+  cursor: pointer;
+  user-select: none;
+  transition: color var(--duration, 0.15s) var(--ease-out, ease);
 }
 
-.prose .file-tree-list *:first-child {
-  margin-top: 0 !important;
-}
-
-.prose .file-tree-list *:last-child {
-  margin-bottom: 0 !important;
-}
-
-.prose .file-tree-list li::marker,
-.prose .file-tree-list li::before,
-.prose .file-tree-list li::after {
+/* .prose .file-tree details > summary::-webkit-details-marker,
+.prose .file-tree details > summary::marker,
+.prose .file-tree details > summary::before {
   display: none;
   content: none;
+  color: transparent;
+} */
+
+.prose .file-tree details > summary:hover {
+  color: var(--accent);
 }
 
-.prose .file-tree-list li + li {
-  margin-top: 0.5rem;
-}
-
-.prose .file-tree-children {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.25s var(--ease-out);
-  margin-left: 0.45rem;
-  border-left: 1px solid
-    color-mix(in srgb, var(--border) 90%, transparent);
-  padding-left: 1rem;
-}
-
-.prose .file-tree-folder.open > .file-tree-children {
-  grid-template-rows: 1fr;
-}
-
-.prose .file-tree-children > ul,
-.prose .file-tree-children > ol {
-  overflow: hidden;
-}
-
-.prose .file-tree-label {
-  @apply text-code-14;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: color var(--prose-duration) var(--ease-out);
-  padding: 0.15rem 0;
-  color: var(--fg-muted);
-  user-select: none;
-  white-space: nowrap;
-  margin-block-start: 4px;
-  margin-block-end: 4px;
-}
-
-.prose .file-tree-folder > .file-tree-label {
-  cursor: pointer;
-  font-weight: 500;
-}
-.prose .file-tree-label:active
-.prose .file-tree-label:hover,
-.prose .file-tree-folder.open > .file-tree-label {
-  color: var(--fg-strong);
-}
-
-.prose .file-tree-label .icon {
+.prose .file-tree .tree-icon-wrapper {
   display: inline-flex;
-  flex-shrink: 0;
   align-items: center;
-  transition: color var(--duration) var(--ease-out);
-  color: var(--fg-subtle);
+  justify-content: center;
+  margin-inline-end: 0.25rem;
+  flex-shrink: 0;
+  vertical-align: middle;
+  width: 1.125rem;
+  height: 1.125rem;
 }
 
-.prose .file-tree-folder.open > .file-tree-label .icon {
-  color: var(--fg-strong);
+.prose .file-tree .tree-icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: currentColor;
 }
 
-.prose .file-tree-label.is-marked {
-  background-color: rgb(from var(--accent) r g b / 0.6) !important;
-  border-radius: 4px;
-  padding-left: 4px;
-  padding-right: 4px;
-  color: var(--fg-strong) !important;
-  gap: 0.25rem;
+.prose .file-tree .tree-folder > details > summary .tree-icon {
+  color: var(--fg-muted);
 }
 
-.prose .file-tree-label.is-marked .file-name mark {
-  background: none !important;
-  color: inherit;
+/* === HIGHLIGHT === */
+.prose .file-tree li.tree-highlight > .tree-label,
+.prose .file-tree li.tree-highlight > details > summary {
+  display: inline-flex;
+  align-items: center;
+  background-color: color-mix(in srgb, var(--accent) 15%, transparent);
+  border-radius: var(--radius-sm);
+  padding-inline: 0.4rem;
+  padding-block: 0.15rem;
+}
+
+.prose .file-tree li.tree-highlight > .tree-label strong,
+.prose .file-tree li.tree-highlight > details > summary strong {
+  color: var(--accent);
   font-weight: 600;
 }
 
-.prose .file-tree-label.is-marked .icon {
-  color: var(--fg-strong) !important;
+.prose .file-tree li.tree-highlight > .tree-label .tree-icon,
+.prose .file-tree li.tree-highlight > details > summary .tree-icon {
+  color: var(--accent);
 }
 
-@media (min-width: 768px) {
-  .prose .file-tree-label {
-    @apply text-code-14;
-  }
+/* === PLACEHOLDER === */
+.prose .file-tree li.tree-placeholder {
+  display: inline-flex;
+  align-items: center;
+  color: var(--fg-muted);
+  opacity: 0.6;
+  padding-left: 0.25rem;
+}
+
+.prose .file-tree li.tree-placeholder > p {
+  margin: 0 !important;
+}
+
+.prose .file-tree li.tree-placeholder > .tree-label .tree-icon-wrapper,
+.prose .file-tree li.tree-placeholder > details > summary .tree-icon-wrapper {
+  display: none !important;
+}
+
+/* === COMMENT === */
+.prose .file-tree .tree-comment {
+  color: var(--fg-muted);
+  margin-left: 0.25rem;
+}
+
+.prose .file-tree li:not(.tree-folder):not(.tree-file) > .tree-label .tree-icon-wrapper {
+  display: none;
+}
+
+.prose .file-tree li.tree-file > .tree-label:hover {
+  color: var(--accent);
+  cursor: default;
 }
