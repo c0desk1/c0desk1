@@ -1,4 +1,4 @@
-// src/pages/feed.atom.ts
+// src/pages/feed.json.ts
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { 
@@ -6,15 +6,6 @@ import {
   ROUTES, 
   PAGINATION 
 } from '@/consts';
-
-function escapeXml(str: string): string {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;');
-}
 
 function getCoverUrl(cover: any, baseUrl: string): string | null {
   if (!cover) return null;
@@ -53,14 +44,14 @@ export const GET: APIRoute = async (context) => {
       return {
         ...post.data,
         url: `${baseUrl}${ROUTES.blog}/${slug}/`,
-        date: post.data.pubDate ?? post.data.lastUpdated ?? new Date(0),
-        updated: post.data.lastUpdated ?? post.data.pubDate ?? new Date(0),
+        date: post.data.pubDate || post.data.lastUpdated || new Date(0),
+        updated: post.data.lastUpdated || post.data.pubDate || new Date(0),
         cover: post.data.cover,
-        author: post.data.author?.name || SITE.name,
-        authorEmail: post.data.author?.email || SITE.email,
-        tags: post.data.tags || [],
+        author: post.data.author,
+        tags: post.data.category
+          ? [...new Set([post.data.category, ...(post.data.tags || [])])]
+          : post.data.tags || [],
         type: 'blog',
-        slug: slug,
       };
     }),
     ...docs.map((doc) => {
@@ -68,14 +59,12 @@ export const GET: APIRoute = async (context) => {
       return {
         ...doc.data,
         url: `${baseUrl}${ROUTES.docs}/${slug}/`,
-        date: doc.data.pubDate ?? doc.data.lastUpdated ?? new Date(0),
-        updated: doc.data.lastUpdated ?? doc.data.pubDate ?? new Date(0),
+        date: doc.data.pubDate || doc.data.lastUpdated || new Date(0),
+        updated: doc.data.lastUpdated || doc.data.pubDate || new Date(0),
         cover: doc.data.cover,
-        author: doc.data.author?.name || SITE.name,
-        authorEmail: doc.data.author?.email || SITE.email,
+        author: doc.data.author,
         tags: doc.data.category ? [doc.data.category] : [],
         type: 'docs',
-        slug: slug,
       };
     }),
   ];
@@ -84,78 +73,73 @@ export const GET: APIRoute = async (context) => {
     .sort((a, b) => b.date.getTime() - a.date.getTime())
     .slice(0, PAGINATION.postsPerFeed);
 
-  const feedUpdated = sortedItems[0]?.updated ?? new Date();
-
-  const feedYear = String(feedUpdated.getFullYear());
-  const feedId = `tag:${baseUrl.replace(/^https?:\/\//, '')},${feedYear}:feed`;
-
-  const atomFeed = `<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="${SITE.lang}">
-  <title>${escapeXml(SITE.name)}</title>
-  <subtitle>${escapeXml(SITE.description)}</subtitle>
-  <link href="${baseUrl}${ROUTES.feedAtom}" rel="self" type="application/atom+xml"/>
-  <link href="${baseUrl}/" rel="alternate" type="text/html"/>
-  <updated>${feedUpdated.toISOString()}</updated>
-  <id>${feedId}</id>
-  <rights>&#xA9; ${new Date().getFullYear()} ${escapeXml(SITE.name)}</rights>
-  <generator uri="${baseUrl}" version="1.0">Astro</generator>
-  <icon>${baseUrl}/favicon/favicon.ico</icon>
-  
-  <author>
-    <name>${escapeXml(SITE.name)}</name>
-    <email>${escapeXml(SITE.email)}</email>
-  </author>
-
-  ${sortedItems
-    .map((item) => {
+  const feed = {
+    version: 'https://jsonfeed.org/version/1.1',
+    title: SITE.name,
+    home_page_url: `${baseUrl}/`,
+    feed_url: `${baseUrl}${ROUTES.feedJson}`,
+    description: SITE.description,
+    authors: [
+      {
+        name: SITE.name,
+        url: SITE.url,
+      },
+    ],
+    language: SITE.lang,
+    items: sortedItems.map((item) => {
       const coverUrl = getCoverUrl(item.cover, baseUrl);
-      const escapedTitle = escapeXml(item.title);
-      const escapedDescription = escapeXml(item.description || `Baca ${item.title} di ${SITE.name}.`);
-      const summary = item.description ?? `Baca ${item.title}`;
+      const tags = item.tags.length > 0 ? item.tags : [];
+      const authorObj = item.author
+        ? {
+            name: item.author.name || SITE.name,
+            ...(item.author.url && { url: item.author.url }),
+            ...(item.author.avatar && { avatar: item.author.avatar }),
+          }
+        : undefined;
 
-      const coverAlt = escapeXml(item.cover?.alt || item.title);
+      const feedItem: any = {
+        id: item.url,
+        url: item.url,
+        title: item.title,
+        summary: item.description || `Baca ${item.title} di ${SITE.name}.`,
+        date_published: new Date(item.date).toISOString(),
+        tags: tags,
+      };
 
-      let rawContent = `<p>${summary}</p>`;
-
-      if (coverUrl) {
-        rawContent = `<p><img src="${coverUrl}" alt="${coverAlt}" /></p>\n${rawContent}`;
+      const updatedIso = new Date(item.updated).toISOString();
+      if (updatedIso !== feedItem.date_published) {
+        feedItem.date_modified = updatedIso;
       }
 
-      const imageType = coverUrl ? getImageType(coverUrl) : 'image/jpeg';
-      const enclosure = coverUrl
-        ? `    <link rel="enclosure" href="${coverUrl}" type="${imageType}" />\n`
-        : '';
+      if (item.description) {
+        feedItem.content_html = `<p>${item.description}</p>`;
+      }
 
-      const entryYear = new Date(item.date).getFullYear();
-      const entryId = `tag:${baseUrl.replace(/^https?:\/\//, '')},${entryYear}:${item.type}:${item.slug}`;
+      if (authorObj) {
+        feedItem.authors = [authorObj];
+      }
 
-      return `  <entry>
-    <title>${escapedTitle}</title>
-    <link href="${item.url}" rel="alternate" type="text/html"/>
-    <id>${entryId}</id>
-    <updated>${new Date(item.updated).toISOString()}</updated>
-    <published>${new Date(item.date).toISOString()}</published>
-    <summary type="text">${escapedDescription}</summary>
-    <content type="html"><![CDATA[${rawContent.trim()}]]></content>
-    <author>
-      <name>${escapeXml(item.author)}</name>
-      <email>${escapeXml(item.authorEmail)}</email>
-    </author>
-    <category term="${escapeXml(item.type)}" />
-    ${item.category ? `    <category term="${escapeXml(item.category)}" />\n` : ''}
-    ${(item.tags || [])
-      .filter((tag: string) => tag !== item.category)
-      .map((tag: string) => `    <category term="${escapeXml(tag)}" />`)
-      .join('\n')}
-    ${enclosure}
-  </entry>`;
-    })
-    .join('\n')}
-</feed>`;
+      if (coverUrl) {
+        feedItem.image = coverUrl;
+      }
 
-  return new Response(atomFeed.trim(), {
+      if (coverUrl) {
+        feedItem.attachments = [
+          {
+            url: coverUrl,
+            mime_type: getImageType(coverUrl),
+            title: item.cover?.alt || `Cover for ${item.title}`,
+          },
+        ];
+      }
+
+      return feedItem;
+    }),
+  };
+
+  return new Response(JSON.stringify(feed, null, 2), {
     headers: {
-      'Content-Type': 'application/atom+xml; charset=utf-8',
+      'Content-Type': 'application/feed+json; charset=utf-8',
       'Cache-Control': 'public, max-age=3600',
     },
   });
