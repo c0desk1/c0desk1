@@ -45,6 +45,7 @@ export const GET: APIRoute = async (context) => {
         ...post.data,
         url: `${baseUrl}${ROUTES.blog}/${slug}/`,
         date: post.data.pubDate || post.data.lastUpdated || new Date(0),
+        updated: post.data.lastUpdated || post.data.pubDate || new Date(0),
         cover: post.data.cover,
         author: post.data.author,
         tags: post.data.category
@@ -59,6 +60,7 @@ export const GET: APIRoute = async (context) => {
         ...doc.data,
         url: `${baseUrl}${ROUTES.docs}/${slug}/`,
         date: doc.data.pubDate || doc.data.lastUpdated || new Date(0),
+        updated: doc.data.lastUpdated || doc.data.pubDate || new Date(0),
         cover: doc.data.cover,
         author: doc.data.author,
         tags: doc.data.category ? [doc.data.category] : [],
@@ -103,6 +105,11 @@ export const GET: APIRoute = async (context) => {
         date_published: new Date(item.date).toISOString(),
         tags: tags,
       };
+
+      const updatedIso = new Date(item.updated).toISOString();
+      if (updatedIso !== feedItem.date_published) {
+        feedItem.date_modified = updatedIso;
+      }
 
       if (item.description) {
         feedItem.content_html = `<p>${item.description}</p>`;
