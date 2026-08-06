@@ -1,4 +1,4 @@
-// src/lib/mdx/satteri-filetree.ts
+
 import { defineMdastPlugin } from 'satteri';
 import { fileIcons } from '@/assets/icons/file';
 
@@ -167,7 +167,7 @@ export const satteriFileTree = defineMdastPlugin({
       ctx.setProperty(node, 'children', [detailsNode as any]);
     } else {
       const labelNode = {
-        type: 'paragraph',
+        type: 'containerDirective',
         data: {
           hName: 'div',
           hProperties: { className: ['tree-label'] },
