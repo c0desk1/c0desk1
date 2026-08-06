@@ -42,12 +42,13 @@
   .steps > li::after {
     content: "";
     position: absolute;
-    inset-inline-start: 0.725rem;
+    inset-inline-start: 0.735rem;
     top: 2rem;
     bottom: 0;
     width: 1px;
     transform: translateX(-50%);
     border-right: 1px solid rgb(from var(--border) r g b / 0.5);
+    background-color: var(--accent);
   }
 
   .steps > li:last-child::after {
