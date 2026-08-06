@@ -1,20 +1,78 @@
 /* src/styles/prose/list.css */
-.prose .steps {
+.prose .steps,
+.prose .steps-container > ol,
+.prose .steps-container > ul {
   margin: 2rem 0;
   padding: 0;
   list-style: none;
+  counter-reset: step;
 }
 
-.prose .steps > li {
+.prose .steps > li,
+.prose .steps-container > ol > li,
+.prose .steps-container > ul > li {
+  position: relative;
+  counter-increment: step;
+  min-height: 1.75rem;
+  padding-inline-start: 2.5rem;
   padding-left: 2.5rem;
+  padding-bottom: 1.25rem;
 }
 
-.prose .steps > li::marker {
+.prose .steps > li::marker,
+.prose .steps-container > ol > li::marker,
+.prose .steps-container > ul > li::marker {
   content: "";
 }
 
-.prose .steps > li::before {
+.prose .steps > li::before,
+.prose .steps-container > ol > li::before,
+.prose .steps-container > ul > li::before {
   @apply text-numeric-14;
+  content: counter(step);
+  position: absolute;
+  inset-inline-start: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+    
+  width: 1.65rem;
+  height: 1.65rem;
+  aspect-ratio: 1/1;
+  border-radius: var(--radius-full);
+  border: 1.5px solid rgb(from var(--bg) r g b / 0.6);
+  background-color: var(--bg-subtle);
+  color: var(--fg-strong);
+  box-shadow: 0 0 0 1.5px var(--bg-muted);
+  padding: 0 !important;
+}
+
+.prose .steps > li::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0.735rem;
+  top: 2rem;
+  bottom: 0;
+  width: 1px;
+  transform: translateX(-50%);
+  border-right: 1px solid rgb(from var(--border) r g b / 0.5);
+  background-color: var(--accent);
+}
+
+.prose .steps > li:last-child::after {
+  display: none;
+}
+
+.prose .steps > li > :first-child {
+  margin-top: 0 !important;
+}
+
+.prose .steps > li > :last-child {
+  margin-bottom: 0 !important;
+}
+
+.prose .steps > li:last-child {
+  padding-bottom: 0 !important;
 }
 
 .prose ul,
