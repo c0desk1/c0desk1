@@ -14,8 +14,8 @@ tags:
   - spring-2026-anime
   - best-anime
   - recommendations
-pubDate: 2026-04-29T19:58
-updateDate: 2026-04-29T19:58
+pubDate: 2026-04-29T19:58Z
+updateDate: 2026-04-29T20:00Z
 draft: false
 seo:
   title: "Spring 2026 Anime Must Add to Your Watchlist!"
