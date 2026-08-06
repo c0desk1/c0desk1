@@ -1,4 +1,21 @@
 /* src/styles/prose/list.css */
+.prose .steps {
+  margin: 2rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+.prose .steps > li {
+  padding-left: 2.5rem;
+}
+
+.prose .steps > li::marker {
+  content: "";
+}
+
+.prose .steps > li::before {
+  @apply text-numeric-14;
+}
 
 .prose ul,
 .prose ol {
