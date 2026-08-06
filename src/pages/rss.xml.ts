@@ -73,6 +73,7 @@ export const GET: APIRoute = async (context) => {
         post.data.pubDate ??
         post.data.lastUpdated ??
         new Date(0),
+      tags: post.data.tags || [],
     })),
 
     ...docs.map((doc) => ({
@@ -82,6 +83,7 @@ export const GET: APIRoute = async (context) => {
         doc.data.pubDate ??
         doc.data.lastUpdated ??
         new Date(0),
+      tags: doc.data.category ? [doc.data.category] : [],
     })),
   ]
     .sort((a, b) => b.date.getTime() - a.date.getTime())
@@ -113,11 +115,12 @@ export const GET: APIRoute = async (context) => {
       const coverUrl = getCoverUrl(item.cover, baseUrl);
       const authorName = item.author?.name || SITE.name;
       const authorEmail = item.author?.email || SITE.email;
-      const safeTitle = escapeHtmlAttr(item.title);
+      const coverAlt = escapeHtmlAttr(item.cover?.alt || item.title);
+
       const html = `
         ${
           coverUrl
-            ? `<p><img src="${coverUrl}" alt="${safeTitle}" /></p>`
+            ? `<p><img src="${coverUrl}" alt="${coverAlt}" /></p>`
             : ""
         }
         <p>${item.description ?? ""}</p>
@@ -137,8 +140,8 @@ export const GET: APIRoute = async (context) => {
           `Baca ${item.title} di ${SITE.name}.`,
         author: `${authorEmail} (${authorName})`,
         categories: item.category
-          ? [item.category]
-          : [],
+          ? [...new Set([item.category, ...(item.tags || [])])]
+          : (item.tags || []),
         enclosure: undefined,
         customData: `
           ${
