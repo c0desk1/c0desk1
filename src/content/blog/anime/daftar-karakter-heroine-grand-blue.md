@@ -3,7 +3,7 @@ slug: "daftar-karakter-heroine-grand-blue"
 title: "Daftar Karakter Heroine di Grand Blue dan Perannya dalam Cerita"
 description: "Mengenal karakter heroine di Grand Blue, mulai dari Chisa Kotegawa hingga Aina Yoshiwara, lengkap dengan kepribadian dan peran mereka dalam cerita."
 pubDate: 2026-08-05T15:51Z
-lastUpdated: 2026-08-05T15:51Z
+lastUpdated: 2026-08-05T15:55Z
 cover:
   src: "https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAAOnanLymyptoeTTfA03MCmeok3eRbQAAjkRaxvfO5hXul-6s1t0uYABAAMCAAN5AAM9BA"
   alt: "Karakter heroine Grand Blue"
