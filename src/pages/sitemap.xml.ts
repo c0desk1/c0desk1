@@ -1,14 +1,23 @@
-// src/pages/sitemap-index.xml.ts
+// src/pages/sitemap.xml.ts
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { SITE, ROUTES } from '@/consts';
+
+function escapeXml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
 
 export const GET: APIRoute = async ({ site }) => {
   const baseUrl = (site?.href || SITE.url).replace(/\/$/, '');
 
   const blog = await getCollection('blog', ({ data }) => !data.draft && !data.seo?.noIndex);
-  const docs = await getCollection('docs', ({ data }) => !data.seo?.noIndex);
-  const legal = await getCollection('legal', ({ data }) => !data.seo?.noIndex); 
+  const docs = await getCollection('docs', ({ data }) => !data.draft && !data.seo?.noIndex);
+  const legal = await getCollection('legal', ({ data }) => !data.draft && !data.seo?.noIndex);
 
   const urls: { loc: string; lastmod?: string; changefreq?: string; priority?: number }[] = [];
 
@@ -65,7 +74,7 @@ export const GET: APIRoute = async ({ site }) => {
 ${urls
   .map(
     (url) => `  <url>
-    <loc>${url.loc}</loc>${
+    <loc>${escapeXml(url.loc)}</loc>${
       url.lastmod ? `\n    <lastmod>${url.lastmod}</lastmod>` : ''
     }${
       url.changefreq ? `\n    <changefreq>${url.changefreq}</changefreq>` : ''
