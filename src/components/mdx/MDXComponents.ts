@@ -3,7 +3,6 @@ import Blockquote from "./Blockquote.astro";
 import Changelog from "./Changelog.astro";
 import Code from "./Code.astro";
 import Figure from "./Figure.astro";
-import FileTree from "./FileTree.astro";
 import Kbd from "./KBD.astro";
 import Video from "./Video.astro";
 import LinkCard from "./LinkCard.astro";
@@ -13,7 +12,6 @@ import CardGrid from "./CardGrid.astro";
 export const components = {
   ChangelogContainer: Changelog,
   ChangelogItem: Changelog,
-  FileTree,
   Code,
   Kbd,
   Video,
