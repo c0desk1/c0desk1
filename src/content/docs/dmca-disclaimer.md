@@ -3,7 +3,7 @@ title: "DMCA & Kebijakan Hak Cipta"
 description: "Pernyataan hukum, sanggahan, serta prosedur penanganan klaim hak cipta (DMCA) untuk arsip tautan eksternal."
 category: "Informasi & Kebijakan"
 order: 5
-lastUpdated: 2026-08-04
+lastUpdated: 2026-08-05T11:00Z
 seo:
   title: "DMCA & Disclaimer — Kebijakan Hak Cipta"
   description: "Informasi penting mengenai status hukum situs, penyimpanan file eksternal, dan prosedur pengajuan DMCA takedown."
