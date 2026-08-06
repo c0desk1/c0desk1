@@ -12,13 +12,12 @@ author:
   role: "Developer"
   avatar: "https://ui-avatars.com/api/?name=Unloyd&background=0a0a0a&color=ffffff&size=64"
 category: "Tutorial"
-tags: [
-  "astro", 
-  "darkmode", 
-  "tailwind", 
-  "css-variables", 
-  "webdev"
-]
+tags:
+  - "Astro"
+  - "Darkmode"
+  - "Tailwind"
+  - "css-variables"
+  - "Webdev"
 draft: false
 seo:
   title: "Dark Mode di Astro dengan Data Attribute dan CSS Variables"
