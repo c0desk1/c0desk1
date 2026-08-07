@@ -83,7 +83,7 @@ export default defineConfig({
         satteriQuote,
         satteriCodeBlock,
         satteriKbd,
-        // satteriCallout,
+        satteriCallout,
         satteriSteps,
         satteriChangelog,
         satteriDetails,
