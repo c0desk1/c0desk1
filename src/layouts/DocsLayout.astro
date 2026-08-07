@@ -2,7 +2,6 @@
 // src/layouts/DocsLayout.astro
 import Layout from "./Layout.astro";
 import DocsNavbar from "@docs/DocsNavbar.astro";
-import DocsNavbarMobile from "@docs/DocsNavbar.astro";
 import DocsNavigation from "@docs/DocsNavigation.astro"; 
 import PageFrame from "@/components/PageFrame.astro";
 import Sidebar from "@ui/Sidebar.astro";
@@ -11,6 +10,7 @@ import ScrollToTop from "@docs/mobile/ScrollToTop.astro";
 import Card from "@ui/Card.astro";
 import Socials from "@/components/Socials.astro";
 import Theme from "@/components/Theme.astro";
+
 import { type buildMeta as BuildMetaFn } from "@/consts";
 
 interface Props {
@@ -41,11 +41,11 @@ const {
   {publisher}
 >
   <MobileHeader>
-    <DocsNavbarMobile />
+    <DocsNavbar />
     <div class="flex-1 overflow-y-auto mb-0 scrollbar-hide">
       <DocsNavigation />
     </div>
-    <Card padding="xs" radius="sm" class="flex md:hidden items-center justify-between">
+    <Card padding="xs" radius="sm" variant="secondary" class="flex md:hidden items-center justify-between mt-4">
       <div class="flex items-center">
         <Socials />
       </div>
@@ -53,20 +53,25 @@ const {
     </Card>
   </MobileHeader>
   <PageFrame>
-    <aside class="bg-(--bg) rounded-none border-r border-(--border-subtle)/80 hidden sticky top-[calc(var(--header-height))] lg:block h-[calc(100vh)] w-full">
+    <aside 
+      aria-label="Main Navigation"
+      class="hidden lg:block sticky top-(--header-height) h-[calc(100vh-var(--header-height))] w-full bg-(--bg) border-r border-(--border-subtle) rounded-none"
+    >
       <Sidebar>
         <DocsNavbar />
-        <div class="flex-1 overflow-y-auto">
-          <DocsNavigation />
-        </div>
+        <DocsNavigation />
       </Sidebar>
     </aside>
     <main id="main-content" class="w-full min-w-0 flex-1">
       <slot />
     </main>
-    <aside class="hidden sticky top-(--header-height) lg:block lg:h-[calc(100vh-var(--header-height))] overflow-y-auto px-2 pt-4 pb-(--safe-bottom) w-full">
+    <aside 
+      aria-label="Table of Contents"
+      class="hidden lg:block sticky top-(--header-height) h-[calc(100vh-var(--header-height))] w-full overflow-y-auto px-2 pt-4 pb-(--safe-bottom)"
+    >
       <slot name="right" />
     </aside>
   </PageFrame>
+  
   <ScrollToTop />
 </Layout>
