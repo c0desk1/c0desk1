@@ -41,6 +41,7 @@ export async function getStaticPaths() {
     return {
       params: { slug: isRoot ? undefined : cleanSlug },
       props: { entry, root },
+      cacheKey: (entry as any).digest
     };
   });
 }
