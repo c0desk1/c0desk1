@@ -1,20 +1,17 @@
 /* src/styles/prose/components/link.css */
 
+:root {
+  --external-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath stroke='none' d='M0 0h24v24H0z' fill='none'/%3E%3Cpath d='M12 6h-6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6'/%3E%3Cpath d='M11 13l9-9'/%3E%3Cpath d='M15 4h5v5'/%3E%3C/svg%3E");
+}
+
 .prose .inline-link {
   color: var(--fg-strong);
   font-weight: 600;
-
   text-decoration: underline;
   text-decoration-color: var(--accent);
   text-decoration-thickness: 2px;
   text-underline-offset: 2px;
-
-  transition:
-    color .2s ease,
-    text-decoration-color .2s ease;
 }
-
-/* Focus */
 
 .prose .inline-link:focus-visible {
   outline: 2px solid var(--accent);
@@ -22,11 +19,8 @@
   border-radius: var(--radius-sm);
 }
 
-/* External */
-
 .prose .inline-link.is-external {
   color: var(--accent);
-  
   text-decoration: underline;
   text-decoration-color: transparent;
   text-decoration-thickness: 2px;
@@ -35,19 +29,15 @@
 
 .prose .inline-link.is-external::after {
   content: "";
-  
   display: inline-block;
   width: 0.95em;
   height: 0.95em;
   margin-inline-start: 0.25rem;
   vertical-align: middle;
-  
   transform: translateY(-0.125rem);
-  
   background-color: currentColor;
-  
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath stroke='none' d='M0 0h24v24H0z' fill='none'/%3E%3Cpath d='M12 6h-6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6'/%3E%3Cpath d='M11 13l9-9'/%3E%3Cpath d='M15 4h5v5'/%3E%3C/svg%3E") center / contain no-repeat;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath stroke='none' d='M0 0h24v24H0z' fill='none'/%3E%3Cpath d='M12 6h-6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6'/%3E%3Cpath d='M11 13l9-9'/%3E%3Cpath d='M15 4h5v5'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: var(--external-icon) center / contain no-repeat;
+  -webkit-mask: var(--external-icon) center / contain no-repeat;
 }
 
 @media (hover: hover) {
