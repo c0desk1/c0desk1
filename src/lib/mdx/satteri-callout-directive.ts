@@ -10,32 +10,17 @@ const CALLOUT_TYPES = {
   danger: 'danger',
 } as const;
 
-function cleanDirectiveName(rawName: string): string | null {
-  const cleaned = rawName
-    .replace(/^\[!/, '')
-    .replace(/\]$/, '')
-    .toLowerCase()
-    .trim();
-
-  if (cleaned in CALLOUT_TYPES) {
-    return cleaned;
-  }
-
-  return null;
-}
-
 export const satteriCalloutDirective = defineMdastPlugin({
   name: 'satteri-callout',
 
   containerDirective(node, ctx) {
-    const rawName = node.name || '';
+    const rawName = node.name?.toLowerCase() || '';
     
-    const cleanName = cleanDirectiveName(rawName);
-    if (!cleanName) {
+    if (!(rawName in CALLOUT_TYPES)) {
       return;
     }
 
-    const type = CALLOUT_TYPES[cleanName as keyof typeof CALLOUT_TYPES];
+    const type = CALLOUT_TYPES[rawName as keyof typeof CALLOUT_TYPES];
     const baseData = node.data || {};
 
     ctx.setProperty(node, 'data', {
