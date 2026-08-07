@@ -116,9 +116,6 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  build: {
-    inlineStylesheets: "auto",
-  },
   fonts: [
     {
       provider: fontProviders.local(),
@@ -154,5 +151,11 @@ export default defineConfig({
   image: {
     remotePatterns: [{ protocol: "https" }],
     service: passthroughImageService(),
+  },
+  build: {
+    inlineStylesheets: "auto",
+  },
+  experimental: {
+    incrementalBuild: true,
   },
 });
