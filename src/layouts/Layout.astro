@@ -1,11 +1,12 @@
 ---
 // src/layouts/Layout.astro
+import Head from "@components/Head.astro";
+
 import { 
   SITE, 
   type buildMeta as BuildMetaFn 
 } from "@/consts";
 
-import Head from "@components/Head.astro";
 import ThemeProvider from "@components/ThemeProvider.astro";
 import Cookie from "@/components/Cookie.astro";
 import SkipLink from "@components/SkipLink.astro";
@@ -48,7 +49,7 @@ const {
 <html lang={SITE.lang} dir={SITE.dir}>
   <Head {meta} {schema} {isHome} {canonical} {author} {publisher} {next} {prev}>
     <ThemeProvider />
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4943136052113535" crossorigin="anonymous"></script>
+    <!--<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4943136052113535" crossorigin="anonymous"></script>-->
     <script type="text/plain" data-consent="required" is:inline>
       (function (w, d, s, l, i) {
         w[l] = w[l] || [];
