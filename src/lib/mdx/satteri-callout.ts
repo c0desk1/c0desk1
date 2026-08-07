@@ -12,20 +12,6 @@ const CALLOUT_TYPES = {
 
 type CalloutType = keyof typeof CALLOUT_TYPES;
 
-
-function cleanDirectiveName(rawName: string): string | null {
-  const cleaned = rawName
-    .replace(/^\[!/, '')
-    .replace(/\]$/, '')
-    .toLowerCase()
-    .trim();
-
-  if (cleaned in CALLOUT_TYPES) {
-    return cleaned;
-  }
-  return null;
-}
-
 function transformToAside(node: any, type: string): any {
   return {
     ...node,
@@ -80,7 +66,8 @@ export const satteriCallout = defineMdastPlugin({
       },
     };
 
-    ctx.replaceNode(node, newNode);
+    const transformed = transformToAside(newNode, type);
+    ctx.replaceNode(node, transformed);
   },
 
   containerDirective(node, ctx) {
