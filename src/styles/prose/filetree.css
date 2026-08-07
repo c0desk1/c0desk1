@@ -129,8 +129,7 @@
 }
 
 /* === HIGHLIGHT === */
-.prose .file-tree li.tree-file.tree-highlight > .tree-label,
-.prose .file-tree li.tree-highlight > details > summary {
+.prose .file-tree li.tree-file.tree-highlight {
   display: block;
   min-width: 100%;
   box-sizing: border-box;
@@ -141,24 +140,13 @@
   border-radius: var(--radius-sm);
 }
 
-.prose .file-tree li.tree-highlight > details > summary {
-  padding-inline: 0.475rem;
-  padding-block: 0.2rem;
-}
-
-.prose .file-tree li.tree-file.tree-highlight > .tree-label {
-  padding-inline: 0.375rem;
-  padding-block: 0.1rem;
-}
-
 .prose .file-tree li.tree-file.tree-highlight > .tree-label strong,
 .prose .file-tree li.tree-highlight > details > summary strong {
   color: var(--accent);
   font-weight: 600;
 }
 
-.prose .file-tree li.tree-file.tree-highlight > .tree-label .tree-icon,
-.prose .file-tree li.tree-highlight > details > summary .tree-icon {
+.prose .file-tree li.tree-file.tree-highlight > .tree-label .tree-icon-wrapper {
   color: var(--accent);
 }
 
