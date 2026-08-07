@@ -49,18 +49,18 @@
   text-align: start;
   white-space: nowrap;
 
-  border-bottom: 1px solid rgb(from var(--border-subtle) r g b / 0.5);
+  /*border-bottom: 1px solid rgb(from var(--border-subtle) r g b / 0.5);*/
 }
 
 .prose thead th:first-child {
   border-top-left-radius: var(--radius-md);
+  border-bottom-left-radius: var(--radius-md);
 }
 
 .prose thead th:last-child {
   border-top-right-radius: var(--radius-md);
+  border-bottom-right-radius: var(--radius-md);
 }
-
-/* ---------- Cells ---------- */
 
 .prose th,
 .prose td {
@@ -113,8 +113,6 @@
   width: 1rem;
   height: 1rem;
 }
-
-/* ---------- Responsive ---------- */
 
 @media (max-width: 45rem) {
   .prose th,
