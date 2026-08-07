@@ -94,7 +94,7 @@ Menggunakan syntax blockquote `> [!NOTE]` default outputnya `<blockquote>`
 > [!note]
 > Ini adalah callout note.
 
-Jika menggunakan Directive `:::NOTE' default outputnya jadi `<aside>`
+Jika menggunakan Directive `:::NOTE` default outputnya jadi `<aside>`
 
 :::NOTE
 Ini adalah callout note.
