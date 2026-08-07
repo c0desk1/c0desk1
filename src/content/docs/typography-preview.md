@@ -92,6 +92,12 @@ https://example.com
 > [!note]
 > Ini adalah callout note.
 
+Jika menggunakan Directive `:::'
+
+:::[!NOTE]
+Ini Adalah Callout Note menggunakan Aside
+:::
+
 ### Tip
 
 > [!TIP]
@@ -162,4 +168,4 @@ https://example.com
 <details>
 <summary>SMALI Launcher tidak muncul dilayar</summary>
 Coba lihat menu daftar aplikasi atau restart HP.
-</details>
+</details>
