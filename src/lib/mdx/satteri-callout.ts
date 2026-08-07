@@ -2,43 +2,36 @@
 import { defineMdastPlugin } from 'satteri';
 
 const CALLOUT_TYPES = {
-  note: 'note',
-  tip: 'tip',
-  important: 'important',
-  warning: 'warning',
-  caution: 'caution',
-  danger: 'danger',
+  NOTE: 'note',
+  TIP: 'tip',
+  IMPORTANT: 'important',
+  WARNING: 'warning',
+  CAUTION: 'caution',
+  DANGER: 'danger',
 } as const;
 
 type CalloutType = keyof typeof CALLOUT_TYPES;
 
-function transformToAside(node: any, type: string): any {
-  return {
-    ...node,
-    data: {
-      ...(node.data || {}),
-      hName: 'aside',
-      hProperties: {
-        ...(node.data?.hProperties || {}),
-        className: ['callout'],
-        dataCallout: type,
-      },
-    },
-  };
-}
+const CALLOUT_PATTERN = /^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION|DANGER)\]\s*/i;
 
 export const satteriCallout = defineMdastPlugin({
   name: 'satteri-callout',
 
   blockquote(node, ctx) {
     const firstChild = node.children[0];
-    if (!firstChild || firstChild.type !== 'paragraph') return;
+    if (!firstChild || firstChild.type !== 'paragraph') {
+      return;
+    }
 
     const firstText = firstChild.children[0];
-    if (!firstText || firstText.type !== 'text') return;
+    if (!firstText || firstText.type !== 'text') {
+      return;
+    }
 
-    const match = firstText.value.match(/^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION|DANGER)\]\s*/i);
-    if (!match) return;
+    const match = firstText.value.match(CALLOUT_PATTERN);
+    if (!match) {
+      return;
+    }
 
     const rawType = match[1].toUpperCase() as CalloutType;
     const type = CALLOUT_TYPES[rawType];
@@ -54,30 +47,20 @@ export const satteriCallout = defineMdastPlugin({
 
     const newParagraph = { ...firstChild, children: newChildren };
 
-    const newNode = {
-      ...node,
-      children: [newParagraph, ...node.children.slice(1)],
-      data: {
-        ...node.data,
-        hProperties: {
-          ...node.data?.hProperties,
-          dataCallout: type,
-        },
+    ctx.setProperty(node, 'children', [
+      newParagraph,
+      ...node.children.slice(1),
+    ]);
+
+    const baseData = node.data || {};
+    ctx.setProperty(node, 'data', {
+      ...baseData,
+      hName: 'aside',
+      hProperties: {
+        ...(baseData.hProperties || {}),
+        className: ['callout'],
+        'data-callout': type,
       },
-    };
-
-    const transformed = transformToAside(newNode, type);
-    ctx.replaceNode(node, transformed);
-  },
-
-  containerDirective(node, ctx) {
-    const name = node.name?.toLowerCase();
-    if (!name || !(name in CALLOUT_TYPES)) {
-      return;
-    }
-
-    const type = CALLOUT_TYPES[name as keyof typeof CALLOUT_TYPES];
-    const transformed = transformToAside(node, type);
-    ctx.setProperty(node, 'data', transformed.data);
+    });
   },
 });
