@@ -1,9 +1,9 @@
 ---
 slug: "membuat-callout-keren-di-astro-dengan-satteri"
 title: "Membuat Callout Keren di Astro dengan Satteri"
-description: "Panduan santai membuat custom callout di Astro pakai Satteri. Tukar blockquote biasa jadi kotak info yang cantik dengan satu baris kode."
+description: "Panduan santai bikin callout custom di Astro pakai Satteri. Ubah blockquote biasa jadi kotak info cantik tanpa ribet."
 pubDate: 2026-08-06T13:00Z
-lastUpdated: 2026-08-06T16:00Z
+lastUpdated: 2026-08-07T21:33Z
 cover:
   src: "https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAAOvanRJsM0xq2EWOLXxrhqjjk3BmtQAArQQaxuBg6FXyp7Cq3sPJMMBAAMCAAN5AAM9BA"
   alt: "Visual cover ilustrasi cara membuat Callout kustom MDX Components"
@@ -26,42 +26,44 @@ seo:
   noIndex: false
 ---
 
-Pernah nggak sih kamu baca dokumentasi terus nemuin kotak-kotak warna-warni kayak gini?
+Pernah nggak kamu baca dokumentasi atau blog terus nemu kotak warna-warni kayak gini?
 
 > [!NOTE]
-> Ini catatan penting.
+> Ini catatan penting, lho!
 
 > [!TIP]
-> Ini tips berguna.
+> Ini tips berguna buat kamu.
 
-Keren, kan? Itu namanya **callout**. Fungsinya buat nyorot informasi penting biar pembaca nggak kelewat. Dan kabar baiknya: **kita bisa bikin sendiri di Astro!**
+Itu namanya **callout**. Fungsinya buat nyorot informasi penting biar pembaca nggak kelewat. Dan kabar baiknya: **kita bisa bikin sendiri di Astro!**
 
-Di artikel ini, aku bakal tunjukin cara bikin callout custom pakai [Satteri](https://satteri.bruits.org/) — sebuah pustaka kecil tapi sakti yang bisa ngubah Markdown jadi apapun yang kita mau. Hasilnya? Kamu tinggal nulis `> [!TIP]` di konten, dan *voila!* callout cantik muncul otomatis.
+Di artikel ini, kita bakal bikin callout custom pakai **Satteri** — sebuah pustaka kecil tapi powerful yang bisa ngubah Markdown jadi HTML sesuai keinginan kita. Hasilnya? Kamu tinggal nulis `> [!TIP]` di konten, dan *voila!* callout cantik muncul otomatis.
+
+Tenang, kita bahas dari nol, perlahan. Yuk mulai!
 
 ---
 
-## Kenapa Satteri?
+## Kenapa Harus Satteri?
 
-Sebenernya ada dua cara bikin callout di Astro:
+Sebenernya ada dua cara umum bikin callout di Astro:
 
-1. **Pakai komponen MDX** — kamu harus import komponen di setiap file. Ribet.
-2. **Pakai plugin Markdown** — kamu tulis `> [!TIP]`, plugin ubah jadi HTML. Otomatis dan bersih.
+1. **Pakai komponen MDX** — kamu harus import komponen di setiap file `.mdx`. Ribet dan banyak kode.
+2. **Pakai plugin Markdown** — kamu tulis `> [!TIP]`, plugin ubah jadi HTML. Otomatis, bersih, dan nggak repot.
 
-Aku milih cara kedua. Dan Satteri adalah alat yang tepat karena:
+Kita pilih cara kedua. Dan Satteri adalah alat yang tepat karena:
 
-- **Ringan** — nggak nambah berat bundel.
-- **Fleksibel** — bisa ubah AST Markdown sesuka hati.
+- **Ringan** — nggak nambah berat bundel website.
+- **Fleksibel** — bisa ubah Markdown jadi apapun.
 - **Mudah** — cuma butuh beberapa baris kode.
 
-Bayangin: kamu lagi nulis artikel, pengen kasih tips. Daripada buka komponen, import, dan nulis JSX, kamu cukup ketik `> [!TIP]` dan lanjut nulis. Gampang, kan?
+Bayangin: lagi asyik nulis artikel, pengen kasih tips. Daripada buka file baru, import komponen, dan nulis JSX, kamu cukup ketik `> [!TIP]` dan lanjut nulis. Gampang banget, kan?
 
 ---
 
 :::steps
-1. ### Langkah 1: Siapin Bahan
+1. ### Langkah 1: Pasang Satteri
 
-  Pertama, install Satteri di proyek Astro-mu:
-  
+  Pertama, install Satteri di proyek Astro-mu. Pilih salah satu yang sesuai dengan package manager favoritmu:
+
   ::::tabs
   :::tab[npm]
   ```bash
@@ -89,18 +91,15 @@ Bayangin: kamu lagi nulis artikel, pengen kasih tips. Daripada buka komponen, im
   ::::
   
   > [!NOTE]
-  > Plugin Satteri ini bekerja untuk file .md dan .mdx karena MDX juga menggunakan remark di balik layar.
+  > Plugin Satteri ini bekerja untuk file .md dan .mdx. Karena MDX juga pakai remark di balik layar, jadi aman.
 
-2. ### Langkah 2: Buat Plugin Satteri
+2. ### Langkah 2: Buat Plugin Callout
 
-  Buat file `src/lib/mdx/satteri-callout.ts`. Ini adalah "otak" dari callout kita.
-
-  Kode ini mungkin keliatan panjang, tapi sebenarnya simpel: kita tangkap blockquote yang diawali `> [!TYPE]`, lalu ubah jadi `<blockquote data-callout="type">`.
+  Buat file `src/lib/mdx/satteri-callout.ts`. File ini bakal jadi “otak” dari callout kita. Jangan takut sama kodenya—kita bedah pelan-pelan.
 
   ```ts
   import { defineMdastPlugin } from "satteri";
   
-  // Daftar tipe callout yang didukung
   const CALLOUT_TYPES = {
     NOTE: "note",
     TIP: "tip",
@@ -109,77 +108,73 @@ Bayangin: kamu lagi nulis artikel, pengen kasih tips. Daripada buka komponen, im
     CAUTION: "caution",
     DANGER: "danger"
   } as const;
-  
-  // Pola regex buat nangkep [!TYPE]
+
   const CALLOUT_PATTERN = /^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION|DANGER)\]\s*/i;
-  
+
   export const satteriCallout = defineMdastPlugin({
     name: "satteri-callout",
 
     blockquote(node, ctx) {
-        // Ambil paragraf pertama dalam blockquote
-        const firstChild = node.children[0];
-        if (!firstChild || firstChild.type !== "paragraph") return;
+      const firstChild = node.children[0];
+      if (!firstChild || firstChild.type !== "paragraph") return;
 
-        const firstText = firstChild.children[0];
-        if (!firstText || firstText.type !== "text") return;
+      const firstText = firstChild.children[0];
+      if (!firstText || firstText.type !== "text") return;
 
-        // Cek apakah teksnya diawali pola callout
-        const match = firstText.value.match(CALLOUT_PATTERN);
-        if (!match) return;
+      const match = firstText.value.match(CALLOUT_PATTERN);
+      if (!match) return;
 
-        // Ambil tipe callout dari hasil regex
-        const rawType = match[1].toUpperCase() as keyof typeof CALLOUT_TYPES;
-        const type = CALLOUT_TYPES[rawType];
+      const rawType = match[1].toUpperCase() as keyof typeof CALLOUT_TYPES;
+      const type = CALLOUT_TYPES[rawType];
 
-        // Hapus teks "[!TYPE]" dari awal
-        const remainingText = firstText.value.slice(match[0].length);
+      const remainingText = firstText.value.slice(match[0].length);
+      const newChildren = [...firstChild.children];
 
-        // Update paragraf pertama (tanpa prefix)
-        const newChildren = [...firstChild.children];
-        if (remainingText) {
-        newChildren[0] = { 
-            ...firstText, 
-            value: remainingText 
-        };
-        } else {
-            newChildren.shift();
-        }
+      if (remainingText) {
+        newChildren[0] = { ...firstText, value: remainingText };
+      } else {
+        newChildren.shift();
+      }
 
-        const newParagraph = { 
-            ...firstChild, 
-            children: newChildren 
-        };
+      const newParagraph = { ...firstChild, children: newChildren };
 
-        // Ganti blockquote dengan versi baru yang punya atribut data-callout
-        const newNode = {
-            ...node,
-            children: [newParagraph, ...node.children.slice(1)],
-            data: {
-                ...node.data,
-                hProperties: {
-                    ...node.data?.hProperties,
-                    "data-callout": type,
-                },
-            },
-        };
+      ctx.setProperty(node, 'children', [
+        newParagraph,
+        ...node.children.slice(1),
+      ]);
 
-        ctx.replaceNode(node, newNode);
+      const baseData = node.data || {};
+      ctx.setProperty(node, 'data', {
+        ...baseData,
+        hName: 'aside',
+        hProperties: {
+          ...(baseData.hProperties || {}),
+          className: ['callout'],
+          'data-callout': type,
+        },
+      });
     },
   });
   ```
 
-  Intinya plugin ini ngubah Markdown `> [!TIP]` jadi HTML `<blockquote data-callout="tip">`. Sisanya urusan CSS.
+  Apa yang terjadi di sini? Singkatnya:
 
-3. ### Langkah 3: Daftarin Plugin ke Astro
+  - Plugin ini “mengintai” setiap blockquote (`>`).
+  - Kalau blockquote-nya dimulai dengan `[!NOTE]`, `[!TIP]`, atau sejenisnya, dia kenali sebagai callout.
+  - Lalu teks `[!NOTE]` dibuang, dan blockquote diubah menjadi `<aside>` dengan atribut data-callout sesuai jenisnya.
+  - Hasil akhirnya: `<aside class="callout" data-callout="note">`.
 
-  Di `astro.config.mjs`, kita daftarin plugin ke `remarkPlugins`. Karena Satteri adalah plugin mdast (bukan remark), kita perlu bungkus dikit:
+  Sisanya tinggal urusan CSS biar cantik.
+
+3. ### Langkah 3:  Daftarkan Plugin ke Astro
+
+  Di `astro.config.mjs`, Di sana, kita tambahkan plugin callout ke daftar `mdastPlugins`:
   
   ```js
   // astro.config.mjs
   import { defineConfig } from "astro/config";
   import { satteri } from "@astrojs/markdown-satteri";
-  import { satteriCallout } from "./src/lib/mdx/satteri-callout";
+  import { satteriCallout } from "./src/lib/mdx/satteri-callout"; // [!code ++]
   
   export default defineConfig({
     markdown: {
@@ -187,7 +182,7 @@ Bayangin: kamu lagi nulis artikel, pengen kasih tips. Daripada buka komponen, im
         // ... fitur lainnya
         mdastPlugins: [
             // ... plugin lain
-            satteriCallout, // 🔥 ini dia!
+            satteriCallout, // [!code ++]
         ],
         }),
         // ...
@@ -195,15 +190,14 @@ Bayangin: kamu lagi nulis artikel, pengen kasih tips. Daripada buka komponen, im
     });
   ```
   
-  Sekarang semua file `.md` dan `.mdx` akan diproses oleh plugin callout. Kamu nggak perlu mikirin lagi.
+  Dengan begitu, semua file `.md` dan `.mdx` di proyekmu bakal diproses sama plugin ini. Kamu nggak perlu mikirin lagi.
 
-4. ### Langkah 4: Kasih Baju (CSS)
+4. ### Langkah 4: Kasih Styling Biar Cantik
 
-  Biar callout-nya cantik, kita perlu styling. Buat file `src/styles/prose/callout.css` dan isi dengan kode di bawah ini:
+  Callout yang sudah jadi aside perlu dibikinin CSS. Buat file `src/styles/prose/callout.css` dan isi dengan kode di bawah ini:
 
   ```css
   /* src/styles/prose/callout.css */
-
   :root {
     --callout-icon-note: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJjdXJyZW50Q29sb3IiIGNsYXNzPSJpY29uIGljb24tdGFibGVyIGljb25zLXRhYmxlci1maWxsZWQgaWNvbi10YWJsZXItaW5mby1jaXJjbGUiPjxwYXRoIHN0cm9rZT0ibm9uZSIgZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIgLz48cGF0aCBkPSJNMTIgMmM1LjUyMyAwIDEwIDQuNDc3IDEwIDEwYTEwIDEwIDAgMCAxIC0xOS45OTUgLjMyNGwtLjAwNSAtLjMyNGwuMDA0IC0uMjhjLjE0OCAtNS4zOTMgNC41NjYgLTkuNzIgOS45OTYgLTkuNzJ6bTAgOWgtMWwtLjExNyAuMDA3YTEgMSAwIDAgMCAwIDEuOTg2bC4xMTcgLjAwN3YzbC4wMDcgLjExN2ExIDEgMCAwIDAgLjg3NiAuODc2bC4xMTcgLjAwN2gxbC4xMTcgLS4wMDdhMSAxIDAgMCAwIC44NzYgLS44NzZsLjAwNyAtLjExN2wtLjAwNyAtLjExN2ExIDEgMCAwIDAgLS43NjQgLS44NTdsLS4xMTIgLS4wMmwtLjExNyAtLjAwNnYtM2wtLjAwNyAtLjExN2ExIDEgMCAwIDAgLS44NzYgLS44NzZsLS4xMTcgLS4wMDd6bS4wMSAtM2wtLjEyNyAuMDA3YTEgMSAwIDAgMCAwIDEuOTg2bC4xMTcgLjAwN2wuMTI3IC0uMDA3YTEgMSAwIDAgMCAwIC0xLjk4NmwtLjExNyAtLjAwN3oiIC8+PC9zdmc+");
     --callout-icon-tip: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJjdXJyZW50Q29sb3IiIGNsYXNzPSJpY29uIGljb24tdGFibGVyIGljb25zLXRhYmxlci1maWxsZWQgaWNvbi10YWJsZXItZmxhbWUiPjxwYXRoIHN0cm9rZT0ibm9uZSIgZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIgLz48cGF0aCBkPSJNMTAgMmMwIC0uODggMS4wNTYgLTEuMzMxIDEuNjkyIC0uNzIyYzEuOTU4IDEuODc2IDMuMDk2IDUuOTk1IDEuNzUgOS4xMmwtLjA4IC4xNzRsLjAxMiAuMDAzYy42MjUgLjEzMyAxLjIwMyAtLjQzIDIuMzAzIC0yLjE3M2wuMTQgLS4yMjRhMSAxIDAgMCAxIDEuNTgyIC0uMTUzYzEuMzM0IDEuNDM1IDIuNjAxIDQuMzc3IDIuNjAxIDYuMjdjMCA0LjI2NSAtMy41OTEgNy43MDUgLTggNy43MDVzLTggLTMuNDQgLTggLTcuNzA2YzAgLTIuMjUyIDEuMDIyIC00LjcxNiAyLjYzMiAtNi4zMDFsLjYwNSAtLjU4OWMuMjQxIC0uMjM2IC40MzQgLS40MyAuNjE4IC0uNjI0YzEuNDMgLTEuNTEyIDIuMTQ1IC0yLjkyNCAyLjE0NSAtNC43OCIgLz48L3N2Zz4=");
@@ -213,7 +207,7 @@ Bayangin: kamu lagi nulis artikel, pengen kasih tips. Daripada buka komponen, im
     --callout-icon-danger: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJjdXJyZW50Q29sb3IiIGNsYXNzPSJpY29uIGljb24tdGFibGVyIGljb25zLXRhYmxlci1maWxsZWQgaWNvbi10YWJsZXItYWxlcnQtY2lyY2xlIj48cGF0aCBzdHJva2U9Im5vbmUiIGQ9Ik0wIDBoMjR2MjRIMHoiIGZpbGw9Im5vbmUiIC8+PHBhdGggZD0iTTEyIDJjNS41MjMgMCAxMCA0LjQ3NyAxMCAxMGExMCAxMCAwIDAgMSAtMTkuOTk1IC4zMjRsLS4wMDUgLS4zMjRsLjAwNCAtLjI4Yy4xNDggLTUuMzkzIDQuNTY2IC05LjcyIDkuOTk2IC05Ljcyem0uMDEgMTNsLS4xMjcgLjAwN2ExIDEgMCAwIDAgMCAxLjk4NmwuMTE3IC4wMDdsLjEyNyAtLjAwN2ExIDEgMCAwIDAgMCAtMS45ODZsLS4xMTcgLS4wMDd6bS0uMDEgLThhMSAxIDAgMCAwIC0uOTkzIC44ODNsLS4wMDcgLjExN3Y0bC4wMDcgLjExN2ExIDEgMCAwIDAgMS45ODYgMGwuMDA3IC0uMTE3di00bC0uMDA3IC0uMTE3YTEgMSAwIDAgMCAtLjk5MyAtLjg4M3oiIC8+PC9zdmc+");
   }
 
-  .prose blockquote[data-callout] {
+  .prose aside[data-callout] {
     @apply text-body-14;
     --callout-color: var(--fg-muted);
     display: block;
@@ -227,7 +221,7 @@ Bayangin: kamu lagi nulis artikel, pengen kasih tips. Daripada buka komponen, im
     color: var(--fg);
   }
 
-  .prose blockquote[data-callout]::before {
+  .prose aside[data-callout]::before {
     content: "";
     position: absolute;
     inset-block: 0.5rem;
@@ -237,7 +231,7 @@ Bayangin: kamu lagi nulis artikel, pengen kasih tips. Daripada buka komponen, im
     border-radius: var(--radius-full);
   }
 
-  .prose blockquote[data-callout]::after {
+  .prose aside[data-callout]::after {
     content: "";
     position: absolute;
     inset-block-start: 0.55rem;
@@ -250,55 +244,55 @@ Bayangin: kamu lagi nulis artikel, pengen kasih tips. Daripada buka komponen, im
     pointer-events: none;
   }
 
-  .prose blockquote[data-callout="note"] {
+  .prose aside[data-callout="note"] {
     --callout-color: var(--fg-muted);
     --callout-icon: var(--callout-icon-note);
   }
-  .prose blockquote[data-callout="tip"] {
+  .prose aside[data-callout="tip"] {
     --callout-color: var(--accent);
     --callout-icon: var(--callout-icon-tip);
   }
-  .prose blockquote[data-callout="important"] {
+  .prose aside[data-callout="important"] {
     --callout-color: #8b5cf6;
     --callout-icon: var(--callout-icon-important);
   }
-  .prose blockquote[data-callout="warning"] {
+  .prose aside[data-callout="warning"] {
     --callout-color: var(--color-warning);
     --callout-icon: var(--callout-icon-warning);
   }
-  .prose blockquote[data-callout="caution"] {
+  .prose aside[data-callout="caution"] {
     --callout-color: #f97316;
     --callout-icon: var(--callout-icon-caution);
   }
-  .prose blockquote[data-callout="danger"] {
+  .prose aside[data-callout="danger"] {
     --callout-color: var(--color-error);
     --callout-icon: var(--callout-icon-danger);
- }
+  }
 
-  .prose blockquote[data-callout] *:first-child {
+  .prose aside[data-callout] *:first-child {
     margin-top: 0 !important;
   }
-  .prose blockquote[data-callout] *:last-child {
+  .prose aside[data-callout] *:last-child {
     margin-bottom: 0 !important;
   }
 
-  .prose blockquote[data-callout] > * + * {
+  .prose aside[data-callout] > * + * {
     margin-block-start: 0.75rem;
   }
 
-  .prose blockquote[data-callout] ul,
-  .prose blockquote[data-callout] ol {
+  .prose aside[data-callout] ul,
+  .prose aside[data-callout] ol {
     padding-inline-start: 1.5rem;
     margin-block: 0.5rem 0;
-   }
-  .prose blockquote[data-callout] li {
+  }
+  .prose aside[data-callout] li {
     margin-block-start: 0.375rem;
   }
-  .prose blockquote[data-callout] li::marker {
+  .prose aside[data-callout] li::marker {
     color: var(--callout-color);
   }
 
-  .prose blockquote[data-callout] a {
+  .prose aside[data-callout] a {
     color: var(--fg-strong);
     font-weight: 500;
     text-decoration: underline;
@@ -307,7 +301,7 @@ Bayangin: kamu lagi nulis artikel, pengen kasih tips. Daripada buka komponen, im
     text-decoration-thickness: 1.5px;
   }
 
-  .prose blockquote[data-callout] :not(pre) > code {
+  .prose aside[data-callout] :not(pre) > code {
     font-size: 0.875em;
     color: var(--fg-strong);
     background: color-mix(in srgb, var(--callout-color) 10%, var(--bg-subtle));
@@ -318,34 +312,32 @@ Bayangin: kamu lagi nulis artikel, pengen kasih tips. Daripada buka komponen, im
   }
   ```
   
-  Setelah file CSS dibuat, jangan lupa import di layout utama:
+  Setelah itu, impor file CSS tersebut di layout utama atau di file `global.css`:
 
   ```css
   /* src/styles/global.css */
-  @import './prose/callout.css';
+  @import './prose/callout.css'; /* [!code ++] */
   ```
 
-  Atau langsung di layout:
+  Atau langsung di layout `.astro`:
 
   ```astro
   ---
   // src/layouts/Layout.astro
-  import '../styles/prose/callout.css';
+  import '../styles/prose/callout.css'; /* [!code ++] */
   ---
   ```
   
-  CSS ini akan ngasih:
+  Penjelasan singkat CSS-nya:
 
-  - Garis vertikal 3px di kiri (kayak tongkat) 
-  - Ikon sesuai tipe (note, tip, warning, dll)
-  - Background soft yang nyaman di mata
-  - Border dan radius yang elegan
-  
-  Hasilnya? Callout yang kelihatan profesional tanpa ribet.
+  - Garis vertikal 3px di kiri sebagai aksen.
+  - Ikon yang berubah sesuai tipe callout.
+  - Background soft dan border tipis biar keliatan elegan.
+  - Warna icon, teks, dan marker menyesuaikan tipe.
 
-5. ### Langkah 5: Tulis Konten dengan Callout
+5. ### Langkah 5: Pakai Callout di Markdown
 
-  Sekarang bagian paling seru: nulis konten. Kamu tinggal pakai format ini:
+  Sekarang bagian paling seru: menulis konten. Kamu tinggal pakai format ini:
 
   ```markdown
   > [!NOTE]
@@ -367,17 +359,17 @@ Bayangin: kamu lagi nulis artikel, pengen kasih tips. Daripada buka komponen, im
   > Ini berbahaya! Jangan coba di production.
   ```
 
-  Plugin akan mengubahnya jadi:
+  Plugin akan mengubahnya jadi HTML seperti ini:
 
   ```html
-  <blockquote data-callout="tip">
+  <aside class="callout" data-callout="tip">
     <p>Tips: Pakai keyboard shortcut `Ctrl+S` buat save.</p>
-  </blockquote>
+  </aside>
   ```
   
-  Dan CSS akan mengubahnya jadi kotak cantik dengan ikon dan warna sesuai tipe.
+  Dan CSS akan mengubahnya jadi kotak cantik dengan ikon serta warna sesuai tipe.
 
-6. ### Langkah 6: Test
+6. ### Langkah 6: Coba Langsung
 
   Buat file `src/pages/test-callout.md`:
   
@@ -385,19 +377,20 @@ Bayangin: kamu lagi nulis artikel, pengen kasih tips. Daripada buka komponen, im
   ---
   title: "Test Callout"
   ---
-  
+
   > [!NOTE]
   > Catatan: Jangan lupa backup data.
-  
+
   > [!TIP]
-  > Tips: Pakai keyboard shortcut `Ctrl+S` buat save.
+  > Tips: Pakai shortcut `Ctrl+S` buat save.
   ```
-  Jalankan `npm run dev`, buka `http://localhost:4321/test-callout`, dan lihat hasilnya. Kalau muncul kotak-kotak cantik, berarti berhasil! 🎉
+
+  Jalankan `npm run dev`, lalu buka `http://localhost:4321/test-callout`. Kalau muncul kotak-kotak cantik, berarti berhasil! 🎉
 :::
 
-## Alternatif: Pakai Komponen MDX (Manual)
+## Alternatif Pakai Komponen MDX (Manual)
 
-Kalau kamu pengen lebih fleksibel, bisa juga bikin komponen Astro dan pake di file `.mdx`:
+Kalau kamu mau fleksibilitas lebih tinggi, kamu juga bisa bikin callout sebagai komponen Astro dan pakai di file `.mdx`:
 
 ```astro
 ---
@@ -405,12 +398,12 @@ Kalau kamu pengen lebih fleksibel, bisa juga bikin komponen Astro dan pake di fi
 const { type = "note" } = Astro.props;
 ---
 
-<blockquote data-callout={type}>
+<aside class="callout" data-callout={type}>
   <slot />
-</blockquote>
+</aside>
 ```
 
-Trus di file `.mdx`:
+Kemudian di file `.mdx`:
 
 ```mdx
 import Callout from '../components/Callout.astro';
@@ -420,10 +413,18 @@ Ini peringatan dari komponen.
 </Callout>
 ```
 
-Tapi jujur, cara plugin lebih praktis. Nggak perlu import tiap kali, nggak perlu mikir JSX, tinggal tulis `> [!TIP]` dan lanjut nulis.
+Tapi jujur, cara plugin lebih praktis. Kamu nggak perlu import tiap kali, nggak perlu mikir JSX, tinggal tulis `> [!TIP]` dan lanjut nulis.
 
 ## Penutup
 
-Dengan sedikit kode dan konfigurasi, kita berhasil bikin callout custom di Astro. Hasilnya: pengalaman nulis konten jadi lebih enak, pembaca lebih paham, dan website jadi lebih profesional.
+Dengan sedikit kode dan konfigurasi, kita berhasil bikin callout custom di Astro. Hasilnya:
 
-Ini adalah contoh kecil bagaimana ngerti **AST (Abstract Syntax Tree)** bisa membuka banyak kemungkinan. Tapi yang paling penting: kita nggak perlu jadi ahli dulu buat mulai. Cukup ikuti langkah-langkah di atas, dan callout-mu siap dipakai.
+Penulisan konten lebih cepat — cukup pakai blockquote biasa.
+
+Tampilan lebih profesional — kotak info dengan ikon dan warna.
+
+Kode tetap rapi — plugin terpisah dari konten.
+
+Ini adalah contoh kecil bagaimana pemahaman tentang **AST (Abstract Syntax Tree)** bisa membuka banyak kemungkinan di Astro. Tapi yang paling penting: kita nggak perlu jadi ahli dulu buat mulai. Cukup ikuti langkah-langkah di atas, dan callout-mu siap dipakai.
+
+Selamat mencoba! 😊
