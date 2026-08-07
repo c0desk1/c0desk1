@@ -1,24 +1,22 @@
-# Author
-/author/*   /404/   410
-/author/    /404/   410
-/author     /404/   410
+# Halaman author
+/author/*   /404/   301
+/author/    /404/   301
+/author     /404/   301
 
-# Guide
-/guide/*    /404/   410
-/guide/     /   410
-/guide      /   410
+# Halaman guide
+/guide/*    /404/   301
+/guide/     /404/   301
+/guide      /404/   301
 
-# English
-/en/*       /404/   410
-/en/        /   410
-/en         /   410
+# Halaman bahasa asing
+/en/*       /404/   301
+/en/        /404/   301
+/en         /404/   301
 
-# Russian
-/ru/*       /404/   410
-/ru/        /   410
-/ru         /   410
+/ru/*       /404/   301
+/ru/        /404/   301
+/ru         /404/   301
 
-# Japanese
-/jp/*       /404/   410
-/jp/        /  410
-/jp         /   410
+/jp/*       /404/   301
+/jp/        /404/   301
+/jp         /404/   301
