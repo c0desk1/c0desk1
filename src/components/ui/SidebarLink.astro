@@ -13,10 +13,9 @@ const {
 } = Astro.props;
 
 const $ = {
-  group: "relative ml-3 gap-y-1",
+  group: "relative ml-3 pb-1 last:pb-0!",
   groupItems: [
     "relative pr-2 py-1.5 -ml-3 rounded",
-    "before:absolute before:inset-0 before:rounded before:-z-10"
   ].join(" "),
   items: "relative flex items-center w-full text-body-14 font-medium",
   itemsIndicator: "absolute left-0 top-0 bottom-0 w-px bg-(--border) rounded-full"
@@ -31,8 +30,8 @@ const $ = {
     <li class:list={[
       $.groupItems,
       isActive 
-        ? "before:bg-(--accent)/10" 
-        : "hover:before:bg-(--bg-muted) active:before:bg-(--bg-muted)",
+        ? "bg-(--accent)/10" 
+        : "hover:bg-(--bg-muted)/80",
     ]}>
       <a
         href={href}
@@ -59,11 +58,10 @@ const $ = {
     href={href}
     class:list={[
       $.items,
-      "px-2 py-1.5 rounded",
-      "before:absolute before:inset-0 before:rounded before:-z-10",
+      "px-2 py-1.5 rounded transition-colors duration-150",
       isActive 
-        ? "before:bg-(--bg-muted) text-(--fg-strong)" 
-        : "text-(--fg) hover:before:bg-(--bg-muted) active:before:bg-(--bg-muted)",
+        ? "bg-(--accent)/10 text-(--accent) font-semibold" 
+        : "text-(--fg) hover:bg-(--bg-muted)/80 active:bg-(--bg-muted)",
     ]}>
     <slot />
   </a>
