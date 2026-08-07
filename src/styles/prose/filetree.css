@@ -1,7 +1,10 @@
 /* src/styles/prose/filetree.css */
 
+/* ============================================
+   CONTAINER
+   ============================================ */
 .prose .file-tree {
-  background-color: var(--bg-subtle);
+  background-color: var(--bg-muted);
   border: 1px solid rgb(from var(--border) r g b / 0.5);
   border-radius: var(--radius-md);
   padding: 0.75rem 2rem;
@@ -16,13 +19,18 @@
   margin-bottom: 0;
 }
 
-.prose .file-tree details > summary,
-.prose .file-tree ul,
-.prose .file-tree li,
-.prose .file-tree p {
+/* ============================================
+   UKURAN TEKS — PAKSA UNTUK SEMUA ELEMEN
+   ============================================ */
+.prose .file-tree,
+.prose .file-tree * {
   @apply text-code-14;
+  font-size: 14px !important;
 }
 
+/* ============================================
+   LIST
+   ============================================ */
 .prose .file-tree ul {
   list-style: none;
   padding: 0;
@@ -34,24 +42,42 @@
   padding-inline-start: 1.5rem;
 }
 
-.prose .file-tree ul ul > li {
-  padding-inline-start: 1rem;
-}
-
+/* ============================================
+   ITEM DASAR
+   ============================================ */
 .prose .file-tree li {
   position: relative;
   margin: 0;
   padding-block: 0.15rem;
 }
 
+/* ============================================
+   INDENTASI BERDASARKAN DEPTH
+   ============================================ */
+.prose .file-tree li.tree-depth-0 {
+  padding-left: 0 !important;
+}
+.prose .file-tree li.tree-depth-1 {
+  padding-left: 0.5rem !important;
+}
+.prose .file-tree li.tree-depth-2,
+.prose .file-tree li.tree-depth-3,
+.prose .file-tree li.tree-depth-4,
+.prose .file-tree li.tree-depth-5,
+.prose .file-tree li.tree-depth-6 {
+  padding-left: 1rem !important;
+}
+
+/* ============================================
+   GARIS TREE (BORDER LEFT)
+   ============================================ */
 .prose .file-tree ul ul > li::before {
   content: "";
   position: absolute;
   left: -1rem;
-  top: 0.9rem;
+  top: 1rem;
   width: 0.5rem;
   border-bottom: 1.5px solid rgb(from var(--border) r g b / 100%);
-
 }
 
 .prose .file-tree ul ul > li::after {
@@ -66,11 +92,56 @@
 }
 
 .prose .file-tree ul ul > li:last-child::after {
-  height: 0.9rem;
+  height: 1rem;
 }
 
-.prose .file-tree .tree-label,
-.prose .file-tree details > summary {
+/* ============================================
+   FOLDER (details)
+   ============================================ */
+.prose .file-tree .tree-folder {
+  display: block;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+}
+
+.prose .file-tree .tree-folder > details {
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+}
+
+.prose .file-tree .tree-folder > details > summary {
+  display: list-item;
+  min-width: 100%;
+  gap: 4px;
+  margin: 0 !important;
+  color: var(--fg-strong);
+  padding-block: 0.15rem;
+  cursor: pointer;
+}
+
+.prose .file-tree .tree-folder > details > summary::-webkit-details-marker {
+  display: initial !important;
+  color: inherit;
+}
+.prose .file-tree .tree-folder > details > summary::marker {
+  content: normal !important;
+  color: inherit;
+}
+.prose .file-tree .tree-folder > details > summary::before {
+  display: none;
+}
+.prose .file-tree .tree-folder > details > summary:hover {
+  color: var(--accent);
+}
+
+/* ============================================
+   LABEL
+   ============================================ */
+.prose .file-tree .tree-label {
   display: list-item;
   min-width: 100%;
   gap: 4px;
@@ -79,31 +150,9 @@
   padding-block: 0.15rem;
 }
 
-.prose .file-tree details {
-  margin: 0;
-  padding: 0;
-  background: none;
-  border: none;
-}
-
-.prose .file-tree details > summary::-webkit-details-marker {
-  display: initial !important;
-  color: inherit;
-}
-
-.prose .file-tree details > summary::marker {
-  content: normal !important;
-  color: inherit;
-}
-
-.prose .file-tree details > summary::before {
-  display: none;
-}
-
-.prose .file-tree details > summary:hover {
-  color: var(--accent);
-}
-
+/* ============================================
+   IKON
+   ============================================ */
 .prose .file-tree .tree-icon-wrapper {
   display: inline-flex;
   align-items: center;
@@ -116,19 +165,20 @@
   aspect-ratio: 1/1;
 }
 
-.prose .file-tree .tree-icon {
+.prose .file-tree .tree-icon-wrapper svg {
   display: block;
   width: 100%;
   height: 100%;
   color: currentColor;
-  object-fit: cover;
 }
 
-.prose .file-tree .tree-folder > details > summary .tree-icon {
+.prose .file-tree .tree-folder > details > summary .tree-icon-wrapper {
   color: var(--fg-muted);
 }
 
-/* === HIGHLIGHT === */
+/* ============================================
+   HIGHLIGHT (FILE)
+   ============================================ */
 .prose .file-tree li.tree-file.tree-highlight {
   display: block;
   min-width: 100%;
@@ -140,8 +190,7 @@
   border-radius: var(--radius-sm);
 }
 
-.prose .file-tree li.tree-file.tree-highlight > .tree-label strong,
-.prose .file-tree li.tree-highlight > details > summary strong {
+.prose .file-tree li.tree-file.tree-highlight > .tree-label strong {
   color: var(--accent);
   font-weight: 600;
 }
@@ -150,13 +199,15 @@
   color: var(--accent);
 }
 
-/* === PLACEHOLDER === */
-.prose .file-tree li.tree-placeholder {
+/* ============================================
+   PLACEHOLDER (...)
+   ============================================ */
+.prose .file-tree li.tree-placeholder > .tree-label {
   display: inline-flex;
   align-items: center;
   color: var(--fg-muted);
   opacity: 0.6;
-  padding-left: 0.25rem;
+  padding-left: 0;
 }
 
 .prose .file-tree li.tree-placeholder > .tree-label .tree-icon-wrapper,
@@ -164,16 +215,19 @@
   display: none !important;
 }
 
-/* === COMMENT === */
-.prose .file-tree .tree-comment {
+/* ============================================
+   KOMENTAR
+   ============================================ */
+.prose .file-tree .tree-label > .tree-comment {
+  @apply text-code-12;
+  font-size: 12px !important;
   color: var(--fg-muted);
-  margin-left: 0.25rem;
+  margin-left: 0.5rem;
 }
 
-.prose .file-tree li:not(.tree-folder):not(.tree-file) > .tree-label .tree-icon-wrapper {
-  display: none;
-}
-
+/* ============================================
+   HOVER FILE
+   ============================================ */
 .prose .file-tree li.tree-file:hover {
   color: var(--accent);
   cursor: default;
