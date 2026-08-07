@@ -1,6 +1,7 @@
 ---
 // src/components/SidebarGroup.astro
 import Icon from './Icons.astro';
+
 interface Props {
   title: string;
   open?: boolean;
@@ -9,15 +10,15 @@ interface Props {
 const { title, open = true } = Astro.props;
 
 const $ = {
-  wrapper: "flex items-center justify-between cursor-pointer list-none [&::-webkit-details-marker]:hidden select-none py-2 px-2 rounded-md hover:bg-(--bg-muted) active:bg-(--bg-muted)",
+  wrapper: "flex items-center justify-between cursor-pointer list-none [&::-webkit-details-marker]:hidden select-none py-2 px-2 rounded-md transition-colors duration-150 hover:bg-(--bg-muted)/80 active:bg-(--bg-muted)",
   label: "text-body-14 font-medium text-(--fg-strong)",
-  icon: "transition-transform duration-(--duration) group-open:rotate-90",
+  icon: "text-(--fg-muted) transition-transform duration-(--duration) group-open:rotate-90",
   iconSize: "size-4",
-  content: "flex flex-col"
+  content: "flex flex-col mt-1 mb-2 last:mb-0"
 }
 ---
 
-<details class="group" {open}>
+<details class="group" open={open}>
   <summary class={$.wrapper}>
     <span class={$.label}>{title}</span>
     <span class={$.icon}>
