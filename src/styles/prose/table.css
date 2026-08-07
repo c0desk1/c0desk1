@@ -1,90 +1,110 @@
 /* src/styles/prose/components/table.css */
+
 .prose table {
   display: block;
   width: 100%;
   max-width: 100%;
+  margin: 2.5rem 0;
+
   color: var(--fg);
   font-size: inherit;
   line-height: inherit;
-  border-radius: var(--radius-md);
-  border-collapse: collapse;
+
+  border-collapse: separate;
   border-spacing: 0;
-  margin: 2.5rem 0;
 
   overflow-x: auto;
   overflow-y: hidden;
-  
-  outline: 1px solid rgb(from var(--border-subtle) r g b / 0.5);
-  outline-offset: 4px;
-  
+
   scrollbar-width: thin;
   scrollbar-color: var(--accent) transparent;
-  
+
   -webkit-overflow-scrolling: touch;
 }
+
 .prose table::-webkit-scrollbar {
   height: 6px;
 }
+
 .prose table::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .prose table::-webkit-scrollbar-thumb {
-  background-color: var(--border-subtle);
-  border-radius: 10px;
+  background: var(--border-subtle);
+  border-radius: 999px;
 }
+
 .prose table::-webkit-scrollbar-thumb:hover {
-  background-color: var(--fg-muted);
+  background: var(--fg-muted);
 }
 
-.prose table thead,
-.prose table tbody {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
-}
-
-.prose thead {
-  background-color: rgb(from var(--bg) r g b / 0.5);
-}
-
-.prose tbody {
-  background-color: var(--bg-subtle);
-}
+/* ---------- Header ---------- */
 
 .prose thead th {
-  border-bottom: 1px solid rgb(from var(--border-subtle) r g b / 0.5);
+  background: var(--bg-subtle);
+
   color: var(--fg-strong);
+  font-weight: 600;
   text-align: start;
-  text-transform: none;
   white-space: nowrap;
-}
-.prose th,
-.prose thead tr {
-  color: var(--fg-strong);
+
+  border-bottom: 1px solid rgb(from var(--border-subtle) r g b / 0.5);
 }
 
-.prose tbody tr:hover {
-  background-color: var(--bg-muted);
+.prose thead th:first-child {
+  border-top-left-radius: var(--radius-md);
 }
+
+.prose thead th:last-child {
+  border-top-right-radius: var(--radius-md);
+}
+
+/* ---------- Cells ---------- */
 
 .prose th,
 .prose td {
-  vertical-align: start;
+  vertical-align: top;
   text-wrap: pretty;
 }
 
-.prose th a,
-.prose td a {
-  white-space: normal;
-  word-break: break-all;
+.prose tbody td {
+  color: var(--fg);
+  background: transparent;
+
+  border-bottom: 1px solid rgb(from var(--border-subtle) r g b / 0.5);
 }
 
-.prose thead th a {
-  white-space: nowrap;
+.prose tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.prose tbody tr:hover {
+  background: rgb(from var(--bg-muted) r g b / 0.4);
+}
+
+/* ---------- Typography ---------- */
+
+.prose td strong {
+  color: var(--fg-strong);
+}
+
+.prose td small {
+  @apply text-label-14;
+  color: var(--fg-subtle);
 }
 
 .prose td code,
 .prose th code {
+  white-space: nowrap;
+}
+
+.prose td a,
+.prose th a {
+  overflow-wrap: anywhere;
+}
+
+.prose thead th a {
   white-space: nowrap;
 }
 
@@ -94,42 +114,22 @@
   height: 1rem;
 }
 
-.prose tbody td {
-  border-bottom: 1px solid rgb(from var(--border-subtle) r g b / 0.5);
-  background-color: transparent;
-  color: var(--fg);
-}
-
-.prose tbody tr:last-child td {
-  border-bottom: none;
-}
-
-.prose tbody td strong {
-  color: var(--fg-strong);
-}
-
-.prose tbody td small {
-  @apply text-label-14;
-  color: var(--fg-subtle);
-}
-
-/* .prose th:not(:last-child),
-.prose td:not(:last-child) {
-  border-inline-end: 1px solid rgb(from var(--border-subtle) r g b / 0.5);
-} */
+/* ---------- Responsive ---------- */
 
 @media (max-width: 45rem) {
-  .prose thead th,
-  .prose tbody td {
+  .prose th,
+  .prose td {
     @apply text-numeric-14;
-    padding: 0.5rem 0.75rem;
+
+    padding: 0.625rem 0.875rem;
   }
 }
 
-@media (min-width: 50rem) {
-  .prose thead th,
-  .prose tbody td {
+@media (min-width: 45rem) {
+  .prose th,
+  .prose td {
     @apply text-numeric-14;
+
     padding: 0.75rem 1rem;
   }
 }
