@@ -15,6 +15,7 @@ const ungroupedDocs = sortedDocs.filter((doc) => !doc.data.category);
 const docsByCategory = sortedDocs.reduce((acc, doc) => {
   const category = doc.data.category;
   if (!category) return acc;
+  
   if (!acc[category]) acc[category] = [];
   acc[category].push(doc);
   return acc;
@@ -27,7 +28,6 @@ const sortedCategories = Object.keys(docsByCategory).sort((a, b) => {
 });
 
 const currentPath = Astro.url.pathname;
-
 const docsRootPath = `${ROUTES.docs}/`;
 
 const checkIsActive = (href: string) => {
@@ -43,18 +43,18 @@ const getHref = (doc: (typeof allDocs)[number]) => {
 };
 
 const $ = {
-  wrapper: "flex flex-col space-y-1 w-full flex-1 px-2 md:px-4 py-2",
+  wrapper: "flex flex-col space-y-1 w-full flex-1 py-2 px-4",
 }
 ---
 
-<nav class={$.wrapper}>
+<div class={$.wrapper}>
   {sortedCategories.map((category) => {
-    const hasActiveChild = docsByCategory[category].some((doc) =>
-      checkIsActive(getHref(doc))
-    );
+    const categoryDocs = docsByCategory[category];
+    const hasActiveChild = categoryDocs.some((doc) => checkIsActive(getHref(doc)));
+    
     return (
       <SidebarGroup title={category} open={hasActiveChild}>
-        {docsByCategory[category].map((doc) => (
+        {categoryDocs.map((doc) => (
           <SidebarLink href={getHref(doc)} isActive={checkIsActive(getHref(doc))}>
             {doc.data.title}
           </SidebarLink>
@@ -62,9 +62,14 @@ const $ = {
       </SidebarGroup>
     );
   })}
+
   {ungroupedDocs.map((doc) => (
-    <SidebarLink href={getHref(doc)} isActive={checkIsActive(getHref(doc))} grouped={false}>
+    <SidebarLink 
+      href={getHref(doc)} 
+      isActive={checkIsActive(getHref(doc))} 
+      grouped={false}
+    >
       {doc.data.title}
     </SidebarLink>
   ))}
-</nav>
+</div>
