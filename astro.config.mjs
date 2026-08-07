@@ -88,7 +88,7 @@ export default defineConfig({
         satteriQuote,
         satteriCodeBlock,
         satteriKbd,
-        satteriChangelog,
+        satteriChangelog
       ],
     }),
     syntaxHighlight: "shiki",
