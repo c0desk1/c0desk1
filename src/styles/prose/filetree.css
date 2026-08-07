@@ -1,10 +1,10 @@
 /* src/styles/prose/filetree.css */
 
 .prose .file-tree {
-  background-color: var(--bg-muted);
-  border: 1px solid rgb(from var(--border) r g b / 80%);
+  background-color: var(--bg-subtle);
+  border: 1px solid rgb(from var(--border) r g b / 100%);
   border-radius: var(--radius-md);
-  padding: 0.75rem 2rem;
+  padding: 0.75rem 1rem;
   margin: 2rem 0;
   overflow-x: auto;
 }
@@ -24,7 +24,7 @@
 
 .prose .file-tree ul {
   list-style: none;
-  padding: 0;
+  padding: 0 ;
   margin: 0;
 }
 
@@ -39,33 +39,31 @@
   padding-block: 0.15rem;
 }
 
-.prose .file-tree li.tree-depth-0 {
-  padding-left: 0 !important;
-}
+.prose .file-tree li.tree-depth-0,
 .prose .file-tree li.tree-depth-1 {
-  padding-left: 0.5rem !important;
+  padding-left: 0;
 }
 .prose .file-tree li.tree-depth-2,
 .prose .file-tree li.tree-depth-3,
 .prose .file-tree li.tree-depth-4,
 .prose .file-tree li.tree-depth-5,
 .prose .file-tree li.tree-depth-6 {
-  padding-left: 1rem !important;
+  padding-left: 1rem;
 }
 
 .prose .file-tree ul ul > li::before {
   content: "";
   position: absolute;
-  left: -1rem;
-  top: 1rem;
-  width: 0.5rem;
+  left: 0;
+  top: 0.75rem;
+  width: 0.7rem;
   border-bottom: 1.5px solid rgb(from var(--border) r g b / 100%);
 }
 
 .prose .file-tree ul ul > li::after {
   content: "";
   position: absolute;
-  left: -1rem;
+  left: 0;
   top: 0;
   bottom: 0;
   width: 1.5px;
@@ -74,7 +72,7 @@
 }
 
 .prose .file-tree ul ul > li:last-child::after {
-  height: 1rem;
+  height: 0.75rem;
 }
 
 .prose .file-tree .tree-folder {
@@ -111,10 +109,7 @@
   color: inherit;
 }
 .prose .file-tree .tree-folder > details > summary::before {
-  display: none;
-}
-.prose .file-tree .tree-folder > details > summary:hover {
-  color: var(--accent);
+  display: none !important;
 }
 
 .prose .file-tree .tree-label {
@@ -177,8 +172,7 @@
   font-weight: 600;
 }
 
-.prose .file-tree .tree-label strong,
-.prose .file-tree .tree-label .tree-name {
+.prose .file-tree .tree-label strong {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -203,13 +197,18 @@
 
 .prose .file-tree .tree-label .tree-comment {
   @apply text-code-12;
+  font-size: 12px !important;
   white-space: nowrap;
   flex-shrink: 0;
   margin-left: 0.25rem;
   color: var(--fg-muted);
 }
 
-.prose .file-tree li.tree-file:hover {
-  color: var(--accent);
-  cursor: default;
+@media (hover: Hover) {
+  .prose .file-tree .tree-folder > details > summary:hover,
+  .prose .file-tree ul ul li.tree-folder:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
 }
+
