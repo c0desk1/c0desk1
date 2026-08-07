@@ -66,7 +66,7 @@ const currentYear = new Date().getFullYear();
 const activeYear = years.length > 0 ? years[0] : currentYear;
 
 const levelColors = {
-  0: "bg-(--bg-muted)/50 ring-1 ring-(--border-subtle)/50 ring-inset",
+  0: "bg-(--bg-muted) ring-1 ring-(--border-subtle) ring-inset",
   1: "bg-(--accent)/30 ring-1 ring-(--accent)/20 ring-inset",
   2: "bg-(--accent)/70 ring-1 ring-(--accent)/50 ring-inset",
   3: "bg-(--accent)",
@@ -178,7 +178,7 @@ const schema = [
       ) : (
         <>
           <Section size="sm">
-            <Card padding='md' radius='md' variant='outline' class="mb-8 shadow-sm">
+            <Card padding='lg' radius='md' variant='secondary' class="mb-8 shadow-sm">
               <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
                  <div>
                    <h2 class="text-heading-18 font-semibold text-(--fg-strong) flex items-center gap-2">
@@ -254,10 +254,10 @@ const schema = [
                   
                   <h2 class="text-heading-24 md:text-heading-32 font-semibold text-(--fg-strong) mb-8 flex items-center gap-4">
                     {year}
-                    <div class="h-px flex-1 bg-linear-to-r from-(--border-subtle) to-transparent"></div>
+                    <div class="h-px flex-1 bg-linear-to-r from-(--border-subtle) to-transparent hidden"></div>
                   </h2>
                   
-                  <div class="relative border-l border-(--border-subtle) ml-3 md:ml-4 space-y-12 py-2">
+                  <div class="relative border-l border-(--border) ml-3 md:ml-4 space-y-12 py-2">
                     {Object.keys(archive[year])
                       .map(Number)
                       .sort((a, b) => b - a)
@@ -277,12 +277,11 @@ const schema = [
                               const slug = post.data.slug ?? post.id.replace(/\.(md|mdx)$/, '');
                               return (
                                 <li class="group">
-                                  <Card padding='none' radius='sm' class="archive-post-card">
-                                    {/* PERBAIKAN: Menggunakan ROUTES.blog dengan slug bersih dan trailing slash */}
+                                  <Card padding='none' radius='sm' variant='primary' class="archive-post-card">
                                     <a href={`${baseUrl}${ROUTES.blog}/${slug}/`}
                                       class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-3 py-2"
                                     >
-                                      <span class="text-body-14 font-medium text-(--fg-muted) group-hover:text-(--fg-strong) line-clamp-1 transition-colors duration-(--duration)">
+                                      <span class="text-body-14 font-medium text-(--fg-muted) group-hover:text-(--fg-strong) line-clamp-1">
                                         {post.data.title}
                                       </span>
                                       

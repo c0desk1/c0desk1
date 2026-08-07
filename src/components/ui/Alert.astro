@@ -1,0 +1,34 @@
+---
+import Icon from "@/components/ui/Icons.astro";
+import Button from "@/components/ui/Button.astro";
+import Particles from "./Particles.astro";
+
+interface Props {
+  message: string;
+  actionLabel?: string;
+  actionHref?: string;
+}
+
+const {
+  message,
+  actionLabel = "",
+  actionHref = "",
+} = Astro.props;
+---
+
+<div role="alert" class="relative z-40 h-12 w-full items-center justify-between gap-4 overflow-hidden bg-(--bg-subtle) px-4">
+  <Particles />
+  <div class="flex h-full items-center justify-center gap-2">
+    <span class="text-body-14 md:text-body-16 items-center font-medium whitespace-nowrap text-(--fg)" set:html={message} />
+    <Button
+      href={actionHref}
+      aria-label={actionLabel}
+      variant="secondary"
+      size="sm"
+      suffix={<Icon slot="icon-right" name="arrow-right" class="size-4" />}
+    >
+      {actionLabel}
+      
+    </Button>
+  </div>
+</div>

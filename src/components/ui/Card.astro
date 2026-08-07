@@ -1,0 +1,80 @@
+---
+// src/components/ui/Card.astro
+import type { HTMLAttributes } from "astro/types";
+
+type CardPadding = 
+  | "none"
+  | 'xs' 
+  | "sm" 
+  | "md" 
+  | "lg";
+type CardRadius = 
+  | "sm" 
+  | "md" 
+  | "lg";
+type CardVariant =
+  | "default"
+  | "outline"
+  | "primary"
+  | "secondary"
+
+interface Props extends HTMLAttributes<"div"> {
+  variant?: CardVariant;
+  hover?: boolean;
+  padding?: CardPadding;
+  radius?: CardRadius;
+}
+
+const {
+  variant = "default",
+  hover = false,
+  padding = "md",
+  radius = "md",
+  class: className,
+  ...rest
+} = Astro.props;
+
+const BaseClasses = [
+  'min-w-0 gap-1.5',
+  'ring-1 border'
+].join(" ");
+
+const HoverClasses = [
+  'cursor-pointer',
+  'hover:ring-(--accent) hover:shadow-(--shadow-md)'
+].join(" ");
+
+const variantClasses: Record<CardVariant, string> = {
+  default: "bg-(--bg-subtle) ring-transparent border-transparent",
+  primary: "bg-(--bg) ring-(--border-subtle) border-transparent",
+  secondary: "bg-(--bg-subtle) ring-(--border) border-transparent",
+  outline: "bg-transparent ring-(--border-strong) border-transparent"
+};
+
+const paddingMap: Record<CardPadding, string> = {
+  none: "p-0",
+  xs: 'p-1',
+  sm: "p-2",
+  md: "p-3",
+  lg: "p-4",
+};
+
+const radiusMap: Record<CardRadius, string> = {
+  sm: "rounded-md",
+  md: "rounded-lg",
+  lg: "rounded-xl",
+};
+
+const cardClasses = [
+  BaseClasses,
+  variantClasses[variant],
+  paddingMap[padding],
+  radiusMap[radius],
+  hover && HoverClasses,
+  className,
+];
+---
+
+<div class:list={cardClasses} {...(rest as HTMLAttributes<"div">)}>
+  <slot />
+</div>

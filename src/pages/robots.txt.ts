@@ -17,10 +17,8 @@ User-agent: *
 ${isIndexable ? 'Allow: /' : 'Disallow: /'}
 
 Disallow: /api/
-# Disallow: /_astro/
-
+Disallow: /_astro/
 Disallow: /*?*
-
 Disallow: /*.json$
 
 Sitemap: ${sitemapUrl}

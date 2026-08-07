@@ -1,0 +1,121 @@
+---
+// src/components/CodeCopy.astro
+
+import Icon from "@ui/Icons.astro";
+import Button from "@ui/Button.astro";
+---
+
+<template id="copy-btn-template">
+  <Button 
+    size="sm" 
+    variant="icon" 
+    aria-label="Salin kode" 
+    title="Salin" 
+    class="copy-button relative backdrop-blur-md ring-(--border-subtle)! bg-(--bg-muted)/80! hover:bg-(--bg-muted)!"
+  >
+    <Icon name="copy" class="copy-icon size-4.5" />
+    <Icon name="check" class="check-icon hidden size-4.5 text-(--accent)" />
+  </Button>
+</template>
+
+<script>
+  (() => {
+    const setupCopyButton = (
+      btn: HTMLButtonElement,
+      code: HTMLElement
+    ) => {
+      btn.addEventListener("click", async () => {
+        const text = code.textContent?.trimEnd() ?? "";
+
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch {
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          document.body.removeChild(ta);
+        }
+
+        const copyIcon = btn.querySelector(".copy-icon");
+        const checkIcon = btn.querySelector(".check-icon");
+
+        if (copyIcon && checkIcon) {
+          copyIcon.classList.add("hidden");
+          checkIcon.classList.remove("hidden");
+          btn.classList.add("copied");
+
+          setTimeout(() => {
+            copyIcon.classList.remove("hidden");
+            checkIcon.classList.add("hidden");
+            btn.classList.remove("copied");
+          }, 2000);
+        }
+      });
+    };
+
+    const setupPlainCodeBlock = (
+      pre: HTMLElement,
+      code: HTMLElement
+    ) => {
+      if (pre.closest(".code-block-wrapper")) return;
+
+      if (getComputedStyle(pre).overflowX === "visible") {
+        pre.style.overflowX = "auto";
+      }
+
+      const wrapper = document.createElement("div");
+
+      wrapper.className = "code-block-wrapper";
+      wrapper.style.position = "relative";
+      wrapper.style.display = "block";
+
+      if (pre.parentNode) {
+        pre.parentNode.replaceChild(wrapper, pre);
+      }
+
+      wrapper.appendChild(pre);
+
+      const template = document.getElementById(
+        "copy-btn-template"
+      ) as HTMLTemplateElement | null;
+
+      if (!template) return;
+
+      const btn = template.content
+        .firstElementChild
+        ?.cloneNode(true) as HTMLButtonElement | null;
+
+      if (!btn) return;
+
+      btn.style.position = "absolute";
+      btn.style.top = "0.5rem";
+      btn.style.right = "0.5rem";
+      btn.style.zIndex = "10";
+
+      wrapper.appendChild(btn);
+
+      setupCopyButton(btn, code);
+    };
+
+    const initAll = () => {
+      document.querySelectorAll("pre > code").forEach((code) => {
+        const pre = code.parentNode;
+
+        if (
+          pre instanceof HTMLElement &&
+          !pre.closest(".code-block-wrapper")
+        ) {
+          setupPlainCodeBlock(pre, code as HTMLElement);
+        }
+      });
+    };
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initAll);
+    } else {
+      initAll();
+    }
+  })();
+</script>

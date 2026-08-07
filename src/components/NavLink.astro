@@ -1,0 +1,42 @@
+---
+// src/components/Navbar.astro
+import { NAV, SITE } from "@/consts";
+
+const currentPath = Astro.url.pathname;
+const baseUrl = SITE.url.replace(/\/$/, "");
+
+const links = NAV.navBar.map((item) => {
+    const isExternal = item.href.startsWith("http");
+    const href = isExternal ? item.href : `${baseUrl}${item.href.endsWith('/') ? item.href : `${item.href}/`}`;
+    return {
+        ...item,
+        href,
+    };
+});
+---
+
+<nav class="text-label-14 hidden items-center gap-6 font-medium md:flex">
+    {
+        links.map((item) => {
+            const cleanHref = item.href.replace(/\/$/, "");
+            const cleanPath = currentPath.replace(/\/$/, "");
+            const isActive = cleanPath === cleanHref;
+
+            return (
+                <a
+                    href={item.href}
+                    class:list={[
+                        "transition-opacity",
+                        isActive
+                            ? "text-(--fg-strong)"
+                            : "text-(--fg-muted) hover:text-(--fg)",
+                    ]}
+                    target={item.isExternal ? "_blank" : undefined}
+                    rel={item.isExternal ? "noopener noreferrer" : undefined}
+                >
+                    {item.label}
+                </a>
+            );
+        })
+    }
+</nav>

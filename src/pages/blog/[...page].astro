@@ -72,11 +72,11 @@ const prevPageUrl = currentPage > 2
   ? `${baseUrl}${ROUTES.blog}/${currentPage - 1}/`
   : currentPage === 2
     ? blogUrl
-    : null;
+    : undefined;
 
 const nextPageUrl = currentPage < totalPages
   ? `${baseUrl}${ROUTES.blog}/${currentPage + 1}/`
-  : null;
+  : undefined;
 
 const isFirstPage = currentPage === 1;
 
@@ -98,8 +98,8 @@ const schema = [
     type: "CollectionPage",
   }),
   schemaBreadcrumb([
-    { name: "Beranda", url: `${baseUrl}${ROUTES.home}` },  // 🔥 pakai baseUrl
-    { name: "Blog", url: blogUrl },                        // 🔥 pakai blogUrl
+    { name: "Beranda", url: `${baseUrl}${ROUTES.home}` },
+    { name: "Blog", url: blogUrl },
   ])
 ];
 ---
