@@ -88,17 +88,8 @@ https://example.com
 ## Callout
 
 ### Note
-
-Menggunakan syntax blockquote `> [!NOTE]` default outputnya `<blockquote>`
-
 > [!note]
 > Ini adalah callout note.
-
-Jika menggunakan Directive `:::NOTE` default outputnya jadi `<aside>`
-
-:::NOTE
-Ini adalah callout note.
-:::
 
 ### Tip
 
@@ -167,7 +158,6 @@ Ini adalah callout note.
 :::
 
 ## Accordion
-<details>
-<summary>SMALI Launcher tidak muncul dilayar</summary>
-Coba lihat menu daftar aplikasi atau restart HP.
-</details>
+:::accordion[Klik disini]
+Lihat apa?
+:::
