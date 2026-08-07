@@ -7,6 +7,7 @@ import {
 
 import { SITE } from "./src/consts";
 
+
 import { 
   satteri, 
   satteriHeadingIdsPlugin 
@@ -41,13 +42,9 @@ import { satteriCodeBlock } from "./src/lib/mdx/satteri-code-block";
 import { satteriFigure } from "./src/lib/mdx/satteri-figure";
 import { satteriKbd } from "./src/lib/mdx/satteri-kbd";
 
-
-
 import pagefind from "astro-pagefind";
 
-
 // import sitemap from "@astrojs/sitemap";
-
 
 // https://astro.build/config
 export default defineConfig({
