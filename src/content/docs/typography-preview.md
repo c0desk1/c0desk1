@@ -87,8 +87,6 @@ https://example.com
 
 ## Callout
 
-Callout mendukung dua syntax.
-
 ### Note
 
 > [!note]
@@ -118,3 +116,50 @@ Callout mendukung dua syntax.
 
 > [!DANGER]
 > Ini adalah callout danger.
+
+## Steps
+
+:::steps
+1. ### Ini Step 1
+  ini isi step 1
+
+  bisa juga callout
+  
+  > [!NOTE]
+  > Ini callout
+  
+2. ### Ini Step 2
+  ini isi step 2
+  
+  bisa juga `pakai code`
+
+3. ### Ini Step 3
+  - ini isi step 3 a
+  - ini isi step 3 b
+
+  juga ini isi step 3 c
+:::
+
+## Filetree
+:::filetree
+- src
+  - assets
+    - ...
+  - components
+    - Header.astro
+  - pages # an important folder
+    - **index.astro**
+    - 404.astro
+    - blog
+      - index.astro
+  - layout
+    - BaseLayout.astro
+- astro.config.mjs
+- README.md
+:::
+
+## Accordion
+<details>
+<summary>SMALI Launcher tidak muncul dilayar</summary>
+Coba lihat menu daftar aplikasi atau restart HP.
+</details>
