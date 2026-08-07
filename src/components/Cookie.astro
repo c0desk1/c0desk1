@@ -1,15 +1,18 @@
 ---
 // src/components/Cookie.astro
 import Button from "@ui/Button.astro";
-import Icon from "@ui/Icons.astro";
 ---
 
-<div id="cookie-banner" class="cookie-banner" role="dialog" aria-label="Cookie Consent">
-  <div class="cookie-banner__inner">
+<div 
+  id="cookie-banner"
+  role="dialog" 
+  aria-label="Cookie Consent"
+  class="cookie-banner"
+><div class="cookie-banner__inner">
     <div class="cookie-banner__text">
       <p class="cookie-banner__message text-body-14">
         Situs ini menggunakan cookie untuk meningkatkan pengalaman, analitik, dan iklan.
-        Dengan mengklik "Setuju", Anda menyetujui penggunaan cookie sesuai <a href="/cookie-policy" class="cookie-banner__link" target="_blank" rel="noopener noreferrer">Kebijakan Cookie</a> kami.
+        Dengan mengklik <span class="text-(--fg-strong) font-semibold" set:text="Setuju" />, Anda menyetujui penggunaan cookie sesuai <a href="/cookie-policy" class="cookie-banner__link" target="_blank" rel="noopener noreferrer" set:text="Kebijakan Cookie" /> kami.
       </p>
     </div>
     <div class="cookie-banner__actions">
@@ -32,6 +35,97 @@ import Icon from "@ui/Icons.astro";
     </div>
   </div>
 </div>
+
+<style is:inline>
+  .cookie-banner {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    padding: 1rem 1.5rem;
+    background: var(--bg-elevated);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .cookie-banner {
+      background: rgba(10, 10, 10, 0.92);
+      border-top-color: var(--border-subtle);
+    }
+  }
+
+  .cookie-banner__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+  }
+
+  .cookie-banner__text {
+    flex: 1 1 0;
+    min-width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .cookie-banner__message {
+    margin: 0; 
+    color: var(--fg);
+  }
+
+  .cookie-banner__link {
+    font-weight: 600;
+    color: var(--fg-strong);
+
+    text-decoration-line: underline;
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 2px;
+  }
+
+  .cookie-banner__link:hover {
+    color: var(--accent);
+  }
+
+  .cookie-banner__actions {
+    display: flex;
+    gap: 0.625rem;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .cookie-banner {
+      padding: 0.875rem 1rem;
+    }
+    .cookie-banner__inner {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.75rem;
+    }
+    .cookie-banner__text {
+      min-width: unset;
+    }
+    .cookie-banner__message {
+      text-align: center;
+    }
+    .cookie-banner__actions {
+      justify-content: center;
+      gap: 0.5rem;
+    }
+  }
+</style>
 
 <script is:inline>
   (function () {
@@ -104,91 +198,3 @@ import Icon from "@ui/Icons.astro";
     });
   })();
 </script>
-
-<style is:inline>
-  .cookie-banner {
-    display: none;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 9999;
-    padding: 1rem 1.5rem;
-    background: var(--bg-elevated);
-    border-top: 1px solid var(--border);
-    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.08);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    transition: all 0.3s ease;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .cookie-banner {
-      background: rgba(10, 10, 10, 0.92);
-      border-top-color: var(--border-subtle);
-    }
-  }
-
-  .cookie-banner__inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem 1.5rem;
-  }
-
-  .cookie-banner__text {
-    flex: 1 1 0;
-    min-width: 280px;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .cookie-banner__message {
-    margin: 0; 
-    color: var(--fg-muted);
-  }
-
-  .cookie-banner__link {
-    color: var(--accent);
-    font-weight: 600;
-    text-decoration: underline;
-    text-underline-offset: 2px;
-  }
-
-  .cookie-banner__link:hover {
-    color: var(--fg-strong);
-  }
-
-  .cookie-banner__actions {
-    display: flex;
-    gap: 0.625rem;
-    flex-shrink: 0;
-    align-items: center;
-  }
-
-  /* Responsive */
-  @media (max-width: 45rem) {
-    .cookie-banner {
-      padding: 0.875rem 1rem;
-    }
-    .cookie-banner__inner {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 0.75rem;
-    }
-    .cookie-banner__text {
-      min-width: unset;
-    }
-    .cookie-banner__message {
-      text-align: center;
-    }
-    .cookie-banner__actions {
-      justify-content: center;
-      gap: 0.5rem;
-    }
-  }
-</style>
