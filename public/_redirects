@@ -1,0 +1,24 @@
+# Author
+/author/*   /404/   410
+/author/    /404/   410
+/author     /404/   410
+
+# Guide
+/guide/*    /404/   410
+/guide/     /   410
+/guide      /   410
+
+# English
+/en/*       /404/   410
+/en/        /   410
+/en         /   410
+
+# Russian
+/ru/*       /404/   410
+/ru/        /   410
+/ru         /   410
+
+# Japanese
+/jp/*       /404/   410
+/jp/        /  410
+/jp         /   410
