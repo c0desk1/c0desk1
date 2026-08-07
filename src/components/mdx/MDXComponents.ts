@@ -6,7 +6,6 @@ import Figure from "./Figure.astro";
 import Kbd from "./KBD.astro";
 import Video from "./Video.astro";
 import LinkCard from "./LinkCard.astro";
-import Tabs from "./Tabs.astro";
 import CardGrid from "./CardGrid.astro";
 
 export const components = {
@@ -18,8 +17,6 @@ export const components = {
   Blockquote,
   Figure,
   LinkCard,
-  TabsContainer: Tabs, 
-  TabItem: Tabs ,
   CardGrid,
 };
 
