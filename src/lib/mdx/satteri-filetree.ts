@@ -19,7 +19,7 @@ function isPlaceholderName(name: string): boolean {
 export const satteriFileTree = defineMdastPlugin({
   name: 'satteri-filetree',
 
-  containerDirective(node, ctx) {
+  containerDirective(node: any, ctx: any) {
     if (node.name !== 'filetree') return;
     const baseData = node.data || {};
     ctx.setProperty(node, 'data', {
@@ -32,26 +32,28 @@ export const satteriFileTree = defineMdastPlugin({
     });
   },
 
-  listItem(node, ctx) {
-    let currentNode: any = node;
-    let isInsideFileTree = false;
+  listItem(node: any, ctx: any) {
+    let current: any = node;
+    let isInside = false;
+    let depth = 0;
 
-    // Pengecekan ketat: pastikan parent terdekatnya benar-benar containerDirective dengan nama 'filetree'
     while (true) {
-      const parent = ctx.parent(currentNode);
+      const parent = ctx.parent(current);
       if (!parent) break;
-      
-      // Jika ketemu kontainer lain terlebih dahulu (seperti steps atau list biasa), batalkan!
-      if (parent.type === 'containerDirective') {
-        if ((parent as any).name === 'filetree') {
-          isInsideFileTree = true;
-        }
-        break; // Berhenti mencari ke atas jika sudah membentur container directive lain
+
+      if (parent.type === 'list') {
+        depth++;
       }
-      currentNode = parent;
+
+      if (parent.type === 'containerDirective' && (parent as any).name === 'filetree') {
+        isInside = true;
+        break;
+      }
+
+      current = parent;
     }
-    
-    if (!isInsideFileTree) return;
+
+    if (!isInside) return;
 
     const firstChild = node.children[0];
     const hasNestedList = node.children.some((c: any) => c.type === 'list');
@@ -72,9 +74,7 @@ export const satteriFileTree = defineMdastPlugin({
           if (textChild?.type === 'text') {
             fileName = (textChild.value as string).trim();
           }
-
           nameNode = first;
-
           const rest = children.slice(1);
           if (rest.length > 0 && rest[0].type === 'text') {
             const match = (rest[0].value as string).match(/^\s*#\s?(.*)$/s);
@@ -119,15 +119,13 @@ export const satteriFileTree = defineMdastPlugin({
 
     const getIconNode = () => {
       if (isPlaceholder) return null;
-      let iconHtml = fileIcons['file'] || fileIcons['file'];
+      let iconHtml = fileIcons['file'] || '📄';
       if (isFolder) {
-        iconHtml = fileIcons['folder'] || fileIcons['folder'];
+        iconHtml = fileIcons['folder'] || '📁';
       } else {
         const parts = fileName.split('.');
         const ext = parts.length > 1 ? parts[parts.length - 1].toLowerCase() : '';
-        if (ext && fileIcons[ext]) {
-          iconHtml = fileIcons[ext];
-        }
+        iconHtml = fileIcons[ext] || fileIcons['file'] || '📄';
       }
       return {
         type: 'html',
@@ -156,7 +154,9 @@ export const satteriFileTree = defineMdastPlugin({
     const existingClasses = (node.data?.hProperties?.className as string[]) || [];
     const typeClass = isPlaceholder ? 'tree-placeholder' : isFolder ? 'tree-folder' : 'tree-file';
     const highlightClass = isHighlighted ? 'tree-highlight' : '';
-    const finalClassName = [...existingClasses, typeClass, highlightClass].filter(Boolean);
+    const depthClass = `tree-depth-${depth}`;
+
+    const finalClassName = [depthClass, typeClass, highlightClass, ...existingClasses].filter(Boolean);
 
     if (isFolder && hasNestedList) {
       const summaryNode = {
