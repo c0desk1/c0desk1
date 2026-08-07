@@ -42,10 +42,7 @@
   margin-inline-start: 0.25rem;
   vertical-align: middle;
   
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 2px;
+  transform: translateY(-0.5rem);
   
   background-color: currentColor;
   
