@@ -89,15 +89,15 @@ https://example.com
 
 ### Note
 
-Menggunakan syntax blockquote `> [!NOTE]`
+Menggunakan syntax blockquote `> [!NOTE]` default outputnya `<blockquote>`
 
 > [!note]
 > Ini adalah callout note.
 
-Jika menggunakan Directive `:::NOTE'
+Jika menggunakan Directive `:::NOTE' default outputnya jadi `<aside>`
 
 :::NOTE
-Ini Adalah Callout Note menggunakan Aside
+Ini adalah callout note.
 :::
 
 ### Tip
