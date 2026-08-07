@@ -39,17 +39,12 @@
   background: var(--fg-muted);
 }
 
-/* ---------- Header ---------- */
-
 .prose thead th {
   background: var(--bg-subtle);
-
   color: var(--fg-strong);
   font-weight: 600;
   text-align: start;
   white-space: nowrap;
-
-  /*border-bottom: 1px solid rgb(from var(--border-subtle) r g b / 0.5);*/
 }
 
 .prose thead th:first-child {
@@ -71,8 +66,7 @@
 .prose tbody td {
   color: var(--fg);
   background: transparent;
-
-  border-bottom: 1px solid rgb(from var(--border-subtle) r g b / 0.5);
+  border-bottom: 1px solid rgb(from var(--border-subtle) r g b / 100%);
 }
 
 .prose tbody tr:last-child td {
@@ -80,10 +74,8 @@
 }
 
 .prose tbody tr:hover {
-  background: rgb(from var(--bg-muted) r g b / 0.4);
+  background: rgb(from var(--bg-muted) r g b / 100%);
 }
-
-/* ---------- Typography ---------- */
 
 .prose td strong {
   color: var(--fg-strong);

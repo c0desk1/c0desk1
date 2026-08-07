@@ -5,7 +5,7 @@
   padding: 0.5rem 0.75rem;
   margin: 1rem 0;
   gap: 0;
-  border: 1px solid rgb(from var(--border-subtle) r g b / 0.5);
+  border: 1px solid rgb(from var(--border) r g b / 80%);
   border-radius: var(--radius-md);
   background-color: var(--bg-subtle);
   user-select: none;
@@ -59,7 +59,7 @@
   list-style: disclosure-open;
 }
 
-.prose details[open] :not(summary) * {
+.prose details[open] :not(summary, .file-tree) * {
   @apply text-body-14;
 }
 

@@ -2,8 +2,8 @@
 
 .prose :not(pre) > code {
   @apply text-code-14;
-  border: 1px solid rgb(from var(--border) r g b / 0.2);
-  border-radius: var(--radius-md);
+  border: 1px solid rgb(from var(--border-subtle) r g b / 100%);
+  border-radius: var(--radius-sm);
   background-color: var(--bg-subtle);
   padding: 0.15em 0.4em;
   color: var(--fg);
@@ -16,7 +16,7 @@
 .prose h4 code,
 .prose h5 code,
 .prose h6 code {
-  border: 1px solid rgb(from var(--border) r g b / 0.2);
+  border: 1px solid rgb(from var(--border-subtle) r g b / 100%);
   background-color: var(--bg-subtle);
   border-radius: var(--radius-md);
   padding: 0.15em 0.4em;
@@ -56,7 +56,7 @@
   color: var(--fg);
   line-height: 1.5;
   border-radius: var(--radius-md);
-  border: 1px solid rgb(from var(--border) r g b / 0.3);
+  border: 1px solid rgb(from var(--border) r g b / 100%);
 }
 
 .prose .tab-panel .astro-code,
@@ -78,7 +78,7 @@
 
 .prose .astro-code .line {
   display: block;
-  padding: 0 1rem !important;
+  padding: 0 1.5rem !important;
   line-height: inherit;
   white-space: pre;
 }
@@ -97,12 +97,14 @@
   position: absolute;
   left: 0.5rem;
   content: "+";
+  padding-right: 0.5rem;
   color: var(--color-success);
 }
 
 .prose .astro-code .line.diff.remove::before {
   position: absolute;
   left: 0.5rem;
+  padding-right: 0.5rem;
   content: "−";
   color: var(--color-error);
 }
@@ -122,7 +124,7 @@
 }
 
 [data-theme='dark'] .astro-code {
-  background-color: rgb(from var(--bg-subtle) r g b / 0.2) !important;
+  background-color: rgb(from var(--bg-subtle) r g b / 100%) !important;
 }
 
 [data-theme='dark'] .astro-code span {

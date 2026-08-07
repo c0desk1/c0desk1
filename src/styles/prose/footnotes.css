@@ -6,9 +6,9 @@
   flex-direction: column;
   margin: 2.5rem 0;
   padding: 1rem;
-  border: 1px solid rgb(from var(--border-subtle) r g b / 0.5);
+  border: 1px solid rgb(from var(--border) r g b / 100%);
   border-radius: var(--radius-md);
-  background-color: rgb(from var(--bg-subtle) r g b / 0.5);
+  background-color: rgb(from var(--bg-subtle) r g b / 100%);
 }
 
 

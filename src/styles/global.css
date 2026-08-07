@@ -124,22 +124,15 @@
   --z-tooltip: 700;
 }
 
-
-/* ═══════════════════════════════════════════════════════════════
- * LIGHT — SKY / DAWN
- * ═══════════════════════════════════════════════════════════════ */
-
 [data-theme='light'] {
   color-scheme: light;
 
-  /* Background */
   --bg: #f7faff;
   --bg-subtle: #f1f6fc;
   --bg-muted: #e7eef8;
   --bg-elevated: #ffffff;
   --bg-overlay: rgba(247, 250, 255, 0.94);
 
-  /* Foreground */
   --fg: #172033;
   --fg-strong: #0b1220;
   --fg-muted: #46546a;
@@ -148,18 +141,16 @@
   --fg-disabled: #aab6c7;
   --fg-inverted: #ffffff;
 
-  /* Borders */
   --border: #d2ddec;
   --border-strong: #b6c5da;
   --border-subtle: #e2e9f3;
 
-  /* Surfaces */
+
   --surface: var(--bg);
   --surface-subtle: var(--bg-subtle);
   --surface-muted: var(--bg-muted);
   --surface-elevated: var(--bg-elevated);
 
-  /* Accent — Electric Sky */
   --accent: #1683ff;
   --accent-dim: rgba(22, 131, 255, 0.32);
   --accent-soft: rgba(22, 131, 255, 0.10);
@@ -167,49 +158,37 @@
   --accent-border: rgba(22, 131, 255, 0.40);
   --accent-fg: #ffffff;
 
-  /* Success — Emerald */
   --success: #15945c;
   --success-soft: rgba(21, 148, 92, 0.11);
   --success-fg: #ffffff;
 
-  /* Error — Crimson */
   --error: #d9363e;
   --error-soft: rgba(217, 54, 62, 0.11);
   --error-fg: #ffffff;
 
-  /* Warning — Amber */
   --warning: #b97800;
   --warning-soft: rgba(185, 120, 0, 0.12);
   --warning-fg: #ffffff;
 
-  /* Info — Cyan */
   --info: #0785ad;
   --info-soft: rgba(7, 133, 173, 0.11);
   --info-fg: #ffffff;
 
-  /* Shadows */
   --shadow-sm: 0 1px 2px rgba(25, 55, 95, 0.06);
   --shadow-md: 0 4px 12px -2px rgba(25, 55, 95, 0.09);
   --shadow-lg: 0 12px 28px -4px rgba(25, 55, 95, 0.12);
   --shadow-xl: 0 20px 48px -6px rgba(25, 55, 95, 0.15);
 }
 
-
-/* ═══════════════════════════════════════════════════════════════
- * DARK — VOID / GALAXY
- * ═══════════════════════════════════════════════════════════════ */
-
 :root[data-theme='dark'] {
   color-scheme: dark;
 
-  /* Background */
   --bg: #070b14;
   --bg-subtle: #0b1120;
   --bg-muted: #111a2b;
   --bg-elevated: #151f33;
   --bg-overlay: rgba(7, 11, 20, 0.88);
 
-  /* Foreground */
   --fg: #dce7f7;
   --fg-strong: #f5f9ff;
   --fg-muted: #9baac0;
@@ -218,18 +197,15 @@
   --fg-disabled: #36445a;
   --fg-inverted: #070b14;
 
-  /* Borders */
   --border: #24324a;
   --border-strong: #334562;
   --border-subtle: #18253a;
 
-  /* Surfaces */
   --surface: var(--bg);
   --surface-subtle: var(--bg-subtle);
   --surface-muted: var(--bg-muted);
   --surface-elevated: var(--bg-elevated);
 
-  /* Accent — Nebula Blue */
   --accent: #4da3ff;
   --accent-dim: rgba(77, 163, 255, 0.40);
   --accent-soft: rgba(77, 163, 255, 0.14);
@@ -237,37 +213,27 @@
   --accent-border: rgba(77, 163, 255, 0.42);
   --accent-fg: #07101f;
 
-  /* Success — Emerald */
   --success: #35c987;
   --success-soft: rgba(53, 201, 135, 0.14);
   --success-fg: #061810;
 
-  /* Error — Crimson */
   --error: #ff6470;
   --error-soft: rgba(255, 100, 112, 0.14);
   --error-fg: #1d0709;
 
-  /* Warning — Amber */
   --warning: #f3b64d;
   --warning-soft: rgba(243, 182, 77, 0.14);
   --warning-fg: #1c1203;
 
-  /* Info — Cyan */
   --info: #43c7ee;
   --info-soft: rgba(67, 199, 238, 0.14);
   --info-fg: #04151b;
 
-  /* Shadows */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.65);
   --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.52);
   --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.62);
   --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.72);
 }
-
-
-/* ═══════════════════════════════════════════════════════════════
- * GLOBAL
- * ═══════════════════════════════════════════════════════════════ */
 
 :root {
   --scroll-padding: 8rem;
@@ -558,7 +524,7 @@
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 45rem) {
   :root {
     --scroll-padding: 4rem;
   }

@@ -18,7 +18,7 @@
   margin: 1.75rem 0;
   padding: 0.5rem 1rem 0.5rem 3.5rem;
   background: var(--bg-subtle);
-  border: 1px solid rgb(from var(--border) r g b / 0.4);
+  border: 1px solid rgb(from var(--border) r g b / 80%);
   border-radius: var(--radius-md);
   color: var(--fg);
 

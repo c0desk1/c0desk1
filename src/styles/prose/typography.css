@@ -70,6 +70,7 @@
   display: inline-flex;
   width: 1rem;
   height: 1rem;
+  flex-shrink: 0;
   margin-left: 0.5rem;
   vertical-align: middle;
   color: var(--fg-subtle);

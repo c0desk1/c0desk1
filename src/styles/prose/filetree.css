@@ -50,7 +50,7 @@
   left: -1rem;
   top: 0.9rem;
   width: 0.5rem;
-  border-bottom: 1.5px solid rgb(from var(--border) r g b / 0.85);
+  border-bottom: 1.5px solid rgb(from var(--border) r g b / 100%);
 
 }
 
@@ -62,7 +62,7 @@
   bottom: 0;
   width: 1.5px;
   height: 100%;
-  border-left: 1.5px solid rgb(from var(--border) r g b / 0.85);
+  border-left: 1.5px solid rgb(from var(--border) r g b / 100%);
 }
 
 .prose .file-tree ul ul > li:last-child::after {
