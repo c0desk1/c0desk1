@@ -6,3 +6,6 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), microphone=(), camera=()
   X-XSS-Protection: 1; mode=block
+
+/404/
+  X-Robots-Tag: noindex, nofollow
