@@ -59,11 +59,6 @@
   border: 1px solid rgb(from var(--border) r g b / 100%);
 }
 
-.prose .tab-panel .astro-code,
-.tab-panel .astro-code {
-  margin: 0 !important;
-}
-
 .prose .astro-code::-webkit-scrollbar {
   display: none;
 }
