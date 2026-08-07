@@ -36,6 +36,7 @@ export async function getStaticPaths() {
         slug: cleanSlug,
       },
       props: { entry },
+      cacheKey: (entry as any).digest,
     };
   });
 }
