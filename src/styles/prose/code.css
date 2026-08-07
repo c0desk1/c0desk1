@@ -1,12 +1,16 @@
 /* src/styles/prose/code.css */
 
+:root {
+  --plus-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='2'%3E%3Cpath d='M4 8h8M8 4v8'/%3E%3C/svg%3E");
+  --minus-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='2'%3E%3Cpath d='M4 8h8'/%3E%3C/svg%3E");
+}
 .prose :not(pre) > code {
   @apply text-code-14;
+  color: var(--fg-strong);
+  background-color: var(--bg-subtle);
   border: 1px solid rgb(from var(--border-subtle) r g b / 100%);
   border-radius: var(--radius-sm);
-  background-color: var(--bg-subtle);
   padding: 0.15em 0.4em;
-  color: var(--fg);
   white-space: break-spaces;
 }
 
@@ -16,57 +20,48 @@
 .prose h4 code,
 .prose h5 code,
 .prose h6 code {
-  border: 1px solid rgb(from var(--border-subtle) r g b / 100%);
-  background-color: var(--bg-subtle);
-  border-radius: var(--radius-md);
-  padding: 0.15em 0.4em;
   color: inherit !important;
   font-size: inherit !important;
   font-family: var(--font-mono) !important;
+  background-color: var(--bg-subtle);
+  border: 1px solid rgb(from var(--border-subtle) r g b / 100%);
+  border-radius: var(--radius-md);
+  padding: 0.15em 0.4em;
 }
 
 .prose summary code,
 .prose a code {
   border: none !important;
-  background-color: none;
-  border-radius: none;
-  padding: 0;
+  background: transparent !important;
+  padding: 0 !important;
   color: inherit !important;
   font-size: inherit !important;
 }
 
-.prose .code-content .astro-code {
-  margin: 0 !important;
-  padding: 0.5rem 0;
-  border: none !important;
-  border-radius: none !important;
-  background-color: transparent !important;
-}
-
-.astro-code,
 .prose .astro-code {
   @apply text-code-14;
   display: block;
-  margin: 2rem 0 !important;
+  margin: 1.5rem 0 !important;
+  padding: 0.75rem 0;
+  line-height: 1.6;
   background-color: var(--bg-subtle) !important;
-  padding: 0.5rem 0;
+  border: 1px solid rgb(from var(--border) r g b / 80%);
+  border-radius: var(--radius-md);
   overflow-x: auto;
   overflow-y: hidden;
-  scrollbar-width: none;
-  color: var(--fg);
-  line-height: 1.5;
-  border-radius: var(--radius-md);
-  border: 1px solid rgb(from var(--border) r g b / 100%);
 }
 
 .prose .astro-code::-webkit-scrollbar {
   display: none;
 }
+.prose .astro-code {
+  scrollbar-width: none;
+}
 
 .prose .astro-code code {
   display: grid;
-  background: none !important;
   min-width: 100%;
+  background: transparent !important;
   line-height: inherit;
   font-family: inherit;
 }
@@ -88,34 +83,57 @@
   position: relative;
 }
 
-.prose .astro-code .line.diff.add::before {
+.prose .astro-code .line.diff.add::before,
+.prose .astro-code .line.diff.remove::before {
+  content: "";
   position: absolute;
-  left: 0.5rem;
-  content: "+";
-  padding-right: 0.5rem;
-  color: var(--color-success);
+  left: 0.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1rem;
+  height: 1rem;
+  aspect-ratio: 1/1;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+}
+
+.prose .astro-code .line.diff.add::before {
+  background-color: var(--color-success);
+  mask: var(--plus-icon);
+  -webkit-mask: var(--plus-icon);
 }
 
 .prose .astro-code .line.diff.remove::before {
-  position: absolute;
-  left: 0.5rem;
-  padding-right: 0.5rem;
-  content: "−";
-  color: var(--color-error);
+  background-color: var(--color-error);
+  mask: var(--minus-icon);
+  -webkit-mask: var(--minus-icon);
 }
 
 .prose .astro-code .line.diff.add {
+  background-color: rgb(from var(--color-success) r g b / 0.15) !important;
   box-shadow: inset 3px 0 0 0 var(--color-success) !important;
-  background-color: rgb(from var(--color-success) r g b / 0.2) !important;
 }
+
 .prose .astro-code .line.diff.remove {
+  background-color: rgb(from var(--color-error) r g b / 0.15) !important;
   box-shadow: inset 3px 0 0 0 var(--color-error) !important;
-  background-color: rgb(from var(--color-error) r g b / 0.2) !important;
-  
 }
+
 .prose .astro-code .line.highlighted {
+  background-color: rgb(from var(--accent) r g b / 0.15) !important;
   box-shadow: inset 3px 0 0 0 var(--accent) !important;
-  background-color: rgb(from var(--accent) r g b / 0.2) !important;
+}
+
+.prose .astro-code .line.error {
+  background-color: rgb(from var(--color-error) r g b / 0.2) !important;
+  box-shadow: inset 3px 0 0 0 var(--color-error) !important;
+}
+
+.prose .astro-code .line.warning {
+  background-color: rgb(from var(--color-warning) r g b / 0.2) !important;
+  box-shadow: inset 3px 0 0 0 var(--color-warning) !important;
 }
 
 [data-theme='dark'] .astro-code {
