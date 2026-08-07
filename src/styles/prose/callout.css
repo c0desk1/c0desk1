@@ -25,6 +25,10 @@
 
 }
 
+.prose aside[data-callout] * {
+  @apply text-body-14;
+}
+
 .prose aside[data-callout]::before,
 .prose blockquote[data-callout]::before {
   content: "";
