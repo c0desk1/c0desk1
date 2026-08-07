@@ -10,13 +10,13 @@ const {
 } = Astro.props;
 
 const $ = {
-  baseClass: "flex h-screen w-full flex-col py-2 flex-1 scrollbar-hide"
+  baseClass: "flex flex-col h-full w-full py-4 px-0 flex-1 overflow-y-auto scrollbar-hide"
 }
 ---
 
-<div id={id} class:list={[
+<nav id={id} aria-label="Sidebar Navigation" class:list={[
   $.baseClass,
   className
 ]}>
   <slot />
-</div>
+</nav>
