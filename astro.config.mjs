@@ -29,7 +29,6 @@ import { satteriHeadingAnchor } from "./src/lib/mdx/satteri-heading-anchor";
 import { satteriExternalLink } from "./src/lib/mdx/satteri-external-link";
 import { satteriCallout } from "./src/lib/mdx/satteri-callout";
 import { satteriQuote } from "./src/lib/mdx/satteri-blockquote";
-import { satteriCalloutDirective } from "./src/lib/mdx/satteri-callout-directive";
 import { satteriChangelog } from "./src/lib/mdx/satteri-changelog";
 import { satteriCodeBlock } from "./src/lib/mdx/satteri-code-block";
 import { satteriDetails } from "./src/lib/mdx/satteri-details";
@@ -78,17 +77,17 @@ export default defineConfig({
         satteriTabsHast
       ],
       mdastPlugins: [
-        satteriCalloutDirective,
+        satteriCallout,
+        satteriSteps,
+        satteriFileTree,
+        satteriTabs,
+
         satteriFigure,
         satteriQuote,
         satteriCodeBlock,
         satteriKbd,
-        satteriCallout,
-        satteriSteps,
         satteriChangelog,
-        satteriDetails,
-        satteriFileTree,
-        satteriTabs
+        satteriDetails
       ],
     }),
     syntaxHighlight: "shiki",
