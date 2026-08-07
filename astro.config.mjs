@@ -39,7 +39,7 @@ import { satteriTabs } from "./src/lib/mdx/satteri-tabs";
 import { satteriAccordion } from "./src/lib/mdx/satteri-accordion";
 
 import pagefind from "astro-pagefind";
-import { satteriTabsHast } from "./src/lib/mdx/satteri-tab-hast";
+import { satteriTabsHast } from "./src/lib/mdx/satteri-tabs-hast";
 
 // import sitemap from "@astrojs/sitemap";
 
