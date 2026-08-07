@@ -1,0 +1,136 @@
+/* src/styles/prose/components/tabs.css */
+
+.prose .tabs {
+  width: 100%;
+  margin: 2.5rem 0;
+}
+
+.prose .tabs-list {
+  display: flex;
+  align-items: stretch;
+  gap: 0.125rem;
+
+  width: 100%;
+  overflow-x: auto;
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.prose .tabs-list::-webkit-scrollbar {
+  display: none;
+}
+
+.prose .tabs .tab-button {
+    @apply text-button-14;
+    position: relative;
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.5rem;
+    padding: 0.625rem 0.875rem;
+    border: 0;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    background: transparent;
+    color: var(--fg-muted);
+    font-weight: 500;
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+@media (hover: hover) {
+  .prose .tabs .tab-button:hover {
+    color: var(--fg-strong);
+    background: var(--bg-subtle);
+  }
+}
+
+.prose .tabs .tab-button[aria-selected="true"] {
+  color: var(--accent);
+}
+
+.prose .tabs .tab-button[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  right: 0.625rem;
+  bottom: -1px;
+  left: 0.625rem;
+  height: 2px;
+  border-radius: var(--radius-md);
+  background: var(--accent);
+}
+
+.prose .tabs .tab-button:focus-visible {
+  z-index: 1;
+
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+
+  color: var(--accent);
+}
+
+.prose .tabs-panels {
+  width: 100%;
+}
+
+.prose .tabs .tab-panel {
+  width: 100%;
+  padding-top: 1rem;
+}
+
+.prose .tabs .tab-panel[hidden] {
+  display: none;
+}
+
+.prose .tabs .tab-panel > :first-child {
+  margin-top: 0;
+}
+
+.prose .tabs .tab-panel > :last-child {
+  margin-bottom: 0;
+}
+
+.prose .tabs .tab-panel p {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.prose .tabs .tab-panel pre {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.prose .tabs .tab-panel .table-wrapper {
+  max-width: 100%;
+}
+
+.prose .tab-panel .astro-code {
+  margin: 0 !important;
+}
+
+@media (max-width: 45rem) {
+  .prose .tabs {
+    margin: 2rem 0;
+  }
+
+  .prose .tabs .tab-button {
+    min-height: 2.375rem;
+    padding: 0.5625rem 0.75rem;
+
+    font-size: 0.875rem;
+  }
+
+  .prose .tabs .tab-button[aria-selected="true"]::after {
+    right: 0.5rem;
+    left: 0.5rem;
+  }
+
+  .prose .tabs .tab-panel {
+    padding-top: 1.25rem;
+  }
+}
