@@ -46,6 +46,19 @@ export const satteriUser = defineMdastPlugin({
           },
         },
       });
+    } else {
+      children.push({
+        type: 'containerDirective',
+        name: 'avatar-placeholder',
+        data: {
+          hName: 'span',
+          hProperties: {
+            className: ['user-avatar', 'user-avatar-placeholder'],
+            'aria-hidden': 'true',
+          },
+        },
+        children: [],
+      });
     }
 
     children.push({
@@ -74,7 +87,6 @@ export const satteriUser = defineMdastPlugin({
 
     const isExternal = attrs.url.startsWith('http');
     const rel = isExternal ? 'noopener noreferrer nofollow' : undefined;
-    const target = isExternal ? '_blank' : '_self';
 
     ctx.setProperty(node, 'data', {
       ...(node.data || {}),
@@ -82,7 +94,7 @@ export const satteriUser = defineMdastPlugin({
       hProperties: {
         href: attrs.url,
         className: ['user-link', attrs.class || ''].filter(Boolean).join(' '),
-        target: target,
+        target: isExternal ? '_blank' : '_self',
         rel: rel,
       },
     });
