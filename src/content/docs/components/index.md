@@ -37,9 +37,8 @@ Contoh sederhana:
 
 Akan menjadi:
 
-<aside class="callout" data-callout="note">
-  <p>Ini adalah catatan penting.</p>
-</aside>
+> [!NOTE]
+> Ini adalah catatan penting.
 
 ## Mengapa Pakai Custom Directives?
 
