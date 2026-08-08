@@ -50,6 +50,10 @@
     mask-image: var(--ic-github);
     -webkit-mask-image: var(--ic-github);
 }
+.prose .button .button-icon[data-icon="playstore"] {
+    mask-image: var(--ic-playstore);
+    -webkit-mask-image: var(--ic-playstore);
+}
 .prose .button .button-icon[data-icon="arrow"] {
     mask-image: var(--ic-btn-arrow);
     -webkit-mask-image: var(--ic-btn-arrow);
