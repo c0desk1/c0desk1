@@ -2,6 +2,7 @@
 import Logo from './assets/images/c0desk1.svg';
 import Thumbnails from './assets/images/placeholder.svg';
 import Avatar from './assets/images/placeholder-user.jpg';
+import Og from './assets/images/og-image.svg';
 
 type NavItem = {
   label: string;
@@ -28,7 +29,7 @@ export const SITE = {
   tagline: "Beyond the Void",
   description: "Platform kuratif untuk pop culture, game, anime, tutorial, dan modding.",
   url: "https://c0desk1.my.id",
-  ogImage: Thumbnails.src,
+  ogImage: Og.src,
   locale: "id_ID",
   lang: "id",
   dir: "ltr",
