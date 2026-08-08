@@ -165,7 +165,7 @@ export default defineConfig({
     service: passthroughImageService(),
   },
   build: {
-    inlineStylesheets: "never",
+    inlineStylesheets: "auto",
   },
   experimental: {
     incrementalBuild: true,
