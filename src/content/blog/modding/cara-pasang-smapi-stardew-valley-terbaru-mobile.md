@@ -53,7 +53,7 @@ Buka browser di HP kamu lalu kunjungi halaman resmi SMAPI di NexusMods.
 
 Kamu perlu membuat akun NexusMods terlebih dahulu sebelum bisa mengunduh file.
 
-Pastikan file yang kamu download berformat `.zip`, biasanya bernama seperti: `SMAPI-Android-x.x.x.x.zip` Saat artikel ini ditulis, versi Android terbaru yang bisa kamu gunakan adalah :badge[v4.3.2.5].
+Pastikan file yang kamu download berformat `.zip`, biasanya bernama seperti: `SMAPI-Android-x.x.x.x.zip` Saat artikel ini ditulis, versi Android terbaru yang bisa kamu gunakan adalah :badge[v4.3.2.5]{variant="info"}.
 
 > [!WARNING]
 > Jangan mengunduh dari sumber yang tidak jelas. File mod dari sumber tidak resmi berisiko bermasalah atau mengandung malware.
@@ -99,11 +99,9 @@ Setelah terpasang:
 :::filetree
 - storage/emulated/0/
   - Android/
-    - ...
   - Documents/
-    - ...
   - Download/
-    - **SMAPI-Android-x.x.x.x.zip** # Nama file mungkin berbeda
+    - **SMAPI-Android-x.x.x.x.zip**
     - SMAPILauncher.apk
 :::
 
@@ -116,11 +114,9 @@ Saat game terbuka, lihat pojok kiri bawah layar.
 
 Kalau muncul tulisan seperti: `SMAPI x.x.x` berarti instalasi berhasil.
 
-![SMAPI Launcher](https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAAOIahMAAXkcLvkPKbbyd77ZzhqB5Z6cAALgD2sb_H-YVJ-r_mnPuOXcAQADAgADdwADOwQ)
-<small>SMAPI Launcher Load File Mod sebelum memulai</small>
+![SMAPI Launcher](https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAAOIahMAAXkcLvkPKbbyd77ZzhqB5Z6cAALgD2sb_H-YVJ-r_mnPuOXcAQADAgADdwADOwQ){SMAPI Launcher Load File Mod sebelum memulai}
 
-![SMAPI Stardew Valley](https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAAOCahLco6kJLqnfjZqLP_IXY_IuxJIAApoPaxv8f5hUZkNsVmhU6AMBAAMCAAN3AAM7BA)
-<small>Pemasangan SMAPI di Stardew Valley Mobile Sukses</small>
+![SMAPI Stardew Valley](https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAAOCahLco6kJLqnfjZqLP_IXY_IuxJIAApoPaxv8f5hUZkNsVmhU6AMBAAMCAAN3AAM7BA){Pemasangan SMAPI di Stardew Valley Mobile Sukses} 
 
 ### Mulai Pasang Mod
 Setelah SMAPI aktif:
@@ -135,23 +131,23 @@ Setelah SMAPI aktif:
 > Beberapa mod membutuhkan dependensi tambahan seperti **Content Patcher** atau utilitas dari SMAPI. Pastikan baca instruksi di halaman mod sebelum memasang.
 
 ## Masalah Umum
-:::details[SMALI Launcher tidak muncul dilayar]
+:::accordion[SMALI Launcher tidak muncul dilayar]
 Coba lihat menu daftar aplikasi atau restart HP.
 :::
 
-:::details[Game crash setelah mod dipasang]
+:::accordion[Game crash setelah mod dipasang]
 Hapus mod terakhir dipasang satu per satu untuk cari yang bermasalah
 :::
 
-:::details[Tidak bisa akses folder Android/data]
+:::accordion[Tidak bisa akses folder Android/data]
 SMAPI Launcher tidak butuh itu. kalian bisa langsung pasang mod lewat `Mod Manager`
 :::
 
-:::detailsError SMAPI not installed]
+:::accordion[Error SMAPI not installed]
 Pastikan kalian sudah mengikuti langkah-langkahnya dengan benar dan jika kalian pakai versi Bajakan pakai atau download bahan yg saya sediakan.
 :::
 
-:::details[>File Apk berformat APKS/XAPK]
+:::accordion[File Apk berformat APKS/XAPK]
 Gunakan Aplikasi XAPK Installer.
 :::
 
@@ -161,9 +157,9 @@ Berikut bahan yang kamu butuhkan untuk memasang SMAPI ke **Stardew Valley Mobile
 > [!DANGER]
 > Kalau kamu memakai versi yang bukan dari Play Store resmi, gunakan opsi **Mirror**. Kalau kamu sudah membeli versi resmi di Play Store, bagian ini bisa dilewati.
 
-- Stardew Valley: [Playstore](https://play.google.com/store/apps/details?id=com.chucklefish.stardewvalley&pcampaignid=web_share), [Mirror](https://link-target.net/1404784/QG9mX09P6sa2), [Mirror 2](https://otieu.com/4/9727499).
-- SMAPI Launcher Android: [Github](https://github.com/NRTnarathip/SMAPILoader), [Direct](https://github.com/NRTnarathip/SMAPILoader/releases/download/1.1.6/SMAPI-Launcher-v1.1.6.apk)
-- SMAPI for Android: [NexusMods](https://www.nexusmods.com/stardewvalley/mods/44436?tab=files)
+- Stardew Valley: :button[Playstore]{url="https://play.google.com/store/apps/details?id=com.chucklefish.stardewvalley&pcampaignid=web_share" icon="playstore"} :button[Mirror]{url="https://link-target.net/1404784/QG9mX09P6sa2" icon="download"} :button[Mirror 2]{url="https://otieu.com/4/9727499" icon="download"}
+- SMAPI Launcher Android: :button[Github]{url="https://github.com/NRTnarathip/SMAPILoader" icon="github"} :button[Direct]{url="https://github.com/NRTnarathip/SMAPILoader/releases/download/1.1.6/SMAPI-Launcher-v1.1.6.apk" icon="download"}
+- SMAPI for Android: :button[NexusMods]{url="https://www.nexusmods.com/stardewvalley/mods/44436?tab=files" icon="download"}
 
 ## Video Tutorial
 <Video src="https://youtube.com/shorts/s7mFhDeefZE?feature=share" />
