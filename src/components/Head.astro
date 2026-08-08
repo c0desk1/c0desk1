@@ -138,13 +138,14 @@ const faviconBase = "/favicon";
   <meta property="og:title" content={ogTitle} />
   <meta property="og:description" content={ogDescription} />
   <meta property="og:url" content={ogUrl} />
+  <meta property="og:logo" content={`${baseUrl}${SITE.logo}`} />
   <meta property="og:locale" content={ogLocale} />
   <meta property="og:image" content={ogImage} />
   <meta property="og:image:width" content={String(ogImageWidth)} />
   <meta property="og:image:height" content={String(ogImageHeight)} />
   <meta property="og:image:alt" content={ogImageAlt} />
   <meta property="og:image:type" content="image/png" />
-<meta property="og:logo" content={`${baseUrl}${SITE.logo}`} />
+
   {
     ogPublishedTime && (
       <meta property="article:published_time" content={ogPublishedTime} />
