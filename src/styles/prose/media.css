@@ -30,7 +30,8 @@
 
 @media (max-width: 45rem) {
   .prose figure,
-  .prose video {
+  .prose video,
+  .prose .video-wrapper {
     margin: 2rem 0;
   }
 }
