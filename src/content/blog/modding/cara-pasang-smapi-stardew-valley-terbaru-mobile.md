@@ -162,7 +162,7 @@ Berikut bahan yang kamu butuhkan untuk memasang SMAPI ke **Stardew Valley Mobile
 - SMAPI for Android: :button[NexusMods]{url="https://www.nexusmods.com/stardewvalley/mods/44436?tab=files" icon="download"}
 
 ## Video Tutorial
-<Video src="https://youtube.com/shorts/s7mFhDeefZE?feature=share" />
+::video[https://youtube.com/shorts/s7mFhDeefZE?feature=share]{title="Cara Pasang SMAPI Stardew Valley di Android"}
 
 ## Penutup
 Kalau SMAPI sudah terpasang, kamu bisa mulai menikmati dunia modding Stardew Valley di Android.
