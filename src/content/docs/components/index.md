@@ -23,8 +23,8 @@ Komponen kustom adalah fitur yang memungkinkan kamu menulis konten Markdown deng
 
 Custom directives adalah ekstensi sintaks Markdown yang dimulai dengan:
 
-- Block directives: ::: atau :: (di baris sendiri)
-- Inline directives: : (di dalam paragraf)
+- Block directives: `:::` atau `::` (di baris sendiri)
+- Inline directives: `:` (di dalam paragraf)
 
 Saat konten di-render, Sätteri akan mengubah directive tersebut menjadi komponen HTML yang sudah dilengkapi dengan styling dan fungsionalitas.
 
@@ -53,18 +53,18 @@ Kelebihan:
 
 Komponen kustom di website ini terbagi menjadi tiga jenis:
 
-### 1. Block Components (::: / ::)
+### 1. Block Components (`:::` / `::`)
 
 Komponen yang berdiri sendiri di level blok.
 
-- Callout: > [!NOTE] — Menyorot informasi penting
-- Steps: :::steps — Panduan langkah-demi-langkah
-- Tabs: ::::tabs — Konten dalam tab
-- Filetree: :::filetree — Struktur folder dan file
-- Accordion: :::details — Konten yang bisa dilipat
-- Video: ::video[...] — Embed video
+- Callout: `> [!NOTE]` — Menyorot informasi penting
+- Steps: `:::steps` — Panduan langkah-demi-langkah
+- Tabs: `::::tabs` — Konten dalam tab
+- Filetree: `:::filetree` — Struktur folder dan file
+- Accordion: `:::details` — Konten yang bisa dilipat
+- Video: `::video[...]` — Embed video
 
-### 2. Inline Components (:)
+### 2. Inline Components (`:`)
 
 Komponen yang bisa digunakan di dalam paragraf atau teks.
 
@@ -74,10 +74,10 @@ Komponen yang bisa digunakan di dalam paragraf atau teks.
 
 ### 3. Media Components
 
-- Figure: ![alt](url){caption} — Gambar dengan caption
+- Figure: `![alt](url){caption}` — Gambar dengan caption
 
 ## Mulai Menggunakan
 
 Kunjungi halaman berikutnya untuk melihat panduan lengkap setiap komponen beserta contoh penggunaannya.
 
-📖 Lihat Semua Komponen → /docs/components/custom-directives
+[📖 Lihat Semua Komponen →](/docs/components/custom-directives)
