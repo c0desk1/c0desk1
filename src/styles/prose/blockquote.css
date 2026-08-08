@@ -61,6 +61,10 @@
   padding-right: 0.25rem;
 }
 
+.prose blockquote.quote::before {
+  display: none;
+}
+
 .prose .quote {
   display: block;
   flex-direction: column;
