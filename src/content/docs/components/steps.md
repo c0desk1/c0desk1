@@ -28,7 +28,7 @@ Setiap langkah bisa berisi paragraf, list, code block, heading, atau inline code
 ```md
 :::steps
 1.  Step 1
-<!-- Beri jarak 1 line agar tidak dianggap judul [!code ++] -->
+<!-- Beri jarak 1 line agar tidak dianggap judul -->
     isi steps
 
 2. ## Step 2
