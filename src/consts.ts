@@ -3,7 +3,11 @@
 import Logo from "./assets/images/c0desk1.svg";
 import Thumbnails from "./assets/images/placeholder.svg";
 import Avatar from "./assets/images/placeholder-user.jpg";
-import OgImage from "./assets/images/og-image.svg";
+import Og from "./assets/images/og-image.svg";
+
+// ============================================================================
+// TYPES
+// ============================================================================
 
 type NavItem = {
   label: string;
@@ -18,29 +22,42 @@ type FooterNav = {
   items: NavItem[];
 };
 
-type Social = {
+type Socials = {
   href: string;
   label?: string;
   icon?: string;
   isExternal?: boolean;
 };
 
+// ============================================================================
+// SITE
+// ============================================================================
+
 export const SITE = {
   name: "Unloyd",
   tagline: "Beyond the Void",
-  description: "Platform kuratif untuk pop culture, game, anime, tutorial, dan modding.",
+  description:
+    "Platform kuratif untuk pop culture, game, anime, tutorial, dan modding.",
   url: "https://c0desk1.my.id",
+
   locale: "id_ID",
   lang: "id",
   dir: "ltr",
   charset: "utf-8",
+
   themeColor: "#0a0a0a",
   bgColor: "#000000",
+
   email: "hello@c0desk1.my.id",
   foundingYear: 2026,
+
   logo: Logo.src,
-  ogImage: OgImage.src,
+  ogImage: Og.src,
 } as const;
+
+// ============================================================================
+// ORGANIZATION
+// ============================================================================
 
 export const ORG = {
   name: SITE.name,
@@ -49,46 +66,76 @@ export const ORG = {
   sameAs: [] as string[],
 } as const;
 
+// ============================================================================
+// ROUTES
+// ============================================================================
+
 export const ROUTES = {
   home: "/",
+
   anime: "/anime",
+
   docs: "/docs",
   blog: "/blog",
   archive: "/blog/archive",
+
   about: "/about",
   contact: "/contact",
+
   cookie: "/cookie-policy",
   privacy: "/privacy-policy",
   terms: "/terms-of-service",
+
   sitemap: "/sitemap.xml",
   manifest: "/manifest.json",
   robots: "/robots.txt",
+
   feedAtom: "/feed.atom",
   feedJson: "/feed.json",
   rss: "/rss.xml",
 } as const;
 
-const MAIN_NAV: NavItem[] = [
-  {
-    label: "Documentation",
-    href: ROUTES.docs,
-    icon: "learn",
-  },
-  {
-    label: "Blog",
-    href: ROUTES.blog,
-    icon: "blog",
-  },
-  {
-    label: "Archive",
-    href: ROUTES.archive,
-    icon: "ai-agent",
-  },
-];
+// ============================================================================
+// NAVIGATION
+// ============================================================================
 
 export const NAV = {
-  navBar: MAIN_NAV,
-  mobileNavBar: MAIN_NAV,
+  navBar: [
+    {
+      label: "Documentation",
+      href: ROUTES.docs,
+      icon: "learn",
+    },
+    {
+      label: "Blog",
+      href: ROUTES.blog,
+      icon: "blog",
+    },
+    {
+      label: "Archive",
+      href: ROUTES.archive,
+      icon: "ai-agent",
+    },
+  ] as NavItem[],
+
+  mobileNavBar: [
+    {
+      label: "Documentation",
+      href: ROUTES.docs,
+      icon: "learn",
+    },
+    {
+      label: "Blog",
+      href: ROUTES.blog,
+      icon: "blog",
+    },
+    {
+      label: "Archive",
+      href: ROUTES.archive,
+      icon: "ai-agent",
+    },
+  ] as NavItem[],
+
   footerBar: [
     {
       title: "Resource",
@@ -103,6 +150,7 @@ export const NAV = {
         },
       ],
     },
+
     {
       title: "Explore",
       items: [
@@ -112,6 +160,7 @@ export const NAV = {
         },
       ],
     },
+
     {
       title: "Legal",
       items: [
@@ -129,6 +178,7 @@ export const NAV = {
         },
       ],
     },
+
     {
       title: "Company",
       items: [
@@ -160,14 +210,18 @@ export const NAV = {
       href: "https://whatsapp.com/channel/0029VaxZggiFnSzHLKybx42h",
       icon: "whatsapp",
     },
-  ] as Social[],
+  ] as Socials[],
 } as const;
+
+// ============================================================================
+// IMAGE
+// ============================================================================
 
 export const IMAGE = {
   og: {
     width: 1200,
     height: 630,
-    placeholder: SITE.ogImage,
+    placeholder: Og.src,
   },
 
   thumbnail: {
@@ -190,23 +244,33 @@ export const IMAGE = {
   },
 } as const;
 
+// ============================================================================
+// SEO
+// ============================================================================
+
 export const SEO = {
   titleDefault: SITE.name,
   titleTemplate: `%s | ${SITE.name}`,
   titleMaxLength: 60,
+
   description: SITE.description,
   descriptionMaxLength: 160,
+
   canonical: SITE.url,
+
   ogImage: SITE.ogImage,
   ogImageWidth: IMAGE.og.width,
   ogImageHeight: IMAGE.og.height,
   ogImageAlt: SITE.name,
+
   twitterCard: "summary_large_image" as const,
   twitterSite: "@adogen_tool",
   twitterCreator: "@adogen_tool",
+
   robots: {
     index: true,
     follow: true,
+
     googleBot: {
       index: true,
       follow: true,
@@ -214,33 +278,46 @@ export const SEO = {
       maxVideoPreview: -1,
       maxImagePreview: "large" as const,
       maxSnippet: -1,
-    }
+    },
   },
+
   verification: {
     google: "ZxoHYWipAMoGhvwVi5nxolWsZOntrYkNkVcG9HTfFZQ",
     bing: "",
     yandex: "1878480c0d7b5510",
   },
+
   ads: {
     google: "ca-pub-4943136052113535",
     yandex: "R-A-19179231",
     monetag: "98464dea950ab2405c90bcb6fc2f1226",
   },
+
   analytics: {
     google: "G-2TKFP229HJ",
     yandex: "108731154",
-  }
+  },
 } as const;
+
+// ============================================================================
+// OPEN GRAPH
+// ============================================================================
 
 export const OG = {
   type: "website" as const,
+
   siteName: SITE.name,
   locale: SITE.locale,
+
   image: SEO.ogImage,
   imageWidth: SEO.ogImageWidth,
   imageHeight: SEO.ogImageHeight,
   imageAlt: SEO.ogImageAlt,
 } as const;
+
+// ============================================================================
+// TWITTER
+// ============================================================================
 
 export const TWITTER = {
   card: SEO.twitterCard,
@@ -248,50 +325,64 @@ export const TWITTER = {
   creator: SEO.twitterCreator,
 } as const;
 
+// ============================================================================
+// PAGINATION
+// ============================================================================
+
 export const PAGINATION = {
   postsPerPage: 9,
   postsPerFeed: 20,
   postsPerSitemap: 1000,
 } as const;
 
-function absoluteUrl(path: string): string {
-  if (/^https?:\/\//i.test(path)) {
-    return path;
-  }
-
-  return `${SITE.url.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
-}
+// ============================================================================
+// STRUCTURED DATA
+// ============================================================================
 
 export const schemaWebSite = {
   "@context": "https://schema.org",
   "@type": "WebSite",
+
   name: SITE.name,
   alternateName: [SITE.name, "c0desk1"],
+
   url: SITE.url,
   description: SITE.description,
+
   inLanguage: SITE.lang,
+
   potentialAction: {
     "@type": "SearchAction",
+
     target: {
       "@type": "EntryPoint",
-      urlTemplate: `${SITE.url}/search?q={search_term_string}`
+      urlTemplate: `${SITE.url}/search?q={search_term_string}`,
     },
+
     "query-input": "required name=search_term_string",
   },
 } as const;
 
+// ----------------------------------------------------------------------------
+// Organization
+// ----------------------------------------------------------------------------
+
 export const schemaOrganization = {
   "@context": "https://schema.org",
   "@type": "Organization",
+
   name: ORG.name,
   url: ORG.url,
+
   logo: {
     "@type": "ImageObject",
-    url: absoluteUrl(ORG.logo),
+    url: ORG.logo,
     width: IMAGE.logo.width,
     height: IMAGE.logo.height,
   },
+
   sameAs: ORG.sameAs,
+
   contactPoint: {
     "@type": "ContactPoint",
     email: SITE.email,
@@ -300,12 +391,17 @@ export const schemaOrganization = {
   },
 } as const;
 
+// ----------------------------------------------------------------------------
+// Breadcrumb
+// ----------------------------------------------------------------------------
+
 export function schemaBreadcrumb(
   items: { name: string; url: string }[],
 ) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+
     itemListElement: items.map((item, index) => ({
       "@type": "ListItem",
       position: index + 1,
@@ -314,6 +410,10 @@ export function schemaBreadcrumb(
     })),
   } as const;
 }
+
+// ----------------------------------------------------------------------------
+// WebPage
+// ----------------------------------------------------------------------------
 
 export function schemaWebPage(opts: {
   title: string;
@@ -337,6 +437,10 @@ export function schemaWebPage(opts: {
     caption?: string;
   };
 }) {
+  const LogoUrl = SITE.logo.startsWith("http")
+    ? SITE.logo
+    : `${SITE.url.replace(/\/$/, "")}${SITE.logo}`;
+
   return {
     "@context": "https://schema.org",
     "@type": opts.type ?? "WebPage",
@@ -362,7 +466,7 @@ export function schemaWebPage(opts: {
       ? {
           image: {
             "@type": "ImageObject",
-            url: absoluteUrl(opts.image.url),
+            url: opts.image.url,
 
             ...(opts.image.width
               ? {
@@ -388,18 +492,22 @@ export function schemaWebPage(opts: {
     publisher: {
       "@type": "Organization",
 
-      name: ORG.name,
-      url: ORG.url,
+      name: SITE.name,
+      url: SITE.url,
 
       logo: {
         "@type": "ImageObject",
-        url: absoluteUrl(ORG.logo),
+        url: LogoUrl,
         width: IMAGE.logo.width,
         height: IMAGE.logo.height,
       },
     },
   } as const;
 }
+
+// ----------------------------------------------------------------------------
+// Article
+// ----------------------------------------------------------------------------
 
 export function schemaArticle(opts: {
   title: string;
@@ -438,7 +546,7 @@ export function schemaArticle(opts: {
       ? {
           image: {
             "@type": "ImageObject",
-            url: absoluteUrl(opts.image.url),
+            url: opts.image.url,
 
             ...(opts.image.width
               ? {
@@ -478,28 +586,34 @@ export function schemaArticle(opts: {
           author: {
             "@type": "Person",
             name: opts.authorName,
-            url: opts.authorUrl
-              ? absoluteUrl(opts.authorUrl)
-              : SITE.url,
+            url: opts.authorUrl || SITE.url,
+          },
+
+          publisher: {
+            "@type": "Organization",
+
+            name: SITE.name,
+            url: SITE.url,
+
+            logo: {
+              "@type": "ImageObject",
+
+              url: SITE.logo.startsWith("http")
+                ? SITE.logo
+                : `${SITE.url.replace(/\/$/, "")}${SITE.logo}`,
+
+              width: IMAGE.logo.width,
+              height: IMAGE.logo.height,
+            },
           },
         }
       : {}),
-
-    publisher: {
-      "@type": "Organization",
-
-      name: ORG.name,
-      url: ORG.url,
-
-      logo: {
-        "@type": "ImageObject",
-        url: absoluteUrl(ORG.logo),
-        width: IMAGE.logo.width,
-        height: IMAGE.logo.height,
-      },
-    },
   } as const;
 }
+
+// ----------------------------------------------------------------------------
+// Software Application
+// ----------------------------------------------------------------------------
 
 export function schemaSoftwareApplication(opts: {
   name: string;
@@ -522,23 +636,26 @@ export function schemaSoftwareApplication(opts: {
     description: opts.description,
     url: opts.url,
 
-    image: Array.isArray(opts.image)
-      ? opts.image.map(absoluteUrl)
-      : absoluteUrl(opts.image),
+    image: opts.image,
 
-    operatingSystem: opts.operatingSystem ?? "All",
+    operatingSystem:
+      opts.operatingSystem || "All",
 
     applicationCategory:
-      opts.applicationCategory ?? "WebApplication",
+      opts.applicationCategory || "WebApplication",
 
     offers: {
       "@type": "Offer",
 
-      price: opts.price ?? "0",
-      priceCurrency: opts.priceCurrency ?? "USD",
+      price: opts.price || "0",
+      priceCurrency: opts.priceCurrency || "USD",
     },
   } as const;
 }
+
+// ----------------------------------------------------------------------------
+// FAQ
+// ----------------------------------------------------------------------------
 
 export function schemaFAQ(
   items: { question: string; answer: string }[],
@@ -560,18 +677,29 @@ export function schemaFAQ(
   } as const;
 }
 
+// ============================================================================
+// META
+// ============================================================================
+
 export function buildMeta(opts: {
   title?: string;
   description?: string;
+
   canonical?: string;
+
   ogImage?: string;
   ogImageAlt?: string;
+
   ogType?: "website" | "article";
+
   noindex?: boolean;
   nofollow?: boolean;
+
   datePublished?: string;
   dateModified?: string;
+
   authorName?: string;
+
   keywords?: string[];
 }) {
   const title = opts.title
@@ -584,9 +712,11 @@ export function buildMeta(opts: {
     opts.description ?? SEO.description
   ).slice(0, SEO.descriptionMaxLength);
 
-  const canonical = opts.canonical ?? SEO.canonical;
+  const canonical =
+    opts.canonical ?? SEO.canonical;
 
-  const ogImage = opts.ogImage ?? SEO.ogImage;
+  const ogImage =
+    opts.ogImage ?? SEO.ogImage;
 
   const ogImageAlt =
     opts.ogImageAlt ?? SEO.ogImageAlt;
@@ -611,7 +741,6 @@ export function buildMeta(opts: {
   return {
     title,
     description,
-
     canonical,
 
     robots: robotsContent,
