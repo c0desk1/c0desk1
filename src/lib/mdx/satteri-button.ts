@@ -39,11 +39,13 @@ export const satteriButton = defineMdastPlugin({
 
     if (attrs.icon) {
       children.push({
-        type: 'element',
-        tagName: 'span',
-        properties: {
-          className: ['button-icon'],
-          'data-icon': attrs.icon,
+        type: 'containerDirective',
+        data: {
+          hName: 'span',
+          hProperties: {
+            className: ['button-icon'],
+            'data-icon': attrs.icon,
+          },
         },
         children: [],
       });
@@ -54,18 +56,17 @@ export const satteriButton = defineMdastPlugin({
       value: buttonLabel,
     });
 
-    const buttonNode = {
-      type: 'element',
-      tagName: 'a',
-      properties: {
+    ctx.setProperty(node, 'data', {
+      ...(node.data || {}),
+      hName: 'a',
+      hProperties: {
         href: url,
         className: ['button', blockClass].filter(Boolean).join(' '),
         target: url.startsWith('http') ? '_blank' : '_self',
         rel: url.startsWith('http') ? 'noopener noreferrer' : undefined,
       },
-      children,
-    };
+    });
 
-    ctx.replaceNode(node, buttonNode);
+    ctx.setProperty(node, 'children', children);
   },
 });
