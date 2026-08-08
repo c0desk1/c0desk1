@@ -357,7 +357,7 @@ export const schemaWebSite = {
     target: {
       "@type": "EntryPoint",
 
-      urlTemplate": `https://google.com{SITE.url.replace(/^https?:\/\//, "")}+{search_term_string}`
+      "urlTemplate": `https://google.com{SITE.url.replace(/^https?:\/\//, "")}+{search_term_string}`
     },
 
     "query-input": "required name=search_term_string",
