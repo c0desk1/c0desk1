@@ -1,0 +1,97 @@
+/* src/styles/prose/button.css */
+
+:root {
+  /* ===== IKON BUTTON ===== */
+  --ic-btn-download: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'%3E%3C/path%3E%3Cpolyline points='7 10 12 15 17 10'%3E%3C/polyline%3E%3Cline x1='12' y1='15' x2='12' y2='3'%3E%3C/line%3E%3C/svg%3E");
+  --ic-btn-github: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.15 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.62.24 2.85.12 3.15.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z'%3E%3C/path%3E%3C/svg%3E");
+  --ic-btn-external: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'%3E%3C/path%3E%3Cpolyline points='15 3 21 3 21 9'%3E%3C/polyline%3E%3Cline x1='10' y1='14' x2='21' y2='3'%3E%3C/line%3E%3C/svg%3E");
+  --ic-btn-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='5' y1='12' x2='19' y2='12'%3E%3C/polyline%3E%3Cpolyline points='12 5 19 12 12 19'%3E%3C/polyline%3E%3C/svg%3E");
+  --ic-btn-star: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'%3E%3C/polygon%3E%3C/svg%3E");
+  --ic-btn-info: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='16' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='8' x2='12.01' y2='8'%3E%3C/line%3E%3C/svg%3E");
+  --ic-btn-warning: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2L2 22h20L12 2z'%3E%3C/path%3E%3Cline x1='12' y1='9' x2='12' y2='14'%3E%3C/line%3E%3Ccircle cx='12' cy='18' r='0.5' fill='currentColor' stroke='none'%3E%3C/circle%3E%3C/svg%3E");
+}
+
+/* ============================================
+   BUTTON
+   ============================================ */
+.prose .button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  background-color: var(--accent);
+  color: white !important;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-decoration: none !important;
+  transition: background 0.2s, transform 0.1s;
+  border: none;
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+.prose .button:hover {
+  background-color: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.prose .button:active {
+  transform: scale(0.98);
+}
+
+/* ============================================
+   IKON BUTTON (via span::before)
+   ============================================ */
+.prose .button .button-icon {
+  display: inline-block;
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+  background-color: currentColor;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+
+/* ===== SELECTOR IKON ===== */
+.prose .button .button-icon[data-icon="download"] {
+  mask-image: var(--ic-btn-download);
+  -webkit-mask-image: var(--ic-btn-download);
+}
+.prose .button .button-icon[data-icon="github"] {
+  mask-image: var(--ic-btn-github);
+  -webkit-mask-image: var(--ic-btn-github);
+}
+.prose .button .button-icon[data-icon="external"] {
+  mask-image: var(--ic-btn-external);
+  -webkit-mask-image: var(--ic-btn-external);
+}
+.prose .button .button-icon[data-icon="arrow"] {
+  mask-image: var(--ic-btn-arrow);
+  -webkit-mask-image: var(--ic-btn-arrow);
+}
+.prose .button .button-icon[data-icon="star"] {
+  mask-image: var(--ic-btn-star);
+  -webkit-mask-image: var(--ic-btn-star);
+}
+.prose .button .button-icon[data-icon="info"] {
+  mask-image: var(--ic-btn-info);
+  -webkit-mask-image: var(--ic-btn-info);
+}
+.prose .button .button-icon[data-icon="warning"] {
+  mask-image: var(--ic-btn-warning);
+  -webkit-mask-image: var(--ic-btn-warning);
+}
+
+/* ============================================
+   BLOCK
+   ============================================ */
+.prose .button-block {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
