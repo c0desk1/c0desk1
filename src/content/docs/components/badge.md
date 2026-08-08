@@ -17,8 +17,6 @@ seo:
   noIndex: true
 ---
 
-# Badge
-
 Badge digunakan untuk label kecil dengan berbagai variant warna dan ikon. Cocok untuk menandai status, versi, kategori, atau informasi singkat lainnya.
 
 ## Sintaks
