@@ -115,6 +115,30 @@ export const NAV = {
   ] as Socials[]
 } as const;
 
+export const IMAGE = {
+  og: {
+    width: 1200,
+    height: 630,
+    placeholder: OG,
+  },
+  thumbnail: {
+    width: 600,
+    height: 400,
+    quality: 80,
+    placeholder: Thumbnails.src,
+  },
+  avatar: {
+    width: 96,
+    height: 96,
+    quality: 80,
+    placeholder: Avatar.src,
+  },
+  logo: {
+    width: 512,
+    height: 512,
+  },
+} as const;
+
 export const SEO = {
   titleDefault: SITE.name,
   titleTemplate: `%s | ${SITE.name}`,
@@ -123,8 +147,8 @@ export const SEO = {
   descriptionMaxLength: 160,
   canonical: SITE.url,
   ogImage: SITE.ogImage,
-  ogImageWidth: 1200,
-  ogImageHeight: 600,
+  ogImageWidth: IMAGE.og.width,
+  ogImageHeight: IMAGE.og.height,
   ogImageAlt: SITE.name,
   twitterCard: "summary_large_image" as const,
   twitterSite: "@adogen_tool",
@@ -171,30 +195,6 @@ export const TWITTER = {
   card: SEO.twitterCard,
   site: SEO.twitterSite,
   creator: SEO.twitterCreator,
-} as const;
-
-export const IMAGE = {
-  og: {
-    width: 1200,
-    height: 630,
-    placeholder: OG,
-  },
-  thumbnail: {
-    width: 600,
-    height: 400,
-    quality: 80,
-    placeholder: Thumbnails,
-  },
-  avatar: {
-    width: 96,
-    height: 96,
-    quality: 80,
-    placeholder: Avatar,
-  },
-  logo: {
-    width: 512,
-    height: 512,
-  },
 } as const;
 
 export const PAGINATION = {
