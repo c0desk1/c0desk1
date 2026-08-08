@@ -68,9 +68,9 @@ Komponen yang berdiri sendiri di level blok.
 
 Komponen yang bisa digunakan di dalam paragraf atau teks.
 
-- User: :user[...] — Profil pengguna dengan avatar
-- Badge: :badge[...] — Label kecil dengan warna
-- Button: :button[...] — Tombol dengan ikon
+- User: `:user[...]` — Profil pengguna dengan avatar
+- Badge: `:badge[...]` — Label kecil dengan warna
+- Button: `:button[...]` — Tombol dengan ikon
 
 ### 3. Media Components
 
