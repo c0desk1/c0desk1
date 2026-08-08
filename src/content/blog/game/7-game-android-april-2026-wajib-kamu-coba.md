@@ -60,11 +60,11 @@ At first glance, *Gambonanza* might look like a quirky board game, but underneat
 
 You’ll navigate a series of procedurally generated boards, moving chess pieces with their traditional rules to overcome enemies and obstacles. The tactical depth ramps up quickly, demanding careful planning and creative use of each piece’s strengths. It’s a genuine mental workout disguised as a lighthearted romp. Released at the very end of April (officially May 1, 2026), *Gambonanza* is a breath of fresh air amidst a sea of generic mobile titles, especially if you enjoy strategy that makes you pause and think.
 
-## ~The Rhymatory~
+## ~~The Rhymatory~~
 
-~Need something to wind down with after a hectic day? *The Rhymatory* is a delightful word puzzle game set in a cozy steampunk world. You’re joined by a friendly ruby, an owl, and a crow who happily brew you tea while you solve over 300 rhyming puzzles.~
+~~Need something to wind down with after a hectic day? *The Rhymatory* is a delightful word puzzle game set in a cozy steampunk world. You’re joined by a friendly ruby, an owl, and a crow who happily brew you tea while you solve over 300 rhyming puzzles.~~
 
-~The premise is simple: you’re given clues and must find the rhyming word pair that fits. But the cleverness of the puzzles and the warm, gentle atmosphere make it surprisingly hard to put down. There’s no timer, no penalty, just pure relaxed solving. It came out on April 30, 2026, and best of all, it’s free to play—a charming, low-commitment addition to any phone.~
+~~The premise is simple: you’re given clues and must find the rhyming word pair that fits. But the cleverness of the puzzles and the warm, gentle atmosphere make it surprisingly hard to put down. There’s no timer, no penalty, just pure relaxed solving. It came out on April 30, 2026, and best of all, it’s free to play—a charming, low-commitment addition to any phone.~~
 
 
 ## Hearthside: A Teeny Tiny Game
