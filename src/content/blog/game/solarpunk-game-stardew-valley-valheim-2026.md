@@ -6,6 +6,7 @@ description: Game survival crafting Solarpunk resmi rilis 8 Juni 2026. Padukan
   terapung. Cek detail selengkapnya.
 author: 
   name: Bima Akbar
+  role: Writer
 category: Game
 cover:
   src: https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAAOYahVmFfzsTQol6vIKegNlfM0tBCgAAo4Qaxu4D6hUE2xQUILbgC0BAAMCAAN4AAM7BA
@@ -60,10 +61,7 @@ Fitur menonjol lainnya adalah **airship** (kapal udara) yang bisa dikemudikan. K
 
 Sistem pertanian di *Solarpunk* juga memiliki keunikan tersendiri. Hewan-hewan ternak akan memberi penghargaan kepada pemain yang merawat mereka dengan baik. Contohnya, babi yang bahagia akan menggali truffle untuk Anda. Buah dan sayuran yang Anda tanam sendiri adalah kunci untuk bertahan hidup, dengan otomatisasi yang memungkinkan Anda memiliki lebih banyak waktu untuk eksplorasi.
 
-:::figure
-[![Solarpunk Gameplay](https://gaming-cdn.com/images/products/14369/screenshot/solarpunk-pc-steam-wallpaper-5.jpg?v=1752074468 "Visit Instant Gaming")](:https://www.instant-gaming.com/en/14369-buy-solarpunk-pc-steam/?srsltid=AfmBOor5DvG76qyI7VxwUA-iw8yZgoxKEz7obrXbrsxP3Ks10r-fRDWm)
-Gameplay Solarpunk yang sangat keren
-:::
+![Solarpunk Gameplay](https://gaming-cdn.com/images/products/14369/screenshot/solarpunk-pc-steam-wallpaper-5.jpg?v=1752074468 "Visit Instant Gaming"){Gameplay Solarpunk yang sangat keren}
 
 Anda bisa menggunakan drone pengangkut untuk mengumpulkan dan mengirimkan sumber daya, memberi penghargaan kepada siapa pun yang merencanakan tata letak dengan cermat.
 
