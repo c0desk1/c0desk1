@@ -165,10 +165,23 @@ Berikut bahan yang kamu butuhkan untuk memasang SMAPI ke **Stardew Valley Mobile
 > [!DANGER]
 > Kalau kamu memakai versi yang bukan dari Play Store resmi, gunakan opsi **Mirror**. Kalau kamu sudah membeli versi resmi di Play Store, bagian ini bisa dilewati.
 
-- Stardew Valley: ::button[Playstore]{url="https://play.google.com/store/apps/details?id=com.chucklefish.stardewvalley&pcampaignid=web_share" icon="download"}, ::button[Mirror]{url="https://link-target.net/1404784/QG9mX09P6sa2" icon="download"}, ::button[Mirror 2]{url="https://otieu.com/4/9727499" icon="download"}.
+- Stardew Valley:
+ 
+::button[Playstore]{url="https://play.google.com/store/apps/details?id=com.chucklefish.stardewvalley&pcampaignid=web_share" icon="download"}
 
-- SMAPI Launcher Android: ::button[Github]{url="https://github.com/NRTnarathip/SMAPILoader" icon="github"}, ::button[Direct]{url="https://github.com/NRTnarathip/SMAPILoader/releases/download/1.1.6/SMAPI-Launcher-v1.1.6.apk" icon="download"}
-- SMAPI for Android: ::button[NexusMods]{url="https://www.nexusmods.com/stardewvalley/mods/44436?tab=files" icon="download"}
+::button[Mirror]{url="https://link-target.net/1404784/QG9mX09P6sa2" icon="download"}
+
+::button[Mirror 2]{url="https://otieu.com/4/9727499" icon="download"}
+
+- SMAPI Launcher Android: 
+
+::button[Github]{url="https://github.com/NRTnarathip/SMAPILoader" icon="github"}
+
+::button[Direct]{url="https://github.com/NRTnarathip/SMAPILoader/releases/download/1.1.6/SMAPI-Launcher-v1.1.6.apk" icon="download"}
+
+- SMAPI for Android:
+
+::button[NexusMods]{url="https://www.nexusmods.com/stardewvalley/mods/44436?tab=files" icon="download"}
 
 ## Video Tutorial
 <Video src="https://youtube.com/shorts/s7mFhDeefZE?feature=share" />
