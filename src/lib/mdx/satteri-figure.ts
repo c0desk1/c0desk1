@@ -1,60 +1,69 @@
 // src/lib/mdx/satteri-figure.ts
-import { defineMdastPlugin } from "satteri";
+import { defineMdastPlugin } from 'satteri';
 
 export const satteriFigure = defineMdastPlugin({
-  name: "satteri-figure",
-  containerDirective(node: any, ctx: any) {
-    if (node.name !== "figure") return;
+  name: 'satteri-figure',
 
-    let imageNode = null;
-    let captionText = "";
-    let href = "";
+  paragraph(node, ctx) {
+    const imageIndex = node.children.findIndex((c: any) => c.type === 'image');
+    if (imageIndex === -1) return;
 
-    for (const child of node.children || []) {
-      if (child.type === "paragraph") {
-        for (const sub of child.children) {
-          if (sub.type === "link") {
-            href = sub.url || "";
-            if (sub.children) {
-              for (const subSub of sub.children) {
-                if (subSub.type === "image") imageNode = subSub;
-                else if (subSub.type === "text") captionText += subSub.value;
-              }
-            }
-          } else if (sub.type === "image") {
-            imageNode = sub;
-          } else if (sub.type === "text") {
-            captionText += sub.value;
-          }
+    const imageNode = node.children[imageIndex] as any;
+
+    let caption = '';
+    let captionIndex = -1;
+
+    for (let i = imageIndex + 1; i < node.children.length; i++) {
+      const child = node.children[i];
+      if (child.type === 'text') {
+        const match = child.value.match(/^\s*\{\s*(.+?)\s*\}\s*$/);
+        if (match) {
+          caption = match[1].trim();
+          captionIndex = i;
+          break;
         }
       }
     }
 
-    if (!imageNode) return;
+    const figureChildren: any[] = [
+      {
+        type: 'image',
+        url: imageNode.url,
+        alt: imageNode.alt || '',
+        title: imageNode.title || undefined,
+        data: {
+          hProperties: {
+            loading: 'lazy',
+          },
+        },
+      },
+    ];
 
-    const alt = imageNode.alt || "";
-    const src = imageNode.url;
-    const title = imageNode.title || "";
-    const caption = captionText.trim();
-
-    const component: any = {
-      type: "mdxJsxFlowElement",
-      name: "Figure",
-      attributes: [
-        { type: "mdxJsxAttribute", name: "src", value: src },
-        { type: "mdxJsxAttribute", name: "alt", value: alt },
-        { type: "mdxJsxAttribute", name: "title", value: title },
-        { type: "mdxJsxAttribute", name: "caption", value: caption },
-      ],
-      children: [],
-    };
-    if (href) {
-      component.attributes.push({
-        type: "mdxJsxAttribute",
-        name: "href",
-        value: href,
+    if (caption) {
+      figureChildren.push({
+        type: 'containerDirective',
+        data: {
+          hName: 'figcaption',
+          hProperties: {},
+        },
+        children: [{ type: 'text', value: caption }],
       });
     }
-    ctx.replaceNode(node, component);
+
+    const otherChildren = node.children.filter(
+      (_: any, i: number) => i !== imageIndex && i !== captionIndex
+    );
+
+    if (otherChildren.length > 0) {
+      figureChildren.push(...otherChildren);
+    }
+
+    ctx.setProperty(node, 'data', {
+      ...(node.data || {}),
+      hName: 'figure',
+      hProperties: {},
+    });
+
+    ctx.setProperty(node, 'children', figureChildren);
   },
 });
