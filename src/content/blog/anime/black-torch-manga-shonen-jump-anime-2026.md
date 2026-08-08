@@ -26,10 +26,7 @@ Buat penggemar manga Shonen Jump, istilah "canceled" atau "axed" pasti sudah tid
 
 Salah satunya adalah *Black Torch*, manga karya Tsuyoshi Takaki yang berusia pendek—hanya 19 bab—kini bersiap kembali dalam format anime. Setelah 8 tahun berlalu.
 
-:::figure
-![Black Torch Anime 2026 Manga yang Dibatalkan 8 Tahun Lalu Kembali](https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAAOOahQceqqYa8-sZaT_AQFJrflxdI4AAnwQaxu4D6BUem_pz5AiVwwBAAMCAAN5AAM7BA)
-Jiro Azuma Black Torch
-:::
+![Black Torch Anime 2026 Manga yang Dibatalkan 8 Tahun Lalu Kembali](https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAAOOahQceqqYa8-sZaT_AQFJrflxdI4AAnwQaxu4D6BUem_pz5AiVwwBAAMCAAN5AAM7BA){Jiro Azuma Black Torch}
 
 ## Apa Itu Black Torch?
 
