@@ -33,7 +33,9 @@ import { satteriCallout } from "./src/lib/mdx/satteri-callout";
 import { satteriSteps } from "./src/lib/mdx/satteri-steps";
 import { satteriTabs } from "./src/lib/mdx/satteri-tabs";
 import { satteriFileTree } from "./src/lib/mdx/satteri-filetree";
-import { satteriButton } from './src/lib/mdx/satteri-button';
+import { satteriUser } from "./src/lib/mdx/satteri-user";
+import { satteriBadge } from "./src/lib/mdx/satteri-badge";
+import { satteriButton } from "./src/lib/mdx/satteri-button";
 import { satteriAccordion } from "./src/lib/mdx/satteri-accordion";
 
 import { satteriQuote } from "./src/lib/mdx/satteri-blockquote";
@@ -83,8 +85,10 @@ export default defineConfig({
         satteriCallout,
         satteriSteps,
         satteriButton,
+        satteriBadge,
         satteriFileTree,
         satteriTabs,
+        satteriUser,
         satteriAccordion,
         
         satteriFigure,
