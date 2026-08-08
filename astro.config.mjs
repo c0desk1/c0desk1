@@ -27,19 +27,22 @@ import {
 
 import { satteriHeadingAnchor } from "./src/lib/mdx/satteri-heading-anchor";
 import { satteriExternalLink } from "./src/lib/mdx/satteri-external-link";
+import { satteriTabsHast } from "./src/lib/mdx/satteri-tabs-hast";
+
 import { satteriCallout } from "./src/lib/mdx/satteri-callout";
+import { satteriSteps } from "./src/lib/mdx/satteri-steps";
+import { satteriTabs } from "./src/lib/mdx/satteri-tabs";
+import { satteriFileTree } from "./src/lib/mdx/satteri-filetree";
+import { satteriButton } from './src/lib/mdx/satteri-button';
+import { satteriAccordion } from "./src/lib/mdx/satteri-accordion";
+
 import { satteriQuote } from "./src/lib/mdx/satteri-blockquote";
 import { satteriChangelog } from "./src/lib/mdx/satteri-changelog";
 import { satteriCodeBlock } from "./src/lib/mdx/satteri-code-block";
 import { satteriFigure } from "./src/lib/mdx/satteri-figure";
-import { satteriFileTree } from "./src/lib/mdx/satteri-filetree";
 import { satteriKbd } from "./src/lib/mdx/satteri-kbd";
-import { satteriSteps } from "./src/lib/mdx/satteri-steps";
-import { satteriTabs } from "./src/lib/mdx/satteri-tabs";
-import { satteriAccordion } from "./src/lib/mdx/satteri-accordion";
 
 import pagefind from "astro-pagefind";
-import { satteriTabsHast } from "./src/lib/mdx/satteri-tabs-hast";
 
 // import sitemap from "@astrojs/sitemap";
 
@@ -77,16 +80,19 @@ export default defineConfig({
         satteriTabsHast
       ],
       mdastPlugins: [
+        satteriCallout,
+        satteriSteps,
+        satteriButton,
+        satteriFileTree,
+        satteriTabs,
+        satteriAccordion,
+        
         satteriFigure,
         satteriQuote,
         satteriCodeBlock,
         satteriKbd,
-        satteriCallout,
-        satteriSteps,
         satteriChangelog,
-        satteriFileTree,
-        satteriTabs,
-        satteriAccordion
+        
       ],
     }),
     syntaxHighlight: "shiki",
