@@ -29,6 +29,7 @@ import { satteriHeadingAnchor } from "./src/lib/mdx/satteri-heading-anchor";
 import { satteriExternalLink } from "./src/lib/mdx/satteri-external-link";
 import { satteriTabsHast } from "./src/lib/mdx/satteri-tabs-hast";
 
+import { satteriFigure } from "./src/lib/mdx/satteri-figure";
 import { satteriCallout } from "./src/lib/mdx/satteri-callout";
 import { satteriSteps } from "./src/lib/mdx/satteri-steps";
 import { satteriTabs } from "./src/lib/mdx/satteri-tabs";
@@ -41,7 +42,6 @@ import { satteriAccordion } from "./src/lib/mdx/satteri-accordion";
 import { satteriQuote } from "./src/lib/mdx/satteri-blockquote";
 import { satteriChangelog } from "./src/lib/mdx/satteri-changelog";
 import { satteriCodeBlock } from "./src/lib/mdx/satteri-code-block";
-import { satteriFigure } from "./src/lib/mdx/satteri-figure";
 import { satteriKbd } from "./src/lib/mdx/satteri-kbd";
 
 import pagefind from "astro-pagefind";
