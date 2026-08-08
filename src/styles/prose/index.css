@@ -1,7 +1,7 @@
 /* src/styles/prose/index.css */
 @reference '../utils.css';
 
-@import "./icons.css",
+
 @import "./token.css";
 @import "./base.css";
 @import "./typography.css";
@@ -24,3 +24,4 @@
 @imoort "./user.css";
 @imoort "./badge.css";
 @imoort "./button.css";
+@import "./icons.css",
