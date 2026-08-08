@@ -1,0 +1,86 @@
+/* src/styles/prose/user.css */
+:root {
+  --ic-user-placeholder: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'%3E%3C/path%3E%3Ccircle cx='12' cy='7' r='4'%3E%3C/circle%3E%3C/svg%3E");
+}
+
+.prose .user,
+.prose .user-link {
+    @apply text-body-16;
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    gap: 0.25rem;
+    padding: 0;
+    margin: 0;
+    color: inherit;
+    white-space: nowrap;
+}
+
+.prose .user *:first-child,
+.prose .user-link *:first-child {
+    padding-top: 0;
+}
+
+.prose .user *:last-child,
+.prose .user-link *:last-child {
+    padding-bottom: 0;
+}
+
+.prose .user-link {
+    font-weight: 500 !important;
+    color: var(--fg) !important;
+}
+
+.prose .user .user-role,
+.prose .user-link .user-role {
+    color: var(--fg-subtle) !important;
+}
+
+.prose .user-link.inline-link.is-external::after,
+.prose .user-link::after {
+    display: none !important;
+    content: none !important;
+}
+
+.prose .user .user-avatar-placeholder,
+.prose .user-link .user-avatar-placeholder {
+    position: relative;
+}
+.prose .user .user-avatar-placeholder::before,
+.prose .user-link .user-avatar-placeholder::before {
+  content: "";
+  position: absolute;
+  inset: 0.125rem;
+  background-color: var(--fg-muted);
+  mask-image: var(--ic-user-placeholder);
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-image: var(--ic-user-placeholder);
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+
+.prose .user .user-avatar-placeholder,
+.prose .user-link .user-avatar-placeholder,
+.prose .user .user-avatar,
+.prose .user-link .user-avatar {
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
+    overflow: hidden;
+    object-fit: cover;
+    flex-shrink: 0;
+
+    border: 1px solid rgb(from var(--border-subtle) r g b / 100%);
+    background-color: var(--bg-muted);
+    border-radius: var(--radius-full);
+    user-select: none;
+}
+
+@media (hover: Hover) {
+    .prose .user-link:hover {
+        color: var(--accent) !important;
+    }
+}
