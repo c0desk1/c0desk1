@@ -30,8 +30,7 @@ Below, I’ve handpicked seven indie titles that stood out this month. Each one 
 
 ## Sea of Stars
 
-
-![Sea of Stars](https://play.google.com/store/apps/details?id=com.playdigious.seaofstars&pcampaignid=web_share "View on Playstore")
+![Sea of Stars](https://play-lh.googleusercontent.com/cp6tR3siCcRhJZqZm7ZLpHkxMkr2glN7sNtHZ7Iq2VmGTfrRhVeGFK154JqD8HJx34sYStKH1PZY0gqjGWl2rXc=w2560-h1440-rw)
 
 If you grew up with timeless JRPGs like *Chrono Trigger*, *Sea of Stars* will hit you right in the nostalgia. Developed by Sabotage Studio and already celebrated on PC and consoles, it officially arrived on Android on April 7, 2026.
 
@@ -39,8 +38,7 @@ What makes it special is how it modernizes the classic formula. Combat is turn-b
 
 ## Drova - Forsaken Kin
 
-
-![Drova - Forsaken Kin](https://play.google.com/store/apps/details?id=com.Just2D.DrovaMobile&pcampaignid=web_share "View on Playstore")
+![Drova - Forsaken Kin](https://play-lh.googleusercontent.com/sZIAKBIK9f-RUOP6g2W7zWZYsmZCMK_kGE7P-tuGvzkBAlxBcjC3bf3d7MFWIz4xVQfinxplbYfVp8FOfsEWc7Y=w2560-h1440-rw)
 
 On the opposite end of the RPG spectrum, *Drova - Forsaken Kin* trades bright fantasy for a grim world steeped in Celtic mythology. Think of it as a pocket-sized *Gothic*—dark, unforgiving, and beautifully rendered in pixel art.
 
@@ -48,7 +46,7 @@ Your choices carry real weight here, actively shaping the narrative and its mult
 
 ## Neverness to Everness
 
-![Neverness to Everness](https://play.google.com/store/apps/details?id=com.hottagames.nte&pcampaignid=web_share "View on Playstore")
+![Neverness to Everness](https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAANHafMiIqcbd02NQkyAOFuiHNHtLzQAAtQQaxsYJZlXESO-pBm-4D0BAAMCAAN5AAM7BA)
 
 Dubbed by many as “Anime GTA,” *Neverness to Everness* (NTE) from Hotta Studio flings you into Hethereau, a vibrant futuristic city teeming with anomalies. You play as an “Anomaly Hunter,” but how you spend your time is largely up to you.
 
@@ -56,7 +54,7 @@ The freedom here is staggering. You can tear through neon-lit streets in customi
 
 ## Gambonanza
 
-![Gambonanza](https://play.google.com/store/apps/details?id=com.strayfawnstudio.gambonanza&pcampaignid=web_share "View on Playstore")
+![Gambonanza](https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAANJafMiReFamhfZ9jXx8dQNLSAiZ0wAAtUQaxsYJZlXxQABFGGj18gDAQADAgADeQADOwQ)
 
 At first glance, *Gambonanza* might look like a quirky board game, but underneath its cheerful exterior lies a deeply strategic chess-based roguelike. Crafted by a solo developer, this title is as niche as it is brilliant.
 
@@ -71,7 +69,7 @@ You’ll navigate a series of procedurally generated boards, moving chess pieces
 
 ## Hearthside: A Teeny Tiny Game
 
-![Hearthside: A Teeny Tiny Game](https://play.google.com/store/apps/details?id=com.shortcircuitstudio.hearthside&hl=id "View on Playstore")
+![Hearthside: A Teeny Tiny Game](https://cdn.c0desk1.my.id/img/AgACAgUAAxkBAANNafMijZ2kGqbm9rA-BkXiYFSplZYAAtcQaxsYJZlXMcjn_ien9xIBAAMCAAN5AAM7BA)
 
 Fans of cozy experiences like *Animal Crossing* or *Stardew Valley* will instantly fall for *Hearthside*. It’s a tile-placement puzzle and city-builder hybrid where you construct an adorable little town, tile by tile.
 
@@ -79,7 +77,7 @@ What makes it addictive is the gentle strategy involved. You need to carefully p
 
 ## Annulus
 
-![Annulus](https://play-lh.googleusercontent.com/7MC3kAHckqlDg7xzc_BPm1dDYErcr7ZTkEEIPR3KMYm9LRfLD_ddmTAa3mFtd-V_mSfkbaaLYKgkIs1IBzfXKA=w2560-h1440-rw "Annulus")
+![Annulus](https://play-lh.googleusercontent.com/7MC3kAHckqlDg7xzc_BPm1dDYErcr7ZTkEEIPR3KMYm9LRfLD_ddmTAa3mFtd-V_mSfkbaaLYKgkIs1IBzfXKA=w2560-h1440-rw)
 
 If you lean more toward dark fantasy and tactical depth, *Annulus* deserves a spot on your home screen. It’s a strategy RPG where you lead a band of mercenaries through the grim, unforgiving continent of Novisess.
 
