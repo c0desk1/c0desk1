@@ -28,14 +28,17 @@ Setiap langkah bisa berisi paragraf, list, code block, heading, atau inline code
 ```md
 :::steps
 1.  Step 1
-    Isi steps
+    // beri jarak 1 line agar tidak dianggap judul [!code ++]
+    isi steps
 
 2. ## Step 2
-   Isi steps
+   isi steps
 
 3. `Step 3`
     - isi steps
     - isi steps
+4.  Step 4
+    isi steps
 :::
 ```
 
@@ -51,15 +54,18 @@ Setiap langkah bisa berisi paragraf, list, code block, heading, atau inline code
 ## Preview
 
 :::steps
-1.  Step 1
-    Isi steps
+1. Step 1
+  
+   isi steps
 
 2. ## Step 2
-   Isi steps
+   isi steps
 
 3. `Step 3`
     - isi steps
     - isi steps
+4.  Step 4
+    isi steps
 :::
 
 ## Aturan Penulisan
