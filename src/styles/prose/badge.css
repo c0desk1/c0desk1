@@ -16,6 +16,7 @@
 
 .prose .badge-default {
   background-color: var(--bg-subtle);
+  border: 1px solid var(--border);
   color: var(--fg);
 }
 .prose .badge-new {
