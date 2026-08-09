@@ -48,7 +48,15 @@ const s = {
     'text-(--fg) hover:bg-(--bg-muted) hover:text-(--fg-strong)',
     'cursor-pointer'
   ].join(" "),
-}
+};
+
+const ACTION = {
+  copy: [
+    { action: "url", icon: "link", message: "Copy as URL" },
+    { action: "markdown", icon: "file", message: "Copy as Markdown" },
+    { action: "agent", icon: "ai-agent", message: "Open in Agent"}
+  ],
+};
 ---
 
 <div class:list={[s.wrapper, className]}>
@@ -86,16 +94,22 @@ const s = {
     </summary>
 
     <menu class={s.actionDropdown}>
-      <button type="button" data-action="url" class={s.actionDropdownItems}>
-        <Icon name="link" class={s.actionIcon} /> Copy as URL
-      </button>
-      <button type="button" data-action="markdown" class={s.actionDropdownItems}>
-        <Icon name="file" class={s.actionIcon} /> Copy as Markdown
-      </button>
-      <div class={s.actionDivider}></div>
-      <button type="button" data-action="agent" class={s.actionDropdownItems}>
-        <Icon name="ai-agent" class={s.actionIcon} /> Open in Agent
-      </button>
+      {ACTION.copy.map((item, i) => (
+      <>
+        {item.action === "agent" && (
+          <li role="separator" class={s.actionDivider}></li>
+        )}
+        <li>
+          <button
+            type="button"
+            data-action={item.action}
+            class={s.actionDropdownItems}>
+            <Icon name={item.icon as any} class={s.actionIcon} />
+            {item.message}
+          </button>
+        </li>
+      </>
+      ))}
     </menu>
   </details>
 </div>
