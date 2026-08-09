@@ -7,9 +7,16 @@ interface Props {
   class?: string;
 }
 
-const { 
-  label = "Bagikan", 
-  class: className 
+type ShareAction = {
+  action: string;
+  icon: string;
+  message: string;
+  separator?: boolean;
+};
+
+const {
+  label = "Bagikan",
+  class: className
 } = Astro.props;
 
 const uniqueId = `share-dropdown-${Math.random().toString(36).substring(2, 9)}`;
@@ -40,24 +47,31 @@ const s = {
     'ring-(--border) bg-(--bg-subtle) shadow-(--shadow-lg)',
     'animate-in fade-in slide-in-from-top-2 origin-top-right',
   ].join(" "),
-  
+
   actionDropdownItems: [
     'flex items-center gap-2 p-2 text-button-13 md:text-button-14 text-start rounded w-full',
     'text-(--fg) hover:bg-(--bg-muted) hover:text-(--fg-strong)',
     'cursor-pointer'
   ].join(" "),
-}
+};
+
+const ACTION: ShareAction[] = [
+  { action: "twitter",  icon: "twitter",  message: "X (Twitter)"  },
+  { action: "facebook", icon: "facebook", message: "Facebook"     },
+  { action: "linkedin", icon: "linkedin", message: "LinkedIn"     },
+  { action: "whatsapp", icon: "whatsapp", message: "WhatsApp"     },
+  { action: "copy-url", icon: "link",     message: "Copy URL", separator: true },
+];
 ---
 
 <div class:list={[s.wrapper, className]}>
-  
-  <button 
+
+  <button
     type="button"
-    data-action="share-default" 
+    data-action="share-default"
     aria-label="Bagikan Halaman"
     title={label}
-    class:list={["px-2.5 py-2 rounded-l", s.actionGroup]}
-  >
+    class:list={["px-2.5 py-2 rounded-l", s.actionGroup]}>
     <div class={s.actionIcon}>
       <Icon name="share" class="icon-share size-full" />
       <Icon name="check" class="icon-check size-full hidden absolute inset-0 text-(--accent) transition-opacity duration-(--duration)" />
@@ -65,52 +79,40 @@ const s = {
     <span>{label}</span>
   </button>
 
-  <details 
+  <details
     id={uniqueId}
     data-auto-close
-    class="relative group"
-  >
-    <summary 
+    class="relative group">
+    <summary
       title="Opsi lainnya"
-      aria-label="Opsi lainnya" 
+      aria-label="Opsi lainnya"
       class:list={[
         "p-2 rounded-r border-l border-(--border) h-full",
         "list-none flex items-center justify-center",
         s.actionGroup
-      ]}
-    >
+      ]}>
       <div class={s.actionIcon}>
         <Icon name="chevron-down" class="size-full group-open:rotate-180 transition-transform" />
       </div>
     </summary>
 
     <menu class={s.actionDropdown}>
-      <li>
-        <button type="button" data-action="twitter" class={s.actionDropdownItems}>
-          <Icon name="twitter" class={s.actionIcon} /> X (Twitter)
-        </button>
-      </li>
-      <li>
-        <button type="button" data-action="facebook" class={s.actionDropdownItems}>
-          <Icon name="facebook" class={s.actionIcon} /> Facebook
-        </button>
-      </li>
-      <li>
-        <button type="button" data-action="linkedin" class={s.actionDropdownItems}>
-          <Icon name="linkedin" class={s.actionIcon} /> LinkedIn
-        </button>
-      </li>
-      <li>
-        <button type="button" data-action="whatsapp" class={s.actionDropdownItems}>
-          <Icon name="whatsapp" class={s.actionIcon} /> WhatsApp
-        </button>
-        </li>
-      <li role="separator" class={s.actionDivider}></li>
-      <li>
-        <button type="button" data-action="copy-url" class={s.actionDropdownItems}>
-          <Icon name="link" class={s.actionIcon} /> Copy URL
-        </button>
-      </li>
+      {ACTION.map((item) => (
+        <>
+          {item.separator && (
+            <li role="separator" class={s.actionDivider}></li>
+          )}
+          <li>
+            <button
+              type="button"
+              data-action={item.action}
+              class={s.actionDropdownItems}>
+              <Icon name={item.icon as any} class={s.actionIcon} />
+              {item.message}
+            </button>
+          </li>
+        </>
+      ))}
     </menu>
   </details>
 </div>
@@ -119,9 +121,9 @@ const s = {
   function setupShareButton() {
     document.querySelectorAll('.share-dropdown-wrapper').forEach(wrapper => {
       const primaryBtn = wrapper.querySelector('[data-action="share-default"]');
-      const details = wrapper.querySelector('details');
-      const iconShare = wrapper.querySelector('.icon-share');
-      const iconCheck = wrapper.querySelector('.icon-check');
+      const details    = wrapper.querySelector('details');
+      const iconShare  = wrapper.querySelector('.icon-share');
+      const iconCheck  = wrapper.querySelector('.icon-check');
 
       if (!primaryBtn || !details) return;
 
@@ -149,19 +151,21 @@ const s = {
           const action = (e.currentTarget as HTMLElement).getAttribute('data-action');
           details.removeAttribute('open');
 
+          const url   = encodeURIComponent(window.location.href);
+          const title = encodeURIComponent(document.title);
+
+          const shareMap: Record<string, string> = {
+            twitter:  `https://twitter.com/intent/tweet?url=${url}&text=${title}`,
+            facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+            linkedin: `https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${title}`,
+            whatsapp: `https://api.whatsapp.com/send?text=${title}%20${url}`,
+          };
+
           if (action === 'copy-url') {
             await navigator.clipboard.writeText(window.location.href);
             showCheckmark();
-          } else {
-            const url = encodeURIComponent(window.location.href);
-            const title = encodeURIComponent(document.title);
-            const shareMap: Record<string, string> = {
-              twitter: `https://twitter.com/intent/tweet?url=${url}&text=${title}`,
-              facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
-              linkedin: `https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${title}`,
-              whatsapp: `https://api.whatsapp.com/send?text=${title}%20${url}`
-            };
-            if (shareMap[action as string]) window.open(shareMap[action as string], '_blank', 'noopener,noreferrer');
+          } else if (action && shareMap[action]) {
+            window.open(shareMap[action], '_blank', 'noopener,noreferrer');
           }
         });
       });
