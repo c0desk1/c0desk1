@@ -1,18 +1,12 @@
 ---
 // src/layouts/DocsLayout.astro
-import Layout from "./Layout.astro";
-import DocsNavbar from "@docs/DocsNavbar.astro";
-import DocsNavigation from "@docs/DocsNavigation.astro"; 
+import Layout from "./Layout.astro"; 
 import PageFrame from "@/components/PageFrame.astro";
-import Sidebar from "@ui/Sidebar.astro";
 import MobileHeader from "@/components/MobileHeader.astro";
 import ScrollToTop from "@docs/mobile/ScrollToTop.astro";
-import Card from "@ui/Card.astro";
-import Socials from "@/components/Socials.astro";
-import Theme from "@/components/Theme.astro";
+import LeftSidebar from "@/components/docs/LeftSidebar.astro";
 
 import { type buildMeta as BuildMetaFn } from "@/consts";
-import Sponsor from "@/components/Sponsor.astro";
 
 interface Props {
   meta?: Partial<ReturnType<typeof BuildMetaFn>>;
@@ -41,58 +35,18 @@ const {
   {author}
   {publisher}
 >
-  <MobileHeader>
-    <DocsNavbar />
-    <div class="flex-1 overflow-y-auto mb-0 scrollbar-gutter-stable">
-      <DocsNavigation />
-      <Sponsor label="Powerd by"
-        brands={
-        [
-            "astro", 
-            "tailwind", 
-            "cloudflare",
-            "github"
-          ]
-        }
-      />
-    </div>
-    <Card padding="xs" radius="sm" variant="secondary" class="flex md:hidden items-center justify-between mt-4">
-      <div class="flex items-center">
-        <Socials />
-      </div>
-      <Theme />
-    </Card>
-  </MobileHeader>
+  <MobileHeader />
   <PageFrame>
-    <aside 
-      aria-label="Main Navigation"
-      class="hidden lg:block sticky top-(--header-height) h-[calc(100vh-var(--header-height))] w-full bg-(--bg) border-r border-(--border-subtle) scrollbar-gutter-stable overflow-y-auto"
-    >
-      <Sidebar>
-        <DocsNavbar />
-        <DocsNavigation />
-        <Sponsor label="Powerd by" brands={
-          [
-            "astro", 
-            "tailwind", 
-            "cloudflare",
-            "github"
-          ]
-        } />
-      </Sidebar>
-    </aside>
-    
+    <LeftSidebar />
     <main id="main-content" class="w-full min-w-0 flex-1">
       <slot />
     </main>
-
     <aside 
       aria-label="Table of Contents"
-      class="hidden lg:block sticky top-(--header-height) h-[calc(100vh-var(--header-height))] w-full overflow-y-auto px-2 pt-4 pb-(--safe-bottom) border-l border-(--border-subtle)"
+      class="hidden lg:block sticky top-(--header-height) h-[calc(100vh-var(--header-height))] w-full overflow-y-auto px-4 py-4 pb-(--safe-bottom) border-l border-(--border-subtle) scrollbar-gutter-stable"
     >
       <slot name="right" />
     </aside>
   </PageFrame>
-  
   <ScrollToTop />
 </Layout>
