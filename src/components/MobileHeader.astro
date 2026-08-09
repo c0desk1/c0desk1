@@ -7,6 +7,7 @@ import Logo from "@ui/Logo.astro";
 import SearchBar from "./ui/SearchBar.astro";
 import AI from "./AI.astro";
 import Theme from "./Theme.astro";
+import GithubStar from "@components/GithubStar.astro";
 
 const label = "Buka Menu"
 const $ = {
@@ -39,17 +40,19 @@ const $ = {
         <div class="flex md:hidden">
           <SearchBar iconOnly />
         </div>
-        <div class="hidden md:flex">
+        <div class="hidden md:flex gap-2">
           <Theme />
+          <GithubStar repo="c0desk1/c0desk1" />
         </div>
         <div class="flex md:hidden gap-1">
-          <Button 
-            variant="icon" 
-            size="md" 
-            data-drawer-trigger="mobile-nav-drawer" 
-            aria-label={label}>
+          <label 
+            for="mobile-nav-toggle" 
+            class="inline-flex items-center justify-center p-2 cursor-pointer text-(--fg-muted) aspect-square hover:bg-(--bg-subtle) rounded-md"
+            aria-label="Buka Menu"
+          >
+            <span class="sr-only">Buka menu navigasi</span>
             <Icon name="menu" class={$.iconSize} />
-          </Button>
+          </label>
         </div>
       </div>
     </div>
