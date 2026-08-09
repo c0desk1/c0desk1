@@ -12,6 +12,7 @@ type NavConfig = {
   folder: string;
 };
 
+// 1. Ambil file konfigurasi navigasi (.yml / .yaml)
 const navFiles = import.meta.glob('../../content/docs/**/_navigation.{yml,yaml}', {
   eager: true,
   query: '?raw',
@@ -21,10 +22,15 @@ const navFiles = import.meta.glob('../../content/docs/**/_navigation.{yml,yaml}'
 const navConfigs: NavConfig[] = Object.entries(navFiles)
   .map(([path, raw]) => {
     try {
-      const folder = path.split('/').at(-2)!;
+      const normalizedPath = path.replace(/\\/g, '/');
+      const segments = normalizedPath.split('/');
+      const folder = segments.at(-2)!;
+      
       const config = parse(raw as string) as Partial<NavConfig>;
-      if (!config?.label || config?.order === undefined) return null;
-      return { label: config.label, order: config.order, folder };
+      const label = config?.label || folder;
+      const order = config?.order ?? 999;
+
+      return { label, order, folder };
     } catch {
       return null;
     }
@@ -51,24 +57,31 @@ const checkIsActive = (href: string) => {
   return currentPath === href || currentPath === `${href}/`;
 };
 
-const managedFolders = new Set(navConfigs.map((n) => n.folder));
-
+// 2. Petakan dokumen berdasarkan kecocokan "category" frontmatter atau nama folder
 const docsByFolder = Object.fromEntries(
-  navConfigs.map(({ folder }) => {
+  navConfigs.map(({ folder, label }) => {
     const docs = allDocs
-      .filter((doc) => doc.id.startsWith(`${folder}/`))
+      .filter((doc) => {
+        const docCategory = doc.data.category?.trim().toLowerCase();
+        const targetLabel = label.trim().toLowerCase();
+        const targetFolder = folder.trim().toLowerCase();
+
+        // Cocok jika frontmatter category sama dengan label navigation, atau id mengandung nama folder
+        const matchCategory = docCategory && docCategory === targetLabel;
+        const matchFolder = doc.id.toLowerCase().startsWith(`${targetFolder}/`) || doc.id.toLowerCase().includes(`/${targetFolder}/`);
+
+        return matchCategory || matchFolder;
+      })
       .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999));
+
     return [folder, docs];
   })
 );
 
+// 3. Ambil dokumen sisa yang tidak masuk ke grup manapun sebagai ungrouped
+const assignedIds = new Set(Object.values(docsByFolder).flat().map(d => d.id));
 const ungroupedDocs = allDocs
-  .filter((doc) => {
-    const parts           = doc.id.split('/');
-    const isFlat          = parts.length === 1;
-    const isUnmanaged     = parts.length > 1 && !managedFolders.has(parts[0]);
-    return isFlat || isUnmanaged;
-  })
+  .filter((doc) => !assignedIds.has(doc.id))
   .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999));
 
 const $ = {
