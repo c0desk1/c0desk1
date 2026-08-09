@@ -1,0 +1,45 @@
+---
+import { BRANDS } from "./../assets/icons/brand";
+
+interface Props {
+  brands: (keyof typeof BRANDS)[];
+  label?: string;
+}
+
+const {
+  brands,
+  label = "Built with",
+} = Astro.props;
+---
+
+<div class="w-full px-4 pt-8 pb-4">
+  <div class="mb-4 text-[12px] font-medium tracking-wide text-(--text-muted)">
+    {label}
+  </div>
+
+  <div class="flex flex-wrap items-center justify-start gap-6 text-(--fg-strong)">
+    {brands.map((key) => {
+      const brand = BRANDS[key];
+
+      return (
+        <a
+          href={brand.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={brand.name}
+          class="shrink-0"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox={brand.viewBox}
+            width={brand.width}
+            height={brand.height}
+            aria-hidden="true"
+            class="block h-8 w-auto max-w-32 opacity-70 transition-opacity hover:opacity-100"
+            set:html={brand.svg}
+          />
+        </a>
+      );
+    })}
+  </div>
+</div>
