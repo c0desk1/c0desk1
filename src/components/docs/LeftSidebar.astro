@@ -1,32 +1,48 @@
 ---
 // src/components/docs/LeftSidebar.astro
 import SidebarMenu from "./SidebarMenu.astro";
-import Sidebar from "@ui/Sidebar.astro";
-import Drawer from "@ui/Drawer.astro";
+import Socials from "@components/Socials.astro";
+import Theme from "@components/Theme.astro";
 import Card from "@ui/Card.astro";
-import Socials from "@/components/Socials.astro";
-import Theme from "@/components/Theme.astro";
+import GithubStar from "@components/GithubStar.astro";
 ---
 
-<aside 
-  aria-label="Main Navigation"
-  class="hidden lg:block sticky top-(--header-height) h-[calc(100vh-var(--header-height))] w-full bg-(--bg) border-r border-(--border-subtle) scrollbar-gutter-stable overflow-y-auto"
->
-  <Sidebar>
-    <SidebarMenu />
-  </Sidebar>
-</aside>
+<input type="checkbox" id="mobile-nav-toggle" class="peer hidden" aria-hidden="true" />
 
-<Drawer id="mobile-nav-drawer">
+<label 
+  for="mobile-nav-toggle"
+  class="fixed inset-0 z-30 hidden bg-(--bg)/80 backdrop-blur-sm lg:hidden peer-checked:block cursor-pointer"
+><span class="sr-only">Tutup menu navigasi</span></label>
+
+<aside 
+  class={
+    "fixed top-[calc(var(--header-height)+0)] inset-x-0 z-50 w-full h-[calc(100vh-var(--header-height))] bg-(--bg) border-b border-(--border-subtle) hidden " +
+    "peer-checked:block " +
+    "lg:block lg:border-b-0 lg:border-r lg:w-full lg:sticky lg:top-(--header-height) lg:z-0"
+  }
+>
   <div class="flex flex-col h-full">
-    <div class="flex-1 overflow-y-auto mb-0 scrollbar-gutter-stable">
+    <div class="flex-1 overflow-y-auto pt-4 pb-4 lg:py-2 scrollbar-gutter-stable">
       <SidebarMenu />
     </div>
-    <Card padding="xs" radius="sm" variant="secondary" class="flex md:hidden items-center justify-between mt-4">
-      <div class="flex items-center">
-        <Socials />
-      </div>
-      <Theme />
-    </Card>
+
+    <div class="shrink-0 p-4 lg:hidden pb-(--safe-bottom)">
+      <Card variant="primary" padding="xs" radius="sm">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-1">
+            <GithubStar repo="c0desk1" />
+            <Socials />
+          </div>
+          <Theme />
+        </div>
+      </Card>
+    </div>
+
   </div>
-</Drawer>
+</aside>
+
+<style is:global>
+  body:has(#mobile-nav-toggle:checked) {
+    overflow: hidden;
+  }
+</style>
