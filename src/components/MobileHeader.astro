@@ -7,7 +7,6 @@ import Logo from "@ui/Logo.astro";
 import SearchBar from "./ui/SearchBar.astro";
 import AI from "./AI.astro";
 import Theme from "./Theme.astro";
-import Drawer from "@ui/Drawer.astro";
 
 const label = "Buka Menu"
 const $ = {
@@ -56,9 +55,6 @@ const $ = {
     </div>
   </Container>
 </header>
-<Drawer id="mobile-nav-drawer">
-  <slot />
-</Drawer>
 
 <script is:inline>
   (() => {
