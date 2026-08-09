@@ -48,7 +48,7 @@ Setiap langkah bisa berisi paragraf, list, code block, heading, atau inline code
 |---------|--------|------------|
 | Teks biasa | `1. Step 1` | Judul berupa teks biasa |
 | Heading | `2. ## Step 2` | Judul berupa heading (lebih besar) |
-| Inline code | `3. `Step 3`` | Judul berupa inline code |
+| Inline code | `3. Step 3` | Judul berupa inline code |
 | Tanpa judul | `4.` | Langsung konten tanpa judul |
 
 ## Preview
