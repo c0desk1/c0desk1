@@ -66,6 +66,7 @@ const currentUrl = cleanSlug
   : `${baseUrl}${ROUTES.docs}/`;
 
 const currentIndex = sidebarItems.findIndex((item) => item.id === entry.id);
+
 const prevEntry = currentIndex > 0 ? sidebarItems[currentIndex - 1] : null;
 const nextEntry =
   currentIndex < sidebarItems.length - 1
