@@ -41,6 +41,7 @@ import { satteriAccordion } from "./src/lib/mdx/satteri-accordion";
 import { satteriVideo } from "./src/lib/mdx/satteri-video";
 import { satteriCard } from "./src/lib/mdx/satteri-card";
 import { satteriIcon } from "./src/lib/mdx/satteri-icon";
+import { satteriGrid } from "./src/lib/mdx/satteri-grid";
 
 import { satteriQuote } from "./src/lib/mdx/satteri-blockquote";
 import { satteriChangelog } from "./src/lib/mdx/satteri-changelog";
@@ -48,6 +49,7 @@ import { satteriCodeBlock } from "./src/lib/mdx/satteri-code-block";
 import { satteriKbd } from "./src/lib/mdx/satteri-kbd";
 
 import pagefind from "astro-pagefind";
+
 
 // import sitemap from "@astrojs/sitemap";
 
@@ -98,6 +100,7 @@ export default defineConfig({
         satteriVideo,
         satteriCard,
         satteriIcon,
+        satteriGrid,
 
         satteriQuote,
         satteriCodeBlock,
