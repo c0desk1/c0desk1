@@ -1,0 +1,82 @@
+/* src/styles/prose/card.css */
+
+:root {
+  --ic-card-star: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'%3E%3C/polygon%3E%3C/svg%3E");
+  --ic-card-info: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cline x1='12' y1='16' x2='12' y2='12'/%3E%3Cline x1='12' y1='8' x2='12.01' y2='8'/%3E%3C/svg%3E");
+  --ic-card-link: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'/%3E%3Cpolyline points='15 3 21 3 21 9'/%3E%3Cline x1='10' y1='14' x2='21' y2='3'/%3E%3C/svg%3E");
+}
+
+.prose .card {
+  border: 1px solid rgb(from var(--border) r g b / 0.4);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-subtle);
+  overflow: hidden;
+  margin: 1.5rem 0;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.prose .card-header {
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--fg-strong);
+  border-bottom: 1px solid rgb(from var(--border) r g b / 0.3);
+  background-color: var(--bg-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.prose .card-header .card-icon {
+  display: inline-block;
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+  background-color: currentColor;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+
+.prose .card-header .card-icon[data-icon="star"] {
+  mask-image: var(--ic-card-star);
+  -webkit-mask-image: var(--ic-card-star);
+}
+.prose .card-header .card-icon[data-icon="info"] {
+  mask-image: var(--ic-card-info);
+  -webkit-mask-image: var(--ic-card-info);
+}
+.prose .card-header .card-icon[data-icon="link"] {
+  mask-image: var(--ic-card-link);
+  -webkit-mask-image: var(--ic-card-link);
+}
+
+.prose .card-body {
+  padding: 1rem;
+}
+
+.prose .card-body > *:first-child {
+  margin-top: 0;
+}
+.prose .card-body > *:last-child {
+  margin-bottom: 0;
+}
+
+.prose .card-link {
+  display: block;
+  color: inherit !important;
+  text-decoration: none !important;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.prose .card-link:hover .card {
+  border-color: var(--accent);
+  box-shadow: 0 4px 16px rgb(from var(--accent) r g b / 0.15);
+}
+
+.prose .card-link:active .card {
+  transform: scale(0.98);
+}
