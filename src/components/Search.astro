@@ -177,15 +177,12 @@ const card = {
 </template>
 
 <style is:global>
-  /* ── Dialog base ─────────────────────────────────────── */
   .search-dialog {
-    /* Reset browser default styles */
     border: none;
     padding: 0;
     background: var(--bg);
     color: var(--fg);
 
-    /* Desktop: centered modal */
     width: min(640px, 90vw);
     max-height: 70dvh;
     border-radius: 0.75rem;
@@ -203,14 +200,12 @@ const card = {
     display: flex;
   }
 
-  /* Backdrop */
   .search-dialog::backdrop {
     background: hsl(0 0% 0% / 0.5);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
   }
 
-  /* Open animation */
   @keyframes dialog-in {
     from {
       opacity: 0;
@@ -235,18 +230,22 @@ const card = {
     animation: backdrop-in 180ms ease forwards;
   }
 
-  /* Mobile: bottom sheet */
-  @media (max-width: 639px) {
-    .search-dialog {
-      position: fixed;
-      inset: auto 0 0 0;
-      width: 100%;
-      max-height: 85dvh;
-      border-radius: 1rem 1rem 0 0;
-      border-bottom: none;
-      margin: 0;
-    }
+  dialog.search-dialog {
+  margin: auto;
+}
 
+  @media (max-width: 639px) {
+    dialog.search-dialog {
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100dvw !important;
+      max-width: 100dvw !important;
+      height: 100dvh !important;
+      max-height: 100dvh !important;
+      border-radius: 0 !important;
+      border: none !important;
+      margin: 0 !important;
+    }
     @keyframes dialog-in {
       from {
         opacity: 0;
@@ -259,15 +258,12 @@ const card = {
     }
   }
 
-  /* Respect reduced motion */
   @media (prefers-reduced-motion: reduce) {
     .search-dialog[open],
     .search-dialog[open]::backdrop {
       animation: none;
     }
   }
-
-  /* ── Result cards ────────────────────────────────────── */
   .result-item:hover,
   .sub-result:hover {
     background-color: var(--bg-muted);
@@ -326,7 +322,6 @@ const card = {
     let token    = 0;
     let activeIdx = -1;
 
-    // ── Pagefind ──────────────────────────────────────────
     function loadPF() {
       if (!pfLoader) pfLoader = import("/pagefind/pagefind.js").then(async (m) => {
         pf = m;
@@ -335,7 +330,6 @@ const card = {
       return pfLoader;
     }
 
-    // ── UI helpers ────────────────────────────────────────
     function setLoading(on) {
       iconEl?.classList.toggle("opacity-0", on);
       spinnerEl?.classList.toggle("hidden", !on);
@@ -393,7 +387,6 @@ const card = {
       target.scrollIntoView({ block: "nearest" });
     }
 
-    // ── Builders ──────────────────────────────────────────
     function buildSub(sub) {
       const node = tplSubresult.content.cloneNode(true);
       node.querySelector("a").href = sub.url;
@@ -433,7 +426,6 @@ const card = {
       return node;
     }
 
-    // ── Render ────────────────────────────────────────────
     async function renderPage(t) {
       const batch = results.slice(rendered, rendered + PAGE_SIZE);
       if (!batch.length) return;
@@ -474,14 +466,12 @@ const card = {
       if (t === token) setLoading(false);
     }
 
-    // ── Open / Close ──────────────────────────────────────
     function open(targetId) {
       if (targetId && targetId !== "search-drawer") return;
       if (isOpen || !drawerEl) return;
 
       loadPF();
 
-      // Scale main content (desktop only)
       const mainWrapper = document.querySelector("main") || document.body.firstElementChild;
       if (mainWrapper && window.innerWidth > 640) {
         mainWrapper.style.transform     = "scale(0.96) translateY(12px)";
@@ -506,10 +496,8 @@ const card = {
       }
 
       drawerEl.close();
-      // cleanup dipindah ke event "close" agar satu jalur
     }
 
-    // Native close event — dipicu oleh drawerEl.close() DAN tombol Escape
     drawerEl.addEventListener("close", () => {
       const mainWrapper = document.querySelector("main") || document.body.firstElementChild;
       if (mainWrapper) {
@@ -524,12 +512,10 @@ const card = {
       setLoading(false);
     });
 
-    // Klik backdrop (target tepat di <dialog>, bukan kontennya)
     drawerEl.addEventListener("click", (e) => {
       if (e.target === drawerEl) close();
     });
 
-    // ── Events ────────────────────────────────────────────
     loadMoreBtn?.addEventListener("click", () => renderPage(token));
     input?.addEventListener("input", search);
 
@@ -557,27 +543,23 @@ const card = {
         return;
       }
 
-      // Escape ditangani native oleh <dialog>, tidak perlu di sini
-
       if (activeIdx >= 0 && e.key.length === 1 && !e.metaKey && !e.ctrlKey) {
         setActive(-1);
       }
     });
 
     document.addEventListener("click", (e) => {
-  // Trigger buka
-  const trigger = e.target.closest("[data-drawer-trigger]");
-  if (trigger) {
-    e.preventDefault();
-    open(trigger.dataset.drawerTrigger);
-    return;
-  }
+      const trigger = e.target.closest("[data-drawer-trigger]");
+      if (trigger) {
+        e.preventDefault();
+        open(trigger.dataset.drawerTrigger);
+        return;
+      }
 
-  // Trigger tutup (sudah ada)
-  if (e.target.closest('[data-action="close-search"]')) {
-    e.preventDefault();
-    close();
-  }
-});
+      if (e.target.closest('[data-action="close-search"]')) {
+        e.preventDefault();
+        close();
+      }
+    });
   })();
 </script>
