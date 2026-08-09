@@ -1,4 +1,5 @@
 ---
+// src/pages/docs/[...slug].astro
 import { 
   getCollection, 
   render 
@@ -29,9 +30,12 @@ import CopyCode from "@/components/CopyCode.astro";
 export async function getStaticPaths() {
   const docsEntries = await getCollection("docs", ({ data }) => !data.draft);
 
-  const sorted = [...docsEntries].sort(
-    (a, b) => (a.data.order ?? 999) - (b.data.order ?? 999),
-  );
+  const sorted = [...docsEntries].sort((a, b) => {
+    const folderA = a.id.includes('/') ? a.id.split('/')[0].toLowerCase() : '';
+    const folderB = b.id.includes('/') ? b.id.split('/')[0].toLowerCase() : '';
+    if (folderA !== folderB) return folderA.localeCompare(folderB);
+    return (a.data.order ?? 999) - (b.data.order ?? 999);
+  });
   const root = sorted[0]?.id;
 
   return docsEntries.map((entry) => {
@@ -55,9 +59,18 @@ if (!entry) {
 const { Content, headings } = await render(entry);
 
 const allDocs = await getCollection("docs", ({ data }) => !data.draft);
-const sidebarItems = allDocs.sort(
-  (a, b) => (a.data.order ?? 999) - (b.data.order ?? 999),
-);
+
+// Sinkronisasi urutan linear untuk Pager (berdasarkan folder/kategori, lalu order dokumen)
+const sidebarItems = allDocs.sort((a, b) => {
+  const folderA = a.id.includes('/') ? a.id.split('/')[0].toLowerCase() : '';
+  const folderB = b.id.includes('/') ? b.id.split('/')[0].toLowerCase() : '';
+
+  if (folderA !== folderB) {
+    return folderA.localeCompare(folderB);
+  }
+
+  return (a.data.order ?? 999) - (b.data.order ?? 999);
+});
 
 const cleanSlug = Astro.params.slug;
 const baseUrl = SITE.url.replace(/\/$/, "");
@@ -66,7 +79,6 @@ const currentUrl = cleanSlug
   : `${baseUrl}${ROUTES.docs}/`;
 
 const currentIndex = sidebarItems.findIndex((item) => item.id === entry.id);
-
 const prevEntry = currentIndex > 0 ? sidebarItems[currentIndex - 1] : null;
 const nextEntry =
   currentIndex < sidebarItems.length - 1
