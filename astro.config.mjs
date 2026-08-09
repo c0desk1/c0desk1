@@ -40,6 +40,7 @@ import { satteriButton } from "./src/lib/mdx/satteri-button";
 import { satteriAccordion } from "./src/lib/mdx/satteri-accordion";
 import { satteriVideo } from "./src/lib/mdx/satteri-video";
 import { satteriCard } from "./src/lib/mdx/satteri-card";
+import { satteriIcon } from "./src/lib/mdx/satteri-icon";
 
 import { satteriQuote } from "./src/lib/mdx/satteri-blockquote";
 import { satteriChangelog } from "./src/lib/mdx/satteri-changelog";
@@ -96,6 +97,8 @@ export default defineConfig({
         satteriFigure,
         satteriVideo,
         satteriCard,
+        satteriIcon,
+
         satteriQuote,
         satteriCodeBlock,
         satteriKbd,
