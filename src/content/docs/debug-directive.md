@@ -4,7 +4,7 @@ description: "Halaman untuk menguji seluruh directive."
 category: "Debug"
 order: 999
 slug: "directives"
-draft: false
+draft: true
 lastUpdated: 2026-08-06T17:04Z
 seo:
   title: "Debug Directive"
