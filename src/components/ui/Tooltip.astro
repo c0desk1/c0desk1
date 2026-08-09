@@ -1,0 +1,152 @@
+---
+// src/components/ui/Tooltip.astro
+
+interface Props {
+  tip: string;
+  position?: "top" | "bottom" | "left" | "right";
+  class?: string;
+}
+
+const {
+  tip,
+  position = "top",
+  class: className = "",
+} = Astro.props;
+
+const id = `tip-${Math.random().toString(36).slice(2, 7)}`;
+---
+
+<span class:list={["tooltip-wrap", className]} data-position={position}>
+  <span
+    class="tooltip-trigger"
+    aria-describedby={id}
+    tabindex="0">
+    <slot />
+  </span>
+  <span
+    id={id}
+    role="tooltip"
+    class="tooltip-bubble">
+    {tip}
+  </span>
+</span>
+
+<style>
+  .tooltip-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .tooltip-bubble {
+    pointer-events: none;
+    position: absolute;
+    z-index: 50;
+    white-space: nowrap;
+    font-size: 0.75rem;
+    line-height: 1;
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.375rem;
+    background: var(--fg);
+    color: var(--bg);
+    border: 1px solid color-mix(in srgb, var(--fg) 80%, transparent);
+
+    opacity: 0;
+    scale: 0.92;
+    transition:
+      opacity 120ms ease,
+      scale 120ms ease,
+      translate 120ms ease;
+
+    &::after {
+      content: "";
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: var(--fg);
+      rotate: 45deg;
+    }
+  }
+
+  [data-position="top"] .tooltip-bubble {
+    bottom: calc(100% + 8px);
+    left: 50%;
+    translate: -50% 4px;
+
+    &::after {
+      top: 100%;
+      left: 50%;
+      translate: -50% -4px;
+    }
+  }
+
+  [data-position="bottom"] .tooltip-bubble {
+    top: calc(100% + 8px);
+    left: 50%;
+    translate: -50% -4px;
+
+    &::after {
+      bottom: 100%;
+      left: 50%;
+      translate: -50% 4px;
+    }
+  }
+
+  [data-position="left"] .tooltip-bubble {
+    right: calc(100% + 8px);
+    top: 50%;
+    translate: 4px -50%;
+
+    &::after {
+      left: 100%;
+      top: 50%;
+      translate: -4px -50%;
+    }
+  }
+
+  [data-position="right"] .tooltip-bubble {
+    left: calc(100% + 8px);
+    top: 50%;
+    translate: -4px -50%;
+
+    &::after {
+      right: 100%;
+      top: 50%;
+      translate: 4px -50%;
+    }
+  }
+
+  .tooltip-wrap:hover .tooltip-bubble,
+  .tooltip-trigger:focus-visible ~ .tooltip-bubble {
+    opacity: 1;
+    scale: 1;
+
+  }
+
+  [data-position="top"]:hover .tooltip-bubble,
+  [data-position="top"] .tooltip-trigger:focus-visible ~ .tooltip-bubble {
+    translate: -50% 0;
+  }
+
+  [data-position="bottom"]:hover .tooltip-bubble,
+  [data-position="bottom"] .tooltip-trigger:focus-visible ~ .tooltip-bubble {
+    translate: -50% 0;
+  }
+
+  [data-position="left"]:hover .tooltip-bubble,
+  [data-position="left"] .tooltip-trigger:focus-visible ~ .tooltip-bubble {
+    translate: 0 -50%;
+  }
+
+  [data-position="right"]:hover .tooltip-bubble,
+  [data-position="right"] .tooltip-trigger:focus-visible ~ .tooltip-bubble {
+    translate: 0 -50%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tooltip-bubble {
+      transition: opacity 80ms ease;
+      scale: 1;
+    }
+  }
+</style>
