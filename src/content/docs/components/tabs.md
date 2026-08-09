@@ -17,8 +17,6 @@ seo:
   noIndex: true
 ---
 
-# Tabs
-
 Tabs digunakan untuk menampilkan konten dalam tab yang bisa dipilih. Cocok untuk menampilkan kode dalam berbagai bahasa, dokumentasi multi-versi, atau konten yang dikelompokkan.
 
 ## Sintaks
@@ -58,7 +56,7 @@ yarn add astro
 | Aturan | Keterangan |
 | :--- | :--- |
 | Pembungkus | Gunakan `::::tabs` 4 titik dua dan tutup dengan `::::` |
-| Setiap tab | Gunakan `:::tab[label]` 3 titik dua |
+| Setiap tab | Gunakan `:::tab[label]` 3 titik dua dan tutup dengan `:::` |
 | Label tab | Ditulis didalam `[]` setelah `tab` |
 | Konten tab | Bisa berupa teks, code block, list dan komponen lainnya |
 
