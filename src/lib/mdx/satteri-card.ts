@@ -38,9 +38,10 @@ export const satteriCard = defineMdastPlugin({
       children = children.slice(1);
     }
 
-    // ===== BUILD HEADER =====
+    // ===== HEADER: Ikon di atas, Label di bawah =====
     const headerChildren: any[] = [];
 
+    // Ikon (di atas)
     if (hasIcon) {
       headerChildren.push({
         type: 'containerDirective',
@@ -55,10 +56,17 @@ export const satteriCard = defineMdastPlugin({
       });
     }
 
+    // Label (di bawah ikon)
     if (label) {
       headerChildren.push({
-        type: 'text',
-        value: label,
+        type: 'containerDirective',
+        data: {
+          hName: 'div',
+          hProperties: {
+            className: ['card-title'],
+          },
+        },
+        children: [{ type: 'text', value: label }],
       });
     }
 
@@ -73,7 +81,7 @@ export const satteriCard = defineMdastPlugin({
       children: headerChildren,
     };
 
-    // ===== BUILD BODY =====
+    // ===== BODY: Isi card =====
     const bodyNode = {
       type: 'containerDirective',
       data: {
@@ -85,11 +93,10 @@ export const satteriCard = defineMdastPlugin({
       children: children,
     };
 
-    // ===== BUILD CARD =====
+    // ===== CARD =====
     const cardChildren = [headerNode, bodyNode];
     const cardClasses = ['card', extraClass].filter(Boolean).join(' ');
 
-    // Jika ada href, bungkus dengan <a>
     if (hasHref) {
       ctx.setProperty(node, 'data', {
         ...(node.data || {}),
