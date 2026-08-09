@@ -1,0 +1,12 @@
+---
+// src/components/docs/SidebarMenu.astro
+import DocsNavbar from "@docs/DocsNavbar.astro";
+import DocsNavigation from "@docs/DocsNavigation.astro";
+import Sponsor from "@/components/Sponsor.astro";
+---
+<DocsNavbar />
+<DocsNavigation />
+<Sponsor 
+  label="Powerd by" 
+  brands={["astro", "tailwind", "cloudflare", "github"]} 
+/>
