@@ -85,22 +85,32 @@ const s = {
     </summary>
 
     <menu class={s.actionDropdown}>
-      <button type="button" data-action="twitter" class={s.actionDropdownItems}>
-        <Icon name="twitter" class={s.actionIcon} /> X (Twitter)
-      </button>
-      <button type="button" data-action="facebook" class={s.actionDropdownItems}>
-        <Icon name="facebook" class={s.actionIcon} /> Facebook
-      </button>
-      <button type="button" data-action="linkedin" class={s.actionDropdownItems}>
-        <Icon name="linkedin" class={s.actionIcon} /> LinkedIn
-      </button>
-      <button type="button" data-action="whatsapp" class={s.actionDropdownItems}>
-        <Icon name="whatsapp" class={s.actionIcon} /> WhatsApp
-      </button>
-      <div class={s.actionDivider}></div>
-      <button type="button" data-action="copy-url" class={s.actionDropdownItems}>
-        <Icon name="link" class={s.actionIcon} /> Copy URL
-      </button>
+      <li>
+        <button type="button" data-action="twitter" class={s.actionDropdownItems}>
+          <Icon name="twitter" class={s.actionIcon} /> X (Twitter)
+        </button>
+      </li>
+      <li>
+        <button type="button" data-action="facebook" class={s.actionDropdownItems}>
+          <Icon name="facebook" class={s.actionIcon} /> Facebook
+        </button>
+      </li>
+      <li>
+        <button type="button" data-action="linkedin" class={s.actionDropdownItems}>
+          <Icon name="linkedin" class={s.actionIcon} /> LinkedIn
+        </button>
+      </li>
+      <li>
+        <button type="button" data-action="whatsapp" class={s.actionDropdownItems}>
+          <Icon name="whatsapp" class={s.actionIcon} /> WhatsApp
+        </button>
+        </li>
+      <li role="separator" class={s.actionDivider}></li>
+      <li>
+        <button type="button" data-action="copy-url" class={s.actionDropdownItems}>
+          <Icon name="link" class={s.actionIcon} /> Copy URL
+        </button>
+      </li>
     </menu>
   </details>
 </div>
