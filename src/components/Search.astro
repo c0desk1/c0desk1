@@ -1,133 +1,68 @@
 ---
-// src/components/Search.astro (DEBUG VERSION)
-import Button from "@ui/Button.astro";
-import Icon from "@ui/Icons.astro";
-import Input from "@ui/Input.astro";
+// src/components/Search.astro
 ---
 
+<!-- DIALOG MURNI TANPA WRAPPER ANEH -->
 <dialog id="search-drawer" class="search-dialog">
-  <search class="search-content">
-    <div class="flex items-center gap-2 py-4 px-4 border-b border-(--border) bg-(--bg-subtle)">
-      <Input
-        id="search-input"
-        type="text"
-        placeholder="Ketik untuk tes debug..."
-        autocomplete="off"
-        spellcheck="false"
-      />
-      <Button 
-        data-action="close-search" 
-        aria-label="Tutup pencarian" 
-        variant="secondary" 
-        size="sm">
-        Tutup / ESC
-      </Button>
-    </div>
-
-    <div class="p-8 text-center text-sm text-(--fg-muted)">
-      <p class="font-bold text-lg text-(--fg-strong) mb-2">Mode Debug Dialog Aktif</p>
-      <p>Jika dialog ini tertutup rapi saat Anda mengklik backdrop, tombol tutup, atau menekan ESC, berarti struktur dasarnya sudah normal.</p>
-    </div>
-  </search>
+  <div class="debug-container">
+    <p>Debug Dialog: Jika Anda melihat teks ini, dialog terbuka.</p>
+    <button data-action="close-search" class="debug-close-btn">Tutup Dialog</button>
+  </div>
 </dialog>
 
 <style is:global>
-  /* Reset dasar dialog */
+  /* 1. Reset Dialog */
   .search-dialog {
-    padding: 0;
-    margin: 0;
-    border: none;
-    background: transparent;
-    width: 100vw;
-    height: 100vh;
-    max-width: none;
-    max-height: none;
+    padding: 0; margin: 0; border: none; background: transparent;
+    width: 100vw; height: 100vh; max-width: none; max-height: none;
+    /* KUNCI: Dialog harus display: none saat tidak open */
+    display: none;
   }
 
-  /* Backdrop gelap transparan */
+  /* 2. Hanya tampil saat atribut [open] ada */
+  .search-dialog[open] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* 3. Backdrop */
   .search-dialog::backdrop {
     background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
   }
 
-  /* Tampilan Mobile: Full screen */
-  .search-content {
-    width: 100%;
-    height: 100%;
-    background: var(--bg-subtle, #ffffff);
-    display: flex;
-    flex-direction: column;
+  /* 4. Container Debug */
+  .debug-container {
+    width: 300px; padding: 2rem;
+    background: white; border-radius: 8px;
+    text-align: center; color: black;
   }
 
-  /* Tampilan Desktop: Modal Center (Hanya aktif saat dialog [open]) */
-  @media (min-width: 45rem) {
-    .search-dialog[open] {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .search-content {
-      width: 600px;
-      height: 400px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-      overflow: hidden;
-    }
+  .debug-close-btn {
+    margin-top: 1rem; padding: 0.5rem 1rem;
+    background: red; color: white; border: none; border-radius: 4px;
+    cursor: pointer;
   }
 </style>
 
 <script is:inline>
   (() => {
     const dialog = document.getElementById("search-drawer");
-    const input = document.getElementById("search-input");
 
-    function open() {
-      console.log("[DEBUG] Dialog dibuka");
-      dialog.showModal();
-      setTimeout(() => input?.focus(), 50);
-    }
-
-    function close() {
-      console.log("[DEBUG] Dialog ditutup");
-      dialog.close();
-      if (input) input.value = "";
-    }
-
-    // Global Listener untuk buka/tutup
+    // Event Global Buka (pakai tombol di page lain)
     document.addEventListener("click", (e) => {
-      const trigger = e.target.closest('[data-drawer-trigger="search-drawer"]');
-      const closeBtn = e.target.closest('[data-action="close-search"]');
-      
-      if (trigger) {
-        e.preventDefault();
-        open();
+      if (e.target.closest('[data-drawer-trigger="search-drawer"]')) {
+        console.log("Membuka dialog...");
+        dialog.showModal();
       }
-      if (closeBtn) {
-        e.preventDefault();
-        close();
+      if (e.target.closest('[data-action="close-search"]')) {
+        console.log("Menutup dialog...");
+        dialog.close();
       }
-      // Tutup jika klik area backdrop di luar kotak search-content
+      // Klik backdrop
       if (e.target === dialog) {
-        close();
+        dialog.close();
       }
-    });
-
-    // Shortcut Ctrl+K atau Cmd+K
-    document.addEventListener("keydown", (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault();
-        if (dialog.open) {
-          close();
-        } else {
-          open();
-        }
-      }
-    });
-
-    document.addEventListener("open-search", () => {
-      open();
     });
   })();
 </script>
