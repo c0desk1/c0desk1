@@ -1,74 +1,578 @@
 ---
-// src/components/Search.astro (EMPTY TEST)
+// src/components/Search.astro
+
+import Button from "./ui/Button.astro";
+import Icon from "./ui/Icons.astro";
+import Input from "./ui/Input.astro";
+import Spinner from "./ui/Spinner.astro";
+
+const PAGE_SIZE = 6;
+
+const ui = {
+  iconSlot: [
+    "relative block shrink-0 items-center justify-center size-5",
+    "transition-opacity duration-(--duration)"
+  ].join(" "),
+  spinner: [
+    "absolute inset-0 hidden",
+    "size-5!",
+    "text-(--fg)/80",
+  ].join(" "),
+  bar:       "flex items-center gap-2 py-2 px-3 border-b border-(--border-subtle)",
+  closeDesk: "font-mono rounded! hidden! sm:inline-flex!",
+  closeMob:  "inline-flex! sm:hidden! shrink-0 p-1.5",
+  results:   "flex-1 overflow-y-auto overscroll-contain",
+  list:      "hidden space-y-4 p-2",
+  empty:     "p-10 text-center text-sm text-(--fg-muted)",
+  footer:    "hidden px-2 pb-2 pt-4",
+  total:     "text-xs text-(--fg-muted) px-2 py-1.5",
+};
+
+const card = {
+  group: [
+    "result-group",
+    "rounded overflow-hidden ring-1",
+    "bg-(--bg-subtle) ring-(--border-subtle)/80"
+  ].join(" "),
+
+  link: [
+    "result-item",
+    "flex items-start justify-center",
+    "gap-1.5 px-4 py-2 text-sm",
+    "outline-none"
+  ].join(" "),
+
+  cover: [
+    "aspect-video object-cover",
+    "h-10 w-auto shrink-0 rounded hidden ring-1",
+    "ring-(--border-subtle)"
+  ].join(" "),
+
+  body:       "flex flex-1 min-w-0 flex-col gap-0.5",
+  title:      "truncate text-(--fg-strong) font-medium text-md",
+  meta:       "flex gap-2 text-xs text-(--fg-muted) hidden",
+
+  excerpt: [
+    "result-excerpt",
+    "text-sm text-(--fg-muted) line-clamp-1",
+  ].join(" "),
+
+  subList: [
+    "sub-results-list",
+    "border-t border-(--border-subtle)/60",
+  ].join(" "),
+
+  subRow: [
+    "sub-result",
+    "relative flex justify-start pl-6 pr-3 bg-none",
+  ].join(" "),
+
+  subLink: [
+    "sub-result-item",
+    "flex w-full items-start gap-2 py-1.5 pl-2 text-sm",
+    "outline-none",
+  ].join(" "),
+
+  subBody:    "flex min-w-0 flex-col gap-1",
+  subTitle:   "text-(--fg) truncate",
+  subExcerpt: [
+    "result-excerpt",
+    "text-(--fg-muted) line-clamp-1",
+  ].join(" "),
+};
 ---
 
-<dialog id="search-drawer" class="search-dialog">
-  <div class="search-panel">
-    <!-- Kosong tanpa isi -->
+<dialog
+  id="search-drawer"
+  aria-label="Pencarian"
+  class="search-dialog">
+
+  <search class={ui.bar}>
+    <Input
+      id="search-input"
+      type="text"
+      role="combobox"
+      aria-autocomplete="list"
+      aria-controls="search-list"
+      aria-expanded="false"
+      placeholder="Ketik untuk mencari..."
+      autocomplete="off"
+      spellcheck="false">
+      <Fragment slot="prefix">
+        <div class={ui.iconSlot}>
+          <Icon id="search-icon" name="search" fill class="h-full w-full" />
+          <Spinner id="search-spinner" size="sm" class={ui.spinner} />
+        </div>
+      </Fragment>
+    </Input>
+    <Button
+      data-action="close-search"
+      aria-label="Tutup pencarian"
+      variant="icon"
+      size="md"
+      class={ui.closeMob}>
+      <Icon name="close" class="size-5" />
+    </Button>
+    <Button
+      data-action="close-search"
+      aria-label="Tutup pencarian"
+      variant="secondary"
+      size="sm"
+      class={ui.closeDesk}>
+      ESC
+    </Button>
+  </search>
+
+  <div id="search-results" class={ui.results}>
+    <div id="search-total" class={`${ui.total} hidden`}></div>
+    <div id="search-empty" class="hidden"></div>
+    <ul
+      id="search-list"
+      class={ui.list}
+      role="listbox"
+      aria-label="Hasil pencarian">
+    </ul>
+    <div id="search-footer" class={ui.footer}>
+      <Button
+        id="search-load-more"
+        variant="secondary"
+        size="md"
+        block>
+        Tampilkan lebih banyak
+      </Button>
+    </div>
   </div>
 </dialog>
 
+<template id="tpl-result">
+  <li class={card.group} role="option" aria-selected="false">
+    <a class={card.link} tabindex="-1">
+      <img data-slot="image" class={card.cover} src="" alt="" loading="lazy" />
+      <div class={card.body}>
+        <div data-slot="meta" class={card.meta}>
+          <span data-slot="author"></span>
+          <span data-slot="date"></span>
+        </div>
+        <span data-slot="title"   class={card.title}></span>
+        <span data-slot="excerpt" class={card.excerpt}></span>
+      </div>
+    </a>
+    <ul data-slot="subs" class={card.subList}></ul>
+  </li>
+</template>
+
+<template id="tpl-subresult">
+  <li class={card.subRow} role="option" aria-selected="false">
+    <a class={card.subLink} tabindex="-1">
+      <div class={card.subBody}>
+        <span data-slot="title"   class={card.subTitle}></span>
+        <span data-slot="excerpt" class={card.subExcerpt}></span>
+      </div>
+    </a>
+  </li>
+</template>
+
+<template id="tpl-empty">
+  <p class={ui.empty}>Tidak ada hasil ditemukan.</p>
+</template>
+
 <style is:global>
+  /* ── Dialog base ─────────────────────────────────────── */
   .search-dialog {
-    padding: 0;
-    margin: auto;
+    /* Reset browser default styles */
     border: none;
-    background: transparent;
-    max-width: none;
-    max-height: none;
-    overflow: visible;
+    padding: 0;
+    background: var(--bg);
+    color: var(--fg);
+
+    /* Desktop: centered modal */
+    width: min(640px, 90vw);
+    max-height: 70dvh;
+    border-radius: 0.75rem;
+    border: 1px solid color-mix(in srgb, var(--border-subtle) 80%, transparent);
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--border-subtle) 40%, transparent),
+      0 20px 60px -10px hsl(0 0% 0% / 0.4);
+
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
   }
 
+  .search-dialog[open] {
+    display: flex;
+  }
+
+  /* Backdrop */
   .search-dialog::backdrop {
-    background: rgba(0, 0, 0, 0.4);
+    background: hsl(0 0% 0% / 0.5);
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
   }
 
-  .search-panel {
-    background: var(--bg-subtle, #ffffff);
-    width: 100vw;
-    height: 100vh;
-  }
-
-  @media (min-width: 45rem) {
-    .search-panel {
-      width: 400px;
-      height: 200px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
+  /* Open animation */
+  @keyframes dialog-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px) scale(0.98);
     }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes backdrop-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .search-dialog[open] {
+    animation: dialog-in 180ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .search-dialog[open]::backdrop {
+    animation: backdrop-in 180ms ease forwards;
+  }
+
+  /* Mobile: bottom sheet */
+  @media (max-width: 639px) {
+    .search-dialog {
+      position: fixed;
+      inset: auto 0 0 0;
+      width: 100%;
+      max-height: 85dvh;
+      border-radius: 1rem 1rem 0 0;
+      border-bottom: none;
+      margin: 0;
+    }
+
+    @keyframes dialog-in {
+      from {
+        opacity: 0;
+        transform: translateY(100%);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .search-dialog[open],
+    .search-dialog[open]::backdrop {
+      animation: none;
+    }
+  }
+
+  /* ── Result cards ────────────────────────────────────── */
+  .result-item:hover,
+  .sub-result:hover {
+    background-color: var(--bg-muted);
+  }
+
+  .sub-result::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 14px;
+    width: 14px;
+    height: 16px;
+    border-left:   1.5px solid var(--border-subtle);
+    border-bottom: 1.5px solid var(--border-subtle);
+  }
+
+  .sub-result:not(:last-of-type)::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 14px;
+    border-left: 1.5px solid var(--border-subtle);
+  }
+
+  .result-excerpt mark {
+    background-color: color-mix(in srgb, var(--accent) 20%, transparent) !important;
+    color:            var(--accent) !important;
+    border-radius:    0 !important;
+    padding:          0 4px !important;
   }
 </style>
 
-<script is:inline>
+<script is:inline define:vars={{ PAGE_SIZE }}>
   (() => {
-    const dialog = document.getElementById("search-drawer");
+    const $           = (id) => document.getElementById(id);
+    const drawerEl    = $("search-drawer");
+    const input       = $("search-input");
+    const list        = $("search-list");
+    const emptyEl     = $("search-empty");
+    const totalEl     = $("search-total");
+    const footerEl    = $("search-footer");
+    const loadMoreBtn = $("search-load-more");
+    const iconEl      = $("search-icon");
+    const spinnerEl   = $("search-spinner");
 
-    function open() {
-      if (!dialog.open) dialog.showModal();
+    const tplResult    = $("tpl-result");
+    const tplSubresult = $("tpl-subresult");
+    const tplEmpty     = $("tpl-empty");
+
+    let isOpen   = false;
+    let pf       = null;
+    let pfLoader = null;
+    let results  = [];
+    let rendered = 0;
+    let token    = 0;
+    let activeIdx = -1;
+
+    // ── Pagefind ──────────────────────────────────────────
+    function loadPF() {
+      if (!pfLoader) pfLoader = import("/pagefind/pagefind.js").then(async (m) => {
+        pf = m;
+        await pf.init();
+      });
+      return pfLoader;
+    }
+
+    // ── UI helpers ────────────────────────────────────────
+    function setLoading(on) {
+      iconEl?.classList.toggle("opacity-0", on);
+      spinnerEl?.classList.toggle("hidden", !on);
+    }
+
+    function getFocusables() {
+      return [...list.querySelectorAll("a[tabindex]")];
+    }
+
+    function reset() {
+      list.innerHTML    = "";
+      list.classList.add("hidden");
+      emptyEl.innerHTML = "";
+      emptyEl.classList.add("hidden");
+      totalEl.classList.add("hidden");
+      footerEl.classList.add("hidden");
+      input?.setAttribute("aria-expanded", "false");
+      results   = [];
+      rendered  = 0;
+      activeIdx = -1;
+    }
+
+    function showEmpty() {
+      emptyEl.appendChild(tplEmpty.content.cloneNode(true));
+      emptyEl.classList.remove("hidden");
+    }
+
+    function updateTotal() {
+      totalEl.textContent = `${results.length} hasil ditemukan`;
+      totalEl.classList.remove("hidden");
+    }
+
+    function updateFooter() {
+      footerEl.classList.toggle("hidden", rendered >= results.length);
+    }
+
+    function setActive(idx) {
+      const links = getFocusables();
+      if (!links.length) return;
+
+      idx = Math.max(-1, Math.min(idx, links.length - 1));
+
+      links.forEach((a) => {
+        a.closest('[role="option"]')?.setAttribute("aria-selected", "false");
+        a.classList.remove("bg-(--bg-muted)");
+      });
+
+      activeIdx = idx;
+
+      if (idx === -1) { input?.focus(); return; }
+
+      const target = links[idx];
+      target.closest('[role="option"]')?.setAttribute("aria-selected", "true");
+      target.classList.add("bg-(--bg-muted)");
+      target.scrollIntoView({ block: "nearest" });
+    }
+
+    // ── Builders ──────────────────────────────────────────
+    function buildSub(sub) {
+      const node = tplSubresult.content.cloneNode(true);
+      node.querySelector("a").href = sub.url;
+      node.querySelector('[data-slot="title"]').textContent = sub.title ?? "";
+
+      const excEl  = node.querySelector('[data-slot="excerpt"]');
+      const excerpt = sub.excerpt || sub.meta?.description || "";
+      if (excerpt) excEl.innerHTML = excerpt;
+      else excEl.remove();
+
+      return node;
+    }
+
+    function buildResult(item) {
+      const node = tplResult.content.cloneNode(true);
+      node.querySelector("a").href = item.url;
+      node.querySelector('[data-slot="title"]').textContent = item.meta?.title ?? item.url;
+
+      const img = node.querySelector('[data-slot="image"]');
+      if (item.meta?.image) img.src = item.meta.image;
+
+      const author = node.querySelector('[data-slot="author"]');
+      const date   = node.querySelector('[data-slot="date"]');
+      if (item.meta?.author) author.textContent = `by ${item.meta.author}`;
+      if (item.meta?.date)   date.textContent   = new Date(item.meta.date).toLocaleDateString("id-ID");
+      if (!item.meta?.author && !item.meta?.date) node.querySelector('[data-slot="meta"]')?.remove();
+
+      const excEl = node.querySelector('[data-slot="excerpt"]');
+      const exc   = item.meta?.description || item.excerpt || "";
+      if (exc) excEl.innerHTML = exc; else excEl.remove();
+
+      const subsEl = node.querySelector('[data-slot="subs"]');
+      const subs   = (item.sub_results ?? []).filter((s) => s.url !== item.url).slice(0, 3);
+      if (subs.length) subs.forEach((s) => subsEl.appendChild(buildSub(s)));
+      else subsEl.remove();
+
+      return node;
+    }
+
+    // ── Render ────────────────────────────────────────────
+    async function renderPage(t) {
+      const batch = results.slice(rendered, rendered + PAGE_SIZE);
+      if (!batch.length) return;
+
+      const items = await Promise.all(batch.map((r) => r.data()));
+      if (t !== token) return;
+
+      const frag = document.createDocumentFragment();
+      items.forEach((i) => frag.appendChild(buildResult(i)));
+      list.appendChild(frag);
+      rendered += batch.length;
+      updateFooter();
+    }
+
+    async function search() {
+      const t     = ++token;
+      const query = input.value.trim();
+
+      reset();
+      if (!query) { setLoading(false); return; }
+
+      setLoading(true);
+      await loadPF();
+
+      const res = await pf.debouncedSearch(query);
+      if (t !== token) return;
+
+      results  = res?.results ?? [];
+      rendered = 0;
+
+      if (!results.length) { showEmpty(); setLoading(false); return; }
+
+      updateTotal();
+      list.classList.remove("hidden");
+      input.setAttribute("aria-expanded", "true");
+
+      await renderPage(t);
+      if (t === token) setLoading(false);
+    }
+
+    // ── Open / Close ──────────────────────────────────────
+    function open(targetId) {
+      if (targetId && targetId !== "search-drawer") return;
+      if (isOpen || !drawerEl) return;
+
+      loadPF();
+
+      // Scale main content (desktop only)
+      const mainWrapper = document.querySelector("main") || document.body.firstElementChild;
+      if (mainWrapper && window.innerWidth > 640) {
+        mainWrapper.style.transform     = "scale(0.96) translateY(12px)";
+        mainWrapper.style.borderRadius  = "12px";
+        mainWrapper.style.transition    = "transform 200ms ease, border-radius 200ms ease";
+      }
+
+      drawerEl.showModal();
+      document.body.style.overflow = "hidden";
+      isOpen = true;
+      setTimeout(() => input?.focus(), 50);
+      reset();
     }
 
     function close() {
-      if (dialog.open) {
-        dialog.close();
-        document.body.style.overflow = "";
-        document.querySelectorAll('body > *').forEach(el => el.removeAttribute('inert'));
+      if (!drawerEl || !isOpen) return;
+
+      const mainWrapper = document.querySelector("main") || document.body.firstElementChild;
+      if (mainWrapper) {
+        mainWrapper.style.transform    = "";
+        mainWrapper.style.borderRadius = "";
       }
+
+      drawerEl.close();
+      // cleanup dipindah ke event "close" agar satu jalur
     }
 
-    document.addEventListener("click", (e) => {
-      if (e.target.closest('[data-drawer-trigger="search-drawer"]')) open();
-      if (e.target === dialog) close();
+    // Native close event — dipicu oleh drawerEl.close() DAN tombol Escape
+    drawerEl.addEventListener("close", () => {
+      const mainWrapper = document.querySelector("main") || document.body.firstElementChild;
+      if (mainWrapper) {
+        mainWrapper.style.transform    = "";
+        mainWrapper.style.borderRadius = "";
+      }
+
+      document.body.style.overflow = "";
+      isOpen = false;
+      if (input) input.value = "";
+      reset();
+      setLoading(false);
     });
+
+    // Klik backdrop (target tepat di <dialog>, bukan kontennya)
+    drawerEl.addEventListener("click", (e) => {
+      if (e.target === drawerEl) close();
+    });
+
+    // ── Events ────────────────────────────────────────────
+    loadMoreBtn?.addEventListener("click", () => renderPage(token));
+    input?.addEventListener("input", search);
 
     document.addEventListener("keydown", (e) => {
+      if (!isOpen) {
+        if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+          e.preventDefault();
+          open("search-drawer");
+        }
+        return;
+      }
+
+      if (e.key === "ArrowDown") { e.preventDefault(); setActive(activeIdx + 1); return; }
+      if (e.key === "ArrowUp")   { e.preventDefault(); setActive(activeIdx - 1); return; }
+
+      if (e.key === "Enter" && activeIdx >= 0) {
+        e.preventDefault();
+        getFocusables()[activeIdx]?.click();
+        return;
+      }
+
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
-        dialog.open ? close() : open();
+        close();
+        return;
       }
-      if (e.key === "Escape" && dialog.open) close();
+
+      // Escape ditangani native oleh <dialog>, tidak perlu di sini
+
+      if (activeIdx >= 0 && e.key.length === 1 && !e.metaKey && !e.ctrlKey) {
+        setActive(-1);
+      }
     });
 
-    document.addEventListener("open-search", open);
+    document.addEventListener("open-search", (e) => {
+      open(e.detail?.targetId);
+    });
+
+    document.addEventListener("click", (e) => {
+      if (e.target.closest('[data-action="close-search"]')) {
+        e.preventDefault();
+        close();
+      }
+    });
   })();
 </script>
