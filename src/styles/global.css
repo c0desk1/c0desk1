@@ -229,13 +229,14 @@
 
   html {
     background: var(--bg);
-    scroll-behavior: smooth;
-    scroll-padding-top: var(--scroll-padding);
-    hanging-punctuation: first last;
     color: var(--fg);
     font-weight: 500;
     font-size: 16px;
     line-height: 1.6;
+    scroll-behavior: smooth;
+    scroll-padding-top: var(--scroll-padding);
+    scrollbar-gutter: stable;
+    hanging-punctuation: first last;
     font-family: var(--font-sans);
     font-feature-settings:
       "ss01" on,
@@ -245,6 +246,7 @@
     -webkit-font-smoothing: antialiased;
     -webkit-tap-highlight-color: rgb(from var(--accent) r g b / 0.2);
     -moz-osx-font-smoothing: grayscale;
+    
   }
 
   body {
@@ -254,6 +256,7 @@
 
   main {
     min-height: calc(100svh - var(--header-height));
+    
   }
 
   img,
