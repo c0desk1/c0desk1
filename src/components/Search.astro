@@ -1,9 +1,9 @@
 ---
 // src/components/Search.astro
-import Button from "./Button.astro";
-import Icon from "./Icons.astro";
-import Input from "./Input.astro";
-import Spinner from "./Spinner.astro";
+import Button from "@ui/Button.astro";
+import Icon from "@ui/Icons.astro";
+import Input from "@ui/Input.astro";
+import Spinner from "@ui/Spinner.astro";
 
 const PAGE_SIZE = 6;
 
@@ -198,7 +198,7 @@ const card = {
     flex-direction: column;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 45rem) {
     .search-dialog {
       display: flex;
       align-items: center;
