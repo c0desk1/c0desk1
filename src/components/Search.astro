@@ -1,28 +1,29 @@
 ---
-// src/components/Search.astro (STEP-BY-STEP TEST)
+// src/components/Search.astro (TEST WITH DIV PANEL)
 import Button from "@ui/Button.astro";
 import Input from "@ui/Input.astro";
 ---
 
 <dialog id="search-drawer" class="search-dialog">
-  <search class="search-panel">
+  <!-- Diganti kembali menggunakan div -->
+  <div class="search-panel">
     
     <div class="flex items-center justify-between p-4 border-b border-(--border)">
-      <span class="font-bold text-(--fg-strong)">Test Dialog &lt;search&gt; Semantic</span>
+      <span class="font-bold text-(--fg-strong)">Test Dialog &lt;div&gt; Panel</span>
       <Button data-action="close-search" variant="secondary" size="sm">
         Tutup / ESC
       </Button>
     </div>
 
     <div class="p-6 text-sm text-(--fg-muted) space-y-4">
-      <p>Status: Dialog terbuka dengan aman menggunakan tag &lt;search&gt; sebagai panel.</p>
+      <p>Status: Dialog terbuka menggunakan div sebagai panel.</p>
       <Input placeholder="Coba ketik sesuatu..." />
       <p class="text-xs text-amber-500">
-        Silakan tes tombol tutup, klik backdrop, atau tekan ESC. Pastikan halaman tidak terkunci setelah tertutup.
+        Silakan tes tutup kembali. Apakah sisa bayangan atau elemen yang "lengket" sudah hilang sepenuhnya?
       </p>
     </div>
 
-  </search>
+  </div>
 </dialog>
 
 <style is:global>
@@ -43,7 +44,7 @@ import Input from "@ui/Input.astro";
     backdrop-filter: blur(4px);
   }
 
-  /* Panel Utama menggunakan tag <search> (Mobile Fullscreen, Desktop Modal Center) */
+  /* Panel Utama menggunakan div (Mobile Fullscreen, Desktop Modal Center) */
   .search-panel {
     background: var(--bg-subtle, #ffffff);
     display: flex;
