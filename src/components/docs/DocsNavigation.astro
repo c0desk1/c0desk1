@@ -1,34 +1,48 @@
 ---
 // src/components/docs/DocsNavigation.astro
 import { getCollection } from 'astro:content';
+import { parse } from 'yaml';
 import { ROUTES } from '@/consts';
 import SidebarGroup from '@/components/ui/SidebarGroup.astro';
 import SidebarLink from '@/components/ui/SidebarLink.astro';
 
-const allDocs = await getCollection('docs', ({ data }) => !data.draft);
+type NavConfig = {
+  label: string;
+  order: number;
+  folder: string;
+};
 
-const sortedDocs = [...allDocs].sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999));
-const primaryRootId = sortedDocs[0]?.id;
-
-const ungroupedDocs = sortedDocs.filter((doc) => !doc.data.category);
-
-const docsByCategory = sortedDocs.reduce((acc, doc) => {
-  const category = doc.data.category;
-  if (!category) return acc;
-  
-  if (!acc[category]) acc[category] = [];
-  acc[category].push(doc);
-  return acc;
-}, {} as Record<string, typeof allDocs>);
-
-const sortedCategories = Object.keys(docsByCategory).sort((a, b) => {
-  const minOrderA = docsByCategory[a][0].data.order ?? 999;
-  const minOrderB = docsByCategory[b][0].data.order ?? 999;
-  return minOrderA - minOrderB;
+const navFiles = import.meta.glob('/src/content/docs/**/_navigation.yml', {
+  eager: true,
+  query: '?raw',
+  import: 'default',
 });
 
-const currentPath = Astro.url.pathname;
+const navConfigs: NavConfig[] = Object.entries(navFiles)
+  .map(([path, raw]) => {
+    try {
+      const folder = path.split('/').at(-2)!;
+      const config = parse(raw as string) as Partial<NavConfig>;
+      if (!config?.label || config?.order === undefined) return null;
+      return { label: config.label, order: config.order, folder };
+    } catch {
+      return null;
+    }
+  })
+  .filter(Boolean)
+  .sort((a, b) => (a!.order ?? 999) - (b!.order ?? 999)) as NavConfig[];
+
+const allDocs = await getCollection('docs', ({ data }) => !data.draft);
+
+const currentPath  = Astro.url.pathname;
 const docsRootPath = `${ROUTES.docs}/`;
+const primaryRootId = [...allDocs]
+  .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999))[0]?.id;
+
+const getHref = (doc: (typeof allDocs)[number]) => {
+  const finalSlug = doc.data.slug || doc.id.replace(/\.(md|mdx)$/, '');
+  return doc.id === primaryRootId ? docsRootPath : `${ROUTES.docs}/${finalSlug}/`;
+};
 
 const checkIsActive = (href: string) => {
   if (href === docsRootPath) {
@@ -37,25 +51,44 @@ const checkIsActive = (href: string) => {
   return currentPath === href || currentPath === `${href}/`;
 };
 
-const getHref = (doc: (typeof allDocs)[number]) => {
-  const finalSlug = doc.data.slug || doc.id.replace(/\.(md|mdx)$/, '');
-  return doc.id === primaryRootId ? docsRootPath : `${ROUTES.docs}/${finalSlug}/`;
-};
+const managedFolders = new Set(navConfigs.map((n) => n.folder));
+
+const docsByFolder = Object.fromEntries(
+  navConfigs.map(({ folder }) => {
+    const docs = allDocs
+      .filter((doc) => doc.id.startsWith(`${folder}/`))
+      .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999));
+    return [folder, docs];
+  })
+);
+
+const ungroupedDocs = allDocs
+  .filter((doc) => {
+    const parts           = doc.id.split('/');
+    const isFlat          = parts.length === 1;
+    const isUnmanaged     = parts.length > 1 && !managedFolders.has(parts[0]);
+    return isFlat || isUnmanaged;
+  })
+  .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999));
 
 const $ = {
   wrapper: "flex flex-col space-y-1 w-full flex-1 py-2 px-4",
-}
+};
 ---
 
 <div class={$.wrapper}>
-  {sortedCategories.map((category) => {
-    const categoryDocs = docsByCategory[category];
-    const hasActiveChild = categoryDocs.some((doc) => checkIsActive(getHref(doc)));
-    
+  {navConfigs.map(({ label, folder }) => {
+    const docs      = docsByFolder[folder] ?? [];
+    const hasActive = docs.some((doc) => checkIsActive(getHref(doc)));
+
+    if (!docs.length) return null;
+
     return (
-      <SidebarGroup title={category} open={hasActiveChild}>
-        {categoryDocs.map((doc) => (
-          <SidebarLink href={getHref(doc)} isActive={checkIsActive(getHref(doc))}>
+      <SidebarGroup title={label} open={hasActive}>
+        {docs.map((doc) => (
+          <SidebarLink
+            href={getHref(doc)}
+            isActive={checkIsActive(getHref(doc))}>
             {doc.data.title}
           </SidebarLink>
         ))}
@@ -64,11 +97,10 @@ const $ = {
   })}
 
   {ungroupedDocs.map((doc) => (
-    <SidebarLink 
-      href={getHref(doc)} 
-      isActive={checkIsActive(getHref(doc))} 
-      grouped={false}
-    >
+    <SidebarLink
+      href={getHref(doc)}
+      isActive={checkIsActive(getHref(doc))}
+      grouped={false}>
       {doc.data.title}
     </SidebarLink>
   ))}
