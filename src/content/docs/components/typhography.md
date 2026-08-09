@@ -4,7 +4,7 @@ title: "Typography & Markdown Preview"
 description: "Halaman dummy untuk menguji seluruh elemen typography, Markdown, callout, code block, tabel, daftar, footnote, dan komponen Satteri."
 lastUpdated: 2026-08-05T00:00:00Z
 category: "Components"
-order: 11
+order: 15
 seo:
   title: "Typography & Markdown Preview"
   description: "Preview seluruh elemen typography dan Markdown."
