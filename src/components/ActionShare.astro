@@ -1,4 +1,5 @@
 ---
+// src/components/ShareDropdown.astro
 import Icon from "@ui/Icons.astro";
 
 interface Props {
@@ -11,19 +12,20 @@ const {
   class: className 
 } = Astro.props;
 
+const uniqueId = `share-dropdown-${Math.random().toString(36).substring(2, 9)}`;
+
 const s = {
-  ActionWrapper: [
+  wrapper: [
     'share-dropdown-wrapper',
     'relative inline-flex items-stretch rounded ring-1 shadow-(--shadow-sm)',
     'ring-(--border) bg-(--bg-subtle)',
-    'hover:shadow active:shadow',
     'transition-shadow duration-(--duration)'
   ].join(" "),
 
   actionGroup: [
-    'flex items-center gap-1.5 text-button-13 md:text-button-14',
-    'hover:bg-(--bg-muted) active:bg-(--bg-muted) hover:text-(--fg-strong) active:text-(--fg-strong)',
-    'cursor-pointer'
+    'flex items-center gap-1.5 text-button-13 md:text-button-14 text-(--fg-muted)',
+    'hover:bg-(--bg-muted) hover:text-(--fg-strong)',
+    'cursor-pointer select-none'
   ].join(" "),
 
   actionDivider: "h-px bg-(--border) my-1.5 mx-1",
@@ -33,97 +35,85 @@ const s = {
     'size-4.5',
   ].join(" "),
 
- actionDropdown: [
-    'share-menu',
-    'hidden absolute right-0 top-[calc(100%+0.5rem)] min-w-[12rem] z-40 rounded-md ring-1 p-1',
+  actionDropdown: [
+    'absolute right-0 top-[calc(100%+0.5rem)] min-w-[12rem] z-50 rounded-md ring-1 p-1',
     'ring-(--border) bg-(--bg-subtle) shadow-(--shadow-lg)',
     'animate-in fade-in slide-in-from-top-2 origin-top-right',
   ].join(" "),
   
   actionDropdownItems: [
     'flex items-center gap-2 p-2 text-button-13 md:text-button-14 text-start rounded w-full',
-    'text-(--fg) hover:bg-(--bg-muted) hover:text-(--fg-strong) active:bg-(--bg-muted) active:text-(--fg-muted)',
+    'text-(--fg) hover:bg-(--bg-muted) hover:text-(--fg-strong)',
     'cursor-pointer'
   ].join(" "),
 }
 ---
 
-<div class:list={[
-  s.ActionWrapper, 
-  className
-  ]}>
+<div class:list={[s.wrapper, className]}>
+  
   <button 
+    type="button"
     data-action="share-default" 
     aria-label="Bagikan Halaman"
     title={label}
-    class:list={[
-      "text-(--fg-muted)",
-      "px-2 py-1.5",
-      "rounded-l-md",
-      s.actionGroup
-    ]}>
-    <div class:list={[
-      s.actionIcon,
-      "text-(--fg-muted)"
-    ]}>
+    class:list={["px-2.5 py-2 rounded-l", s.actionGroup]}
+  >
+    <div class={s.actionIcon}>
       <Icon name="share" class="icon-share size-full" />
       <Icon name="check" class="icon-check size-full hidden absolute inset-0 text-(--accent) transition-opacity duration-(--duration)" />
     </div>
     <span>{label}</span>
   </button>
-  <button 
-    title="Opsi lainnya"
-    aria-label="Opsi lainnya" 
-    class:list={[
-      "share-trigger",
-      "p-1.5",
-      "rounded-r-md",
-      "border-l border-(--border)",
-      s.actionGroup
-    ]}>
-    <div class:list={[
-      s.actionIcon,
-      "text-(--fg-muted)",
-      "hover:text-(--fg-strong) active:text-(--fg-strong)"
-    ]}>
-      <Icon name="chevron-down" class="size-full" />
+
+  <details 
+    id={uniqueId}
+    data-auto-close
+    class="relative group select-none [-webkit-tap-highlight-color:transparent]"
+  >
+    <summary 
+      title="Opsi lainnya"
+      aria-label="Opsi lainnya" 
+      class:list={[
+        "p-2 rounded-r border-l border-(--border) h-full",
+        "list-none flex items-center justify-center",
+        s.actionGroup
+      ]}
+    >
+      <div class={s.actionIcon}>
+        <Icon name="chevron-down" class="size-full group-open:rotate-180 transition-transform" />
+      </div>
+    </summary>
+
+    <div class={s.actionDropdown}>
+      <button type="button" data-action="twitter" class={s.actionDropdownItems}>
+        <Icon name="twitter" class={s.actionIcon} /> X (Twitter)
+      </button>
+      <button type="button" data-action="facebook" class={s.actionDropdownItems}>
+        <Icon name="facebook" class={s.actionIcon} /> Facebook
+      </button>
+      <button type="button" data-action="linkedin" class={s.actionDropdownItems}>
+        <Icon name="linkedin" class={s.actionIcon} /> LinkedIn
+      </button>
+      <button type="button" data-action="whatsapp" class={s.actionDropdownItems}>
+        <Icon name="whatsapp" class={s.actionIcon} /> WhatsApp
+      </button>
+      <div class={s.actionDivider}></div>
+      <button type="button" data-action="copy-url" class={s.actionDropdownItems}>
+        <Icon name="link" class={s.actionIcon} /> Copy URL
+      </button>
     </div>
-  </button>
-  <div class={s.actionDropdown}>
-    <button data-action="twitter" class={s.actionDropdownItems}>
-      <Icon name="twitter" class={s.actionIcon} />
-      <span>X (Twitter)</span> 
-    </button>
-    <button data-action="facebook" class={s.actionDropdownItems}>
-      <Icon name="facebook" class={s.actionIcon} />
-      <span>Facebook</span>
-    </button>
-    <button data-action="linkedin" class={s.actionDropdownItems}>
-      <Icon name="linkedin" class={s.actionIcon} />
-      <span>LinkedIn</span>
-    </button>
-    <button data-action="whatsapp" class={s.actionDropdownItems}>
-      <Icon name="whatsapp" class={s.actionIcon} />
-      <span>WhatsApp</span>
-    </button>
-    <div class={s.actionDivider}></div>
-    <button data-action="copy-url" class={s.actionDropdownItems}>
-      <Icon name="link" class={s.actionIcon} />
-      <span>Copy URL</span>
-    </button>
-  </div>
+  </details>
 </div>
 
 <script>
   function setupShareButton() {
     document.querySelectorAll('.share-dropdown-wrapper').forEach(wrapper => {
       const primaryBtn = wrapper.querySelector('[data-action="share-default"]');
-      const trigger = wrapper.querySelector('.share-trigger');
-      const menu = wrapper.querySelector('.share-menu');
+      const details = wrapper.querySelector('details');
       const iconShare = wrapper.querySelector('.icon-share');
       const iconCheck = wrapper.querySelector('.icon-check');
 
-      if (!primaryBtn || !trigger || !menu) return;
+      if (!primaryBtn || !details) return;
 
       const showCheckmark = () => {
         iconShare?.classList.add('hidden');
@@ -135,71 +125,47 @@ const s = {
       };
 
       primaryBtn.addEventListener('click', async () => {
-        const url = window.location.href;
-        const title = document.title;
-
+        const data = { title: document.title, url: window.location.href };
         if (navigator.share) {
-          try {
-            await navigator.share({ title, url });
-          } catch (err) {
-            console.log('Share canceled or failed', err);
-          }
+          try { await navigator.share(data); } catch (err) { console.log(err); }
         } else {
-          await navigator.clipboard.writeText(url);
+          await navigator.clipboard.writeText(data.url);
           showCheckmark();
         }
       });
 
-      trigger.addEventListener('click', (e) => {
-        e.stopPropagation();
-        document.querySelectorAll('.share-menu').forEach(m => {
-          if (m !== menu) m.classList.add('hidden');
-        });
-        menu.classList.toggle('hidden');
-      });
-
-      menu.querySelectorAll('button').forEach(btn => {
+      details.querySelectorAll('button[data-action]').forEach(btn => {
         btn.addEventListener('click', async (e) => {
-          e.stopPropagation();
-          const action = btn.getAttribute('data-action');
-          
-          const url = encodeURIComponent(window.location.href);
-          const title = encodeURIComponent(document.title);
-          let shareUrl = '';
+          const action = (e.currentTarget as HTMLElement).getAttribute('data-action');
+          details.removeAttribute('open');
 
-          switch (action) {
-            case 'twitter':
-              shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
-              break;
-            case 'facebook':
-              shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-              break;
-            case 'linkedin':
-              shareUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${title}`;
-              break;
-            case 'whatsapp':
-              shareUrl = `https://api.whatsapp.com/send?text=${title}%20${url}`;
-              break;
-            case 'copy-url':
-              await navigator.clipboard.writeText(window.location.href);
-              showCheckmark();
-              break;
-          }
-
-          menu.classList.add('hidden');
-
-          if (shareUrl) {
-            window.open(shareUrl, '_blank', 'noopener,noreferrer');
+          if (action === 'copy-url') {
+            await navigator.clipboard.writeText(window.location.href);
+            showCheckmark();
+          } else {
+            const url = encodeURIComponent(window.location.href);
+            const title = encodeURIComponent(document.title);
+            const shareMap: Record<string, string> = {
+              twitter: `https://twitter.com/intent/tweet?url=${url}&text=${title}`,
+              facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+              linkedin: `https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${title}`,
+              whatsapp: `https://api.whatsapp.com/send?text=${title}%20${url}`
+            };
+            if (shareMap[action as string]) window.open(shareMap[action as string], '_blank', 'noopener,noreferrer');
           }
         });
       });
     });
 
-    document.addEventListener('click', () => {
-      document.querySelectorAll('.share-menu').forEach(m => m.classList.add('hidden'));
+    document.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      document.querySelectorAll('details[data-auto-close][open]').forEach(details => {
+        if (details.hasAttribute('id') && !details.contains(target)) {
+          details.removeAttribute('open');
+        }
+      });
     });
   }
 
   setupShareButton();
-  // document.addEventListener('astro:page-load', setupShareButton); jangan aktifkan ini
 </script>
