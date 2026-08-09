@@ -1,42 +1,46 @@
 ---
+// src/components/Sponsor.astro
 import { BRANDS } from "./../assets/icons/brand";
 
 interface Props {
+  label: string;
   brands: (keyof typeof BRANDS)[];
-  label?: string;
 }
 
-const {
-  brands,
-  label = "Built with",
+const { 
+    label, 
+    brands 
 } = Astro.props;
+
+const uid = Math.random().toString(36).substring(2, 9);
+
+const processSvg = (svgString: string) => {
+  return svgString
+    .replace(/id="([^"]+)"/g, `id="$1-${uid}"`)
+    .replace(/url\(#([^)]+)\)/g, `url(#$1-${uid})`);
+};
 ---
 
-<div class="w-full px-4 pt-8 pb-4">
-  <div class="mb-4 text-[12px] font-medium tracking-wide text-(--text-muted)">
-    {label}
-  </div>
-
-  <div class="flex flex-wrap items-center justify-start gap-6 text-(--fg-strong)">
-    {brands.map((key) => {
-      const brand = BRANDS[key];
-
+<div class="px-4 mt-8 pb-6">
+  <p class="text-xs text-(--fg-muted) mb-6 font-medium">{label}</p>
+  <div class="flex flex-wrap items-center gap-6">
+    {brands.map((brandKey) => {
+      const brand = BRANDS[brandKey];
       return (
-        <a
-          href={brand.href}
-          target="_blank"
+        <a 
+          href={brand.href} 
+          target="_blank" 
           rel="noopener noreferrer"
           aria-label={brand.name}
-          class="shrink-0"
+          class="inline-block shrink-0 items-center justify-center text-(--fg-strong) opacity-80 hover:opacity-100 transition-opacity"
         >
-          <svg
+
+          <svg 
             xmlns="http://www.w3.org/2000/svg"
-            viewBox={brand.viewBox}
-            width={brand.width}
+            viewBox={brand.viewBox} 
+            width={brand.width} 
             height={brand.height}
-            aria-hidden="true"
-            class="block h-8 w-auto max-w-32 opacity-70 transition-opacity hover:opacity-100"
-            set:html={brand.svg}
+            set:html={processSvg(brand.svg)} 
           />
         </a>
       );
