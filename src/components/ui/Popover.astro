@@ -1,0 +1,124 @@
+---
+// src/components/ui/Popover.astro
+
+interface Props {
+  id: string;
+  position?: "bottom-start" | "bottom-end" | "bottom" | "top-start" | "top-end";
+  class?: string;
+  panelClass?: string;
+}
+
+const {
+  id,
+  position = "bottom-start",
+  class: className = "",
+  panelClass = "",
+} = Astro.props;
+---
+
+<div class:list={["popover-wrap", className]} data-position={position}>
+  <slot name="trigger" />
+
+  <div
+    id={id}
+    popover="auto"
+    class:list={["popover-panel", panelClass]}>
+    <slot />
+  </div>
+</div>
+
+<style>
+  .popover-wrap {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .popover-panel {
+    position: absolute;
+    inset: unset;
+    margin: 0;
+    padding: 0.375rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 0.5rem;
+    background: var(--bg);
+    color: var(--fg);
+    box-shadow:
+      0 4px 6px -1px hsl(0 0% 0% / 0.1),
+      0 2px 4px -2px hsl(0 0% 0% / 0.1);
+    min-width: 10rem;
+    z-index: 50;
+
+    /* Animasi */
+    opacity: 0;
+    scale: 0.95;
+    translate: 0 -4px;
+    transition:
+      opacity 140ms ease,
+      scale 140ms ease,
+      translate 140ms ease,
+      display 140ms ease allow-discrete,
+      overlay 140ms ease allow-discrete;
+
+    &:popover-open {
+      opacity: 1;
+      scale: 1;
+      translate: 0 0;
+    }
+
+    @starting-style {
+      &:popover-open {
+        opacity: 0;
+        scale: 0.95;
+        translate: 0 -4px;
+      }
+    }
+  }
+
+  /* ── Positions (anchor via CSS dalam wrap) ───── */
+  [data-position="bottom-start"] .popover-panel {
+    top: calc(100% + 6px);
+    left: 0;
+  }
+
+  [data-position="bottom-end"] .popover-panel {
+    top: calc(100% + 6px);
+    right: 0;
+  }
+
+  [data-position="bottom"] .popover-panel {
+    top: calc(100% + 6px);
+    left: 50%;
+    translate: -50% 0;
+
+    &:popover-open {
+      translate: -50% 0;
+    }
+  }
+
+  [data-position="top-start"] .popover-panel {
+    bottom: calc(100% + 6px);
+    left: 0;
+    translate: 0 4px;
+
+    &:popover-open {
+      translate: 0 0;
+    }
+  }
+
+  [data-position="top-end"] .popover-panel {
+    bottom: calc(100% + 6px);
+    right: 0;
+    translate: 0 4px;
+
+    &:popover-open {
+      translate: 0 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .popover-panel {
+      transition: opacity 80ms ease, display 80ms ease allow-discrete;
+      scale: 1;
+    }
+  }
+</style>
