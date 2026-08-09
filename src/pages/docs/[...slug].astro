@@ -119,7 +119,7 @@ const schema = [
   ]),
 ];
 
-const markdown = `---
+const fullMarkdownContent = `---
 title: "${entry.data.title}"
 description: "${entry.data.description || ""}"
 category: "${entry.data.category}"
@@ -127,8 +127,6 @@ lastUpdated: "${entry.data.lastUpdated}"
 ---
 
 ${entry.body}`;
-
-const fullMarkdownContent = markdown;
 ---
 
 <DocsLayout 
@@ -139,6 +137,7 @@ const fullMarkdownContent = markdown;
 >
   <div data-pagefind-weight="2" class="hidden" />
   <MobileToc title={entry.data.title} headings={headings} />
+  
   <Fragment>
     <div class="mx-auto w-full min-w-0 pb-(--safe-bottom) px-0 lg:px-4">
       <Section size="md">
@@ -168,14 +167,20 @@ const fullMarkdownContent = markdown;
       </Section>
     </div>
   </Fragment>
+
   <Fragment slot="right">
-    <div class="sticky top-0 right-0 space-y-2">
-      <ScrollToTop label="Scroll to top" />
-    </div>
-    <div class="fixed top-1/2 right-2 z-40 hidden -translate-y-1/2 lg:block">
+    <div class="fixed top-1/2 right-4 z-40 hidden -translate-y-1/2 lg:block">
       <Toc headings={headings} />
     </div>
+    <div class="flex flex-col justify-between min-h-full">
+      <div class="space-y-4">
+      </div>
+      <div class="pt-4 mt-auto">
+        <ScrollToTop label="Scroll to top" class="text-(--fg-muted)" />
+      </div>
+    </div>
   </Fragment>
+
   <CopyCode />
 </DocsLayout>
 
