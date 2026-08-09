@@ -18,6 +18,55 @@ function getAttributes(node: any): Record<string, string> {
   return attrs;
 }
 
+function renderChildren(children: any[]): string {
+  if (!Array.isArray(children)) return '';
+  return children
+    .map((child) => {
+      if (child.type === 'text') {
+        return child.value || '';
+      }
+      if (child.type === 'paragraph') {
+        const inner = (child.children || []).map((c: any) => c.value || '').join('');
+        return `<p>${inner}</p>`;
+      }
+      if (child.type === 'strong') {
+        const inner = (child.children || []).map((c: any) => c.value || '').join('');
+        return `<strong>${inner}</strong>`;
+      }
+      if (child.type === 'emphasis') {
+        const inner = (child.children || []).map((c: any) => c.value || '').join('');
+        return `<em>${inner}</em>`;
+      }
+      if (child.type === 'inlineCode') {
+        return `<code>${child.value || ''}</code>`;
+      }
+      if (child.type === 'link') {
+        const inner = (child.children || []).map((c: any) => c.value || '').join('');
+        return `<a href="${child.url || '#'}">${inner}</a>`;
+      }
+      if (child.type === 'list') {
+        const isOrdered = child.ordered === true;
+        const tag = isOrdered ? 'ol' : 'ul';
+        const items = (child.children || [])
+          .map((li: any) => {
+            const liContent = (li.children || [])
+              .map((c: any) => {
+                if (c.type === 'paragraph') {
+                  return `<p>${(c.children || []).map((cc: any) => cc.value || '').join('')}</p>`;
+                }
+                return c.value || '';
+              })
+              .join('');
+            return `<li>${liContent}</li>`;
+          })
+          .join('');
+        return `<${tag}>${items}</${tag}>`;
+      }
+      return child.value || '';
+    })
+    .join('');
+}
+
 export const satteriCard = defineMdastPlugin({
   name: 'satteri-card',
 
@@ -27,97 +76,45 @@ export const satteriCard = defineMdastPlugin({
     const label = getLabel(node);
     const attrs = getAttributes(node);
     const hasIcon = !!attrs.icon;
+    const hasLabel = !!label;
     const hasHref = !!attrs.href;
     const extraClass = attrs.class || '';
 
     let children = node.children || [];
 
-    // Hapus paragraf pertama jika itu directiveLabel
     const firstNode = children[0];
     if (firstNode?.type === 'paragraph' && firstNode.data?.directiveLabel) {
       children = children.slice(1);
     }
 
-    // ===== HEADER: Ikon di atas, Label di bawah =====
-    const headerChildren: any[] = [];
+    const cardClasses = ['card'];
+    if (!hasLabel) cardClasses.push('card-no-title');
+    if (!hasIcon) cardClasses.push('card-no-icon');
+    if (extraClass) cardClasses.push(extraClass);
 
-    // Ikon (di atas)
-    if (hasIcon) {
-      headerChildren.push({
-        type: 'containerDirective',
-        data: {
-          hName: 'span',
-          hProperties: {
-            className: ['card-icon'],
-            'data-icon': attrs.icon,
-          },
-        },
-        children: [],
-      });
+    let headerHtml = '';
+    if (hasIcon || hasLabel) {
+      const iconHtml = hasIcon
+        ? `<span class="card-icon-wrapper"><span class="card-icon" data-icon="${attrs.icon}"></span></span>`
+        : '';
+      const labelHtml = hasLabel
+        ? `<div class="card-title">${label}</div>`
+        : '';
+      headerHtml = `<div class="card-header">${iconHtml}${labelHtml}</div>`;
     }
 
-    // Label (di bawah ikon)
-    if (label) {
-      headerChildren.push({
-        type: 'containerDirective',
-        data: {
-          hName: 'div',
-          hProperties: {
-            className: ['card-title'],
-          },
-        },
-        children: [{ type: 'text', value: label }],
-      });
-    }
+    const bodyContent = renderChildren(children);
+    const bodyHtml = bodyContent ? `<div class="card-body">${bodyContent}</div>` : '';
 
-    const headerNode = {
-      type: 'containerDirective',
-      data: {
-        hName: 'div',
-        hProperties: {
-          className: ['card-header'],
-        },
-      },
-      children: headerChildren,
-    };
-
-    // ===== BODY: Isi card =====
-    const bodyNode = {
-      type: 'containerDirective',
-      data: {
-        hName: 'div',
-        hProperties: {
-          className: ['card-body'],
-        },
-      },
-      children: children,
-    };
-
-    // ===== CARD =====
-    const cardChildren = [headerNode, bodyNode];
-    const cardClasses = ['card', extraClass].filter(Boolean).join(' ');
+    let cardHtml = `<div class="${cardClasses.join(' ')}">${headerHtml}${bodyHtml}</div>`;
 
     if (hasHref) {
-      ctx.setProperty(node, 'data', {
-        ...(node.data || {}),
-        hName: 'a',
-        hProperties: {
-          href: attrs.href,
-          className: ['card-link', cardClasses].filter(Boolean).join(' '),
-          target: attrs.href.startsWith('http') ? '_blank' : '_self',
-          rel: attrs.href.startsWith('http') ? 'noopener noreferrer' : undefined,
-        },
-      });
-    } else {
-      ctx.setProperty(node, 'data', {
-        ...(node.data || {}),
-        hName: 'div',
-        hProperties: {
-          className: cardClasses,
-        },
-      });
+      cardHtml = `<a href="${attrs.href}" class="card-link" target="${attrs.href.startsWith('http') ? '_blank' : '_self'}" rel="${attrs.href.startsWith('http') ? 'noopener noreferrer' : ''}">${cardHtml}</a>`;
     }
 
-    ctx.setProperty(node, 'children', cardChildren);
+    ctx.replaceNode(node, {
+      type: 'html',
+      value: cardHtml,
+    });
   },
 });
