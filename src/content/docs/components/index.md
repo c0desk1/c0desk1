@@ -42,24 +42,24 @@ Saat konten di-render, Sätteri akan mengubah directive tersebut menjadi kompone
 
 Komponen yang berdiri sendiri di level blok.
 
-| Komponen | Sintaks | Fungsi | Halaman |
-|----------|---------|--------|---------|
-| Callout | `> [!NOTE]` | Menyorot informasi penting | [Callout](/docs/components/callout) |
-| Steps | `:::steps` | Panduan langkah-demi-langkah | [Steps](/docs/components/steps) |
-| Tabs | `::::tabs` | Konten dalam tab | [Tabs](/docs/components/tabs) |
-| Filetree | `:::filetree` | Struktur folder dan file | [Filetree](/docs/components/filetree) |
-| Accordion | `:::details` | Konten yang bisa dilipat | [Accordion](/docs/components/accordion) |
-| Video | `::video[...]` | Embed video | [Video](/docs/components/video) |
+| Komponen | Sintaks | Fungsi |
+|----------|---------|--------|
+| Callout | `> [!NOTE]` | Menyorot informasi penting |
+| Steps | `:::steps` | Panduan langkah-demi-langkah |
+| Tabs | `::::tabs` | Konten dalam tab |
+| Filetree | `:::filetree` | Struktur folder dan file |
+| Accordion | `:::details` | Konten yang bisa dilipat |
+| Video | `::video[...]` | Embed video |
 
 ### Inline Components (:)
 
 Komponen yang bisa digunakan di dalam paragraf atau teks.
 
-| Komponen | Sintaks | Fungsi | Halaman |
-|----------|---------|--------|---------|
-| User | `:user[...]` | Profil pengguna dengan avatar | [User](/docs/components/user) |
-| Badge | `:badge[...]` | Label kecil dengan warna | [Badge](/docs/components/badge) |
-| Button | `:button[...]` | Tombol dengan ikon | [Button](/docs/components/button) |
+| Komponen | Sintaks | Fungsi |
+|----------|---------|--------|
+| User | `:user[...]` | Profil pengguna dengan avatar |
+| Badge | `:badge[...]` | Label kecil dengan warna |
+| Button | `:button[...]` | Tombol dengan ikon |
 
 ### Media Components
 
@@ -69,4 +69,14 @@ Komponen yang bisa digunakan di dalam paragraf atau teks.
 
 ## Mulai Menggunakan
 
-Pilih salah satu komponen dari daftar di atas untuk melihat panduan lengkap, sintaks, dan contoh penggunaan.
+:::card[Callout]{icon="info" href="/docs/callout/"}
+Mulai dengan Callout untuk menyorot informasi penting.
+:::
+
+:::card[Steps]{icon="info" href="/docs/steps/"}
+Gunakan Steps untuk membuat panduan langkah-demi-langkah.
+:::
+
+:::card[Tabs]{icon="info" href="/docs/tabs/"}
+Pelajari Tabs untuk menampilkan konten dalam tab.
+:::
