@@ -14,18 +14,19 @@ const {
   rawMarkdown = "" 
 } = Astro.props;
 
+const uniqueId = `copy-dropdown-${Math.random().toString(36).substring(2, 9)}`;
+
 const s = {
   wrapper: [
     'copy-dropdown-wrapper',
     'relative inline-flex items-stretch rounded ring-1 shadow-(--shadow-sm)',
     'ring-(--border) bg-(--bg-subtle)',
-    'hover:shadow active:shadow',
     'transition-shadow duration-(--duration)'
   ].join(" "),
 
   actionGroup: [
     'flex items-center gap-1.5 text-button-13 md:text-button-14',
-    'hover:bg-(--bg-muted) active:bg-(--bg-muted)',
+    'hover:bg-(--bg-muted)',
     'cursor-pointer select-none'
   ].join(" "),
 
@@ -44,7 +45,7 @@ const s = {
 
   actionDropdownItems: [
     'flex items-center gap-2 p-2 text-button-13 md:text-button-14 text-start rounded w-full',
-    'text-(--fg) hover:bg-(--bg-muted) hover:text-(--fg-strong) active:bg-(--bg-muted) active:text-(--fg-muted)',
+    'text-(--fg) hover:bg-(--bg-muted) hover:text-(--fg-strong)',
     'cursor-pointer'
   ].join(" "),
 }
@@ -52,6 +53,7 @@ const s = {
 
 <div class:list={[s.wrapper, className]}>
   <template class="raw-markdown-data">{rawMarkdown}</template>
+  
   <button 
     type="button"
     data-action="copy-default" 
@@ -68,7 +70,11 @@ const s = {
     <span>{label}</span>
   </button>
 
-  <details class="relative group select-none [-webkit-tap-highlight-color:transparent]">
+  <details 
+    id={uniqueId}
+    data-auto-close 
+    class="relative group select-none [-webkit-tap-highlight-color:transparent]"
+  >
     <summary class:list={[
       "px-2.5 py-2 rounded-r border-l border-(--border) h-full",
       "list-none flex items-center justify-center",
@@ -154,6 +160,20 @@ const s = {
             }
           }
         });
+      });
+    });
+
+    document.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      
+      document.querySelectorAll('details[data-auto-close][open]').forEach(details => {
+        const hasValidId = details.hasAttribute('id');
+        
+        const isClickOutside = !details.contains(target);
+
+        if (hasValidId && isClickOutside) {
+          details.removeAttribute('open');
+        }
       });
     });
   }
