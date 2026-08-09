@@ -17,7 +17,7 @@ seo:
   noIndex: true
 ---
 
-Figure digunakan untuk menampilkan gambar dengan caption. Caption ditulis di dalam kurung kurawal `{...}` setelah URL gambar, dan mendukung Markdown (bold, italic, link).
+Figure digunakan untuk menampilkan gambar dengan caption. Caption ditulis di dalam kurung kurawal `{...}` setelah URL gambar.
 
 ## Sintaks
 
