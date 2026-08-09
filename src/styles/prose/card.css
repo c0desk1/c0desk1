@@ -15,24 +15,24 @@
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
+/* ===== HEADER: Ikon di atas, Label di bawah ===== */
 .prose .card-header {
-  padding: 0.75rem 1rem;
-  font-weight: 600;
-  font-size: 1rem;
-  color: var(--fg-strong);
-  border-bottom: 1px solid rgb(from var(--border) r g b / 0.3);
-  background-color: var(--bg-muted);
+  padding: 1.25rem 1rem 0.75rem 1rem;
+  text-align: center;
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 0.5rem;
+  border-bottom: 1px solid rgb(from var(--border) r g b / 0.3);
+  background-color: var(--bg-muted);
 }
 
 .prose .card-header .card-icon {
   display: inline-block;
-  width: 1.125rem;
-  height: 1.125rem;
+  width: 2.25rem;
+  height: 2.25rem;
   flex-shrink: 0;
-  background-color: currentColor;
+  background-color: var(--accent);
   mask-size: contain;
   mask-repeat: no-repeat;
   mask-position: center;
@@ -54,8 +54,15 @@
   -webkit-mask-image: var(--ic-card-link);
 }
 
+.prose .card-header .card-title {
+  font-weight: 600;
+  font-size: 1.125rem;
+  color: var(--fg-strong);
+}
+
+/* ===== BODY ===== */
 .prose .card-body {
-  padding: 1rem;
+  padding: 1.25rem;
 }
 
 .prose .card-body > *:first-child {
@@ -65,6 +72,7 @@
   margin-bottom: 0;
 }
 
+/* ===== CARD LINK ===== */
 .prose .card-link {
   display: block;
   color: inherit !important;
