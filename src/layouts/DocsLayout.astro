@@ -12,6 +12,7 @@ import Socials from "@/components/Socials.astro";
 import Theme from "@/components/Theme.astro";
 
 import { type buildMeta as BuildMetaFn } from "@/consts";
+import Sponsor from "@/components/Sponsor.astro";
 
 interface Props {
   meta?: Partial<ReturnType<typeof BuildMetaFn>>;
@@ -42,8 +43,18 @@ const {
 >
   <MobileHeader>
     <DocsNavbar />
-    <div class="flex-1 overflow-y-auto mb-0 scrollbar-hide">
+    <div class="flex-1 overflow-y-auto mb-0 scrollbar-gutter-stable">
       <DocsNavigation />
+      <Sponsor label="Powerd by"
+        brands={
+        [
+            "astro", 
+            "tailwind", 
+            "cloudflare",
+            "github"
+          ]
+        }
+      />
     </div>
     <Card padding="xs" radius="sm" variant="secondary" class="flex md:hidden items-center justify-between mt-4">
       <div class="flex items-center">
@@ -60,6 +71,14 @@ const {
       <Sidebar>
         <DocsNavbar />
         <DocsNavigation />
+        <Sponsor label="Powerd by" brands={
+          [
+            "astro", 
+            "tailwind", 
+            "cloudflare",
+            "github"
+          ]
+        } />
       </Sidebar>
     </aside>
     
