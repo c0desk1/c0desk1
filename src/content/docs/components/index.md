@@ -17,8 +17,6 @@ seo:
   noIndex: true
 ---
 
-# Komponen Kustom
-
 Komponen kustom adalah fitur yang memungkinkan kamu menulis konten Markdown dengan sintaks sederhana yang otomatis berubah menjadi elemen HTML yang kaya dan interaktif.
 
 ## Apa Itu Custom Directives?
