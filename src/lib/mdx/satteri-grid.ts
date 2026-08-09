@@ -1,15 +1,6 @@
 // src/lib/mdx/satteri-grid.ts
 import { defineMdastPlugin } from 'satteri';
 
-function getAttributes(node: any): Record<string, string> {
-  const props = node.attributes || {};
-  const attrs: Record<string, string> = {};
-  if (props.cols) attrs.cols = props.cols;
-  if (props.gap) attrs.gap = props.gap;
-  if (props.class) attrs.class = props.class;
-  return attrs;
-}
-
 export const satteriGrid = defineMdastPlugin({
   name: 'satteri-grid',
 
@@ -17,23 +8,13 @@ export const satteriGrid = defineMdastPlugin({
     const name = node.name?.toLowerCase();
 
     if (name === 'grid') {
-      const attrs = getAttributes(node);
-      const cols = attrs.cols || '2';
-      const gap = attrs.gap || '4';
-      const extraClass = attrs.class || '';
-
-      const className = ['grid', `grid-cols-${cols}`, `gap-${gap}`, extraClass]
-        .filter(Boolean)
-        .join(' ');
-
       ctx.setProperty(node, 'data', {
         ...(node.data || {}),
         hName: 'div',
         hProperties: {
-          className: className,
+          className: ['grid', 'grid-cols-2', 'gap-4'],
         },
       });
-
       return;
     }
 
@@ -45,8 +26,6 @@ export const satteriGrid = defineMdastPlugin({
           className: ['col'],
         },
       });
-
-      return;
     }
   },
 });
