@@ -1,33 +1,14 @@
 ---
-// src/components/Search.astro (TEST WITH DIV PANEL)
-import Button from "@ui/Button.astro";
-import Input from "@ui/Input.astro";
+// src/components/Search.astro (EMPTY TEST)
 ---
 
 <dialog id="search-drawer" class="search-dialog">
-  <!-- Diganti kembali menggunakan div -->
   <div class="search-panel">
-    
-    <div class="flex items-center justify-between p-4 border-b border-(--border)">
-      <span class="font-bold text-(--fg-strong)">Test Dialog &lt;div&gt; Panel</span>
-      <Button data-action="close-search" variant="secondary" size="sm">
-        Tutup / ESC
-      </Button>
-    </div>
-
-    <div class="p-6 text-sm text-(--fg-muted) space-y-4">
-      <p>Status: Dialog terbuka menggunakan div sebagai panel.</p>
-      <Input placeholder="Coba ketik sesuatu..." />
-      <p class="text-xs text-amber-500">
-        Silakan tes tutup kembali. Apakah sisa bayangan atau elemen yang "lengket" sudah hilang sepenuhnya?
-      </p>
-    </div>
-
+    <!-- Kosong tanpa isi -->
   </div>
 </dialog>
 
 <style is:global>
-  /* Dialog dasar sebagai pintu / Top Layer */
   .search-dialog {
     padding: 0;
     margin: auto;
@@ -38,29 +19,23 @@ import Input from "@ui/Input.astro";
     overflow: visible;
   }
 
-  /* Backdrop native */
   .search-dialog::backdrop {
     background: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(4px);
   }
 
-  /* Panel Utama menggunakan div (Mobile Fullscreen, Desktop Modal Center) */
   .search-panel {
     background: var(--bg-subtle, #ffffff);
-    display: flex;
-    flex-direction: column;
     width: 100vw;
     height: 100vh;
   }
 
   @media (min-width: 45rem) {
     .search-panel {
-      width: 600px;
-      height: 450px;
+      width: 400px;
+      height: 200px;
       border-radius: 12px;
       border: 1px solid var(--border);
-      box-shadow: var(--shadow-lg, 0 20px 25px -5px rgb(0 0 0 / 0.1));
-      overflow: hidden;
     }
   }
 </style>
@@ -70,57 +45,30 @@ import Input from "@ui/Input.astro";
     const dialog = document.getElementById("search-drawer");
 
     function open() {
-      if (!dialog.open) {
-        dialog.showModal();
-        console.log("[TEST] Dialog dibuka");
-      }
+      if (!dialog.open) dialog.showModal();
     }
 
     function close() {
       if (dialog.open) {
         dialog.close();
-        
-        // PENGAMAN MANUAL: Paksa lepas kunci scroll dan inert
         document.body.style.overflow = "";
         document.querySelectorAll('body > *').forEach(el => el.removeAttribute('inert'));
-        
-        console.log("[TEST] Dialog ditutup, kunci dilepas");
       }
     }
 
-    // Global Listener
     document.addEventListener("click", (e) => {
-      const trigger = e.target.closest('[data-drawer-trigger="search-drawer"]');
-      const closeBtn = e.target.closest('[data-action="close-search"]');
-      
-      if (trigger) {
-        e.preventDefault();
-        open();
-      }
-      if (closeBtn) {
-        e.preventDefault();
-        close();
-      }
-      // Klik di area backdrop (luar search-panel)
-      if (e.target === dialog) {
-        close();
-      }
+      if (e.target.closest('[data-drawer-trigger="search-drawer"]')) open();
+      if (e.target === dialog) close();
     });
 
-    // Shortcut Ctrl+K / Cmd+K & ESC
     document.addEventListener("keydown", (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
-        if (dialog.open) close();
-        else open();
+        dialog.open ? close() : open();
       }
-      if (e.key === "Escape" && dialog.open) {
-        close();
-      }
+      if (e.key === "Escape" && dialog.open) close();
     });
 
-    document.addEventListener("open-search", () => {
-      open();
-    });
+    document.addEventListener("open-search", open);
   })();
 </script>
