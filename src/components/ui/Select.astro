@@ -22,6 +22,7 @@ interface Props {
   suffix?: string;
   prefix?: string;
   size?: SelectSize;
+  role?: "listbox" | "menu";
 }
 
 const {
@@ -33,8 +34,11 @@ const {
   prefix = "",
   suffix = "select",
   size = "md",
+  role = "menu",
 } = Astro.props;
 
+const isMenu     = role === "menu";
+const optionRole = isMenu ? "menuitem" : "option";
 const activeOption = options.find((opt) => opt.value === selectedValue);
 
 const sizeClasses: Record<SelectSize, string> = {
@@ -49,49 +53,64 @@ const itemSizeClasses: Record<SelectSize, string> = {
   lg: "px-3.5 py-2.5 text-base rounded-lg",
 };
 
-const triggerClasses = [
-  "flex w-full items-center justify-between ring-1 ring-(--border) bg-(--bg-subtle) text-(--fg)",
-  "shadow-[0_1px_2px_rgba(0,0,0,0.02)] transition-opacity duration-(--duration)",
-  "hover:bg-(--bg-muted) hover:text-(--fg-strong) active:bg-(--bg-muted)",
-  "select-none cursor-pointer focus-visible:outline-none",
-  "focus-visible:ring-2 focus-visible:ring-(--accent) focus-visible:border-transparent",
-  sizeClasses[size],
-  className,
-].filter(Boolean).join(" ");
-
-const itemSize = itemSizeClasses[size];
-
 const $ = {
   wrapper:  "relative w-full",
-  items:    "flex items-center shrink-0 gap-2 truncate flex-1 text-left",
-  prefix:   "shrink-0 text-(--fg-subtle) size-5",
-  chevron:  "shrink-0 text-(--fg-subtle) size-4 transition-transform duration-(--duration) ease-[cubic-bezier(0.34,1.56,0.64,1)]",
+  summary: [
+    "flex w-full items-center justify-between",
+    "ring-1 ring-(--border) bg-(--bg-subtle) text-(--fg)",
+    "shadow-[0_1px_2px_rgba(0,0,0,0.02)]",
+    "hover:bg-(--bg-muted) hover:text-(--fg-strong)",
+    "active:bg-(--bg-muted) select-none cursor-pointer",
+    "focus-visible:outline-none focus-visible:ring-2",
+    "focus-visible:ring-(--accent)",
+    "list-none [&::-webkit-details-marker]:hidden",
+    sizeClasses[size],
+    className,
+  ].filter(Boolean).join(" "),
+
+  items:   "flex items-center shrink-0 gap-2 truncate flex-1 text-left",
+  prefix:  "shrink-0 text-(--fg-subtle) size-5",
+  chevron: [
+    "shrink-0 text-(--fg-subtle) size-4",
+    "transition-transform duration-(--duration)",
+    "ease-[cubic-bezier(0.34,1.56,0.64,1)]",
+    "details-open:rotate-180",
+  ].join(" "),
+
   dropdown: [
     "select-dropdown",
-    "absolute left-0 right-0 top-full mt-1.5",
+    "absolute left-0 right-0 top-full mt-1.5 z-50",
     "max-h-60 overflow-y-auto rounded-md",
-    "ring-1 ring-(--border) bg-(--bg-subtle) backdrop-blur-md",
-    "p-1.5 shadow-xl space-y-0.5 select-none scrollbar-thin",
-    "origin-top",
-    // popover reset
-    "m-0 border-0 p-1.5",
+    "ring-1 ring-(--border) bg-(--bg-subtle)",
+    "p-1.5 shadow-xl space-y-0.5 select-none",
+    "scrollbar-thin origin-top",
+  ].join(" "),
+
+  item: (isActive: boolean, itemSize: string) => [
+    "flex w-full items-start gap-2.5 text-left",
+    "transition-all duration-(--duration) cursor-pointer",
+    "focus:outline-none focus:bg-(--bg-muted) focus:text-(--fg-strong)",
+    itemSize,
+    isActive
+      ? "bg-(--bg-muted) text-(--fg-strong)"
+      : "text-(--fg-muted) hover:bg-(--bg-muted) hover:text-(--fg-strong)",
   ].join(" "),
 };
+
+const itemSize = itemSizeClasses[size];
 ---
 
-<div
+<details
   data-select-wrapper
-  class:list={["custom-select", $.wrapper]}
-  style={`anchor-name: --anc-${id}`}>
+  class:list={["custom-select", $.wrapper]}>
 
-  <button
-    popovertarget={id}
-    popovertargetaction="toggle"
-    aria-haspopup="listbox"
-    aria-controls={id}
-    type="button"
-    class={triggerClasses}>
-    <span class={$.items} data-select-label-container>
+  <summary
+    class={$.summary}
+    role="button"
+    aria-haspopup={role}
+    aria-label={activeOption?.label || placeholder}>
+
+    <span class={$.items}>
       {prefix && <Icon name={prefix as any} class={$.prefix} />}
       {activeOption?.icon && <Icon name={activeOption.icon as any} class={$.prefix} />}
       <span
@@ -100,33 +119,25 @@ const $ = {
         {activeOption?.label || placeholder}
       </span>
     </span>
+
     <Icon
       name={suffix as any}
-      class={$.chevron}
-      data-select-icon />
-  </button>
+      data-select-icon
+      class={$.chevron} />
+  </summary>
 
   <div
-    id={id}
-    popover="auto"
-    role="listbox"
+    role={role}
     aria-label="Pilihan"
-    class={$.dropdown}
-    style={`position-anchor: --anc-${id}`}>
+    class={$.dropdown}>
     {options.map((option) => {
       const isActive = option.value === selectedValue;
-      const itemClasses = [
-        "flex w-full items-start gap-2.5 text-left transition-all duration-(--duration) cursor-pointer",
-        "focus:outline-none focus:bg-(--bg-muted) focus:text-(--fg-strong)",
-        itemSize,
-        isActive
-          ? "bg-(--bg-muted) text-(--fg-strong)"
-          : "text-(--fg-muted) hover:bg-(--bg-muted) hover:text-(--fg-strong)",
-      ];
+      const ariaCurrent = isMenu && isActive ? "page" : undefined;
+      const ariaSelected = !isMenu ? isActive : undefined;
 
       const inner = (
         <>
-          {option.icon && <Icon name={option.icon as any} class="size-5" />}
+          {option.icon && <Icon name={option.icon as any} class="size-5 shrink-0" />}
           <div class="flex-1 min-w-0">
             <div class="truncate">{option.label}</div>
             {option.subtitle && (
@@ -135,9 +146,8 @@ const $ = {
               </div>
             )}
           </div>
-          {isActive && (
+          {isActive && !isMenu && (
             <Icon
-              data-check-icon
               name="check"
               class="shrink-0 size-4 text-(--accent)"
             />
@@ -150,72 +160,55 @@ const $ = {
           href={option.href}
           target={option.isExternal ? "_blank" : undefined}
           rel={option.isExternal ? "noopener noreferrer" : undefined}
-          class:list={itemClasses}
+          class={$.item(isActive, itemSize)}
           data-select-option
-          role="option"
-          aria-selected={isActive}>
+          role={optionRole}
+          aria-current={ariaCurrent}
+          aria-selected={ariaSelected}>
           {inner}
         </a>
       ) : (
         <button
           type="button"
           data-value={option.value}
-          class:list={itemClasses}
+          class={$.item(isActive, itemSize)}
           data-select-option
-          role="option"
-          aria-selected={isActive}>
+          role={optionRole}
+          aria-selected={ariaSelected}>
           {inner}
         </button>
       );
     })}
   </div>
-</div>
+</details>
 
 <style is:global>
+  details[open] [data-select-icon] {
+    transform: rotate(180deg);
+  }
+
   .select-dropdown {
-    inset: unset;
-    top: anchor(bottom);
-    left: anchor(left);
-    right: anchor(right);
-    margin-top: 6px;
-
-    opacity: 0;
-    scale: 0.96;
-    translate: 0 -4px;
-    transition:
-      opacity 160ms cubic-bezier(0.16, 1, 0.3, 1),
-      scale   160ms cubic-bezier(0.16, 1, 0.3, 1),
-      translate 160ms cubic-bezier(0.16, 1, 0.3, 1),
-      display 160ms ease allow-discrete,
-      overlay 160ms ease allow-discrete;
+    animation: none;
   }
 
-  .select-dropdown:popover-open {
-    opacity: 1;
-    scale: 1;
-    translate: 0 0;
+  details[open] .select-dropdown {
+    animation: selectIn 160ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
-  @starting-style {
-    .select-dropdown:popover-open {
+  @keyframes selectIn {
+    from {
       opacity: 0;
-      scale: 0.96;
-      translate: 0 -4px;
+      transform: scale(0.96) translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
     }
   }
 
-  :has(+ .select-dropdown:popover-open) [data-select-icon] {
-    transform: rotate(180deg);
-  }
-
-  [data-select-icon].rotated {
-    transform: rotate(180deg);
-  }
-
   @media (prefers-reduced-motion: reduce) {
-    .select-dropdown {
-      transition: opacity 80ms ease, display 80ms ease allow-discrete;
-      scale: 1;
+    details[open] .select-dropdown {
+      animation: none;
     }
   }
 
@@ -226,19 +219,30 @@ const $ = {
 
 <script>
   document.addEventListener("click", (e) => {
+    document.querySelectorAll("details[data-select-wrapper][open]").forEach((d) => {
+      if (!d.contains(e.target as Node)) {
+        (d as HTMLDetailsElement).open = false;
+      }
+    });
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    document.querySelectorAll("details[data-select-wrapper][open]").forEach((d) => {
+      (d as HTMLDetailsElement).open = false;
+    });
+  });
+
+  document.addEventListener("click", (e) => {
     const option = (e.target as HTMLElement).closest("[data-select-option]") as HTMLElement | null;
-    if (!option) return;
+    if (!option || option.tagName === "A") return;
 
-    const wrapper   = option.closest("[data-select-wrapper]") as HTMLElement;
-    const dropdown  = option.closest("[popover]") as HTMLElement;
-    const labelEl   = wrapper?.querySelector("[data-select-label]") as HTMLElement;
-    const iconSlot  = wrapper?.querySelector("[data-select-label-container]") as HTMLElement;
-    const chevron   = wrapper?.querySelector("[data-select-icon]") as HTMLElement;
-
+    const wrapper  = option.closest("[data-select-wrapper]") as HTMLDetailsElement;
+    const labelEl  = wrapper?.querySelector("[data-select-label]") as HTMLElement;
     if (!wrapper || !labelEl) return;
 
-    const value   = option.dataset.value ?? "";
-    const label   = option.querySelector(".truncate")?.textContent?.trim() ?? "";
+    const label = option.querySelector(".truncate")?.textContent?.trim() ?? "";
+    const value = option.dataset.value ?? "";
 
     labelEl.textContent = label;
     labelEl.classList.remove("text-(--fg-muted)");
@@ -248,15 +252,9 @@ const $ = {
       const el = opt as HTMLElement;
       const isThis = el === option;
       el.setAttribute("aria-selected", String(isThis));
-
-      el.querySelector("[data-check-icon]")?.remove();
-      if (isThis) {
-        el.classList.add("bg-(--bg-muted)", "text-(--fg-strong)");
-        el.classList.remove("text-(--fg-muted)");
-      } else {
-        el.classList.remove("bg-(--bg-muted)", "text-(--fg-strong)");
-        el.classList.add("text-(--fg-muted)");
-      }
+      el.classList.toggle("bg-(--bg-muted)",   isThis);
+      el.classList.toggle("text-(--fg-strong)", isThis);
+      el.classList.toggle("text-(--fg-muted)",  !isThis);
     });
 
     wrapper.dispatchEvent(new CustomEvent("select-change", {
@@ -264,16 +262,6 @@ const $ = {
       detail: { value, label },
     }));
 
-    dropdown?.hidePopover();
-  });
-
-  document.querySelectorAll("[popover].select-dropdown").forEach((pop) => {
-    pop.addEventListener("toggle", (e: Event) => {
-      const ev = e as ToggleEvent;
-      const wrapper = (pop as HTMLElement).previousElementSibling?.closest("[data-select-wrapper]")
-        ?? (pop as HTMLElement).closest("[data-select-wrapper]");
-      const chevron = wrapper?.querySelector("[data-select-icon]");
-      chevron?.classList.toggle("rotated", ev.newState === "open");
-    });
+    wrapper.open = false;
   });
 </script>
