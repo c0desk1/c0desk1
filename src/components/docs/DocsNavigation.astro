@@ -12,7 +12,7 @@ type NavConfig = {
   folder: string;
 };
 
-const navFiles = import.meta.glob('/src/content/docs/**/_navigation.yml', {
+const navFiles = import.meta.glob('../../content/docs/**/_navigation.yml', {
   eager: true,
   query: '?raw',
   import: 'default',
