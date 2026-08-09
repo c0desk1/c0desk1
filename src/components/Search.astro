@@ -564,15 +564,20 @@ const card = {
       }
     });
 
-    document.addEventListener("open-search", (e) => {
-      open(e.detail?.targetId);
-    });
-
     document.addEventListener("click", (e) => {
-      if (e.target.closest('[data-action="close-search"]')) {
-        e.preventDefault();
-        close();
-      }
-    });
+  // Trigger buka
+  const trigger = e.target.closest("[data-drawer-trigger]");
+  if (trigger) {
+    e.preventDefault();
+    open(trigger.dataset.drawerTrigger);
+    return;
+  }
+
+  // Trigger tutup (sudah ada)
+  if (e.target.closest('[data-action="close-search"]')) {
+    e.preventDefault();
+    close();
+  }
+});
   })();
 </script>
