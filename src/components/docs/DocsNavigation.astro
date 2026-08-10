@@ -1,54 +1,35 @@
 ---
 // src/components/docs/DocsNavigation.astro
 import { getCollection } from 'astro:content';
-import { parse } from 'yaml';
 import { ROUTES } from '@/consts';
+import { SIDEBAR_CONFIG } from '@/config/sidebar';
 import SidebarGroup from '@/components/ui/SidebarGroup.astro';
 import SidebarLink from '@/components/ui/SidebarLink.astro';
 
-type NavConfig = {
-  label: string;
-  order: number;
-  folder: string;
-};
-
-// 1. Ambil file konfigurasi navigasi (.yml / .yaml)
-const navFiles = import.meta.glob('../../content/docs/**/_navigation.{yml,yaml}', {
-  eager: true,
-  query: '?raw',
-  import: 'default',
-});
-
-const navConfigs: NavConfig[] = Object.entries(navFiles)
-  .map(([path, raw]) => {
-    try {
-      const normalizedPath = path.replace(/\\/g, '/');
-      const segments = normalizedPath.split('/');
-      const folder = segments.at(-2)!;
-      
-      const config = parse(raw as string) as Partial<NavConfig>;
-      const label = config?.label || folder;
-      const order = config?.order ?? 999;
-
-      return { label, order, folder };
-    } catch {
-      return null;
-    }
-  })
-  .filter(Boolean)
-  .sort((a, b) => (a!.order ?? 999) - (b!.order ?? 999)) as NavConfig[];
-
 const allDocs = await getCollection('docs', ({ data }) => !data.draft);
 
-const currentPath  = Astro.url.pathname;
-const docsRootPath = `${ROUTES.docs}/`;
-const primaryRootId = [...allDocs]
-  .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999))[0]?.id;
+const sortedDocs = [...allDocs].sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999));
+const primaryRootId = sortedDocs[0]?.id;
 
-const getHref = (doc: (typeof allDocs)[number]) => {
-  const finalSlug = doc.data.slug || doc.id.replace(/\.(md|mdx)$/, '');
-  return doc.id === primaryRootId ? docsRootPath : `${ROUTES.docs}/${finalSlug}/`;
-};
+const docsByCategory: Record<string, typeof allDocs> = {};
+for (const doc of sortedDocs) {
+  const category = doc.data.category || 'Uncategorized';
+  if (!docsByCategory[category]) docsByCategory[category] = [];
+  docsByCategory[category].push(doc);
+}
+
+// 🔥 Ambil daftar kategori dari config
+const configCategories: string[] = SIDEBAR_CONFIG.map(c => c.category);
+const availableCategories = Object.keys(docsByCategory);
+
+const orderedCategories = configCategories.filter(cat => availableCategories.includes(cat));
+const extraCategories = availableCategories.filter(cat => !configCategories.includes(cat));
+const sortedCategories = [...orderedCategories, ...extraCategories];
+
+const ungroupedDocs = sortedDocs.filter((doc) => !doc.data.category);
+
+const currentPath = Astro.url.pathname;
+const docsRootPath = `${ROUTES.docs}/`;
 
 const checkIsActive = (href: string) => {
   if (href === docsRootPath) {
@@ -57,51 +38,31 @@ const checkIsActive = (href: string) => {
   return currentPath === href || currentPath === `${href}/`;
 };
 
-// 2. Petakan dokumen berdasarkan kecocokan "category" frontmatter atau nama folder
-const docsByFolder = Object.fromEntries(
-  navConfigs.map(({ folder, label }) => {
-    const docs = allDocs
-      .filter((doc) => {
-        const docCategory = doc.data.category?.trim().toLowerCase();
-        const targetLabel = label.trim().toLowerCase();
-        const targetFolder = folder.trim().toLowerCase();
+const getHref = (doc: (typeof allDocs)[number]) => {
+  const finalSlug = doc.data.slug || doc.id.replace(/\.(md|mdx)$/, '');
+  return doc.id === primaryRootId ? docsRootPath : `${ROUTES.docs}/${finalSlug}/`;
+};
 
-        // Cocok jika frontmatter category sama dengan label navigation, atau id mengandung nama folder
-        const matchCategory = docCategory && docCategory === targetLabel;
-        const matchFolder = doc.id.toLowerCase().startsWith(`${targetFolder}/`) || doc.id.toLowerCase().includes(`/${targetFolder}/`);
-
-        return matchCategory || matchFolder;
-      })
-      .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999));
-
-    return [folder, docs];
-  })
-);
-
-// 3. Ambil dokumen sisa yang tidak masuk ke grup manapun sebagai ungrouped
-const assignedIds = new Set(Object.values(docsByFolder).flat().map(d => d.id));
-const ungroupedDocs = allDocs
-  .filter((doc) => !assignedIds.has(doc.id))
-  .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999));
+const getCategoryLabel = (category: string) => {
+  const found = SIDEBAR_CONFIG.find(c => c.category === category);
+  return found?.label || category;
+};
 
 const $ = {
   wrapper: "flex flex-col space-y-1 w-full flex-1 py-2 px-4",
-};
+}
 ---
 
 <div class={$.wrapper}>
-  {navConfigs.map(({ label, folder }) => {
-    const docs      = docsByFolder[folder] ?? [];
-    const hasActive = docs.some((doc) => checkIsActive(getHref(doc)));
-
-    if (!docs.length) return null;
-
+  {sortedCategories.map((category) => {
+    const categoryDocs = docsByCategory[category] || [];
+    const hasActiveChild = categoryDocs.some((doc) => checkIsActive(getHref(doc)));
+    const label = getCategoryLabel(category as typeof SIDEBAR_CONFIG[number]['category']);
+    
     return (
-      <SidebarGroup title={label} open={hasActive}>
-        {docs.map((doc) => (
-          <SidebarLink
-            href={getHref(doc)}
-            isActive={checkIsActive(getHref(doc))}>
+      <SidebarGroup title={label} open={hasActiveChild}>
+        {categoryDocs.map((doc) => (
+          <SidebarLink href={getHref(doc)} isActive={checkIsActive(getHref(doc))}>
             {doc.data.title}
           </SidebarLink>
         ))}
@@ -110,10 +71,11 @@ const $ = {
   })}
 
   {ungroupedDocs.map((doc) => (
-    <SidebarLink
-      href={getHref(doc)}
-      isActive={checkIsActive(getHref(doc))}
-      grouped={false}>
+    <SidebarLink 
+      href={getHref(doc)} 
+      isActive={checkIsActive(getHref(doc))} 
+      grouped={false}
+    >
       {doc.data.title}
     </SidebarLink>
   ))}
