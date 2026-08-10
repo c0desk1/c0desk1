@@ -1,5 +1,5 @@
 ---
-slug: "components"
+slug: "custom-components"
 title: "Komponen Kustom"
 description: "Ikhtisar semua komponen kustom berbasis Sätteri yang tersedia di website ini."
 category: "Components"
@@ -13,7 +13,7 @@ author:
 lastUpdated: 2026-08-09T02:27:00Z
 seo:
   title: "Komponen Kustom — Ikhtisar"
-  description: "Ikhtisar semua komponen kustom berbasis Sätteri: callout, steps, tabs, filetree, accordion, user, badge, button, figure, dan video."
+  description: "Ikhtisar semua komponen kustom berbasis Sätteri: callout, steps, tabs, filetree, accordion, user, badge, button, figure, video, card, dan icon."
   noIndex: true
 ---
 
@@ -38,28 +38,30 @@ Saat konten di-render, Sätteri akan mengubah directive tersebut menjadi kompone
 
 ## Daftar Komponen
 
-### Block Components `:::` / `::`
+### Block Components (`:::` / `::`)
 
 Komponen yang berdiri sendiri di level blok.
 
-| Komponen | Sintaks | Fungsi |
-|----------|---------|--------|
-| Callout | `> [!NOTE]` | Menyorot informasi penting |
-| Steps | `:::steps` | Panduan langkah-demi-langkah |
-| Tabs | `::::tabs` | Konten dalam tab |
-| Filetree | `:::filetree` | Struktur folder dan file |
-| Accordion | `:::details` | Konten yang bisa dilipat |
-| Video | `::video[...]` | Embed video |
+| Komponen | Sintaks | Fungsi | Halaman |
+|----------|---------|--------|---------|
+| Callout | `> [!NOTE]` | Menyorot informasi penting | [Callout](/docs/components/callout) |
+| Steps | `:::steps` | Panduan langkah-demi-langkah | [Steps](/docs/components/steps) |
+| Tabs | `::::tabs` | Konten dalam tab | [Tabs](/docs/components/tabs) |
+| Filetree | `:::filetree` | Struktur folder dan file | [Filetree](/docs/components/filetree) |
+| Accordion | `:::details` | Konten yang bisa dilipat | [Accordion](/docs/components/accordion) |
+| Video | `::video[...]` | Embed video | [Video](/docs/components/video) |
+| Card | `:::card` | Kotak informasi dengan ikon dan link | [Card](/docs/components/card) |
 
-### Inline Components (:)
+### Inline Components (`:`)
 
 Komponen yang bisa digunakan di dalam paragraf atau teks.
 
-| Komponen | Sintaks | Fungsi |
-|----------|---------|--------|
-| User | `:user[...]` | Profil pengguna dengan avatar |
-| Badge | `:badge[...]` | Label kecil dengan warna |
-| Button | `:button[...]` | Tombol dengan ikon |
+| Komponen | Sintaks | Fungsi | Halaman |
+|----------|---------|--------|---------|
+| User | `:user[...]` | Profil pengguna dengan avatar | [User](/docs/components/user) |
+| Badge | `:badge[...]` | Label kecil dengan warna | [Badge](/docs/components/badge) |
+| Button | `:button[...]` | Tombol dengan ikon | [Button](/docs/components/button) |
+| Icon | `:icon[...]` | Ikon SVG dengan berbagai ukuran | [Icon](/docs/components/icon) |
 
 ### Media Components
 
@@ -69,14 +71,24 @@ Komponen yang bisa digunakan di dalam paragraf atau teks.
 
 ## Mulai Menggunakan
 
-:::card[Callout]{icon="info" href="/docs/callout/"}
+Pilih salah satu komponen dari daftar di atas untuk mulai belajar. Berikut beberapa rekomendasi untuk memulai:
+
+:::card[Callout]{icon="info" href="/docs/components/callout"}
 Mulai dengan Callout untuk menyorot informasi penting.
 :::
 
-:::card[Steps]{icon="info" href="/docs/steps/"}
+:::card[Steps]{icon="star" href="/docs/components/steps"}
 Gunakan Steps untuk membuat panduan langkah-demi-langkah.
 :::
 
-:::card[Tabs]{icon="info" href="/docs/tabs/"}
+:::card[Tabs]{icon="link" href="/docs/components/tabs"}
 Pelajari Tabs untuk menampilkan konten dalam tab.
+:::
+
+:::card[Icon]{icon="sparkle" href="/docs/components/icon"}
+Tambahkan ikon ke dalam konten dengan Icon.
+:::
+
+:::card[Card]{icon="star" href="/docs/components/card"}
+Pelajari cara membuat Card untuk menampilkan informasi.
 :::
