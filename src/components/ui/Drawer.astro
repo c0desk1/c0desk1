@@ -38,16 +38,10 @@ const $ = {
     }
 
     const openDrawer = (drawer: HTMLElement) => {
-      const backdrop = drawer.querySelector('[data-drawer-backdrop]') as HTMLElement;
-      const panel = drawer.querySelector('[data-drawer-panel]') as HTMLElement;
-
       drawer.classList.remove("hidden");
       drawer.classList.add("flex");
 
       requestAnimationFrame(() => {
-        backdrop.classList.remove("opacity-0");
-        panel.classList.remove("translate-y-full");
-
         if (mainWrapper && window.innerWidth > 640) {
           mainWrapper.style.transform = 'scale(0.96) translateY(12px)';
           mainWrapper.style.borderRadius = '12px';
