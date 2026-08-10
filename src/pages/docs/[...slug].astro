@@ -36,10 +36,10 @@ export async function getStaticPaths() {
 
   return docsEntries.map((entry) => {
     const cleanSlug = entry.data.slug || entry.id.replace(/\.(md|mdx)$/, '');
-    const isRoot = entry.data.slug === root || entry.id === root;
+    // const isRoot = entry.data.slug === root || entry.id === root;
 
     return {
-      params: { slug: isRoot ? undefined : cleanSlug },
+      params: { slug: cleanSlug },
       props: { entry, root },
       cacheKey: (entry as any).digest
     };
