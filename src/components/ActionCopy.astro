@@ -93,24 +93,22 @@ const ACTION = {
       </div>
     </summary>
 
-    <menu class={s.actionDropdown}>
+    <div class={s.actionDropdown}>
       {ACTION.copy.map((item, i) => (
       <>
         {item.action === "agent" && (
-          <li class={s.actionDivider}></li>
+          <hr class={s.actionDivider} />
         )}
-        <li>
-          <button
-            type="button"
-            data-action={item.action}
-            class={s.actionDropdownItems}>
-            <Icon name={item.icon as any} class={s.actionIcon} />
-            {item.message}
-          </button>
-        </li>
+        <button
+          type="button"
+          data-action={item.action}
+          class={s.actionDropdownItems}
+        ><Icon name={item.icon as any} class={s.actionIcon} />
+          {item.message}
+        </button>
       </>
       ))}
-    </menu>
+    </div>
   </details>
 </div>
 
