@@ -30,64 +30,64 @@ Sebelum memulai, pastikan perangkat Anda telah terpasang beberapa perangkat luna
 Ikuti instruksi di bawah ini untuk menyiapkan lingkungan lokal Anda:
 
 :::steps
-- ### 1. Salin Repositori (Clone)
-  Buka terminal atau command line di komputer Anda, lalu unduh salinan repositori kode sumber Unloyd dari GitHub:
-
-  ```bash
-  git clone [https://github.com/username/unloyd.git](https://github.com/username/unloyd.git)
-  cd unloyd
-  ```
+1.  ### Salin Repositori (Clone)
+	Buka terminal atau command line di komputer Anda, lalu unduh salinan repositori kode sumber Unloyd dari GitHub:
+	
+	```bash
+    git clone [https://github.com/username/unloyd.git](https://github.com/username/unloyd.git)
+    cd unloyd
+    ```
 
   > [!NOTE]
   > Sesuaikan tautan URL di atas dengan alamat repositori yang Anda miliki).
 
-- ### 2. Pasang Dependensi
-  Setelah berada di dalam direktori proyek, pasang seluruh pustaka pendukung yang dibutuhkan menggunakan manajer paket pilihan Anda:
+2. ### Pasang Dependensi
+   Setelah berada di dalam direktori proyek, pasang seluruh pustaka pendukung yang dibutuhkan menggunakan manajer paket pilihan Anda:
   
-  ::::tabs
-  :::tab[npm]
-  ```bash
-  npm install
-  ```
-  :::
+   ::::tabs
+   :::tab[npm]
+   ```bash
+   npm install
+   ```
+   :::
   
-  :::tab[pnpm]
-  ```bash
-  pnpm install
-  ```
-  :::
+   :::tab[pnpm]
+   ```bash
+   pnpm install
+   ```
+   :::
   
-  :::tab[bun]
-  ```bash
-  bun install
-  ```
-  :::
-  ::::
+   :::tab[bun]
+   ```bash
+   bun install
+   ```
+   :::
+   ::::
   
-- ### 3. Jalankan Peladen Lokal
-  Setelah proses pemasangan pustaka selesai, nyalakan peladen pengembangan (development server) lokal dengan perintah:
+3. ### Jalankan Peladen Lokal
+   Setelah proses pemasangan pustaka selesai, nyalakan peladen pengembangan (development server) lokal dengan perintah:
   
-  ::::tabs
-  :::tab[npm]
-  ```bash
-  npm run dev
-  ```
-  :::
+   ::::tabs
+   :::tab[npm]
+   ```bash
+   npm run dev
+   ```
+   :::
   
-  :::tab[pnpm]
-  ```bash
-  pnpm dev
-  ```
-  :::
+   :::tab[pnpm]
+   ```bash
+   pnpm dev
+   ```
+   :::
   
-  :::tab[bun]
-  ```bash
-  bun dev
-  ```
-  :::
-  ::::
+   :::tab[bun]
+   ```bash
+   bun dev
+   ```
+   :::
+   ::::
   
-  Secara default, Astro akan menjalankan peladen lokal yang dapat diakses melalui peramban web pada alamat `http://localhost:4321`.
+   Secara default, Astro akan menjalankan peladen lokal yang dapat diakses melalui peramban web pada alamat `http://localhost:4321`.
 :::
 
 Setiap kali Anda mengubah berkas artikel di dalam folder `src/content/` atau merubah tata letak kode, peramban akan memperbarui tampilannya secara instan (Hot Module Replacement), memudahkan Anda melihat hasil eksperimen secara langsung.
