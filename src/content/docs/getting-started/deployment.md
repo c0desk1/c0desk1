@@ -32,22 +32,22 @@ Proses publikasi dilakukan dengan menghubungkan repositori kode sumber langsung 
 1. ### 1. Salin atau Hubungkan Repositori
   Pastikan kode sumber proyek Unloyd telah berada di dalam repositori GitHub Anda.
 
-2. ### 2. Buat Aplikasi Baru di Cloudflare Pages
+2. ### Buat Aplikasi Baru di Cloudflare Pages
   * Masuk ke dalam dasbor Cloudflare Anda.
   * Pada panel navigasi sebelah kiri, pilih menu **Workers & Pages**.
   * Buka tab **Pages**, lalu klik tombol **Create application**.
   * Pilih opsi **Connect to Git** untuk memberikan izin akses Cloudflare ke akun GitHub Anda, kemudian pilih repositori Unloyd.
 
-3. ### 3. Konfigurasi Parameter Build
+3. ### Konfigurasi Parameter Build
   Pada tahap pengaturan pembangunan (*build settings*), masukkan parameter yang sesuai dengan konfigurasi proyek Astro Anda:
   * **Production branch:** `main` (atau cabang utama yang Anda gunakan)
   * **Build command:** `npm run build` (atau manajer paket lain seperti `pnpm build` / `bun run build`)
   * **Build output directory:** `dist`
 
-4. ### 4. Selesaikan dan Publikasikan
+4. ### Selesaikan dan Publikasikan
   Klik tombol **Save and Deploy**. Cloudflare akan secara otomatis mengunduh pustaka yang diperlukan, menjalankan proses kompilasi (*build*) Astro, dan menerbitkan situs Anda ke jaringan global dalam waktu singkat.
 :::
 
-## Otomatisasi Pembaruan (Continuous Deployment)
+## Continuous Deployment
 
 Setelah pengaturan selesai, Anda tidak perlu lagi melakukan *deployment* secara manual. Setiap kali Anda melakukan *push* perubahan kode (baik itu menambah artikel blog baru, memperbarui dokumentasi, atau mengubah tata letak) ke cabang utama di GitHub, Cloudflare Pages akan secara otomatis memicu proses *re-build* dan memperbarui isi situs secara langsung tanpa gangguan layanan.
