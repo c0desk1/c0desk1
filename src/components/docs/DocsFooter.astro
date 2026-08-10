@@ -1,5 +1,4 @@
 ---
-// src/components/docs/DocsFooter.astro
 import type { CollectionEntry } from "astro:content";
 import DocsPager from "./DocsPager.astro";
 import { formatDate } from "@lib/utils";
@@ -7,14 +6,12 @@ import { formatDate } from "@lib/utils";
 interface Props {
     prev?: CollectionEntry<"docs"> | null;
     next?: CollectionEntry<"docs"> | null;
-    root: string;
     lastUpdated?: Date;
 }
 
 const { 
     prev, 
     next, 
-    root, 
     lastUpdated 
 } = Astro.props;
 
@@ -38,7 +35,6 @@ const $ = {
     )}
     
     <DocsPager 
-      root={root} 
       prev={prev} 
       next={next} 
     />
