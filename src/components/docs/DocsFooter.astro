@@ -1,11 +1,12 @@
 ---
+// src/components/docs/DocsFooter.astro
+import type { CollectionEntry } from "astro:content";
 import DocsPager from "./DocsPager.astro";
 import { formatDate } from "@lib/utils";
-// import Feedback from "../Feedback.astro";
 
 interface Props {
-    prev: any;
-    next: any;
+    prev?: CollectionEntry<"docs"> | null;
+    next?: CollectionEntry<"docs"> | null;
     root: string;
     lastUpdated?: Date;
 }
@@ -22,13 +23,9 @@ const $ = {
     date: "text-body-14 text-(--fg-muted) py-4"
 }
 ---
-<div 
-  data-pagefind-ignore 
-  class={$.wrapper}
->
-    <!--<Feedback />-->
-    <p class={$.date}>
-        {lastUpdated && (
+<div data-pagefind-ignore class={$.wrapper}>
+    {lastUpdated && (
+        <p class={$.date}>
             <time 
               data-page-meta="date" 
               data-pagefind-sort="date" 
@@ -37,8 +34,9 @@ const $ = {
                 <span>Diperbarui: </span>
                 {formatDate(lastUpdated)}
             </time>
-        )}
-    </p>
+        </p>
+    )}
+    
     <DocsPager 
       root={root} 
       prev={prev} 
