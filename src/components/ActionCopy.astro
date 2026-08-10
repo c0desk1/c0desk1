@@ -1,5 +1,4 @@
 ---
-// src/components/CopyDropdown.astro
 import Icon from "@ui/Icons.astro";
 
 interface Props {
@@ -10,15 +9,14 @@ interface Props {
 
 const { 
   label = "Copy Page", 
-  class: className, 
+  class: className = "", 
   rawMarkdown = "" 
 } = Astro.props;
 
-const uniqueId = `copy-dropdown-${Math.random().toString(36).substring(2, 9)}`;
+const safeMarkdown = encodeURIComponent(rawMarkdown);
 
 const s = {
   wrapper: [
-    'copy-dropdown-wrapper',
     'relative inline-flex items-stretch rounded ring-1 shadow-(--shadow-sm)',
     'ring-(--border) bg-(--bg-subtle)',
     'transition-shadow duration-(--duration)'
@@ -32,10 +30,7 @@ const s = {
 
   actionDivider: "h-px bg-(--border) my-1.5 mx-1",
 
-  actionIcon: [
-    'relative inline-flex items-center justify-center shrink-0',
-    'size-4',
-  ].join(" "),
+  actionIcon: 'relative inline-flex items-center justify-center shrink-0 size-4',
 
   actionDropdown: [
     'absolute right-0 top-[calc(100%+0.5rem)] min-w-[12rem] z-50 rounded-md ring-1 p-1',
@@ -46,7 +41,7 @@ const s = {
   actionDropdownItems: [
     'flex items-center gap-2 p-2 text-button-13 md:text-button-14 text-start rounded w-full',
     'text-(--fg) hover:bg-(--bg-muted) hover:text-(--fg-strong)',
-    'cursor-pointer'
+    'cursor-pointer transition-colors'
   ].join(" "),
 };
 
@@ -59,17 +54,13 @@ const ACTION = {
 };
 ---
 
-<div class:list={[s.wrapper, className]}>
-  <template class="raw-markdown-data">{rawMarkdown}</template>
+<copy-dropdown data-markdown={safeMarkdown} class:list={[s.wrapper, className]}>
   
   <button 
     type="button"
     data-action="copy-default" 
     aria-label="Copy page URL" 
-    class:list={[
-      "px-2.5 py-2 rounded-l",
-      s.actionGroup
-    ]}
+    class:list={["px-2.5 py-2 rounded-l", s.actionGroup]}
   >
     <div class={s.actionIcon}>
       <Icon name="copy" class="icon-copy w-full h-full text-(--fg-strong)" />
@@ -78,11 +69,7 @@ const ACTION = {
     <span>{label}</span>
   </button>
 
-  <details 
-    id={uniqueId}
-    data-auto-close 
-    class="relative group"
-  >
+  <details class="relative group">
     <summary class:list={[
       "px-2.5 py-2 rounded-r border-l border-(--border) h-full",
       "list-none flex items-center justify-center",
@@ -94,101 +81,101 @@ const ACTION = {
     </summary>
 
     <div class={s.actionDropdown}>
-      {ACTION.copy.map((item, i) => (
-      <>
-        {item.action === "agent" && (
-          <hr class={s.actionDivider} />
-        )}
-        <button
-          type="button"
-          data-action={item.action}
-          class={s.actionDropdownItems}
-        ><Icon name={item.icon as any} class={s.actionIcon} />
-          {item.message}
-        </button>
-      </>
+      {ACTION.copy.map((item) => (
+        <>
+          {item.action === "agent" && <hr class={s.actionDivider} />}
+          <button
+            type="button"
+            data-action={item.action}
+            class={s.actionDropdownItems}
+          >
+            <Icon name={item.icon as any} class={s.actionIcon} />
+            {item.message}
+          </button>
+        </>
       ))}
     </div>
   </details>
-</div>
+</copy-dropdown>
 
 <script>
-  function setupCopyButton() {
-    document.querySelectorAll('.copy-dropdown-wrapper').forEach(wrapper => {
-      const primaryBtn = wrapper.querySelector('[data-action="copy-default"]');
-      const details = wrapper.querySelector('details');
-      const iconCopy = wrapper.querySelector('.icon-copy');
-      const iconCheck = wrapper.querySelector('.icon-check');
-      const template = wrapper.querySelector('.raw-markdown-data');
+  class CopyDropdown extends HTMLElement {
+    private closeOnOutsideClick: (e: MouseEvent) => void;
 
-      if (!primaryBtn || !details) return;
+    connectedCallback() {
+      const rawMarkdown = decodeURIComponent(this.dataset.markdown || "");
+      const primaryBtn = this.querySelector('[data-action="copy-default"]');
+      const details = this.querySelector('details');
+      
+      primaryBtn?.addEventListener('click', () => {
+        this.handleCopy(window.location.href);
+      });
 
-      const showCheckmark = () => {
+      this.querySelectorAll('button[data-action]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const action = (e.currentTarget as HTMLElement).getAttribute('data-action');
+          details?.removeAttribute('open');
+
+          if (action === 'url') {
+            this.handleCopy(window.location.href);
+          } 
+          else if (action === 'markdown') {
+            if (rawMarkdown) this.handleCopy(rawMarkdown);
+          } 
+          else if (action === 'agent') {
+            this.handleAgentAction();
+          }
+        });
+      });
+
+      this.closeOnOutsideClick = (e: MouseEvent) => {
+        if (details?.hasAttribute('open') && !this.contains(e.target as Node)) {
+          details.removeAttribute('open');
+        }
+      };
+      document.addEventListener('click', this.closeOnOutsideClick);
+    }
+
+    disconnectedCallback() {
+      document.removeEventListener('click', this.closeOnOutsideClick);
+    }
+
+    private async handleCopy(text: string) {
+      try {
+        await navigator.clipboard.writeText(text);
+        
+        const iconCopy = this.querySelector('.icon-copy');
+        const iconCheck = this.querySelector('.icon-check');
+        
         iconCopy?.classList.add('hidden');
         iconCheck?.classList.remove('hidden');
+        
         setTimeout(() => {
           iconCopy?.classList.remove('hidden');
           iconCheck?.classList.add('hidden');
         }, 2000);
-      };
+      } catch (err) {
+        console.error('Failed to copy: ', err);
+      }
+    }
 
-      primaryBtn.addEventListener('click', async () => {
-        await navigator.clipboard.writeText(window.location.href);
-        showCheckmark();
-      });
-
-      details.querySelectorAll('button[data-action]').forEach(btn => {
-        btn.addEventListener('click', async (e) => {
-          const action = (e.currentTarget as HTMLElement).getAttribute('data-action');
-          
-          details.removeAttribute('open');
-
-          if (action === 'url') {
-            await navigator.clipboard.writeText(window.location.href);
-            showCheckmark();
-          } 
-          else if (action === 'markdown') {
-            const rawContent = template?.innerHTML || "";
-            if (rawContent) {
-              await navigator.clipboard.writeText(rawContent);
-              showCheckmark();
-            }
-          } 
-          else if (action === 'agent') {
-            const drawerTrigger = document.querySelector('[data-drawer-trigger="ai-assistant-drawer"]');
-            
-            if (drawerTrigger) {
-              (drawerTrigger as HTMLElement).click();
-
-              setTimeout(() => {
-                const aiInput = document.getElementById('ai-drawer-input') as HTMLInputElement;
-                if (aiInput) {
-                  aiInput.value = `Tolong jelaskan atau rangkum halaman ini: ${window.location.href}`;
-                  aiInput.focus();
-                }
-              }, 300);
-            } else {
-              window.location.href = `/agent?page=${window.location.pathname}`;
-            }
-          }
-        });
-      });
-    });
-
-    document.addEventListener('click', (event) => {
-      const target = event.target as HTMLElement;
+    private handleAgentAction() {
+      const drawerTrigger = document.querySelector('[data-drawer-trigger="ai-assistant-drawer"]') as HTMLElement;
       
-      document.querySelectorAll('details[data-auto-close][open]').forEach(details => {
-        const hasValidId = details.hasAttribute('id');
-        
-        const isClickOutside = !details.contains(target);
-
-        if (hasValidId && isClickOutside) {
-          details.removeAttribute('open');
-        }
-      });
-    });
+      if (drawerTrigger) {
+        drawerTrigger.click();
+        setTimeout(() => {
+          const aiInput = document.getElementById('ai-drawer-input') as HTMLInputElement;
+          if (aiInput) {
+            aiInput.value = `Tolong jelaskan atau rangkum halaman ini: ${window.location.href}`;
+            aiInput.focus();
+          }
+        }, 300);
+      } else {
+        window.location.href = `/agent?page=${window.location.pathname}`;
+      }
+    }
   }
 
-  setupCopyButton();
+  customElements.define('copy-dropdown', CopyDropdown);
 </script>
