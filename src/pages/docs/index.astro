@@ -1,0 +1,81 @@
+---
+// src/pages/docs/index.astro
+import { getCollection } from "astro:content";
+import { SIDEBAR_CONFIG } from "@/config/sidebar";
+import { ROUTES, buildMeta } from "@/consts";
+
+import Layout from "@/layouts/Layout.astro";
+import Container from "@ui/Container.astro";
+import Section from "@ui/Section.astro";
+import DocsHero from "@/components/docs/DocsHero.astro";
+import Icon from "@ui/Icons.astro";
+
+
+const allDocs = await getCollection("docs", ({ data }) => !data.draft);
+const sortedDocs = [...allDocs].sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999));
+
+const docsByCategory = Object.groupBy(
+  sortedDocs,
+  (doc) => doc.data.category ?? 'Uncategorized'
+) as Partial<Record<string, typeof allDocs>>;
+
+const meta = buildMeta({
+  title: "Docs",
+  description: "Explore our guides, component references, and API documentation.",
+  canonical: `${Astro.site}${ROUTES.docs}/`
+});
+
+const $ = {
+  card: [
+    "group flex flex-col gap-3 p-6 rounded-xl ring-1 ring-(--border)",
+    "bg-(--bg-muted)/50 hover:bg-(--bg-muted) no-underline"
+  ].join(" "),
+  cardTitle: "text-title-20 font-semibold text-(--fg-strong)",
+  cardDesc: "text-body-14 text-(--fg-muted)",
+  linkList: "mt-4 space-y-2",
+  linkItem: "flex items-center gap-2 text-label-14 text-(--fg-muted) hover:text-(--fg-strong)",
+}
+
+---
+
+<Layout meta={meta}>
+    <DocsHero />
+    <Section size="md" class="py-12 lg:py-16">
+      <Container size="lg">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {SIDEBAR_CONFIG.map((config) => {
+            const categoryDocs = docsByCategory[config.category] ?? [];
+            if (categoryDocs.length === 0) return null;
+
+            const firstDoc = categoryDocs[0];
+            const mainHref = `${ROUTES.docs}/${firstDoc.data.slug ?? firstDoc.id.replace(/\.(md|mdx)$/, '')}/`;
+
+            return (
+                <div class={$.card}>
+                <h2 class={$.cardTitle}>{config.label}</h2>
+                <p class={$.cardDesc}>
+                    Explore {categoryDocs.length} articles in {config.label.toLowerCase()}.
+                </p>
+                
+                <div class={$.linkList}>
+                    {categoryDocs.slice(0, 3).map((doc) => {
+                    const docHref = `${ROUTES.docs}/${doc.data.slug ?? doc.id.replace(/\.(md|mdx)$/, '')}/`;
+                    return (
+                        <a href={docHref} class={$.linkItem}>
+                        <Icon name="file-text" class="size-4 shrink-0" />
+                        <span class="truncate">{doc.data.title}</span>
+                        </a>
+                    )
+                    })}
+                </div>
+
+                <a href={mainHref} class="mt-auto pt-4 text-label-14 font-medium text-brand flex items-center gap-1">
+                    View all <Icon name="arrow-right" class="size-4" />
+                </a>
+                </div>
+            );
+            })}
+        </div>
+    </Container>
+  </Section>
+</Layout>
