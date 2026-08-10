@@ -1,0 +1,71 @@
+---
+// src/components/docs/DocsHero.astro
+import { ROUTES } from "@/consts";
+
+import Icon from "@ui/Icons.astro";
+import Button from "@ui/Button.astro";
+
+import Container from "@ui/Container.astro";
+import Section from "@ui/Section.astro";
+
+const $ = {
+  section: [
+    "relative py-16 lg:py-24 border-b border-(--border-subtle)/50",
+    "bg-(--bg)",
+  ].join(" "),
+  
+  backgroundPattern: [
+    "absolute inset-0 z-0",
+    "bg-[radial-gradient(var(--fg)_1px,transparent_1px)]",
+    "[background-size:24px_24px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_0%,#000_10%,transparent_100%)]",
+    "opacity-60"
+  ].join(" "),
+
+  container: "relative z-10 mx-auto max-w-4xl text-center flex flex-col items-center",
+  
+  badge: [
+    "items-center gap-2 px-3 py-1 mb-5 rounded-full ring-1",
+    "ring-(--border-subtle) bg-(--bg-muted) text-(--fg-muted)",
+    "text-label-12 font-medium hidden"
+  ].join(" "),
+
+  title: [
+    "text-heading-40 md:text-heading-48 font-semibold text-(--fg-strong)",
+    "tracking-tighter mb-5 leading-tight",
+  ].join(" "),
+
+  description: "text-body-18 text-(--fg-muted) mb-10 max-w-2xl",
+
+  actions: "flex flex-wrap gap-4 items-center justify-center",
+};
+---
+
+<Section class={$.section}>
+  <div class={$.backgroundPattern} aria-hidden="true" />
+  
+  <Container size="lg" class={$.container}>
+
+    <div class={$.badge}>
+      <Icon name="atom" class="size-4 text-brand" />
+      <span>v2.1.0 Released</span>
+    </div>
+
+    <h1 class={$.title}>
+      The ultimate framework<br/>for documentation.
+    </h1>
+    
+    <p class={$.description}>
+      A modern, sleek documentation engine designed for speed, customization, and developer experience. Start building in seconds.
+    </p>
+
+    <div class={$.actions}>
+      <Button href={`${ROUTES.docs}/overview/`} variant="ghost" size="lg" suffix={<Icon name="arrow-right" class="size-4" />}>
+        <span>Get Started</span>
+      </Button>
+      <Button href={`${ROUTES.docs}/custom-components/`} variant="outline" size="lg">
+        View Components
+      </Button>
+    </div>
+
+  </Container>
+</Section>
