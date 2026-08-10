@@ -7,37 +7,42 @@ import SidebarGroup from '@/components/ui/SidebarGroup.astro';
 import SidebarLink from '@/components/ui/SidebarLink.astro';
 
 const allDocs = await getCollection('docs', ({ data }) => !data.draft);
-const sortedDocs = [...allDocs].sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999));
-const primaryRootId = sortedDocs[0]?.id;
 
 const docsByCategory = Object.groupBy(
-  sortedDocs,
+  allDocs,
   (doc) => doc.data.category ?? 'Uncategorized'
 ) as Partial<Record<string, typeof allDocs>>;
 
+for (const category in docsByCategory) {
+  docsByCategory[category]?.sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999));
+}
+
 const categoryMap = new Map(SIDEBAR_CONFIG.map((c) => [c.category, c.label]));
+const configCategories = SIDEBAR_CONFIG.map(c => c.category);
 const availableCategories = Object.keys(docsByCategory);
 
 const sortedCategories = [
-  ...SIDEBAR_CONFIG.map((c) => c.category).filter((cat) => cat in docsByCategory),
+  ...configCategories.filter((cat) => cat in docsByCategory),
   ...availableCategories.filter((cat) => !categoryMap.has(cat as any)),
 ];
 
-const ungroupedDocs = sortedDocs.filter((doc) => !doc.data.category);
+const ungroupedDocs = (docsByCategory['Uncategorized'] ?? []).filter((doc) => !doc.data.category);
 
-const currentPath = Astro.url.pathname;
-const docsRootPath = `${ROUTES.docs}/`;
+const currentPath = Astro.url.pathname.endsWith('/') 
+  ? Astro.url.pathname 
+  : `${Astro.url.pathname}/`;
 
-const checkIsActive = (href: string) => {
-  if (href === docsRootPath) {
-    return currentPath === ROUTES.docs || currentPath === docsRootPath;
-  }
-  return currentPath === href || currentPath === `${href}/`;
-};
+const baseDocsRoute = ROUTES.docs.replace(/\/$/, '');
 
 const getHref = (doc: (typeof allDocs)[number]) => {
-  const finalSlug = doc.data.slug || doc.id.replace(/\.(md|mdx)$/, '');
-  return doc.id === primaryRootId ? docsRootPath : `${ROUTES.docs}/${finalSlug}/`;
+  const rawSlug = doc.data.slug ?? doc.id.replace(/\.(md|mdx)$/, '');
+  const cleanSlug = rawSlug.replace(/^\/+/, '').replace(/\/+$/, '');
+  
+  return `${baseDocsRoute}/${cleanSlug}/`;
+};
+
+const checkIsActive = (href: string) => {
+  return currentPath === href;
 };
 
 const $ = {
