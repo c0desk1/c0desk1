@@ -7,24 +7,21 @@ import SidebarGroup from '@/components/ui/SidebarGroup.astro';
 import SidebarLink from '@/components/ui/SidebarLink.astro';
 
 const allDocs = await getCollection('docs', ({ data }) => !data.draft);
-
 const sortedDocs = [...allDocs].sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999));
 const primaryRootId = sortedDocs[0]?.id;
 
-const docsByCategory: Record<string, typeof allDocs> = {};
-for (const doc of sortedDocs) {
-  const category = doc.data.category || 'Uncategorized';
-  if (!docsByCategory[category]) docsByCategory[category] = [];
-  docsByCategory[category].push(doc);
-}
+const docsByCategory = Object.groupBy(
+  sortedDocs,
+  (doc) => doc.data.category ?? 'Uncategorized'
+) as Partial<Record<string, typeof allDocs>>;
 
-// 🔥 Ambil daftar kategori dari config
-const configCategories: string[] = SIDEBAR_CONFIG.map(c => c.category);
+const categoryMap = new Map(SIDEBAR_CONFIG.map((c) => [c.category, c.label]));
 const availableCategories = Object.keys(docsByCategory);
 
-const orderedCategories = configCategories.filter(cat => availableCategories.includes(cat));
-const extraCategories = availableCategories.filter(cat => !configCategories.includes(cat));
-const sortedCategories = [...orderedCategories, ...extraCategories];
+const sortedCategories = [
+  ...SIDEBAR_CONFIG.map((c) => c.category).filter((cat) => cat in docsByCategory),
+  ...availableCategories.filter((cat) => !categoryMap.has(cat as any)),
+];
 
 const ungroupedDocs = sortedDocs.filter((doc) => !doc.data.category);
 
@@ -43,40 +40,39 @@ const getHref = (doc: (typeof allDocs)[number]) => {
   return doc.id === primaryRootId ? docsRootPath : `${ROUTES.docs}/${finalSlug}/`;
 };
 
-const getCategoryLabel = (category: string) => {
-  const found = SIDEBAR_CONFIG.find(c => c.category === category);
-  return found?.label || category;
-};
-
 const $ = {
-  wrapper: "flex flex-col space-y-1 w-full flex-1 py-2 px-4",
-}
+  wrapper: 'flex flex-col space-y-1 w-full flex-1 py-2 px-4',
+};
 ---
 
 <div class={$.wrapper}>
-  {sortedCategories.map((category) => {
-    const categoryDocs = docsByCategory[category] || [];
-    const hasActiveChild = categoryDocs.some((doc) => checkIsActive(getHref(doc)));
-    const label = getCategoryLabel(category as typeof SIDEBAR_CONFIG[number]['category']);
-    
-    return (
-      <SidebarGroup title={label} open={hasActiveChild}>
-        {categoryDocs.map((doc) => (
-          <SidebarLink href={getHref(doc)} isActive={checkIsActive(getHref(doc))}>
-            {doc.data.title}
-          </SidebarLink>
-        ))}
-      </SidebarGroup>
-    );
-  })}
+  {
+    sortedCategories.map((category) => {
+      const categoryDocs = docsByCategory[category] ?? [];
+      const hasActiveChild = categoryDocs.some((doc) => checkIsActive(getHref(doc)));
+      const label = categoryMap.get(category as any) ?? category;
 
-  {ungroupedDocs.map((doc) => (
-    <SidebarLink 
-      href={getHref(doc)} 
-      isActive={checkIsActive(getHref(doc))} 
-      grouped={false}
-    >
-      {doc.data.title}
-    </SidebarLink>
-  ))}
+      return (
+        <SidebarGroup title={label} open={hasActiveChild}>
+          {categoryDocs.map((doc) => (
+            <SidebarLink href={getHref(doc)} isActive={checkIsActive(getHref(doc))}>
+              {doc.data.title}
+            </SidebarLink>
+          ))}
+        </SidebarGroup>
+      );
+    })
+  }
+
+  {
+    ungroupedDocs.map((doc) => (
+      <SidebarLink
+        href={getHref(doc)}
+        isActive={checkIsActive(getHref(doc))}
+        grouped={false}
+      >
+        {doc.data.title}
+      </SidebarLink>
+    ))
+  }
 </div>
