@@ -35,17 +35,16 @@ Berikut adalah gambaran umum dari peta direktori utama proyek:
 	- astro.config.mjs   # Konfigurasi utama Astro dan integrasi modul Satteri
 :::
 
-## Penjelasan Direktori Krusial
+## Penjelasan Direktori
 Setiap folder dalam proyek memiliki tanggung jawab yang spesifik untuk menjaga kerapian kode:
 
-### `src/content/`
-Direktori ini menjadi pusat dari seluruh materi bacaan. Dengan memisahkan `blog`, `docs`, dan `legal` ke dalam sub-folder tersendiri, sistem **Content Collections** dapat mengelola validasi tipe data secara terisolasi tanpa saling tercampur.
+1. `src/content/` Direktori ini menjadi pusat dari seluruh materi bacaan. Dengan memisahkan `blog`, `docs`, dan `legal` ke dalam sub-folder tersendiri, sistem **Content Collections** dapat mengelola validasi tipe data secara terisolasi tanpa saling tercampur.
 
-### `src/lib/mdx/`
-Bagian ini menampung seluruh fungsi ekstensi dan plugin kustom untuk pengurai Markdown (Satteri). Berkas-berkas di sini (seperti `satteri-callout.ts`, `satteri-tabs.ts`, dan `satteri-filetree.ts`) memproses sintaks direktif khusus menjadi elemen HTML yang bersih saat situs dikompilasi.
+2. `src/lib/` Bagian ini menampung seluruh fungsi ekstensi dan plugin kustom untuk pengurai Markdown (Satteri).
 
-### `src/pages/ dan functions/`
-	- `src/pages/` menangani seluruh struktur perutean halaman statis maupun dinamis (seperti halaman arsip artikel dan tampilan detail bacaan).
-	- `functions/` disiapkan untuk menangani logika sisi peladen (serverless) yang berjalan langsung di jaringan Edge Cloudflare jika diperlukan di masa mendatang.
+3. `src/pages/ dan functions/`
+
+    - `src/pages/` menangani seluruh struktur perutean halaman statis maupun dinamis (seperti halaman arsip artikel dan tampilan detail bacaan).
+    - `functions/` disiapkan untuk menangani logika sisi peladen (serverless) yang berjalan langsung di jaringan Edge Cloudflare jika diperlukan di masa mendatang.
 
 Struktur ini dirancang agar bersih, mudah dirawat, dan transparan bagi siapa saja yang ingin mempelajari atau memodifikasi kode sumber Unloyd.
