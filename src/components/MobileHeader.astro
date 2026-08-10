@@ -2,14 +2,12 @@
 // src/components/docs/mobile/MobileHeader.astro
 import Container from "./ui/Container.astro";
 import Icon from "@ui/Icons.astro";
-import Button from "@ui/Button.astro";
 import Logo from "@ui/Logo.astro";
 import SearchBar from "./ui/SearchBar.astro";
-import AI from "./AI.astro";
+// import AI from "./AI.astro";
 import Theme from "./Theme.astro";
 import GithubStar from "@components/GithubStar.astro";
 
-const label = "Buka Menu"
 const $ = {
   header: [
     "sticky top-0 z-50 w-full h-full pt-(--safe-top)",
@@ -24,7 +22,9 @@ const $ = {
   left: "flex items-center shrink-0 gap-4",
   right: "flex items-center shrink-0 gap-2",
   iconSize: "size-6"
-}
+};
+
+const label = "Buka Menu";
 ---
 
 <header id="mobile-header" class={$.header}>
@@ -47,10 +47,9 @@ const $ = {
         <div class="flex md:hidden gap-1">
           <label 
             for="mobile-nav-toggle" 
-            class="inline-flex items-center justify-center p-2 cursor-pointer text-(--fg-muted) aspect-square hover:bg-(--bg-subtle) rounded-md"
-            aria-label="Buka Menu"
-          >
-            <span class="sr-only">Buka menu navigasi</span>
+            class="inline-flex items-center justify-center size-8 cursor-pointer text-(--fg-muted) aspect-square hover:bg-(--bg-muted) hover:text-(--fg-strong) rounded-md outline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--accent-ring)"
+            aria-label={label}
+          ><span class="sr-only" set:text="Buka menu navigasi" />
             <Icon name="menu" class={$.iconSize} />
           </label>
         </div>
