@@ -125,12 +125,8 @@ const schema = [
   ]),
 ];
 
-const fullMarkdownContent = `---
-title: "${entry.data.title}"
-description: "${entry.data.description || ""}"
-category: "${entry.data.category}"
-lastUpdated: "${entry.data.lastUpdated}"
----
+const fullMarkdownContent = `
+# ${entry.data.title}
 
 ${entry.body}`;
 ---
