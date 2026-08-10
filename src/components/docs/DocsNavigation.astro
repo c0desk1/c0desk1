@@ -35,7 +35,7 @@ const currentPath = Astro.url.pathname.endsWith('/')
 const baseDocsRoute = ROUTES.docs.replace(/\/$/, '');
 
 const getHref = (doc: (typeof allDocs)[number]) => {
-  const rawSlug = doc.data.slug ?? doc.id.replace(/\.(md|mdx)$/, '');
+  const rawSlug = doc.data.slug ?? doc.id.split('/').pop() ?? '';
   const cleanSlug = rawSlug.replace(/^\/+/, '').replace(/\/+$/, '');
   
   return `${baseDocsRoute}/${cleanSlug}/`;
