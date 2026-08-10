@@ -10,15 +10,11 @@ interface Props {
   root: string;
 }
 
-const { 
-  prev, 
-  next, 
-  root 
-} = Astro.props;
+const { prev, next, root } = Astro.props;
 
 const getHref = (item: CollectionEntry<"docs">) => {
   const isRoot = item.id === root;
-  const cleanSlug = item.data.slug || item.id.replace(/\.(md|mdx)$/, '');
+  const cleanSlug = item.data.slug ?? item.id.replace(/\.(md|mdx)$/, '');
   
   return isRoot ? `${ROUTES.docs}/` : `${ROUTES.docs}/${cleanSlug}/`;
 };
@@ -27,14 +23,12 @@ const aria = "Docs pagination";
 
 const $ = {
   wrapper: 'items-center justify-center shrink-0 pb-(--safe-bottom)',
-  peginationGroup: 'grid grid-cols-1 gap-4 sm:grid-cols-2 items-center justify-center',
-    
-  pegination: [
+  paginationGroup: 'grid grid-cols-1 gap-4 sm:grid-cols-2 items-center justify-center',
+  pagination: [
     'group flex flex-col shrink-0 gap-2 rounded ring-1 p-4 font-medium',
     'ring-(--border) hover:bg-(--bg-muted) active:bg-(--bg-muted)',
-    'no-underline'
+    'no-underline transition-colors'
   ].join(" "),
-
   header: 'flex items-center gap-1 text-(--fg-strong)',
   Icon: 'block shrink-0 items-center justify-center size-4',
   Label: 'text-label-13 font-semibold',
@@ -44,22 +38,11 @@ const $ = {
 
 {
   (prev || next) && (
-    <nav 
-      data-pagefind-ignore 
-      aria-label={aria} 
-      class={$.wrapper}
-    >
-      <div class={$.peginationGroup}>
+    <nav data-pagefind-ignore aria-label={aria} class={$.wrapper}>
+      <div class={$.paginationGroup}>
         {prev ? (
-          <a rel="prev" href={getHref(prev)} 
-            class:list={[
-              "text-start justify-start",
-              $.pegination
-            ]}>
-            <span class:list={[
-              "justify-start",
-              $.header
-            ]}>
+          <a rel="prev" href={getHref(prev)} class:list={["text-start justify-start", $.pagination]}>
+            <span class:list={["justify-start", $.header]}>
               <Icon name="chevron-left" class={$.Icon} />
               <span class={$.Label}>{prev.data.title}</span>
             </span>
@@ -70,16 +53,10 @@ const $ = {
         ) : (
           <div aria-hidden="true" />
         )}
+        
         {next ? (
-          <a rel="next" href={getHref(next)} 
-            class:list={[
-              "text-end justify-end",
-              $.pegination
-            ]}>
-            <span class:list={[
-              "justify-end",
-              $.header
-            ]}>
+          <a rel="next" href={getHref(next)} class:list={["text-end justify-end", $.pagination]}>
+            <span class:list={["justify-end", $.header]}>
               <span class={$.Label}>{next.data.title}</span>
               <Icon name="chevron-right" class={$.Icon} />
             </span>
