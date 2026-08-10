@@ -1,4 +1,5 @@
 ---
+// src/components/CopyDropdown.astro
 import Icon from "@ui/Icons.astro";
 
 interface Props {
@@ -28,12 +29,10 @@ const s = {
     'cursor-pointer select-none'
   ].join(" "),
 
-  actionDivider: "h-px bg-(--border) my-1.5 mx-1",
-
   actionIcon: 'relative inline-flex items-center justify-center shrink-0 size-4',
 
   actionDropdown: [
-    'absolute right-0 top-[calc(100%+0.5rem)] min-w-[12rem] z-50 rounded-md ring-1 p-1',
+    'absolute right-0 top-[calc(100%+0.5rem)] min-w-[11rem] z-50 rounded-md ring-1 p-1',
     'ring-(--border) bg-(--bg-subtle) shadow-(--shadow-lg)',
     'animate-in fade-in slide-in-from-top-2 origin-top-right',
   ].join(" "),
@@ -45,17 +44,15 @@ const s = {
   ].join(" "),
 };
 
-const ACTION = {
-  copy: [
-    { action: "url", icon: "link", message: "Copy as URL" },
-    { action: "markdown", icon: "file", message: "Copy as Markdown" },
-    { action: "agent", icon: "ai-agent", message: "Open in Agent"}
-  ],
-};
+// Hanya menyisakan aksi murni untuk Copy & View Markdown
+const ACTIONS = [
+  { action: "url", icon: "link", message: "Copy as URL" },
+  { action: "markdown", icon: "file", message: "Copy as Markdown" },
+  { action: "view", icon: "eye", message: "View Source" },
+];
 ---
 
 <copy-dropdown data-markdown={safeMarkdown} class:list={[s.wrapper, className]}>
-  
   <button 
     type="button"
     data-action="copy-default" 
@@ -81,18 +78,15 @@ const ACTION = {
     </summary>
 
     <div class={s.actionDropdown}>
-      {ACTION.copy.map((item) => (
-        <>
-          {item.action === "agent" && <hr class={s.actionDivider} />}
-          <button
-            type="button"
-            data-action={item.action}
-            class={s.actionDropdownItems}
-          >
-            <Icon name={item.icon as any} class={s.actionIcon} />
-            {item.message}
-          </button>
-        </>
+      {ACTIONS.map((item) => (
+        <button
+          type="button"
+          data-action={item.action}
+          class={s.actionDropdownItems}
+        >
+          <Icon name={item.icon as any} class={s.actionIcon} />
+          {item.message}
+        </button>
       ))}
     </div>
   </details>
@@ -122,8 +116,12 @@ const ACTION = {
           else if (action === 'markdown') {
             if (rawMarkdown) this.handleCopy(rawMarkdown);
           } 
-          else if (action === 'agent') {
-            this.handleAgentAction();
+          else if (action === 'view') {
+            if (rawMarkdown) {
+              const blob = new Blob([rawMarkdown], { type: 'text/plain;charset=utf-8' });
+              const url = URL.createObjectURL(blob);
+              window.open(url, '_blank');
+            }
           }
         });
       });
@@ -143,7 +141,6 @@ const ACTION = {
     private async handleCopy(text: string) {
       try {
         await navigator.clipboard.writeText(text);
-        
         const iconCopy = this.querySelector('.icon-copy');
         const iconCheck = this.querySelector('.icon-check');
         
@@ -156,23 +153,6 @@ const ACTION = {
         }, 2000);
       } catch (err) {
         console.error('Failed to copy: ', err);
-      }
-    }
-
-    private handleAgentAction() {
-      const drawerTrigger = document.querySelector('[data-drawer-trigger="ai-assistant-drawer"]') as HTMLElement;
-      
-      if (drawerTrigger) {
-        drawerTrigger.click();
-        setTimeout(() => {
-          const aiInput = document.getElementById('ai-drawer-input') as HTMLInputElement;
-          if (aiInput) {
-            aiInput.value = `Tolong jelaskan atau rangkum halaman ini: ${window.location.href}`;
-            aiInput.focus();
-          }
-        }, 300);
-      } else {
-        window.location.href = `/agent?page=${window.location.pathname}`;
       }
     }
   }
