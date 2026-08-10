@@ -17,7 +17,7 @@ const $ = {
   groupItems: [
     "relative pr-2 py-1.5 -ml-3 rounded",
   ].join(" "),
-  items: "relative flex items-center w-full text-body-14 font-medium",
+  items: "relative flex items-center w-full text-body-13 font-medium",
   itemsIndicator: "absolute left-0 top-0 bottom-0 w-px bg-(--border) rounded-full"
 }
 ---
@@ -40,7 +40,7 @@ const $ = {
           "pl-6",
           isActive
             ? "text-(--accent) border-(--accent)"
-            : "text-(--fg) border-transparent"
+            : "text-(--fg)/80 border-transparent"
         ]}>
         {isActive && (
           <span class:list={[
