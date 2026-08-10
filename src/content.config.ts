@@ -6,6 +6,8 @@ import {
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 
+import { SIDEBAR_CATEGORIES } from "@/config/sidebar";
+
 const METADATA = z.object({
   slug: z.string().optional(),
   title: z.string(),
@@ -52,7 +54,7 @@ const docs = defineCollection({
   schema: z.object({
     ...METADATA.shape,
     ...AUTHOR.shape,
-    category: z.string().optional(),
+    category: z.enum(SIDEBAR_CATEGORIES).optional(),
     order: z.number().optional(),
     draft: z.boolean().default(false),
     seo: SEO,
