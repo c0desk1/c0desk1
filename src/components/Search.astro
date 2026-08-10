@@ -100,7 +100,7 @@ const card = {
       spellcheck="false">
       <Fragment slot="prefix">
         <div class={ui.iconSlot}>
-          <Icon id="search-icon" name="search" fill class="h-full w-full" />
+          <Icon id="search-icon" name="search" fill class="size-full" />
           <Spinner id="search-spinner" size="sm" class={ui.spinner} />
         </div>
       </Fragment>
@@ -182,9 +182,9 @@ const card = {
     padding: 0;
     background: var(--bg);
     color: var(--fg);
-
-    width: min(640px, 90vw);
-    max-height: 70dvh;
+    top: 0;
+    width: min(45rem, 90vw);
+    max-height: 80dvh;
     border-radius: 0.75rem;
     border: 1px solid color-mix(in srgb, var(--border-subtle) 80%, transparent);
     box-shadow:
@@ -234,7 +234,7 @@ const card = {
   margin: auto;
 }
 
-  @media (max-width: 639px) {
+  @media (max-width: 45rem) {
     dialog.search-dialog {
       position: fixed !important;
       inset: 0 !important;
