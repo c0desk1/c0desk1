@@ -26,7 +26,6 @@ const s = {
     'share-dropdown-wrapper',
     'relative inline-flex items-stretch rounded ring-1 shadow-(--shadow-sm)',
     'ring-(--border) bg-(--bg-subtle)',
-    'transition-shadow duration-(--duration)'
   ].join(" "),
 
   actionGroup: [
@@ -96,24 +95,22 @@ const ACTION: ShareAction[] = [
       </div>
     </summary>
 
-    <menu class={s.actionDropdown}>
+    <div class={s.actionDropdown}>
       {ACTION.map((item) => (
         <>
           {item.separator && (
-            <li role="separator" class={s.actionDivider}></li>
+            <hr class={s.actionDivider} />
           )}
-          <li>
-            <button
-              type="button"
-              data-action={item.action}
-              class={s.actionDropdownItems}>
-              <Icon name={item.icon as any} class={s.actionIcon} />
-              {item.message}
-            </button>
-          </li>
+          <button
+            type="button"
+            data-action={item.action}
+            class={s.actionDropdownItems}
+          ><Icon name={item.icon as any} class={s.actionIcon} />
+            {item.message}
+          </button>
         </>
       ))}
-    </menu>
+    </div>
   </details>
 </div>
 
