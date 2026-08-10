@@ -1,8 +1,5 @@
 ---
-import { 
-  getCollection, 
-  render 
-} from "astro:content";
+import { getCollection, render } from "astro:content";
 
 import { 
   buildMeta, 
@@ -10,7 +7,6 @@ import {
   schemaBreadcrumb,
   SITE,
   ROUTES, 
- // ORG,
   IMAGE,
 } from "@/consts";
 import { SIDEBAR_CONFIG } from "@/config/sidebar";
@@ -29,24 +25,18 @@ import CopyCode from "@/components/CopyCode.astro";
 export async function getStaticPaths() {
   const docsEntries = await getCollection("docs", ({ data }) => !data.draft);
 
-  const sorted = [...docsEntries].sort(
-    (a, b) => (a.data.order ?? 999) - (b.data.order ?? 999),
-  );
-  const root = sorted[0]?.id;
-
   return docsEntries.map((entry) => {
-    const cleanSlug = entry.data.slug || entry.id.replace(/\.(md|mdx)$/, '');
-    // const isRoot = entry.data.slug === root || entry.id === root;
+    const cleanSlug = entry.data.slug ?? entry.id.split('/').pop() ?? '';
 
     return {
       params: { slug: cleanSlug },
-      props: { entry, root },
+      props: { entry },
       cacheKey: (entry as any).digest
     };
   });
 }
 
-const { entry, root } = Astro.props;
+const { entry } = Astro.props;
 
 if (!entry) {
   return Astro.redirect("/404/");
@@ -81,8 +71,7 @@ const currentIndex = orderedPaginationItems.findIndex((item) => item.id === entr
 const prevEntry = currentIndex > 0 ? orderedPaginationItems[currentIndex - 1] : null;
 const nextEntry = currentIndex < orderedPaginationItems.length - 1 ? orderedPaginationItems[currentIndex + 1] : null;
 
-const cleanSlug = Astro.params.slug;
-
+const cleanSlug = entry.data.slug ?? entry.id.split('/').pop() ?? '';
 
 const baseUrl = SITE.url.replace(/\/$/, "");
 const currentUrl = cleanSlug 
@@ -178,7 +167,7 @@ ${entry.body}`;
               lastUpdated={entry.data.lastUpdated}
               prev={prevEntry}
               next={nextEntry}
-              root={root} />
+            />
           </Container>
         </article>
       </Section>
